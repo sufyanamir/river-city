@@ -7,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- <link href="https://cdn.tailwindcss.com" rel="stylesheet"> -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="{{ asset('assets/css/icons.css') }}" />
+  <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" />
   @vite('resources/css/app.css')
 </head>
   <body class="bg-blue-600">
@@ -26,14 +28,8 @@
         <i class="bi bi-search text-sm"></i>
         <input type="text" placeholder="Search" class="text-[15px] ml-4 w-full bg-transparent focus:outline-none" />
       </div> -->
-      <div class="p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[black] text-white">
-        <i class="bi bi-house-door-fill"></i>
-        <span class="text-[15px] ml-4  font-bold">Home</span>
-      </div>
-      <div class="p-2.5 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-blue-600 text-white">
-        <i class="bi bi-bookmark-fill"></i>
-        <span class="text-[15px] ml-4 text-gray-200 font-bold">Bookmark</span>
-      </div>
+      <x-sidebarLinks :title="'Dashboard'" :icon="'dashboard-icon.svg'"></x-sidebarLinks>
+      <x-sidebarLinks :title="'Customers'" :icon="'user-icon.svg'"></x-sidebarLinks>
       <div class="my-4 bg-gray-600 h-[1px]"></div>
       <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white" onclick="dropdown()">
         <i class="bi bi-chat-left-text-fill"></i>
@@ -62,22 +58,3 @@
     </div>
     <div class="bg-[#930027] h-screen">
       <div class="main-container duration-500 rounded-l-3xl h-screen overflow-auto bg-[#edf2f7] ml-[250px] p-3">
-        <p>hello world</p>
-      </div>
-    </div>
-
-    <script type="text/javascript">
-      function dropdown() {
-        document.querySelector("#submenu").classList.toggle("hidden");
-        document.querySelector("#arrow").classList.toggle("rotate-0");
-      }
-      dropdown();
-
-      function openSidebar() {
-        document.querySelector(".sidebar").classList.toggle("w-[0]");
-        document.querySelector(".main-container").classList.toggle("ml-[0px]");
-        document.querySelector(".main-container").classList.toggle("rounded-l-none");
-      }
-    </script>
-  </body>
-</html>
