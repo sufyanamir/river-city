@@ -13,11 +13,13 @@ class sidebarLinks extends Component
      */
     public $title;
     public $icon;
+    public $class;
 
-    public function __construct($title, $icon)
+    public function __construct($title, $icon, $class)
     {
         $this->title = $title;
         $this->icon = $icon;
+        $this->class = $class;
     }
 
     /**
