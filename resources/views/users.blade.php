@@ -28,7 +28,8 @@
                     </thead>
                     <tbody class=" text-sm">
                         <tr>
-                            <td><img class=" w-18 h-18 rounded-full" src="{{ asset('assets/images/demo-user.svg') }}" alt="image"></td>
+                            <td><img class=" w-18 h-18 rounded-full" src="{{ asset('assets/images/demo-user.svg') }}"
+                                    alt="image"></td>
                             <td>Client Name</td>
                             <td>client@gmail.com</td>
                             <td>Sep 23, 2023</td>
@@ -43,9 +44,11 @@
                                 <button>
                                     <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
                                 </button>
-                                <button>
-                                    <img src="{{ asset('assets/icons/userPrivileges-icon.svg') }}" alt="btn">
-                                </button>
+                                <a href="{{ url('privileges') }}">
+                                    <button>
+                                        <img src="{{ asset('assets/icons/userPrivileges-icon.svg') }}" alt="btn">
+                                    </button>
+                                </a>
                             </td>
                         </tr>
                     </tbody>
