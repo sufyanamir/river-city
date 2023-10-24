@@ -4,24 +4,16 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class sidebarLinks extends Component
+class profileDropdown extends Component
 {
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public $title;
-    public $icon;
-    public $class;
-    public $url;
-
-    public function __construct($title, $icon, $class, $url)
+    public function __construct()
     {
-        $this->title = $title;
-        $this->icon = $icon;
-        $this->class = $class;
-        $this->url = $url;
+        //
     }
 
     /**
@@ -31,6 +23,6 @@ class sidebarLinks extends Component
      */
     public function render()
     {
-        return view('components.sidebar-links');
+        return view('components.profile-dropdown');
     }
 }
