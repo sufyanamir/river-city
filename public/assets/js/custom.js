@@ -8,6 +8,10 @@ $(document).ready(function () {
     // $('#topbar-menu').toggleClass("hidden");
     $('#profile-menu').toggleClass("topbar-menuEntring topbar-manuLeaving");
   });
+  $("#action-menubutton").click(function () {
+    // $('#topbar-menu').toggleClass("hidden");
+    $('#action-menu').toggleClass("topbar-menuEntring topbar-manuLeaving");
+  });
 
   // Dropdown Function
   function dropdown(submenuId, arrowId, dropdownId, dropdownText) {

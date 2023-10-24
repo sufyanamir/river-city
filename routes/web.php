@@ -25,6 +25,24 @@ Route::get('/users', function () {
 Route::get('/userRole', function () {
     return view('user_roles');
 });
+Route::get('/crew', function () {
+    return view('crew');
+});
+Route::get('/estimates', function () {
+    return view('estimates');
+});
+Route::get('/items', function () {
+    return view('items');
+});
+Route::get('/group', function () {
+    return view('group');
+});
+Route::get('/emails', function () {
+    return view('email-templates');
+});
+Route::get('/campaign', function () {
+    return view('campaign');
+});
 Route::get('/login',function(){
     return view('login');
 });
