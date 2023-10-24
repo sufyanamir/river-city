@@ -48,7 +48,7 @@
                   </div> --}}
                   {{-- <a href="" class="text-[#FF0000] text-[12px]/[18px] text-end m-0 	">forget your password</a> --}}
                     <button
-                        class="bg-[#930027] rounded-full text-white py-2 hover:scale-105 duration-300">Login</button>
+                        class="bg-[#930027] rounded-full text-white py-2 hover:scale-105 duration-300">Send</button>
                 </form>
             </div>
 

@@ -31,4 +31,10 @@ Route::get('/login',function(){
 Route::get('/forgotPassword',function(){
     return view('forgotPassword');
 });
+Route::get('/privileges',function(){
+    return view('privileges');
+});
+Route::get('/test',function(){
+    return view('test');
+});
 
