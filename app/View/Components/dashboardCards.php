@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class sidebarLinks extends Component
+class dashboardCards extends Component
 {
     /**
      * Create a new component instance.
@@ -12,16 +12,13 @@ class sidebarLinks extends Component
      * @return void
      */
     public $title;
-    public $icon;
-    public $class;
-    public $url;
-
-    public function __construct($title, $icon, $class, $url)
+    public $value;
+    public $img;
+    public function __construct($title, $value, $img)
     {
         $this->title = $title;
-        $this->icon = $icon;
-        $this->class = $class;
-        $this->url = $url;
+        $this->value = $value;
+        $this->img = $img;
     }
 
     /**
@@ -31,6 +28,6 @@ class sidebarLinks extends Component
      */
     public function render()
     {
-        return view('components.sidebar-links');
+        return view('components.dashboard-cards');
     }
 }
