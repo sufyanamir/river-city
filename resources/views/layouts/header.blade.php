@@ -21,7 +21,7 @@
     }
 
     ::-webkit-scrollbar-track {
-      background-color: #930027;
+      /* background-color: #930027; */
     }
 
     ::-webkit-scrollbar-track:horizontal {
@@ -56,7 +56,7 @@
       </div> -->
     <x-sidebarLinks :class="'text-white'" :url="'/'" :title="'Dashboard'" :icon="'dashboard-icon.svg'"></x-sidebarLinks>
     <x-sidebarLinks :class="'text-white'" :url="'/customers'" :title="'Customers'" :icon="'user-icon.svg'"></x-sidebarLinks>
-    <x-sidebarLinks :class="'text-white'" :url="''" :title="'Estimates'" :icon="'estimate-icon.svg'"></x-sidebarLinks>
+    <x-sidebarLinks :class="'text-white'" :url="'/estimates'" :title="'Estimates'" :icon="'estimate-icon.svg'"></x-sidebarLinks>
     <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white" id="dropdown-card1">
       <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1.8C0 1.32261 0.263392 0.864773 0.732233 0.527208C1.20107 0.189642 1.83696 0 2.5 0H17.5C18.163 0 18.7989 0.189642 19.2678 0.527208C19.7366 0.864773 20 1.32261 20 1.8V16.2C20 16.6774 19.7366 17.1352 19.2678 17.4728C18.7989 17.8104 18.163 18 17.5 18H2.5C1.83696 18 1.20107 17.8104 0.732233 17.4728C0.263392 17.1352 0 16.6774 0 16.2V1.8ZM17.5 1.8H2.5V16.2H17.5V1.8ZM9.435 4.2867C9.66934 4.45547 9.80098 4.68435 9.80098 4.923C9.80098 5.16165 9.66934 5.39052 9.435 5.5593L7.00375 7.308C6.71076 7.51877 6.31354 7.63716 5.89937 7.63716C5.48521 7.63716 5.08799 7.51877 4.795 7.308L3.69 6.5124C3.57061 6.42938 3.47538 6.33007 3.40987 6.22026C3.34436 6.11046 3.30988 5.99236 3.30844 5.87286C3.30699 5.75336 3.33862 5.63485 3.40147 5.52424C3.46432 5.41363 3.55714 5.31315 3.67451 5.22864C3.79187 5.14414 3.93144 5.07731 4.08506 5.03206C4.23868 4.98681 4.40328 4.96404 4.56925 4.96507C4.73523 4.96611 4.89925 4.99094 5.05176 5.03811C5.20426 5.08528 5.34219 5.15384 5.4575 5.2398L5.9 5.5584L7.6675 4.2858C7.90191 4.11708 8.21979 4.02229 8.55125 4.02229C8.8827 4.02229 9.20059 4.11798 9.435 4.2867ZM11.25 6.3C11.25 6.06131 11.3817 5.83239 11.6161 5.6636C11.8505 5.49482 12.1685 5.4 12.5 5.4H15C15.3315 5.4 15.6495 5.49482 15.8839 5.6636C16.1183 5.83239 16.25 6.06131 16.25 6.3C16.25 6.53869 16.1183 6.76761 15.8839 6.9364C15.6495 7.10518 15.3315 7.2 15 7.2H12.5C12.1685 7.2 11.8505 7.10518 11.6161 6.9364C11.3817 6.76761 11.25 6.53869 11.25 6.3ZM3.75 10.35C3.75 9.99196 3.94754 9.64858 4.29917 9.39541C4.65081 9.14223 5.12772 9 5.625 9H8.125C8.62228 9 9.09919 9.14223 9.45083 9.39541C9.80246 9.64858 10 9.99196 10 10.35V12.15C10 12.508 9.80246 12.8514 9.45083 13.1046C9.09919 13.3578 8.62228 13.5 8.125 13.5H5.625C5.12772 13.5 4.65081 13.3578 4.29917 13.1046C3.94754 12.8514 3.75 12.508 3.75 12.15V10.35ZM6.25 10.8V11.7H7.5V10.8H6.25ZM11.25 11.25C11.25 11.0113 11.3817 10.7824 11.6161 10.6136C11.8505 10.4448 12.1685 10.35 12.5 10.35H15C15.3315 10.35 15.6495 10.4448 15.8839 10.6136C16.1183 10.7824 16.25 11.0113 16.25 11.25C16.25 11.4887 16.1183 11.7176 15.8839 11.8864C15.6495 12.0552 15.3315 12.15 15 12.15H12.5C12.1685 12.15 11.8505 12.0552 11.6161 11.8864C11.3817 11.7176 11.25 11.4887 11.25 11.25Z" fill="white" />
@@ -70,13 +70,13 @@
       </div>
     </div>
     <div class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 duration-300 font-bold hidden" id="submenu1">
-      <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="''" :title="'Items'" :icon="'item-icon.svg'"></x-sidebarLinks>
-      <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="''" :title="'Groups'" :icon="'group-icon.svg'"></x-sidebarLinks>
+      <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/items'" :title="'Items'" :icon="'item-icon.svg'"></x-sidebarLinks>
+      <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/group'" :title="'Groups'" :icon="'group-icon.svg'"></x-sidebarLinks>
     </div>
     <x-sidebarLinks :class="'text-white'" :url="''" :title="'Calendar'" :icon="'calendar-icon.svg'"></x-sidebarLinks>
-    <x-sidebarLinks :class="'text-white'" :url="''" :title="'Campaign'" :icon="'campaign-icon.svg'"></x-sidebarLinks>
+    <x-sidebarLinks :class="'text-white'" :url="'/campaign'" :title="'Campaign'" :icon="'campaign-icon.svg'"></x-sidebarLinks>
     <x-sidebarLinks :class="'text-white'" :url="''" :title="'Reports'" :icon="'reports-icon.svg'"></x-sidebarLinks>
-    <x-sidebarLinks :class="'text-white'" :url="''" :title="'Email Templates'" :icon="'emailTemplate-icon.svg'"></x-sidebarLinks>
+    <x-sidebarLinks :class="'text-white'" :url="'/emails'" :title="'Email Templates'" :icon="'emailTemplate-icon.svg'"></x-sidebarLinks>
     <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white" id="dropdown-card2">
       <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12.0506 7.69166C11.29 7.69166 10.5465 7.46614 9.914 7.04351C9.28154 6.62098 8.78866 6.02031 8.4976 5.31756C8.20645 4.61483 8.13035 3.84156 8.27875 3.09554C8.42715 2.34953 8.79337 1.66427 9.33128 1.12642C9.86908 0.588567 10.5544 0.22229 11.3003 0.0739028C12.0463 -0.0744949 12.8196 0.00166265 13.5224 0.292746C14.2251 0.583829 14.8258 1.07676 15.2483 1.7092C15.6709 2.34165 15.8965 3.0852 15.8965 3.84583C15.8965 4.86581 15.4913 5.84402 14.7701 6.56529C14.0488 7.28646 13.0707 7.69166 12.0506 7.69166ZM12.0506 1.53833C11.5943 1.53833 11.1481 1.67366 10.7687 1.92721C10.3892 2.18077 10.0935 2.54115 9.91882 2.96279C9.74417 3.38443 9.69843 3.84839 9.78744 4.296C9.87656 4.74361 10.0962 5.15477 10.419 5.47749C10.7417 5.80023 11.1529 6.02001 11.6004 6.10902C12.0481 6.19804 12.512 6.1523 12.9336 5.97765C13.3553 5.803 13.7157 5.50723 13.9692 5.1278C14.2228 4.74834 14.3581 4.30221 14.3581 3.84583C14.3581 3.23384 14.115 2.64693 13.6823 2.21418C13.2495 1.78144 12.6626 1.53833 12.0506 1.53833Z" fill="white" />
@@ -97,6 +97,7 @@
       <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/users'" :title="'Users'" :icon="'user-icon.svg'"></x-sidebarLinks>
       <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/userRole'" :title="'User role'" :icon="'userRole-icon.svg'"></x-sidebarLinks>
     </div>
+    <x-sidebarLinks :class="'text-white'" :url="'/crew'" :title="'Crew'" :icon="'user-icon.svg'"></x-sidebarLinks>
     <x-sidebarLinks :class="'text-white'" :url="''" :title="'Settings'" :icon="'settings-icon.svg'"></x-sidebarLinks>
     <x-sidebarLinks :class="'text-white'" :url="''" :title="'Help'" :icon="'help-icon.svg'"></x-sidebarLinks>
 
