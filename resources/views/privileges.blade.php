@@ -76,7 +76,7 @@
             <div class="p-3 ">
                 <div class="grid grid-cols-12 mt-4">
                     <div class="pl-[57px] col-span-8 ">
-                       <input type="checkbox" name="" id="privilegesUser">
+                       <input type="checkbox" checked name="" id="privilegesUser">
                        <label for="privilegesUser">User</label>
                     </div>
                     <div class="col-span-4 mr-20">
@@ -90,7 +90,7 @@
                                 <label for="privilegesDelete1">Delete</label>
                             </div>
                                 <div>
-                                <input type="checkbox" name="Add" id="privilegesAdd1">
+                                <input type="checkbox" checked name="Add" id="privilegesAdd1">
                                 <label for="privilegesAdd1">Add</label>
                             </div>
                             </div>
@@ -112,7 +112,7 @@
                                 <label for="privilegesDelete2">Delete</label>
                             </div>
                                 <div>
-                                <input type="checkbox" name="Add" id="privilegesAdd2">
+                                <input type="checkbox" checked name="Add" id="privilegesAdd2">
                                 <label for="privilegesAdd2">Add</label>
                             </div>
                             </div>
@@ -120,13 +120,13 @@
                 </div>
                 <div class="grid grid-cols-12 mt-4">
                     <div class="pl-[57px] col-span-8 ">
-                       <input type="checkbox" name="" id="privilegesUser3">
+                       <input type="checkbox" checked name="" id="privilegesUser3">
                        <label for="privilegesUser3">User</label>
                     </div>
                     <div class="col-span-4 mr-20">
                         <div class="flex justify-between">
                                  <div>   
-                                <input type="checkbox" name="Edit" id="privilegesEdit3">
+                                <input type="checkbox" checked name="Edit" id="privilegesEdit3">
                                 <label for="privilegesEdit3">Edit</label>
                             </div>
                             <div>
