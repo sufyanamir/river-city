@@ -1,4 +1,42 @@
 @include('layouts.header')
+<style>
+    input[type=checkbox]+label {
+        display: block;
+        margin: 0.2em;
+        cursor: pointer;
+        padding: em;
+    }
+
+    input[type=checkbox] {
+        display: none;
+    }
+
+    input[type=checkbox]+label:before {
+        content: "\2713";
+        border: 1.5px solid #1C274C;
+        border-radius: 25%;
+        display: inline-block;
+        width: 1.3em;
+        height: 1.3em;
+        padding-left: 0.2em;
+        padding-bottom: 0.2em;
+        margin-right: 0.2em;
+        vertical-align: bottom;
+        color: transparent;
+        transition: .2s;
+    }
+
+    input[type=checkbox]+label:active:before {
+        transform: scale(0);
+    }
+
+    input[type=checkbox]:checked+label:before {
+        background-color: #71E25E;
+        border-color: rgb(0, 0, 0);
+        color: #000000;
+    }
+</style>
+
 <h1 class=" text-2xl font-semibold mb-3">Privileges</h1>
     <div class=" bg-white w-full rounded-lg shadow-lg">
         <div class=" lg:flex justify-between p-3 grid sm:grid-cols-2 mx-auto">
@@ -31,25 +69,78 @@
         </div>
         <div class="py-4">
             <div class=" overflow-x-auto">
-                <div class="border p-3 flex font-bold  justify-around">
-                 <p>
-                   <input type="checkbox" name="" id=""> Name</p>
-                 <p>Action</p>   
+                <div class="border grid grid-cols-12 p-3  font-bold   ">
+                 <p class="col-span-8 pl-14"><input type="checkbox" class="" name="" id="priName"> <label for="priName">Name</label></p>
+                 <p class="col-span-4">Action</p>   
                 </div>
-                <div class="flex justify-around">
-                    <div class="ml-[118px] ">
-                       <input type="checkbox" name="" id="">
-                       <label for="">User</label>
+            <div class="p-3 ">
+                <div class="grid grid-cols-12 mt-4">
+                    <div class="pl-[57px] col-span-8 ">
+                       <input type="checkbox" name="" id="privilegesUser">
+                       <label for="privilegesUser">User</label>
                     </div>
-                    <div class=" ml-[220px]">
-                        <input type="checkbox" name="Edit" id="">
-                                <label for="">Edit</label>
-                                <input type="checkbox" name="Delete" id="">
-                                <label for="">Delete</label>
-                                <input type="checkbox" name="Add" id="">
-                                <label for="">Add</label>
+                    <div class="col-span-4 mr-20">
+                        <div class="flex justify-between">
+                                 <div>   
+                                <input type="checkbox" name="Edit" id="privilegesEdit1">
+                                <label for="privilegesEdit1">Edit</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="Delete" id="privilegesDelete1">
+                                <label for="privilegesDelete1">Delete</label>
+                            </div>
+                                <div>
+                                <input type="checkbox" name="Add" id="privilegesAdd1">
+                                <label for="privilegesAdd1">Add</label>
+                            </div>
+                            </div>
                     </div>
                 </div>
+                <div class="grid grid-cols-12 mt-4">
+                    <div class="pl-[57px] col-span-8 ">
+                       <input type="checkbox" name="" id="privilegesUser2">
+                       <label for="privilegesUser2">User</label>
+                    </div>
+                    <div class="col-span-4 mr-20">
+                        <div class="flex justify-between">
+                                 <div>   
+                                <input type="checkbox" name="Edit" id="privilegesEdit2">
+                                <label for="privilegesEdit2">Edit</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="Delete" id="privilegesDelete2">
+                                <label for="privilegesDelete2">Delete</label>
+                            </div>
+                                <div>
+                                <input type="checkbox" name="Add" id="privilegesAdd2">
+                                <label for="privilegesAdd2">Add</label>
+                            </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-12 mt-4">
+                    <div class="pl-[57px] col-span-8 ">
+                       <input type="checkbox" name="" id="privilegesUser3">
+                       <label for="privilegesUser3">User</label>
+                    </div>
+                    <div class="col-span-4 mr-20">
+                        <div class="flex justify-between">
+                                 <div>   
+                                <input type="checkbox" name="Edit" id="privilegesEdit3">
+                                <label for="privilegesEdit3">Edit</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="Delete" id="privilegesDelete3">
+                                <label for="privilegesDelete3">Delete</label>
+                            </div>
+                                <div>
+                                <input type="checkbox" name="Add" id="privilegesAdd3">
+                                <label for="privilegesAdd3">Add</label>
+                            </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
             </div>
 
         </div>
