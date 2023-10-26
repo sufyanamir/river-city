@@ -209,6 +209,8 @@
             </div>
 
         </div>
-    </div>
+        <div class="border text-right">
+            <x-add-button :title="'Update'" :class="'m-5 px-6'"></x-add-button>
+        </div>
 </div>
 @include('layouts.footer')
