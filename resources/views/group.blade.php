@@ -7,7 +7,7 @@
                 <h4>Group List</h4>
             </div>
             <div>
-                <x-add-button :title="'+Add Group'"></x-add-button>
+                <x-add-button :title="'+Add Group'" :class="''"></x-add-button>
             </div>
         </div>
         <div class="py-4">

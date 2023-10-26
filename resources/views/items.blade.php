@@ -7,7 +7,12 @@
                 <h4>Items List</h4>
             </div>
             <div>
-                <x-add-button :title="'+Add Item'"></x-add-button>
+                <x-add-button :title="'All'" :class="' bg-orange-500 px-6'"></x-add-button>
+                <x-add-button :title="'Product'" :class="''"></x-add-button>
+                <x-add-button :title="'Labour'" :class="''"></x-add-button>
+                <x-add-button :title="'Assemblies'" :class="''"></x-add-button>
+                <x-add-button :title="'Groups'" :class="''"></x-add-button>
+                <x-add-button :title="'+Add Item'" :class="''"></x-add-button>
             </div>
         </div>
         <div class="py-4">

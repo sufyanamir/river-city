@@ -46,6 +46,15 @@ Route::get('/campaign', function () {
 Route::get('/login',function(){
     return view('login');
 });
+Route::get('/settings',function(){
+    return view('settings');
+});
+Route::get('/help',function(){
+    return view('help');
+});
+Route::get('/notifications',function(){
+    return view('notifications');
+});
 Route::get('/forgotPassword',function(){
     return view('forgotPassword');
 });
