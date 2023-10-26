@@ -7,7 +7,9 @@
                 <h4>Estimates List</h4>
             </div>
             <div>
-                <x-add-button :title="'+Add Estimates'" :class="''"></x-add-button>
+                <a href="{{url('add-estimate')}}">
+                <x-add-button :title="'+Add Estimates'" :class="''"  :id="''" ></x-add-button>
+                </a>
             </div>
         </div>
         <div class="py-4">

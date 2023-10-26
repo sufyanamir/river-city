@@ -7,7 +7,7 @@
                 <h4>Roles List</h4>
             </div>
             <div>
-                <x-add-button :title="'+Add Role'" :class="''"></x-add-button>
+                <x-add-button :title="'+Add Role'"  :id="''" :class="''"></x-add-button>
             </div>
         </div>
         <div class="py-4">

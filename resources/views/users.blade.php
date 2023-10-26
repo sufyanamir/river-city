@@ -7,7 +7,7 @@
                 <h4>Users List</h4>
             </div>
             <div>
-                <x-add-button :title="'+Add User'" :class="''"></x-add-button>
+                <x-add-button :title="'+Add User'" :id="''" :class="''"></x-add-button>
             </div>
         </div>
         <div class="py-4">

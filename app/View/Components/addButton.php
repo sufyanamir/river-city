@@ -13,10 +13,12 @@ class addButton extends Component
      */
     public $title;
     public $class;
-    public function __construct($title, $class)
+    public $id;
+    public function __construct($title, $class,$id)
     {
         $this->title = $title;
         $this->class = $class;
+        $this->id = $id;
     }
 
     /**

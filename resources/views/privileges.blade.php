@@ -210,7 +210,7 @@
 
         </div>
         <div class="border text-right">
-            <x-add-button :title="'Update'" :class="'m-5 px-6'"></x-add-button>
+            <x-add-button :title="'Update'" :id="''" :class="'m-5 px-6'"></x-add-button>
         </div>
 </div>
 @include('layouts.footer')

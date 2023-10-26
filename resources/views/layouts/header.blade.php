@@ -54,6 +54,7 @@
       </div> -->
         <x-sidebarLinks :class="'text-white'" :url="'/'" :title="'Dashboard'" :icon="'dashboard-icon.svg'"></x-sidebarLinks>
         <x-sidebarLinks :class="'text-white'" :url="'/customers'" :title="'Customers'" :icon="'user-icon.svg'"></x-sidebarLinks>
+        <x-sidebarLinks :class="'text-white'" :url="'/estimates'" :title="'Estimates'" :icon="'estimate-icon.svg'"></x-sidebarLinks>
         <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white"
             id="crew-dropdown-card1">
             <img src="{{ asset('assets/icons/estimate-icon.svg') }}" alt="">
