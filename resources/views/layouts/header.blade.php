@@ -40,9 +40,7 @@
 </head>
 
 <body class="bg-[#930027]">
-  <span class="absolute text-white text-4xl top-5 left-4 cursor-pointer openClose-sidebar">
-    <i class="bi bi-filter-left px-2 bg-gray-900 rounded-md"></i>
-  </span>
+
   <div class="sidebar duration-500 fixed top-0 bottom-0 lg:left-0 w-[250px] overflow-y-auto text-center bg-[#930027]">
     <div class="text-gray-100 text-xl">
       <div class="p-2.5 mt-1 flex items-center">
@@ -98,8 +96,8 @@
       <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/userRole'" :title="'User role'" :icon="'userRole-icon.svg'"></x-sidebarLinks>
     </div>
     <x-sidebarLinks :class="'text-white'" :url="'/crew'" :title="'Crew'" :icon="'user-icon.svg'"></x-sidebarLinks>
-    <x-sidebarLinks :class="'text-white'" :url="''" :title="'Settings'" :icon="'settings-icon.svg'"></x-sidebarLinks>
-    <x-sidebarLinks :class="'text-white'" :url="''" :title="'Help'" :icon="'help-icon.svg'"></x-sidebarLinks>
+    <x-sidebarLinks :class="'text-white'" :url="'/settings'" :title="'Settings'" :icon="'settings-icon.svg'"></x-sidebarLinks>
+    <x-sidebarLinks :class="'text-white'" :url="'/help'" :title="'Help'" :icon="'help-icon.svg'"></x-sidebarLinks>
 
     <div class="p-2.5 mt-3  flex items-center rounded-md px-4 duration-300 cursor-pointer text-white">
       <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -110,17 +108,24 @@
   </div>
   <div class="bg-[#930027] h-screen">
     <div class="main-container duration-500 rounded-l-3xl h-screen overflow-auto bg-[#edf2f7] ml-[250px] p-3">
-      <div class="topbar py-1">
+      <div class="topbar py-1 flex justify-between">
+        <div>
+          <span class=" text-white text-4xl cursor-pointer openClose-sidebar">
+            <i class="bi bi-filter-left px-2 bg-[#930027] rounded-md"></i>
+          </span>
+        </div>
         <div class="flex justify-end gap-4">
           <!-------------------------------- plus icon ------------------------------------>
           <x-quick-add-btn :icon="'plus-icon.svg'"></x-quick-add-btn>
           <!-------------------------------- plus icon ------------------------------------>
           <!-------------------------------- notification icon ------------------------------------>
           <div class="relative">
-            <img src="{{ asset('assets/icons/bell.svg') }}" alt="logo">
-            <div class="absolute top-0 right-0 bg-[#F5222D] text-white rounded-full w-4 h-4 flex items-center justify-center">
-              3
-            </div>
+            <a href="/notifications">
+              <img src="{{ asset('assets/icons/bell.svg') }}" alt="logo">
+              <div class="absolute top-0 right-0 bg-[#F5222D] text-white rounded-full w-4 h-4 flex items-center justify-center">
+                3
+              </div>
+            </a>
           </div>
           <!-------------------------------- notification icon ------------------------------------>
           <!-------------------------------- profile icon ------------------------------------>

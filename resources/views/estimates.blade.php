@@ -7,7 +7,7 @@
                 <h4>Estimates List</h4>
             </div>
             <div>
-                <x-add-button :title="'+Add Estimates'"></x-add-button>
+                <x-add-button :title="'+Add Estimates'" :class="''"></x-add-button>
             </div>
         </div>
         <div class="py-4">

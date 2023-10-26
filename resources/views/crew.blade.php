@@ -7,7 +7,7 @@
                 <h4>Crew List</h4>
             </div>
             <div>
-                <x-add-button :title="'+Add Crew'"></x-add-button>
+                <x-add-button :title="'+Add Crew'" :class="''"></x-add-button>
             </div>
         </div>
         <div class="py-4">

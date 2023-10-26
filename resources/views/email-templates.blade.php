@@ -7,7 +7,7 @@
                 <h4>Email Template List</h4>
             </div>
             <div>
-                <x-add-button :title="'+Add Template'"></x-add-button>
+                <x-add-button :title="'+Add Template'" :class="''"></x-add-button>
             </div>
         </div>
         <div class="py-4">

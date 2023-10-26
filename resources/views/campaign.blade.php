@@ -7,7 +7,7 @@
                 <h4>Campaign List</h4>
             </div>
             <div>
-                <x-add-button :title="'+Add Campaign'"></x-add-button>
+                <x-add-button :title="'+Add Campaign'" :class="''"></x-add-button>
             </div>
         </div>
         <div class="py-4">
