@@ -73,7 +73,7 @@
     </div>
     <x-sidebarLinks :class="'text-white'" :url="''" :title="'Calendar'" :icon="'calendar-icon.svg'"></x-sidebarLinks>
     <x-sidebarLinks :class="'text-white'" :url="'/campaign'" :title="'Campaign'" :icon="'campaign-icon.svg'"></x-sidebarLinks>
-    <x-sidebarLinks :class="'text-white'" :url="''" :title="'Reports'" :icon="'reports-icon.svg'"></x-sidebarLinks>
+    <x-sidebarLinks :class="'text-white'" :url="'/reports'" :title="'Reports'" :icon="'reports-icon.svg'"></x-sidebarLinks>
     <x-sidebarLinks :class="'text-white'" :url="'/emails'" :title="'Email Templates'" :icon="'emailTemplate-icon.svg'"></x-sidebarLinks>
     <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white" id="dropdown-card2">
       <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg">

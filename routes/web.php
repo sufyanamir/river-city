@@ -43,6 +43,9 @@ Route::get('/emails', function () {
 Route::get('/campaign', function () {
     return view('campaign');
 });
+Route::get('/reports', function () {
+    return view('reports');
+});
 Route::get('/login',function(){
     return view('login');
 });
