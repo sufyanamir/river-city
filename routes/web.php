@@ -55,6 +55,9 @@ Route::get('/feedGallery', function () {
 Route::get('/login',function(){
     return view('login');
 });
+Route::get('//addEmail',function(){
+    return view('addEmail');
+});
 Route::get('/settings',function(){
     return view('settings');
 });
