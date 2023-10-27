@@ -40,6 +40,12 @@ $(document).ready(function () {
   $("#dropdown-card2").click(function () {
     dropdown('submenu2', 'arrow2', 'dropdown-card2', 'dropdown-text2');
   });
+  $("#user-dropdown-card1").click(function () {
+    dropdown('user-submenu1', 'user-arrow1', 'user-dropdown-card1', 'user-dropdown-text1');
+  });
+  $("#crew-dropdown-card1").click(function () {
+    dropdown('crew-submenu1', 'crew-arrow1', 'crew-dropdown-card1', 'crew-dropdown-text1');
+  });
 
   new DataTable('#example');
 
