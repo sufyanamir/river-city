@@ -49,6 +49,9 @@ Route::get('/campaign', function () {
 Route::get('/reports', function () {
     return view('reports');
 });
+Route::get('/feedGallery', function () {
+    return view('feedGallery');
+});
 Route::get('/login',function(){
     return view('login');
 });
