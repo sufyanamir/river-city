@@ -29,8 +29,8 @@
                     <p class="font-medium text-[17px]/[25px] text-[#858585]">12</p>
                 </div>
             </div>
-            <div class="col-span-1">
-                <hr class=" bg-black ">
+            <div class="col-span-1 p-3  ">
+                <div class="h-full mx-auto rounded bg-[#D9D9D9]   w-[5px]"></div>
             </div>
             <div class="col-span-5 grid grid-cols-5 mx-2 my-auto"> 
                 <div class="col-span-1">
@@ -64,8 +64,8 @@
                     <p class="font-medium text-[17px]/[25px] text-[#858585]">4</p>
                 </div>
             </div>
-            <div class="col-span-1">
-                
+            <div class="col-span-1 p-3  ">
+                <div class="h-full mx-auto rounded bg-[#D9D9D9]   w-[5px]"></div>
             </div>
             <div class="col-span-5 grid grid-cols-5 mx-2 my-auto">
                 <div class="col-span-1">
@@ -99,8 +99,8 @@
                     <p class="font-medium text-[17px]/[25px] text-[#858585]">5</p>
                 </div>
             </div>
-            <div class="col-span-1">
-                
+            <div class="col-span-1 p-3  ">
+                <div class="h-full mx-auto rounded bg-[#D9D9D9]   w-[5px]"></div>
             </div>
             <div class="col-span-5 grid grid-cols-5 mx-2 my-auto">
                 <div class="col-span-1">
@@ -134,8 +134,8 @@
                     <p class="font-medium text-[17px]/[25px] text-[#858585]">20</p>
                 </div>
             </div>
-            <div class="col-span-1">
-                
+            <div class="col-span-1 p-3  ">
+                <div class="h-full mx-auto rounded bg-[#D9D9D9]   w-[5px]"></div>
             </div>
             <div class="col-span-5 grid grid-cols-5 mx-2 my-auto">
                 <div class="col-span-1">
@@ -169,8 +169,8 @@
                     <p class="font-medium text-[17px]/[25px] text-[#858585]">12</p>
                 </div>
             </div>
-            <div class="col-span-1">
-                
+            <div class="col-span-1 p-3  ">
+                <div class="h-full mx-auto rounded bg-[#D9D9D9]   w-[5px]"></div>
             </div>
             <div class="col-span-5 grid grid-cols-5 mx-2 my-auto">
                 <div class="col-span-1">
