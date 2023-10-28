@@ -2,11 +2,20 @@
 <div class="my-4">
     <h1 class=" text-2xl font-semibold mb-3">Gallery</h1>
     <div class=" bg-white w-full rounded-lg shadow-lg">
-        <div class="">
-            <h3 class="m-5">top headings and serach box</h3>
+        <div class="m-2  just grid sm:grid-cols-12 ">
+            <div class="col-span-6 flex justify-between p-4">
+                <h2 class="my-auto pr-3 font-medium text-[22px]/[25.78px] text-black font-[Roboto]">Gallery list</h2>
+                <x-add-button :title="'All'" :id="''" :class="'bg-[#E02B20] px-6'"></x-add-button>
+                <x-add-button :title="'New'" :id="''" :class="' px-6'"></x-add-button>
+                <x-add-button :title="'Pending'" :id="''" :class="' px-6'"></x-add-button>
+                <x-add-button :title="'Complete'" :id="''" :class="' px-6'"></x-add-button>
+            </div>
+            <div class="col-span-6 my-auto ">
+                <img class="float-right mx-2" src="{{asset('assets/images/searchbox.svg')}}" alt="">
+            </div>
         </div>
         <hr class="bg-gray-900">
-        <div class="mt-2 grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-2">
+        <div class=" grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
             <div class="col-span-5 p-2 flex justify-between">
                 <div class="pl-3">
                     <h3 class="text-[22px]/[25.78px] text-[#323C47] font-bold">Estimate Name</h3>
@@ -41,7 +50,7 @@
                 </div>
             </div>
         </div>
-        <div class="mt-2 grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-2">
+        <div class=" grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
             <div class="col-span-5 p-2 flex justify-between">
                 <div class="pl-3">
                     <h3 class="text-[22px]/[25.78px] text-[#323C47] font-bold">Estimate Name</h3>
@@ -76,7 +85,7 @@
                 </div>
             </div>
         </div>
-        <div class="mt-2 grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-2">
+        <div class=" grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
             <div class="col-span-5 p-2 flex justify-between">
                 <div class="pl-3">
                     <h3 class="text-[22px]/[25.78px] text-[#323C47] font-bold">Estimate Name</h3>
@@ -111,7 +120,7 @@
                 </div>
             </div>
         </div>
-        <div class="mt-2 grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-2">
+        <div class=" grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
             <div class="col-span-5 p-2 flex justify-between">
                 <div class="pl-3">
                     <h3 class="text-[22px]/[25.78px] text-[#323C47] font-bold">Estimate Name</h3>
@@ -146,7 +155,7 @@
                 </div>
             </div>
         </div>
-        <div class="mt-2 grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-2">
+        <div class=" grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
             <div class="col-span-5 p-2 flex justify-between">
                 <div class="pl-3">
                     <h3 class="text-[22px]/[25.78px] text-[#323C47] font-bold">Estimate Name</h3>
