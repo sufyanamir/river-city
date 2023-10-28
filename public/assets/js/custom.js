@@ -16,7 +16,9 @@ $(document).ready(function () {
     // $('#topbar-menu').toggleClass("hidden");
     $('#action-menu').toggleClass("topbar-menuEntring topbar-manuLeaving");
   });
-
+  $('#emailAttachmentsCheck').click(function () { 
+    $("#emailAttachmentsfile").toggleClass("hidden");
+  });
   // Dropdown Function
   function dropdown(submenuId, arrowId, dropdownId, dropdownText) {
     $("#" + submenuId).toggleClass("hidden");

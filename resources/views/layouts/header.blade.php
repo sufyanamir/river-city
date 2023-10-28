@@ -8,7 +8,7 @@
     <title>River City</title>
     <style>
         ::-webkit-scrollbar {
-            width: 5px;
+            width: 8px;
         }
 
         ::-webkit-scrollbar:horizontal {
