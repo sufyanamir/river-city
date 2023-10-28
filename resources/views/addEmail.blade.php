@@ -2,13 +2,13 @@
 <style>
     /* Default color for the radio button */
     input[type="radio"] {
-        /* Add any styles you want for the unchecked state here */
+        /* Add any styles you want for the u state here */
     }
 
-    /* Style the radio button when it's checked */
-    input[type="radio"]:checked {
+    /* Style the radio button when it's */
+    input[type="radio"] {
         background-color: #930027;
-        /* You can add other styles to customize the checked state */
+        /* You can add other styles to customize the state */
     }
 </style>
 <div class=" my-4">
@@ -36,15 +36,15 @@
                         </select>
                     </div>
                     <div class=" sm:col-span-2 ml-6 text-center">
-                            <input type="checkbox" checked name="" id="clientCheck">
+                            <input type="checkbox" name="" id="clientCheck">
                             <label for="clientCheck" class=" font-semibold">Client</label>
                     </div>
                     <div class=" sm:col-span-2 ml-6 text-center">
-                        <input type="checkbox" checked name="" id="senderCheck">
+                        <input type="checkbox" name="" id="senderCheck">
                         <label for="senderCheck" class=" font-semibold">Sender</label>
                     </div>
                     <div class=" sm:col-span-2 ml-6 text-center">
-                        <input type="checkbox" checked name="" id="projectOwnerCheck">
+                        <input type="checkbox" name="" id="projectOwnerCheck">
                         <label for="projectOwnerCheck" class=" font-semibold">Project Owner</label>
                     </div>
                     <div class=" sm:col-span-6 mx-6 flex justify-between">
@@ -70,12 +70,12 @@
                     </div>
                     <div class="sm:col-span-6 mx-6 flex justify-start">
                         <label for="note" class=" text-sm font-medium leading-6  text-black">Attachments</label>
-                        <input type="checkbox" checked name="" id="attachments">
-                        <label for="attachments" class=" text-gray-400">Include Project Documents</label>
+                        <input type="checkbox" name="attachments" id="emailAttachmentsCheck">
+                        <label for="emailAttachmentsCheck" class=" text-gray-400">Include Project Documents</label>
                         <!-- <input type="text" name="note" id="note" placeholder="Note" class="   ml-1 pl-2 w-[95%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"> -->
                     </div>
                     <div class=" mx-28">
-                        <input class=" border p-2 rounded-xl" type="file" name="" id="">
+                        <input class=" border p-2 rounded-xl hidden" type="file" name="" id="emailAttachmentsfile">
                     </div>
 
                 </div>

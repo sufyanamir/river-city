@@ -31,7 +31,7 @@
                 <div class="p-3 ">
                     <div class="grid grid-cols-12 mt-4">
                         <div class="pl-[57px] col-span-8 ">
-                            <input type="checkbox" checked name="" id="addPrivilegeUser">
+                            <input type="checkbox" name="" id="addPrivilegeUser">
                             <label for="addPrivilegeUser" class=" font-bold">Users</label>
                         </div>
                         <div class="col-span-4 mr-20">
@@ -45,7 +45,7 @@
                                     <label for="privilegeUserDelete" class=" text-gray-500">Delete</label>
                                 </div>
                                 <div>
-                                    <input type="checkbox" checked name="Add" id="privilegeUserAdd">
+                                    <input type="checkbox" name="Add" id="privilegeUserAdd">
                                     <label for="privilegeUserAdd" class=" text-gray-500">Add</label>
                                 </div>
                             </div>
@@ -67,7 +67,7 @@
                                     <label for="privilegeEstimateDelete" class=" text-gray-500">Delete</label>
                                 </div>
                                 <div>
-                                    <input type="checkbox" checked name="Add" id="privilegeEstimateAdd">
+                                    <input type="checkbox" name="Add" id="privilegeEstimateAdd">
                                     <label for="privilegeEstimateAdd" class=" text-gray-500">Add</label>
                                 </div>
                             </div>
@@ -75,13 +75,13 @@
                     </div>
                     <div class="grid grid-cols-12 mt-4">
                         <div class="pl-[57px] col-span-8 ">
-                            <input type="checkbox" checked name="" id="addprivilegeSchedule">
+                            <input type="checkbox" name="" id="addprivilegeSchedule">
                             <label for="addprivilegeSchedule" class=" font-bold">Schedule</label>
                         </div>
                         <div class="col-span-4 mr-20">
                             <div class="flex justify-between">
                                 <div>
-                                    <input type="checkbox" checked name="Edit" id="privilegeScheduleEdit">
+                                    <input type="checkbox" name="Edit" id="privilegeScheduleEdit">
                                     <label for="privilegeScheduleEdit" class=" text-gray-500">Edit</label>
                                 </div>
                                 <div>
@@ -97,13 +97,13 @@
                     </div>
                     <div class="grid grid-cols-12 mt-4">
                         <div class="pl-[57px] col-span-8 ">
-                            <input type="checkbox" checked name="" id="addPrivilegeItem">
+                            <input type="checkbox" name="" id="addPrivilegeItem">
                             <label for="addPrivilegeItem" class=" font-bold">Items</label>
                         </div>
                         <div class="col-span-4 mr-20">
                             <div class="flex justify-between">
                                 <div>
-                                    <input type="checkbox" checked name="Edit" id="privilegeItemsEdit">
+                                    <input type="checkbox" name="Edit" id="privilegeItemsEdit">
                                     <label for="privilegeItemsEdit" class=" text-gray-500">Edit</label>
                                 </div>
                                 <div>
@@ -119,13 +119,13 @@
                     </div>
                     <div class="grid grid-cols-12 mt-4">
                         <div class="pl-[57px] col-span-8 ">
-                            <input type="checkbox" checked name="" id="addPrivilegeLabour">
+                            <input type="checkbox" name="" id="addPrivilegeLabour">
                             <label for="addPrivilegeLabour" class=" font-bold">Labour</label>
                         </div>
                         <div class="col-span-4 mr-20">
                             <div class="flex justify-between">
                                 <div>
-                                    <input type="checkbox" checked name="Edit" id="privilegeLabourEdit">
+                                    <input type="checkbox" name="Edit" id="privilegeLabourEdit">
                                     <label for="privilegeLabourEdit" class=" text-gray-500">Edit</label>
                                 </div>
                                 <div>
@@ -141,13 +141,13 @@
                     </div>
                     <div class="grid grid-cols-12 mt-4">
                         <div class="pl-[57px] col-span-8 ">
-                            <input type="checkbox" checked name="" id="addPrivilegeMaterials">
+                            <input type="checkbox" name="" id="addPrivilegeMaterials">
                             <label for="addPrivilegeMaterials" class=" font-bold">Materials</label>
                         </div>
                         <div class="col-span-4 mr-20">
                             <div class="flex justify-between">
                                 <div>
-                                    <input type="checkbox" checked name="Edit" id="privilegeMaterialsEdit">
+                                    <input type="checkbox" name="Edit" id="privilegeMaterialsEdit">
                                     <label for="privilegeMaterialsEdit" class=" text-gray-500">Edit</label>
                                 </div>
                                 <div>
@@ -163,13 +163,13 @@
                     </div>
                     <div class="grid grid-cols-12 mt-4">
                         <div class="pl-[57px] col-span-8 ">
-                            <input type="checkbox" checked name="" id="addPrivilegeFiles">
+                            <input type="checkbox" name="" id="addPrivilegeFiles">
                             <label for="addPrivilegeFiles" class=" font-bold">Files</label>
                         </div>
                         <div class="col-span-4 mr-20">
                             <div class="flex justify-between">
                                 <div>
-                                    <input type="checkbox" checked name="Edit" id="privilegeFilesEdit">
+                                    <input type="checkbox" name="Edit" id="privilegeFilesEdit">
                                     <label for="privilegeFilesEdit" class=" text-gray-500">Edit</label>
                                 </div>
                                 <div>
@@ -185,13 +185,13 @@
                     </div>
                     <div class="grid grid-cols-12 mt-4">
                         <div class="pl-[57px] col-span-8 ">
-                            <input type="checkbox" checked name="" id="addPrivilegeCampaign">
+                            <input type="checkbox" name="" id="addPrivilegeCampaign">
                             <label for="addPrivilegeCampaign" class=" font-bold">Campaign</label>
                         </div>
                         <div class="col-span-4 mr-20">
                             <div class="flex justify-between">
                                 <div>
-                                    <input type="checkbox" checked name="Edit" id="privilegeCampaignEdit">
+                                    <input type="checkbox" name="Edit" id="privilegeCampaignEdit">
                                     <label for="privilegeCampaignEdit" class=" text-gray-500">Edit</label>
                                 </div>
                                 <div>
