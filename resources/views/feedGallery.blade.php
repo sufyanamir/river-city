@@ -10,8 +10,10 @@
                 <x-add-button :title="'Pending'" :id="''" :class="' px-6'"></x-add-button>
                 <x-add-button :title="'Complete'" :id="''" :class="' px-6'"></x-add-button>
             </div>
-            <div class="col-span-6 my-auto ">
-                <img class="float-right mx-2" src="{{asset('assets/images/searchbox.svg')}}" alt="">
+            <div class="col-span-6 flex justify-end">.
+                <div class="my-auto">
+                    <img class=" m-2" src="{{asset('assets/images/searchbox.svg')}}" alt="">
+                </div>
             </div>
         </div>
         <hr class="bg-gray-900">
