@@ -11,7 +11,7 @@
             </div>
             <div class="col-span-10  pl-2 ">
                 <div class="grid grid-cols-10">
-                    <div class="col-span-7 p-3">
+                    <div class="col-span-8 p-3">
                         <p class="text-[#F5222D] text-[25px]/[29.3px] font-bold">
                             Coyne Development Corp - Steve Coyne
                         </p>
@@ -37,7 +37,7 @@
                             <span class="pl-2">Project Owner: Tom D
                             </span>
                         </p>
-                        <hr class="bg-gray-300 my-3 h-[2px]">
+                        <hr class="bg-gray-300 my-3 h-[2px] w-full">
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/page-icon.svg') }}" alt="">
                             <span class="pl-2">Estimate Pending Schedule
@@ -51,7 +51,7 @@
                             </span>
                         </p>
                     </div>
-                    <div class=" col-span-3 p-3 text-right">
+                    <div class=" col-span-2 p-3 text-right">
                         <p class="text-2xl font-bold">
                             Estimate
                         </p>
@@ -100,7 +100,11 @@
             </div>
             <div class="col-span-10 pl-2 py-3" >
                 <div class="my-auto flex p-3 pl-0">
-                    <img class="h-[40px] w-[190px] pl-3" src="{{asset('assets/images/estimateDemoImages/btn1.svg')}}" alt="">
+                    <a href="" class="pl-3">
+                        <button class=" flex h-[40px] w-[190px] p-3 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                            <img class="h-[14px] w-[14px] m-1" src="{{asset('assets/icons/calendar-icon.svg')}}" alt="">Schedule Estimate
+                        </button>
+                    </a>
                     <img class="h-[40px] w-[190px] pl-3" src="{{asset('assets/images/estimateDemoImages/btn2.svg')}}" alt="">
                     <img class="h-[40px] w-[190px] pl-3" src="{{asset('assets/images/estimateDemoImages/btn3.svg')}}" alt="">
                     <img class="h-[40px] w-[190px] pl-3" src="{{asset('assets/images/estimateDemoImages/btn4.svg')}}" alt="">
