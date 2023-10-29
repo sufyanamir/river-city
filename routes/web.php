@@ -31,6 +31,9 @@ Route::get('/crew', function () {
 Route::get('/estimates', function () {
     return view('estimates');
 });
+Route::get('/estimates/new', function () {
+    return view('newEstimates');
+});
 Route::get('/add-estimate', function () {
     return view('addEstimate');
 });
