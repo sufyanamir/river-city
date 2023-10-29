@@ -1,7 +1,7 @@
 @include('layouts.header')
 <div class=" my-4">
     <h1 class=" text-2xl font-semibold mb-3">Estimates</h1>
-    <div class=" bg-white w-full h-[809px] rounded-lg shadow-lg">
+    <div class=" bg-white w-full max-h-[809px] rounded-lg shadow-lg">
         <div class="grid sm:grid-cols-12 p-4">
             <div class="col-span-2  flex justify-between p-3 pr-0">
                 <p class="text-[20px]/[23.44px] font-medium">
@@ -89,6 +89,22 @@
                 <p class="text-[17px]/[19.92px] py-3 my-auto  pl-9 text-[#707683] font-medium">
                     Add Contacts to keep track of your project's stakeholders
                 </p>
+            </div>
+        </div>
+        <hr class="bg-gray-300 mt-0 h-[2px]">
+        <div class="grid grid-cols-12 p-4 py-0">
+            <div class="col-span-2 flex justify-between p-3 pr-0">
+                <p class="text-[20px]/[23.44px] py-3  font-medium">
+                    Actions
+                </p>
+            </div>
+            <div class="col-span-10 pl-2 py-3" >
+                <div class="my-auto flex p-3 pl-0">
+                    <img class="h-[40px] w-[190px] pl-3" src="{{asset('assets/images/estimateDemoImages/btn1.svg')}}" alt="">
+                    <img class="h-[40px] w-[190px] pl-3" src="{{asset('assets/images/estimateDemoImages/btn2.svg')}}" alt="">
+                    <img class="h-[40px] w-[190px] pl-3" src="{{asset('assets/images/estimateDemoImages/btn3.svg')}}" alt="">
+                    <img class="h-[40px] w-[190px] pl-3" src="{{asset('assets/images/estimateDemoImages/btn4.svg')}}" alt="">
+                </div>
             </div>
         </div>
         <hr class="bg-gray-300 mt-0 h-[2px]">
