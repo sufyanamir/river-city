@@ -179,36 +179,34 @@
         <div class="grid grid-cols-12 p-4 py-0">
             <div class="col-span-2  flex justify-between p-3 pr-0">
                 <p class="text-[20px]/[23.44px] font-medium">
-                    Profitablity
+                    Profitability
                 </p>
                 <button type="button" class="flex">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                         alt="">
                 </button>
             </div>
-            <div class="col-span-10 pl-2 py-3 grid grid-cols-10">
-                <p class="col-span-2 font-semibold text-xl pl-2 pt-5">
-                    Estimated
-                </p>
-                <table class="col-span-8 ">
-                    <thead>
-                        <tr>
-                            <th>Hours</th>
-                            <th>Cost</th>
-                            <th>Profit</th>
-                            <th>Margin</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>120.66</td>
-                            <td>$250.55</td>
-                            <td>$25.565</td>
-                            <td>40.41%</td>
-                        </tr>
-                    </tbody>
-                </table>
-
+            <div class="col-span-10 pl-2 py-3 ">
+                    <table class=" w-auto  ">
+                        <thead>
+                            <tr class="border border-solid border-l-0 border-r-0 border-t-0">
+                                <th></th>
+                                <th class=" pl-36  px-5">Hours</th>
+                                <th class="px-10">Cost</th>
+                                <th class="px-10">Profit</th>
+                                <th class="px-10">Margin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-semibold text-xl pr-44">Estimated</td>
+                                <td class="pl-36 px-5">120.66</td>
+                                <td class="px-10">$250.55</td>
+                                <td class="px-10">$25.565</td>
+                                <td class="px-10">40.41%</td>
+                            </tr>
+                        </tbody>
+                    </table>
             </div>
         </div>
     </div>
