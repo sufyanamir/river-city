@@ -186,8 +186,11 @@
                         alt="">
                 </button>
             </div>
-            <div class="col-span-10 pl-2 py-3">
-                <table class="border float-right ">
+            <div class="col-span-10 pl-2 py-3 grid grid-cols-10">
+                <p class="col-span-2 font-semibold text-xl pl-2 pt-5">
+                    Estimated
+                </p>
+                <table class="col-span-8 ">
                     <thead>
                         <tr>
                             <th>Hours</th>
