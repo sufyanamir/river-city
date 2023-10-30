@@ -19,9 +19,13 @@
             background-color: rgba(255, 255, 255, 0.7);
             border-radius: 10px;
         }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+        }
 
-        ::-webkit-scrollbar-track {
-            /* background-color: #930027; */
+        ::-webkit-scrollbar-track:hover {
+            background-color: #930027;
         }
 
         ::-webkit-scrollbar-track:horizontal {

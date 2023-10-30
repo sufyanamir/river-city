@@ -1,7 +1,7 @@
 @include('layouts.header')
 <div class=" my-4">
     <h1 class=" text-2xl font-semibold mb-3">Estimates</h1>
-    <div class=" bg-white w-full max-h-[809px] rounded-lg shadow-lg">
+    <div class=" bg-white w-full max-h-[809px] overflow-auto rounded-lg shadow-lg">
         <div class="grid sm:grid-cols-12 p-4">
             <div class="col-span-2  flex justify-between p-3 pr-0">
                 <p class="text-[20px]/[23.44px] font-medium">
@@ -209,6 +209,54 @@
                     </table>
             </div>
         </div>
+        <hr class="bg-gray-300 mt-0 h-[2px]">
+        <div class="grid grid-cols-12 p-4 py-0">
+            <div class="col-span-2 flex justify-between p-3 pr-0">
+                <p class="text-[20px]/[23.44px] py-3  font-medium">
+                    Items
+                </p>
+                <button type="button" class="flex">
+                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
+                </button>
+            </div>
+            <div class="col-span-10  ml-2 bg-gray-300 rounded-lg border-[#0000004D] my-2 py-3">
+                <div class="flex border-b border-[#0000001A] w-full px-4 pl-0  justify-between items-center mb-4">
+                    <div class=" flex">
+                      <button type="button" class="inline">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
+                            alt="">
+                      </button>
+                      <div class="">
+                        <label class="text-[20px]/[23.44px] font-semibold text-[#323C47]" for="groupName">Item name</label>
+                        <p class="text-[16px]/[18px] text-[#323C47] font">Description about item </p>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                        <span>$0.00</span>
+                    </div>
+                </div>
+                  <div class="flex border-b border-[#0000001A] w-full pl-0 px-4 justify-between items-center mb-4">
+                      <div class=" flex">
+                        <button type="button" class="inline">
+                          <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
+                              alt="">
+                        </button>
+                        <div class="">
+                          <label class="text-[20px]/[23.44px] font-semibold text-[#323C47]" for="groupName">Group name</label>
+                          <p class="text-[16px]/[18px] text-[#323C47] font">living room items</p>
+                        </div>
+                      </div>
+                      <div class="text-right">
+                          <span>$0.00</span>
+                      </div>
+                  </div>
+                  <div class="border-t mt-4 border-gray-300 px-4 pl-0 flex justify-end">
+                      <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] mr-5">Total</span>
+                      <span>$0.00</span>
+                  </div>
+            </div>
+        </div>
+        <hr class="bg-gray-300 mt-0 h-[2px]">
     </div>
 </div>
 
