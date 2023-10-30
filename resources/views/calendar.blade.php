@@ -140,7 +140,7 @@
                         <div id="dropdown-div" class="hidden">
                             <p class=" font-medium items-center">Who will complete estimate?</p>
                             <label for="userDropdown">User</label>
-                            <select id="customer" name="customer" autocomplete="customer-name" class=" ml-1 pl-2 w-[78%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <select id="customer" name="customer" autocomplete="customer-name" class=" ml-12 pl-2 w-[70%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                 <option>Select</option>
                                 <option>Canada</option>
                                 <option>Mexico</option>
@@ -161,9 +161,9 @@
                     <div class=" flex justify-start gap-3 mb-2">
                         <label>End date:</label>
                         <p class=" se_date text-[#858585]">2023-10-04</p>
-                        <input type="date" name="fendDate" id="fendDate" autocomplete="given-name" class=" se_date hidden w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        <input type="date" name="fendDate" id="fendDate" autocomplete="given-name" class=" se_date hidden w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     </div>
-                    <textarea placeholder="Note " disabled class="  ml-1 pl-2 w-[95%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6" name="" id="noteText"></textarea>
+                    <textarea placeholder="Note " disabled class=" w-[100%] outline-none rounded-md p-2 border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6" name="" id="noteText"></textarea>
                     <!-- task details -->
                     <p class="text-sm mb-4" id="modal-description"></p>
                     <!-- You can customize this part according to your needs -->
