@@ -18,6 +18,8 @@
         ::-webkit-scrollbar-thumb {
             background-color: rgba(255, 255, 255, 0.7);
             border-radius: 10px;
+            border:1px solid transparent;
+            background-clip: content-box;
         }
         ::-webkit-scrollbar-thumb:hover {
             background-color: rgba(255, 255, 255, 0.7);
@@ -35,6 +37,7 @@
         ::-webkit-scrollbar-horizontal {
             display: none;
         }
+
     </style>
     <!-- <link href="https://cdn.tailwindcss.com" rel="stylesheet"> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
