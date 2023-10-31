@@ -50,17 +50,6 @@ $(document).ready(function () {
   });
 
   new DataTable('#example');
-  $("#addItem").click(function (e) {
-    e.preventDefault();
-    $("#addItem-modal").removeClass('hidden');
-  });
-
-  $(".modal-close").click(function (e) { 
-    e.preventDefault();
-    $("#addItem-modal").addClass('hidden');
-    $("#addItem-form")[0].reset()
-  });
-
 });
 // Get references to the necessary elements
 const fileInput = document.getElementById('fileInput1');
