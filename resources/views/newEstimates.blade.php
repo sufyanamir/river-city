@@ -336,6 +336,37 @@
                   </div>
             </div>
         </div>
+        <hr class="bg-gray-300 mt-0 h-[2px]">
+        <div class="grid grid-cols-12 p-4 py-0">
+            <div class="col-span-2 flex justify-between p-3 pr-0">
+                <p class="text-[20px]/[23.44px] py-3  font-medium">
+                    Files
+                </p>
+                <button type="button" class="flex">
+                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
+                </button>
+            </div>
+            <div class="col-span-10  pl-2  py-3">
+                <div class="w-56 h-56">
+                    <x-drop-zone :value="''" :name="'upload_image'"></x-drop-zone>
+                </div>
+            </div>
+        </div>
+        <hr class="bg-gray-300 mt-0 h-[2px]">
+        <div class="grid grid-cols-12 p-4 py-0">
+            <div class="col-span-2 flex justify-between p-3 pr-0">
+                <p class="text-[20px]/[23.44px] py-3  font-medium">
+                    Proposals
+                </p>
+                <button type="button" class="flex">
+                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
+                </button>
+            </div>
+            <div class="col-span-10  pl-2  py-3">
+                <div class="">
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
