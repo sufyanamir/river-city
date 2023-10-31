@@ -109,6 +109,16 @@ img {
     overflow: hidden;
     display: inline-block;
 }
+.dropzonee {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* border-radius: 50%; */
+    overflow: hidden;
+    display: inline-block;
+    background-color: #F5F5F5;
+  }
+  
 
 .file-input-container {
     position: absolute;
@@ -126,6 +136,24 @@ img {
 }
 
 .file-input-container:hover {
+    opacity: 1;
+}
+.file-inputt-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* background: rgba(0, 0, 0, 0.5); */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* opacity: 0; */
+    cursor: pointer;
+    /* transition: opacity 0.3s ease; */
+}
+
+.file-inputt-container:hover {
     opacity: 1;
 }
 

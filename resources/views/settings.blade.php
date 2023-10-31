@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="my-3 text-right">
-                    <x-add-button :title="'Update'" :class="'px-7'"></x-add-button>
+                    <x-add-button :title="'Update'" :id="''" :class="'px-7'"></x-add-button>
                 </div>
             </form>
         </div>
