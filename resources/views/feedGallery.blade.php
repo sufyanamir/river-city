@@ -72,21 +72,23 @@
                 <div class="h-full mx-auto rounded bg-[#D9D9D9]   w-[5px]"></div>
             </div>
             <div class="col-span-5 grid grid-cols-5 mx-2 my-auto">
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                </div>
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                </div>
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                </div>
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                </div>
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                </div>
+                <a class="col-span-5 grid grid-cols-5" href="{{url('manageGallery')}}">
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
+                    </div>
+            </a>
             </div>
         </div>
         <div class=" grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
@@ -107,21 +109,23 @@
                 <div class="h-full mx-auto rounded bg-[#D9D9D9]   w-[5px]"></div>
             </div>
             <div class="col-span-5 grid grid-cols-5 mx-2 my-auto">
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                </div>
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                </div>
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                </div>
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                </div>
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                </div>
+                <a class="col-span-5 grid grid-cols-5" href="{{url('manageGallery')}}">
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
+                    </div>
+            </a>
             </div>
         </div>
         <div class=" grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
@@ -142,21 +146,23 @@
                 <div class="h-full mx-auto rounded bg-[#D9D9D9]   w-[5px]"></div>
             </div>
             <div class="col-span-5 grid grid-cols-5 mx-2 my-auto">
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                </div>
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                </div>
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                </div>
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                </div>
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                </div>
+                <a class="col-span-5 grid grid-cols-5" href="{{url('manageGallery')}}">
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
+                    </div>
+            </a>
             </div>
         </div>
         <div class=" grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
@@ -177,21 +183,23 @@
                 <div class="h-full mx-auto rounded bg-[#D9D9D9]   w-[5px]"></div>
             </div>
             <div class="col-span-5 grid grid-cols-5 mx-2 my-auto">
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                </div>
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                </div>
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                </div>
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                </div>
-                <div class="col-span-1">
-                    <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                </div>
+                <a class="col-span-5 grid grid-cols-5" href="{{url('manageGallery')}}">
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
+                    </div>
+            </a>
             </div>
         </div>
 

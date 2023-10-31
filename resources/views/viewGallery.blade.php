@@ -1,7 +1,7 @@
 @include('layouts.header')
 <div class=" my-4">
     <h1 class=" text-2xl font-semibold mb-3">Estimates</h1>
-    <div class=" bg-white w-full max-h-[809px] overflow-auto rounded-lg shadow-lg">
+    <div class=" bg-white w-full overflow-auto rounded-lg shadow-lg">
         <div class="grid sm:grid-cols-11 p-4">
             <div class="col-span-1  flex justify-end p-3 pr-0">
                 <button type="button" class="flex">
@@ -41,13 +41,61 @@
         <div class=" grid sm:grid-cols-11 pb-4 px-4">
             <div class="col-span-1"></div>
             <div class="col-span-10 px-3  flex justify-between">
-                <p class="text-[22px]/[25.78px] font-medium">Images</p>
+                <p class="text-[22px]/[25.78px] font-medium">Images <span>12</span></p>
                 <x-add-button :title="'Add Image'" :class="'px-4'" :id="''" />
-           </div>
+            </div>
         </div>
         <hr class="bg-gray-300 h-[2px] w-full">
-        .grid
+        <div class="grid sm:grid-cols-12 p-4">
+            <div class="col-span-1"></div>
+            <div class="col-span-10 p-3 grid grid-cols-3">
+                <div class="col-span-1 p-2 relative">
+                    <img src="{{ asset('assets/images/galleryEditsDemoImages/image1.svg') }}" alt="">
+                    <a href="###">
+                        <img class="absolute top-3 right-3" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
+                    </a>
+                </div>
+                <div class="col-span-1 p-2 relative">
+                    <img src="{{ asset('assets/images/galleryEditsDemoImages/image2.svg') }}" alt="">
+                    <a href="###">
+                        <img class="absolute top-3 right-3" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
+                    </a>
+                </div><div class="col-span-1 p-2 relative">
+                    <img src="{{ asset('assets/images/galleryEditsDemoImages/image1.svg') }}" alt="">
+                    <a href="###">
+                        <img class="absolute top-3 right-3" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
+                    </a>
+                </div><div class="col-span-1 p-2 relative">
+                    <img src="{{ asset('assets/images/galleryEditsDemoImages/image2.svg') }}" alt="">
+                    <a href="###">
+                        <img class="absolute top-3 right-3" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
+                    </a>
+                </div><div class="col-span-1 p-2 relative">
+                    <img src="{{ asset('assets/images/galleryEditsDemoImages/image1.svg') }}" alt="">
+                    <a href="###">
+                        <img class="absolute top-3 right-3" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
+                    </a>
+                </div><div class="col-span-1 p-2 relative">
+                    <img src="{{ asset('assets/images/galleryEditsDemoImages/image2.svg') }}" alt="">
+                    <a href="###">
+                        <img class="absolute top-3 right-3" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
+                    </a>
+                </div><div class="col-span-1 p-2 relative">
+                    <img src="{{ asset('assets/images/galleryEditsDemoImages/image1.svg') }}" alt="">
+                    <a href="###">
+                        <img class="absolute top-3 right-3" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
+                    </a>
+                </div>
 
+            </div>
+            <div class="col-span-1"></div>
+
+
+        </div>
+        <hr class="bg-gray-300 h-[2px] w-full">
+        <div class="p-3 px-6">
+            <x-add-button :title="'Back'" :class="'text-[#050303] px-6 py-1 border-solid border-[#000000]  shadow-md border-[1px] text-[18px]/[21px] bg-gray-100 hover:bg-[#930027] hover:text-white hover:border-none '" :id="''" />
+        </div>
     </div>
 </div>
 @include('layouts.footer')
