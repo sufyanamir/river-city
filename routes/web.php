@@ -55,6 +55,9 @@ Route::get('/reports', function () {
 Route::get('/feedGallery', function () {
     return view('feedGallery');
 });
+Route::get('/manageGallery', function () {
+    return view('viewGallery');
+});
 Route::get('/calendar', function () {
     return view('calendar');
 });
