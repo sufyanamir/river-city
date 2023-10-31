@@ -13,7 +13,7 @@
                 </button>
             </div>
             <div class="col-span-10  pl-2 ">
-                <div class="grid grid-cols-10">
+                <div class="grid sm:grid-cols-10">
                     <div class="col-span-8 p-3">
                         <p class="text-[#F5222D] text-[25px]/[29.3px] font-bold">
                             Coyne Development Corp - Steve Coyne
@@ -83,7 +83,7 @@
             </div>
         </div>
         <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid grid-cols-12 p-4 py-0">
+        <div class="grid sm:grid-cols-12 p-4 py-0">
             <div class="col-span-2 flex justify-between p-3 pr-0">
                 <p class="text-[20px]/[23.44px] py-3  font-medium">
                     Contacts
@@ -99,7 +99,7 @@
             </div>
         </div>
         <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid grid-cols-12 p-4 py-0">
+        <div class="grid sm:grid-cols-12 p-4 py-0">
             <div class="col-span-2 flex justify-between p-3 pr-0">
                 <p class="text-[20px]/[23.44px] py-3  font-medium">
                     Actions
@@ -137,7 +137,7 @@
             </div>
         </div>
         <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid grid-cols-12 p-4 py-0">
+        <div class="grid sm:grid-cols-12 p-4 py-0">
             <div class="col-span-2 flex justify-between p-3 pr-0">
                 <p class="text-[20px]/[23.44px] py-3  font-medium">
                     Document
@@ -176,7 +176,7 @@
             </div>
         </div>
         <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid grid-cols-12 p-4 py-0">
+        <div class="grid sm:grid-cols-12 p-4 py-0">
             <div class="col-span-2  flex justify-between p-3 pr-0">
                 <p class="text-[20px]/[23.44px] font-medium">
                     Profitability
@@ -210,7 +210,7 @@
             </div>
         </div>
         <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid grid-cols-12 p-4 py-0">
+        <div class="grid sm:grid-cols-12 p-4 py-0">
             <div class="col-span-2 flex justify-between p-3 pr-0">
                 <p class="text-[20px]/[23.44px] py-3  font-medium">
                     Items
@@ -257,7 +257,7 @@
             </div>
         </div>
         <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid grid-cols-12 p-4 py-0">
+        <div class="grid sm:grid-cols-12 p-4 py-0">
             <div class="col-span-2 flex justify-between p-3 pr-0">
                 <p class="text-[20px]/[23.44px] py-3  font-medium">
                     Labor
@@ -291,7 +291,7 @@
             </div>
         </div>
         <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid grid-cols-12 p-4 py-0">
+        <div class="grid sm:grid-cols-12 p-4 py-0">
             <div class="col-span-2 flex justify-between p-3 pr-0">
                 <p class="text-[20px]/[23.44px] py-3  font-medium">
                     Materials
@@ -337,7 +337,7 @@
             </div>
         </div>
         <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid grid-cols-12 p-4 py-0">
+        <div class="grid sm:grid-cols-12 p-4 py-0">
             <div class="col-span-2 flex justify-between p-3 pr-0">
                 <p class="text-[20px]/[23.44px] py-3  font-medium">
                     Files
@@ -353,7 +353,7 @@
             </div>
         </div>
         <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid grid-cols-12 p-4 py-0">
+        <div class="grid sm:grid-cols-12 p-4 py-0">
             <div class="col-span-2 flex justify-between p-3 pr-0">
                 <p class="text-[20px]/[23.44px] py-3  font-medium">
                     Proposals
