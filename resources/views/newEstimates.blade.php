@@ -342,11 +342,11 @@
                 <p class="text-[20px]/[23.44px] py-3  font-medium">
                     Files
                 </p>
-                <button type="button" class="flex">
+                <button type="button" class="flex" id="addImage-btn">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <div class="col-span-10  pl-2  py-3">
+            <div class="col-span-10  pl-2  py-3 hidden" id="image-field">
                 <div class="w-56 h-56">
                     <x-drop-zone :value="''" :name="'upload_image'"></x-drop-zone>
                 </div>
@@ -371,3 +371,9 @@
 </div>
 
 @include('layouts.footer')
+<script>
+    $("#addImage-btn").click(function (e) { 
+        e.preventDefault();
+        $("#image-field").toggleClass('hidden');
+    });
+</script>
