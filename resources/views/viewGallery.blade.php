@@ -5,8 +5,7 @@
         <div class="grid sm:grid-cols-11 p-4">
             <div class="col-span-1  flex justify-end p-3 pr-0">
                 <button type="button" class="flex">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
-                        alt="">
+                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                 </button>
             </div>
             <div class="col-span-10  pl-3 ">
@@ -50,40 +49,45 @@
             <div class="col-span-1"></div>
             <div class="col-span-10 p-3 grid grid-cols-3">
                 <div class="col-span-1 p-2 relative">
-                    <img src="{{ asset('assets/images/galleryEditsDemoImages/image1.svg') }}" alt="">
-                    <a href="###">
-                        <img class="absolute top-3 right-3" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
+                    <img class=" w-full" src="{{ asset('assets/images/galleryEditsDemoImages/image1.svg') }}" alt="">
+                    <a href="###" class=" absolute top-4 right-4">
+                        <img class="" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
                     </a>
                 </div>
                 <div class="col-span-1 p-2 relative">
-                    <img src="{{ asset('assets/images/galleryEditsDemoImages/image2.svg') }}" alt="">
-                    <a href="###">
-                        <img class="absolute top-3 right-3" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
+                    <img class=" w-full" src="{{ asset('assets/images/galleryEditsDemoImages/image2.svg') }}" alt="">
+                    <a href="###" class=" absolute top-4 right-4">
+                        <img class="" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
                     </a>
-                </div><div class="col-span-1 p-2 relative">
-                    <img src="{{ asset('assets/images/galleryEditsDemoImages/image1.svg') }}" alt="">
-                    <a href="###">
-                        <img class="absolute top-3 right-3" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
+                </div>
+                <div class="col-span-1 p-2 relative">
+                    <img class=" w-full" src="{{ asset('assets/images/galleryEditsDemoImages/image1.svg') }}" alt="">
+                    <a href="###" class=" absolute top-4 right-4">
+                        <img class="" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
                     </a>
-                </div><div class="col-span-1 p-2 relative">
-                    <img src="{{ asset('assets/images/galleryEditsDemoImages/image2.svg') }}" alt="">
-                    <a href="###">
-                        <img class="absolute top-3 right-3" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
+                </div>
+                <div class="col-span-1 p-2 relative">
+                    <img class=" w-full" src="{{ asset('assets/images/galleryEditsDemoImages/image2.svg') }}" alt="">
+                    <a href="###" class=" absolute top-4 right-4">
+                        <img class="" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
                     </a>
-                </div><div class="col-span-1 p-2 relative">
-                    <img src="{{ asset('assets/images/galleryEditsDemoImages/image1.svg') }}" alt="">
-                    <a href="###">
-                        <img class="absolute top-3 right-3" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
+                </div>
+                <div class="col-span-1 p-2 relative">
+                    <img class=" w-full" src="{{ asset('assets/images/galleryEditsDemoImages/image1.svg') }}" alt="">
+                    <a href="###" class=" absolute top-4 right-4">
+                        <img class="" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
                     </a>
-                </div><div class="col-span-1 p-2 relative">
-                    <img src="{{ asset('assets/images/galleryEditsDemoImages/image2.svg') }}" alt="">
-                    <a href="###">
-                        <img class="absolute top-3 right-3" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
+                </div>
+                <div class="col-span-1 p-2 relative">
+                    <img class=" w-full" src="{{ asset('assets/images/galleryEditsDemoImages/image2.svg') }}" alt="">
+                    <a href="###" class=" absolute top-4 right-4">
+                        <img class="" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
                     </a>
-                </div><div class="col-span-1 p-2 relative">
-                    <img src="{{ asset('assets/images/galleryEditsDemoImages/image1.svg') }}" alt="">
-                    <a href="###">
-                        <img class="absolute top-3 right-3" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
+                </div>
+                <div class="col-span-1 p-2 relative">
+                    <img class=" w-full" src="{{ asset('assets/images/galleryEditsDemoImages/image1.svg') }}" alt="">
+                    <a href="###" class=" absolute top-4 right-4">
+                        <img class="" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
                     </a>
                 </div>
 

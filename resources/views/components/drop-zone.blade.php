@@ -1,5 +1,4 @@
-<div  id="dropzonee" class="dropzonee">
-    
+<div  id="dropzonee" class="dropzonee border rounded-xl">    
     <img id="profileImage" src="{{ 'assets/images/rectangle-image.svg' }}"  style="width: 100%; height: 237px; object-fit: fill;" alt="IMAGE">
     <div class="file-inputt-container">
         <input class="file-input" type="file" name="{{ $name }}" id="fileInput1">
