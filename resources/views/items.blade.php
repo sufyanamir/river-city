@@ -7,7 +7,7 @@
                 <h4>Items List</h4>
             </div>
             <div class=" flex gap-5">
-                <x-add-button :id="''" :title="'All'" :class="' bg-orange-500 px-6'"></x-add-button>
+                <x-add-button :id="''" :title="'All'" :class="' bg-[#E02B20] px-6'"></x-add-button>
                 <x-add-button :id="''" :title="'Product'" :class="''"></x-add-button>
                 <x-add-button :id="''" :title="'Labour'" :class="''"></x-add-button>
                 <x-add-button :id="''" :title="'Assemblies'" :class="''"></x-add-button>

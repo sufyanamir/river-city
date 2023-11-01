@@ -55,6 +55,9 @@ Route::get('/reports', function () {
 Route::get('/feedGallery', function () {
     return view('feedGallery');
 });
+Route::get('/editQoutation', function () {
+    return view('editQoutation');
+});
 Route::get('/manageGallery', function () {
     return view('viewGallery');
 });
