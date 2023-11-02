@@ -73,7 +73,7 @@
             </div>
         </div>
         <div class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 duration-300 font-bold hidden" id="crew-submenu1">
-          <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/allJobs'" :title="'All'" :icon="'item-icon.svg'"></x-sidebarLinks>
+          <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/jobs'" :title="'All'" :icon="'item-icon.svg'"></x-sidebarLinks>
           <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/completeJobs'" :title="'Complete'"
               :icon="'group-icon.svg'"></x-sidebarLinks>
           <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/pendigJobs'" :title="'Pending'" :icon="'item-icon.svg'"></x-sidebarLinks>
@@ -93,7 +93,7 @@
             </div>
         </div>
         <div class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 duration-300 font-bold hidden" id="user-submenu1">
-          <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/allEstimates'" :title="'All'" :icon="'item-icon.svg'"></x-sidebarLinks>
+          <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/estimates'" :title="'All'" :icon="'item-icon.svg'"></x-sidebarLinks>
           <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/completeEstimates'" :title="'Complete'"
               :icon="'group-icon.svg'"></x-sidebarLinks>
           <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/pendigEstimates'" :title="'Pending'" :icon="'item-icon.svg'"></x-sidebarLinks>
