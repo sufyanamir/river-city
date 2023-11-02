@@ -98,7 +98,7 @@
         </div>
         <hr class="bg-gray-300 h-[2px] w-full">
         <div class="p-3 px-6">
-            <x-add-button :title="'Back'" :class="'text-[#050303] px-6 py-1 border-solid border-[#000000]  shadow-md border-[1px] text-[18px]/[21px] bg-gray-100 hover:bg-[#930027] hover:text-white hover:border-none '" :id="''" />
+            <x-add-button :title="'Back'" :class="'text-[#140808] px-6 py-1 border-solid border-[#000000]  shadow-md border-[1px] text-[18px]/[21px] bg-gray-100 hover:bg-[#930027] hover:text-white hover:border-none '" :id="''" />
         </div>
     </div>
 </div>

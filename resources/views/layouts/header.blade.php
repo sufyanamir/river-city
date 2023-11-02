@@ -124,6 +124,7 @@
                 :icon="'group-icon.svg'"></x-sidebarLinks>
         </div>
         <x-sidebarLinks :class="'text-white'" :url="'/calendar'" :title="'Calendar'" :icon="'calendar-icon.svg'"></x-sidebarLinks>
+        <x-sidebarLinks :class="'text-white'" :url="'/payment-template'" :title="'PAY Template'" :icon="'calendar-icon.svg'"></x-sidebarLinks>
         <x-sidebarLinks :class="'text-white'" :url="'/feedGallery'" :title="'Gallery'" :icon="'gallery-icon.svg'"></x-sidebarLinks>
         <x-sidebarLinks :class="'text-white'" :url="'/campaign'" :title="'Campaign'" :icon="'campaign-icon.svg'"></x-sidebarLinks>
         <x-sidebarLinks :class="'text-white'" :url="''" :title="'Reports'" :icon="'reports-icon.svg'"></x-sidebarLinks>

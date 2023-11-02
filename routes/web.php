@@ -49,6 +49,9 @@ Route::get('/emails', function () {
 Route::get('/campaign', function () {
     return view('campaign');
 });
+Route::get('/payment-template', function () {
+    return view('paymentTemplate');
+});
 Route::get('/reports', function () {
     return view('reports');
 });
