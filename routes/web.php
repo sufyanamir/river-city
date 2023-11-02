@@ -52,6 +52,9 @@ Route::get('/campaign', function () {
 Route::get('/reports', function () {
     return view('reports');
 });
+Route::get('/jobs', function () {
+    return view('jobs');
+});
 Route::get('/feedGallery', function () {
     return view('feedGallery');
 });
