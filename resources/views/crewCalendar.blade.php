@@ -1,4 +1,12 @@
 <style>
+    .mbsc-calendar-button {
+        color: black !important;
+    }
+
+    .mbsc-calendar-controls {
+        background-color: white !important;
+    }
+
     .employee-shifts-day {
         font-size: 14px;
         font-weight: 600;
@@ -50,29 +58,32 @@
 </style>
 @include('layouts.header')
 <link rel="stylesheet" href="{{ asset('assets/employeeCalendar/css/mobiscroll.javascript.min.css') }}">
-<div id="demo-employee-shifts-calendar" class=" my-2 md-employee-shifts"></div>
+<div class=" my-4">
+    <h1 class=" text-2xl font-semibold mb-3">Crew Calendar</h1>
+    <div id="demo-employee-shifts-calendar" class=" md-employee-shifts"></div>
 
-<div id="demo-employee-shifts-popup" class=" employee-shifts-popup">
-    <div class="mbsc-form-group">
-        <label for="employee-shifts-start">
-            Shift start
-            <input mbsc-input data-dropdown="true" id="employee-shifts-start" />
-        </label>
-        <label for="employee-shifts-end">
-            Shift end
-            <input mbsc-input data-dropdown="true" id="employee-shifts-end" />
-        </label>
-        <div id="demo-employee-shifts-date"></div>
-    </div>
-    <div class="mbsc-form-group">
-        <label>
-            Notes
-            <textarea mbsc-textarea id="employee-shifts-notes"></textarea>
-        </label>
-    </div>
-    <div class="mbsc-button-group">
-        <button class="mbsc-button-block" id="employee-shifts-delete" mbsc-button data-color="danger"
-            data-variant="outline">Delete shift</button>
+    <div id="demo-employee-shifts-popup" class=" employee-shifts-popup">
+        <div class="mbsc-form-group">
+            <label for="employee-shifts-start">
+                Shift start
+                <input mbsc-input data-dropdown="true" id="employee-shifts-start" />
+            </label>
+            <label for="employee-shifts-end">
+                Shift end
+                <input mbsc-input data-dropdown="true" id="employee-shifts-end" />
+            </label>
+            <div id="demo-employee-shifts-date"></div>
+        </div>
+        <div class="mbsc-form-group">
+            <label>
+                Notes
+                <textarea mbsc-textarea id="employee-shifts-notes"></textarea>
+            </label>
+        </div>
+        <div class="mbsc-button-group">
+            <button class="mbsc-button-block" id="employee-shifts-delete" mbsc-button data-color="danger"
+                data-variant="outline">Delete shift</button>
+        </div>
     </div>
 </div>
 @include('layouts.footer')
