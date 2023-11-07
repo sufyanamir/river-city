@@ -108,7 +108,7 @@
                             <input type="text" name="taxRate" id="taxRate" placeholder="Tax Rate (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class=" col-span-2">
-                            <h3 class=" text-lg font-medium text-left">Tax</h3>
+                            <h3 class=" text-lg font-medium text-left">Potential Value</h3>
                             <input type="text" name="potentialValue" id="potentialValue" placeholder="Potential Value" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class=" col-span-4">
