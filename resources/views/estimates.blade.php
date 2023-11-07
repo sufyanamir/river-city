@@ -34,20 +34,24 @@
                             <td>Town, City, Country</td>
                             <td>user name</td>
                             <td>
-                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Badge</span>
+                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Complete</span>
                             </td>
                             <td>
-                                <div class="inline-block">
-                                    <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="estimateDetails" aria-expanded="true" aria-haspopup="true">
-                                        <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                                    </button>
+                                <div class=" flex justify-evenly gap-3">
+                                    <div class=" my-auto">
+                                        <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="estimateDetails" aria-expanded="true" aria-haspopup="true">
+                                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <button class=" px-2 py-2">
+                                            <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <x-action-dropdown></x-action-dropdown>
+                                    </div>
                                 </div>
-                                <div class=" inline-block items-center align-middle">
-                                    <button>
-                                        <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
-                                    </button>
-                                </div>
-                                <x-action-dropdown></x-action-dropdown>
                             </td>
                         </tr>
                     </tbody>
