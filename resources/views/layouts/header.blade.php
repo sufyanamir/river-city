@@ -59,9 +59,9 @@
         <i class="bi bi-search text-sm"></i>
         <input type="text" placeholder="Search" class="text-[15px] ml-4 w-full bg-transparent focus:outline-none" />
       </div> -->
-        <x-sidebarLinks :class="'text-white'" :url="'/'" :title="'Dashboard'" :icon="'dashboard-icon.svg'"></x-sidebarLinks>
-        <x-sidebarLinks :class="'text-white'" :url="'/customers'" :title="'Customers'" :icon="'user-icon.svg'"></x-sidebarLinks>
-        <x-sidebarLinks :class="'text-white'" :url="'/estimates'" :title="'Estimates'" :icon="'estimate-icon.svg'"></x-sidebarLinks>
+        <x-sidebar-links :class="'text-white'" :url="'/'" :title="'Dashboard'" :icon="'dashboard-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="'/customers'" :title="'Customers'" :icon="'user-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="'/estimates'" :title="'Estimates'" :icon="'estimate-icon.svg'"></x-sidebar-links>
         <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white"
             id="crew-dropdown-card1">
             <img src="{{ asset('assets/icons/estimate-icon.svg') }}" alt="">
@@ -73,14 +73,14 @@
             </div>
         </div>
         <div class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 duration-300 font-bold hidden" id="crew-submenu1">
-          <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/jobs'" :title="'All'" :icon="'item-icon.svg'"></x-sidebarLinks>
-          <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/completeJobs'" :title="'Complete'"
-              :icon="'group-icon.svg'"></x-sidebarLinks>
-          <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/pendigJobs'" :title="'Pending'" :icon="'item-icon.svg'"></x-sidebarLinks>
-          <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/approvedJobs'" :title="'Approved'"
-              :icon="'group-icon.svg'"></x-sidebarLinks>
-          <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/cancelJobs'" :title="'Cancel'"
-              :icon="'group-icon.svg'"></x-sidebarLinks>
+          <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/jobs'" :title="'All'" :icon="'item-icon.svg'"></x-sidebar-links>
+          <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/completeJobs'" :title="'Complete'"
+              :icon="'group-icon.svg'"></x-sidebar-links>
+          <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/pendigJobs'" :title="'Pending'" :icon="'item-icon.svg'"></x-sidebar-links>
+          <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/approvedJobs'" :title="'Approved'"
+              :icon="'group-icon.svg'"></x-sidebar-links>
+          <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/cancelJobs'" :title="'Cancel'"
+              :icon="'group-icon.svg'"></x-sidebar-links>
       </div>
         <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white"
             id="user-dropdown-card1">
@@ -93,14 +93,14 @@
             </div>
         </div>
         <div class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 duration-300 font-bold hidden" id="user-submenu1">
-          <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/estimates'" :title="'All'" :icon="'item-icon.svg'"></x-sidebarLinks>
-          <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/completeEstimates'" :title="'Complete'"
-              :icon="'group-icon.svg'"></x-sidebarLinks>
-          <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/pendigEstimates'" :title="'Pending'" :icon="'item-icon.svg'"></x-sidebarLinks>
-          <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/approvedEstimates'" :title="'Approved'"
-              :icon="'group-icon.svg'"></x-sidebarLinks>
-          <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/cancelEstimates'" :title="'Cancel'"
-              :icon="'group-icon.svg'"></x-sidebarLinks>
+          <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/estimates'" :title="'All'" :icon="'item-icon.svg'"></x-sidebar-links>
+          <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/completeEstimates'" :title="'Complete'"
+              :icon="'group-icon.svg'"></x-sidebar-links>
+          <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/pendigEstimates'" :title="'Pending'" :icon="'item-icon.svg'"></x-sidebar-links>
+          <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/approvedEstimates'" :title="'Approved'"
+              :icon="'group-icon.svg'"></x-sidebar-links>
+          <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/cancelEstimates'" :title="'Cancel'"
+              :icon="'group-icon.svg'"></x-sidebar-links>
       </div>
         <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white"
             id="dropdown-card1">
@@ -119,16 +119,16 @@
             
         </div>
         <div class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 duration-300 font-bold hidden" id="submenu1">
-            <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/items'" :title="'Items'" :icon="'item-icon.svg'"></x-sidebarLinks>
-            <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/group'" :title="'Groups'"
-                :icon="'group-icon.svg'"></x-sidebarLinks>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/items'" :title="'Items'" :icon="'item-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/group'" :title="'Groups'"
+                :icon="'group-icon.svg'"></x-sidebar-links>
         </div>
-        <x-sidebarLinks :class="'text-white'" :url="'/calendar'" :title="'Calendar'" :icon="'calendar-icon.svg'"></x-sidebarLinks>
-        <x-sidebarLinks :class="'text-white'" :url="'/payment-template'" :title="'PAY Template'" :icon="'calendar-icon.svg'"></x-sidebarLinks>
-        <x-sidebarLinks :class="'text-white'" :url="'/feedGallery'" :title="'Gallery'" :icon="'gallery-icon.svg'"></x-sidebarLinks>
-        <x-sidebarLinks :class="'text-white'" :url="'/campaign'" :title="'Campaign'" :icon="'campaign-icon.svg'"></x-sidebarLinks>
-        <x-sidebarLinks :class="'text-white'" :url="''" :title="'Reports'" :icon="'reports-icon.svg'"></x-sidebarLinks>
-        <x-sidebarLinks :class="'text-white'" :url="'/emails'" :title="'Email Templates'" :icon="'emailTemplate-icon.svg'"></x-sidebarLinks>
+        <x-sidebar-links :class="'text-white'" :url="'/calendar'" :title="'Calendar'" :icon="'calendar-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="'/payment-template'" :title="'PAY Template'" :icon="'calendar-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="'/feedGallery'" :title="'Gallery'" :icon="'gallery-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="'/campaign'" :title="'Campaign'" :icon="'campaign-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="''" :title="'Reports'" :icon="'reports-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="'/emails'" :title="'Email Templates'" :icon="'emailTemplate-icon.svg'"></x-sidebar-links>
         <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white"
             id="dropdown-card2">
             <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -155,14 +155,14 @@
             </div>
         </div>
         <div class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 font-bold hidden" id="submenu2">
-            <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/users'" :title="'Users'"
-                :icon="'user-icon.svg'"></x-sidebarLinks>
-            <x-sidebarLinks :class="'bg-white text-[#930027]'" :url="'/userRole'" :title="'User role'"
-                :icon="'userRole-icon.svg'"></x-sidebarLinks>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/users'" :title="'Users'"
+                :icon="'user-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/userRole'" :title="'User role'"
+                :icon="'userRole-icon.svg'"></x-sidebar-links>
         </div>
-        <x-sidebarLinks :class="'text-white'" :url="'/crew'" :title="'Crew'" :icon="'user-icon.svg'"></x-sidebarLinks>
-        <x-sidebarLinks :class="'text-white'" :url="'/settings'" :title="'Settings'" :icon="'settings-icon.svg'"></x-sidebarLinks>
-        <x-sidebarLinks :class="'text-white'" :url="'/help'" :title="'Help'" :icon="'help-icon.svg'"></x-sidebarLinks>
+        <x-sidebar-links :class="'text-white'" :url="'/crew'" :title="'Crew'" :icon="'user-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="'/settings'" :title="'Settings'" :icon="'settings-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="'/help'" :title="'Help'" :icon="'help-icon.svg'"></x-sidebar-links>
 
         <div class="p-2.5 mt-3  flex items-center rounded-md px-4 duration-300 cursor-pointer text-white">
             <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
