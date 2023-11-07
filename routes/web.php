@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('dashboard');
+    return view('login');
 });
 Route::get('/customers', function () {
     return view('customers');
@@ -73,8 +73,8 @@ Route::get('/manageGallery', function () {
 Route::get('/calendar', function () {
     return view('calendar');
 });
-Route::get('/login',function(){
-    return view('login');
+Route::get('/dashboard',function(){
+    return view('dashboard');
 });
 Route::get('//addEmail',function(){
     return view('addEmail');

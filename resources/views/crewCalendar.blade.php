@@ -1,7 +1,4 @@
 <style>
-    .mbsc-calendar-button {
-        color: black !important;
-    }
 
     .mbsc-calendar-controls {
         background-color: white !important;
@@ -81,8 +78,7 @@
             </label>
         </div>
         <div class="mbsc-button-group">
-            <button class="mbsc-button-block" id="employee-shifts-delete" mbsc-button data-color="danger"
-                data-variant="outline">Delete shift</button>
+            <button class="mbsc-button-block" id="employee-shifts-delete" mbsc-button data-color="danger" data-variant="outline">Delete shift</button>
         </div>
     </div>
 </div>
