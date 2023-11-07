@@ -177,7 +177,7 @@
         <div class="main-container duration-500 rounded-l-3xl h-screen overflow-auto bg-[#edf2f7] ml-[250px] p-3">
             <div class="topbar py-1 flex justify-between">
                 <div>
-                    <span class=" text-white text-4xl cursor-pointer openClose-sidebar">
+                    <span class=" text-white text-4xl cursor-pointer open-sidebar hidden">
                         <i class="bi bi-filter-left px-2 bg-[#930027] rounded-md"></i>
                     </span>
                 </div>

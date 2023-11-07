@@ -12,21 +12,21 @@
     </div>
     <div>
         <div class="grid lg:grid-cols-4 sm:grid-cols-1 gap-3">
-            <x-dashboard-cards :title="''" :value="''" :img="''"></x-dashboard-cards>
-            <x-dashboard-cards :title="''" :value="''" :img="''"></x-dashboard-cards>
-            <x-dashboard-cards :title="''" :value="''" :img="''"></x-dashboard-cards>
-            <x-dashboard-cards :title="''" :value="''" :img="''"></x-dashboard-cards>
+            <x-dashboard-cards :title="'Total Customers'" :value="'5732'" :img="'dashboard-graphs.svg'"></x-dashboard-cards>
+            <x-dashboard-cards :title="'Total Staff'" :value="'5732'" :img="'dashboard-users.svg'"></x-dashboard-cards>
+            <x-dashboard-cards :title="'Total Orders'" :value="'5732'" :img="'dashboard-orders.svg'"></x-dashboard-cards>
+            <x-dashboard-cards :title="'Total Revenue'" :value="'5732'" :img="'dashboard-dollar.svg'"></x-dashboard-cards>
         </div>
     </div>
-    <div class=" flex justify-between">
+    <div class=" lg:flex lg:justify-between xl:flex xl:justify-between sm:grid sm:grid-cols-1 md:grid md:grid-cols-1 gap-2">
         <!-- order summary & schedules -->
 
-        <div class=" bg-white w-full m-3 rounded-xl">
+        <div class=" bg-white my-2 w-full rounded-xl">
             <div class=" p-2 border-b-2">
                 <h3 class=" text-xl font-smibold">Orders Summary</h3>
             </div>
-            <div class=" flex justify-evenly">
-                <div class=" p-2">
+            <div class=" lg:flex lg:justify-evenly xl:flex xl:justify-evenly md:grid md:grid-cols-1 sm:grid sm:grid-cols-1">
+                <div class=" p-2 text-center sm:mx-auto md:mx-auto lg:mx-0 xl:mx-0">
                     <canvas id="myDoughnutChart1"></canvas>
                 </div>
                 <div class=" p-2 my-auto text-center">
@@ -60,18 +60,18 @@
 
         <!-- order summary & schedules -->
         <!-- orders chart & to do list -->
-        <div class=" bg-[#930027] m-3 rounded-2xl w-auto">
+        <div class=" bg-[#930027] my-2 rounded-2xl w-auto">
             <div class=" border-b-2 p-2 text-white">
                 <h3 class=" text-lg font-medium">Orders</h3>
             </div>
-            <div class=" m-2 text-white">
+            <div class=" my-2 text-white text-center mx-auto">
                 <canvas id="myDoughnutChart"></canvas>
             </div>
         </div>
         <!-- orders chart & to do list -->
     </div>
-    <div class=" flex justify-between">
-        <div class=" bg-white w-full m-3 rounded-xl">
+    <div class=" lg:flex lg:justify-between gap-2 xl:flex xl:justify-between sm:grid sm:grid-cols-1 md:grid md:grid-cols-1">
+        <div class=" bg-white w-full rounded-xl">
             <div class=" p-2">
                 <div class=" flex justify-between gap-10">
                     <h3 class=" text-lg font-medium">Schedules</h3>
@@ -116,7 +116,7 @@
                 </div>
             </div>
         </div>
-        <div class=" bg-white w-full m-3 rounded-xl">
+        <div class=" bg-white w-full rounded-xl">
             <div class=" border-b-2 p-2">
                 <h3 class=" text-lg font-medium">To do List</h3>
             </div>
@@ -124,7 +124,7 @@
                 <div class=" p-2">
                     <form action="">
                         <div class=" flex justify-between">
-                            <input type="text" name="add_new" id="add_new" placeholder="Add New" autocomplete="given-name" class=" inline-block mb-2 w-full rounded-md border-0 text-gray-400 p-2 ring-0 border-b-2 focus:border-0 border-[#f5f5f5] placeholder:text-gray-400 focus:ring-0 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <input type="text" name="add_new" id="add_new" placeholder="Add New" autocomplete="given-name" class=" inline-block mb-2 w-full rounded-md border-0 text-gray-400 p-2 ring-0 border-b-2 focus:border-0 border-[#f5f5f5] placeholder:text-gray-400 outline-none focus:ring-0 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             <x-quick-add-btn :icon="'plus-icon.svg'"></x-quick-add-btn>
                         </div>
                     </form>
@@ -190,7 +190,7 @@
                 display: true,
                 text: 'My Doughnut Chart'
             },
-            cutout: 100,
+            cutout: '60%',
             circumference: 180,
             rotation: 270
         }
@@ -219,7 +219,7 @@
                 display: true,
                 text: 'My Doughnut Chart'
             },
-            cutout: 110,
+            cutout: '90%',
         }
     });
 </script>

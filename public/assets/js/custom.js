@@ -27,11 +27,18 @@ $(document).ready(function () {
     $("#" + arrowId).toggleClass("rotate-180 text-[#930027]");
   }
 
+  $(".open-sidebar").click(function () {
+    $(".sidebar").toggleClass("w-[0px]"); // Assuming the sidebar width is initially set to 0
+    $(".main-container").toggleClass("ml-[250px]");
+    $(".main-container").toggleClass("rounded-l-none");
+    $(".open-sidebar").addClass("hidden");
+
+  })
   $(".openClose-sidebar").click(function () {
     $(".sidebar").toggleClass("w-[0px]"); // Assuming the sidebar width is initially set to 0
     $(".main-container").toggleClass("ml-[250px]");
     $(".main-container").toggleClass("rounded-l-none");
-
+    $(".open-sidebar").removeClass("hidden");
   })
 
   // Click events for dropdowns
