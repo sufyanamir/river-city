@@ -176,7 +176,7 @@
         // labels: ['#2ED47A', '#FFB946', '#F7685B'],
         datasets: [{
             data: [val, newVal],
-            backgroundColor: ['#FF8356', '#edf2f7'],
+            backgroundColor: ['#930027', '#edf2f7'],
             borderColor: '#fff'
         }]
     };
