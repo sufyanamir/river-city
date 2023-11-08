@@ -44,9 +44,11 @@
                                         </button>
                                     </div>
                                     <div class=" my-auto">
-                                        <button class=" px-2 py-2">
-                                            <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
-                                        </button>
+                                        <a href="/estimates/new">
+                                            <button class=" px-2 py-2">
+                                                <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
+                                            </button>
+                                        </a>
                                     </div>
                                     <div class=" my-auto">
                                         <x-action-dropdown></x-action-dropdown>
