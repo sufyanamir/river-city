@@ -202,10 +202,10 @@
 
     // Define your data
     const data = {
-        labels: ['#2ED47A', '#FFB946', '#F7685B'],
+        labels: ['Pending', 'Complete', 'Cancel'],
         datasets: [{
-            data: [75, 15, 10],
-            backgroundColor: ['#2ED47A', '#FFB946', '#F7685B'],
+            data: [30, 60, 10],
+            backgroundColor: ['#FFB946', '#2ED47A', '#F7685B'],
             borderColor: '#930027'
         }]
     };
