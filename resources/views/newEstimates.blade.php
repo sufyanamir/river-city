@@ -1,10 +1,10 @@
 @include('layouts.header')
 <div class=" my-4">
     <h1 class=" text-2xl font-semibold mb-3">Estimates</h1>
-    <div class=" bg-white w-full max-h-[809px] overflow-auto rounded-lg shadow-lg">
-        <div class="grid sm:grid-cols-12 p-4">
+    <div class=" bg-white w-full rounded-lg shadow-lg">
+        <div class="grid sm:grid-cols-12">
             <div class="col-span-2  flex justify-between p-3 pr-0">
-                <p class="text-[20px]/[23.44px] font-medium">
+                <p class="text-lg font-medium">
                     Project
                 </p>
                 <a href="/editQoutation">
@@ -16,13 +16,13 @@
             <div class="col-span-10  pl-2 ">
                 <div class="grid sm:grid-cols-10">
                     <div class="col-span-8 p-3">
-                        <p class="text-[#F5222D] text-[25px]/[29.3px] font-bold">
+                        <p class="text-[#F5222D] text-xl font-bold">
                             Coyne Development Corp - Steve Coyne
                         </p>
-                        <p class="text-[#323C47] text-[20px]/[23.44px] font-semibold">
+                        <p class="text-[#323C47] text-lg font-semibold">
                             Webinar - Painting
                         </p>
-                        <p class="mt-4 flex text-[#323C47] font-medium">
+                        <p class="mt-2 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/home-icon.svg') }}" alt="">
                             <span class="pl-2">65 Water St, Newburyport, MA, 01950</span>
                         </p>
@@ -41,7 +41,7 @@
                             <span class="pl-2">Project Owner: Tom D
                             </span>
                         </p>
-                        <hr class="bg-gray-300 my-3 h-[2px] w-full">
+                        <hr class="bg-gray-300 my-2 w-full">
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/page-icon.svg') }}" alt="">
                             <span class="pl-2">Estimate Pending Schedule
@@ -56,7 +56,7 @@
                         </p>
                     </div>
                     <div class=" col-span-2 p-3 text-right">
-                        <p class="text-2xl font-bold">
+                        <p class="text-lg font-bold">
                             Estimate
                         </p>
                         <p class="mt-[2px] ">
@@ -81,31 +81,31 @@
                 </div>
             </div>
         </div>
-        <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid sm:grid-cols-12 p-4 py-0">
-            <div class="col-span-2 flex justify-between p-3 pr-0">
-                <p class="text-[20px]/[23.44px] py-3  font-medium">
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2 flex justify-between gap-5">
+                <p class="text-lg py-3 px-3  font-medium">
                     Contacts
                 </p>
                 <button type="button" class="flex" id="addContact">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <div class="col-span-10 pl-2 py-3">
-                <p class="text-[17px]/[19.92px] py-3 my-auto  pl-9 text-[#707683] font-medium">
+            <div class="col-span-10 ">
+                <p class="text-lg py-3 my-auto  pl-9 text-[#707683] font-medium">
                     Add Contacts to keep track of your project's stakeholders
                 </p>
             </div>
         </div>
-        <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid sm:grid-cols-12 p-4 py-0">
-            <div class="col-span-2 flex justify-between p-3 pr-0">
-                <p class="text-[20px]/[23.44px] py-3  font-medium">
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2 flex justify-between gap-5">
+                <p class="text-lg py-3 pl-3  font-medium">
                     Actions
                 </p>
             </div>
-            <div class="col-span-10 pl-2 py-3">
-                <div class="my-auto flex p-3 pl-0">
+            <div class="col-span-10">
+                <div class="my-auto flex p-2">
                     <a href="" class="pl-3">
                         <button type="button" class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                             <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/calendar-icon.svg') }}" alt="">
@@ -131,16 +131,16 @@
                 </div>
             </div>
         </div>
-        <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid sm:grid-cols-12 p-4 py-0">
-            <div class="col-span-2 flex justify-between p-3 pr-0">
-                <p class="text-[20px]/[23.44px] py-3  font-medium">
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2 flex justify-between gap-5">
+                <p class="text-lg py-3 px-3  font-medium">
                     Document
                 </p>
 
             </div>
-            <div class="col-span-10 pl-2 py-3">
-                <div class="my-auto flex p-3 pl-0">
+            <div class="col-span-10">
+                <div class="my-auto flex py-2">
                     <a href="" class="pl-3">
                         <button type="button" class="flex h-[40px] w-[190px] ml-2  px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#4088CD]" id="action-menubutton" aria-expanded="true" aria-haspopup="true">
                             <svg class=" my-auto mx-1" width="14" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -156,7 +156,7 @@
                         <img class="h-[14px] w-[14px]  my-auto mx-1" src="{{ asset('assets/icons/emailTemplate-icon.svg') }}" alt="">
                         <span class=" my-auto">Email</span>
                     </button>
-                    <button type="button" class=" flex h-[40px] w-[190px] ml-2 px-auto px-5 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#F4AC50]">
+                    <button type="button" class=" flex h-[40px] w-[190px] ml-2 px-auto px-5 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#E36152]">
                         <svg class="h-[14px] w-[14px]  my-auto mx-1" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect x="3.5" y="3.5" width="7" height="7" fill="white" />
                             <rect x="0.5" y="0.5" width="13" height="13" stroke="white" />
@@ -168,57 +168,59 @@
                 </div>
             </div>
         </div>
-        <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid sm:grid-cols-12 p-4 py-0">
-            <div class="col-span-2  flex justify-between p-3 pr-0">
-                <p class="text-[20px]/[23.44px] font-medium">
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2  flex justify-between gap-5">
+                <p class="text-lg pl-3 font-medium">
                     Profitability
                 </p>
                 <button type="button" class="flex">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                 </button>
             </div>
-            <div class="col-span-10 pl-2 py-3 ">
-                <table class=" w-auto  ">
-                    <thead>
-                        <tr class="border border-solid border-l-0 border-r-0 border-t-0">
-                            <th></th>
-                            <th class=" pl-36  px-5">Hours</th>
-                            <th class="px-10">Cost</th>
-                            <th class="px-10">Profit</th>
-                            <th class="px-10">Margin</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="font-semibold text-xl pr-44">Estimated</td>
-                            <td class="pl-36 px-5">120.66</td>
-                            <td class="px-10">$250.55</td>
-                            <td class="px-10">$25.565</td>
-                            <td class="px-10">40.41%</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="col-span-10">
+                <div class=" relative overflow-x-auto">
+                    <table class=" w-full  ">
+                        <thead class=" text-center">
+                            <tr class="border border-solid border-l-0 border-r-0 border-t-0">
+                                <th></th>
+                                <th class="">Hours</th>
+                                <th class="">Cost</th>
+                                <th class="">Profit</th>
+                                <th class="">Margin</th>
+                            </tr>
+                        </thead>
+                        <tbody class=" text-center">
+                            <tr>
+                                <td class="font-semibold text-xl">Estimated</td>
+                                <td class="">120.66</td>
+                                <td class="">$250.55</td>
+                                <td class="">$25.565</td>
+                                <td class="">40.41%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-        <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid sm:grid-cols-12 p-4 py-0">
-            <div class="col-span-2 flex justify-between p-3 pr-0">
-                <p class="text-[20px]/[23.44px] py-3  font-medium">
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2 flex justify-between gap-5">
+                <p class="text-lg px-3  font-medium">
                     Items
                 </p>
                 <button type="button" class="flex addItems">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <div class="col-span-10 relative  ml-2 h-[445px] overflow-auto bg-gray-300 rounded-lg border-[#0000004D] my-2 py-3">
+            <div class="col-span-10  ml-2 overflow-auto bg-gray-300 rounded-lg border-[#0000004D] m-3">
                 <div class="flex border-b border-[#0000001A] w-full px-4 pl-0  justify-between items-center mb-4">
                     <div class=" flex">
                         <button type="button" class="inline">
                             <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                         </button>
                         <div class="">
-                            <label class="text-[20px]/[23.44px] font-semibold text-[#323C47]" for="groupName">Item name</label>
+                            <label class="text-lg font-semibold text-[#323C47]" for="groupName">Item name</label>
                             <p class="text-[16px]/[18px] text-[#323C47] font">Description about item </p>
                         </div>
                     </div>
@@ -226,77 +228,74 @@
                         <span>$0.00</span>
                     </div>
                 </div>
-                <div class="flex border-b border-[#0000001A] w-full pl-0 px-4 justify-between items-center mb-4">
+                <div class="flex border-b border-[#0000001A] w-full px-4 pl-0  justify-between items-center mb-4">
                     <div class=" flex">
                         <button type="button" class="inline">
                             <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                         </button>
                         <div class="">
-                            <label class="text-[20px]/[23.44px] font-semibold text-[#323C47]" for="groupName">Group name</label>
-                            <p class="text-[16px]/[18px] text-[#323C47] font">living room items</p>
+                            <label class="text-lg font-semibold text-[#323C47]" for="groupName">Item name</label>
+                            <p class="text-[16px]/[18px] text-[#323C47] font">Description about item </p>
                         </div>
                     </div>
-                    <div class="text-right">
+                    <div class="text-right ">
                         <span>$0.00</span>
                     </div>
                 </div>
-                <div class="border-t absolute bottom-2  mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
+                <div class="bottom-2  mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
                     <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Total</span>
                     <span>$0.00</span>
                 </div>
             </div>
         </div>
-        <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid sm:grid-cols-12 p-4 py-0">
-            <div class="col-span-2 flex justify-between p-3 pr-0">
-                <p class="text-[20px]/[23.44px] py-3  font-medium">
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2 flex justify-between gap-5">
+                <p class="text-lg px-3 font-medium">
                     Labor
                 </p>
                 <button type="button" class="flex addItems">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <div class="col-span-10  pl-2  py-3">
+            <div class="col-span-10">
                 <div class="flex border-b border-[#0000001A] w-full px-4 pl-0  justify-between items-center mb-4">
                     <div class=" flex">
                         <button type="button" class="inline">
                             <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                         </button>
                         <div class="">
-                            <label class="text-[20px]/[23.44px] font-semibold text-[#323C47]" for="groupName">Service name</label>
+                            <label class="text-lg font-semibold text-[#323C47]" for="groupName">Service name</label>
                             <p class="text-[16px]/[18px] text-[#323C47] font">Description about service </p>
                         </div>
                     </div>
-                    <div class="text-right">
+                    <div class="">
                         <span>$0.00</span>
                     </div>
                 </div>
-                <div class="  w-full pl-0 px-4  items-center pb-4">
-                    <div class="text-right">
-                        <span>$0.00</span>
-                    </div>
+                <div class="text-right mr-4">
+                    <span>$0.00</span>
                 </div>
-
             </div>
         </div>
-        <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid sm:grid-cols-12 p-4 py-0">
-            <div class="col-span-2 flex justify-between p-3 pr-0">
-                <p class="text-[20px]/[23.44px] py-3  font-medium">
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2 flex justify-between gap-5">
+                <p class="text-lg px-3  font-medium">
                     Materials
                 </p>
                 <button type="button" class="flex addItems">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <div class="col-span-10  pl-2  py-3">
-                <div class="flex border-b border-[#0000001A] w-full px-4 pl-0  justify-between items-center mb-4">
+            <div class="col-span-10 ">
+                <div class="flex border-b border-[#0000001A] w-full px-4 pl-0  justify-between items-center">
                     <div class=" flex">
                         <button type="button" class="inline">
                             <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                         </button>
                         <div class="">
-                            <label class="text-[20px]/[23.44px] font-semibold text-[#323C47]" for="groupName">Material name</label>
+                            <label class="text-lg font-semibold text-[#323C47]" for="groupName">Material name</label>
                             <p class="text-[16px]/[18px] text-[#323C47] font">Description about material </p>
                         </div>
                     </div>
@@ -310,7 +309,7 @@
                             <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                         </button>
                         <div class="">
-                            <label class="text-[20px]/[23.44px] font-semibold text-[#323C47]" for="groupName">Material Group </label>
+                            <label class="text-lg font-semibold text-[#323C47]" for="groupName">Material Group </label>
                             <p class="text-[16px]/[18px] text-[#323C47] font">living room items</p>
                         </div>
                     </div>
@@ -323,26 +322,26 @@
                 </div>
             </div>
         </div>
-        <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid sm:grid-cols-12 p-4 py-0">
-            <div class="col-span-2 flex justify-between p-3 pr-0">
-                <p class="text-[20px]/[23.44px] py-3  font-medium">
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2 flex justify-between gap-5">
+                <p class="text-lg px-3  font-medium">
                     Files
                 </p>
                 <button type="button" class="flex" id="addImage-btn">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <div class="col-span-10  pl-2  py-3 hidden" id="image-field">
+            <div class="col-span-10  hidden p-2" id="image-field">
                 <div class="w-56 h-56">
                     <x-drop-zone :value="''" :name="'upload_image'"></x-drop-zone>
                 </div>
             </div>
         </div>
-        <hr class="bg-gray-300 mt-0 h-[2px]">
-        <div class="grid sm:grid-cols-12 p-4 py-0">
-            <div class="col-span-2 flex justify-between p-3 pr-0">
-                <p class="text-[20px]/[23.44px] py-3  font-medium">
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2 flex justify-between gap-5">
+                <p class="text-lg px-3  font-medium">
                     Proposals
                 </p>
                 <a href="/payment-template">
@@ -351,7 +350,7 @@
                     </button>
                 </a>
             </div>
-            <div class="col-span-10  pl-2  py-3">
+            <div class="col-span-10 ">
                 <div class="">
                 </div>
             </div>
