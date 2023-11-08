@@ -108,18 +108,21 @@
                 <div class="my-auto flex p-3 pl-0">
                     <a href="" class="pl-3">
                         <button type="button" class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
-                            <img class="h-[14px] w-[14px] m-1" src="{{ asset('assets/icons/calendar-icon.svg') }}" alt="">Schedule Estimate
+                            <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/calendar-icon.svg') }}" alt="">
+                            <span class=" my-auto">Schedule Estimate</span>
                         </button>
                     </a>
                     <button type="button" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
-                        <img class="h-[14px] w-[14px] m-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">Complete Estimate
+                        <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
+                        <span class=" my-auto">Complete Estimate</span>
                     </button>
                     <button type="button" class=" flex h-[40px] w-[190px] ml-2 px-auto px-8 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#F4AC50]">
-                        <img class="h-[14px] w-[14px] m-1" src="{{ asset('assets/icons/userRole-icon.svg') }}" alt="">Reassign
+                        <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/userRole-icon.svg') }}" alt="">
+                        <span class=" my-auto">Reassign</span>
                     </button>
-                    <button type="button" class="flex h-[40px] w-[190px] ml-2  px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#F4AC50]"" id=" action-menubutton" aria-expanded="true" aria-haspopup="true">
-                        <img class="h-[14px] w-[14px] m-1" src="{{ asset('assets/icons/settings-icon.svg') }}" alt="">
-                        More
+                    <button type="button" class="flex h-[40px] w-[190px] ml-2  px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#F4AC50]" id=" action-menubutton" aria-expanded="true" aria-haspopup="true">
+                        <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/settings-icon.svg') }}" alt="">
+                        <span class=" my-auto">More</span>
                         <svg class="-mr-1 h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                         </svg>
@@ -140,24 +143,25 @@
                 <div class="my-auto flex p-3 pl-0">
                     <a href="" class="pl-3">
                         <button type="button" class="flex h-[40px] w-[190px] ml-2  px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#4088CD]" id="action-menubutton" aria-expanded="true" aria-haspopup="true">
-                            <svg class="m-1" width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg class=" my-auto mx-1" width="14" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1.4C0 0.626801 0.619911 0 1.38462 0H8.9604L12 3.07336V12.6C12 13.3732 11.3801 14 10.6154 14H1.38462C0.619911 14 0 13.3732 0 12.6V1.4ZM2.76923 3.73333H5.53846V4.66667H2.76923V3.73333ZM9.23077 6.53333H2.76923V7.46667H9.23077V6.53333ZM9.23077 9.33333H6.46154V10.2667H9.23077V9.33333Z" fill="white" />
                             </svg>
-                            Preview
+                            <span class=" my-auto">Preview</span>
                             <svg class="-mr-1 h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                             </svg>
                         </button>
                     </a>
                     <button type="button" class=" flex h-[40px] w-[190px] ml-2 px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#4088CD]">
-                        <img class="h-[14px] w-[14px] m-1" src="{{ asset('assets/icons/emailTemplate-icon.svg') }}" alt="">Email
+                        <img class="h-[14px] w-[14px]  my-auto mx-1" src="{{ asset('assets/icons/emailTemplate-icon.svg') }}" alt="">
+                        <span class=" my-auto">Email</span>
                     </button>
                     <button type="button" class=" flex h-[40px] w-[190px] ml-2 px-auto px-5 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#F4AC50]">
-                        <svg class="h-[14px] w-[14px] m-1" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="h-[14px] w-[14px]  my-auto mx-1" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect x="3.5" y="3.5" width="7" height="7" fill="white" />
                             <rect x="0.5" y="0.5" width="13" height="13" stroke="white" />
                         </svg>
-                        Stop Campaign
+                        <span class=" my-auto">Stop Campaign</span>
                     </button>
 
 
@@ -341,9 +345,11 @@
                 <p class="text-[20px]/[23.44px] py-3  font-medium">
                     Proposals
                 </p>
-                <button type="button" class="flex">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
+                <a href="/payment-template">
+                    <button type="button" class="flex">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
+                    </button>
+                </a>
             </div>
             <div class="col-span-10  pl-2  py-3">
                 <div class="">

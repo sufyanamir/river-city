@@ -28,7 +28,7 @@
                         <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="  ml-1 pl-2 w-[90%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                     </div>
                     <div class="sm:col-span-3 mr-6 flex justify-between">
-                        <label for="type" class=" text-sm font-medium leading-6 text-gray-900">Type</label>
+                        <label for="type" class=" text-sm font-medium leading-6 text-gray-900 mx-auto">Type</label>
                         <select id="customer" name="customer" autocomplete="customer-name" class=" ml-1 pl-2 w-[78%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"">
                             <option>Select Customer</option>
                             <option>Canada</option>
@@ -68,8 +68,8 @@
                         <input type="radio" name="format" id="markDown"> <label for="markDown" class="text-gray-400">Markdown</label>
                         <!-- <input type="text" name="email" id="email" placeholder="Phone Number" class="   ml-1 pl-2 w-[85%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"> -->
                     </div>
-                    <div class="sm:col-span-6 mx-6 flex justify-start">
-                        <label for="note" class=" text-sm font-medium leading-6  text-black">Attachments</label>
+                    <div class="sm:col-span-6 mx-6 flex justify-start gap-2">
+                        <label for="note" class=" text-sm font-medium leading-6 my-auto  text-black">Attachments</label>
                         <input type="checkbox" name="attachments" id="emailAttachmentsCheck">
                         <label for="emailAttachmentsCheck" class=" text-gray-400">Include Project Documents</label>
                         <!-- <input type="text" name="note" id="note" placeholder="Note" class="   ml-1 pl-2 w-[95%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"> -->

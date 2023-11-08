@@ -59,8 +59,8 @@
     <div class="sidebar duration-500 fixed top-0 bottom-0 lg:left-0 w-[250px] overflow-y-auto text-center bg-[#930027]">
         <div class="text-gray-100 text-xl">
             <div class="p-2.5 mt-1 flex items-center">
-                <img src="{{ asset('assets/icons/projectLogo.svg') }}" alt="">
-                <i class="bi bi-x cursor-pointer  ml-6 openClose-sidebar"></i>
+                <img src="{{ asset('assets/icons/projectLogo.svg') }}" class=" mx-auto" alt="icon">
+                <!-- <i class="bi bi-x cursor-pointer  ml-6 openClose-sidebar"></i> -->
             </div>
         </div>
         <!-- <div class="p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer bg-gray-700 text-white">
@@ -124,7 +124,7 @@
         <x-sidebar-links :class="'text-white'" :url="'/payment-template'" :title="'PAY Template'" :hoverIcon="'hover-calendar-icon.svg'" :icon="'calendar-icon.svg'"></x-sidebar-links>
         <x-sidebar-links :class="'text-white'" :url="'/feedGallery'" :title="'Gallery'" :hoverIcon="'hover-gallery-icon.svg'" :icon="'gallery-icon.svg'"></x-sidebar-links>
         <x-sidebar-links :class="'text-white'" :url="'/campaign'" :title="'Campaign'" :hoverIcon="'hover-campaign-icon.svg'" :icon="'campaign-icon.svg'"></x-sidebar-links>
-        <x-sidebar-links :class="'text-white'" :url="''" :title="'Reports'" :hoverIcon="'hover-reports-icon.svg'" :icon="'reports-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="'/reports'" :title="'Reports'" :hoverIcon="'hover-reports-icon.svg'" :icon="'reports-icon.svg'"></x-sidebar-links>
         <x-sidebar-links :class="'text-white'" :url="'/emails'" :title="'Email Templates'" :hoverIcon="'hover-emailTemplate-icon.svg'" :icon="'emailTemplate-icon.svg'"></x-sidebar-links>
         <div class="p-2.5 mt-3 sidebar-link flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white" id="dropdown-card2">
             <img class=" plain-icon" src="{{ asset('assets/icons/user-icon.svg') }}" alt="icon">
