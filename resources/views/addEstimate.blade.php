@@ -33,7 +33,7 @@
                             <label for="number" class=" text-sm font-medium my-auto  text-black">Phone No</label>
                             <input type="text" name="email" id="email" placeholder="Phone Number" class="   p-2 w-[85%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                         </div>
-                        <div class="sm:col-span-6 flex justify-between gap-6">
+                        <div class="sm:col-span-6 flex justify-between gap-5">
                             <label for="address" class=" text-sm font-medium my-auto  text-black">Address</label>
                             <textarea type="text" name="address" id="address" placeholder="Address" class="  ml-2 p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"></textarea>
                         </div>
