@@ -35,7 +35,7 @@
                         </div>
                         <div class="sm:col-span-6 flex justify-between gap-6">
                             <label for="address" class=" text-sm font-medium my-auto  text-black">Address</label>
-                            <textarea type="text" name="address" id="address" placeholder="Address" class="   p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"></textarea>
+                            <textarea type="text" name="address" id="address" placeholder="Address" class="  ml-2 p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"></textarea>
                         </div>
                         <div class="sm:col-span-3 flex justify-between gap-2 py-2">
                             <label for="sceduler" class=" text-sm font-medium my-auto text-gray-900">Sceduler</label>
@@ -51,7 +51,7 @@
                         </div>
                         <div class="sm:col-span-6 flex justify-between gap-10">
                             <label for="note" class=" text-sm font-medium my-auto text-black">Note</label>
-                            <textarea type="text" name="note" id="note" placeholder="Note" class="   p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"></textarea>
+                            <textarea type="text" name="note" id="note" placeholder="Note" class=" ml-1  p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"></textarea>
                         </div>
                     </div>
                     <div class="border-t text-right ">
