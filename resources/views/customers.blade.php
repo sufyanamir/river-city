@@ -60,7 +60,7 @@
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between border-b-2">
-                        <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Customer</h2>
+                        <h2 class=" text-xl font-semibold mb-2 text-[#930027]" id="modal-title">Add Customer</h2>
                         <button class="modal-close" type="button">
                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
                         </button>
@@ -132,6 +132,43 @@
 
                             <input type="tel" name="number" id="number" placeholder="Phone No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div> -->
+                    </div>
+                    <div class=" flex justify-between border-b-2 mb-2">
+                        <h2 class=" text-xl font-semibold mb-2 text-[#930027]" id="modal-title">Add Estimate</h2>
+                    </div>
+                    <div class=" text-center grid grid-cols-4 gap-2">
+                        <div class=" col-span-2">
+                            <h3 class=" text-lg font-medium text-left">Estimate Date</h3>
+                            <input type="date" name="owner" id="owner" placeholder="Owner Name" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2">
+                            <h3 class=" text-lg font-medium text-left">Email</h3>
+                            <input type="text" name="email" id="email" placeholder="Email" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2">
+                            <h3 class=" text-lg font-medium text-left">Phone</h3>
+                            <input type="tel" name="phone" id="phone" placeholder="Phone No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2">
+                            <h3 class=" text-lg font-medium text-left">Schedule Date</h3>
+                            <input type="date" name="phone" id="phone" placeholder="Schedule Date/Time" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2">
+                            <h3 class=" text-lg font-medium text-left">Select Schedule</h3>
+                            <select id="customer" name="customer" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                                <option>Select Schedule</option>
+                                <option>Canada</option>
+                                <option>Mexico</option>
+                            </select>
+                        </div>
+                        <div class=" col-span-2 ">
+                            <h3 class=" text-lg font-medium text-left">Address</h3>
+                            <input type="text" name="address" id="address" placeholder="Address" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-4 ">
+                            <h3 class=" text-lg font-medium text-left">Note</h3>
+                            <textarea type="text" name="note" id="note" placeholder="Note" class="  p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"></textarea>
+                        </div>
                     </div>
                     <div class="">
                         <button id="updateEvent" class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Add
