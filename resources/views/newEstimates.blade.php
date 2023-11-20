@@ -342,6 +342,22 @@
         <div class="grid sm:grid-cols-12">
             <div class="col-span-2 flex justify-between gap-5">
                 <p class="text-lg px-3  font-medium">
+                    Photos
+                </p>
+                <button type="button" class="flex" id="addImage-btn">
+                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
+                </button>
+            </div>
+            <div class="col-span-10 p-1 text-right">
+                <button class="  bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 text-xs">
+                    Show CC Photos
+                </button>
+            </div>
+        </div>
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2 flex justify-between gap-5">
+                <p class="text-lg px-3  font-medium">
                     Proposals
                 </p>
                 <a href="/payment-template">
@@ -353,6 +369,134 @@
             <div class="col-span-10 ">
                 <div class="">
                 </div>
+            </div>
+        </div>
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2 flex justify-between gap-5">
+                <p class="text-lg px-3  font-medium">
+                    Notes
+                </p>
+                <button type="button" class="flex" id="addImage-btn">
+                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
+                </button>
+            </div>
+            <br>
+            <div class="col-span-12 py-3 mx-auto">
+                <p class=" text-sm">
+                    Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las.
+                </p>
+            </div>
+        </div>
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2 flex justify-between gap-5">
+                <p class="text-lg px-3  font-medium">
+                    Emails
+                </p>
+                <button type="button" class="flex" id="addImage-btn">
+                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
+                </button>
+            </div>
+            <br>
+            <div class="col-span-12 py-3 mx-auto">
+                <p class=" text-sm">
+                    Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las.
+                </p>
+            </div>
+        </div>
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2 flex justify-between gap-5">
+                <p class="text-lg px-3  font-medium">
+                    Time Entries
+                </p>
+                <button type="button" class="flex" id="addImage-btn">
+                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
+                </button>
+            </div>
+            <br>
+            <div class="col-span-12 p-3 mx-auto">
+                <p class=" text-sm">
+                    Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las.
+                </p>
+                <p class=" text-sm text-[#930027]">
+                    Find out more about using time tracking.
+                </p>
+            </div>
+        </div>
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2 flex justify-between gap-5">
+                <p class="text-lg px-3  font-medium">
+                    To-Dos
+                </p>
+                <button type="button" class="flex" id="addImage-btn">
+                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
+                </button>
+            </div>
+            <br>
+            <div class="col-span-12 p-3 mx-auto">
+                <p class=" text-sm">
+                    Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las.
+                </p>
+                <p class=" text-sm text-[#930027]">
+                    Find out more about using time tracking.
+                </p>
+            </div>
+        </div>
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2 flex justify-between gap-5">
+                <p class="text-lg px-3  font-medium">
+                    Invoices
+                </p>
+                <button type="button" class="flex" id="addImage-btn">
+                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
+                </button>
+            </div>
+            <br>
+            <div class="col-span-12 p-3 mx-auto">
+            </div>
+        </div>
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2 flex justify-between gap-5">
+                <p class="text-lg px-3  font-medium">
+                    Payments
+                </p>
+                <button type="button" class="flex" id="addImage-btn">
+                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
+                </button>
+            </div>
+            <br>
+            <div class="col-span-12 p-3 mx-auto">
+                <p class=" text-sm">
+                    Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las.
+                </p>
+                <p class=" text-sm text-[#930027]">
+                    Find out more about using time tracking.
+                </p>
+            </div>
+        </div>
+        <hr class="bg-gray-300">
+        <div class="grid sm:grid-cols-12">
+            <div class="col-span-2 flex justify-between gap-5">
+                <p class="text-lg px-3  font-medium">
+                    Expenses
+                </p>
+                <button type="button" class="flex" id="addImage-btn">
+                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
+                </button>
+            </div>
+            <br>
+            <div class="col-span-12 p-3 mx-auto">
+                <p class=" text-sm">
+                    Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las.
+                </p>
+                <p class=" text-sm text-[#930027]">
+                    Find out more about using time tracking.
+                </p>
             </div>
         </div>
     </div>

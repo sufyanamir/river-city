@@ -7,8 +7,8 @@
                 <h4>Estimates List</h4>
             </div>
             <div>
-                <a href="{{url('add-estimate')}}">
-                    <!-- <x-add-button :title="'+Add Estimates'" :class="''" :id="''"></x-add-button> -->
+                <a>
+                    <x-add-button :title="'+Add Estimates'" :class="'addEstimate'" :id="''"></x-add-button>
                 </a>
             </div>
         </div>
@@ -27,6 +27,210 @@
                         </tr>
                     </thead>
                     <tbody class=" text-sm">
+                        <tr>
+                            <td>Sep 23, 2023</td>
+                            <td>Client Name</td>
+                            <td>123 456 789</td>
+                            <td>Town, City, Country</td>
+                            <td>user name</td>
+                            <td>
+                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Complete</span>
+                            </td>
+                            <td>
+                                <div class=" flex justify-evenly gap-2">
+                                    <div class=" my-auto">
+                                        <button class=" px-2 py-2" id="chat-btn">
+                                            <img class="  w-9" src="{{ asset('assets/icons/dropdown-activity-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="estimateDetails" aria-expanded="true" aria-haspopup="true">
+                                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <a href="/estimates/new">
+                                            <button class=" px-2 py-2">
+                                                <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
+                                            </button>
+                                        </a>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <x-action-dropdown></x-action-dropdown>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Sep 23, 2023</td>
+                            <td>Client Name</td>
+                            <td>123 456 789</td>
+                            <td>Town, City, Country</td>
+                            <td>user name</td>
+                            <td>
+                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Complete</span>
+                            </td>
+                            <td>
+                                <div class=" flex justify-evenly gap-2">
+                                    <div class=" my-auto">
+                                        <button class=" px-2 py-2" id="chat-btn">
+                                            <img class="  w-9" src="{{ asset('assets/icons/dropdown-activity-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="estimateDetails" aria-expanded="true" aria-haspopup="true">
+                                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <a href="/estimates/new">
+                                            <button class=" px-2 py-2">
+                                                <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
+                                            </button>
+                                        </a>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <x-action-dropdown></x-action-dropdown>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Sep 23, 2023</td>
+                            <td>Client Name</td>
+                            <td>123 456 789</td>
+                            <td>Town, City, Country</td>
+                            <td>user name</td>
+                            <td>
+                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Complete</span>
+                            </td>
+                            <td>
+                                <div class=" flex justify-evenly gap-2">
+                                    <div class=" my-auto">
+                                        <button class=" px-2 py-2" id="chat-btn">
+                                            <img class="  w-9" src="{{ asset('assets/icons/dropdown-activity-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="estimateDetails" aria-expanded="true" aria-haspopup="true">
+                                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <a href="/estimates/new">
+                                            <button class=" px-2 py-2">
+                                                <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
+                                            </button>
+                                        </a>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <x-action-dropdown></x-action-dropdown>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Sep 23, 2023</td>
+                            <td>Client Name</td>
+                            <td>123 456 789</td>
+                            <td>Town, City, Country</td>
+                            <td>user name</td>
+                            <td>
+                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Complete</span>
+                            </td>
+                            <td>
+                                <div class=" flex justify-evenly gap-2">
+                                    <div class=" my-auto">
+                                        <button class=" px-2 py-2" id="chat-btn">
+                                            <img class="  w-9" src="{{ asset('assets/icons/dropdown-activity-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="estimateDetails" aria-expanded="true" aria-haspopup="true">
+                                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <a href="/estimates/new">
+                                            <button class=" px-2 py-2">
+                                                <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
+                                            </button>
+                                        </a>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <x-action-dropdown></x-action-dropdown>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Sep 23, 2023</td>
+                            <td>Client Name</td>
+                            <td>123 456 789</td>
+                            <td>Town, City, Country</td>
+                            <td>user name</td>
+                            <td>
+                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Complete</span>
+                            </td>
+                            <td>
+                                <div class=" flex justify-evenly gap-2">
+                                    <div class=" my-auto">
+                                        <button class=" px-2 py-2" id="chat-btn">
+                                            <img class="  w-9" src="{{ asset('assets/icons/dropdown-activity-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="estimateDetails" aria-expanded="true" aria-haspopup="true">
+                                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <a href="/estimates/new">
+                                            <button class=" px-2 py-2">
+                                                <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
+                                            </button>
+                                        </a>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <x-action-dropdown></x-action-dropdown>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Sep 23, 2023</td>
+                            <td>Client Name</td>
+                            <td>123 456 789</td>
+                            <td>Town, City, Country</td>
+                            <td>user name</td>
+                            <td>
+                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Complete</span>
+                            </td>
+                            <td>
+                                <div class=" flex justify-evenly gap-2">
+                                    <div class=" my-auto">
+                                        <button class=" px-2 py-2" id="chat-btn">
+                                            <img class="  w-9" src="{{ asset('assets/icons/dropdown-activity-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="estimateDetails" aria-expanded="true" aria-haspopup="true">
+                                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <a href="/estimates/new">
+                                            <button class=" px-2 py-2">
+                                                <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
+                                            </button>
+                                        </a>
+                                    </div>
+                                    <div class=" my-auto">
+                                        <x-action-dropdown></x-action-dropdown>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
                         <tr>
                             <td>Sep 23, 2023</td>
                             <td>Client Name</td>
@@ -256,7 +460,7 @@
                             <label for="chat" class="sr-only">Your message</label>
                             <div class="flex items-center px-3 py-2 rounded-lg bg-gray-50">
                                 <button type="button" onclick="openFileMenu()" class="inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100">
-                                <input type="file" class="hidden" id="fileInput">
+                                    <input type="file" class="hidden" id="fileInput">
                                     <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
                                         <path fill="currentColor" d="M13 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM7.565 7.423 4.5 14h11.518l-2.516-3.71L11 13 7.565 7.423Z" />
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 1H2a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z" />
@@ -310,7 +514,7 @@
                         </button>
                     </div>
                     <!-- task details -->
-                    
+
                 </div>
             </form>
         </div>
