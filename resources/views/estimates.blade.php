@@ -8,7 +8,7 @@
             </div>
             <div>
                 <a href="{{url('add-estimate')}}">
-                    <x-add-button :title="'+Add Estimates'" :class="''" :id="''"></x-add-button>
+                    <!-- <x-add-button :title="'+Add Estimates'" :class="''" :id="''"></x-add-button> -->
                 </a>
             </div>
         </div>
