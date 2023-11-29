@@ -22,7 +22,8 @@
                 </div>
 
                 <h2 class="font-bold text-2xl mt-16 text-[#000000]">Log In</h2>
-                <form action="" class="flex flex-col gap-4">
+                <form action="/" id="login-form" method="post" class="flex flex-col gap-4" >
+                    @csrf 
                     <div class="relative mt-16">
                         <label for="" class="">Email</label>
                         <input class="p-2 pl-5 relative  focus:outline-none  border-b border-black w-full " type="email" name="email" placeholder="Email">
@@ -39,9 +40,7 @@
                         </svg>
                     </div>
                     <a href="/forgotPassword" class="text-[#FF0000] text-[12px]/[18px] hover:scale-105 duration-300 text-end m-0">forget your password</a>
-                    <a href="/dashboard">
-                        <button type="button" class="bg-[#930027] rounded-full w-full text-white py-2 hover:scale-105 duration-300">Login</button>
-                    </a>
+                        <button type="submit" class="bg-[#930027] rounded-full w-full text-white py-2 hover:scale-105 duration-300">Login</button>
                 </form>
             </div>
 
