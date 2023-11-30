@@ -3,11 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserRole;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    // ================================================== Users =====================================================================
+    public function addUserRole(Request $request){
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData =  $request->validate([
+                'departement'  => 'required|string',
+                'role' => 'required|string',
+            ]);
+            $userRole = UserRole::create([
+                'departement' => $validatedData['departement'],
+                'role' =>  $validatedData['role'],
+            ]);
+
+            return response()->json(['success'  => true, 'mwssage' => 'data added'],  200);
+
+
+        } catch (\Exception $e) {
+            return  response()->json(['success' => false, 'message' =>  $e->getMessage()], 400);
+        }
+    }
+    // ================================================== Users =====================================================================
     // ================================================== authentication =====================================================================
     public function index()
     {

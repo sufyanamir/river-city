@@ -20,6 +20,9 @@ Route::post('/', [UserController::class, 'login']);
 Route::match(['get', 'post'], '/logout', [UserController::class,'logout']);
 
 Route::middleware('customauth')->group(function () {
+
+    Route::post('/addUserRole',  [UserController::class, 'addUserRole']);
+
     Route::get('/customers', function () {
         return view('customers');
     });
