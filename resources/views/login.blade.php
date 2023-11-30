@@ -22,8 +22,8 @@
                 </div>
 
                 <h2 class="font-bold text-2xl mt-16 text-[#000000]">Log In</h2>
-                <form action="/" id="login-form" method="post" class="flex flex-col gap-4" >
-                    @csrf 
+                <form action="/" id="login-form" method="post" class="flex flex-col gap-4">
+                    @csrf
                     <div class="relative mt-16">
                         <label for="" class="">Email</label>
                         <input class="p-2 pl-5 relative  focus:outline-none  border-b border-black w-full " type="email" name="email" placeholder="Email">
@@ -40,7 +40,7 @@
                         </svg>
                     </div>
                     <a href="/forgotPassword" class="text-[#FF0000] text-[12px]/[18px] hover:scale-105 duration-300 text-end m-0">forget your password</a>
-                        <button type="submit" class="bg-[#930027] rounded-full w-full text-white py-2 hover:scale-105 duration-300">Login</button>
+                    <button type="submit" class="bg-[#930027] rounded-full w-full text-white py-2 hover:scale-105 duration-300">Login</button>
                 </form>
             </div>
 
@@ -50,6 +50,62 @@
             </div>
         </div>
     </section>
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function() {
+            $("#login-form").submit(function(event) {
+                // Prevent the default form submission
+                event.preventDefault();
+
+                // Serialize the form data into a JSON object
+                var formData = $(this).serialize();
+
+                // Send the AJAX request
+                $.ajax({
+                    type: "POST", // Use POST method
+                    url: "/", // Replace with the actual URL to your login endpoint
+                    data: formData, // Send the form data
+                    dataType: "json", // Expect JSON response
+                    beforeSend: function() {
+                        $('#spinner').removeClass('d-none');
+                        $('#text').addClass('d-none');
+                    },
+                    success: function(response) {
+                        // Handle the success response here
+                        if (response.success == true) {
+                            // Redirect to the dashboard or do something else
+                            $('#text').removeClass('d-none');
+                            $('#spinner').addClass('d-none');
+                            window.location.href = "/dashboard";
+                        } else if (response.success == false) {
+                            Swal.fire(
+                                'Warning!',
+                                response.message,
+                                'warning'
+                            )
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Log the error response to the console
+                        console.error("AJAX Error: " + textStatus, errorThrown);
+
+                        // Log the response content for further investigation
+                        console.log("Response:", jqXHR.responseText);
+                        let response = JSON.parse(jqXHR.responseText);
+                        Swal.fire(
+                            'Warning!',
+                            response.message,
+                            'warning'
+                        )
+                        // Handle the error here
+                        $('#text').removeClass('d-none');
+                        $('#spinner').addClass('d-none');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -1,8 +1,10 @@
 <div>
     <div class="grid grid-cols-2 gap-1">
         <div>
-            <h6 class="">Lorem Ipsum</h6>
+            @if(session()->has('user_details'))
+            <h6 class="">{{ session('user_details')['name'] }}</h6>
             <p class="text-xs text-[#ACADAE]">Administer</p>
+            @endif
         </div>
         <button type="button" class="w-10" id="profile-btn">
             <img src="{{ asset('assets/icons/userprofile-icon.svg') }}" alt="icon">

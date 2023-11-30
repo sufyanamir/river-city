@@ -145,7 +145,7 @@
         <x-sidebar-links :class="'text-white'" :url="'/crew'" :title="'Crew'" :hoverIcon="'hover-user-icon.svg'" :icon="'user-icon.svg'"></x-sidebar-links>
         <x-sidebar-links :class="'text-white'" :url="'/settings'" :title="'Settings'" :hoverIcon="'hover-settings-icon.svg'" :icon="'settings-icon.svg'"></x-sidebar-links>
         <x-sidebar-links :class="'text-white'" :url="'/help'" :title="'Help'" :hoverIcon="'hover-help-icon.svg'" :icon="'help-icon.svg'"></x-sidebar-links>
-        <x-sidebar-links :class="'text-white'" :url="'/'" :title="'Logout'" :hoverIcon="'hover-logout-icon.svg'" :icon="'logout-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="'/logout'" :title="'Logout'" :hoverIcon="'hover-logout-icon.svg'" :icon="'logout-icon.svg'"></x-sidebar-links>
     </div>
     <div class="bg-[#930027] h-screen">
         <div class="main-container duration-500 rounded-l-3xl h-screen overflow-auto bg-[#edf2f7] ml-[250px] p-3">

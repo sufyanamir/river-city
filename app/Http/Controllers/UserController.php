@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    // ================================================== authentication =====================================================================
     public function index()
     {
         return view('login');
-    
     }
     public function login(Request $request)
     {
@@ -35,11 +35,20 @@ class UserController extends Controller
                 'user_id' => $user->id,
             ]]);
 
-            return response()->json(['success' => 'Login successful', 'user_details' => session('user_details')]);
+            return response()->json(['success' => true, 'message' => 'Login successful', 'user_details' => session('user_details')]);
         } else {
             // Authentication failed
-            return response()->json(['error' => 'Invalid credentials'], 401);
+            return response()->json(['success' => false, 'message' => 'Invalid credentials'], 401);
         }
     }
+
+    public function logout(Request $request)
+    {
+        $request->session()->forget('user_details');
+        $request->session()->regenerate();
+
+        return redirect('/');
+    }
+    // ================================================== authentication =====================================================================
 
 }
