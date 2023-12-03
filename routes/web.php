@@ -17,21 +17,24 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [UserController::class, 'index']);
 Route::post('/', [UserController::class, 'login']);
-Route::match(['get', 'post'], '/logout', [UserController::class,'logout']);
+Route::match(['get', 'post'], '/logout', [UserController::class, 'logout']);
 
 Route::middleware('customauth')->group(function () {
 
     Route::post('/addUserRole',  [UserController::class, 'addUserRole']);
-
+    Route::get('/userRole', [UserController::class, 'getUserRole']);
+    Route::get('/users', [UserController::class, 'getUsers']);
+    Route::get('/addUser', [UserController::class, 'addUsers']);
+    Route::match(['get', 'post'], '/delete/userRole/{id}', [UserController::class, 'deleteUserRole']);
     Route::get('/customers', function () {
         return view('customers');
     });
-    Route::get('/users', function () {
-        return view('users');
-    });
-    Route::get('/userRole', function () {
-        return view('user_roles');
-    });
+    // Route::get('/users', function () {
+    //     return view('users');
+    // });
+    // Route::get('/userRole', function () {
+    //     return view('user_roles');
+    // });
     Route::get('/crew', function () {
         return view('crew');
     });

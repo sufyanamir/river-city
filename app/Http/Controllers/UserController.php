@@ -10,7 +10,26 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     // ================================================== Users =====================================================================
-    public function addUserRole(Request $request){
+    public function deleteUserRole(Request $request, $id)
+    {
+        try {
+            $userDetails = session('user_details');
+            $userRole = UserRole::where('user_role_id', $id)->first();
+
+            if (!$userRole) {
+                return response()->json(['success' => false, 'message' => 'No user role found!'], 404);
+            }
+
+            $userRole->delete();
+
+            return response()->json(['success' => true, 'message' => 'User role deleted!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // add user role
+    public function addUserRole(Request $request)
+    {
         try {
             $userDetails = session('user_details');
 
@@ -22,14 +41,31 @@ class UserController extends Controller
                 'departement' => $validatedData['departement'],
                 'role' =>  $validatedData['role'],
             ]);
+            // return redirect()->back()->with(['success'  => true, 'mwssage' => 'data added'],  200);
 
-            return response()->json(['success'  => true, 'mwssage' => 'data added'],  200);
-
-
+            return response()->json(['success'  => true, 'message' => 'data added'],  200);
         } catch (\Exception $e) {
             return  response()->json(['success' => false, 'message' =>  $e->getMessage()], 400);
         }
     }
+    // add user role
+    // get user role
+
+    public function getUserRole()
+    {
+
+        $userDetails = session('user_details');
+        $userRole = UserRole::get();
+        return view('user_roles', ['user_roles' => $userRole, 'user_details' => $userDetails]);
+    }
+    public function getUsers()
+    {
+
+        $userDetails = session('user_details');
+        $userRole = UserRole::get();
+        return view('users', ['user_roles' => $userRole, 'user_details' => $userDetails]);
+    }
+    // get user role
     // ================================================== Users =====================================================================
     // ================================================== authentication =====================================================================
     public function index()
@@ -74,4 +110,32 @@ class UserController extends Controller
     }
     // ================================================== authentication =====================================================================
 
+
+    //add users
+
+    public function addUsers(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+            $validated = $request->validate([
+                'firstName' => 'required|string',
+                'lastName' => 'required|string',
+                'email' => 'required|string',
+                'phone' => 'required|string',
+                'role' => 'required|string',
+                'address' => 'required|string',
+            ]);
+            $users = User::create([
+                'name' => $validated['firstName'],
+                'last_name' => $validated['lastName'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'],
+                'user_role' => $validated['role'],
+                'address' => $validated['address'],
+            ]);
+            return response()->json(['sucess' => true, 'message' => 'date add'], 200);
+        } catch (\Exception $eror) {
+            return response()->json(['sucess' => false, 'message' => $eror->getMessage()], 404);
+        }
+    }
 }

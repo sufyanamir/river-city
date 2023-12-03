@@ -22,19 +22,23 @@
                         </tr>
                     </thead>
                     <tbody class=" text-sm">
+                        @foreach ($user_roles as $item)
                         <tr>
                             <td><img class=" w-18 h-18 rounded-full" src="{{ asset('assets/images/demo-user.svg') }}" alt="image"></td>
-                            <td>Client Name</td>
-                            <td>John</td>
+                            <td>{{ $item['departement'] }}</td>
+                            <td>{{ $item['role'] }}</td>
                             <td>
                                 <button>
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                 </button>
                                 <button>
-                                    <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
+                                    <a href="/delete/userRole/{{$item['user_role_id']}}">
+                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
+                                    </a>
                                 </button>
                             </td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -50,7 +54,8 @@
 
         <!-- Modal panel -->
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="" id="addRole-form">
+            <form action="/addUserRole" id="addRole-form" method="post">
+                @csrf
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between border-b-2">
