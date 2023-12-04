@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,9 +53,8 @@ Route::middleware('customauth')->group(function () {
     Route::get('/add-estimate', function () {
         return view('addEstimate');
     });
-    Route::get('/items', function () {
-        return view('items');
-    });
+    Route::get('/items', [ItemsController::class, 'getItems']);
+    Route::post('/addItem', [ItemsController::class, 'addItem']);
     Route::get('/group', function () {
         return view('group');
     });
