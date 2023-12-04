@@ -2,18 +2,171 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Email;
 use App\Models\User;
 use App\Models\UserRole;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+
+    protected $userDetails;
+
+    public function __construct()
+    {
+        // Retrieve user details from session and store it in $userDetails
+        $this->userDetails = Session::get('user_details');
+    }
+    // ================================================== Crew =====================================================================
+
+    // delete crew
+    public  function  deleteCrew($id)
+    {
+        try {
+            $user  = User::where('id', $id)->first();
+            if (!$user) {
+                return response()->json(['success' => false, 'message'  => 'no Crew found'], 404);
+            }
+
+            $user->delete();
+
+            return response()->json(['success' => true, 'message' => 'Crew deleted  successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // delete crew
+    // get crew departement on crew
+    public function getDepartementOnCrew()
+    {
+        $crew = User::where('user_role', 'crew')->get();
+        $departement  = UserRole::select('departement')->get();
+
+        return view('crew', ['departements' => $departement, 'crew' => $crew, 'user_details' => $this->userDetails]);
+    }
+    // get crew departement on crew
+
+    // add crew
+    public function addCrew(Request $request)
+    {
+        try {
+            $validatedData  =  $request->validate([
+                'firstName' => 'required|string',
+                'lastName' => 'nullable|string',
+                'email' => 'required|string',
+                'phone' => 'required|string',
+                'departement' => 'required|string',
+                'rate' => 'nullable|numeric',
+                'teamNumber' => 'required|numeric',
+                'address' => 'required|string',
+                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            ]);
+
+            $users = User::create([
+                'name' => $validatedData['firstName'],
+                'last_name' => $validatedData['lastName'],
+                'email' => $validatedData['email'],
+                'phone' => $validatedData['phone'],
+                'user_role' => 'crew',
+                'address' => $validatedData['address'],
+                'departement' => $validatedData['departement'],
+                'rating' => $validatedData['rate'],
+                'team_number' => $validatedData['teamNumber'],
+            ]);
+
+            if ($request->hasFile('upload_image')) {
+                $image = $request->file('upload_image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/user_images', $imageName); // Adjust storage path as needed
+                $users->user_image = 'storage/user_images/' . $imageName;
+            }
+
+            $users->save();
+
+            return response()->json(['success' => true, 'message' => 'Crew added successfully!'], 200);
+        } catch (\Exception $e) {
+            return response(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // add crew
+
+    // ================================================== Crew =====================================================================
+
     // ================================================== Users =====================================================================
+    // delete Users
+    public function  deleteUser($id)
+    {
+        try {
+            $user = User::where('id', $id)->first();
+            if (!$user) {
+                return response(['success' => false, 'message' => 'User not found!'], 404);
+            } elseif ($user == 'admin') {
+                return response(['success' => false, 'message' => 'User cannot be deleted!'], 400);
+            } else {
+                $user->delete();
+                return response(['success' => true, 'message' => 'User deleted!'], 200);
+            }
+        } catch (\Exception $e) {
+            return response(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // delete Users
+    // get users with roles
+    public function getUsersWithRoles()
+    {
+
+        $users = User::get();
+        $userRoles = UserRole::get();
+
+        return view('users', ['users' => $users, 'user_roles' => $userRoles, 'user_details' => $this->userDetails]);
+    }
+    // get users with roles
+    //add users
+    public function addUsers(Request $request)
+    {
+        try {
+
+            $validatedData = $request->validate([
+                'firstName' => 'required|string',
+                'lastName' => 'nullable|string',
+                'email' => 'required|string',
+                'phone' => 'required|string',
+                'role' => 'required|string',
+                'address' => 'required|string',
+                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            ]);
+
+            $users = User::create([
+                'name' => $validatedData['firstName'],
+                'last_name' => $validatedData['lastName'],
+                'email' => $validatedData['email'],
+                'phone' => $validatedData['phone'],
+                'user_role' => $validatedData['role'],
+                'address' => $validatedData['address'],
+            ]);
+
+            if ($request->hasFile('upload_image')) {
+                $image = $request->file('upload_image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/user_images', $imageName); // Adjust storage path as needed
+                $users->user_image = 'storage/user_images/' . $imageName;
+            }
+
+            $users->save();
+
+            return response()->json(['sucess' => true, 'message' => 'User added successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['sucess' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    //add users
+    // del user role
     public function deleteUserRole(Request $request, $id)
     {
         try {
-            $userDetails = session('user_details');
+
             $userRole = UserRole::where('user_role_id', $id)->first();
 
             if (!$userRole) {
@@ -27,11 +180,12 @@ class UserController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
+    // del user role
     // add user role
     public function addUserRole(Request $request)
     {
         try {
-            $userDetails = session('user_details');
+
 
             $validatedData =  $request->validate([
                 'departement'  => 'required|string',
@@ -50,20 +204,12 @@ class UserController extends Controller
     }
     // add user role
     // get user role
-
     public function getUserRole()
     {
 
-        $userDetails = session('user_details');
-        $userRole = UserRole::get();
-        return view('user_roles', ['user_roles' => $userRole, 'user_details' => $userDetails]);
-    }
-    public function getUsers()
-    {
 
-        $userDetails = session('user_details');
         $userRole = UserRole::get();
-        return view('users', ['user_roles' => $userRole, 'user_details' => $userDetails]);
+        return view('user_roles', ['user_roles' => $userRole, 'user_details' => $this->userDetails]);
     }
     // get user role
     // ================================================== Users =====================================================================
@@ -81,17 +227,18 @@ class UserController extends Controller
 
         if ($user && md5($password) === $user->password) {
             // Check if the user role is 0 or 1
-            // $userRole = $user->user_role;
-            // if ($userRole != 0 && $userRole != 1) {
-            //     // User role is not allowed to login
-            //     return response()->json(['error' => 'User role not allowed to login'], 401);
-            // }
+            $userRole = $user->user_role;
+            if ($userRole != 'admin') {
+                // User role is not allowed to login
+                return response()->json(['success' => false, 'message' => 'User not  allowed to login!'], 401);
+            }
 
             // Create a session for the user
             session(['user_details' => [
                 'token' => $token, // Set token value if needed
                 'name' => $user->name,
                 'user_id' => $user->id,
+                'user_role' => $user->user_role,
             ]]);
 
             return response()->json(['success' => true, 'message' => 'Login successful', 'user_details' => session('user_details')]);
@@ -109,33 +256,4 @@ class UserController extends Controller
         return redirect('/');
     }
     // ================================================== authentication =====================================================================
-
-
-    //add users
-
-    public function addUsers(Request $request)
-    {
-        try {
-            $userDetails = session('user_details');
-            $validated = $request->validate([
-                'firstName' => 'required|string',
-                'lastName' => 'required|string',
-                'email' => 'required|string',
-                'phone' => 'required|string',
-                'role' => 'required|string',
-                'address' => 'required|string',
-            ]);
-            $users = User::create([
-                'name' => $validated['firstName'],
-                'last_name' => $validated['lastName'],
-                'email' => $validated['email'],
-                'phone' => $validated['phone'],
-                'user_role' => $validated['role'],
-                'address' => $validated['address'],
-            ]);
-            return response()->json(['sucess' => true, 'message' => 'date add'], 200);
-        } catch (\Exception $eror) {
-            return response()->json(['sucess' => false, 'message' => $eror->getMessage()], 404);
-        }
-    }
 }

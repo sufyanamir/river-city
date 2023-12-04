@@ -26,44 +26,28 @@
                         </tr>
                     </thead>
                     <tbody class=" text-sm">
+                        @foreach($crew as $item)
                         <tr>
-                            <td><img class=" w-18 h-18 rounded-full" src="{{ asset('assets/images/demo-user.svg') }}" alt="image"></td>
-                            <td>Client Name</td>
-                            <td>Labour</td>
+                            <td><img class=" w-10 h-10 rounded-full" style="object-fit: cover;" src="{{ (isset($item->user_image)) ? asset($item->user_image) : 'assets/images/demo-user.svg'}}" alt="image"></td>
+                            <td>{{ $item->name }} {{ $item->last_name }}</td>
+                            <td>{{ $item->departement }}</td>
                             <td>
-                                <label>
-                                    <input type="checkbox" checked class="star-checkbox">
-                                    <span class="star-label"></span>
-                                </label>
-                                <label>
-                                    <input type="checkbox" checked class="star-checkbox">
-                                    <span class="star-label"></span>
-                                </label>
-                                <label>
-                                    <input type="checkbox" checked class="star-checkbox">
-                                    <span class="star-label"></span>
-                                </label>
-                                <label>
-                                    <input type="checkbox" class="star-checkbox">
-                                    <span class="star-label"></span>
-                                </label>
-                                <label>
-                                    <input type="checkbox" class="star-checkbox">
-                                    <span class="star-label"></span>
-                                </label>
                             </td>
-                            <td>abcd@gmail.com</td>
-                            <td>123 456 789</td>
-                            <td>Town, City, Country</td>
+                            <td>{{ $item->email }}</td>
+                            <td>{{ $item->phone }}</td>
+                            <td>{{ $item->address }}</td>
                             <td>
                                 <button>
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                 </button>
                                 <button>
-                                    <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
+                                    <a href="/delete/crew/{{ $item->id }}">
+                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
+                                    </a>
                                 </button>
                             </td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -79,7 +63,8 @@
 
         <!-- Modal panel -->
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="" id="addCrew-form">
+            <form action="/addCrew" id="addCrew-form" method="post" enctype="multipart/form-data">
+                @csrf
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between border-b-2">
@@ -100,12 +85,13 @@
 
                             <input type="email" name="email" id="email" placeholder="Email" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
 
-                            <input type="tel" name="number" id="number" placeholder="Phone No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <input type="tel" name="phone" id="phone" placeholder="Phone No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
 
                             <select id="departement" name="departement" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                 <option value="">Departement</option>
-                                <option value="">Labour</option>
-                                <option value="">Staff</option>
+                                @foreach($departements as $item)
+                                <option value="{{ $item->departement }}">{{ $item->departement }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div>
@@ -118,34 +104,24 @@
                                     </div>
                                 </div>
                             </div>
-                            <div>
-                                <label>
-                                    <input type="checkbox" checked class="star-checkbox">
-                                    <span class="star-label"></span>
-                                </label>
-                                <label>
-                                    <input type="checkbox" checked class="star-checkbox">
-                                    <span class="star-label"></span>
-                                </label>
-                                <label>
-                                    <input type="checkbox" checked class="star-checkbox">
-                                    <span class="star-label"></span>
-                                </label>
-                                <label>
-                                    <input type="checkbox" class="star-checkbox">
-                                    <span class="star-label"></span>
-                                </label>
-                                <label>
-                                    <input type="checkbox" class="star-checkbox">
-                                    <span class="star-label"></span>
-                                </label>
+                            <div class="rate">
+                                <input type="radio" id="star5" name="rate" value="5" />
+                                <label for="star5" title="text">5 stars</label>
+                                <input type="radio" id="star4" name="rate" value="4" />
+                                <label for="star4" title="text">4 stars</label>
+                                <input type="radio" id="star3" name="rate" value="3" />
+                                <label for="star3" title="text">3 stars</label>
+                                <input type="radio" id="star2" name="rate" value="2" />
+                                <label for="star2" title="text">2 stars</label>
+                                <input type="radio" id="star1" name="rate" value="1" />
+                                <label for="star1" title="text">1 star</label>
                             </div>
                             <div>
                                 <input type="tel" name="teamNumber" id="teamNumber" placeholder="Team No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             </div>
                         </div>
                         <div class=" col-span-2 my-2">
-                            <textarea name="" id="" placeholder="Address" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                            <textarea name="address" id="address" placeholder="Address" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
                         </div>
                     </div>
                     <div class="">
