@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,8 +24,9 @@ Route::middleware('customauth')->group(function () {
 
     Route::post('/addUserRole',  [UserController::class, 'addUserRole']);
     Route::get('/userRole', [UserController::class, 'getUserRole']);
-    Route::get('/users', [UserController::class, 'getUsers']);
-    Route::get('/addUser', [UserController::class, 'addUsers']);
+    Route::get('/users', [UserController::class, 'getUsersWithRoles']);
+    Route::post('/addUser', [UserController::class, 'addUsers']);
+    Route::match(['get', 'post'], '/delete/user/{id}', [UserController::class, 'deleteUser']);
     Route::match(['get', 'post'], '/delete/userRole/{id}', [UserController::class, 'deleteUserRole']);
     Route::get('/customers', function () {
         return view('customers');
@@ -35,9 +37,12 @@ Route::middleware('customauth')->group(function () {
     // Route::get('/userRole', function () {
     //     return view('user_roles');
     // });
-    Route::get('/crew', function () {
-        return view('crew');
-    });
+    Route::get('/crew', [UserController::class, 'getDepartementOnCrew']);
+    Route::post('/addCrew', [UserController::class, 'addCrew']);
+    Route::match(['get', 'post'], '/delete/crew/{id}', [UserController::class, 'deleteCrew']);
+    // Route::get('/crew', function () {
+    //     return view('crew');
+    // });
     Route::get('/estimates', function () {
         return view('estimates');
     });
@@ -89,6 +94,9 @@ Route::middleware('customauth')->group(function () {
     Route::get('//addEmail', function () {
         return view('addEmail');
     });
+    Route::post('/addEmail', [EmailController::class, 'addMailTemplate']);
+    Route::get('/emails', [EmailController::class, 'getEmails']);
+    Route::match(['get', 'post'], '/delete/email/{id}', [EmailController::class, 'deleteEmail']);
     Route::get('/settings', function () {
         return view('settings');
     });

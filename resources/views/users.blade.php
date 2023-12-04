@@ -25,20 +25,22 @@
                         </tr>
                     </thead>
                     <tbody class=" text-sm">
+                        @foreach($users as $user)
                         <tr>
-                            <td><img class=" w-18 h-18 rounded-full" src="{{ asset('assets/images/demo-user.svg') }}"
-                                    alt="image"></td>
-                            <td>Client Name</td>
-                            <td>Labour</td>
-                            <td>client@gmail.com</td>
-                            <td>123 456 789</td>
-                            <td>Town, City, Country</td>
+                            <td><img class=" w-10 h-10 rounded-full" style="object-fit: cover;" src="{{ (isset($user->user_image)) ? asset($user->user_image) : 'assets/images/demo-user.svg'}}" alt="image"></td>
+                            <td>{{ $user->name }} {{ $user->last_name }}</td>
+                            <td>{{ $user->user_role }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td>{{ $user->phone }}</td>
+                            <td>{{ $user->address }}</td>
                             <td>
                                 <button>
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                 </button>
                                 <button>
-                                    <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
+                                    <a href="/delete/user/{{$user->id}}">
+                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
+                                    </a>
                                 </button>
                                 <a href="{{ url('privileges') }}">
                                     <button>
@@ -47,6 +49,7 @@
                                 </a>
                             </td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -61,9 +64,9 @@
         </div>
 
         <!-- Modal panel -->
-        <div
-            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="/addUser" id="addUser-form">
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="/addUser" id="addUser-form" enctype="multipart/form-data" method="post">
+                @csrf
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between border-b-2">
@@ -78,76 +81,39 @@
                             <h3 class=" text-lg font-medium text-left">Details</h3>
                         </div>
                         <div class=" pt-3">
-                            <input type="text" name="firstName" id="firstName" placeholder="First Name"
-                                autocomplete="given-name"
-                                class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <input type="text" name="firstName" id="firstName" placeholder="First Name" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
 
-                            <input type="text" name="lastName" id="lastName" placeholder="Last Name"
-                                autocomplete="given-name"
-                                class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <input type="text" name="lastName" id="lastName" placeholder="Last Name" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
 
-                            <input type="email" name="email" id="email" placeholder="Email"
-                                autocomplete="given-name"
-                                class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <input type="email" name="email" id="email" placeholder="Email" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
 
-                            <input type="tel" name="phone" id="phone" placeholder="Phone No."
-                                autocomplete="given-name"
-                                class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <input type="tel" name="phone" id="phone" placeholder="Phone No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div>
-                            <div id="dropzone" class="dropzone"
-                                style=" width: 139px !important; height: 139px !important;">
-                                <img id="profileImage" src="{{ asset('assets/images/demo-user.svg') }}"
-                                    style="width: 139px; height: 139px; border-radius: 50%; object-fit: cover;"
-                                    alt="text">
+                            <div id="dropzone" class="dropzone" style=" width: 139px !important; height: 139px !important;">
+                                <img id="profileImage" src="{{ asset('assets/images/demo-user.svg') }}" style="width: 139px; height: 139px; border-radius: 50%; object-fit: cover;" alt="text">
                                 <div class="file-input-container">
                                     <input class="file-input" type="file" name="upload_image" id="fileInput1">
                                     <div class="upload-icon" onclick="document.getElementById('fileInput1').click()">
-                                        <img src="{{ asset('assets/icons/edit-icon.svg') }}" class=" w-11"
-                                            alt="icon">
+                                        <img src="{{ asset('assets/icons/edit-icon.svg') }}" class=" w-11" alt="icon">
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div>
-                                <label>
-                                    <input type="checkbox" checked class="star-checkbox">
-                                    <span class="star-label"></span>
-                                </label>
-                                <label>
-                                    <input type="checkbox" checked class="star-checkbox">
-                                    <span class="star-label"></span>
-                                </label>
-                                <label>
-                                    <input type="checkbox" checked class="star-checkbox">
-                                    <span class="star-label"></span>
-                                </label>
-                                <label>
-                                    <input type="checkbox" class="star-checkbox">
-                                    <span class="star-label"></span>
-                                </label>
-                                <label>
-                                    <input type="checkbox" class="star-checkbox">
-                                    <span class="star-label"></span>
-                                </label>
-                            </div> -->
                             <div>
-                                <select id="role" name="role" autocomplete="customer-name"
-                                    class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                                <select id="role" name="role" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                     <option value="">role</option>
                                     @foreach ($user_roles as $row)
-                                        <option >{{ $row['role'] }}</option>
+                                    <option>{{ $row['role'] }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class=" col-span-2 my-2">
-                            <textarea name="address" id="" placeholder="Address"
-                                class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                            <textarea name="address" id="" placeholder="Address" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
                         </div>
                     </div>
                     <div class="">
-                        <button id="updateEvent"
-                            class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Add
+                        <button id="updateEvent" class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Add
                         </button>
                     </div>
                 </div>

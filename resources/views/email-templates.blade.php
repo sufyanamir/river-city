@@ -24,22 +24,26 @@
                         </tr>
                     </thead>
                     <tbody class=" text-sm">
+                        @foreach($emailTemplates as $email)
                         <tr>
-                            <td>Email Name</td>
-                            <td>All Project</td>
-                            <td>Plain Text</td>
+                            <td>{{ $email->email_name }}</td>
+                            <td>{{ $email->email_type }}</td>
+                            <td>{{ $email->email_format }}</td>
                             <td>
                                 <button>
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                 </button>
                                 <button>
-                                    <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
+                                    <a href="/delete/email/{{ $email->email_id }}">
+                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
+                                    </a>
                                 </button>
                                 <button>
                                     <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="btn">
                                 </button>
                             </td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

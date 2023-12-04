@@ -18,7 +18,8 @@ class AdminSeeder extends Seeder
         DB::table('users')->insert([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
-            'password' => md5('12345')
+            'password' => md5('12345'),
+            'user_role' => 'admin',
         ]);
     }
 }
