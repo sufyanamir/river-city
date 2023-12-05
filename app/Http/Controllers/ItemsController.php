@@ -27,10 +27,10 @@ class ItemsController extends Controller
         try {
             $item = Items::find($id);
 
+            $item->assemblies()->delete();
             $item->delete();
 
             return response()->json(['success' => true, 'message' => 'Item deleted successfully!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -58,7 +58,7 @@ class ItemsController extends Controller
                 'item_price' => 'required|numeric',
                 'labour_expense' => 'nullable|numeric',
                 'item_description' => 'required|string',
-                'assembly_name' => 'nullable|array'
+                'assembly_name' => 'nullable|array',
             ]);
 
             $item = Items::create([
@@ -72,13 +72,14 @@ class ItemsController extends Controller
             ]);
 
             if (isset($validatedData['assembly_name'])) {
-                // Convert array to string
-                $assemblyName = implode(', ', $validatedData['assembly_name']);
-
-                $assemblyItem = ItemAssembly::create([
-                    'item_id' => $item->item_id,
-                    'assembly_name' => $assemblyName,
-                ]);
+                // Iterate through each assembly name
+                foreach ($validatedData['assembly_name'] as $assemblyName) {
+                    // Create a new ItemAssembly for each assembly name
+                    ItemAssembly::create([
+                        'item_id' => $item->item_id,
+                        'assembly_name' => $assemblyName,
+                    ]);
+                }
             }
 
             return response()->json(['success' => true, 'message' => 'Item added successfully!'], 200);

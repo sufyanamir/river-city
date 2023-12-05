@@ -175,7 +175,7 @@
         let rembtn = document.createElement('span');
         newele.classList.add('mt-5')
         newele.innerHTML =
-            `<input type="text" name="items_name[]" id="itemName" placeholder="Item Name"
+            `<input type="text" name="assembly_name[]" id="itemName" placeholder="Item Name"
 autocomplete="given-name"
 class=" w-[92%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">`
         rembtn.innerHTML = `<button type="button"
