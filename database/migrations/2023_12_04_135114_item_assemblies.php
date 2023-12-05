@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('item_assemblies', function(Blueprint $table){
             $table->id('assembly_id');
             $table->integer('item_id');
-            $table->string('assembly_name');
+            $table->string('assembly_name')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrent();
         });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Email;
+use App\Models\Groups;
 use App\Models\ItemAssembly;
 use App\Models\Items;
 use App\Models\User;
@@ -44,11 +45,12 @@ class ItemsController extends Controller
 
         return view('items', ['items' => $items, 'user_details' => $this->userDetails]);
     }
-    public function getItemsOnGroups()
+    public function getGroupsWithItems()
     {
         $items = Items::get();
+        $groups = Groups::get();
 
-        return view('group', ['items' => $items, 'user_details' => $this->userDetails]);
+        return view('group', ['items' => $items, 'groups' => $groups, 'user_details' => $this->userDetails]);
     }
     // get item
 
