@@ -21,53 +21,71 @@ class ItemsController extends Controller
         $this->userDetails = Session::get('user_details');
     }
 
+    // delete item
+    public function deleteItem($id)
+    {
+        try {
+            $item = Items::find($id);
+
+            $item->delete();
+
+            return response()->json(['success' => true, 'message' => 'Item deleted successfully!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // delete item
+
+    // get item
     public function getItems()
     {
         $items = Items::get();
 
         return view('items', ['items' => $items, 'user_details' => $this->userDetails]);
     }
+    // get item
 
-
+    // add item
     public function addItem(Request $request)
-{
-    try {
-        $validatedData = $request->validate([
-            'item_name' => 'required|string',
-            'item_type' => 'required|string',
-            'item_units' => 'required|string',
-            'item_cost' => 'required|numeric',
-            'item_price' => 'required|numeric',
-            'labour_expense' => 'nullable|numeric',
-            'item_description' => 'required|string',
-            'assembly_name' => 'nullable|array'
-        ]);
-
-        $item = Items::create([
-            'item_name' => $validatedData['item_name'],
-            'item_type' => $validatedData['item_type'],
-            'item_units' => $validatedData['item_units'],
-            'item_cost' => $validatedData['item_cost'],
-            'item_price' => $validatedData['item_price'],
-            'labour_expense' => $validatedData['labour_expense'],
-            'item_description' => $validatedData['item_description'],
-        ]);
-
-        if (isset($validatedData['assembly_name'])) {
-            // Convert array to string
-            $assemblyName = implode(', ', $validatedData['assembly_name']);
-
-            $assemblyItem = ItemAssembly::create([
-                'item_id' => $item->item_id,
-                'assembly_name' => $assemblyName,
+    {
+        try {
+            $validatedData = $request->validate([
+                'item_name' => 'required|string',
+                'item_type' => 'required|string',
+                'item_units' => 'required|string',
+                'item_cost' => 'required|numeric',
+                'item_price' => 'required|numeric',
+                'labour_expense' => 'nullable|numeric',
+                'item_description' => 'required|string',
+                'assembly_name' => 'nullable|array'
             ]);
+
+            $item = Items::create([
+                'item_name' => $validatedData['item_name'],
+                'item_type' => $validatedData['item_type'],
+                'item_units' => $validatedData['item_units'],
+                'item_cost' => $validatedData['item_cost'],
+                'item_price' => $validatedData['item_price'],
+                'labour_expense' => $validatedData['labour_expense'],
+                'item_description' => $validatedData['item_description'],
+            ]);
+
+            if (isset($validatedData['assembly_name'])) {
+                // Convert array to string
+                $assemblyName = implode(', ', $validatedData['assembly_name']);
+
+                $assemblyItem = ItemAssembly::create([
+                    'item_id' => $item->item_id,
+                    'assembly_name' => $assemblyName,
+                ]);
+            }
+
+            return response()->json(['success' => true, 'message' => 'Item added successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
-
-        return response()->json(['success' => true, 'message' => 'Item added successfully!'], 200);
-
-    } catch (\Exception $e) {
-        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
     }
-}
+    // add item
 
 }

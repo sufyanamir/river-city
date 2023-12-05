@@ -9,6 +9,11 @@ class Items extends Model
 {
     use HasFactory;
 
+    public function assemblies()
+    {
+        return $this->hasMany(ItemAssembly::class, 'item_id', 'item_id');
+    }
+
     protected $table = 'items';
 
     protected $primaryKey =  'item_id';

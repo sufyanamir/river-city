@@ -77,23 +77,22 @@
                     </div>
                     <!-- task details -->
                     <div class=" text-center grid grid-cols-2 gap-2">
-                        <div class=" col-span-2 my-2">
-                            <input type="text" name="item_name" id="itemName" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                        </div>
-                        <div class=" my-2">
+                        <div class="  col-span-2 my-2">
                             <select id="type" name="item_type" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                                <option disabled>type</option>
-                                <option value="services">Services</option>
-                                <option value="product">Product</option>
+                                <option>type</option>
+                                <option value="services">labour</option>
+                                <option value="material">Material</option>
                                 <option value="assemblies">Assemblies</option>
                             </select>
                         </div>
+                        <div class=" my-2">
+                            <input type="text" name="item_name" id="itemName" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
                         <div class="my-2">
                             <select id="item_units" name="item_units" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                                <option disabled>Units</option>
+                                <option>Units</option>
                                 <option value="hour">Hour</option>
                                 <option value="gal">Gal</option>
-                                <option value="assemblies">Assemblies</option>
                             </select>
                         </div>
                         <div class="my-2 text-left">
