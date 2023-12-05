@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -59,7 +60,8 @@ Route::middleware('customauth')->group(function () {
     // Route::get('/group', function () {
     //     return view('group');
     // });
-    Route::get('/group',[ItemsController::class, 'getItemsOnGroups']);
+    Route::get('/group',[ItemsController::class, 'getGroupsWithItems']);
+    Route::post('/addGroup', [GroupController::class], 'addGroup');
     Route::get('/emails', function () {
         return view('email-templates');
     });

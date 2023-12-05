@@ -13,15 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('items', function(Blueprint $table){
-            $table->id('item_id');
-            $table->string('item_name');
-            $table->string('item_type');
-            $table->string('item_units');
-            $table->float('item_cost');
-            $table->float('item_price');
-            $table->float('labour_expense')->nullable();
-            $table->text('item_description')->nullable();
+        Schema::create('groups', function(Blueprint $table){
+            $table->id('group_id');
+            $table->string('group_name');
+            $table->text('group_items');
+            $table->integer('total_items');
+            $table->string('group_type');
+            $table->text('group_description')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrent();
         });
@@ -34,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('groups');
     }
 };
