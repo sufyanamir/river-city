@@ -44,6 +44,12 @@ class ItemsController extends Controller
 
         return view('items', ['items' => $items, 'user_details' => $this->userDetails]);
     }
+    public function getItemsOnGroups()
+    {
+        $items = Items::get();
+
+        return view('group', ['items' => $items, 'user_details' => $this->userDetails]);
+    }
     // get item
 
     // add item

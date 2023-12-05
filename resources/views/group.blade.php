@@ -15,7 +15,7 @@
                 <table id="example" class="display" style="width:100%">
                     <thead class="bg-[#930027] text-white text-sm">
                         <tr>
-                            <th>Item Name</th>
+                            <th>Group Name</th>
                             <th>Type</th>
                             <th>Items</th>
                             <th>Description</th>
@@ -43,6 +43,7 @@
         </div>
     </div>
 </div>
+{{-- add group --}}
 <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addGroup-modal">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <!-- Background overlay -->
@@ -79,12 +80,13 @@
                         </div>
                         <div class=" text-left col-span-2">
                             <h3 class=" font-medium text-lg">Items</h3>
-                            <select id="customer" name="customer" autocomplete="customer-name" class=" p-2 w-[92%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            {{-- <select id="customer" name="customer" autocomplete="customer-name" class=" p-2 w-[92%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                 <option>Item name</option>
                                 <option>Interior</option>
                                 <option>Exterior</option>
                                 <option>Labour</option>
-                            </select>
+                            </select> --}}
+                            <input type="text" id="customer" name="customer" autocomplete="customer-name" class=" p-2 w-[92%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                             <button type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="" aria-expanded="true" aria-haspopup="true">
                                 <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
                             </button>
@@ -107,6 +109,9 @@
         </div>
     </div>
 </div>
+{{-- add group --}}
+
+{{-- select ietms --}}
 <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="selectItems-modal">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <!-- Background overlay -->
@@ -159,90 +164,30 @@
                                 </tr>
                             </thead>
                             <tbody class="">
+                                @foreach ($items as $values)
+                                    
                                 <tr class="bg-white border-b">
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        Item Name
+                                        {{$values['item_name']}}
                                     </th>
                                     <td class="px-6 py-4">
-                                        Product
+                                        {{$values['item_type']}}
                                     </td>
                                     <td class="px-6 py-4">
-                                        gal
+                                        {{$values['item_units']}}
                                     </td>
                                     <td class="px-6 py-4">
-                                        $10
+                                        ${{$values['item_cost']}}
                                     </td>
                                     <td class="px-6 py-4">
-                                        $15
+                                        ${{$values['item_price']}}
                                     </td>
                                     <td>
                                         <input type="checkbox" name="Edit" id="privilegeUserEdit">
                                         <label for="privilegeUserEdit" class=" text-gray-500 opacity-1"></label>
                                     </td>
                                 </tr>
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        Item Name
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        Product
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        gal
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $10
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $15
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" name="Edit" id="privilegeUserEdit1">
-                                        <label for="privilegeUserEdit1" class=" text-gray-500 opacity-1"></label>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        Item Name
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        Product
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        gal
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $10
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $15
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" name="Edit" id="privilegeUserEdit2">
-                                        <label for="privilegeUserEdit2" class=" text-gray-500 opacity-1"></label>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        Item Name
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        Product
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        gal
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $10
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $15
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" name="Edit" id="privilegeUserEdit3">
-                                        <label for="privilegeUserEdit3" class=" text-gray-500 opacity-1"></label>
-                                    </td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -257,6 +202,8 @@
         </div>
     </div>
 </div>
+{{-- select ietms --}}
+
 @include('layouts.footer')
 <script>
     $("#addGroup").click(function(e) {
