@@ -52,7 +52,8 @@
         </div>
 
         <!-- Modal panel -->
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div
+            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <form action="" id="addGroup-form">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
@@ -65,13 +66,18 @@
                     <!-- task details -->
                     <div class=" text-center grid grid-cols-2 gap-2">
                         <div class=" col-span-2 my-2">
-                            <input type="text" name="groupName" id="groupName" placeholder="Group Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <input type="text" name="groupName" id="groupName" placeholder="Group Name"
+                                autocomplete="given-name"
+                                class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class="my-2">
-                            <input type="text" name="totalItems" id="totalItems" placeholder="Total Items" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <input type="text" name="totalItems" id="totalItems" placeholder="Total Items"
+                                autocomplete="given-name"
+                                class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class=" my-2">
-                            <select id="customer" name="customer" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <select id="customer" name="customer" autocomplete="customer-name"
+                                class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                 <option>type</option>
                                 <option>Services</option>
                                 <option>Product</option>
@@ -86,22 +92,26 @@
                                 <option>Exterior</option>
                                 <option>Labour</option>
                             </select> --}}
-                            <input type="text" id="customer" name="customer" autocomplete="customer-name" class=" p-2 w-[92%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                            <button type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="" aria-expanded="true" aria-haspopup="true">
-                                <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
-                            </button>
+                            {{-- ======multiple item inputs===== --}}
+                            <div id="muliple_items">
+                            </div>
+
                             <div class=" text-right mt-2">
-                                <button type="button" class=" gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="selectItems" aria-expanded="true" aria-haspopup="true">
+                                <button type="button"
+                                    class=" gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]"
+                                    id="selectItems" aria-expanded="true" aria-haspopup="true">
                                     <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
                                 </button>
                             </div>
                         </div>
                         <div class="my-2 col-span-2">
-                            <textarea name="" id="" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                            <textarea name="" id="" placeholder="Description"
+                                class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
                         </div>
                     </div>
                     <div class="">
-                        <button id="updateEvent" class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                        <button id="updateEvent"
+                            class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
                         </button>
                     </div>
                 </div>
@@ -120,7 +130,8 @@
         </div>
 
         <!-- Modal panel -->
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full lg:max-w-screen-md">
+        <div
+            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full lg:max-w-screen-md">
             <form action="" id="selectItems-form">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
@@ -136,7 +147,9 @@
                         </button>
                     </div>
                     <div class=" my-2">
-                        <input type="text" name="search" id="search" placeholder="Search" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        <input type="text" name="search" id="search" placeholder="Search"
+                            autocomplete="given-name"
+                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     </div>
                     <!-- task details -->
 
@@ -164,37 +177,92 @@
                                 </tr>
                             </thead>
                             <tbody class="">
-                                @foreach ($items as $values)
-                                    
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {{$values['item_name']}}
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{$values['item_type']}}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{$values['item_units']}}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        ${{$values['item_cost']}}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        ${{$values['item_price']}}
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" name="Edit" id="privilegeUserEdit">
-                                        <label for="privilegeUserEdit" class=" text-gray-500 opacity-1"></label>
-                                    </td>
-                                </tr>
+                                @foreach ($items as $i => $values)
+                                    <tr class="bg-white border-b">
+                                        <th scope="row"
+                                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                            {{ $values['item_name'] }}
+                                        </th>
+                                        <td class="px-6 py-4">
+                                            {{ $values['item_type'] }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $values['item_units'] }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            ${{ $values['item_cost'] }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            ${{ $values['item_price'] }}
+                                        </td>
+                                        <td>
+                                            <input class="checkboxes" type="checkbox" name="Edit"
+                                                id="privilegeUserEdit{{ $i }}"
+                                                data-item-name="{{ $values['item_name'] }}"
+                                                data-item-price="{{ $values['item_price'] }}"
+                                                data-item-id="{{ $values['item_id'] }}""
+                                                data-item-cost="{{ $values['item_cost'] }}">
+                                            <label for="privilegeUserEdit{{ $i }}"
+                                                class="text-gray-500 opacity-1"></label>
+                                        </td>
+                                    </tr>
                                 @endforeach
+
+                                <script>
+                                    let muliple_items = document.querySelector('#muliple_items');
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        let checkboxes = document.querySelectorAll('.checkboxes');
+
+                                        checkboxes.forEach(function(checkbox) {
+                                            checkbox.addEventListener('change', function() {
+                                                if (this.checked) {
+                                                    let itemName = this.getAttribute('data-item-name');
+                                                    let itemPrice = this.getAttribute('data-item-price');
+                                                    let itemCost = this.getAttribute('data-item-cost');
+                                                    let itemid = this.getAttribute('data-item-id');
+
+                                                    let newelements = document.createElement('div');
+                                                    let id = Math.floor(Math.random() * 999 + 1);
+                                                    newelements.id = "eleremove" + id;
+                                                    newelements.innerHTML = `<input type="text" placeholder="id" value="${itemid}">
+                                    <input type="text" id="itemname" name="itemname" autocomplete="customer-name" value="${itemName}"
+                                    class=" p-2 w-full outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"
+                                    placeholder="Item Name">
+                                         <div class="flex flex-1 gap-2 mt-5">
+                                    <input type="text" id="itemprice" name="itemcost"  value="${itemCost}"
+                                        class=" p-2 w-[46%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"
+                                        placeholder="Item Cost">
+                                    <input type="text" id="itemcost" name="itemprice"  value="${itemPrice}"
+                                        class=" p-2 w-[46%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"
+                                        placeholder="Item Price">
+                                    <div class="mt-2">
+                                             <button type="button" onclick="removeelements('#eleremove${id}')"
+                                                     class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]"
+                                             aria-expanded="true" aria-haspopup="true">
+                                            <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}"
+                                                alt="icon">
+                                                       </button>
+                                                 </div>
+                                              </div>`
+                                                    muliple_items.append(newelements);
+                                                }
+                                            });
+                                        });
+                                    });
+
+                                    function removeelements(e) {
+                                        let ele = document.querySelector(e);
+                                        if (ele) {
+                                            ele.remove();
+                                        }
+                                    }
+                                </script>
                             </tbody>
                         </table>
                     </div>
                     <div class=" flex justify-between pt-2">
-                        <button id="updateEvent" class=" mb-2 py-1 px-7 rounded-md border ">Cancel
-                        </button>
-                        <button id="updateEvent" class=" mb-2 bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                        <button id="updateEvent"
+                            class=" mb-2 bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 addItemsModal-close float-right">Save
                         </button>
                     </div>
                 </div>
