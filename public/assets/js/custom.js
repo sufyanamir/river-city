@@ -80,6 +80,28 @@ $(document).ready(function () {
   });
 
   new DataTable('#example');
+
+  window.voice = function (buttonId, textareaId) {
+    var recognition = new webkitSpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.onresult = function (event) {
+      console.log(event);
+      var existingText = $("#" + textareaId).val();
+      var newText = event.results[0][0].transcript;
+      $("#" + textareaId).val(existingText + ' ' + newText);
+      $('.speak-icon').removeClass('fa-beat-fade');
+    };
+    recognition.start();
+    $('.speak-icon').addClass('fa-beat-fade');
+    // Disable the button while recording
+    $("#" + buttonId).prop("disabled", true);
+
+    // Enable the button after recording ends
+    recognition.onend = function () {
+      $("#" + buttonId).prop("disabled", false);
+    };
+  }
+
 });
 // Get references to the necessary elements
 const fileInput = document.getElementById('fileInput1');

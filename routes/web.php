@@ -61,7 +61,8 @@ Route::middleware('customauth')->group(function () {
     //     return view('group');
     // });
     Route::get('/group',[ItemsController::class, 'getGroupsWithItems']);
-    Route::post('/addGroup', [GroupController::class], 'addGroup');
+    Route::post('/addGroup', [GroupController::class, 'addGroup']);
+    Route::match(['post', 'get'], '/delete/group/{id}', [GroupController::class, 'deleteGroup']);
     Route::get('/emails', function () {
         return view('email-templates');
     });

@@ -23,6 +23,22 @@ class GroupController extends Controller
         $this->userDetails = Session::get('user_details');
     }
 
+    // delete group
+    public function deleteGroup($id)
+    {
+        try {
+            $group = Groups::find($id);
+
+            $group->delete();
+
+            return response()->json(['success' => true, 'message' => 'Group deleted successfully!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // delete group
+
     // get groups
     public function getGroups()
     {
@@ -35,7 +51,7 @@ class GroupController extends Controller
     // add group
     public function addGroup(Request $request)
     {
-        dd($request);
+        // dd($request);
         try {
             $validatedData = $request->validate([
                 'group_name' => 'required|string',
@@ -49,7 +65,7 @@ class GroupController extends Controller
                 'group_name' => $validatedData['group_name'],
                 'total_items' => $validatedData['total_items'],
                 'group_type' => $validatedData['group_type'],
-                'group_items' => $validatedData['group_items'],
+                'group_items' => json_encode($validatedData['group_items']),
                 'group_description' => $validatedData['group_description'],
             ]);
 

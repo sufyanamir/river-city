@@ -54,6 +54,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/dataTables.min.css') }}">
+    <script src="https://kit.fontawesome.com/4ae3f77a6d.js" crossorigin="anonymous"></script>
     @vite('resources/css/app.css')
 </head>
 
@@ -248,7 +249,7 @@
                                     </div>
                                     <div class=" col-span-4">
                                         <h3 class=" text-lg font-medium text-left">Note</h3>
-                                        <input type="text" name="note" id="note" placeholder="Internal Notes (Optional, only vivible to employees)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <input type="text" name="note" id="note" placeholder="Internal Notes (Optional, only visible to employees)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class=" col-span-2">
                                         <h3 class=" text-lg font-medium text-left">Source</h3>
@@ -300,9 +301,10 @@
                                         <h3 class=" text-lg font-medium text-left">Address</h3>
                                         <input type="text" name="address" id="address" placeholder="Address" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
-                                    <div class=" col-span-4 ">
+                                    <div class=" col-span-4 relative">
                                         <h3 class=" text-lg font-medium text-left">Note</h3>
-                                        <textarea type="text" name="note" id="note" placeholder="Note" class="  p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"></textarea>
+                                        <textarea type="text" name="estimate_note" id="estimate_note" placeholder="Note" class="  p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"></textarea>
+                                        <button type="button" id="estimate-mic" class=" absolute mt-10 right-4" onclick="voice('estimate-mic', 'estimate_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                                     </div>
                                 </div>
                                 <div class="">
