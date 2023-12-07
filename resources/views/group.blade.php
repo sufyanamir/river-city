@@ -267,8 +267,15 @@
                                                  </div>
                                               </div>`
                                                     let updatebtn = document.querySelector('#additems');
+                                                    let iid = 0;
                                                     updatebtn.addEventListener('click', () => {
-                                                        muliple_items.append(newelements);
+                                                        if(iid == 0){
+                                                            muliple_items.append(newelements);
+                                                            iid = 1
+                                                        }else{
+                                                            iid = 0
+                                                        }
+
                                                     })
                                                 }
                                             });
