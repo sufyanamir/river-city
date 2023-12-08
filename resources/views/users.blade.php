@@ -42,7 +42,7 @@
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
                                     </a>
                                 </button>
-                                <a href="{{ url('privileges') }}">
+                                <a href="{{ url('/privileges/' . $user->id) }}">
                                     <button>
                                         <img src="{{ asset('assets/icons/userPrivileges-icon.svg') }}" alt="btn">
                                     </button>

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AddUserMail;
 use App\Models\Email;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -19,6 +21,65 @@ class UserController extends Controller
         // Retrieve user details from session and store it in $userDetails
         $this->userDetails = Session::get('user_details');
     }
+    // ================================================== Crew =====================================================================
+
+    // get user privileges
+    public function getUserPrivileges($id)
+    {
+        $user = User::findOrFail($id);
+
+        $user->user_privileges = json_decode($user->user_privileges);
+
+        return response()->json(['success' => true, 'data' => $user],  200);
+    
+    }
+    // get user privileges
+
+    // add user privileges
+    public function addUserPrivileges(Request $request, $id)
+    {
+        try {
+            $user = User::find($id);
+
+            // Use the "privileges" key in the request to get the nested array
+            $selectedPrivileges = $request->input('privileges', []);
+
+            $user->user_privileges = json_encode($selectedPrivileges);
+
+            $user->save();
+
+            return response()->json(['success' => true, 'message' => 'Privileges added to The User'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
+    // add user privileges
+
+    // get user on privileges
+    public function getUserOnPrivileges($id)
+    {
+        try {
+            $user = User::where('id', $id)->first();
+
+            if (!$user) {
+                return response()->json(['success' => false, 'message' => 'User not found!'], 404);
+            } elseif ($user->user_role == 'admin') {
+                return response()->json(['success' => false, 'message' => 'Cannot set privileges of this User!'], 400);
+            } else {
+
+                $user->user_privileges = json_decode($user->user_privileges, true);
+
+                return view('privileges', ['user' => $user, 'user_details' => $this->userDetails]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // get user on privileges
+
+    // ================================================== Crew =====================================================================
+
     // ================================================== Crew =====================================================================
 
     // delete crew
@@ -138,6 +199,21 @@ class UserController extends Controller
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
             ]);
 
+            $password = rand();
+            
+            $emailData = [
+                'email' => $validatedData['email'],
+                'password' => $password,
+            ];
+
+            $mail = new AddUserMail($emailData);
+
+            try {
+                Mail::to($validatedData['email'])->send($mail);
+            } catch (\Throwable $e) {
+                return response()->json(['success' =>  false, 'message' => $e->getMessage()], 400);
+            }
+            
             $users = User::create([
                 'name' => $validatedData['firstName'],
                 'last_name' => $validatedData['lastName'],
@@ -145,6 +221,7 @@ class UserController extends Controller
                 'phone' => $validatedData['phone'],
                 'user_role' => $validatedData['role'],
                 'address' => $validatedData['address'],
+                'password' => md5($password),
             ]);
 
             if ($request->hasFile('upload_image')) {
@@ -153,6 +230,7 @@ class UserController extends Controller
                 $image->storeAs('public/user_images', $imageName); // Adjust storage path as needed
                 $users->user_image = 'storage/user_images/' . $imageName;
             }
+
 
             $users->save();
 
@@ -236,9 +314,18 @@ class UserController extends Controller
             // Create a session for the user
             session(['user_details' => [
                 'token' => $token, // Set token value if needed
+                'id' => $user->id,
                 'name' => $user->name,
-                'user_id' => $user->id,
+                'last_name' => $user->last_name,
+                'email' => $user->email,
                 'user_role' => $user->user_role,
+                'user_image' => $user->user_image,
+                'phone' => $user->phone,
+                'address' => $user->address,
+                'departement' => $user->departement,
+                'rating' => $user->rating,
+                'team_number' => $user->team_number,
+                'user_privileges' => $user->user_privileges,
             ]]);
 
             return response()->json(['success' => true, 'message' => 'Login successful', 'user_details' => session('user_details')]);

@@ -4,213 +4,214 @@
     <div class=" bg-white w-full rounded-lg shadow-lg">
         <div class=" lg:flex justify-between p-3 grid sm:grid-cols-2 mx-auto">
 
-            <img class=" w-28 h-28" src="{{ asset('assets/images/demo-user.svg') }}" alt="">
+            <img class=" w-28 h-28 rounded-full" style="object-fit: cover;" src="{{ (isset($user->user_image)) ? asset($user->user_image) : 'assets/images/demo-user.svg'}}" alt="">
             <div class="ml-8 mt-7">
-                <h4 class=" text-xl font-semibold">User Full Name</h4>
-                <p class="text-[#858585]">Department Role</p>
+                <h4 class=" text-xl font-semibold">{{ $user->name }} {{ $user->last_name }}</h4>
+                <p class="text-[#858585]">{{ $user->user_departement }} {{ $user->user_role }}</p>
             </div>
             {{-- address --}}
             <div class=" w-1/2 mt-8 pl-16 text-[#858585]">
                 <p>
-                    User Address 222 Merrimac ST
-                    Newburyport, Massachusetts 01950
+                    {{ $user->address }}
                 </p>
             </div>
             <div class="sm:pl:8  mt-8 pl-16 text-[#858585]">
-                <p>Useremail@gmail.com</p>
-                <p>978-379-7979</p>
+                <p>{{ $user->email }}</p>
+                <p>{{ $user->phone }}</p>
             </div>
 
         </div>
-        <div class="py-4">
-            <div class=" overflow-x-auto">
-                <div class="border grid grid-cols-12 p-3  font-bold   ">
-                    <p class="col-span-8 pl-14"><input type="checkbox" class="" name="" id="priName"> <label for="priName">Name</label></p>
-                    <p class="col-span-4">Action</p>
-                </div>
-                <div class="p-3 ">
-                    <div class="grid grid-cols-12 mt-4">
-                        <div class="pl-[57px] col-span-8 ">
-                            <input type="checkbox" name="" id="addPrivilegeUser">
-                            <label for="addPrivilegeUser" class=" font-bold">Users</label>
-                        </div>
-                        <div class="col-span-4 mr-20">
-                            <div class="flex justify-between">
-                                <div>
-                                    <input type="checkbox" name="Edit" id="privilegeUserEdit">
-                                    <label for="privilegeUserEdit" class=" text-gray-500">Edit</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="Delete" id="privilegeUserDelete">
-                                    <label for="privilegeUserDelete" class=" text-gray-500">Delete</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="Add" id="privilegeUserAdd">
-                                    <label for="privilegeUserAdd" class=" text-gray-500">Add</label>
+        <form action="/addUserPrivileges/{{ $user->id }}" method="post">
+            @csrf
+            <div class="py-4">
+                <div class=" overflow-x-auto">
+                    <div class="border grid grid-cols-12 p-3  font-bold   ">
+                        <p class="col-span-8 pl-14"><input type="checkbox" class="" name="" id="priName"> <label for="priName">Name</label></p>
+                        <p class="col-span-4">Action</p>
+                    </div>
+                    <div class="p-3 ">
+                        <div class="grid grid-cols-12 mt-4">
+                            <div class="pl-[57px] col-span-8 ">
+                                <input type="checkbox" name="privileges[user]" id="addPrivilegeUser" {{ isset($user->user_privileges['user']) ? 'checked' : '' }}>
+                                <label for="addPrivilegeUser" class=" font-bold">Users</label>
+                            </div>
+                            <div class="col-span-4 mr-20">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <input type="checkbox" name="privileges[user][edit]" id="privilegeUserEdit" {{ isset($user->user_privileges['user']['edit']) ? 'checked' : '' }}>
+                                        <label for="privilegeUserEdit" class=" text-gray-500">Edit</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[user][delete]" id="privilegeUserDelete" {{ isset($user->user_privileges['user']['delete']) ? 'checked' : '' }}>
+                                        <label for="privilegeUserDelete" class=" text-gray-500">Delete</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[user][add]" id="privilegeUserAdd" {{ isset($user->user_privileges['user']['add']) ? 'checked' : '' }}>
+                                        <label for="privilegeUserAdd" class=" text-gray-500">Add</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="grid grid-cols-12 mt-4">
-                        <div class="pl-[57px] col-span-8 ">
-                            <input type="checkbox" name="" id="addPrivilegeEstimate">
-                            <label for="addPrivilegeEstimate" class=" font-bold">Estimate</label>
-                        </div>
-                        <div class="col-span-4 mr-20">
-                            <div class="flex justify-between">
-                                <div>
-                                    <input type="checkbox" name="Edit" id="privilegeEstimateEdit">
-                                    <label for="privilegeEstimateEdit" class=" text-gray-500">Edit</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="Delete" id="privilegeEstimateDelete">
-                                    <label for="privilegeEstimateDelete" class=" text-gray-500">Delete</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="Add" id="privilegeEstimateAdd">
-                                    <label for="privilegeEstimateAdd" class=" text-gray-500">Add</label>
+                        <div class="grid grid-cols-12 mt-4">
+                            <div class="pl-[57px] col-span-8 ">
+                                <input type="checkbox" name="privileges[estimate]" id="addPrivilegeEstimate" {{ isset($user->user_privileges['estimate']) ? 'checked' : '' }}>
+                                <label for="addPrivilegeEstimate" class=" font-bold">Estimate</label>
+                            </div>
+                            <div class="col-span-4 mr-20">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <input type="checkbox" name="privileges[estimate][edit]" id="privilegeEstimateEdit" {{ isset($user->user_privileges['estimate']['edit']) ? 'checked' : '' }}>
+                                        <label for="privilegeEstimateEdit" class=" text-gray-500">Edit</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[estimate][delete]" id="privilegeEstimateDelete" {{ isset($user->user_privileges['estimate']['delete']) ? 'checked' : '' }}>
+                                        <label for="privilegeEstimateDelete" class=" text-gray-500">Delete</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[estimate][add]" id="privilegeEstimateAdd" {{ isset($user->user_privileges['estimate']['add']) ? 'checked' : '' }}>
+                                        <label for="privilegeEstimateAdd" class=" text-gray-500">Add</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="grid grid-cols-12 mt-4">
-                        <div class="pl-[57px] col-span-8 ">
-                            <input type="checkbox" name="" id="addprivilegeSchedule">
-                            <label for="addprivilegeSchedule" class=" font-bold">Schedule</label>
-                        </div>
-                        <div class="col-span-4 mr-20">
-                            <div class="flex justify-between">
-                                <div>
-                                    <input type="checkbox" name="Edit" id="privilegeScheduleEdit">
-                                    <label for="privilegeScheduleEdit" class=" text-gray-500">Edit</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="Delete" id="privilegeScheduleDelete">
-                                    <label for="privilegeScheduleDelete" class=" text-gray-500">Delete</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="Add" id="privilegeScheduleAdd">
-                                    <label for="privilegeScheduleAdd" class=" text-gray-500">Add</label>
+                        <div class="grid grid-cols-12 mt-4">
+                            <div class="pl-[57px] col-span-8 ">
+                                <input type="checkbox" name="privileges[schedule]" id="addprivilegeSchedule" {{ isset($user->user_privileges['schedule']) ? 'checked' : '' }}>
+                                <label for="addprivilegeSchedule" class=" font-bold">Schedule</label>
+                            </div>
+                            <div class="col-span-4 mr-20">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <input type="checkbox" name="privileges[schedule][edit]" id="privilegeScheduleEdit" {{ isset($user->user_privileges['estimate']['edit']) ? 'checked' : '' }}>
+                                        <label for="privilegeScheduleEdit" class=" text-gray-500">Edit</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[schedule][delete]" id="privilegeScheduleDelete" {{ isset($user->user_privileges['schedule']['delete']) ? 'checked' : '' }}>
+                                        <label for="privilegeScheduleDelete" class=" text-gray-500">Delete</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[schedule][add]" id="privilegeScheduleAdd" {{ isset($user->user_privileges['schedule']['add']) ? 'checked' : '' }}>
+                                        <label for="privilegeScheduleAdd" class=" text-gray-500">Add</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="grid grid-cols-12 mt-4">
-                        <div class="pl-[57px] col-span-8 ">
-                            <input type="checkbox" name="" id="addPrivilegeItem">
-                            <label for="addPrivilegeItem" class=" font-bold">Items</label>
-                        </div>
-                        <div class="col-span-4 mr-20">
-                            <div class="flex justify-between">
-                                <div>
-                                    <input type="checkbox" name="Edit" id="privilegeItemsEdit">
-                                    <label for="privilegeItemsEdit" class=" text-gray-500">Edit</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="Delete" id="privilegeItemsDelete">
-                                    <label for="privilegeItemsDelete" class=" text-gray-500">Delete</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="Add" id="privilegeItemsAdd">
-                                    <label for="privilegeItemsAdd" class=" text-gray-500">Add</label>
+                        <div class="grid grid-cols-12 mt-4">
+                            <div class="pl-[57px] col-span-8 ">
+                                <input type="checkbox" name="privileges[item]" id="addPrivilegeItem" {{ isset($user->user_privileges['item']) ? 'checked' : '' }}>
+                                <label for="addPrivilegeItem" class=" font-bold">Items</label>
+                            </div>
+                            <div class="col-span-4 mr-20">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <input type="checkbox" name="privileges[item][edit]" id="privilegeItemsEdit" {{ isset($user->user_privileges['item']['edit']) ? 'checked' : '' }}>
+                                        <label for="privilegeItemsEdit" class=" text-gray-500">Edit</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[item][delete]" id="privilegeItemsDelete" {{ isset($user->user_privileges['item']['delete']) ? 'checked' : '' }}>
+                                        <label for="privilegeItemsDelete" class=" text-gray-500">Delete</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[item][add]" id="privilegeItemsAdd" {{ isset($user->user_privileges['item']['add']) ? 'checked' : '' }}>
+                                        <label for="privilegeItemsAdd" class=" text-gray-500">Add</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="grid grid-cols-12 mt-4">
-                        <div class="pl-[57px] col-span-8 ">
-                            <input type="checkbox" name="" id="addPrivilegeLabour">
-                            <label for="addPrivilegeLabour" class=" font-bold">Labour</label>
-                        </div>
-                        <div class="col-span-4 mr-20">
-                            <div class="flex justify-between">
-                                <div>
-                                    <input type="checkbox" name="Edit" id="privilegeLabourEdit">
-                                    <label for="privilegeLabourEdit" class=" text-gray-500">Edit</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="Delete" id="privilegeLabourDelete">
-                                    <label for="privilegeLabourDelete" class=" text-gray-500">Delete</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="Add" id="privilegeLabourAdd">
-                                    <label for="privilegeLabourAdd" class=" text-gray-500">Add</label>
+                        <div class="grid grid-cols-12 mt-4">
+                            <div class="pl-[57px] col-span-8 ">
+                                <input type="checkbox" name="privileges[labour]" id="addPrivilegeLabour" {{ isset($user->user_privileges['labour']) ? 'checked' : '' }}>
+                                <label for="addPrivilegeLabour" class=" font-bold">Labour</label>
+                            </div>
+                            <div class="col-span-4 mr-20">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <input type="checkbox" name="privileges[labour][edit]" id="privilegeLabourEdit" {{ isset($user->user_privileges['labour']['edit']) ? 'checked' : '' }}>
+                                        <label for="privilegeLabourEdit" class=" text-gray-500">Edit</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[labour][delete]" id="privilegeLabourDelete" {{ isset($user->user_privileges['labour']['delete']) ? 'checked' : '' }}>
+                                        <label for="privilegeLabourDelete" class=" text-gray-500">Delete</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[labour][add]" id="privilegeLabourAdd" {{ isset($user->user_privileges['labour']['add']) ? 'checked' : '' }}>
+                                        <label for="privilegeLabourAdd" class=" text-gray-500">Add</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="grid grid-cols-12 mt-4">
-                        <div class="pl-[57px] col-span-8 ">
-                            <input type="checkbox" name="" id="addPrivilegeMaterials">
-                            <label for="addPrivilegeMaterials" class=" font-bold">Materials</label>
-                        </div>
-                        <div class="col-span-4 mr-20">
-                            <div class="flex justify-between">
-                                <div>
-                                    <input type="checkbox" name="Edit" id="privilegeMaterialsEdit">
-                                    <label for="privilegeMaterialsEdit" class=" text-gray-500">Edit</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="Delete" id="privilegeMaterialsDelete">
-                                    <label for="privilegeMaterialsDelete" class=" text-gray-500">Delete</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="Add" id="privilegeMaterialsAdd">
-                                    <label for="privilegeMaterialsAdd" class=" text-gray-500">Add</label>
+                        <div class="grid grid-cols-12 mt-4">
+                            <div class="pl-[57px] col-span-8 ">
+                                <input type="checkbox" name="privileges[materials]" id="addPrivilegeMaterials" {{ isset($user->user_privileges['materials']) ? 'checked' : '' }}>
+                                <label for="addPrivilegeMaterials" class=" font-bold">Materials</label>
+                            </div>
+                            <div class="col-span-4 mr-20">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <input type="checkbox" name="privileges[materials][edit]" id="privilegeMaterialsEdit" {{ isset($user->user_privileges['materials']['edit']) ? 'checked' : '' }}>
+                                        <label for="privilegeMaterialsEdit" class=" text-gray-500">Edit</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[materials][delete]" id="privilegeMaterialsDelete" {{ isset($user->user_privileges['materials']['delete']) ? 'checked' : '' }}>
+                                        <label for="privilegeMaterialsDelete" class=" text-gray-500">Delete</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[materials][add]" id="privilegeMaterialsAdd" {{ isset($user->user_privileges['materials']['add']) ? 'checked' : '' }}>
+                                        <label for="privilegeMaterialsAdd" class=" text-gray-500">Add</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="grid grid-cols-12 mt-4">
-                        <div class="pl-[57px] col-span-8 ">
-                            <input type="checkbox" name="" id="addPrivilegeFiles">
-                            <label for="addPrivilegeFiles" class=" font-bold">Files</label>
-                        </div>
-                        <div class="col-span-4 mr-20">
-                            <div class="flex justify-between">
-                                <div>
-                                    <input type="checkbox" name="Edit" id="privilegeFilesEdit">
-                                    <label for="privilegeFilesEdit" class=" text-gray-500">Edit</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="Delete" id="privilegeFilesDelete">
-                                    <label for="privilegeFilesDelete" class=" text-gray-500">Delete</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="Add" id="privilegeFilesAdd">
-                                    <label for="privilegeFilesAdd" class=" text-gray-500">Add</label>
+                        <div class="grid grid-cols-12 mt-4">
+                            <div class="pl-[57px] col-span-8 ">
+                                <input type="checkbox" name="privileges[files]" id="addPrivilegeFiles" {{ isset($user->user_privileges['files']) ? 'checked' : '' }}>
+                                <label for="addPrivilegeFiles" class=" font-bold">Files</label>
+                            </div>
+                            <div class="col-span-4 mr-20">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <input type="checkbox" name="privileges[files][edit]" id="privilegeFilesEdit" {{ isset($user->user_privileges['files']['edit']) ? 'checked' : '' }}>
+                                        <label for="privilegeFilesEdit" class=" text-gray-500">Edit</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[files][delete]" id="privilegeFilesDelete" {{ isset($user->user_privileges['file']['delete']) ? 'checked' : '' }}>
+                                        <label for="privilegeFilesDelete" class=" text-gray-500">Delete</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[files][add]" id="privilegeFilesAdd"  {{ isset($user->user_privileges['files']['add']) ? 'checked' : '' }}>
+                                        <label for="privilegeFilesAdd" class=" text-gray-500">Add</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="grid grid-cols-12 mt-4">
-                        <div class="pl-[57px] col-span-8 ">
-                            <input type="checkbox" name="" id="addPrivilegeCampaign">
-                            <label for="addPrivilegeCampaign" class=" font-bold">Campaign</label>
-                        </div>
-                        <div class="col-span-4 mr-20">
-                            <div class="flex justify-between">
-                                <div>
-                                    <input type="checkbox" name="Edit" id="privilegeCampaignEdit">
-                                    <label for="privilegeCampaignEdit" class=" text-gray-500">Edit</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="Delete" id="privilegeCampaignDelete">
-                                    <label for="privilegeCampaignDelete" class=" text-gray-500">Delete</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="Add" id="privilegeCampaignAdd">
-                                    <label for="privilegeCampaignAdd" class=" text-gray-500">Add</label>
+                        <div class="grid grid-cols-12 mt-4">
+                            <div class="pl-[57px] col-span-8 ">
+                                <input type="checkbox" name="privileges[campaign]" id="addPrivilegeCampaign" {{ isset($user->user_privileges['campaign']) ? 'checked' : '' }}>
+                                <label for="addPrivilegeCampaign" class=" font-bold">Campaign</label>
+                            </div>
+                            <div class="col-span-4 mr-20">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <input type="checkbox" name="privileges[campaign][edit]" id="privilegeCampaignEdit" {{ isset($user->user_privileges['camapign']['edit']) ? 'checked' : '' }}>
+                                        <label for="privilegeCampaignEdit" class=" text-gray-500">Edit</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[campaign][delete]" id="privilegeCampaignDelete" {{ isset($user->user_privileges['campaign']['delete']) ? 'checked' : '' }}>
+                                        <label for="privilegeCampaignDelete" class=" text-gray-500">Delete</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[campaign][delete]" id="privilegeCampaignAdd" {{ isset($user->user_privileges['campaign']['add']) ? 'checked' : '' }}>
+                                        <label for="privilegeCampaignAdd" class=" text-gray-500">Add</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-        </div>
-        <div class="border text-right">
-            <x-add-button :title="'Update'" :id="''" :class="'m-5 px-6'"></x-add-button>
-        </div>
-</div>
-@include('layouts.footer')
+            <div class="border text-right">
+                <x-add-button :title="'Update'" :id="''" :class="'m-5 px-6'"></x-add-button>
+            </div>
+        </form>
+    </div>
+    @include('layouts.footer')

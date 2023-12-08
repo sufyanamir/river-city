@@ -114,9 +114,9 @@ Route::middleware('customauth')->group(function () {
     Route::get('/forgotPassword', function () {
         return view('forgotPassword');
     });
-    Route::get('/privileges', function () {
-        return view('privileges');
-    });
+    Route::get('/privileges/{id}', [UserController::class, 'getUserOnPrivileges']);
+    Route::post('/addUserPrivileges/{id}', [UserController::class, 'addUserPrivileges']);
+    Route::get('/getprivileges/{id}', [UserController::class, 'getUserPrivileges']);
     Route::get('/test', function () {
         return view('test');
     });
