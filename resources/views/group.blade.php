@@ -272,8 +272,6 @@
                                                         if(iid == 0){
                                                             muliple_items.append(newelements);
                                                             iid = 1
-                                                        }else{
-                                                            iid = 0
                                                         }
 
                                                     })
