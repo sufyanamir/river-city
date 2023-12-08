@@ -13,7 +13,7 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
     public function roles()
     {
-        return $this->belongsToMany(UserRole::class);
+        return $this->hasMany(UserRole::class);
     }
     /**
      * The attributes that are mass assignable.
@@ -32,6 +32,7 @@ class User extends Authenticatable
         'departement',
         'rating',
         'team_number',
+        'user_privileges',
     ];
 
     /**
