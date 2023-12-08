@@ -78,6 +78,7 @@
                     <!-- task details -->
                     <div class=" text-center grid grid-cols-2 gap-2">
                         <div class="  col-span-2 my-2">
+                            <label for="" class="block text-left mb-1"> Items Type</label>
                             <select id="type" name="item_type" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                 <option>type</option>
                                 <option value="services">labour</option>
@@ -86,9 +87,11 @@
                             </select>
                         </div>
                         <div class=" my-2">
+                            <label for="" class="block  text-left mb-1"> Item Name</label>
                             <input type="text" name="item_name" id="itemName" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class="my-2">
+                            <label for="" class="block text-left mb-1"> Item Unit</label>
                             <select id="item_units" name="item_units" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                 <option>Units</option>
                                 <option value="hour">Hour</option>
@@ -96,19 +99,21 @@
                             </select>
                         </div>
                         <div class="my-2 text-left">
-                            <label for="" class=" block">Cost:</label>
+                            <label for="" class=" block text-left mb-1">Cost:</label>
                             <input type="number" name="item_cost" id="item_cost" placeholder="00.0" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class="my-2 text-left">
-                            <label for="" class=" block">Price:</label>
+                            <label for="" class=" block text-left mb-1">Price:</label>
                             <input type="number" name="item_price" id="item_price" placeholder="00.0" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class="my-2 col-span-2" id="labourExpense">
+                            <label for="" class="block text-left mb-1"> Labour Expense</label>
                             <input type="number" name="labour_expense" id="labourExpense" placeholder="Labour Expense" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class=" my-2 col-span-2 hidden" id="multiAdd-items">
                             <div id="mulitple_input">
-                                <input type="text" name="assembly_name[]" id="itemName" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <label for="" class="block text-left mb-1"> Assembly Name </label>
+                                <input type="text" name="assembly_name[]" id="" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             </div>
                             <div class=" text-right mt-2">
                                 <button type="button" class=" gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="addbtn" aria-expanded="true" aria-haspopup="true">
@@ -117,6 +122,7 @@
                             </div>
                         </div>
                         <div class="my-2 col-span-2 relative">
+                            <label for="" class="block text-left mb-1"> Item Description </label>
                             <textarea name="item_description" id="item_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
                             <button type="button" id="items-mic" class=" absolute top-8 right-4" onclick="voice('items-mic', 'item_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
