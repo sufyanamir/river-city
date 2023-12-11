@@ -306,10 +306,10 @@ class UserController extends Controller
         if ($user && md5($password) === $user->password) {
             // Check if the user role is 0 or 1
             $userRole = $user->user_role;
-            if ($userRole != 'admin') {
-                // User role is not allowed to login
-                return response()->json(['success' => false, 'message' => 'User not  allowed to login!'], 401);
-            }
+            // if ($userRole != 'admin') {
+            //     // User role is not allowed to login
+            //     return response()->json(['success' => false, 'message' => 'User not  allowed to login!'], 401);
+            // }
 
             // Create a session for the user
             session(['user_details' => [
@@ -325,7 +325,7 @@ class UserController extends Controller
                 'departement' => $user->departement,
                 'rating' => $user->rating,
                 'team_number' => $user->team_number,
-                'user_privileges' => $user->user_privileges,
+                'user_privileges' => json_decode($user->user_privileges),
             ]]);
 
             return response()->json(['success' => true, 'message' => 'Login successful', 'user_details' => session('user_details')]);

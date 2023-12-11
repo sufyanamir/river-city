@@ -57,9 +57,13 @@
     <script src="https://kit.fontawesome.com/4ae3f77a6d.js" crossorigin="anonymous"></script>
     @vite('resources/css/app.css')
 </head>
+<!-- Debug: Display decoded user_privileges -->
+@php
+$userPrivileges = session('user_details')['user_privileges'];
+@endphp
 
 <body class="bg-[#930027]">
-
+    @if(session('user_details')['user_role'] == 'admin')
     <div class="sidebar duration-500 fixed top-0 bottom-0 lg:left-0 w-[250px] overflow-y-auto text-center bg-[#930027]">
         <div class="text-gray-100 text-xl">
             <div class="p-2.5 mt-1 flex items-center">
@@ -141,7 +145,9 @@
             </div>
         </div>
         <div class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 font-bold hidden" id="submenu2">
+        @if(isset($userPrivileges->user) && $userPrivileges->user->view === "on")
             <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/users'" :title="'Users'" :hoverIcon="'user-icon.svg'" :icon="'user-icon.svg'"></x-sidebar-links>
+            @endif
             <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/userRole'" :title="'User role'" :hoverIcon="'userRole-icon.svg'" :icon="'userRole-icon.svg'"></x-sidebar-links>
         </div>
         <x-sidebar-links :class="'text-white'" :url="'/crew'" :title="'Crew'" :hoverIcon="'hover-user-icon.svg'" :icon="'user-icon.svg'"></x-sidebar-links>
@@ -149,6 +155,152 @@
         <x-sidebar-links :class="'text-white'" :url="'/help'" :title="'Help'" :hoverIcon="'hover-help-icon.svg'" :icon="'help-icon.svg'"></x-sidebar-links>
         <x-sidebar-links :class="'text-white'" :url="'/logout'" :title="'Logout'" :hoverIcon="'hover-logout-icon.svg'" :icon="'logout-icon.svg'"></x-sidebar-links>
     </div>
+    @elseif(session('user_details')['user_role'] == 'crew')
+    <div class="sidebar duration-500 fixed top-0 bottom-0 lg:left-0 w-[250px] overflow-y-auto text-center bg-[#930027]">
+        <div class="text-gray-100 text-xl">
+            <div class="p-2.5 mt-1 flex items-center">
+                <img src="{{ asset('assets/icons/projectLogo.svg') }}" class=" mx-auto" alt="icon">
+                <!-- <i class="bi bi-x cursor-pointer  ml-6 openClose-sidebar"></i> -->
+            </div>
+        </div>
+        <!-- <div class="p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer bg-gray-700 text-white">
+        <i class="bi bi-search text-sm"></i>
+        <input type="text" placeholder="Search" class="text-[15px] ml-4 w-full bg-transparent focus:outline-none" />
+      </div> -->
+        <x-sidebar-links :class="'text-white'" :url="'/dashboard'" :title="'Dashboard'" :hoverIcon="'hover-dashboard-icon.svg'" :icon="'dashboard-icon.svg'"></x-sidebar-links>
+        <div class="p-2.5 mt-3 sidebar-link flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white" id="crew-dropdown-card1">
+            <img class=" plain-icon" src="{{ asset('assets/icons/estimate-icon.svg') }}" alt="icon">
+            <img class=" hover-icon hidden" src="{{ asset('assets/icons/hover-estimate-icon.svg') }}" alt="icon">
+            <div class="flex justify-between w-full items-center">
+                <span class="text-[15px] ml-4 font-bold" id="crew-dropdown-text1">Jobs</span>
+                <span class="text-sm duration-300" id="crew-arrow1">
+                    <i class="bi bi-chevron-down"></i>
+                </span>
+            </div>
+        </div>
+        <div class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 duration-300 font-bold hidden" id="crew-submenu1">
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/jobs'" :title="'All'" :hoverIcon="'item-icon.svg'" :icon="'item-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/completeJobs'" :title="'Complete'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/pendigJobs'" :title="'Pending'" :hoverIcon="'item-icon.svg'" :icon="'item-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/approvedJobs'" :title="'Approved'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/cancelJobs'" :title="'Cancel'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
+        </div>
+        <x-sidebar-links :class="'text-white'" :url="'/calendar'" :title="'Calendar'" :hoverIcon="'hover-calendar-icon.svg'" :icon="'calendar-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="'/settings'" :title="'Settings'" :hoverIcon="'hover-settings-icon.svg'" :icon="'settings-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="'/help'" :title="'Help'" :hoverIcon="'hover-help-icon.svg'" :icon="'help-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="'/logout'" :title="'Logout'" :hoverIcon="'hover-logout-icon.svg'" :icon="'logout-icon.svg'"></x-sidebar-links>
+    </div>
+    @else
+    <div class="sidebar duration-500 fixed top-0 bottom-0 lg:left-0 w-[250px] overflow-y-auto text-center bg-[#930027]">
+        <div class="text-gray-100 text-xl">
+            <div class="p-2.5 mt-1 flex items-center">
+                <img src="{{ asset('assets/icons/projectLogo.svg') }}" class=" mx-auto" alt="icon">
+                <!-- <i class="bi bi-x cursor-pointer  ml-6 openClose-sidebar"></i> -->
+            </div>
+        </div>
+        <!-- <div class="p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer bg-gray-700 text-white">
+        <i class="bi bi-search text-sm"></i>
+        <input type="text" placeholder="Search" class="text-[15px] ml-4 w-full bg-transparent focus:outline-none" />
+      </div> -->
+        <x-sidebar-links :class="'text-white'" :url="'/dashboard'" :title="'Dashboard'" :hoverIcon="'hover-dashboard-icon.svg'" :icon="'dashboard-icon.svg'"></x-sidebar-links>
+        @if(isset($userPrivileges->customers) && $userPrivileges->customers->view === "on")
+        <x-sidebar-links :class="'text-white'" :url="'/customers'" :title="'Customers'" :hoverIcon="'hover-user-icon.svg'" :icon="'user-icon.svg'"></x-sidebar-links>
+        @endif
+        @if(isset($userPrivileges->estimate) && $userPrivileges->estimate->view === "on")
+        <x-sidebar-links :class="'text-white'" :url="'/estimates'" :title="'Estimates'" :hoverIcon="'hover-estimate-icon.svg'" :icon="'estimate-icon.svg'"></x-sidebar-links>
+        @endif
+        <!-- <div class="p-2.5 mt-3 sidebar-link flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white" id="crew-dropdown-card1">
+            <img class=" plain-icon" src="{{ asset('assets/icons/estimate-icon.svg') }}" alt="icon">
+            <img class=" hover-icon hidden" src="{{ asset('assets/icons/hover-estimate-icon.svg') }}" alt="icon">
+            <div class="flex justify-between w-full items-center">
+                <span class="text-[15px] ml-4 font-bold" id="crew-dropdown-text1">Jobs</span>
+                <span class="text-sm duration-300" id="crew-arrow1">
+                    <i class="bi bi-chevron-down"></i>
+                </span>
+            </div>
+        </div>
+        <div class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 duration-300 font-bold hidden" id="crew-submenu1">
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/jobs'" :title="'All'" :hoverIcon="'item-icon.svg'" :icon="'item-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/completeJobs'" :title="'Complete'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/pendigJobs'" :title="'Pending'" :hoverIcon="'item-icon.svg'" :icon="'item-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/approvedJobs'" :title="'Approved'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/cancelJobs'" :title="'Cancel'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
+        </div> -->
+        <!-- <div class="p-2.5 mt-3 sidebar-link flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white" id="user-dropdown-card1">
+            <img class=" plain-icon" src="{{ asset('assets/icons/estimate-icon.svg') }}" alt="icon">
+            <img class=" hover-icon hidden" src="{{ asset('assets/icons/hover-estimate-icon.svg') }}" alt="icon">
+            <div class="flex justify-between w-full items-center">
+                <span class="text-[15px] ml-4 font-bold" id="user-dropdown-text1">Estimates</span>
+                <span class="text-sm duration-300" id="user-arrow1">
+                    <i class="bi bi-chevron-down"></i>
+                </span>
+            </div>
+        </div>
+        <div class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 duration-300 font-bold hidden" id="user-submenu1">
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/estimates'" :title="'All'" :hoverIcon="'item-icon.svg'" :icon="'item-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/completeEstimates'" :title="'Complete'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/pendigEstimates'" :title="'Pending'" :hoverIcon="'item-icon.svg'" :icon="'item-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/approvedEstimates'" :title="'Approved'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/cancelEstimates'" :title="'Cancel'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
+        </div> -->
+        @if(isset($userPrivileges->item) && $userPrivileges->item->view === "on")
+        <div class="p-2.5 mt-3 sidebar-link flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white" id="dropdown-card1">
+            <img class=" plain-icon" src="{{ asset('assets/icons/item-icon.svg') }}" alt="icon">
+            <img class=" hover-icon hidden" src="{{ asset('assets/icons/hover-item-icon.svg') }}" alt="icon">
+            <div class="flex justify-between w-full items-center">
+                <span class="text-[15px] ml-4 font-bold" id="dropdown-text1">Items</span>
+                <span class="text-sm duration-300" id="arrow1">
+                    <i class="bi bi-chevron-down"></i>
+                </span>
+            </div>
+
+        </div>
+        <div class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 duration-300 font-bold hidden" id="submenu1">
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/items'" :title="'Items'" :hoverIcon="'item-icon.svg'" :icon="'item-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/group'" :title="'Groups'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
+        </div>
+        @endif
+        <x-sidebar-links :class="'text-white'" :url="'/calendar'" :title="'Calendar'" :hoverIcon="'hover-calendar-icon.svg'" :icon="'calendar-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="'/crewCalendar'" :title="'Crew Calendar'" :hoverIcon="'hover-calendar-icon.svg'" :icon="'calendar-icon.svg'"></x-sidebar-links>
+        @if(isset($userPrivileges->paymentTemplates) && $userPrivileges->paymentTemplates->view === "on")
+        <x-sidebar-links :class="'text-white'" :url="'/payment-template'" :title="'PAY Template'" :hoverIcon="'hover-calendar-icon.svg'" :icon="'calendar-icon.svg'"></x-sidebar-links>
+        @endif
+        @if(isset($userPrivileges->feedGallery) && $userPrivileges->feedGallery->view === "on")
+        <x-sidebar-links :class="'text-white'" :url="'/feedGallery'" :title="'Gallery'" :hoverIcon="'hover-gallery-icon.svg'" :icon="'gallery-icon.svg'"></x-sidebar-links>
+        @endif
+        @if(isset($userPrivileges->campaign) && $userPrivileges->campaign->view === "on")
+        <x-sidebar-links :class="'text-white'" :url="'/campaign'" :title="'Campaign'" :hoverIcon="'hover-campaign-icon.svg'" :icon="'campaign-icon.svg'"></x-sidebar-links>
+        @endif
+        @if(isset($userPrivileges->reports) && $userPrivileges->reports->view === "on")
+        <x-sidebar-links :class="'text-white'" :url="'/reports'" :title="'Reports'" :hoverIcon="'hover-reports-icon.svg'" :icon="'reports-icon.svg'"></x-sidebar-links>
+        @endif
+        @if(isset($userPrivileges->emails) && $userPrivileges->emails->view === "on")
+        <x-sidebar-links :class="'text-white'" :url="'/emails'" :title="'Email Templates'" :hoverIcon="'hover-emailTemplate-icon.svg'" :icon="'emailTemplate-icon.svg'"></x-sidebar-links>
+        @endif
+        @if(isset($userPrivileges->user) && $userPrivileges->user->view === "on")
+        <div class="p-2.5 mt-3 sidebar-link flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white" id="dropdown-card2">
+            <img class=" plain-icon" src="{{ asset('assets/icons/user-icon.svg') }}" alt="icon">
+            <img class=" hover-icon hidden" src="{{ asset('assets/icons/hover-user-icon.svg') }}" alt="icon">
+            <div class="flex justify-between w-full items-center">
+                <span class="text-[15px] ml-4 font-bold" id="dropdown-text2">Users</span>
+                <span class="text-sm duration-300" id="arrow2">
+                    <i class="bi bi-chevron-down"></i>
+                </span>
+            </div>
+        </div>
+        <div class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 font-bold hidden" id="submenu2">
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/users'" :title="'Users'" :hoverIcon="'user-icon.svg'" :icon="'user-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/userRole'" :title="'User role'" :hoverIcon="'userRole-icon.svg'" :icon="'userRole-icon.svg'"></x-sidebar-links>
+        </div>
+        @endif
+        @if(isset($userPrivileges->crew) && $userPrivileges->crew->view === "on")
+        <x-sidebar-links :class="'text-white'" :url="'/crew'" :title="'Crew'" :hoverIcon="'hover-user-icon.svg'" :icon="'user-icon.svg'"></x-sidebar-links>
+        @endif
+        <x-sidebar-links :class="'text-white'" :url="'/settings'" :title="'Settings'" :hoverIcon="'hover-settings-icon.svg'" :icon="'settings-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="'/help'" :title="'Help'" :hoverIcon="'hover-help-icon.svg'" :icon="'help-icon.svg'"></x-sidebar-links>
+        <x-sidebar-links :class="'text-white'" :url="'/logout'" :title="'Logout'" :hoverIcon="'hover-logout-icon.svg'" :icon="'logout-icon.svg'"></x-sidebar-links>
+    </div>
+    @endif
     <div class="bg-[#930027] h-screen">
         <div class="main-container duration-500 rounded-l-3xl h-screen overflow-auto bg-[#edf2f7] ml-[250px] p-3">
             <div class="topbar py-1 flex justify-between">
