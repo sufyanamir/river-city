@@ -178,10 +178,18 @@ class UserController extends Controller
     public function getUsersWithRoles()
     {
 
-        $users = User::get();
-        $userRoles = UserRole::get();
+        $userDetails = session('user_details');
 
-        return view('users', ['users' => $users, 'user_roles' => $userRoles, 'user_details' => $this->userDetails]);
+        if ($userDetails['user_role'] == 'admin') {
+            
+            $users = User::where('user_role', '<>', 'crew')->get();
+            $userRoles = UserRole::get();
+    
+            return view('users', ['users' => $users, 'user_roles' => $userRoles, 'user_details' => $userDetails]);
+        
+        }else {
+            return response()->json(['success' => false, 'message' => 'You do not have access to this url!'], 401);
+        }
     }
     // get users with roles
     //add users
@@ -285,9 +293,15 @@ class UserController extends Controller
     public function getUserRole()
     {
 
+        $userDetails = session('user_details');
 
-        $userRole = UserRole::get();
-        return view('user_roles', ['user_roles' => $userRole, 'user_details' => $this->userDetails]);
+        if ($userDetails['user_role'] == 'admin') {
+            $userRole = UserRole::get();
+            return view('user_roles', ['user_roles' => $userRole, 'user_details' => $this->userDetails]);
+        }else {
+            return response()->json(['success' =>false, 'message' => 'You do not have access to this url!'], 401);
+        }
+
     }
     // get user role
     // ================================================== Users =====================================================================
