@@ -79,14 +79,19 @@
                             <h3 class=" text-lg font-medium text-left">Details</h3>
                         </div>
                         <div>
+                            <label for="" class="text-gray-700 block text-left mb-1 "> First Name</label>
                             <input type="text" name="firstName" id="firstName" placeholder="First Name" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
 
+                            <label for="" class="text-gray-700 block text-left mb-1 "> Last Name</label>
                             <input type="text" name="lastName" id="lastName" placeholder="Last Name" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
 
+                            <label for="" class="text-gray-700 block text-left mb-1 "> Email</label>
                             <input type="email" name="email" id="email" placeholder="Email" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
 
+                            <label for="" class="text-gray-700 block text-left mb-1 "> Phone No</label>
                             <input type="tel" name="phone" id="phone" placeholder="Phone No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
 
+                            <label for="" class="text-gray-700 block text-left mb-1 "> Departement</label>
                             <select id="departement" name="departement" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                 <option value="">Departement</option>
                                 @foreach($departements as $item)
@@ -117,10 +122,13 @@
                                 <label for="star1" title="text">1 star</label>
                             </div>
                             <div>
+                                <br>
+                            <label for="" class="text-gray-700 block text-left mb-1 "> Team No</label>
                                 <input type="tel" name="teamNumber" id="teamNumber" placeholder="Team No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             </div>
                         </div>
                         <div class=" col-span-2 my-2">
+                            <label for="" class="text-gray-700 block text-left mb-1 "> Address</label>
                             <textarea name="address" id="address" placeholder="Address" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
                         </div>
                     </div>
