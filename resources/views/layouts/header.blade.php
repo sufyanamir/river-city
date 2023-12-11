@@ -78,40 +78,6 @@ $userPrivileges = session('user_details')['user_privileges'];
         <x-sidebar-links :class="'text-white'" :url="'/dashboard'" :title="'Dashboard'" :hoverIcon="'hover-dashboard-icon.svg'" :icon="'dashboard-icon.svg'"></x-sidebar-links>
         <x-sidebar-links :class="'text-white'" :url="'/customers'" :title="'Customers'" :hoverIcon="'hover-user-icon.svg'" :icon="'user-icon.svg'"></x-sidebar-links>
         <x-sidebar-links :class="'text-white'" :url="'/estimates'" :title="'Estimates'" :hoverIcon="'hover-estimate-icon.svg'" :icon="'estimate-icon.svg'"></x-sidebar-links>
-        <div class="p-2.5 mt-3 sidebar-link flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white" id="crew-dropdown-card1">
-            <img class=" plain-icon" src="{{ asset('assets/icons/estimate-icon.svg') }}" alt="icon">
-            <img class=" hover-icon hidden" src="{{ asset('assets/icons/hover-estimate-icon.svg') }}" alt="icon">
-            <div class="flex justify-between w-full items-center">
-                <span class="text-[15px] ml-4 font-bold" id="crew-dropdown-text1">Jobs</span>
-                <span class="text-sm duration-300" id="crew-arrow1">
-                    <i class="bi bi-chevron-down"></i>
-                </span>
-            </div>
-        </div>
-        <div class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 duration-300 font-bold hidden" id="crew-submenu1">
-            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/jobs'" :title="'All'" :hoverIcon="'item-icon.svg'" :icon="'item-icon.svg'"></x-sidebar-links>
-            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/completeJobs'" :title="'Complete'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
-            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/pendigJobs'" :title="'Pending'" :hoverIcon="'item-icon.svg'" :icon="'item-icon.svg'"></x-sidebar-links>
-            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/approvedJobs'" :title="'Approved'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
-            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/cancelJobs'" :title="'Cancel'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
-        </div>
-        <div class="p-2.5 mt-3 sidebar-link flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white" id="user-dropdown-card1">
-            <img class=" plain-icon" src="{{ asset('assets/icons/estimate-icon.svg') }}" alt="icon">
-            <img class=" hover-icon hidden" src="{{ asset('assets/icons/hover-estimate-icon.svg') }}" alt="icon">
-            <div class="flex justify-between w-full items-center">
-                <span class="text-[15px] ml-4 font-bold" id="user-dropdown-text1">Estimates</span>
-                <span class="text-sm duration-300" id="user-arrow1">
-                    <i class="bi bi-chevron-down"></i>
-                </span>
-            </div>
-        </div>
-        <div class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 duration-300 font-bold hidden" id="user-submenu1">
-            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/estimates'" :title="'All'" :hoverIcon="'item-icon.svg'" :icon="'item-icon.svg'"></x-sidebar-links>
-            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/completeEstimates'" :title="'Complete'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
-            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/pendigEstimates'" :title="'Pending'" :hoverIcon="'item-icon.svg'" :icon="'item-icon.svg'"></x-sidebar-links>
-            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/approvedEstimates'" :title="'Approved'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
-            <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/cancelEstimates'" :title="'Cancel'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
-        </div>
         <div class="p-2.5 mt-3 sidebar-link flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white" id="dropdown-card1">
             <img class=" plain-icon" src="{{ asset('assets/icons/item-icon.svg') }}" alt="icon">
             <img class=" hover-icon hidden" src="{{ asset('assets/icons/hover-item-icon.svg') }}" alt="icon">
@@ -358,16 +324,21 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     <div class=" flex justify-between border-b-2 mb-2 col-span-4 mt-4">
                                         <h2 class=" text-xl font-semibold mb-2 text-[#930027]" >Contact</h2>
                                     </div>
+                                    <div class="col-span-4">
+                                        <select name="" id="" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                            <option value="">New Client</option>
+                                        </select>
+                                    </div>
                                     <div class=" ">
                                         <h5 class="text-gray-600 mb-1  font-medium text-left">First Name</h5>
-                                        <input type="text" name="firstName" id="firstName" placeholder="First Name" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <input type="text" name="first_name" id="first_name" placeholder="First Name" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class=" ">
-                                        <h5 class="text-gray-600 mb-1  font-medium text-left">Last  Name</h5>
-                                        <input type="text" name="lastName" id="lastName" placeholder="Last Name" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <h5 class="text-gray-600 mb-1  font-medium text-left">Last Name</h5>
+                                        <input type="text" name="last_name" id="last_name" placeholder="Last Name" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class=" ">
-                                        <h5 class="text-gray-600 mb-1  font-medium text-left">Last  Name</h5>
+                                        <h5 class="text-gray-600 mb-1  font-medium text-left">Email</h5>
                                         <input type="text" name="email" id="email" placeholder="Email" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class=" ">
@@ -376,18 +347,26 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     </div>
                                     <div class=" col-span-4 ">
                                         <h5 class="text-gray-600 mb-1  font-medium text-left">Company Name (Optional)</h5>
-                                        <input type="text" name="companyName" id="companyName" placeholder="Company Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <input type="text" name="company_name" id="company_name" placeholder="Company Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                    </div>
+                                    <div class=" col-span-2 ">
+                                        <h5 class="text-gray-600 mb-1  font-medium text-left">Project Name (Optional)</h5>
+                                        <input type="text" name="project_name" id="project_name" placeholder="Company Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                    </div>
+                                    <div class=" col-span-2 ">
+                                        <h5 class="text-gray-600 mb-1  font-medium text-left">Project Number (Optional)</h5>
+                                        <input type="text" name="project_number" id="project_number" placeholder="Company Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class=" flex justify-between border-b-2 mb-2 col-span-4  mt-1 mb-3">
                                         <h2 class=" text-xl font-semibold mb-2 text-[#930027]" >Billing</h2>
                                     </div>
                                     <div class=" col-span-2 ">
-                                        <h5 class="text-gray-600 mb-1  font-medium text-left">Last  Name</h5>
-                                        <input type="text" name="address1" id="address1" placeholder="Address 1" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <h5 class="text-gray-600 mb-1  font-medium text-left">Address 1</h5>
+                                        <input type="text" name="first_address" id="first_address" placeholder="Address 1" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class=" col-span-2 ">
                                         <h5 class="text-gray-600 mb-1  font-medium text-left">Address 2 (Optional)</h5>
-                                        <input type="text" name="address2" id="address2" placeholder="Address 2 (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <input type="text" name="second_address" id="second_address" placeholder="Address 2 (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class=" ">
                                         <h5 class="text-gray-600 mb-1  font-medium text-left">City</h5>
@@ -399,19 +378,19 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     </div>
                                     <div class=" ">
                                         <h5 class="text-gray-600 mb-1  font-medium text-left">Zip/Postal Code</h5>
-                                        <input type="text" name="zipCode" id="zipCode" placeholder="Zip/Postal Code" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <input type="text" name="zip_code" id="zip_code" placeholder="Zip/Postal Code" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class=" col-span-2">
                                         <h5 class="text-gray-600 mb-1  font-medium text-left">Tax</h5>
-                                        <input type="text" name="taxRate" id="taxRate" placeholder="Tax Rate (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <input type="text" name="tax_rate" id="tax_rate" placeholder="Tax Rate (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class=" col-span-2">
                                         <h5 class="text-gray-600 mb-1  font-medium text-left">Potential Value</h5>
-                                        <input type="text" name="potentialValue" id="potentialValue" placeholder="Potential Value" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <input type="text" name="potential_value" id="potential_value" placeholder="Potential Value" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class=" col-span-4">
                                         <h5 class="text-gray-600 mb-1  font-medium text-left">Note</h5>
-                                        <input type="text" name="note" id="note" placeholder="Internal Notes (Optional, only visible to employees)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <input type="text" name="internal_note" id="internal_note" placeholder="Internal Notes (Optional, only visible to employees)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class=" col-span-2">
                                         <h5 class="text-gray-600 mb-1  font-medium text-left">Source</h5>
@@ -419,7 +398,9 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     </div>
                                     <div class=" col-span-2">
                                         <h5 class="text-gray-600 mb-1  font-medium text-left">Owner</h5>
-                                        <input type="text" name="owner" id="owner" placeholder="Owner Name" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="owner" id="owner" placeholder="Owner Name">
+                                            <option value="">Owner Name</option>
+                                        </select>
                                     </div>
                                     <!-- <div class=" pt-3">
 
@@ -431,7 +412,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <input type="tel" name="number" id="number" placeholder="Phone No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div> -->
                                 </div>
-                                <div class=" flex justify-between border-b-2 mb-2 mt-4">
+                                <!-- <div class=" flex justify-between border-b-2 mb-2 mt-4">
                                     <h2 class=" text-xl font-semibold mb-2 text-[#930027]" id="modal-title">Add Estimate</h2>
                                 </div>
                                 <div class=" text-center grid grid-cols-4 gap-2">
@@ -468,7 +449,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                         <textarea type="text" name="estimate_note" id="estimate_note" placeholder="Note" class="  p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"></textarea>
                                         <button type="button" id="estimate-mic" class=" absolute mt-10 right-4" onclick="voice('estimate-mic', 'estimate_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="">
                                     <button id="updateEvent" class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Add
                                     </button>
