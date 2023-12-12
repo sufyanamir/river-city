@@ -25,14 +25,15 @@
                     </tr>
                 </thead>
                 <tbody class=" text-sm">
+                    @foreach($customers as $customer)
                     <tr>
-                        <td>Client Name</td>
-                        <td>client@gmail.com</td>
-                        <td>Sep 23, 2023</td>
-                        <td>Town, City, Country</td>
-                        <td>123 456 789</td>
-                        <td>Facebook Ads</td>
-                        <td>John</td>
+                        <td>{{ $customer->customer_first_name }} {{ $customer->customer_last_name }}</td>
+                        <td>{{ $customer->customer_email }}</td>
+                        <td>{{ $customer->created_at }}</td>
+                        <td>{{ $customer->customer_address }}</td>
+                        <td>{{ $customer->customer_phone }}</td>
+                        <td>{{ $customer->customer_soource }}</td>
+                        <td>{{ $customer->added_user_id }}</td>
                         <td>
                             <button>
                                 <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
@@ -42,6 +43,7 @@
                             </button>
                         </td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

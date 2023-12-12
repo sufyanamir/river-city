@@ -310,7 +310,8 @@ $userPrivileges = session('user_details')['user_privileges'];
 
                     <!-- Modal panel -->
                     <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full lg:max-w-screen-lg">
-                        <form action="" id="addEstimate-form">
+                        <form action="/addEstimate" method="post" id="addEstimate-form">
+                            @csrf
                             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <!-- Modal content here -->
                                 <div class=" flex justify-between border-b-2">
@@ -355,7 +356,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     </div>
                                     <div class=" col-span-2 ">
                                         <h5 class="text-gray-600 mb-1  font-medium text-left">Project Number (Optional)</h5>
-                                        <input type="text" name="project_number" id="project_number" placeholder="Company Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <input type="number" name="project_number" id="project_number" placeholder="Company Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class=" flex justify-between border-b-2 mb-2 col-span-4  mt-1 mb-3">
                                         <h2 class=" text-xl font-semibold mb-2 text-[#930027]" >Billing</h2>
@@ -378,11 +379,11 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     </div>
                                     <div class=" ">
                                         <h5 class="text-gray-600 mb-1  font-medium text-left">Zip/Postal Code</h5>
-                                        <input type="text" name="zip_code" id="zip_code" placeholder="Zip/Postal Code" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <input type="number" name="zip_code" id="zip_code" placeholder="Zip/Postal Code" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class=" col-span-2">
                                         <h5 class="text-gray-600 mb-1  font-medium text-left">Tax</h5>
-                                        <input type="text" name="tax_rate" id="tax_rate" placeholder="Tax Rate (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <input type="number" name="tax_rate" id="tax_rate" placeholder="Tax Rate (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class=" col-span-2">
                                         <h5 class="text-gray-600 mb-1  font-medium text-left">Potential Value</h5>
@@ -399,7 +400,8 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     <div class=" col-span-2">
                                         <h5 class="text-gray-600 mb-1  font-medium text-left">Owner</h5>
                                         <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="owner" id="owner" placeholder="Owner Name">
-                                            <option value="">Owner Name</option>
+                                            <option>Owner Name</option>
+                                            <option value="john doe">john doe</option>
                                         </select>
                                     </div>
                                     <!-- <div class=" pt-3">
@@ -451,7 +453,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     </div>
                                 </div> -->
                                 <div class="">
-                                    <button id="updateEvent" class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Add
+                                    <button id="" class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Add
                                     </button>
                                 </div>
                             </div>

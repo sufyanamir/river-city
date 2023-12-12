@@ -17,28 +17,28 @@
                 <div class="grid sm:grid-cols-10">
                     <div class="col-span-8 p-3">
                         <p class="text-[#F5222D] text-xl font-bold">
-                            Coyne Development Corp - Steve Coyne
+                            {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
                         </p>
                         <p class="text-[#323C47] text-lg font-semibold">
                             Webinar - Painting
                         </p>
                         <p class="mt-2 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/home-icon.svg') }}" alt="">
-                            <span class="pl-2">65 Water St, Newburyport, MA, 01950</span>
+                            <span class="pl-2">{{ $customer->customer_primary_address }}</span>
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/mail-icon.svg') }}" alt="">
-                            <span class="pl-2">tom.droste-sc@gmail.com
+                            <span class="pl-2">{{ $customer->customer_email }}
                             </span>
                         </p>
                         <p class="mt-1 flex text-[#323C47]font-medium">
                             <img src="{{ asset('assets/icons/tel-icon.svg') }}" alt="">
-                            <span class="pl-2">949-300-9632
+                            <span class="pl-2">{{ $customer->customer_phone }}
                             </span>
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
-                            <span class="pl-2">Project Owner: Tom D
+                            <span class="pl-2">Project Owner: {{ $customer->owner }}
                             </span>
                         </p>
                         <hr class="bg-gray-300 my-2 w-full">
@@ -49,9 +49,9 @@
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/person-icon.svg') }}" alt="">
-                            <span class="pl-2 flex">Tom D Assigned To Schedule Estimate On <span class="pl-2 text-[#31A613] flex">
+                            <span class="pl-2 flex">{{ $customer->owner }} Assigned To Schedule Estimate On <span class="pl-2 text-[#31A613] flex">
                                     <img class="pr-1" src="{{ asset('assets/icons/green-calendar.svg') }}" alt="">
-                                    April 24th, 2019</span>
+                                    {{ $customer->created_at }}</span>
                             </span>
                         </p>
                     </div>
@@ -63,7 +63,7 @@
                             1904-2413-2841
                         </p>
                         <p class="">
-                            2023-10-14
+                            {{ $customer->created_at }}
                         </p>
                         <p class="mt-1 ">
                             $8,206.75
