@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\EstimateController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\UserController;
@@ -30,9 +32,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/addUser', [UserController::class, 'addUsers']);
     Route::match(['get', 'post'], '/delete/user/{id}', [UserController::class, 'deleteUser']);
     Route::match(['get', 'post'], '/delete/userRole/{id}', [UserController::class, 'deleteUserRole']);
-    Route::get('/customers', function () {
-        return view('customers');
-    });
+    Route::get('/customers', [CustomerController::class, 'index']);
     // Route::get('/users', function () {
     //     return view('users');
     // });
@@ -45,12 +45,9 @@ Route::middleware('customauth')->group(function () {
     // Route::get('/crew', function () {
     //     return view('crew');
     // });
-    Route::get('/estimates', function () {
-        return view('estimates');
-    });
-    Route::get('/estimates/new', function () {
-        return view('newEstimates');
-    });
+    Route::get('/estimates', [EstimateController::class, 'index']);
+    Route::post('/addEstimate', [EstimateController::class, 'addCustomerAndEstimate']);
+    Route::get('/viewEstimate/{id}', [EstimateController::class, 'viewEstimate']);
     Route::get('/add-estimate', function () {
         return view('addEstimate');
     });
