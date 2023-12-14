@@ -58,9 +58,11 @@
                     <div class=" col-span-2 p-3 text-right">
                         <p class="text-lg font-bold">
                             Estimate
+                            <br>
+                            <span>{{ $customer->customer_project_name }}</span>
                         </p>
                         <p class="mt-[2px] ">
-                            1904-2413-2841
+                            {{ $customer->customer_project_number }}
                         </p>
                         <p class="">
                             {{ $customer->created_at }}
@@ -95,6 +97,58 @@
                 <p class="text-lg py-3 my-auto  pl-9 text-[#707683] font-medium">
                     Add Contacts to keep track of your project's stakeholders
                 </p>
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Title
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    email
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Phone
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($additional_contacts as $contacts)
+                            <tr class="bg-white border-b">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    {{ $contacts->contact_title }}
+                                </th>
+                                <td class="px-6 py-4">
+                                    {{ $contacts->contact_first_name }} {{ $contacts->contact_last_name }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $contacts->contact_email }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $contacts->contact_phone }}
+                                </td>
+                                <td>
+                                    <button>
+                                        <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
+                                    </button>
+                                    <button>
+                                        <a href="/delete/additionalContact/{{ $contacts->contact_id }}">
+                                            <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                        </a>
+                                    </button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </div>
         <hr class="bg-gray-300">
@@ -328,14 +382,9 @@
                 <p class="text-lg px-3  font-medium">
                     Files
                 </p>
-                <button type="button" class="flex" id="addImage-btn">
+                <button type="button" class="flex">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
-            </div>
-            <div class="col-span-10  hidden p-2" id="image-field">
-                <div class="w-56 h-56">
-                    <x-drop-zone :value="''" :name="'upload_image'"></x-drop-zone>
-                </div>
             </div>
         </div>
         <hr class="bg-gray-300">
@@ -348,10 +397,26 @@
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <div class="col-span-10 p-1 text-right">
-                <button class="  bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 text-xs">
-                    Show CC Photos
-                </button>
+            <div class="col-span-10  hidden p-2" id="image-field">
+                <form action="/additionalImage" enctype="multipart/form-data" method="post">
+                    @csrf
+                    <input type="text" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                    <div class="w-56 h-56">
+                        <div id="dropzonee" class="dropzonee border rounded-xl">
+                            <img id="profileImage" src="{{ 'assets/images/rectangle-image.svg' }}" style="width: 100%; height: 237px; object-fit: fill;" alt="IMAGE">
+                            <div class="file-inputt-container">
+                                <input class="file-input" type="file" name="estimate_image" id="fileInput1">
+                                <div class="upload-iconn" onclick="document.getElementById('fileInput1').click()">
+                                    <img src="{{ asset('assets/images/upload-image.svg') }}" alt="Image">
+                                </div>
+                            </div>
+                        </div>
+                        <p class="error-image text-red-700 d-none" style="font-size: smaller;"></P>
+                    </div>
+                    <button class="  bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 text-xs">
+                        Save
+                    </button>
+                </form>
             </div>
         </div>
         <hr class="bg-gray-300">
@@ -510,7 +575,9 @@
 
         <!-- Modal panel -->
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="" id="addContact-form">
+            <form action="/additionalContact" method="post" id="addContact-form">
+                @csrf
+                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between border-b">
@@ -520,22 +587,30 @@
                         </button>
                     </div>
                     <!-- task details -->
-                    <div class=" text-center grid grid-cols-2 gap-2">
-                        <div class=" my-2 col-span-2" id="multiAdd-items">
-                            <label for="" class=" inline-block">Phone no.</label>
-                            <input type="tel" name="contacts" id="contacts" placeholder="Phone Number" autocomplete="given-name" class=" w-[76%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                            <button type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                                <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
-                            </button>
-                            <div class=" text-right mt-2">
-                                <button type="button" class=" gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                                    <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                                </button>
-                            </div>
+                    <div class=" grid grid-cols-2 gap-2">
+                        <div class=" col-span-2" id="">
+                            <label for="" class=" block">Title:</label>
+                            <input type="text" name="contact_title" id="contact_title" required placeholder="Contact title" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class="" id="">
+                            <label for="" class=" block">First Name:</label>
+                            <input type="text" name="first_name" id="first_name" required placeholder="First Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class="" id="">
+                            <label for="" class=" block">Last Name:</label>
+                            <input type="text" name="last_name" id="last_name" placeholder="Last Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class="" id="">
+                            <label for="" class=" block">Email:</label>
+                            <input type="text" name="email" id="email" required placeholder="Email" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class="" id="">
+                            <label for="" class=" block">Phone:</label>
+                            <input type="tel" name="phone" id="phone" placeholder="Phone" required autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                     </div>
                     <div class=" border-t">
-                        <button id="updateEvent" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                        <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
                         </button>
                     </div>
                 </div>
@@ -573,111 +648,61 @@
                     <!-- task details -->
 
                     <div class="relative overflow-x-auto h-60 overflow-y-auto my-2">
-                        <table class="w-full text-sm text-left ">
-                            <thead class="text-xs text-white uppercase bg-[#930027]">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">
-                                        Item name
-                                    </th>
+                        <form action="/addEstimateItems" method="post">
+                            @csrf
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-white uppercase bg-[#930027]">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            type
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Units
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Cost
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Price
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($items as $item)
+                                    <tr class="bg-white border-b">
+                                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                            {{ $item->item_name }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $item->item_type }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $item->item_unit }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            ${{ $item->item_cost }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            ${{ $item->item_price }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <input type="checkbox" name="selected_items[]" value="{{ $item->id }}">
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
 
-                                    <th scope="col" class="px-6 py-3">
-                                        type
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Units
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Cost
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Price
-                                    </th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="">
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        Item Name
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        Product
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        gal
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $10
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $15
-                                    </td>
-                                    <td>
-                                        <x-add-button :id="''" :title="'Choose'" :class="''"></x-add-button>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        Item Name
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        Product
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        gal
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $10
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $15
-                                    </td>
-                                    <td>
-                                        <x-add-button :id="''" :title="'Choose'" :class="''"></x-add-button>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        Item Name
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        Product
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        gal
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $10
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $15
-                                    </td>
-                                    <td>
-                                        <x-add-button :id="''" :title="'Choose'" :class="''"></x-add-button>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        Item Name
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        Product
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        gal
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $10
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $15
-                                    </td>
-                                    <td>
-                                        <x-add-button :id="''" :title="'Choose'" :class="''"></x-add-button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            <button type="submit" class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 text-xs">
+                                Save Selected Items
+                            </button>
+                        </form>
                     </div>
                     <div class=" flex justify-between pt-2 border-t">
                         <button id="updateEvent" class=" mb-2 py-1 px-7 rounded-md border ">Cancel

@@ -6,6 +6,7 @@ use App\Http\Controllers\EstimateController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\UserController;
+use App\Models\Estimate;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,6 +49,9 @@ Route::middleware('customauth')->group(function () {
     Route::get('/estimates', [EstimateController::class, 'index']);
     Route::post('/addEstimate', [EstimateController::class, 'addCustomerAndEstimate']);
     Route::get('/viewEstimate/{id}', [EstimateController::class, 'viewEstimate']);
+    Route::post('/additionalContact', [EstimateController::class,  'additionalContacts']);
+    Route::match(['post', 'get'], '/delete/additionalContact/{id}', [EstimateController::class, 'deleteAdditionalContact']);
+    Route::post('/additionalImage', [EstimateController::class, 'additionalImage']);
     Route::get('/add-estimate', function () {
         return view('addEstimate');
     });
