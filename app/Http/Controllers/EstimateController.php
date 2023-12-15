@@ -7,7 +7,9 @@ use App\Models\Estimate;
 use App\Models\EstimateContact;
 use App\Models\EstimateImage;
 use App\Models\EstimateItem;
+use App\Models\EstimateNote;
 use App\Models\Items;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -27,27 +29,76 @@ class EstimateController extends Controller
     // ==============================================================Estimate additional functions=========================================================
 
     // estimate items
-    public  function estimateItems(Request $request)
+    public function addEstimateNote(Request $request)
+    {
+        try {
+            
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'estimate_note' => 'required|string',
+            ]);
+
+            $estimateNote = EstimateNote::create([
+                'added_user_id' => $userDetails['id'],
+                'estimate_id' => $validatedData['estimate_id'],
+                'estimate_note' => $validatedData['estimate_note'],
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Note added!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // estimate items
+
+    // estimate items
+    public function estimateItems(Request $request)
     {
         try {
             $userDetails = session('user_details');
 
-            $validatedData =  $request->validate([
+            $validatedData = $request->validate([
                 'estimate_id' => 'required',
                 'selected_items' => 'required|array',
-                'selected_items.*' => 'exists:estimate_items,id',
+                'selected_item_names' => 'nullable|array', // Use plural for consistency
+                'selected_item_types' => 'nullable|array',
+                'selected_item_units' => 'nullable|array',
+                'selected_item_costs' => 'nullable|array',
+                'selected_item_prices' => 'required|array',
             ]);
 
-            foreach ($validatedData['selected_items'] as $itemId) {
+            $itemsData = [];
+            foreach ($validatedData['selected_items'] as $index => $itemId) {
+                $itemsData[] = [
+                    'item_id' => $itemId,
+                    'item_name' => $validatedData['selected_item_names'][$index],
+                    'item_type' => $validatedData['selected_item_types'][$index],
+                    'item_unit' => $validatedData['selected_item_units'][$index],
+                    'item_cost' => $validatedData['selected_item_costs'][$index],
+                    'item_price' => $validatedData['selected_item_prices'][$index],
+                ];
+            }
+
+            foreach ($itemsData as $item) {
                 EstimateItem::create([
                     'added_user_id' => $userDetails['id'],
                     'estimate_id' => $validatedData['estimate_id'],
-                    'item_id' => $validatedData['item_id'],
+                    'item_id' => $item['item_id'],
+                    'item_name' => $item['item_name'],
+                    'item_type' => $item['item_type'],
+                    'item_unit' => $item['item_unit'],
+                    'item_cost' => $item['item_cost'],
+                    'item_price' => $item['item_price'],
+                    // Add other fields as needed
                 ]);
             }
 
-        } catch (\Throwable $th) {
-            //throw $th;
+            return response()->json(['success' => true, 'message' => 'Items added to estimate'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     // estimate items
@@ -69,7 +120,6 @@ class EstimateController extends Controller
             $additionalImage->delete();
 
             return response()->json(['success' => true, 'message' => 'Image deleted!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -102,7 +152,6 @@ class EstimateController extends Controller
             $additionalImage->save();
 
             return response()->json(['success' => true, 'message' => 'image added!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -167,15 +216,51 @@ class EstimateController extends Controller
     // view estimate
     public function viewEstimate($id)
     {
-        $userDetails = session('user_details');
-        $customer = Customer::where('customer_id', $id)->first();
-        $customerId = $customer->customer_id;
-        $estimate = Estimate::where('customer_id', $customerId)->first();
-        $additionalContacts = EstimateContact::where('estimate_id', $estimate->estimate_id)->get();
-        $items  = Items::get();
+        try {
+            $userDetails = session('user_details');
+            $customer = Customer::where('customer_id', $id)->first();
 
-        return view('viewEstimates', ['customer' => $customer, 'estimate' => $estimate, 'items' => $items, 'additional_contacts' => $additionalContacts, 'user_details' => $userDetails]);
+            if (!$customer) {
+                // Handle the case where the customer is not found
+                // You may want to return a response or redirect to an error page
+                return response()->json(['success' => false, 'message' => 'Customer not found'], 404);
+            }
+
+            $customerId = $customer->customer_id;
+            $estimate = Estimate::where('customer_id', $customerId)->first();
+
+            if (!$estimate) {
+                // Handle the case where the estimate is not found
+                // You may want to return a response or redirect to an error page
+                return response()->json(['success' => false, 'message' => 'Estimate not found'], 404);
+            }
+
+            $additionalContacts = EstimateContact::where('estimate_id', $estimate->estimate_id)->get();
+            $estimateItems = EstimateItem::where('estimate_id', $estimate->estimate_id)->get();
+            $items = Items::get();
+            $users = User::get();
+            $estimateNotes = EstimateNote::where('estimate_id', $estimate->estimate_id)->get();
+
+            // Calculate the sum of item_price for the estimate
+            $totalPrice = $estimateItems->sum('item_price');
+
+            return view('viewEstimates', [
+                'customer' => $customer,
+                'estimate' => $estimate,
+                'items' => $items,
+                'estimate_items' => $estimateItems,
+                'additional_contacts' => $additionalContacts,
+                'user_details' => $userDetails,
+                'item_total' => $totalPrice, // Pass the total price to the view
+                'employees' => $users,
+                'estimate_notes' => $estimateNotes,
+            ]);
+        } catch (\Exception $e) {
+            // Handle the exception
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
+
     // view estimate
 
     // add  estimate

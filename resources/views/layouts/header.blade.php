@@ -55,6 +55,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/dataTables.min.css') }}">
     <script src="https://kit.fontawesome.com/4ae3f77a6d.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@5.9.2/dist/dropzone.css" />
     @vite('resources/css/app.css')
 </head>
 <!-- Debug: Display decoded user_privileges -->
@@ -111,9 +112,7 @@ $userPrivileges = session('user_details')['user_privileges'];
             </div>
         </div>
         <div class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 font-bold hidden" id="submenu2">
-        @if(isset($userPrivileges->user) && $userPrivileges->user->view === "on")
             <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/users'" :title="'Users'" :hoverIcon="'user-icon.svg'" :icon="'user-icon.svg'"></x-sidebar-links>
-            @endif
             <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/userRole'" :title="'User role'" :hoverIcon="'userRole-icon.svg'" :icon="'userRole-icon.svg'"></x-sidebar-links>
         </div>
         <x-sidebar-links :class="'text-white'" :url="'/crew'" :title="'Crew'" :hoverIcon="'hover-user-icon.svg'" :icon="'user-icon.svg'"></x-sidebar-links>

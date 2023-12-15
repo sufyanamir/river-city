@@ -17,7 +17,12 @@ return new class extends Migration
             $table->id('estimate_item_id');
             $table->integer('added_user_id');
             $table->integer('estimate_id');
-            $table->string('item_id');
+            $table->integer('item_id');
+            $table->string('item_name');
+            $table->string('item_type');
+            $table->string('item_unit')->nullable();
+            $table->float('item_cost')->nullable();
+            $table->float('item_price');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrent();
         });

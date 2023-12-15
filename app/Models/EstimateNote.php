@@ -5,23 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EstimateItem extends Model
+class EstimateNote extends Model
 {
     use HasFactory;
 
-    protected $table = 'estimate_items';
+    protected $table = 'estimate_notes';
 
-    protected $primaryKey = 'estimate_item_id';
+    protected $primaryKey = 'estimate_note_id';
 
     protected $fillable = [
         'added_user_id',
         'estimate_id',
-        'item_id',
-        'item_name',
-        'item_type',
-        'item_unit',
-        'item_cost',
-        'item_price',
+        'estimate_note',
     ];
 
     public $timestamps = true;

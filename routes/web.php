@@ -52,6 +52,8 @@ Route::middleware('customauth')->group(function () {
     Route::post('/additionalContact', [EstimateController::class,  'additionalContacts']);
     Route::match(['post', 'get'], '/delete/additionalContact/{id}', [EstimateController::class, 'deleteAdditionalContact']);
     Route::post('/additionalImage', [EstimateController::class, 'additionalImage']);
+    Route::post('/addEstimateItems', [EstimateController::class, 'estimateItems']);
+    Route::post('/addEstimateNote', [EstimateController::class, 'addEstimateNote']);
     Route::get('/add-estimate', function () {
         return view('addEstimate');
     });

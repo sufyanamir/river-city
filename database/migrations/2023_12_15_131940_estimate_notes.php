@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('estimate_images', function(Blueprint $table){
-            $table->id('image_id');
+        Schema::create('estimate_notes', function(Blueprint $table){
+            $table->id('estimate_note_id');
             $table->integer('added_user_id');
             $table->integer('estimate_id');
-            $table->text('estimate_image');
+            $table->text('estimate_note');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrent();
         });
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('estimate_images');
+        Schema::dropIfExists('estimate_notes');
     }
 };

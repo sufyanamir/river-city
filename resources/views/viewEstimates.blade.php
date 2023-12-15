@@ -260,45 +260,41 @@
         <hr class="bg-gray-300">
         <div class="grid sm:grid-cols-12">
             <div class="col-span-2 flex justify-between gap-5">
-                <p class="text-lg px-3  font-medium">
+                <p class="text-lg px-3 font-medium">
                     Items
                 </p>
                 <button type="button" class="flex addItems">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <div class="col-span-10  ml-2 overflow-auto bg-gray-300 rounded-lg border-[#0000004D] m-3">
-                <div class="flex border-b border-[#0000001A] w-full px-4 pl-0  justify-between items-center mb-4">
-                    <div class=" flex">
+            <div class="col-span-10 ml-2 overflow-auto bg-gray-300 rounded-lg border-[#0000004D] m-3">
+                @php
+                $totalPrice = 0; // Initialize total price variable
+                @endphp
+
+                @foreach($estimate_items as $item)
+                <div class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
+                    <div class="flex">
                         <button type="button" class="inline">
                             <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                         </button>
-                        <div class="">
-                            <label class="text-lg font-semibold text-[#323C47]" for="groupName">Item name</label>
-                            <p class="text-[16px]/[18px] text-[#323C47] font">Description about item </p>
+                        <div>
+                            <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
+                            <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }} </p>
                         </div>
                     </div>
-                    <div class="text-right ">
-                        <span>$0.00</span>
+                    <div class="text-right">
+                        <span>${{ $item->item_price }}</span>
+                        @php
+                        $totalPrice += $item->item_price; // Add item price to total
+                        @endphp
                     </div>
                 </div>
-                <div class="flex border-b border-[#0000001A] w-full px-4 pl-0  justify-between items-center mb-4">
-                    <div class=" flex">
-                        <button type="button" class="inline">
-                            <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                        </button>
-                        <div class="">
-                            <label class="text-lg font-semibold text-[#323C47]" for="groupName">Item name</label>
-                            <p class="text-[16px]/[18px] text-[#323C47] font">Description about item </p>
-                        </div>
-                    </div>
-                    <div class="text-right ">
-                        <span>$0.00</span>
-                    </div>
-                </div>
-                <div class="bottom-2  mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
+                @endforeach
+
+                <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
                     <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Total</span>
-                    <span>$0.00</span>
+                    <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
                 </div>
             </div>
         </div>
@@ -308,71 +304,75 @@
                 <p class="text-lg px-3 font-medium">
                     Labor
                 </p>
-                <button type="button" class="flex addItems">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
             </div>
             <div class="col-span-10">
-                <div class="flex border-b border-[#0000001A] w-full px-4 pl-0  justify-between items-center mb-4">
-                    <div class=" flex">
+                @php
+                $totalLaborPrice = 0; // Initialize total labor price variable
+                @endphp
+
+                @foreach($estimate_items as $item)
+                @if($item->item_type === 'labour')
+                <div class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
+                    <div class="flex">
                         <button type="button" class="inline">
                             <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                         </button>
-                        <div class="">
-                            <label class="text-lg font-semibold text-[#323C47]" for="groupName">Service name</label>
-                            <p class="text-[16px]/[18px] text-[#323C47] font">Description about service </p>
+                        <div>
+                            <label class="text-lg font-semibold text-[#323C47]" for="groupName">{{ $item->item_name }}</label>
+                            <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
                         </div>
                     </div>
-                    <div class="">
-                        <span>$0.00</span>
+                    <div>
+                        <span>${{ $item->item_price }}</span>
+                        @php
+                        $totalLaborPrice += $item->item_price; // Add labor item price to total
+                        @endphp
                     </div>
                 </div>
+                @endif
+                @endforeach
+
                 <div class="text-right mr-4">
-                    <span>$0.00</span>
+                    <span>${{ number_format($totalLaborPrice, 2) }}</span> {{-- Display the formatted total labor price --}}
                 </div>
             </div>
         </div>
         <hr class="bg-gray-300">
         <div class="grid sm:grid-cols-12">
             <div class="col-span-2 flex justify-between gap-5">
-                <p class="text-lg px-3  font-medium">
+                <p class="text-lg px-3 font-medium">
                     Materials
                 </p>
-                <button type="button" class="flex addItems">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
             </div>
-            <div class="col-span-10 ">
-                <div class="flex border-b border-[#0000001A] w-full px-4 pl-0  justify-between items-center">
-                    <div class=" flex">
+            <div class="col-span-10">
+                @php
+                $totalMaterialPrice = 0; // Initialize total material price variable
+                @endphp
+
+                @foreach($estimate_items as $item)
+                @if($item->item_type === 'material')
+                <div class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center">
+                    <div class="flex">
                         <button type="button" class="inline">
                             <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                         </button>
-                        <div class="">
-                            <label class="text-lg font-semibold text-[#323C47]" for="groupName">Material name</label>
-                            <p class="text-[16px]/[18px] text-[#323C47] font">Description about material </p>
-                        </div>
-                    </div>
-                    <div class="text-right ">
-                        <span>$0.00</span>
-                    </div>
-                </div>
-                <div class="flex border-b border-[#0000001A] w-full pl-0 px-4 justify-between items-center mb-4">
-                    <div class=" flex">
-                        <button type="button" class="inline">
-                            <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                        </button>
-                        <div class="">
-                            <label class="text-lg font-semibold text-[#323C47]" for="groupName">Material Group </label>
-                            <p class="text-[16px]/[18px] text-[#323C47] font">living room items</p>
+                        <div>
+                            <label class="text-lg font-semibold text-[#323C47]" for="groupName">{{ $item->item_name }}</label>
+                            <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
                         </div>
                     </div>
                     <div class="text-right">
-                        <span>$0.00</span>
+                        <span>${{ $item->item_price }}</span>
+                        @php
+                        $totalMaterialPrice += $item->item_price; // Add material item price to total
+                        @endphp
                     </div>
                 </div>
-                <div class=" pt-4 px-4 pl-2 flex justify-end">
-                    <span>$0.00</span>
+                @endif
+                @endforeach
+
+                <div class="pt-4 px-4 pl-2 flex justify-end">
+                    <span>${{ number_format($totalMaterialPrice, 2) }}</span> {{-- Display the formatted total material price --}}
                 </div>
             </div>
         </div>
@@ -398,24 +398,12 @@
                 </button>
             </div>
             <div class="col-span-10  hidden p-2" id="image-field">
-                <form action="/additionalImage" enctype="multipart/form-data" method="post">
+                <form action="/additionalImage" enctype="multipart/form-data" method="post" class="dropzone" id="myDropzone">
                     @csrf
                     <input type="text" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
-                    <div class="w-56 h-56">
-                        <div id="dropzonee" class="dropzonee border rounded-xl">
-                            <img id="profileImage" src="{{ 'assets/images/rectangle-image.svg' }}" style="width: 100%; height: 237px; object-fit: fill;" alt="IMAGE">
-                            <div class="file-inputt-container">
-                                <input class="file-input" type="file" name="estimate_image" id="fileInput1">
-                                <div class="upload-iconn" onclick="document.getElementById('fileInput1').click()">
-                                    <img src="{{ asset('assets/images/upload-image.svg') }}" alt="Image">
-                                </div>
-                            </div>
-                        </div>
-                        <p class="error-image text-red-700 d-none" style="font-size: smaller;"></P>
+                    <div class="fallback">
+                        <input name="estimate_image" type="file" multiple />
                     </div>
-                    <button class="  bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 text-xs">
-                        Save
-                    </button>
                 </form>
             </div>
         </div>
@@ -442,15 +430,17 @@
                 <p class="text-lg px-3  font-medium">
                     Notes
                 </p>
-                <button type="button" class="flex" id="addImage-btn">
+                <button type="button" class="flex" id="addNote-btn">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
             <br>
             <div class="col-span-12 py-3 mx-auto">
-                <p class=" text-sm">
-                    Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las.
+                @foreach($estimate_notes as $note)
+                <p class=" text-sm my-2 ">
+                    {{ $note->estimate_note }}
                 </p>
+                @endforeach
             </div>
         </div>
         <hr class="bg-gray-300">
@@ -618,6 +608,43 @@
         </div>
     </div>
 </div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addNote-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="/addEstimateNote" method="post" id="addNote-form">
+                @csrf
+                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class=" flex justify-between border-b">
+                        <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Note</h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div class=" grid grid-cols-2 gap-2">
+                        <div class=" col-span-2 my-2">
+                            <label for="estimate_note">Add Note:</label>
+                            <textarea name="estimate_note" id="estimate_note" placeholder="Add Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                            <button type="button" id="items-mic" class=" absolute mt-8 right-8" onclick="voice('note-mic', 'estimate_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                        </div>
+                    </div>
+                    <div class=" border-t">
+                        <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addItems-modal">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <!-- Background overlay -->
@@ -627,95 +654,114 @@
 
         <!-- Modal panel -->
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full lg:max-w-screen-md">
-            <form action="" id="addItems-form">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <!-- Modal content here -->
-                    <div class=" flex justify-between">
-                        <div class=" " id="">
-                            <x-add-button :id="''" :title="'All'" :class="' bg-[#E02B20] px-6'"></x-add-button>
-                            <x-add-button :id="''" :title="'Product'" :class="''"></x-add-button>
-                            <x-add-button :id="''" :title="'Labour'" :class="''"></x-add-button>
-                            <x-add-button :id="''" :title="'Assemblies'" :class="''"></x-add-button>
-                            <x-add-button :id="''" :title="'Groups'" :class="''"></x-add-button>
-                        </div>
-                        <button class="addItemsModal-close" type="button">
-                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-                        </button>
-                    </div>
-                    <div class=" my-2">
-                        <input type="text" name="search" id="search" placeholder="Search" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    </div>
-                    <!-- task details -->
 
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <!-- Modal content here -->
+                <div class=" flex justify-between">
+                    <div class=" " id="">
+                        <x-add-button :id="''" :title="'All'" :class="' bg-[#E02B20] px-6'"></x-add-button>
+                        <x-add-button :id="''" :title="'Product'" :class="''"></x-add-button>
+                        <x-add-button :id="''" :title="'Labour'" :class="''"></x-add-button>
+                        <x-add-button :id="''" :title="'Assemblies'" :class="''"></x-add-button>
+                        <x-add-button :id="''" :title="'Groups'" :class="''"></x-add-button>
+                    </div>
+                    <button class="addItemsModal-close" type="button">
+                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                    </button>
+                </div>
+                <div class=" my-2">
+                    <input type="text" name="search" id="search" placeholder="Search" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                </div>
+                <!-- task details -->
+
+                <form action="/addEstimateItems" method="post">
                     <div class="relative overflow-x-auto h-60 overflow-y-auto my-2">
-                        <form action="/addEstimateItems" method="post">
-                            @csrf
-                            <table class="w-full text-sm text-left">
-                                <thead class="text-xs text-white uppercase bg-[#930027]">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3">
-                                            Item name
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            type
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Units
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Cost
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Price
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Actions
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($items as $item)
-                                    <tr class="bg-white border-b">
-                                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                            {{ $item->item_name }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ $item->item_type }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ $item->item_unit }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            ${{ $item->item_cost }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            ${{ $item->item_price }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <input type="checkbox" name="selected_items[]" value="{{ $item->id }}">
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-
-                            <button type="submit" class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 text-xs">
-                                Save Selected Items
-                            </button>
-                        </form>
+                        @csrf
+                        <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-white uppercase bg-[#930027]">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Item name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        type
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Units
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Cost
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Price
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($items as $item)
+                                <tr class="bg-white border-b">
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        {{ $item->item_name }}
+                                        <input type="hidden" name="selected_item_names[]" value="{{ $item->item_name }}">
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $item->item_type }}
+                                        <input type="hidden" name="selected_item_types[]" value="{{ $item->item_type }}">
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $item->item_unit }}
+                                        <input type="hidden" name="selected_item_units[]" value="{{ $item->item_unit }}">
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        ${{ $item->item_cost }}
+                                        <input type="hidden" name="selected_item_costs[]" value="{{ $item->item_cost }}">
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        ${{ $item->item_price }}
+                                        <input type="hidden" name="selected_item_prices[]" value="{{ $item->item_price }}">
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <input type="checkbox" name="selected_items[]" id="selected_items{{ $item->item_id }}" value="{{ $item->item_id }}">
+                                        <label for="selected_items{{ $item->item_id }}"></label>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                     <div class=" flex justify-between pt-2 border-t">
-                        <button id="updateEvent" class=" mb-2 py-1 px-7 rounded-md border ">Cancel
+                        <button class=" mb-2 py-1 px-7 rounded-md border ">Cancel
                         </button>
-                        <button id="updateEvent" class=" mb-2 bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                        <button class=" mb-2 bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
                         </button>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 @include('layouts.footer')
+<script src="https://cdn.jsdelivr.net/npm/dropzone@5.9.2"></script>
+<script>
+    // Initialize Dropzone
+    Dropzone.options.myDropzone = {
+        paramName: "file", // The name that will be used to transfer the file
+        maxFilesize: 2, // MB
+        addRemoveLinks: true,
+        success: function(file, response) {
+            // Handle successful uploads
+            console.log(response);
+        },
+        error: function(file, response) {
+            // Handle errors
+            console.log(response);
+        }
+    };
+</script>
 <script>
     $("#addImage-btn").click(function(e) {
         e.preventDefault();
@@ -744,5 +790,17 @@
         e.preventDefault();
         $("#addItems-modal").addClass('hidden');
         $("#addItems-form")[0].reset()
+    });
+</script>
+<script>
+    $("#addNote-btn").click(function(e) {
+        e.preventDefault();
+        $("#addNote-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#addNote-modal").addClass('hidden');
+        $("#addNote-form")[0].reset()
     });
 </script>
