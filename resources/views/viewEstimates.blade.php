@@ -640,6 +640,7 @@
                 </div>
                 <form action="/sendEmail" method="post" id="addEmail-form">
                     @csrf
+                    <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
                     <!-- Display email details here -->
                     <div class=" grid grid-cols-2 gap-4 my-2">
                         <input type="hidden" name="email_id" id="email_id">
