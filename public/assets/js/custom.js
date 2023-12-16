@@ -1,4 +1,68 @@
 $(document).ready(function () {
+  // Listen for form submissions
+  $(document).on('submit', 'form', function (event) {
+    // Prevent the default form submission
+    event.preventDefault();
+
+    // Get the form data
+    var formData = $(this).serialize();
+
+    // Get the form action
+    var formAction = $(this).attr('action');
+
+    // Make the AJAX request
+    $.ajax({
+      type: 'POST',
+      url: formAction,
+      data: formData,
+      success: function (response) {
+        if (response.success == true) {
+          // Handle success, if needed
+          handleSuccess(response);
+        } else if (response.success == false) {
+          // Handle failure, if needed
+          handleFailure(response);
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        // Log the error response to the console
+        console.error("AJAX Error: " + textStatus, errorThrown);
+
+        // Log the response content for further investigation
+        console.log("Response:", jqXHR.responseText);
+
+        // Handle the error here
+        handleFailure(JSON.parse(jqXHR.responseText));
+      }
+    });
+  });
+
+  function handleSuccess(response) {
+    // Redirect to the dashboard or do something else
+    $('.text').removeClass('hidden');
+    $('.spinner').addClass('hidden');
+    Swal.fire(
+      'Success!',
+      response.message,
+      'success'
+    );
+    $("#universalTableBody").load(location.href + "#universalTableBody > *");
+    $(".modal-close").trigger("click");
+    $("#formData")[0].reset();
+    // window.location.href = "/dashboard";
+  }
+
+  function handleFailure(response) {
+    Swal.fire(
+      'Warning!',
+      response.message,
+      'warning'
+    );
+    // Additional failure handling if needed
+    $('.text').removeClass('hidden');
+    $('.spinner').addClass('hidden');
+    $('#loginBtn').attr('disabled', false);
+  }
 
   $("#accordion-collapse").click(function () {
     $("#accordion-collapse-body").toggleClass("hidden");
@@ -79,7 +143,7 @@ $(document).ready(function () {
     dropdown('crew-submenu1', 'crew-arrow1', 'crew-dropdown-card1', 'crew-dropdown-text1');
   });
 
-  new DataTable('#example');
+  new DataTable('#universalTable');
 
   window.voice = function (buttonId, textareaId) {
     var recognition = new webkitSpeechRecognition();

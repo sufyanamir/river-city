@@ -12,7 +12,7 @@
         </div>
         <div class="py-4">
             <div class=" overflow-x-auto">
-                <table id="example" class="display" style="width:100%">
+                <table id="universalTable" class="display" style="width:100%">
                     <thead class="bg-[#930027] text-white text-sm">
                         <tr>
                             <th></th>
@@ -25,7 +25,7 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody class=" text-sm">
+                    <tbody  id="universalTableBody" class=" text-sm">
                         @foreach($crew as $item)
                         <tr>
                             <td><img class=" w-10 h-10 rounded-full" style="object-fit: cover;" src="{{ (isset($item->user_image)) ? asset($item->user_image) : 'assets/images/demo-user.svg'}}" alt="image"></td>
@@ -40,11 +40,12 @@
                                 <button>
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                 </button>
-                                <button>
-                                    <a href="/delete/crew/{{ $item->id }}">
+                                <form action="/delete/crew/{{ $item->id }}"  class=" inline-block" method="post">
+                                    @csrf
+                                    <button>
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
-                                    </a>
-                                </button>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         @endforeach
@@ -123,7 +124,7 @@
                             </div>
                             <div>
                                 <br>
-                            <label for="" class="text-gray-700 block text-left mb-1 "> Team No</label>
+                                <label for="" class="text-gray-700 block text-left mb-1 "> Team No</label>
                                 <input type="tel" name="teamNumber" id="teamNumber" placeholder="Team No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             </div>
                         </div>
@@ -151,6 +152,6 @@
     $(".modal-close").click(function(e) {
         e.preventDefault();
         $("#addCrew-modal").addClass('hidden');
-        $("#addCrew-form")[0].reset()
+        $("#formData")[0].reset()
     });
 </script>

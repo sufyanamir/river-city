@@ -449,7 +449,7 @@
                 <p class="text-lg px-3  font-medium">
                     Emails
                 </p>
-                <button type="button" class="flex" id="addImage-btn">
+                <button type="button" class="flex" id="addEmail-btn">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
@@ -605,6 +605,67 @@
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addEmail-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <!-- Modal content here -->
+                <div class=" flex justify-between border-b">
+                    <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Contacts</h2>
+                    <button class="modal-close" type="button">
+                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                    </button>
+                </div>
+                <!-- task details -->
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="col-span-2" id="emailDetailsContainer">
+                        <label for="" class="block">Select Email:</label>
+                        <select name="" id="emailDropdown" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <option value="">Select Email</option>
+                            @foreach($email_templates as $emails)
+                            <option value="{{ $emails->email_id }}">{{ $emails->email_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <form action="/sendEmail" method="post" id="addEmail-form">
+                    @csrf
+                    <!-- Display email details here -->
+                    <div class=" grid grid-cols-2 gap-4 my-2">
+                        <input type="hidden" name="email_id" id="email_id">
+                        <div>
+                            <label for="email_title">Email title:</label>
+                            <input type="text" name="email_name" id="email_name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div>
+                            <label for="email_to">Email to:</label>
+                            <input type="text" name="email_to" id="email_to" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $customer->customer_email }}">
+                        </div>
+                        <div class=" col-span-2">
+                            <label for="email_subject">Email Subject:</label>
+                            <textarea name="email_subject" id="email_subject" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                        </div>
+                        <div class=" col-span-2">
+                            <label for="email_body">Email body:</label>
+                            <textarea name="email_body" id="email_body" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                        </div>
+                    </div>
+                    <div class=" border-t">
+                        <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -802,5 +863,57 @@
         e.preventDefault();
         $("#addNote-modal").addClass('hidden');
         $("#addNote-form")[0].reset()
+    });
+</script>
+<script>
+    $("#addEmail-btn").click(function(e) {
+        e.preventDefault();
+        $("#addEmail-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#addEmail-modal").addClass('hidden');
+        $("#addEmail-form")[0].reset()
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        var emailTitle = $('#email_name');
+        var emailSubjectInput = $('#email_subject');
+        var emailBodyTextarea = $('#email_body');
+        var email_id = $('#email_id');
+
+        $('#emailDropdown').change(function() {
+            var selectedEmailId = $(this).val();
+
+            // Make an AJAX request to fetch email details based on the selected ID
+            $.ajax({
+                url: '/getemailDetails/' + selectedEmailId, // Replace with your actual endpoint
+                type: 'GET',
+                success: function(response) {
+                    // Check if the response has a success property and email_detail
+                    if (response.success && response.email_detail) {
+                        // Access the email properties
+                        var emailName = response.email_detail.email_name;
+                        var emailSubject = response.email_detail.email_subject;
+                        var emailBody = response.email_detail.email_body;
+                        var emailId = response.email_detail.email_id;
+
+                        // Update the email details container with input fields
+                        email_id.val(emailId);
+                        emailTitle.val(emailName);
+                        emailSubjectInput.val(emailSubject); // Use .val() for input fields
+                        emailBodyTextarea.val(emailBody); // Use .val() for textarea
+
+                    } else {
+                        console.error('Invalid response format:', response);
+                    }
+                },
+                error: function(error) {
+                    console.error('Error fetching email details:', error);
+                }
+            });
+        });
     });
 </script>

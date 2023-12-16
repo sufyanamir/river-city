@@ -90,7 +90,7 @@
                             <div class="col-span-4 mr-20">
                                 <div class="flex justify-between">
                                     <div>
-                                        <input type="checkbox" name="privileges[schedule][edit]" id="privilegeScheduleEdit" {{ isset($user->user_privileges['estimate']['edit']) ? 'checked' : '' }}>
+                                        <input type="checkbox" name="privileges[schedule][edit]" id="privilegeScheduleEdit" {{ isset($user->user_privileges['schedule']['edit']) ? 'checked' : '' }}>
                                         <label for="privilegeScheduleEdit" class=" text-gray-500">Edit</label>
                                     </div>
                                     <div>

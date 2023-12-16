@@ -14,7 +14,7 @@
         </div>
         <div class="py-4">
             <div class=" overflow-x-auto">
-                <table id="example" class="display" style="width:100%">
+                <table id="universalTable" class="display" style="width:100%">
                     <thead class="bg-[#930027] text-white text-sm">
                         <tr>
                             <th>Name</th>
@@ -23,7 +23,7 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody class=" text-sm">
+                    <tbody id="universalTableBody" class=" text-sm">
                         @foreach($emailTemplates as $email)
                         <tr>
                             <td>{{ $email->email_name }}</td>
@@ -33,11 +33,12 @@
                                 <button>
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                 </button>
-                                <button>
-                                    <a href="/delete/email/{{ $email->email_id }}">
+                                <form action="/delete/email/{{ $email->email_id }}" method="post">
+                                    @csrf
+                                    <button>
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
-                                    </a>
-                                </button>
+                                    </button>
+                                </form>
                                 <button>
                                     <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="btn">
                                 </button>
