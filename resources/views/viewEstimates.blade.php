@@ -267,7 +267,7 @@
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <div class="col-span-10 ml-2 overflow-auto bg-gray-300 rounded-lg border-[#0000004D] m-3">
+            <div class=" itemDiv col-span-10 ml-2 overflow-auto bg-gray-300 rounded-lg border-[#0000004D] m-3">
                 @php
                 $totalPrice = 0; // Initialize total price variable
                 @endphp
@@ -305,7 +305,7 @@
                     Labor
                 </p>
             </div>
-            <div class="col-span-10">
+            <div class=" itemDiv  col-span-10">
                 @php
                 $totalLaborPrice = 0; // Initialize total labor price variable
                 @endphp
@@ -344,7 +344,7 @@
                     Materials
                 </p>
             </div>
-            <div class="col-span-10">
+            <div class=" itemDiv col-span-10">
                 @php
                 $totalMaterialPrice = 0; // Initialize total material price variable
                 @endphp
@@ -726,7 +726,7 @@
                         <x-add-button :id="''" :title="'Assemblies'" :class="''"></x-add-button>
                         <x-add-button :id="''" :title="'Groups'" :class="''"></x-add-button>
                     </div>
-                    <button class="addItemsModal-close" type="button">
+                    <button class="modal-close" type="button">
                         <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
                     </button>
                 </div>
@@ -735,7 +735,7 @@
                 </div>
                 <!-- task details -->
 
-                <form action="/addEstimateItems" method="post">
+                <form action="/addEstimateItems" method="post" id="formData">
                     <div class="relative overflow-x-auto h-60 overflow-y-auto my-2">
                         @csrf
                         <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
@@ -795,7 +795,7 @@
                         </table>
                     </div>
                     <div class=" flex justify-between pt-2 border-t">
-                        <button class=" mb-2 py-1 px-7 rounded-md border ">Cancel
+                        <button type="submit" class=" mb-2 py-1 px-7 rounded-md border ">Cancel
                         </button>
                         <button class=" mb-2 bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
                         </button>
@@ -847,10 +847,10 @@
         $("#addItems-modal").removeClass('hidden');
     });
 
-    $(".addItemsModal-close").click(function(e) {
+    $(".modal-close").click(function(e) {
         e.preventDefault();
         $("#addItems-modal").addClass('hidden');
-        $("#addItems-form")[0].reset()
+        $("#formData")[0].reset()
     });
 </script>
 <script>

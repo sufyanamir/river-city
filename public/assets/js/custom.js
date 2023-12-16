@@ -47,6 +47,7 @@ $(document).ready(function () {
       'success'
     );
     $("#universalTableBody").load(location.href + "#universalTableBody > *");
+    $(".itemDiv").load(location.href + ".itemDiv > *");
     $(".modal-close").trigger("click");
     $("#formData")[0].reset();
     // window.location.href = "/dashboard";
