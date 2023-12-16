@@ -21,7 +21,7 @@
                     <img src="{{ asset('assets/icons/question-icon.svg') }}" alt="icon">
                 </div>
             </div>
-            <form action="/addEmail" method="post" enctype="multipart/form-data">
+            <form action="/addEmail"  id="formData" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="mt-10 mb-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div class="sm:col-span-3 ml-6 flex justify-between">

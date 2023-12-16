@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Email;
 use App\Models\Estimate;
 use App\Models\EstimateContact;
 use App\Models\EstimateImage;
@@ -17,6 +18,33 @@ use Symfony\Contracts\Service\Attribute\Required;
 class EstimateController extends Controller
 {
 
+    public function getEmailDetails($id)
+    {
+        $email = Email::find($id);
+
+        return response()->json(['success' => true, 'email_detail' => $email], 200);
+    }
+
+    public function sendEmail(Request$request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'email_id' => 'required|integer',
+                'email_name' => 'required|string',
+                'email_to' => 'required|string',
+                'email_subject' => 'nullable|string',
+                'email_body' => 'required|string',
+            ]);
+
+            
+
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
 
     public function index()
     {
@@ -240,6 +268,7 @@ class EstimateController extends Controller
             $items = Items::get();
             $users = User::get();
             $estimateNotes = EstimateNote::where('estimate_id', $estimate->estimate_id)->get();
+            $emailTemplates = Email::get();
 
             // Calculate the sum of item_price for the estimate
             $totalPrice = $estimateItems->sum('item_price');
@@ -254,6 +283,7 @@ class EstimateController extends Controller
                 'item_total' => $totalPrice, // Pass the total price to the view
                 'employees' => $users,
                 'estimate_notes' => $estimateNotes,
+                'email_templates' => $emailTemplates,
             ]);
         } catch (\Exception $e) {
             // Handle the exception

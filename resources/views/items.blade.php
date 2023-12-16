@@ -17,7 +17,7 @@
         </div>
         <div class="py-4">
             <div class=" overflow-x-auto">
-                <table id="example" class="display" style="width:100%">
+                <table id="universalTable" class="display" style="width:100%">
                     <thead class="bg-[#930027] text-white text-sm">
                         <tr>
                             <th>Item Name</th>
@@ -29,7 +29,7 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody class=" text-sm">
+                    <tbody id="universalTableBody" class=" text-sm">
                         @foreach($items as $item)
                         <tr>
                             <td>{{ $item->item_name }}</td>
@@ -65,7 +65,7 @@
 
         <!-- Modal panel -->
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="/addItem" method="post" enctype="multipart/form-data" id="addItem-form">
+            <form action="/addItem" method="post" enctype="multipart/form-data" id="formData">
                 @csrf
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
@@ -172,7 +172,7 @@
     $(".modal-close").click(function(e) {
         e.preventDefault();
         $("#addItem-modal").addClass('hidden');
-        $("#addItem-form")[0].reset()
+        $("#formData")[0].reset()
     });
 
     let mulitple_input = document.getElementById('mulitple_input');
