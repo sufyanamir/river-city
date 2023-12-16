@@ -53,9 +53,11 @@ a.paginate_button.current {
 
 /* Hide the default checkbox */
 .rate {
-    float: left;
     height: 46px;
     padding: 0 10px;
+    display: flex !important;
+    justify-content: center!important;
+    width: 100%;
 }
 
 .rate:not(:checked)>input {

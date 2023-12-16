@@ -5,7 +5,7 @@
         <div class="p-3">
             <form action="">
                 <div class="text-center mb-2">
-                    <div id="dropzone" class="dropzone">
+                    <div id="dropzone" class="dropzone" style="padding: 0 !important">
                         <img id="profileImage" src="{{ asset('assets/images/demo-user.svg') }}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;" alt="text">
                         <div class="file-input-container">
                             <input class="file-input" type="file" name="upload_image" id="fileInput1">
