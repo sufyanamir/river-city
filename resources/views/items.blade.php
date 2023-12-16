@@ -42,11 +42,12 @@
                                 <button>
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                 </button>
-                                <button>
-                                    <a href="/delete/item/{{ $item->item_id }}">
+                                <form action="/delete/item/{{ $item->item_id }}" class=" inline-block" method="post">
+                                    @csrf
+                                    <button>
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
-                                    </a>
-                                </button>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         @endforeach
@@ -124,7 +125,7 @@
                         <div class="my-2 col-span-2 relative">
                             <label for="" class="block text-left mb-1"> Item Description </label>
                             <textarea name="item_description" id="item_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
-                            <button type="button" id="items-mic" class=" absolute top-8 right-4" onclick="voice('items-mic', 'item_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                            <button type="button" id="items-mic" class=" absolute mt-8 right-4" onclick="voice('items-mic', 'item_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
                     </div>
                     <div class="">

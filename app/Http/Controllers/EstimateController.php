@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\sendMailToClient;
 use App\Models\Customer;
 use App\Models\Email;
 use App\Models\Estimate;
 use App\Models\EstimateContact;
+use App\Models\EstimateEmail;
 use App\Models\EstimateImage;
 use App\Models\EstimateItem;
 use App\Models\EstimateNote;
 use App\Models\Items;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -25,7 +28,7 @@ class EstimateController extends Controller
         return response()->json(['success' => true, 'email_detail' => $email], 200);
     }
 
-    public function sendEmail(Request$request)
+    public function sendEmail(Request $request)
     {
         try {
             $userDetails = session('user_details');
@@ -39,10 +42,36 @@ class EstimateController extends Controller
                 'email_body' => 'required|string',
             ]);
 
-            
+            $emailData = [
+                'estimate_id' => $validatedData['estimate_id'],
+                'email_id' => $validatedData['email_id'],
+                'email_name' => $validatedData['email_name'],
+                'email_to' => $validatedData['email_to'],
+                'email_subject' => $validatedData['email_subject'],
+                'email_body' => $validatedData['email_body'],
+            ];
 
-        } catch (\Throwable $th) {
-            //throw $th;
+            // Create an instance of the Mailable class
+            $mail = new sendMailToClient($emailData);
+
+            // Send the email using the Mail facade
+            Mail::to($validatedData['email_to'])
+                ->send($mail);
+
+            // Assuming you want to save the email data in the database
+            $mail = EstimateEmail::create([
+                'added_user_id' => $userDetails['id'],
+                'estimate_id' => $validatedData['estimate_id'],
+                'email_id' => $validatedData['email_id'],
+                'email_name' => $validatedData['email_name'],
+                'email_to' => $validatedData['email_to'],
+                'email_subject' => $validatedData['email_subject'],
+                'email_body' => $validatedData['email_body'],
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Email sent to the client!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
 
@@ -60,7 +89,7 @@ class EstimateController extends Controller
     public function addEstimateNote(Request $request)
     {
         try {
-            
+
             $userDetails = session('user_details');
 
             $validatedData = $request->validate([
@@ -75,7 +104,6 @@ class EstimateController extends Controller
             ]);
 
             return response()->json(['success' => true, 'message' => 'Note added!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
