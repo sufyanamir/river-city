@@ -64,7 +64,7 @@
 
         <!-- Modal panel -->
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="/addCrew" id="addCrew-form" method="post" enctype="multipart/form-data">
+            <form action="/addCrew" id="formData" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
@@ -101,8 +101,8 @@
                             </select>
                         </div>
                         <div>
-                            <div id="dropzone" class="dropzone" style=" width: 145px !important; height: 145px !important;">
-                                <img id="profileImage" src="{{ asset('assets/images/demo-user.svg') }}" style="width: 145px; height: 145px; border-radius: 50%; object-fit: cover;" alt="text">
+                            <div id="dropzone" class="dropzone" style=" width: 145px !important; height: 145px !important; padding: 0 !important;">
+                                <img id="profileImage" src="{{ asset('assets/images/demo-user.svg') }}" style="width: 145px; height: 100%; border-radius: 50%; object-fit: cover;" alt="text">
                                 <div class="file-input-container">
                                     <input class="file-input" type="file" name="upload_image" id="fileInput1">
                                     <div class="upload-icon" onclick="document.getElementById('fileInput1').click()">
@@ -122,8 +122,7 @@
                                 <input type="radio" id="star1" name="rate" value="1" />
                                 <label for="star1" title="text">1 star</label>
                             </div>
-                            <div>
-                                <br>
+                            <div class="mt-3">
                                 <label for="" class="text-gray-700 block text-left mb-1 "> Team No</label>
                                 <input type="tel" name="teamNumber" id="teamNumber" placeholder="Team No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             </div>

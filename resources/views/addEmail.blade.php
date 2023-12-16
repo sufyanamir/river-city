@@ -59,9 +59,10 @@
                         <textarea placeholder="Subject (account_company_name] [project_document_type} # [project_number)" class="  ml-1 pl-2 w-[95%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6" name="email_subject" id="email_subject"></textarea>
                         <!-- <input type="email" name="email" id="email" autocomplete="given-email" class="  ml-1 pl-2 w-[90%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"> -->
                     </div>
-                    <div class=" sm:col-span-6 mx-6 flex justify-between">
+                    <div class=" sm:col-span-6 mx-6 flex justify-between relative">
                         <label for="email" class=" text-sm font-medium leading-6   text-black">Body</label>
                         <textarea placeholder="Body Optional " class="  ml-1 pl-2 w-[95%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6" name="email_body" id="email_body"></textarea>
+                        <button type="button" id="estimate-mic" class=" absolute mt-10 bottom-1 right-4" onclick="voice('email-mic', 'email_notes')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         <!-- <input type="email" name="email" id="email" autocomplete="given-email" class="  ml-1 pl-2 w-[90%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"> -->
                     </div>
                     <div class="sm:col-span-6 mx-20">
