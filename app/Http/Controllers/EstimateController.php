@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ProposalMail;
 use App\Mail\sendMailToClient;
 use App\Models\Customer;
 use App\Models\Email;
@@ -11,6 +12,7 @@ use App\Models\EstimateEmail;
 use App\Models\EstimateImage;
 use App\Models\EstimateItem;
 use App\Models\EstimateNote;
+use App\Models\EstimateProposal;
 use App\Models\Items;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -21,6 +23,112 @@ use Symfony\Contracts\Service\Attribute\Required;
 class EstimateController extends Controller
 {
 
+    public function index()
+    {
+        $userDetails = session('user_details');
+
+        $estimates = Estimate::get();
+
+        return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails]);
+    }
+    // ==============================================================Estimate additional functions=========================================================
+    // accept proposal
+    public function acceptProposal($id)
+    {
+        try {
+
+            $proposal = EstimateProposal::where('estimate_id', $id)->first();
+
+            $proposal->proposal_status = 'accepted';
+            $proposal->proposal_accepted = $proposal->proposal_total;
+
+            $proposal->save();
+
+            return response()->json(['success' => true, 'message' => 'You accepted the proposal. Thank You!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // accept proposal
+
+    // view proposal
+    public function viewProposal($id)
+    {
+        try {
+
+            $estimate = Estimate::where('estimate_id', $id)->first();
+            $customer = Customer::where('customer_id', $estimate->customer_id)->first();
+            $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->get();
+
+            // return response()->json(['success' => true, 'data' => ['user_details' => $userDetails, 'estimate' => $estimate, 'customer' => $customer, 'items' => $items]], 200);
+            return view('accept-proposal', [
+                'estimate' => $estimate,
+                'customer' => $customer,
+                'items' => $items,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // view proposal
+
+    // send proposal
+    public function sendProposal(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'customer_email' => 'required|string',
+                'estimate_total' => 'required|numeric',
+            ]);
+
+            $emailData = [
+                'estimate_id' => $validatedData['estimate_id'],
+                'email' => $validatedData['customer_email'],
+            ];
+
+            $mail = new ProposalMail($emailData);
+            Mail::to($validatedData['customer_email'])->send($mail);
+
+            $proposal = EstimateProposal::create([
+                'estimate_id' => $validatedData['estimate_id'],
+                'proposal_total' => $validatedData['estimate_total'],
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Proposal Sent Successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // send proposal
+
+    // make proposal
+    public function makeProposal($id)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $estimate = Estimate::where('estimate_id', $id)->first();
+            $customer = Customer::where('customer_id', $estimate->customer_id)->first();
+            $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->get();
+
+            // return response()->json(['success' => true, 'data' => ['user_details' => $userDetails, 'estimate' => $estimate, 'customer' => $customer, 'items' => $items]], 200);
+            return view('make-proposal', [
+                'user_details' => $userDetails,
+                'estimate' => $estimate,
+                'customer' => $customer,
+                'items' => $items,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // make proposal
+
+    // estimate emails
     public function getEmailDetails($id)
     {
         $email = Email::find($id);
@@ -74,16 +182,7 @@ class EstimateController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
-
-    public function index()
-    {
-        $userDetails = session('user_details');
-
-        $estimates = Estimate::get();
-
-        return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails]);
-    }
-    // ==============================================================Estimate additional functions=========================================================
+    // estimate emails
 
     // estimate items
     public function addEstimateNote(Request $request)
@@ -297,6 +396,8 @@ class EstimateController extends Controller
             $users = User::get();
             $estimateNotes = EstimateNote::where('estimate_id', $estimate->estimate_id)->get();
             $emailTemplates = Email::get();
+            $estimateEmails = EstimateEmail::where('estimate_id', $estimate->estimate_id)->get();
+            $proposals = EstimateProposal::where('estimate_id', $estimate->estimate_id)->get();
 
             // Calculate the sum of item_price for the estimate
             $totalPrice = $estimateItems->sum('item_price');
@@ -312,6 +413,8 @@ class EstimateController extends Controller
                 'employees' => $users,
                 'estimate_notes' => $estimateNotes,
                 'email_templates' => $emailTemplates,
+                'estimate_emails' => $estimateEmails,
+                'proposals' => $proposals,
             ]);
         } catch (\Exception $e) {
             // Handle the exception

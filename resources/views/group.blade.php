@@ -33,11 +33,12 @@
                                 <button>
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                 </button>
-                                <button>
-                                    <a href="/delete/group/{{ $group->group_id }}">
+                                <form action="/delete/group/{{ $group->group_id }}" method="post">
+                                    @csrf
+                                    <button>
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
-                                    </a>
-                                </button>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         @endforeach

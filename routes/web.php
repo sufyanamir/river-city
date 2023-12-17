@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [UserController::class, 'index']);
 Route::post('/', [UserController::class, 'login']);
 Route::match(['get', 'post'], '/logout', [UserController::class, 'logout']);
+Route::get('/viewProposal/{id}', [EstimateController::class, 'viewProposal']);
+Route::post('/acceptProposal/{id}', [EstimateController::class, 'acceptProposal']);
 
 Route::middleware('customauth')->group(function () {
 
@@ -74,6 +76,8 @@ Route::middleware('customauth')->group(function () {
     Route::get('/campaign', function () {
         return view('campaign');
     });
+    Route::post('/sendProposal', [EstimateController::class, 'sendProposal']);
+    Route::get('/makeProposal/{id}', [EstimateController::class, 'makeProposal']);
     Route::get('/payment-template', function () {
         return view('paymentTemplate');
     });
