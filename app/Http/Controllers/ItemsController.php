@@ -14,14 +14,6 @@ use Illuminate\Http\Request;
 
 class ItemsController extends Controller
 {
-    protected $userDetails;
-
-    public function __construct()
-    {
-        // Retrieve user details from session and store it in $userDetails
-        $this->userDetails = Session::get('user_details');
-    }
-
     // delete item
     public function deleteItem($id)
     {
@@ -41,16 +33,18 @@ class ItemsController extends Controller
     // get item
     public function getItems()
     {
+        $userDetails = session('user_details');
         $items = Items::get();
 
-        return view('items', ['items' => $items, 'user_details' => $this->userDetails]);
+        return view('items', ['items' => $items, 'user_details' => $userDetails]);
     }
     public function getGroupsWithItems()
     {
+        $userDetails = session('user_details');
         $items = Items::get();
         $groups = Groups::get();
 
-        return view('group', ['items' => $items, 'groups' => $groups, 'user_details' => $this->userDetails]);
+        return view('group', ['items' => $items, 'groups' => $groups, 'user_details' => $userDetails]);
     }
     // get item
 

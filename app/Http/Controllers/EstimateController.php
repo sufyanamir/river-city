@@ -32,20 +32,49 @@ class EstimateController extends Controller
         return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails]);
     }
     // ==============================================================Estimate additional functions=========================================================
+    // Complete Estimate
+    public function completeEstimate(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'estimator_id' => 'required|numeric',
+                'assign_estimate' => 'required|numeric',
+            ]);
+
+            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
+
+            $estimate->estimated_completed_by = $validatedData['estimator_id'];
+            $estimate->estimate_assigned_to = $validatedData['assign_estimate'];
+            $estimate->estimate_assigned = 1;
+
+            $estimate->save();
+
+            return response()->json(['success' => true, 'message' => 'Estimated Completed Successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // Complete Estimate
+
     // accept proposal
     public function acceptProposal($id)
     {
         try {
-
+            $estimate = Estimate::find($id);
             $proposal = EstimateProposal::where('estimate_id', $id)->first();
 
             $proposal->proposal_status = 'accepted';
             $proposal->proposal_accepted = $proposal->proposal_total;
+            $estimate->estimate_total = $proposal->proposal_total;
 
+            $estimate->save();
             $proposal->save();
 
             return response()->json(['success' => true, 'message' => 'You accepted the proposal. Thank You!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -258,6 +287,30 @@ class EstimateController extends Controller
     }
     // estimate items
 
+    // get images
+    public function getEstimateWithImages()
+    {
+        $userDetails = session('user_details');
+
+        $estimates = Estimate::get();
+        $customers = Customer::get();
+
+        $estimateData = [];
+
+        foreach ($estimates as $estimate) {
+            $images = EstimateImage::where('estimate_id', $estimate->estimate_id)->get();
+            $estimateData[] = [
+                'estimate' => $estimate,
+                'images' => $images,
+            ];
+        }
+        
+        return view('feedGallery', ['customers' => $customers, 'estimates_with_images' => $estimateData, 'user_details' => $userDetails]);
+
+        // return response()->json(['customers' => $customers, 'estimates_with_images' => $estimateData, 'user_details' => $userDetails], 200);
+    }
+    // get images
+
     // delete additional  images
     public function deleteAdditionalImage($id)
     {
@@ -393,7 +446,7 @@ class EstimateController extends Controller
             $additionalContacts = EstimateContact::where('estimate_id', $estimate->estimate_id)->get();
             $estimateItems = EstimateItem::where('estimate_id', $estimate->estimate_id)->get();
             $items = Items::get();
-            $users = User::get();
+            $users = User::where('added_user_id', $userDetails['id'])->get();
             $estimateNotes = EstimateNote::where('estimate_id', $estimate->estimate_id)->get();
             $emailTemplates = Email::get();
             $estimateEmails = EstimateEmail::where('estimate_id', $estimate->estimate_id)->get();

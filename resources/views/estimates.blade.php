@@ -7,6 +7,9 @@
                 <h4>Estimates List</h4>
             </div>
             <div>
+                @if($user_details['user_role'] == 'admin')
+                <x-add-button :title="'+Add Estimates'" :class="'addEstimate'" :id="''"></x-add-button>
+                @endif
                 @if(isset($userPrivileges->estimate) && $userPrivileges->estimate->add === "on")
                 <x-add-button :title="'+Add Estimates'" :class="'addEstimate'" :id="''"></x-add-button>
                 @endif

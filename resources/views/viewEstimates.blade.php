@@ -68,7 +68,7 @@
                             {{ $customer->created_at }}
                         </p>
                         <p class="mt-1 ">
-                            $8,206.75
+                            ${{$estimate->estimate_total}}
                         </p>
                         <p class="flex justify-end  ">
                             <img class="pr-1" src="{{ asset('assets/icons/clipboard-icon.svg') }}" alt="">
@@ -166,11 +166,20 @@
                             <span class=" my-auto">Schedule Estimate</span>
                         </button>
                     </a>
-                    <button type="button" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                    @if($estimate->estimate_assigned == 1)
+                    <button type="button" id="accept-estimate" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                        <div class=" flex mx-auto">
+                            <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
+                            <span class=" my-auto">Accept Work</span>
+                        </div>
+                    </button>
+                    @else
+                    <button type="button" id="complete-estimate" class=" complete-estimate flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                         <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
                         <span class=" my-auto">Complete Estimate</span>
                     </button>
-                    <button type="button" class=" flex h-[40px] w-[190px] ml-2 px-auto px-8 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#F4AC50]">
+                    @endif
+                    <button type="button" class=" complete-estimate flex h-[40px] w-[190px] ml-2 px-auto px-8 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#F4AC50]">
                         <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/userRole-icon.svg') }}" alt="">
                         <span class=" my-auto">Reassign</span>
                     </button>
@@ -954,6 +963,140 @@
         </div>
     </div>
 </div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="complete-estimate-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="/completeEstimate" id="complete-estimate-form">
+                @csrf
+                <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class=" flex justify-between">
+                        <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">{{ $customer->customer_first_name }} {{ $customer->customer_last_name }}</h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div>
+                        <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
+                        <p class=" font-medium inline-block items-center">{{$customer->customer_primary_address}}, {{$customer->customer_city}}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</p>
+                    </div>
+                    <div>
+                        <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
+                        <p class=" font-medium inline-block items-center">{{ $customer->customer_email }}</p>
+                    </div>
+                    <div>
+                        <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
+                        <p class=" font-medium inline-block items-center">{{ $customer->customer_phone }}</p>
+                    </div>
+                    <div>
+                        <div id="estimators" class="">
+                            <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
+                            <p class=" font-medium inline-block items-center">Estimator: {{ $user_details['name'] }}</p>
+                        </div>
+                        <div id="dropdown-div" class="">
+                            <p class=" font-medium items-center">Who will complete estimate?</p>
+                            <input type="text" id="estimator_name" disabled value="{{ $user_details['name'] }}" name="estimator_name" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <input type="hidden" id="estimator_id" value="{{ $user_details['id'] }}" name="estimator_id" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                                <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                            </button> -->
+                        </div>
+                    </div>
+                    <div>
+                        <label for="assiegne-estimate">Assign Estimate:</label>
+                        <select name="assign_estimate" id="assign_estimate" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <option value="">Select User</option>
+                            <option value="{{ $user_details['id'] }}">Yourself</option>
+                            @foreach($employees as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class=" mt-2">
+                        <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
+                        <button id="" class=" float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Complete Estimate
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="accept-estimate-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="/completeEstimate" id="accept-estimate-form">
+                @csrf
+                <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class=" flex justify-between">
+                        <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">{{ $customer->customer_first_name }} {{ $customer->customer_last_name }}</h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div>
+                        <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
+                        <p class=" font-medium inline-block items-center">{{$customer->customer_primary_address}}, {{$customer->customer_city}}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</p>
+                    </div>
+                    <div>
+                        <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
+                        <p class=" font-medium inline-block items-center">{{ $customer->customer_email }}</p>
+                    </div>
+                    <div>
+                        <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
+                        <p class=" font-medium inline-block items-center">{{ $customer->customer_phone }}</p>
+                    </div>
+                    <div>
+                        <div id="estimators" class="">
+                            <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
+                            <p class=" font-medium inline-block items-center">Estimator: {{ $user_details['name'] }}</p>
+                        </div>
+                        <div id="dropdown-div" class="">
+                            <p class=" font-medium items-center">Are you sure! You want to accept the work?</p>
+                            <input type="text" id="estimator_name" disabled value="{{ $user_details['name'] }}" name="estimator_name" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <input type="hidden" id="estimator_id" value="{{ $user_details['id'] }}" name="estimator_id" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                                <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                            </button> -->
+                        </div>
+                    </div>
+                    <div>
+                        <label for="assiegne-estimate">Assign Estimate:</label>
+                        <select name="assign_estimate" id="assign_estimate" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <option value="">Select User</option>
+                            <option value="{{ $user_details['id'] }}">Yourself</option>
+                            @foreach($employees as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class=" mt-2">
+                        <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
+                        <button id="" class=" float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Complete Estimate
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @include('layouts.footer')
 <script src="https://cdn.jsdelivr.net/npm/dropzone@5.9.2"></script>
 <script>
@@ -1000,6 +1143,30 @@
         e.preventDefault();
         $("#schedule-estimate-modal").addClass('hidden');
         $("#schedule-estimate-form")[0].reset()
+    });
+</script>
+<script>
+    $(".complete-estimate").click(function(e) {
+        e.preventDefault();
+        $("#complete-estimate-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#complete-estimate-modal").addClass('hidden');
+        $("#complete-estimate-form")[0].reset()
+    });
+</script>
+<script>
+    $("#accept-estimate").click(function(e) {
+        e.preventDefault();
+        $("#accept-estimate-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#accept-estimate-modal").addClass('hidden');
+        $("#accept-estimate-form")[0].reset()
     });
 </script>
 <script>

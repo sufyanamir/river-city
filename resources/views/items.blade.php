@@ -12,6 +12,9 @@
                 <x-add-button :id="''" :title="'Labour'" :class="''"></x-add-button>
                 <x-add-button :id="''" :title="'Assemblies'" :class="''"></x-add-button>
                 <x-add-button :id="''" :title="'Groups'" :class="''"></x-add-button>
+                @if($user_details['user_role'] == 'admin')
+                <x-add-button :id="'addItem'" :title="'+Add Item'" :class="''"></x-add-button>
+                @endif
                 @if(isset($userPrivileges->item) && $userPrivileges->item->add === "on")
                 <x-add-button :id="'addItem'" :title="'+Add Item'" :class="''"></x-add-button>
                 @endif
@@ -39,8 +42,19 @@
                             <td>{{ $item->item_units }}</td>
                             <td>{{ $item->item_cost }}</td>
                             <td>{{ $item->item_price }}</td>
-                            <td>{{ $item->item_address }}</td>
+                            <td>{{ $item->item_description }}</td>
                             <td>
+                                @if($user_details['user_role'] == 'admin')
+                                <button>
+                                    <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
+                                </button>
+                                <form action="/delete/item/{{ $item->item_id }}" class=" inline-block" method="post">
+                                    @csrf
+                                    <button>
+                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
+                                    </button>
+                                </form>
+                                @endif
                                 @if(isset($userPrivileges->item) && $userPrivileges->item->edit === "on")
                                 <button>
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
