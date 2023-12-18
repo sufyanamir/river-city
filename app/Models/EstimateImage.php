@@ -9,6 +9,14 @@ class EstimateImage extends Model
 {
     use HasFactory;
 
+    // EstimateImage.php
+
+    public function estimate()
+    {
+        return $this->belongsTo(Estimate::class, 'estimate_id');
+    }
+
+
     protected $table = 'estimate_images';
 
     protected $primaryKey = 'image_id';
@@ -20,5 +28,4 @@ class EstimateImage extends Model
     ];
 
     public $timestamps = true;
-
 }

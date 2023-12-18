@@ -48,6 +48,7 @@ Route::middleware('customauth')->group(function () {
     // Route::get('/crew', function () {
     //     return view('crew');
     // });
+    Route::match(['get', 'post'], '/getEstimateWithImages', [EstimateController::class, 'getEstimateWithImages']);
     Route::get('/estimates', [EstimateController::class, 'index']);
     Route::post('/addEstimate', [EstimateController::class, 'addCustomerAndEstimate']);
     Route::get('/viewEstimate/{id}', [EstimateController::class, 'viewEstimate']);
@@ -58,6 +59,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/addEstimateNote', [EstimateController::class, 'addEstimateNote']);
     Route::match(['get', 'post'], '/getemailDetails/{id}', [EstimateController::class, 'getEmailDetails']);
     Route::post('/sendEmail', [EstimateController::class, 'sendEmail']);
+    Route::post('/completeEstimate', [EstimateController::class, 'completeEstimate']);
     Route::get('/add-estimate', function () {
         return view('addEstimate');
     });
@@ -90,9 +92,10 @@ Route::middleware('customauth')->group(function () {
     Route::get('/crewCalendar', function () {
         return view('crewCalendar');
     });
-    Route::get('/feedGallery', function () {
-        return view('feedGallery');
-    });
+    Route::get('/feedGallery', [EstimateController::class, 'getEstimateWithImages']);
+    // Route::get('/feedGallery', function () {
+    //     return view('feedGallery');
+    // });
     Route::get('/editQoutation', function () {
         return view('editQoutation');
     });

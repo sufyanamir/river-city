@@ -9,6 +9,12 @@ class Customer extends Model
 {
     use HasFactory;
 
+    public function estimates()
+    {
+        return $this->hasMany(Estimate::class, 'customer_id');
+    }
+
+
     protected $table = 'customers';
 
     protected $primaryKey = 'customer_id';
@@ -35,5 +41,4 @@ class Customer extends Model
     ];
 
     public $timestamps = true;
-
 }

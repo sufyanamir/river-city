@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('departement')->nullable();
             $table->integer('rating')->nullable();
             $table->integer('team_number')->nullable();
+            $table->integer('added_user_id')->nullable();
         });
     }
 

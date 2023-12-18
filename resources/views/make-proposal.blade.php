@@ -105,7 +105,7 @@
                                     ${{ number_format($subTotal, 2) }}
                                 </p>
                                 <p class="text-[#858585]">
-                                    ${{ number_format($customer->tax_rate, 2) }}
+                                    {{ number_format($customer->tax_rate, 2) }}%
                                 </p>
                                 <p class="text-[#858585]">
                                     ${{ number_format($subTotal + ($subTotal * $customer->tax_rate / 100), 2) }}

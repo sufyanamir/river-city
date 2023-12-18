@@ -33,6 +33,7 @@ class User extends Authenticatable
         'rating',
         'team_number',
         'user_privileges',
+        'added_user_id',
     ];
 
     /**
