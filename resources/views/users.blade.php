@@ -37,7 +37,7 @@
                                 <button>
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                 </button>
-                                <form action="/delete/user/{{$user->id}}" method="post">
+                                <form class=" inline-block" action="/delete/user/{{$user->id}}" method="post">
                                     @csrf
                                     <button>
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">

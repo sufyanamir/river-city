@@ -207,15 +207,6 @@ class UserController extends Controller
 
             $password = rand();
 
-            $emailData = [
-                'email' => $validatedData['email'],
-                'password' => $password,
-            ];
-
-            $mail = new AddUserMail($emailData);
-
-            Mail::to($validatedData['email'])->send($mail);
-
             $users = User::create([
                 'name' => $validatedData['firstName'],
                 'last_name' => $validatedData['lastName'],
@@ -236,9 +227,9 @@ class UserController extends Controller
 
             $users->save();
 
-            return response()->json(['sucess' => true, 'message' => 'User added successfully!'], 200);
+            return response()->json(['success' => true, 'message' => 'User added successfully!'], 200);
         } catch (\Exception $e) {
-            return response()->json(['sucess' => false, 'message' => $e->getMessage()], 400);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     //add users
