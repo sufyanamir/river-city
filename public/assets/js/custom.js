@@ -46,10 +46,15 @@ $(document).ready(function () {
       response.message,
       'success'
     );
-    $("#universalTableBody").load(location.href + "#universalTableBody > *");
-    $(".itemDiv").load(location.href + ".itemDiv > *");
-    $(".modal-close").trigger("click");
-    $("#formData")[0].reset();
+    setTimeout(
+      location.reload()
+      ,
+      2000
+    );
+    // $("#universalTableBody").load(location.href + "#universalTableBody > *");
+    // $(".itemDiv").load(location.href + ".itemDiv > *");
+    // $(".modal-close").trigger("click");
+    // $("#formData")[0].reset();
     // window.location.href = "/dashboard";
   }
 
