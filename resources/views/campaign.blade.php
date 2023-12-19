@@ -12,7 +12,7 @@
         </div>
         <div class="py-4">
             <div class=" overflow-x-auto">
-                <table id="example" class="display" style="width:100%">
+                <table id="universalTable" class="display" style="width:100%">
                     <thead class="bg-[#930027] text-white text-sm">
                         <tr>
                             <th>Date</th>
