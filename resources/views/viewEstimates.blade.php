@@ -160,29 +160,36 @@
             </div>
             <div class="col-span-10">
                 <div class="my-auto flex p-2">
-                    <a href="" class="pl-3">
-                        <button type="button" id="schedule-estimate" class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
-                            <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/calendar-icon.svg') }}" alt="">
-                            <span class=" my-auto">Schedule Estimate</span>
-                        </button>
-                    </a>
-                    @if($estimate->estimate_assigned == 1)
+                    @if($schedule->schedule_assigned == 1 && $estimate->work_assigned != 1)
+                    <button type="button" id="schedule-estimate" class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                        <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/calendar-icon.svg') }}" alt="">
+                        <span class=" my-auto">Schedule Estimate</span>
+                    </button>
+                    @endif
+                    @if($estimate->work_assigned == 1)
+                    <button type="button" id="" class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                        <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
+                        <span class=" my-auto">Complete Work</span>
+                    </button>
+                    @endif
+                    @if($estimate->estimate_assigned == 1 && $schedule->schedule_assigned != 1)
                     <button type="button" id="accept-estimate" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                         <div class=" flex mx-auto">
                             <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
                             <span class=" my-auto">Accept Work</span>
                         </div>
                     </button>
-                    @else
+                    <button type="button" class=" complete-estimate flex h-[40px] w-[190px] ml-2 px-auto px-8 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#F4AC50]">
+                        <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/userRole-icon.svg') }}" alt="">
+                        <span class=" my-auto">Reassign</span>
+                    </button>
+                    @endif
+                    @if($estimate->estimate_assigned != 1 || $schedule->schedule_assigned != 1)
                     <button type="button" id="complete-estimate" class=" complete-estimate flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                         <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
                         <span class=" my-auto">Complete Estimate</span>
                     </button>
                     @endif
-                    <button type="button" class=" complete-estimate flex h-[40px] w-[190px] ml-2 px-auto px-8 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#F4AC50]">
-                        <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/userRole-icon.svg') }}" alt="">
-                        <span class=" my-auto">Reassign</span>
-                    </button>
                     <button type="button" class="flex h-[40px] w-[190px] ml-2  px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#F4AC50]" id=" action-menubutton" aria-expanded="true" aria-haspopup="true">
                         <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/settings-icon.svg') }}" alt="">
                         <span class=" my-auto">More</span>
@@ -928,11 +935,16 @@
                     <div>
                         <div id="estimators" class="">
                             <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                            <p class=" font-medium inline-block items-center">Estimator: {{ $user_details['name'] }}</p>
+                            <p class=" font-medium inline-block items-center">Estimator: {{ $estimator->name }}</p>
                         </div>
                         <div id="dropdown-div" class="">
-                            <p class=" font-medium items-center">Who will complete estimate?</p>
-                            <input type="text" id="estimator_name" disabled value="{{ $user_details['name'] }}" name="estimator_name" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <p class=" font-medium items-center">Who will complete work?</p>
+                            <select name="assign_work" id="assign_work" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <option value="">Select User</option>
+                                @foreach($employees as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}}</option>
+                                @endforeach
+                            </select>
                             <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
                                 <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
                             </button> -->
@@ -950,8 +962,6 @@
                         <input type="date" name="end_date" id="end_date" autocomplete="given-name" class=" se_date  w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     </div>
                     <textarea placeholder="Note " class=" w-[100%] outline-none rounded-md p-2 border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6" name="note" id="note"></textarea>
-                    <!-- task details -->
-                    <p class="text-sm mb-4" id="modal-description"></p>
                     <!-- You can customize this part according to your needs -->
                     <div>
                         <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
@@ -1010,15 +1020,33 @@
                             </button> -->
                         </div>
                     </div>
-                    <div>
-                        <label for="assiegne-estimate">Assign Estimate:</label>
+                    <div id="dropdown-div" class="">
+                        <label for="assiegne-estimate">Who will follow up on work acceptence:</label>
                         <select name="assign_estimate" id="assign_estimate" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             <option value="">Select User</option>
-                            <option value="{{ $user_details['id'] }}">Yourself</option>
                             @foreach($employees as $user)
                             <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}}</option>
                             @endforeach
                         </select>
+                        <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                        </button> -->
+                    </div>
+                    <div>
+                        <p class=" font-medium inline-block items-center">When should it be completed?</p>
+                    </div>
+                    <div class=" flex justify-start gap-3 mb-2">
+                        <label>Start date:</label>
+                        <input type="date" name="start_date" id="start_date" autocomplete="given-name" class=" se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    </div>
+                    <div class=" flex justify-start gap-3 mb-2">
+                        <label>End date:</label>
+                        <input type="date" name="end_date" id="end_date" autocomplete="given-name" class=" se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    </div>
+                    <div class="my-2 col-span-2 relative">
+                        <label for="" class="block text-left mb-1"> Note: </label>
+                        <textarea name="note" id="note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                        <button type="button" id="note-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                     </div>
                     <div class=" mt-2">
                         <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
@@ -1039,7 +1067,7 @@
 
         <!-- Modal panel -->
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="/completeEstimate" id="accept-estimate-form">
+            <form action="/scheduleEstimate" id="accept-estimate-form">
                 @csrf
                 <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -1066,26 +1094,33 @@
                     <div>
                         <div id="estimators" class="">
                             <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                            <p class=" font-medium inline-block items-center">Estimator: {{ $user_details['name'] }}</p>
-                        </div>
-                        <div id="dropdown-div" class="">
-                            <p class=" font-medium items-center">Are you sure! You want to accept the work?</p>
-                            <input type="text" id="estimator_name" disabled value="{{ $user_details['name'] }}" name="estimator_name" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                            <input type="hidden" id="estimator_id" value="{{ $user_details['id'] }}" name="estimator_id" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                                <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                            </button> -->
+                            <p class=" font-medium inline-block items-center">Estimator: {{ $estimator->name }}</p>
                         </div>
                     </div>
                     <div>
-                        <label for="assiegne-estimate">Assign Estimate:</label>
-                        <select name="assign_estimate" id="assign_estimate" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        <label for="assiegne-estimate">Who will schedule Work?</label>
+                        <select name="schedule_work" id="schedule_work" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             <option value="">Select User</option>
-                            <option value="{{ $user_details['id'] }}">Yourself</option>
                             @foreach($employees as $user)
                             <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}}</option>
                             @endforeach
                         </select>
+                    </div>
+                    <div>
+                        <p class=" font-medium inline-block items-center">When should it be Completed?</p>
+                    </div>
+                    <div class=" flex justify-start gap-3 mb-2">
+                        <label>Start date:</label>
+                        <input type="date" name="start_date" id="start_date" autocomplete="given-name" class=" se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    </div>
+                    <div class=" flex justify-start gap-3 mb-2">
+                        <label>End date:</label>
+                        <input type="date" name="end_date" id="end_date" autocomplete="given-name" class=" se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    </div>
+                    <div class="my-2 col-span-2 relative">
+                        <label for="" class="block text-left mb-1"> Note: </label>
+                        <textarea name="note" id="note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                        <button type="button" id="note-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                     </div>
                     <div class=" mt-2">
                         <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>

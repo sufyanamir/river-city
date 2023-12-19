@@ -32,6 +32,13 @@ class Estimate extends Model
         'estimated_completed_by',
         'estimated_complete_date',
         'estimate_total',
+        'scheduled_start_date',
+        'scheduled_end_date',
+        'work_assigned',
+        'customer_last_name',
+        'tax_rate',
+        'project_name',
+        'project_number',
     ];
 
     public $timestamps = true;

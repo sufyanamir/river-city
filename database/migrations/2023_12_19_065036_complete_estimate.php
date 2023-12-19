@@ -13,12 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('schedule_estimates', function(Blueprint $table){
-            $table->id('schedule_estimate_id');
+        Schema::create('complete_estimates', function(Blueprint $table){
+            $table->id('complete_estimate_id');
             $table->integer('added_user_id');
             $table->integer('estimate_id');
-            $table->timestamp('start_date')->useCurrent();
-            $table->timestamp('end_date')->useCurrent();
+            $table->integer('estimate_completed_by');
+            $table->integer('estimate_assigned_to_accept');
+            $table->timestamp('acceptence_start_date')->useCurrent();
+            $table->timestamp('acceptence_end_date')->useCurrent();
+            $table->text('note')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrent();
         });
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('schedule_estimates');
+        Schema::dropIfExists('complete_estimates');
     }
 };

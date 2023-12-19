@@ -5,21 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ScheduleEstimate extends Model
+class CompleteEstimate extends Model
 {
     use HasFactory;
 
-    protected $table = 'schedule_estimates';
-    
-    protected $primaryKey = 'schedule_estimate_id';
+    protected $table = 'complete_estimates';
+
+    protected $primaryKey = 'complete_estimate_id';
 
     protected $fillable = [
         'added_user_id',
         'estimate_id',
-        'start_date',
-        'end_date',
-        'work_assigned',
-        'work_assign_id',
+        'estimate_completed_by',
+        'estimate_assigned_to_accept',
+        'acceptence_start_date',
+        'acceptence_end_date',
         'note',
     ];
 

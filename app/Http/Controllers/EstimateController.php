@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\ProposalMail;
 use App\Mail\sendMailToClient;
+use App\Models\CompleteEstimate;
 use App\Models\Customer;
 use App\Models\Email;
 use App\Models\Estimate;
@@ -14,6 +15,8 @@ use App\Models\EstimateItem;
 use App\Models\EstimateNote;
 use App\Models\EstimateProposal;
 use App\Models\Items;
+use App\Models\ScheduleEstimate;
+use App\Models\ScheduleWork;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -22,6 +25,13 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class EstimateController extends Controller
 {
+
+    public function getEstimatesOnCalendar()
+    {
+        $estimates = Estimate::get();
+
+        return view('calendar', ['estimates' => $estimates]);
+    }
 
     public function index()
     {
@@ -32,6 +42,78 @@ class EstimateController extends Controller
         return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails]);
     }
     // ==============================================================Estimate additional functions=========================================================
+    // set schedule
+    public function setSchedule(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'assign_work' => 'required|string',
+                'note' => 'nullable',
+            ]);
+
+            $schedule = ScheduleEstimate::create([
+                'added_user_id' => $userDetails['id'],
+                'estimate_id' => $validatedData['estimate_id'],
+                'start_date' => $validatedData['start_date'],
+                'end_date' => $validatedData['end_date'],
+                'work_assigned' => 1,
+                'work_assign_id' => $validatedData['assign_work'],
+                'note' => $validatedData['note'],
+            ]);
+
+            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
+
+            $estimate->scheduled_start_date = $validatedData['start_date'];
+            $estimate->scheduled_end_date = $validatedData['end_date'];
+            $estimate->work_assigned  = 1;
+
+            $estimate->save();
+
+            return response()->json(['success' => true, 'message' => 'The work is scheduled!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // set schedule
+
+    // Schedule estimate
+    public function scheduleEstimate(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+            
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'schedule_work' => 'required|string',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'note' => 'nullable',
+            ]);
+
+            $schedluleEstimate = ScheduleWork::create([
+                'added_user_id' => $userDetails['id'],
+                'estimate_id' => $validatedData['estimate_id'],
+                'schedule_assign_id' => $validatedData['schedule_work'],
+                'schedule_start_date' => $validatedData['start_date'],
+                'schedule_end_date' => $validatedData['end_date'],
+                'note' => $validatedData['note'],
+                'schedule_assigned' => 1,
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Work is assigned for schedule!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' =>  false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // Schedule estimate
+    
     // Complete Estimate
     public function completeEstimate(Request $request)
     {
@@ -43,6 +125,9 @@ class EstimateController extends Controller
                 'estimate_id' => 'required',
                 'estimator_id' => 'required|numeric',
                 'assign_estimate' => 'required|numeric',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'note' => 'nullable|string',
             ]);
 
             $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
@@ -52,6 +137,16 @@ class EstimateController extends Controller
             $estimate->estimate_assigned = 1;
 
             $estimate->save();
+
+            $completeEstimate = CompleteEstimate::create([
+                'added_user_id' => $userDetails['id'],
+                'estimate_id' => $validatedData['estimate_id'],
+                'estimate_completed_by' => $validatedData['estimator_id'],
+                'estimate_assigned_to_accept' => $validatedData['assign_estimate'],
+                'acceptence_start_date' => $validatedData['start_date'],
+                'acceptence_end_date' => $validatedData['end_date'],
+                'note' => $validatedData['note'],
+            ]);
 
             return response()->json(['success' => true, 'message' => 'Estimated Completed Successfully!'], 200);
         } catch (\Exception $e) {
@@ -304,7 +399,7 @@ class EstimateController extends Controller
                 'images' => $images,
             ];
         }
-        
+
         return view('feedGallery', ['customers' => $customers, 'estimates_with_images' => $estimateData, 'user_details' => $userDetails]);
 
         // return response()->json(['customers' => $customers, 'estimates_with_images' => $estimateData, 'user_details' => $userDetails], 200);
@@ -451,6 +546,9 @@ class EstimateController extends Controller
             $emailTemplates = Email::get();
             $estimateEmails = EstimateEmail::where('estimate_id', $estimate->estimate_id)->get();
             $proposals = EstimateProposal::where('estimate_id', $estimate->estimate_id)->get();
+            $estimator = User::where('id', $estimate->estimated_completed_by)->first();
+            $schedule = ScheduleWork::where('estimate_id', $estimate->estimate_id)->first();
+            $work = ScheduleEstimate::where('estimate_id', $estimate->estimate_id)->first();
 
             // Calculate the sum of item_price for the estimate
             $totalPrice = $estimateItems->sum('item_price');
@@ -468,6 +566,9 @@ class EstimateController extends Controller
                 'email_templates' => $emailTemplates,
                 'estimate_emails' => $estimateEmails,
                 'proposals' => $proposals,
+                'estimator' => $estimator,
+                'schedule' => $schedule,
+                'work' => $work,
             ]);
         } catch (\Exception $e) {
             // Handle the exception
@@ -533,6 +634,10 @@ class EstimateController extends Controller
                 'customer_name' => $validatedData['first_name'],
                 'customer_phone' => $validatedData['phone'],
                 'customer_address' => $validatedData['first_address'],
+                'customer_last_name' => $validatedData['last_name'],
+                'tax_rate' => $validatedData['tax_rate'],
+                'project_name' => $validatedData['project_name'],
+                'project_number' => $validatedData['project_number'], 
             ]);
 
             return response()->json(['success' => true, 'message' => 'Estimate created Successfully!'], 200);
