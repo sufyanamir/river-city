@@ -160,13 +160,17 @@
             </div>
             <div class="col-span-10">
                 <div class="my-auto flex p-2">
-                    @if($schedule->schedule_assigned == 1)
-                    <a href="" class="pl-3">
-                        <button type="button" id="schedule-estimate" class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
-                            <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/calendar-icon.svg') }}" alt="">
-                            <span class=" my-auto">Schedule Estimate</span>
-                        </button>
-                    </a>
+                    @if($schedule->schedule_assigned == 1 && $estimate->work_assigned != 1)
+                    <button type="button" id="schedule-estimate" class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                        <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/calendar-icon.svg') }}" alt="">
+                        <span class=" my-auto">Schedule Estimate</span>
+                    </button>
+                    @endif
+                    @if($estimate->work_assigned == 1)
+                    <button type="button" id="" class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                        <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
+                        <span class=" my-auto">Complete Work</span>
+                    </button>
                     @endif
                     @if($estimate->estimate_assigned == 1 && $schedule->schedule_assigned != 1)
                     <button type="button" id="accept-estimate" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
@@ -958,8 +962,6 @@
                         <input type="date" name="end_date" id="end_date" autocomplete="given-name" class=" se_date  w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     </div>
                     <textarea placeholder="Note " class=" w-[100%] outline-none rounded-md p-2 border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6" name="note" id="note"></textarea>
-                    <!-- task details -->
-                    <p class="text-sm mb-4" id="modal-description"></p>
                     <!-- You can customize this part according to your needs -->
                     <div>
                         <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>

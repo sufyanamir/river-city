@@ -238,6 +238,18 @@
             }
         });
 
+        var estimateEvents = {!! json_encode($estimates) !!};
+
+        var events = estimateEvents.map(function(estimate) {
+            return {
+                title: [estimate.customer_name + ' ' + estimate.customer_last_name],
+                start: new Date(estimate.scheduled_start_date),
+                end: new Date(estimate.scheduled_end_date),
+                backgroundColor: '#your_color', // Choose a color or generate dynamically
+                borderColor: '#your_color' // Choose a color or generate dynamically
+            };
+        });
+
         var calendar = new Calendar(calendarEl, {
             headerToolbar: {
                 left: 'prev,next today',
@@ -245,53 +257,7 @@
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
             themeSystem: 'bootstrap',
-            events: [{
-                    title: 'Coyne Development Corp - Steve',
-                    description: 'there can be som description about the event.',
-                    start: new Date(y, m, 1),
-                    backgroundColor: '#B7E4FF', //red
-                    borderColor: '#B7E4FF', //red
-                    color: '#000',
-                    allDay: true
-                },
-                {
-                    title: 'Long Event',
-                    start: new Date(y, m, 5),
-                    end: new Date(y, m, d - 23),
-                    backgroundColor: '#DAEFD5', //yellow
-                    borderColor: '#DAEFD5' //yellow
-                },
-                {
-                    title: 'Meeting',
-                    start: new Date(y, m, 10),
-                    allDay: true,
-                    backgroundColor: '#CFBFE8', //Blue
-                    borderColor: '#CFBFE8' //Blue
-                },
-                {
-                    title: 'Lunch',
-                    start: new Date(y, m, 15),
-                    allDay: true,
-                    backgroundColor: '#FDD5D7', //Info (aqua)
-                    borderColor: '#FDD5D7' //Info (aqua)
-                },
-                {
-                    title: 'Birthday Party',
-                    start: new Date(y, m, d + 1, 19, 0),
-                    end: new Date(y, m, d + 1, 22, 30),
-                    allDay: false,
-                    backgroundColor: '#00a65a', //Success (green)
-                    borderColor: '#00a65a' //Success (green)
-                },
-                {
-                    title: 'Click for Google',
-                    start: new Date(y, m, 28),
-                    end: new Date(y, m, 29),
-                    url: 'https://www.google.com/',
-                    backgroundColor: '#3c8dbc', //Primary (light-blue)
-                    borderColor: '#3c8dbc' //Primary (light-blue)
-                }
-            ],
+            events: events,
             editable: true,
             droppable: true,
             drop: function(info) {

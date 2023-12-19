@@ -15,6 +15,7 @@ use App\Models\EstimateItem;
 use App\Models\EstimateNote;
 use App\Models\EstimateProposal;
 use App\Models\Items;
+use App\Models\ScheduleEstimate;
 use App\Models\ScheduleWork;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,6 +26,13 @@ use Symfony\Contracts\Service\Attribute\Required;
 class EstimateController extends Controller
 {
 
+    public function getEstimatesOnCalendar()
+    {
+        $estimates = Estimate::get();
+
+        return view('calendar', ['estimates' => $estimates]);
+    }
+
     public function index()
     {
         $userDetails = session('user_details');
@@ -34,6 +42,46 @@ class EstimateController extends Controller
         return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails]);
     }
     // ==============================================================Estimate additional functions=========================================================
+    // set schedule
+    public function setSchedule(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'assign_work' => 'required|string',
+                'note' => 'nullable',
+            ]);
+
+            $schedule = ScheduleEstimate::create([
+                'added_user_id' => $userDetails['id'],
+                'estimate_id' => $validatedData['estimate_id'],
+                'start_date' => $validatedData['start_date'],
+                'end_date' => $validatedData['end_date'],
+                'work_assigned' => 1,
+                'work_assign_id' => $validatedData['assign_work'],
+                'note' => $validatedData['note'],
+            ]);
+
+            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
+
+            $estimate->scheduled_start_date = $validatedData['start_date'];
+            $estimate->scheduled_end_date = $validatedData['end_date'];
+            $estimate->work_assigned  = 1;
+
+            $estimate->save();
+
+            return response()->json(['success' => true, 'message' => 'The work is scheduled!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // set schedule
+
     // Schedule estimate
     public function scheduleEstimate(Request $request)
     {
@@ -500,6 +548,7 @@ class EstimateController extends Controller
             $proposals = EstimateProposal::where('estimate_id', $estimate->estimate_id)->get();
             $estimator = User::where('id', $estimate->estimated_completed_by)->first();
             $schedule = ScheduleWork::where('estimate_id', $estimate->estimate_id)->first();
+            $work = ScheduleEstimate::where('estimate_id', $estimate->estimate_id)->first();
 
             // Calculate the sum of item_price for the estimate
             $totalPrice = $estimateItems->sum('item_price');
@@ -519,6 +568,7 @@ class EstimateController extends Controller
                 'proposals' => $proposals,
                 'estimator' => $estimator,
                 'schedule' => $schedule,
+                'work' => $work,
             ]);
         } catch (\Exception $e) {
             // Handle the exception
@@ -584,6 +634,10 @@ class EstimateController extends Controller
                 'customer_name' => $validatedData['first_name'],
                 'customer_phone' => $validatedData['phone'],
                 'customer_address' => $validatedData['first_address'],
+                'customer_last_name' => $validatedData['last_name'],
+                'tax_rate' => $validatedData['tax_rate'],
+                'project_name' => $validatedData['project_name'],
+                'project_number' => $validatedData['project_number'], 
             ]);
 
             return response()->json(['success' => true, 'message' => 'Estimate created Successfully!'], 200);

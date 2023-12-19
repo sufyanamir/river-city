@@ -16,9 +16,11 @@ class ScheduleEstimate extends Model
     protected $fillable = [
         'added_user_id',
         'estimate_id',
-        'estimator',
         'start_date',
         'end_date',
+        'work_assigned',
+        'work_assign_id',
+        'note',
     ];
 
     public $timestamps = true;

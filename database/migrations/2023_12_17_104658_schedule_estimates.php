@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id('schedule_estimate_id');
             $table->integer('added_user_id');
             $table->integer('estimate_id');
-            $table->string('estimator');
             $table->timestamp('start_date')->useCurrent();
             $table->timestamp('end_date')->useCurrent();
             $table->timestamp('created_at')->useCurrent();

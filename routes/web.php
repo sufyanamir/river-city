@@ -61,6 +61,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/sendEmail', [EstimateController::class, 'sendEmail']);
     Route::post('/completeEstimate', [EstimateController::class, 'completeEstimate']);
     Route::post('/scheduleEstimate', [EstimateController::class, 'scheduleEstimate']);
+    Route::post('/setSchedule', [EstimateController::class, 'setSchedule']);
     Route::get('/add-estimate', function () {
         return view('addEstimate');
     });
@@ -103,9 +104,11 @@ Route::middleware('customauth')->group(function () {
     Route::get('/manageGallery', function () {
         return view('viewGallery');
     });
-    Route::get('/calendar', function () {
-        return view('calendar');
-    });
+
+    Route::get('/calendar', [EstimateController::class, 'getEstimatesOnCalendar']);
+    // Route::get('/calendar', function () {
+    //     return view('calendar');
+    // });
     Route::get('/dashboard', function () {
         return view('dashboard');
     });
