@@ -60,6 +60,7 @@ Route::middleware('customauth')->group(function () {
     Route::match(['get', 'post'], '/getemailDetails/{id}', [EstimateController::class, 'getEmailDetails']);
     Route::post('/sendEmail', [EstimateController::class, 'sendEmail']);
     Route::post('/completeEstimate', [EstimateController::class, 'completeEstimate']);
+    Route::post('/scheduleEstimate', [EstimateController::class, 'scheduleEstimate']);
     Route::get('/add-estimate', function () {
         return view('addEstimate');
     });
