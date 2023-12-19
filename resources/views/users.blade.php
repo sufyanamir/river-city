@@ -125,7 +125,7 @@
                         </div>
                     </div>
                     <div class="">
-                        <button type="submit" class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Add
+                        <button class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Add
                         </button>
                     </div>
                 </div>

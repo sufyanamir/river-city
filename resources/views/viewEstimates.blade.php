@@ -160,7 +160,7 @@
             </div>
             <div class="col-span-10">
                 <div class="my-auto flex p-2">
-                    @if($schedule->schedule_assigned == 1 && $estimate->work_assigned != 1)
+                    @if($estimate->work_assigned != 1)
                     <button type="button" id="schedule-estimate" class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                         <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/calendar-icon.svg') }}" alt="">
                         <span class=" my-auto">Schedule Estimate</span>
@@ -935,7 +935,7 @@
                     <div>
                         <div id="estimators" class="">
                             <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                            <p class=" font-medium inline-block items-center">Estimator: {{ $estimator->name }}</p>
+                            <p class=" font-medium inline-block items-center">Estimator: {{ $user_details['name'] }}</p>
                         </div>
                         <div id="dropdown-div" class="">
                             <p class=" font-medium items-center">Who will complete work?</p>
@@ -1094,7 +1094,7 @@
                     <div>
                         <div id="estimators" class="">
                             <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                            <p class=" font-medium inline-block items-center">Estimator: {{ $estimator->name }}</p>
+                            <p class=" font-medium inline-block items-center">Estimator: {{ $user_details['name'] }}</p>
                         </div>
                     </div>
                     <div>

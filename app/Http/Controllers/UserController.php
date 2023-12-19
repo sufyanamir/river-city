@@ -31,7 +31,6 @@ class UserController extends Controller
         $user->user_privileges = json_decode($user->user_privileges);
 
         return response()->json(['success' => true, 'data' => $user],  200);
-    
     }
     // get user privileges
 
@@ -181,13 +180,12 @@ class UserController extends Controller
         $userDetails = session('user_details');
 
         if ($userDetails['user_role'] == 'admin') {
-            
+
             $users = User::where('user_role', '<>', 'crew')->get();
             $userRoles = UserRole::get();
-    
+
             return view('users', ['users' => $users, 'user_roles' => $userRoles, 'user_details' => $userDetails]);
-        
-        }else {
+        } else {
             return response()->json(['success' => false, 'message' => 'You do not have access to this url!'], 401);
         }
     }
@@ -208,7 +206,7 @@ class UserController extends Controller
             ]);
 
             $password = rand();
-            
+
             $emailData = [
                 'email' => $validatedData['email'],
                 'password' => $password,
@@ -216,12 +214,8 @@ class UserController extends Controller
 
             $mail = new AddUserMail($emailData);
 
-            try {
-                Mail::to($validatedData['email'])->send($mail);
-            } catch (\Throwable $e) {
-                return response()->json(['success' =>  false, 'message' => $e->getMessage()], 400);
-            }
-            
+            Mail::to($validatedData['email'])->send($mail);
+
             $users = User::create([
                 'name' => $validatedData['firstName'],
                 'last_name' => $validatedData['lastName'],
@@ -298,10 +292,9 @@ class UserController extends Controller
         if ($userDetails['user_role'] == 'admin') {
             $userRole = UserRole::get();
             return view('user_roles', ['user_roles' => $userRole, 'user_details' => $this->userDetails]);
-        }else {
-            return response()->json(['success' =>false, 'message' => 'You do not have access to this url!'], 401);
+        } else {
+            return response()->json(['success' => false, 'message' => 'You do not have access to this url!'], 401);
         }
-
     }
     // get user role
     // ================================================== Users =====================================================================
