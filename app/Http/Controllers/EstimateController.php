@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Mail\ProposalMail;
 use App\Mail\sendMailToClient;
+use App\Models\AssignPayment;
 use App\Models\CompleteEstimate;
+use App\Models\CompleteEstimateInvoiceWork;
 use App\Models\Customer;
 use App\Models\Email;
 use App\Models\Estimate;
@@ -13,10 +15,13 @@ use App\Models\EstimateEmail;
 use App\Models\EstimateImage;
 use App\Models\EstimateItem;
 use App\Models\EstimateNote;
+use App\Models\EstimatePayments;
 use App\Models\EstimateProposal;
 use App\Models\Items;
 use App\Models\ScheduleEstimate;
 use App\Models\ScheduleWork;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -42,6 +47,161 @@ class EstimateController extends Controller
         return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails]);
     }
     // ==============================================================Estimate additional functions=========================================================
+    // complete project
+    public function completeProject(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+            ]);
+
+            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
+
+            $estimate->estimate_status = 'complete';
+
+            $estimate->save();
+
+            return response()->json(['success' => true, 'message' => 'The project has been completed'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // complete project
+
+    // add payment
+    public function addPayment(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'invoice_id' => 'required',
+                'invoice_date' => 'required',
+                'invoice_amount' => 'nullable',
+                'note' => 'nullable',
+
+            ]);
+
+            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
+
+            $estimate->invoice_paid = 1;
+            $estimate->invoice_paid_total = $validatedData['invoice_amount'];
+            $estimate->estimate_status = 'paid';
+
+            $estimate->save();
+
+            $estimateCompleteInvoices = AssignPayment::where('estimate_id', $validatedData['estimate_id'])->first();
+
+            $estimateCompleteInvoices->invoice_status = 'paid';
+
+            $estimateCompleteInvoices->save();
+            
+            $estimatePayment = EstimatePayments::create([
+                'added_user_id' => $userDetails['id'],
+                'estimate_id' => $validatedData['estimate_id'],
+                'estimate_complete_invoice_id' => $validatedData['invoice_id'],
+                'complete_invoice_date' => $validatedData['invoice_date'],
+                'invoice_total'  => $validatedData['invoice_amount'],
+                'note' => $validatedData['note'],
+            ]);
+
+
+            return response()->json(['success' => true, 'message' => 'Payment has been completed!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // add payment
+    
+    // complete invoice and assign payment
+    public function completeInvoiceAndAssignPayment(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'complete_invoice_date' => 'required',
+                'assign_payment' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'note' => 'nullable',
+            ]);
+
+            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
+            $estimate->payment_assigned = 1;
+            $estimate->payment_assigned_to = $validatedData['assign_payment'];
+            $estimate->invoiced_payment = $estimate->estimate_total;
+
+            $assignPayment = AssignPayment::create([
+                'added_user_id' => $userDetails['id'],
+                'estimate_id' => $validatedData['estimate_id'],
+                'payment_assigned_to' => $validatedData['assign_payment'],
+                'start_date' =>   $validatedData['start_date'],
+                'end_date' => $validatedData['end_date'],
+                'note' => $validatedData['note'],
+                'complete_invoice_date' => $validatedData['complete_invoice_date'],
+                'invoice_name' => 'final invoice',
+                'tax_rate' => $estimate->tax_rate,
+                'invoice_total' => $estimate->estimate_total,
+                'invoice_due' => $estimate->estimate_total,
+            ]);
+
+            $estimate->save();
+
+            return response()->json(['success' => true, 'message' => 'Invoice Completed and Payment assigned!'], 200);
+
+        } catch (\Exception $e) {
+            return  response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // complete invoice and assign payment
+    
+    // Complete work  and assign invoice
+    public function completeWorkAndAssignInvoice(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'work_completed_by' => 'required',
+                'complete_work_date' => 'required',
+                'assign_invoice' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+            ]);
+
+            $work = CompleteEstimateInvoiceWork::create([
+                'added_user_id' => $userDetails['id'],
+                'estimate_id' => $validatedData['estimate_id'],
+                'invoice_assigned_to' => $validatedData['assign_invoice'],
+                'start_date' => $validatedData['start_date'],
+                'end_date' => $validatedData['end_date'],
+            ]);
+
+            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
+
+            $estimate->work_completed_by = $userDetails['id'];
+            $estimate->invoice_assigned = $validatedData['complete_work_date'];
+            $estimate->invoice_assigned = 1;
+            $estimate->invoice_assigned_to = $validatedData['assign_invoice'];
+
+            $estimate->save();
+
+            return response()->json(['success' => true, 'message' => 'Invoice work has Assigned!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // Complete work  and assign invoice
+
     // set schedule
     public function setSchedule(Request $request)
     {
@@ -75,7 +235,6 @@ class EstimateController extends Controller
             $estimate->save();
 
             return response()->json(['success' => true, 'message' => 'The work is scheduled!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -87,7 +246,7 @@ class EstimateController extends Controller
     {
         try {
             $userDetails = session('user_details');
-            
+
             $validatedData = $request->validate([
                 'estimate_id' => 'required',
                 'schedule_work' => 'required|string',
@@ -107,13 +266,12 @@ class EstimateController extends Controller
             ]);
 
             return response()->json(['success' => true, 'message' => 'Work is assigned for schedule!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' =>  false, 'message' => $e->getMessage()], 400);
         }
     }
     // Schedule estimate
-    
+
     // Complete Estimate
     public function completeEstimate(Request $request)
     {
@@ -383,82 +541,54 @@ class EstimateController extends Controller
     // estimate items
 
     // get images
-    public function getEstimateWithImages()
-    {
-        $userDetails = session('user_details');
+    // public function getEstimateWithImages()
+    // {
+    //     $userDetails = session('user_details');
 
-        $estimates = Estimate::get();
-        $customers = Customer::get();
+    //     $estimates = Estimate::get();
+    //     $customers = Customer::get();
 
-        $estimateData = [];
+    //     $estimateData = [];
 
-        foreach ($estimates as $estimate) {
-            $images = EstimateImage::where('estimate_id', $estimate->estimate_id)->get();
-            $estimateData[] = [
-                'estimate' => $estimate,
-                'images' => $images,
-            ];
-        }
+    //     foreach ($estimates as $estimate) {
+    //         $images = EstimateImage::where('estimate_id', $estimate->estimate_id)->get();
+    //         $estimateData[] = [
+    //             'estimate' => $estimate,
+    //             'images' => $images,
+    //         ];
+    //     }
 
-        return view('feedGallery', ['customers' => $customers, 'estimates_with_images' => $estimateData, 'user_details' => $userDetails]);
+    //     return view('feedGallery', ['customers' => $customers, 'estimates_with_images' => $estimateData, 'user_details' => $userDetails]);
 
-        // return response()->json(['customers' => $customers, 'estimates_with_images' => $estimateData, 'user_details' => $userDetails], 200);
-    }
+    //     // return response()->json(['customers' => $customers, 'estimates_with_images' => $estimateData, 'user_details' => $userDetails], 200);
+    // }
     // get images
 
     // delete additional  images
-    public function deleteAdditionalImage($id)
-    {
-        try {
-            $additionalImage = EstimateImage::find($id);
+    // public function deleteAdditionalImage($id)
+    // {
+    //     try {
+    //         $additionalImage = EstimateImage::find($id);
 
-            if (!$additionalImage) {
-                return response()->json(['success' => false, 'message' => 'No image found!'],  404);
-            }
+    //         if (!$additionalImage) {
+    //             return response()->json(['success' => false, 'message' => 'No image found!'],  404);
+    //         }
 
-            if (Storage::exists($additionalImage->estimate_image)) {
-                Storage::delete($additionalImage->estimate_image);
-            }
+    //         if (Storage::exists($additionalImage->estimate_image)) {
+    //             Storage::delete($additionalImage->estimate_image);
+    //         }
 
-            $additionalImage->delete();
+    //         $additionalImage->delete();
 
-            return response()->json(['success' => true, 'message' => 'Image deleted!'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
-        }
-    }
+    //         return response()->json(['success' => true, 'message' => 'Image deleted!'], 200);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+    //     }
+    // }
     // delete additional  images
 
     // add image
-    public function additionalImage(Request $request)
-    {
-        try {
-            $userDetails = session('user_details');
 
-            $validatedData = $request->validate([
-                'estimate_id' => 'required',
-                'estimate_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:1024',
-            ]);
-
-            $additionalImage = EstimateImage::create([
-                'added_user_id' => $userDetails['id'],
-                'estimate_id' => $validatedData['estimate_id'],
-            ]);
-
-            if ($request->hasFile('estimate_image')) {
-                $image = $request->file('estimate_image');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->storeAs('public/estimate_images', $imageName); // Adjust storage path as needed
-                $additionalImage->estimate_image = 'storage/estimate_images/' . $imageName;
-            }
-
-            $additionalImage->save();
-
-            return response()->json(['success' => true, 'message' => 'image added!'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
-        }
-    }
     // add image
 
     // delete contact
@@ -549,6 +679,8 @@ class EstimateController extends Controller
             $estimator = User::where('id', $estimate->estimated_completed_by)->first();
             $schedule = ScheduleWork::where('estimate_id', $estimate->estimate_id)->first();
             $work = ScheduleEstimate::where('estimate_id', $estimate->estimate_id)->first();
+            $invoices = AssignPayment::where('estimate_id', $estimate->estimate_id)->first();
+            $payments = EstimatePayments::where('estimate_id', $estimate->estimate_id)->first();
 
             // Calculate the sum of item_price for the estimate
             $totalPrice = $estimateItems->sum('item_price');
@@ -569,6 +701,8 @@ class EstimateController extends Controller
                 'estimator' => $estimator,
                 'schedule' => $schedule,
                 'work' => $work,
+                'invoices' => $invoices,
+                'payments' => $payments,
             ]);
         } catch (\Exception $e) {
             // Handle the exception
@@ -637,7 +771,7 @@ class EstimateController extends Controller
                 'customer_last_name' => $validatedData['last_name'],
                 'tax_rate' => $validatedData['tax_rate'],
                 'project_name' => $validatedData['project_name'],
-                'project_number' => $validatedData['project_number'], 
+                'project_number' => $validatedData['project_number'],
             ]);
 
             return response()->json(['success' => true, 'message' => 'Estimate created Successfully!'], 200);

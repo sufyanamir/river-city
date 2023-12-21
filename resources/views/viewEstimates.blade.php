@@ -7,11 +7,9 @@
                 <p class="text-lg font-medium">
                     Project
                 </p>
-                <a href="/editQoutation">
-                    <button type="button" class="flex" id="qoutation">
-                        <img class="" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="icon">
-                    </button>
-                </a>
+                <button type="button" class="flex" id="btnStartAdvanced">
+                    <img class="" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="icon">
+                </button>
             </div>
             <div class="col-span-10  pl-2 ">
                 <div class="grid sm:grid-cols-10">
@@ -64,15 +62,17 @@
                         <p class="mt-[2px] ">
                             {{ $customer->customer_project_number }}
                         </p>
+                        <p>
+                            {{ $estimate->estimate_status }}
+                        </p>
                         <p class="">
                             {{ $customer->created_at }}
                         </p>
-                        <p class="mt-1 ">
-                            ${{$estimate->estimate_total}}
+                        <p class="mt-1 text-red-900">
+                            Total: ${{$estimate->estimate_total}}
                         </p>
-                        <p class="flex justify-end  ">
-                            <img class="pr-1" src="{{ asset('assets/icons/clipboard-icon.svg') }}" alt="">
-                            0.00
+                        <p class="flex justify-end text-blue-900">
+                            Invoiced: ${{ $estimate->invoiced_payment }}
                         </p>
                         <p class="flex justify-end">
                             <img class="pr-1" src="{{ asset('assets/icons/card-icon.svg') }}" alt="">
@@ -166,13 +166,39 @@
                         <span class=" my-auto">Schedule Estimate</span>
                     </button>
                     @endif
-                    @if($estimate->work_assigned == 1)
-                    <button type="button" id="" class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                    @if($estimate->work_assigned == 1 && $estimate->invoice_assigned != 1)
+                    <button type="button" id="complete-work" class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                         <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
                         <span class=" my-auto">Complete Work</span>
                     </button>
                     @endif
-                    @if($estimate->estimate_assigned == 1 && $schedule->schedule_assigned != 1)
+                    @if($estimate->invoice_assigned == 1 && $estimate->payment_assigned != 1)
+                    <button type="button" id="complete-invoice" class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                        <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
+                        <span class=" my-auto">Complete Invoice</span>
+                    </button>
+                    @endif
+                    @if($estimate->payment_assigned == 1 && $estimate->invoice_paid != 1)
+                    <button type="button" id="add-payment" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                        <div class=" flex mx-auto">
+                            <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
+                            <span class=" my-auto">Add Payment</span>
+                        </div>
+                    </button>
+                    @endif
+                    @if($estimate->invoice_paid == 1 && $estimate->estimate_status != 'complete')
+                    <form action="/completeProject" method="post">
+                        @csrf
+                        <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
+                        <button id="" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                            <div class=" flex mx-auto">
+                                <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
+                                <span class=" my-auto">Complete Project</span>
+                            </div>
+                        </button>
+                    </form>
+                    @endif
+                    @if($estimate->estimate_assigned == 1)
                     <button type="button" id="accept-estimate" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                         <div class=" flex mx-auto">
                             <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
@@ -184,7 +210,7 @@
                         <span class=" my-auto">Reassign</span>
                     </button>
                     @endif
-                    @if($estimate->estimate_assigned != 1 || $schedule->schedule_assigned != 1)
+                    @if($estimate->estimate_assigned != 1)
                     <button type="button" id="complete-estimate" class=" complete-estimate flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                         <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
                         <span class=" my-auto">Complete Estimate</span>
@@ -413,14 +439,20 @@
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <div class="col-span-10  hidden p-2" id="image-field">
-                <form action="/additionalImage" enctype="multipart/form-data" method="post" class="dropzone" id="myDropzone">
+            <div class="col-span-10 p-2" id="image-field">
+                <form action="/addEstimateImage" enctype="multipart/form-data" method="post">
+                    @csrf
+                    <input type="text" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
+                    <input type="file" name="upload_image" id="upload_image">
+                    <button type="submit">submit</button>
+                </form>
+                <!-- <form action="/additionalImage" enctype="multipart/form-data" method="post" class="dropzone" id="myDropzone">
                     @csrf
                     <input type="text" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
                     <div class="fallback">
                         <input name="estimate_image" type="file" multiple />
                     </div>
-                </form>
+                </form> -->
             </div>
         </div>
         <hr class="bg-gray-300">
@@ -505,8 +537,7 @@
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <br>
-            <div class="col-span-12 py-1">
+            <div class="col-span-10 py-2">
                 <div class="relative overflow-x-auto">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -603,8 +634,55 @@
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <br>
-            <div class="col-span-12 p-3 mx-auto">
+            <div class="col-span-10">
+                <div class="relative overflow-x-auto py-2">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Date
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Tax
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Total
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Due
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Status
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-white border-b">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    {{ $invoices->complete_invoice_date }}
+                                </th>
+                                <td class="px-6 py-4">
+                                    {{ $invoices->invoice_name }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $invoices->tax_rate }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $invoices->invoice_total }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $invoices->invoice_due }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $invoices->invoice_status }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <hr class="bg-gray-300">
@@ -617,14 +695,37 @@
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <br>
-            <div class="col-span-12 p-3 mx-auto">
-                <p class=" text-sm">
-                    Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las.
-                </p>
-                <p class=" text-sm text-[#930027]">
-                    Find out more about using time tracking.
-                </p>
+            <div class="col-span-10">
+                <div class="relative overflow-x-auto py-2">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Date
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Description
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-white border-b">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    {{ $payments->complete_invoice_date }}
+                                </th>
+                                <td class="px-6 py-4">
+                                    {{ $payments->note }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $payments->invoice_total }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <hr class="bg-gray-300">
@@ -714,7 +815,7 @@
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <!-- Modal content here -->
                 <div class=" flex justify-between border-b">
-                    <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Contacts</h2>
+                    <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Emails</h2>
                     <button class="modal-close" type="button">
                         <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
                     </button>
@@ -1058,6 +1159,223 @@
         </div>
     </div>
 </div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="complete-work-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="/completeWorkAndAssignInvoice" method="post" id="complete-work-form">
+                @csrf
+                <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class=" flex justify-between">
+                        <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">{{ $customer->customer_first_name }} {{ $customer->customer_last_name }}</h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div>
+                        <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
+                        <p class=" font-medium inline-block items-center">{{$customer->customer_primary_address}}, {{$customer->customer_city}}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</p>
+                    </div>
+                    <div class=" mb-2">
+                        <div id="dropdown-div" class="">
+                            <p class=" font-medium items-center">Who completed the work Order?</p>
+                            <input type="text" id="estimator_name" disabled value="{{ $user_details['name'] }}" name="estimator_name" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <input type="hidden" id="work_completed_by" value="{{ $user_details['id'] }}" name="work_completed_by" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                                <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                            </button> -->
+                        </div>
+                        <div id="dropdown-div" class="">
+                            <p class=" font-medium items-center">What is the complete work date?</p>
+                            <input type="date" id="complete_work_date" name="complete_work_date" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                                <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                            </button> -->
+                        </div>
+                    </div>
+                    <hr>
+                    <div id="dropdown-div" class="">
+                        <label for="assiegne-estimate">Who will Complete and Send Invoice?</label>
+                        <select name="assign_invoice" id="assign_invoice" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <option value="">Select User</option>
+                            @foreach($employees as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}}</option>
+                            @endforeach
+                        </select>
+                        <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                        </button> -->
+                    </div>
+                    <div>
+                        <p class=" font-medium inline-block items-center">When should it be completed?</p>
+                    </div>
+                    <div class=" flex justify-start gap-3 mb-2">
+                        <label>Start date:</label>
+                        <input type="date" name="start_date" id="start_date" autocomplete="given-name" class=" se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    </div>
+                    <div class=" flex justify-start gap-3 mb-2">
+                        <label>End date:</label>
+                        <input type="date" name="end_date" id="end_date" autocomplete="given-name" class=" se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    </div>
+                    <div class="my-2 col-span-2 relative">
+                        <label for="" class="block text-left mb-1"> Note: </label>
+                        <textarea name="note" id="note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                        <button type="button" id="note-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                    </div>
+                    <div class=" mt-2">
+                        <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
+                        <button id="" class=" float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Complete Estimate
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="complete-invoice-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="/completeInvoiceAndAssignPayment" method="post" id="complete-invoice-form">
+                @csrf
+                <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class=" flex justify-between">
+                        <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">{{ $customer->customer_first_name }} {{ $customer->customer_last_name }}</h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div>
+                        <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
+                        <p class=" font-medium inline-block items-center">{{$customer->customer_primary_address}}, {{$customer->customer_city}}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</p>
+                    </div>
+                    <div class=" mb-2">
+                        <div id="dropdown-div" class="">
+                            <p class=" font-medium items-center">What is the complete invoice date?</p>
+                            <input type="date" id="complete_invoice_date" name="complete_invoice_date" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                                <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                            </button> -->
+                        </div>
+                    </div>
+                    <hr>
+                    <div id="dropdown-div" class="">
+                        <label for="assiegne-estimate">Who will follow up on payment?</label>
+                        <select name="assign_payment" id="assign_payment" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <option value="">Select User</option>
+                            @foreach($employees as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}}</option>
+                            @endforeach
+                        </select>
+                        <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                        </button> -->
+                    </div>
+                    <div>
+                        <p class=" font-medium inline-block items-center">When should it be completed?</p>
+                    </div>
+                    <div class=" flex justify-start gap-3 mb-2">
+                        <label>Start date:</label>
+                        <input type="date" name="start_date" id="start_date" autocomplete="given-name" class=" se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    </div>
+                    <div class=" flex justify-start gap-3 mb-2">
+                        <label>End date:</label>
+                        <input type="date" name="end_date" id="end_date" autocomplete="given-name" class=" se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    </div>
+                    <div class="my-2 col-span-2 relative">
+                        <label for="" class="block text-left mb-1"> Note: </label>
+                        <textarea name="note" id="note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                        <button type="button" id="note-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                    </div>
+                    <div class=" mt-2">
+                        <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
+                        <button id="" class=" float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Complete Estimate
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="add-payment-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="/addPayment" method="post" id="add-payment-form">
+                @csrf
+                <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class=" flex justify-between">
+                        <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">Payment</h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div class=" mb-2">
+                        <div id="dropdown-div" class="">
+                            <p class=" font-medium items-center">Invoice:</p>
+                            <input type="text" id="invoice" name="invoice" value="{{ $invoices->invoice_name }} (Due {{$invoices->invoice_due}})" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <input type="hidden" name="invoice_id" value="{{$invoices->estimate_complete_invoice_id}}">
+                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                                <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                            </button> -->
+                        </div>
+                    </div>
+                    <hr>
+                    <div id="dropdown-div" class="">
+                        <label for="assiegne-estimate">Details:</label>
+                        <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                        </button> -->
+                    </div>
+                    <div class=" grid grid-cols-2 gap-3">
+                        <div>
+                            <label for="">Date:</label>
+                            <input type="date" id="invoice_date" name="invoice_date" value="{{ date('Y-m-d', strtotime($invoices->complete_invoice_date)) }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                        </div>
+                        <div>
+                            <label for="">Amount:</label>
+                            <input type="text" id="invoice_amount" name="invoice_amount" value="{{ $invoices->invoice_due }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                        </div>
+                    </div>
+                    <div class="my-2 col-span-2 relative">
+                        <label for="" class="block text-left mb-1"> Note: </label>
+                        <textarea name="note" id="note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                        <button type="button" id="note-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                    </div>
+                    <div class=" mt-2">
+                        <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
+                        <button id="" class=" float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="accept-estimate-modal">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <!-- Background overlay -->
@@ -1190,6 +1508,42 @@
         e.preventDefault();
         $("#complete-estimate-modal").addClass('hidden');
         $("#complete-estimate-form")[0].reset()
+    });
+</script>
+<script>
+    $("#complete-work").click(function(e) {
+        e.preventDefault();
+        $("#complete-work-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#complete-work-modal").addClass('hidden');
+        $("#complete-work-form")[0].reset()
+    });
+</script>
+<script>
+    $("#complete-invoice").click(function(e) {
+        e.preventDefault();
+        $("#complete-invoice-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#complete-invoice-modal").addClass('hidden');
+        $("#complete-invoice-form")[0].reset()
+    });
+</script>
+<script>
+    $("#add-payment").click(function(e) {
+        e.preventDefault();
+        $("#add-payment-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#add-payment-modal").addClass('hidden');
+        $("#add-payment-form")[0].reset()
     });
 </script>
 <script>

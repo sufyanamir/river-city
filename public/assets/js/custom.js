@@ -1,20 +1,57 @@
 $(document).ready(function () {
+  topbar.config({
+    autoRun: false,
+    barThickness: 3,
+    barColors: {
+      '0': '#930027'
+    },
+    shadowBlur: 5,
+    shadowColor: 'rgba(0, 0, 0, .5)',
+    className: 'topbar',
+  })
+  topbar.show();
+  (function step() {
+    setTimeout(function () {
+      if (topbar.progress('+.01') < 1) step()
+    }, 16)
+  })()
+  $(window).on('load', function () {
+    topbar.hide();
+  });
+  // Listen for form submissions
   // Listen for form submissions
   $(document).on('submit', 'form', function (event) {
     // Prevent the default form submission
     event.preventDefault();
 
-    // Get the form data
-    var formData = $(this).serialize();
-
-    // Get the form action
-    var formAction = $(this).attr('action');
+    // Get the form data using FormData for handling file uploads
+    var formData = new FormData(this);
 
     // Make the AJAX request
     $.ajax({
       type: 'POST',
-      url: formAction,
+      url: $(this).attr('action'),
       data: formData,
+      processData: false, // Important: Don't process the data
+      contentType: false, // Important: Don't set content type (jQuery will automatically set it based on FormData)
+      beforeSend: function () {
+        topbar.config({
+          autoRun: false,
+          barThickness: 3,
+          barColors: {
+            '0': '#930027'
+          },
+          shadowBlur: 5,
+          shadowColor: 'rgba(0, 0, 0, .5)',
+          className: 'topbar',
+        })
+        topbar.show();
+        (function step() {
+          setTimeout(function () {
+            if (topbar.progress('+.01') < 1) step()
+          }, 16)
+        })()
+      },
       success: function (response) {
         if (response.success == true) {
           // Handle success, if needed
@@ -46,10 +83,11 @@ $(document).ready(function () {
       response.message,
       'success'
     );
-    setTimeout(
+    topbar.hide();
+    setInterval(
       location.reload()
       ,
-      2000
+      5000
     );
     // $("#universalTableBody").load(location.href + "#universalTableBody > *");
     // $(".itemDiv").load(location.href + ".itemDiv > *");
@@ -64,6 +102,7 @@ $(document).ready(function () {
       response.message,
       'warning'
     );
+    topbar.hide();
     // Additional failure handling if needed
     $('.text').removeClass('hidden');
     $('.spinner').addClass('hidden');

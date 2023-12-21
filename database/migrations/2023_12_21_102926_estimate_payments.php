@@ -13,11 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('estimate_images', function(Blueprint $table){
-            $table->id('image_id');
+        Schema::create('estimate_payments', function(Blueprint $table){
+            $table->id('estimate_payment_id');
             $table->integer('added_user_id');
             $table->integer('estimate_id');
-            $table->text('estimate_image');
+            $table->integer('estimate_complete_invoice_id');
+            $table->timestamp('complete_invoice_date')->useCurrent();
+            $table->double('invoice_total')->nullable();
+            $table->text('note')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrent();
         });
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('estimate_images');
+        Schema::dropIfExists('estimate_payments');
     }
 };
