@@ -610,18 +610,68 @@
                 <p class="text-lg px-3  font-medium">
                     To-Dos
                 </p>
-                <button type="button" class="flex" id="addImage-btn">
+                <button type="button" class="flex" id="to-do-button">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <br>
-            <div class="col-span-12 p-3 mx-auto">
-                <p class=" text-sm">
-                    Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las.
-                </p>
-                <p class=" text-sm text-[#930027]">
-                    Find out more about using time tracking.
-                </p>
+            <div class="col-span-10">
+                <div class="relative overflow-x-auto py-2">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Assign By
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Assigned To
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Satrt Date
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    End Date
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Status
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($toDos as $toDo)
+                            <tr class="bg-white border-b">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    {{ $toDo->to_do_title }}
+                                </th>
+                                <td class="px-6 py-4">
+                                    {{ $toDo->added_user_id }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $toDo->to_do_assigned_to }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $toDo->start_date }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $toDo->end_date }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $toDo->to_do_status }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Complete
+                                    </button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <hr class="bg-gray-300">
@@ -791,6 +841,67 @@
                         <div class="" id="">
                             <label for="" class=" block">Phone:</label>
                             <input type="tel" name="phone" id="phone" placeholder="Phone" required autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                    </div>
+                    <div class=" border-t">
+                        <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="to-do-button-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="/addToDos" method="post" id="to-do-button-form">
+                @csrf
+                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class=" flex justify-between border-b">
+                        <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add To-Dos</h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div class=" grid grid-cols-2 gap-2">
+                        <div class=" col-span-2" id="">
+                            <label for="" class=" block">Title:</label>
+                            <input type="text" name="task_name" id="task_name" required placeholder="Title" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2" id="">
+                            <label for="" class=" block">Who:</label>
+                            <select name="assign_work" id="assign_work" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <option value="">Select User</option>
+                                @foreach($employees as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-span-2">
+                            When Should it be completed?
+                        </div>
+                        <div class="" id="">
+                            <label for="" class=" block">Start Date:</label>
+                            <input type="date" name="start_date" id="start_date" placeholder="Last Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class="" id="">
+                            <label for="" class=" block">End Date:</label>
+                            <input type="date" name="end_date" id="end_date" required placeholder="" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2 my-2">
+                            <label for="estimate_note">Add Note:</label>
+                            <textarea name="note" id="note" placeholder="Add Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                            <button type="button" id="items-mic" class=" absolute mt-8 right-8" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
                     </div>
                     <div class=" border-t">
@@ -1484,6 +1595,18 @@
         e.preventDefault();
         $("#addContact-modal").addClass('hidden');
         $("#addContact-form")[0].reset()
+    });
+</script>
+<script>
+    $("#to-do-button").click(function(e) {
+        e.preventDefault();
+        $("#to-do-button-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#to-do-button-modal").addClass('hidden');
+        $("#to-do-button-form")[0].reset()
     });
 </script>
 <script>

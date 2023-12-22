@@ -67,6 +67,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/completeInvoiceAndAssignPayment', [EstimateController::class, 'completeInvoiceAndAssignPayment']);
     Route::post('/addPayment', [EstimateController::class, 'addPayment']);
     Route::post('/completeProject', [EstimateController::class, 'completeProject']);
+    Route::post('/addToDos', [EstimateController::class, 'addToDos']);
     Route::get('/add-estimate', function () {
         return view('addEstimate');
     });

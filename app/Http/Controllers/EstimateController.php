@@ -17,6 +17,7 @@ use App\Models\EstimateItem;
 use App\Models\EstimateNote;
 use App\Models\EstimatePayments;
 use App\Models\EstimateProposal;
+use App\Models\EstimateToDos;
 use App\Models\Items;
 use App\Models\ScheduleEstimate;
 use App\Models\ScheduleWork;
@@ -47,6 +48,39 @@ class EstimateController extends Controller
         return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails]);
     }
     // ==============================================================Estimate additional functions=========================================================
+    // add to do
+    public function addToDos(Request  $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'task_name' =>  'required',
+                'assign_work' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'note' => 'nullable',
+            ]);
+
+            $toDo = EstimateToDos::create([
+                'added_user_id' => $userDetails['id'],
+                'estimate_id' => $validatedData['estimate_id'],
+                'to_do_title' => $validatedData['task_name'],
+                'to_do_assigned_to' => $validatedData['assign_work'],
+                'start_date' => $validatedData['start_date'],
+                'end_date' => $validatedData['end_date'],
+                'note' => $validatedData['note'],
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'To Do Added!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // add to do
+    
     // complete project
     public function completeProject(Request $request)
     {
@@ -681,6 +715,7 @@ class EstimateController extends Controller
             $work = ScheduleEstimate::where('estimate_id', $estimate->estimate_id)->first();
             $invoices = AssignPayment::where('estimate_id', $estimate->estimate_id)->first();
             $payments = EstimatePayments::where('estimate_id', $estimate->estimate_id)->first();
+            $toDos = EstimateToDos::where('estimate_id', $estimate->estimate_id)->get();
 
             // Calculate the sum of item_price for the estimate
             $totalPrice = $estimateItems->sum('item_price');
@@ -703,6 +738,7 @@ class EstimateController extends Controller
                 'work' => $work,
                 'invoices' => $invoices,
                 'payments' => $payments,
+                'toDos' => $toDos,
             ]);
         } catch (\Exception $e) {
             // Handle the exception
