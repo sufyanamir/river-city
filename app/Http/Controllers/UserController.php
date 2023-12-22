@@ -112,6 +112,9 @@ class UserController extends Controller
     public function addCrew(Request $request)
     {
         try {
+
+            $userDetails = session('user_details');
+
             $validatedData  =  $request->validate([
                 'firstName' => 'required|string',
                 'lastName' => 'nullable|string',
@@ -134,6 +137,7 @@ class UserController extends Controller
                 'departement' => $validatedData['departement'],
                 'rating' => $validatedData['rate'],
                 'team_number' => $validatedData['teamNumber'],
+                'added_user_id' => $userDetails['id'],
             ]);
 
             if ($request->hasFile('upload_image')) {
@@ -195,6 +199,8 @@ class UserController extends Controller
     {
         try {
 
+            $userDetails = session('user_details');
+
             $validatedData = $request->validate([
                 'firstName' => 'required|string',
                 'lastName' => 'nullable|string',
@@ -207,6 +213,14 @@ class UserController extends Controller
 
             $password = rand();
 
+            $emailData = [
+                'email' => $validatedData['email'],
+                'password' => $password,
+            ];
+
+            $mail = new AddUserMail($emailData);
+            Mail::to($validatedData['email'])->send($mail);
+
             $users = User::create([
                 'name' => $validatedData['firstName'],
                 'last_name' => $validatedData['lastName'],
@@ -215,6 +229,7 @@ class UserController extends Controller
                 'user_role' => $validatedData['role'],
                 'address' => $validatedData['address'],
                 'password' => md5($password),
+                'added_user_id' => $userDetails['id'],
             ]);
 
             if ($request->hasFile('upload_image')) {

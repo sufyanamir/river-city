@@ -39,6 +39,17 @@ class Estimate extends Model
         'tax_rate',
         'project_name',
         'project_number',
+        'schedule_assigned',
+        'schedule_assigned_to',
+        'work_completed_by',
+        'complete_work_date',
+        'invoice_assigned',
+        'invoice_assigned_to',
+        'payment_assigned',
+        'payment_assigned_to',
+        'invoiced_payment',
+        'invoice_paid',
+        'invoice_paid_total',
     ];
 
     public $timestamps = true;

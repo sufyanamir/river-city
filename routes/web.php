@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\EstimageImagesController;
 use App\Http\Controllers\EstimateController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ItemsController;
@@ -54,7 +55,6 @@ Route::middleware('customauth')->group(function () {
     Route::get('/viewEstimate/{id}', [EstimateController::class, 'viewEstimate']);
     Route::post('/additionalContact', [EstimateController::class,  'additionalContacts']);
     Route::match(['post', 'get'], '/delete/additionalContact/{id}', [EstimateController::class, 'deleteAdditionalContact']);
-    Route::post('/additionalImage', [EstimateController::class, 'additionalImage']);
     Route::post('/addEstimateItems', [EstimateController::class, 'estimateItems']);
     Route::post('/addEstimateNote', [EstimateController::class, 'addEstimateNote']);
     Route::match(['get', 'post'], '/getemailDetails/{id}', [EstimateController::class, 'getEmailDetails']);
@@ -62,6 +62,11 @@ Route::middleware('customauth')->group(function () {
     Route::post('/completeEstimate', [EstimateController::class, 'completeEstimate']);
     Route::post('/scheduleEstimate', [EstimateController::class, 'scheduleEstimate']);
     Route::post('/setSchedule', [EstimateController::class, 'setSchedule']);
+    Route::post('/addEstimateImage', [EstimageImagesController::class, 'addEstimateImage']);
+    Route::post('/completeWorkAndAssignInvoice', [EstimateController::class, 'completeWorkAndAssignInvoice']);
+    Route::post('/completeInvoiceAndAssignPayment', [EstimateController::class, 'completeInvoiceAndAssignPayment']);
+    Route::post('/addPayment', [EstimateController::class, 'addPayment']);
+    Route::post('/completeProject', [EstimateController::class, 'completeProject']);
     Route::get('/add-estimate', function () {
         return view('addEstimate');
     });
