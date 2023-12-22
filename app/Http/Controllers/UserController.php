@@ -213,6 +213,14 @@ class UserController extends Controller
 
             $password = rand();
 
+            $emailData = [
+                'email' => $validatedData['email'],
+                'password' => $password,
+            ];
+
+            $mail = new AddUserMail($emailData);
+            Mail::to($validatedData['email'])->send($mail);
+
             $users = User::create([
                 'name' => $validatedData['firstName'],
                 'last_name' => $validatedData['lastName'],
