@@ -7,33 +7,39 @@ use Illuminate\Http\Request;
 
 class EstimageImagesController extends Controller
 {
-    public function addEstimateImage(Request $request)
+    public function uploadImage(Request $request)
     {
         try {
             $userDetails = session('user_details');
-            $validatedData = $request->validate([
+
+            // Validate the form data
+            $request->validate([
                 'estimate_id' => 'required',
-                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+                'upload_image.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust validation rules as needed
             ]);
 
-            $estimateImage = EstimateImages::create([
-                'added_user_id' => $userDetails['id'],
-                'estimate_id' => $validatedData['estimate_id'],
-            ]);
+            // Process the form data and handle the file uploads
+            $estimateId = $request->input('estimate_id');
+            $images = $request->file('upload_image');
 
-            if ($request->hasFile('upload_image')) {
-                $image = $request->file('upload_image');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->storeAs('public/estimate_images/', $imageName);
-                $estimateImage->estimate_image = 'storage/estimate_images/' . $imageName;
+            foreach ($images as $image) {
+                // Save each file to a specific location
+                $path = $image->store('estimate_images', 'public');
+
+                // Create a new record in the database for each file
+                $estimateImage = new EstimateImages([
+                    'added_user_id' =>  $userDetails['id'],
+                    'estimate_id' => $estimateId,
+                    'estimate_image' => $path,
+                ]);
+
+                $estimateImage->save();
             }
 
-            $estimateImage->save();
-
-            return response()->json(['success' => true, 'message' => 'Image added to estimate!'], 200);
-
+            // Redirect or respond accordingly
+            return response()->json(['success' => true, 'message' => 'Images uploaded successfully'], 200);
         } catch (\Exception $e) {
-            return  response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+            return response()->json(['success' => false, 'message' => $e->getMessage()],  400);
         }
     }
 }

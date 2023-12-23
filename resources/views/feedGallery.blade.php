@@ -17,193 +17,32 @@
             </div>
         </div>
         <hr class="bg-gray-900">
-        <div class=" grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
+        @foreach ($estimates_with_images as $item)
+        <div class="grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
             <div class="col-span-5 p-2 flex justify-between">
                 <div class="pl-3">
-                    <h3 class=" text-[#323C47] font-bold">Estimate Name</h3>
-                    <p class=" font-medium text-sm text-[#858585]">
-                        Customer Name / 949-300-9632
-                        65 Water St, Newburyport, MA, 01950
+                    <h3 class="text-[#323C47] font-bold">{{ $item['estimate']->project_name }}</h3>
+                    <p class="font-medium text-sm text-[#858585]">
+                        {{ $item['estimate']->customer_name }} {{ $item['estimate']->customer_last_name }} / {{ $item['estimate']->customer_address }}
                     </p>
                 </div>
                 <div class="pl-3">
-                    <h3 class=" text-[#323C47] font-bold">Images</h3>
-                    <p class="font-medium text-sm text-[#858585]">12</p>
+                    <h3 class="text-[#323C47] font-bold">Images</h3>
+                    <p class="font-medium text-sm text-[#858585]">{{ count($item['images']) }}</p>
                 </div>
             </div>
-            <div class="col-span-1 p-3  ">
-                <div class="h-full mx-auto rounded bg-[#D9D9D9]   w-[5px]"></div>
+            <div class="col-span-1 p-3">
+                <div class="h-full mx-auto rounded bg-[#D9D9D9] w-[5px]"></div>
             </div>
-            <div class="col-span-5 grid grid-cols-5 mx-2 my-auto">
-                <a class="col-span-5 grid grid-cols-5" href="{{url('manageGallery')}}">
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                    </div>
-            </a>
+            <div class="col-span-5 grid grid-cols-5 gap-3 mx-2 my-auto">
+                @foreach ($item['images']->take(5) as $image)
+                <div class="col-span-1 py-2">
+                    <img src="{{ asset('storage/' . $image->estimate_image) }}" class="  h-20" alt="Estimate Image">
+                </div>
+                @endforeach
             </div>
         </div>
-        <div class=" grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
-            <div class="col-span-5 p-2 flex justify-between">
-                <div class="pl-3">
-                    <h3 class=" text-[#323C47] font-bold">Estimate Name</h3>
-                    <p class=" font-medium text-sm text-[#858585]">
-                        Customer Name / 949-300-9632
-                        65 Water St, Newburyport, MA, 01950
-                    </p>
-                </div>
-                <div class="pl-3">
-                    <h3 class=" text-[#323C47] font-bold">Images</h3>
-                    <p class="font-medium text-sm text-[#858585]">4</p>
-                </div>
-            </div>
-            <div class="col-span-1 p-3  ">
-                <div class="h-full mx-auto rounded bg-[#D9D9D9]   w-[5px]"></div>
-            </div>
-            <div class="col-span-5 grid grid-cols-5 mx-2 my-auto">
-                <a class="col-span-5 grid grid-cols-5" href="{{url('manageGallery')}}">
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                    </div>
-            </a>
-            </div>
-        </div>
-        <div class=" grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
-            <div class="col-span-5 p-2 flex justify-between">
-                <div class="pl-3">
-                    <h3 class=" text-[#323C47] font-bold">Estimate Name</h3>
-                    <p class=" font-medium text-sm text-[#858585]">
-                        Customer Name / 949-300-9632
-                        65 Water St, Newburyport, MA, 01950
-                    </p>
-                </div>
-                <div class="pl-3">
-                    <h3 class=" text-[#323C47] font-bold">Images</h3>
-                    <p class="font-medium text-sm text-[#858585]">5</p>
-                </div>
-            </div>
-            <div class="col-span-1 p-3  ">
-                <div class="h-full mx-auto rounded bg-[#D9D9D9]   w-[5px]"></div>
-            </div>
-            <div class="col-span-5 grid grid-cols-5 mx-2 my-auto">
-                <a class="col-span-5 grid grid-cols-5" href="{{url('manageGallery')}}">
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                    </div>
-            </a>
-            </div>
-        </div>
-        <div class=" grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
-            <div class="col-span-5 p-2 flex justify-between">
-                <div class="pl-3">
-                    <h3 class=" text-[#323C47] font-bold">Estimate Name</h3>
-                    <p class=" font-medium text-sm text-[#858585]">
-                        Customer Name / 949-300-9632
-                        65 Water St, Newburyport, MA, 01950
-                    </p>
-                </div>
-                <div class="pl-3">
-                    <h3 class=" text-[#323C47] font-bold">Images</h3>
-                    <p class="font-medium text-sm text-[#858585]">20</p>
-                </div>
-            </div>
-            <div class="col-span-1 p-3  ">
-                <div class="h-full mx-auto rounded bg-[#D9D9D9]   w-[5px]"></div>
-            </div>
-            <div class="col-span-5 grid grid-cols-5 mx-2 my-auto">
-                <a class="col-span-5 grid grid-cols-5" href="{{url('manageGallery')}}">
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                    </div>
-            </a>
-            </div>
-        </div>
-        <div class=" grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
-            <div class="col-span-5 p-2 flex justify-between">
-                <div class="pl-3">
-                    <h3 class=" text-[#323C47] font-bold">Estimate Name</h3>
-                    <p class=" font-medium text-sm text-[#858585]">
-                        Customer Name / 949-300-9632
-                        65 Water St, Newburyport, MA, 01950
-                    </p>
-                </div>
-                <div class="pl-3">
-                    <h3 class=" text-[#323C47] font-bold">Images</h3>
-                    <p class="font-medium text-sm text-[#858585]">12</p>
-                </div>
-            </div>
-            <div class="col-span-1 p-3  ">
-                <div class="h-full mx-auto rounded bg-[#D9D9D9]   w-[5px]"></div>
-            </div>
-            <div class="col-span-5 grid grid-cols-5 mx-2 my-auto">
-                <a class="col-span-5 grid grid-cols-5" href="{{url('manageGallery')}}">
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image2.svg') }}" alt="">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="{{ asset('assets/images/feed-gallery-image1.svg') }}" alt="">
-                    </div>
-            </a>
-            </div>
-        </div>
-
+        @endforeach
     </div>
-
 </div>
 @include('layouts.footer')

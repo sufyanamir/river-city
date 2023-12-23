@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('estimates', function (Blueprint $table) {
             $table->integer('invoice_paid')->default(0);
-            $table->double('invoice_paid_total');
+            $table->double('invoice_paid_total')->nullable();
         });
     }
 

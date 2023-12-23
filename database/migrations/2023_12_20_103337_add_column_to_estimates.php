@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('estimates', function (Blueprint $table) {
-            $table->integer('schedule_assigned')->nullable(0);
+            $table->integer('schedule_assigned')->default(0);
             $table->integer('schedule_assigned_to')->nullable();
             $table->integer('work_completed_by')->nullable();
             $table->timestamp('complete_work_date')->useCurrent();

@@ -74,9 +74,8 @@
                         <p class="flex justify-end text-blue-900">
                             Invoiced: ${{ $estimate->invoiced_payment }}
                         </p>
-                        <p class="flex justify-end">
-                            <img class="pr-1" src="{{ asset('assets/icons/card-icon.svg') }}" alt="">
-                            0.00
+                        <p class="flex justify-end text-green-900">
+                            Paid: ${{$estimate->invoice_paid_total}}
                         </p>
 
                     </div>
@@ -424,9 +423,18 @@
                 <p class="text-lg px-3  font-medium">
                     Files
                 </p>
-                <button type="button" class="flex">
+                <button type="button" id="addFile-btn" class="flex">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
+            </div>
+            <div class="col-span-10">
+                <div class=" p-2">
+                    @foreach($estimate_files as $file)
+                    <a  href="{{ asset('storage/' . $file->estimate_file) }}" class=" text-[#930027] hover:border-b border-[#930027]" target="_blank">
+                        {{$file->estimate_file_name}} , 
+                    </a>
+                    @endforeach
+                </div>
             </div>
         </div>
         <hr class="bg-gray-300">
@@ -439,20 +447,12 @@
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <div class="col-span-10 p-2" id="image-field">
-                <form action="/addEstimateImage" enctype="multipart/form-data" method="post">
-                    @csrf
-                    <input type="text" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
-                    <input type="file" name="upload_image" id="upload_image">
-                    <button type="submit">submit</button>
-                </form>
-                <!-- <form action="/additionalImage" enctype="multipart/form-data" method="post" class="dropzone" id="myDropzone">
-                    @csrf
-                    <input type="text" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
-                    <div class="fallback">
-                        <input name="estimate_image" type="file" multiple />
-                    </div>
-                </form> -->
+            <div class="col-span-12 mx-auto">
+                @foreach($estimate_images as $image)
+                <div class=" inline-block p-2 mx-auto">
+                    <img class=" w-16 h-16" src="{{ asset('storage/' . $image->estimate_image) }}" alt="Estimate Image">
+                </div>
+                @endforeach
             </div>
         </div>
         <hr class="bg-gray-300">
@@ -590,7 +590,7 @@
                 <p class="text-lg px-3  font-medium">
                     Time Entries
                 </p>
-                <button type="button" class="flex" id="addImage-btn">
+                <button type="button" class="flex" id="">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
@@ -610,18 +610,68 @@
                 <p class="text-lg px-3  font-medium">
                     To-Dos
                 </p>
-                <button type="button" class="flex" id="addImage-btn">
+                <button type="button" class="flex" id="to-do-button">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <br>
-            <div class="col-span-12 p-3 mx-auto">
-                <p class=" text-sm">
-                    Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las.
-                </p>
-                <p class=" text-sm text-[#930027]">
-                    Find out more about using time tracking.
-                </p>
+            <div class="col-span-10">
+                <div class="relative overflow-x-auto py-2">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Assign By
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Assigned To
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Satrt Date
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    End Date
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Status
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($toDos as $toDo)
+                            <tr class="bg-white border-b">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    {{ $toDo->to_do_title }}
+                                </th>
+                                <td class="px-6 py-4">
+                                    {{ $toDo->added_user_id }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $toDo->to_do_assigned_to }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $toDo->start_date }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $toDo->end_date }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $toDo->to_do_status }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Complete
+                                    </button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <hr class="bg-gray-300">
@@ -630,7 +680,7 @@
                 <p class="text-lg px-3  font-medium">
                     Invoices
                 </p>
-                <button type="button" class="flex" id="addImage-btn">
+                <button type="button" class="flex" id="">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
@@ -660,6 +710,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($invoices as $invoices)
                             <tr class="bg-white border-b">
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     {{ $invoices->complete_invoice_date }}
@@ -680,6 +731,7 @@
                                     {{ $invoices->invoice_status }}
                                 </td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -691,7 +743,7 @@
                 <p class="text-lg px-3  font-medium">
                     Payments
                 </p>
-                <button type="button" class="flex" id="addImage-btn">
+                <button type="button" class="flex" id="">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
@@ -712,6 +764,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($payments as $payments)
                             <tr class="bg-white border-b">
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     {{ $payments->complete_invoice_date }}
@@ -723,6 +776,7 @@
                                     {{ $payments->invoice_total }}
                                 </td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -734,18 +788,61 @@
                 <p class="text-lg px-3  font-medium">
                     Expenses
                 </p>
-                <button type="button" class="flex" id="addImage-btn">
+                <button type="button" class="flex" id="expenses-btn">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
                 </button>
             </div>
-            <br>
-            <div class="col-span-12 p-3 mx-auto">
-                <p class=" text-sm">
-                    Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las.
-                </p>
-                <p class=" text-sm text-[#930027]">
-                    Find out more about using time tracking.
-                </p>
+            <div class="col-span-10">
+                <div class="relative overflow-x-auto py-2">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Date
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Vendor
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Description
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Hours
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Paid
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($expenses as $expense)
+                            <tr class="bg-white border-b">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    {{ $expense->expense_date }}
+                                </th>
+                                <td class="px-6 py-4">
+                                    {{ $expense->expense_vendor }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $expense->expense_description }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $expense->labour_hours }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $expense->expense_paid }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $expense->expense_total }}
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -791,6 +888,211 @@
                         <div class="" id="">
                             <label for="" class=" block">Phone:</label>
                             <input type="tel" name="phone" id="phone" placeholder="Phone" required autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                    </div>
+                    <div class=" border-t">
+                        <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addImage-btn-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="/addEstimateImage" enctype="multipart/form-data" method="post" id="addImage-btn-form">
+                @csrf
+                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class=" flex justify-between border-b">
+                        <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Images</h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div class=" grid grid-cols-2 gap-2  py-2">
+                        <div>
+                            <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
+                            <input type="file" name="upload_image[]" id="upload_image" multiple>
+                        </div>
+                    </div>
+                    <div class=" border-t">
+                        <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addFile-btn-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="/addEstimateFile" enctype="multipart/form-data" method="post" id="addFile-btn-form">
+                @csrf
+                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class=" flex justify-between border-b">
+                        <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Files</h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div class=" grid grid-cols-2 gap-2  py-2">
+                        <div>
+                            <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
+                            <input type="file" name="upload_file" id="upload_file">
+                        </div>
+                    </div>
+                    <div class=" border-t">
+                        <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="to-do-button-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="/addToDos" method="post" id="to-do-button-form">
+                @csrf
+                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class=" flex justify-between border-b">
+                        <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add To-Dos</h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div class=" grid grid-cols-2 gap-2">
+                        <div class=" col-span-2" id="">
+                            <label for="" class=" block">Title:</label>
+                            <input type="text" name="task_name" id="task_name" required placeholder="Title" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2" id="">
+                            <label for="" class=" block">Who:</label>
+                            <select name="assign_work" id="assign_work" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <option value="">Select User</option>
+                                @foreach($employees as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-span-2">
+                            When Should it be completed?
+                        </div>
+                        <div class="" id="">
+                            <label for="" class=" block">Start Date:</label>
+                            <input type="date" name="start_date" id="start_date" placeholder="Last Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class="" id="">
+                            <label for="" class=" block">End Date:</label>
+                            <input type="date" name="end_date" id="end_date" required placeholder="" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2 my-2">
+                            <label for="estimate_note">Add Note:</label>
+                            <textarea name="note" id="note" placeholder="Add Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                            <button type="button" id="items-mic" class=" absolute mt-8 right-8" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                        </div>
+                    </div>
+                    <div class=" border-t">
+                        <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="expenses-btn-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="/addEstimateExpense" method="post" id="expenses-btn-form">
+                @csrf
+                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class=" flex justify-between border-b">
+                        <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Expenses</h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div class=" grid grid-cols-2 gap-2">
+                        <div class="" id="">
+                            <label for="" class=" block">Date:</label>
+                            <input type="date" name="date" id="date" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class="" id="">
+                            <label for="" class=" block">Item Type:</label>
+                            <select name="item_type" id="item_type" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <option value="material">material</option>
+                                <option value="labour">labour</option>
+                            </select>
+                        </div>
+                        <div class="" id="">
+                            <label for="" class=" block">Vendor:</label>
+                            <input type="text" name="vendor" id="vendor" placeholder="Vendor" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class="" id="">
+                            <label for="" class=" block">Hours:</label>
+                            <input type="number" name="hours" id="hours" placeholder="Hours" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class="" id="">
+                            <label for="" class=" block">Subtotal:</label>
+                            <input type="number" name="subtotal" id="subtotal" placeholder="Subtotal" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class="" id="">
+                            <label for="" class=" block">Tax:</label>
+                            <input type="number" name="tax" id="tax" placeholder="Tax" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class="" id="">
+                            <label for="" class=" block">Total:</label>
+                            <input type="number" name="total" id="total" placeholder="Total" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" my-5" id="">
+                            <input type="checkbox" name="paid" id="paid" value="paid">
+                            <label for="paid">Paid</label>
+                        </div>
+                        <div class=" col-span-2 my-2">
+                            <label for="description">Description:</label>
+                            <textarea name="description" id="description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                            <button type="button" id="items-mic" class=" absolute mt-8 right-8" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
                     </div>
                     <div class=" border-t">
@@ -1333,12 +1635,13 @@
                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
                         </button>
                     </div>
+                    @if($invoice)
                     <!-- task details -->
                     <div class=" mb-2">
                         <div id="dropdown-div" class="">
                             <p class=" font-medium items-center">Invoice:</p>
-                            <input type="text" id="invoice" name="invoice" value="{{ $invoices->invoice_name }} (Due {{$invoices->invoice_due}})" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                            <input type="hidden" name="invoice_id" value="{{$invoices->estimate_complete_invoice_id}}">
+                            <input type="text" id="invoice" name="invoice" value="{{ $invoice->invoice_name }} (Due {{$invoice->invoice_due}})" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <input type="hidden" name="invoice_id" value="{{$invoice->estimate_complete_invoice_id}}">
                             <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
                                 <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
                             </button> -->
@@ -1354,13 +1657,14 @@
                     <div class=" grid grid-cols-2 gap-3">
                         <div>
                             <label for="">Date:</label>
-                            <input type="date" id="invoice_date" name="invoice_date" value="{{ date('Y-m-d', strtotime($invoices->complete_invoice_date)) }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <input type="date" id="invoice_date" name="invoice_date" value="{{ date('Y-m-d', strtotime($invoice->complete_invoice_date)) }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                         </div>
                         <div>
                             <label for="">Amount:</label>
-                            <input type="text" id="invoice_amount" name="invoice_amount" value="{{ $invoices->invoice_due }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <input type="text" id="invoice_amount" name="invoice_amount" value="{{ $invoice->invoice_due }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                         </div>
                     </div>
+                    @endif
                     <div class="my-2 col-span-2 relative">
                         <label for="" class="block text-left mb-1"> Note: </label>
                         <textarea name="note" id="note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
@@ -1484,6 +1788,54 @@
         e.preventDefault();
         $("#addContact-modal").addClass('hidden');
         $("#addContact-form")[0].reset()
+    });
+</script>
+<script>
+    $("#addImage-btn").click(function(e) {
+        e.preventDefault();
+        $("#addImage-btn-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#addImage-btn-modal").addClass('hidden');
+        $("#addImage-btn-form")[0].reset()
+    });
+</script>
+<script>
+    $("#addFile-btn").click(function(e) {
+        e.preventDefault();
+        $("#addFile-btn-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#addFile-btn-modal").addClass('hidden');
+        $("#addFile-btn-form")[0].reset()
+    });
+</script>
+<script>
+    $("#to-do-button").click(function(e) {
+        e.preventDefault();
+        $("#to-do-button-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#to-do-button-modal").addClass('hidden');
+        $("#to-do-button-form")[0].reset()
+    });
+</script>
+<script>
+    $("#expenses-btn").click(function(e) {
+        e.preventDefault();
+        $("#expenses-btn-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#expenses-btn-modal").addClass('hidden');
+        $("#expenses-btn-form")[0].reset()
     });
 </script>
 <script>
@@ -1632,5 +1984,25 @@
                 }
             });
         });
+
+        var subtotalInput = $('#subtotal');
+        var taxInput = $('#tax');
+        var totalInput = $('#total');
+
+        // Add event listener to the subtotal and tax inputs
+        subtotalInput.on('input', updateTotal);
+        taxInput.on('input', updateTotal);
+
+        // Function to update the total based on subtotal and tax
+        function updateTotal() {
+            var subtotalValue = parseFloat(subtotalInput.val()) || 0;
+            var taxValue = parseFloat(taxInput.val()) || 0;
+
+            // Calculate the total
+            var totalValue = subtotalValue + taxValue;
+
+            // Update the total input
+            totalInput.val(totalValue);
+        }
     });
 </script>
