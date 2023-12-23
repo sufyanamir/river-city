@@ -650,27 +650,27 @@ class EstimateController extends Controller
     // estimate items
 
     // get images
-    // public function getEstimateWithImages()
-    // {
-    //     $userDetails = session('user_details');
+    public function getEstimateWithImages()
+    {
+        $userDetails = session('user_details');
 
-    //     $estimates = Estimate::get();
-    //     $customers = Customer::get();
+        $estimates = Estimate::get();
+        $customers = Customer::get();
 
-    //     $estimateData = [];
+        $estimateData = [];
 
-    //     foreach ($estimates as $estimate) {
-    //         $images = EstimateImage::where('estimate_id', $estimate->estimate_id)->get();
-    //         $estimateData[] = [
-    //             'estimate' => $estimate,
-    //             'images' => $images,
-    //         ];
-    //     }
+        foreach ($estimates as $estimate) {
+            $images = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
+            $estimateData[] = [
+                'estimate' => $estimate,
+                'images' => $images,
+            ];
+        }
+        // return response()->json(['success' => true, 'data' => ['estimate_with_images' => $estimateData]], 200);
+        return view('feedGallery', ['estimates_with_images' => $estimateData, 'user_details' => $userDetails]);
 
-    //     return view('feedGallery', ['customers' => $customers, 'estimates_with_images' => $estimateData, 'user_details' => $userDetails]);
-
-    //     // return response()->json(['customers' => $customers, 'estimates_with_images' => $estimateData, 'user_details' => $userDetails], 200);
-    // }
+        // return response()->json(['customers' => $customers, 'estimates_with_images' => $estimateData, 'user_details' => $userDetails], 200);
+    }
     // get images
 
     // delete additional  images
@@ -785,11 +785,12 @@ class EstimateController extends Controller
             $emailTemplates = Email::get();
             $estimateEmails = EstimateEmail::where('estimate_id', $estimate->estimate_id)->get();
             $proposals = EstimateProposal::where('estimate_id', $estimate->estimate_id)->get();
-            $estimator = User::where('id', $estimate->estimated_completed_by)->first();
-            $schedule = ScheduleWork::where('estimate_id', $estimate->estimate_id)->first();
-            $work = ScheduleEstimate::where('estimate_id', $estimate->estimate_id)->first();
-            $invoices = AssignPayment::where('estimate_id', $estimate->estimate_id)->first();
-            $payments = EstimatePayments::where('estimate_id', $estimate->estimate_id)->first();
+            $estimator = User::where('id', $estimate->estimated_completed_by)->get();
+            $schedule = ScheduleWork::where('estimate_id', $estimate->estimate_id)->get();
+            $work = ScheduleEstimate::where('estimate_id', $estimate->estimate_id)->get();
+            $invoices = AssignPayment::where('estimate_id', $estimate->estimate_id)->get();
+            $invoice = AssignPayment::where('estimate_id', $estimate->estimate_id)->first();
+            $payments = EstimatePayments::where('estimate_id', $estimate->estimate_id)->get();
             $toDos = EstimateToDos::where('estimate_id', $estimate->estimate_id)->get();
             $expenses = EstimateExpenses::where('estimate_id', $estimate->estimate_id)->get();
             $estimateImages = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
@@ -820,6 +821,7 @@ class EstimateController extends Controller
                 'expenses' => $expenses,
                 'estimate_images' => $estimateImages,
                 'estimate_files' => $estimateFiles,
+                'invoice' => $invoice,
             ]);
         } catch (\Exception $e) {
             // Handle the exception

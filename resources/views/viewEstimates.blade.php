@@ -710,6 +710,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($invoices as $invoices)
                             <tr class="bg-white border-b">
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     {{ $invoices->complete_invoice_date }}
@@ -730,6 +731,7 @@
                                     {{ $invoices->invoice_status }}
                                 </td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -762,6 +764,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($payments as $payments)
                             <tr class="bg-white border-b">
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     {{ $payments->complete_invoice_date }}
@@ -773,6 +776,7 @@
                                     {{ $payments->invoice_total }}
                                 </td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -1631,12 +1635,13 @@
                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
                         </button>
                     </div>
+                    @if($invoice)
                     <!-- task details -->
                     <div class=" mb-2">
                         <div id="dropdown-div" class="">
                             <p class=" font-medium items-center">Invoice:</p>
-                            <input type="text" id="invoice" name="invoice" value="{{ $invoices->invoice_name }} (Due {{$invoices->invoice_due}})" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                            <input type="hidden" name="invoice_id" value="{{$invoices->estimate_complete_invoice_id}}">
+                            <input type="text" id="invoice" name="invoice" value="{{ $invoice->invoice_name }} (Due {{$invoice->invoice_due}})" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <input type="hidden" name="invoice_id" value="{{$invoice->estimate_complete_invoice_id}}">
                             <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
                                 <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
                             </button> -->
@@ -1652,13 +1657,14 @@
                     <div class=" grid grid-cols-2 gap-3">
                         <div>
                             <label for="">Date:</label>
-                            <input type="date" id="invoice_date" name="invoice_date" value="{{ date('Y-m-d', strtotime($invoices->complete_invoice_date)) }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <input type="date" id="invoice_date" name="invoice_date" value="{{ date('Y-m-d', strtotime($invoice->complete_invoice_date)) }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                         </div>
                         <div>
                             <label for="">Amount:</label>
-                            <input type="text" id="invoice_amount" name="invoice_amount" value="{{ $invoices->invoice_due }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <input type="text" id="invoice_amount" name="invoice_amount" value="{{ $invoice->invoice_due }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                         </div>
                     </div>
+                    @endif
                     <div class="my-2 col-span-2 relative">
                         <label for="" class="block text-left mb-1"> Note: </label>
                         <textarea name="note" id="note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
