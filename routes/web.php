@@ -62,12 +62,14 @@ Route::middleware('customauth')->group(function () {
     Route::post('/completeEstimate', [EstimateController::class, 'completeEstimate']);
     Route::post('/scheduleEstimate', [EstimateController::class, 'scheduleEstimate']);
     Route::post('/setSchedule', [EstimateController::class, 'setSchedule']);
-    Route::post('/addEstimateImage', [EstimageImagesController::class, 'addEstimateImage']);
+    Route::post('/addEstimateImage', [EstimageImagesController::class, 'uploadImage']);
     Route::post('/completeWorkAndAssignInvoice', [EstimateController::class, 'completeWorkAndAssignInvoice']);
     Route::post('/completeInvoiceAndAssignPayment', [EstimateController::class, 'completeInvoiceAndAssignPayment']);
     Route::post('/addPayment', [EstimateController::class, 'addPayment']);
     Route::post('/completeProject', [EstimateController::class, 'completeProject']);
     Route::post('/addToDos', [EstimateController::class, 'addToDos']);
+    Route::post('/addEstimateExpense', [EstimateController::class, 'addEstimateExpense']);
+    Route::post('/addEstimateFile', [EstimateController::class, 'uploadFile']);
     Route::get('/add-estimate', function () {
         return view('addEstimate');
     });
