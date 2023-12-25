@@ -51,12 +51,11 @@
         }
     </style>
     <!-- <link href="https://cdn.tailwindcss.com" rel="stylesheet"> -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/dataTables.min.css') }}">
-    <script src="https://kit.fontawesome.com/4ae3f77a6d.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@5.9.2/dist/dropzone.css" />
+    <script src="{{ asset('assets/js/fontawesome.js') }}" crossorigin="anonymous"></script>
     @vite('resources/css/app.css')
+    <link rel="stylesheet" href="{{ asset('assets/css/fancybox.min.css') }}" />
 </head>
 <!-- Debug: Display decoded user_privileges -->
 @php
@@ -314,7 +313,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <!-- Modal content here -->
                                 <div class=" flex justify-between border-b-2">
-                                    <h2 class=" text-xl font-semibold mb-2 text-[#930027]" >Add Customer</h2>
+                                    <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Add Customer</h2>
                                     <button class="modal-close" type="button">
                                         <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
                                     </button>
@@ -322,7 +321,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                 <!-- task details -->
                                 <div class=" text-center grid grid-cols-4 gap-2">
                                     <div class=" flex justify-between border-b-2 mb-2 col-span-4 mt-4">
-                                        <h2 class=" text-xl font-semibold mb-2 text-[#930027]" >Contact</h2>
+                                        <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Contact</h2>
                                     </div>
                                     <div class="col-span-4">
                                         <select name="" id="" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
@@ -358,7 +357,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                         <input type="number" name="project_number" id="project_number" placeholder="Company Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class=" flex justify-between border-b-2 mb-2 col-span-4  mt-1 mb-3">
-                                        <h2 class=" text-xl font-semibold mb-2 text-[#930027]" >Billing</h2>
+                                        <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Billing</h2>
                                     </div>
                                     <div class=" col-span-2 ">
                                         <h5 class="text-gray-600 mb-1  font-medium text-left">Address 1</h5>

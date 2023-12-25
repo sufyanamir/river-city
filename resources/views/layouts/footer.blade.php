@@ -3,8 +3,9 @@
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
 <script src="{{ asset('assets/js/custom.js') }}"></script>
 <script src="{{ asset('assets/js/dataTables.min.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.jsdelivr.net/npm/topbar@2.0.1/topbar.min.js"></script>
+<script src="{{ asset('assets/js/sweetalert2.js') }}"></script>
+<script src="{{ asset('assets/js/topbar.min.js') }}"></script>
+<script src="{{ asset('assets/js/fancybox.min.js') }}"></script>
 <script>
   $(".addEstimate").click(function(e) {
     e.preventDefault();
