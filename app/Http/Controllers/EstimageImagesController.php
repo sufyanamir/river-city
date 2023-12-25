@@ -2,11 +2,60 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
+use App\Models\Estimate;
 use App\Models\EstimateImages;
 use Illuminate\Http\Request;
 
 class EstimageImagesController extends Controller
 {
+
+    public function deleteEstimateImage($id)
+    {
+        try {
+            $estimateImage = EstimateImages::where('estimate_image_id', $id)->first();
+            // Check if the image exists
+            if ($estimateImage) {
+                // Delete the image file from the file system
+                $imagePath = public_path($estimateImage->estimate_image); // Adjust this based on your file storage configuration
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+
+                // Delete the record from the database
+                $estimateImage->delete();
+
+                // Optionally, you may also delete the image from the estimate_images folder
+                // Assuming that the estimate_images folder is located in the public directory
+                $imageFileName = basename($estimateImage->estimate_image);
+                $estimateImagesFolder = public_path('estimate_images');
+
+                $imageFilePath = $estimateImagesFolder . '/' . $imageFileName;
+                if (file_exists($imageFilePath)) {
+                    unlink($imageFilePath);
+                }
+                return response()->json(['success' => true, 'message' => 'Image deleted successfully!'], 200);
+            }else{
+                return response()->json(['success' => false, 'message' => 'Image not found!'], 400);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => true, 'message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function viewGallery($id)
+    {
+        $userDetails = session('user_details');
+
+        $estimate = Estimate::where('estimate_id', $id)->first();
+        $estimateImages = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
+        $customer = Customer::where('customer_id', $estimate->customer_id)->first();
+        // return response()->json(['success' => true, 'data' => ['estimate_with_images' => $estimateData]], 200);
+        return view('viewGallery', ['estimate' => $estimate, 'estimate_images' => $estimateImages, 'customer' => $customer]);
+
+        // return response()->json(['customers' => $customers, 'estimates_with_images' => $estimateData, 'user_details' => $userDetails], 200);
+    }
+
     public function uploadImage(Request $request)
     {
         try {

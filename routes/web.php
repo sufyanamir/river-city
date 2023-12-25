@@ -109,9 +109,9 @@ Route::middleware('customauth')->group(function () {
     Route::get('/editQoutation', function () {
         return view('editQoutation');
     });
-    Route::get('/manageGallery', function () {
-        return view('viewGallery');
-    });
+    Route::get('/viewGallery{id}', [EstimageImagesController::class, 'viewGallery']);
+    // Route::get('/deleteEstimateImage', [EstimageImagesController::class, 'deleteEstimateImage']);
+    Route::match(['post', 'get'], 'deleteEstimateImage{id}', [EstimageImagesController::class, 'deleteEstimateImage']);
 
     Route::get('/calendar', [EstimateController::class, 'getEstimatesOnCalendar']);
     // Route::get('/calendar', function () {

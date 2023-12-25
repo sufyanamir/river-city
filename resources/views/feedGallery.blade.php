@@ -20,16 +20,18 @@
         @foreach ($estimates_with_images as $item)
         <div class="grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
             <div class="col-span-5 p-2 flex justify-between">
-                <div class="pl-3">
-                    <h3 class="text-[#323C47] font-bold">{{ $item['estimate']->project_name }}</h3>
-                    <p class="font-medium text-sm text-[#858585]">
-                        {{ $item['estimate']->customer_name }} {{ $item['estimate']->customer_last_name }} / {{ $item['estimate']->customer_address }}
-                    </p>
-                </div>
-                <div class="pl-3">
-                    <h3 class="text-[#323C47] font-bold">Images</h3>
-                    <p class="font-medium text-sm text-[#858585]">{{ count($item['images']) }}</p>
-                </div>
+                <a href="/viewGallery{{ $item['estimate']->estimate_id }}">
+                    <div class="pl-3">
+                        <h3 class="text-[#323C47] font-bold">{{ $item['estimate']->project_name }}</h3>
+                        <p class="font-medium text-sm text-[#858585]">
+                            {{ $item['estimate']->customer_name }} {{ $item['estimate']->customer_last_name }} / {{ $item['estimate']->customer_address }}
+                        </p>
+                    </div>
+                    <div class="pl-3">
+                        <h3 class="text-[#323C47] font-bold">Images</h3>
+                        <p class="font-medium text-sm text-[#858585]">{{ count($item['images']) }}</p>
+                    </div>
+                </a>
             </div>
             <div class="col-span-1 p-3">
                 <div class="h-full mx-auto rounded bg-[#D9D9D9] w-[5px]"></div>
