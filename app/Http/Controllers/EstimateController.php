@@ -374,6 +374,13 @@ class EstimateController extends Controller
                 'schedule_assigned' => 1,
             ]);
 
+            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
+
+            $estimate->schedule_assigned = 1;
+            $estimate->schedule_assigned_to = $validatedData['schedule_work'];
+
+            $estimate->save();
+
             return response()->json(['success' => true, 'message' => 'Work is assigned for schedule!'], 200);
         } catch (\Exception $e) {
             return response()->json(['success' =>  false, 'message' => $e->getMessage()], 400);

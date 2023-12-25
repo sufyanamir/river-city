@@ -197,7 +197,7 @@
                         </button>
                     </form>
                     @endif
-                    @if($estimate->estimate_assigned == 1)
+                    @if($estimate->estimate_assigned == 1 && $estimate->schedule_assigned != 1)
                     <button type="button" id="accept-estimate" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                         <div class=" flex mx-auto">
                             <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
