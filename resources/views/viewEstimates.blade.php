@@ -18,7 +18,7 @@
                             {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
                         </p>
                         <p class="text-[#323C47] text-lg font-semibold">
-                            Webinar - Painting
+                        {{ $customer->customer_project_name }}
                         </p>
                         <p class="mt-2 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/home-icon.svg') }}" alt="">
@@ -56,18 +56,18 @@
                         </p>
                     </div>
                     <div class=" col-span-2 p-3 text-right">
-                        <p class="text-lg font-bold">
+                        <p class="text-lg font-bold text-[#323C47]">
                             Estimate
                             <br>
                             <span>{{ $customer->customer_project_name }}</span>
                         </p>
-                        <p class="mt-[2px] ">
+                        <p class="mt-[2px] text-[#323C47]">
                             {{ $customer->customer_project_number }}
                         </p>
-                        <p>
+                        <p class="text-[#323C47]">
                             {{ $estimate->estimate_status }}
                         </p>
-                        <p class="">
+                        <p class="text-[#323C47]">
                             {{ $customer->created_at }}
                         </p>
                         <p class="mt-1 text-red-900">
@@ -1811,7 +1811,7 @@
                             class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
                         <button id=""
                             class=" float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Complete
-                            Estimate
+                            Invoice
                         </button>
                     </div>
                 </div>
