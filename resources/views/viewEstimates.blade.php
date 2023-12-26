@@ -162,13 +162,15 @@
                 </div>
                 <div class=" px-3">
                     <div class="my-auto py-4 flex p-2">
-                        @if ($estimate->work_assigned != 1)
+                        @if ($estimate->schedule_assigned == 1 && $estimate->work_assigned != 1)
+                        <a href="/getEstimateToSetSchedule{{$estimate->estimate_id}}">
                             <button type="button" id="schedule-estimate"
                                 class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                                 <img class="h-[14px] w-[14px] my-auto mx-1"
                                     src="{{ asset('assets/icons/calendar-icon.svg') }}" alt="">
                                 <span class=" my-auto">Schedule Estimate</span>
                             </button>
+                        </a>
                         @endif
                         @if ($estimate->work_assigned == 1 && $estimate->invoice_assigned != 1)
                             <button type="button" id="complete-work"
