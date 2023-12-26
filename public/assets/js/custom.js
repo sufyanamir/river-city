@@ -84,15 +84,15 @@ $(document).ready(function () {
       'success'
     );
     topbar.hide();
-    setInterval(
-      location.reload()
-      ,
-      5000
-    );
-    // $("#universalTableBody").load(location.href + "#universalTableBody > *");
-    // $(".itemDiv").load(location.href + ".itemDiv > *");
-    // $(".modal-close").trigger("click");
-    // $("#formData")[0].reset();
+    // setInterval(
+    //   location.reload()
+    //   ,
+    //   5000
+    // );
+    $("#universalTableBody").load(location.href + " #universalTableBody > *");
+    $(".itemDiv").load(location.href + " .itemDiv > *");
+    $(".modal-close").trigger("click");
+    $("#formData")[0].reset();
     // window.location.href = "/dashboard";
   }
 

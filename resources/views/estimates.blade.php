@@ -29,7 +29,7 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody class=" text-sm">
+                    <tbody class=" universalTableBody text-sm">
                         @foreach($estimates as $item)
                         <tr>
                             <td>{{ $item->created_at }}</td>

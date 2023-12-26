@@ -79,21 +79,20 @@
             <span class="bg-[#CFBFE8] text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Pending</span>
             <span class="bg-[#FDD5D7] text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Cancel</span>
         </div>
-        @if($estimate)
         <div class="p-4">
             <div id="external-events">
+                @if(isset($estimate))
                 <div class="external-event bg-[#B7E4FF] text-xs font-medium px-2 py-2 rounded-lg w-32 mb-2 cursor-pointer" id="schedule-estimate">{{ $estimate->customer_name }} {{$estimate->customer_last_name}}</div>
-            </div>
-
+                @endif
+            </div>            
             <!-- THE CALENDAR -->
             <div id="calendar"></div>
         </div>
-        @endif
         <!-- /.card-body -->
     </div>
 
 </div>
-@if($estimate)
+@if(isset($estimate))
 <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="schedule-estimate-modal">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <!-- Background overlay -->
