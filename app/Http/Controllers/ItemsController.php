@@ -35,8 +35,8 @@ class ItemsController extends Controller
     {
         $userDetails = session('user_details');
         $items = Items::get();
-
-        return view('items', ['items' => $items, 'user_details' => $userDetails]);
+        $itemsForAssemblis = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
+        return view('items', ['items' => $items, 'user_details' => $userDetails, 'itemsForAssemblies' => $itemsForAssemblis]);
     }
     public function getGroupsWithItems()
     {

@@ -21,6 +21,7 @@ use App\Models\EstimateNote;
 use App\Models\EstimatePayments;
 use App\Models\EstimateProposal;
 use App\Models\EstimateToDos;
+use App\Models\ItemAssembly;
 use App\Models\Items;
 use App\Models\ScheduleEstimate;
 use App\Models\ScheduleWork;
@@ -37,15 +38,15 @@ class EstimateController extends Controller
 
     public function getEstimateToSetSchedule($id)
     {
-            $userDetails = session('user_details');
+        $userDetails = session('user_details');
 
-            $estimate = Estimate::where('estimate_id', $id)->first();
-            $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-            $estimates = Estimate::get();
-            $users = User::where('added_user_id', $userDetails['id'])->get();
+        $estimate = Estimate::where('estimate_id', $id)->first();
+        $customer = Customer::where('customer_id', $estimate->customer_id)->first();
+        $estimates = Estimate::get();
+        $users = User::where('added_user_id', $userDetails['id'])->get();
 
-            return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users]);
-            // return response()->json(['success' => true, 'estimate' => $estimate]);
+        return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users]);
+        // return response()->json(['success' => true, 'estimate' => $estimate]);
     }
     public function getEstimatesOnCalendar()
     {
@@ -628,22 +629,20 @@ class EstimateController extends Controller
             $validatedData = $request->validate([
                 'estimate_id' => 'required',
                 'selected_items' => 'required|array',
-                'selected_item_names' => 'nullable|array', // Use plural for consistency
-                'selected_item_types' => 'nullable|array',
-                'selected_item_units' => 'nullable|array',
-                'selected_item_costs' => 'nullable|array',
-                'selected_item_prices' => 'required|array',
             ]);
 
+            // Fetch the selected items from the database
+            $selectedItems = Items::whereIn('item_id', $validatedData['selected_items'])->get();
+
             $itemsData = [];
-            foreach ($validatedData['selected_items'] as $index => $itemId) {
+            foreach ($selectedItems as $item) {
                 $itemsData[] = [
-                    'item_id' => $itemId,
-                    'item_name' => $validatedData['selected_item_names'][$index],
-                    'item_type' => $validatedData['selected_item_types'][$index],
-                    'item_unit' => $validatedData['selected_item_units'][$index],
-                    'item_cost' => $validatedData['selected_item_costs'][$index],
-                    'item_price' => $validatedData['selected_item_prices'][$index],
+                    'item_id' => $item->item_id,
+                    'item_name' => $item->item_name,
+                    'item_type' => $item->item_type,
+                    'item_unit' => $item->item_unit,
+                    'item_cost' => $item->item_cost,
+                    'item_price' => $item->item_price,
                 ];
             }
 
@@ -814,7 +813,7 @@ class EstimateController extends Controller
             $expenses = EstimateExpenses::where('estimate_id', $estimate->estimate_id)->get();
             $estimateImages = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
             $estimateFiles = EstimateFile::where('estimate_id', $estimate->estimate_id)->get();
-
+            
             // Calculate the sum of item_price for the estimate
             $totalPrice = $estimateItems->sum('item_price');
 

@@ -134,7 +134,12 @@
                         <div class=" my-2 col-span-2 hidden" id="multiAdd-items">
                             <div id="mulitple_input">
                                 <label for="" class="block text-left mb-1"> Assembly Name </label>
-                                <input type="text" name="assembly_name[]" id="" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <select name="assembly_name[]" id="" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                    <option value="">Select Item</option>
+                                    @foreach ($itemsForAssemblies as $item)
+                                    <option value="{{ $item->item_id }}">{{ $item->item_name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class=" text-right mt-2">
                                 <button type="button" class=" gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="addbtn" aria-expanded="true" aria-haspopup="true">
@@ -203,9 +208,12 @@
         let rembtn = document.createElement('span');
         newele.classList.add('mt-5')
         newele.innerHTML =
-            `<input type="text" name="assembly_name[]" id="itemName" placeholder="Item Name"
-autocomplete="given-name"
-class=" w-[92%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">`
+            `<select name="assembly_name[]" id="" placeholder="Item Name" autocomplete="given-name" class=" w-[92%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                    <option value="">Select Item</option>
+                                    @foreach ($itemsForAssemblies as $item)
+                                    <option value="{{ $item->item_id }}">{{ $item->item_name }}</option>
+                                    @endforeach
+                                </select>`
         rembtn.innerHTML = `<button type="button"
 class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]"
 id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">

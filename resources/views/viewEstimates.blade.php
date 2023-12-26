@@ -18,7 +18,7 @@
                             {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
                         </p>
                         <p class="text-[#323C47] text-lg font-semibold">
-                        {{ $customer->customer_project_name }}
+                            {{ $customer->customer_project_name }}
                         </p>
                         <p class="mt-2 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/home-icon.svg') }}" alt="">
@@ -163,14 +163,14 @@
                 <div class=" px-3">
                     <div class="my-auto py-4 flex p-2">
                         @if ($estimate->schedule_assigned == 1 && $estimate->work_assigned != 1)
-                        <a href="/getEstimateToSetSchedule{{$estimate->estimate_id}}">
-                            <button type="button" id="schedule-estimate"
-                                class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
-                                <img class="h-[14px] w-[14px] my-auto mx-1"
-                                    src="{{ asset('assets/icons/calendar-icon.svg') }}" alt="">
-                                <span class=" my-auto">Schedule Estimate</span>
-                            </button>
-                        </a>
+                            <a href="/getEstimateToSetSchedule{{ $estimate->estimate_id }}">
+                                <button type="button" id="schedule-estimate"
+                                    class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                                    <img class="h-[14px] w-[14px] my-auto mx-1"
+                                        src="{{ asset('assets/icons/calendar-icon.svg') }}" alt="">
+                                    <span class=" my-auto">Schedule Estimate</span>
+                                </button>
+                            </a>
                         @endif
                         @if ($estimate->work_assigned == 1 && $estimate->invoice_assigned != 1)
                             <button type="button" id="complete-work"
@@ -262,7 +262,7 @@
                     </p>
 
                 </div>
-                <div >
+                <div>
                     <div class="my-auto flex  py-4">
                         <a href="" class="pl-3">
                             <button type="button"
@@ -310,7 +310,7 @@
                 <p class="text-lg text-white pl-3 font-medium">
                     Profitability
                 </p>
-                <button type="button" class="flex">
+                <button type="button" id="profitability-btn" class="flex">
                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                         alt="">
                 </button>
@@ -516,7 +516,7 @@
                     </button>
                 </a>
             </div>
-            <div >
+            <div>
                 <div class="relative overflow-x-auto py-2">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -1376,28 +1376,18 @@
                                     <tr class="bg-white border-b">
                                         <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                             {{ $item->item_name }}
-                                            <input type="hidden" name="selected_item_names[]"
-                                                value="{{ $item->item_name }}">
                                         </td>
                                         <td class="px-6 py-4">
                                             {{ $item->item_type }}
-                                            <input type="hidden" name="selected_item_types[]"
-                                                value="{{ $item->item_type }}">
                                         </td>
                                         <td class="px-6 py-4">
                                             {{ $item->item_unit }}
-                                            <input type="hidden" name="selected_item_units[]"
-                                                value="{{ $item->item_unit }}">
                                         </td>
                                         <td class="px-6 py-4">
                                             ${{ $item->item_cost }}
-                                            <input type="hidden" name="selected_item_costs[]"
-                                                value="{{ $item->item_cost }}">
                                         </td>
                                         <td class="px-6 py-4">
                                             ${{ $item->item_price }}
-                                            <input type="hidden" name="selected_item_prices[]"
-                                                value="{{ $item->item_price }}">
                                         </td>
                                         <td class="px-6 py-4">
                                             <input type="checkbox" name="selected_items[]"
@@ -1417,6 +1407,280 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="profitability-btn-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div
+            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full lg:max-w-screen-md">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <!-- Modal content here -->
+                <div class=" flex justify-between">
+                    <div class=" " id="">
+                        Profitability
+                    </div>
+                    <button class="modal-close" type="button">
+                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                    </button>
+                </div>
+                <hr>
+                <!-- task details -->
+                <div class="my-2">
+                    <div class="relative overflow-x-auto">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-300">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 rounded-s-lg">
+                                        Hours
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Estimated
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 rounded-e-lg">
+                                        Actual
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white">
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        Tracked Hours
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        ___
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        $0.00
+                                    </td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        Other Labour Hours
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        ___
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        $0.00
+                                    </td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        Expense Hours
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        ___
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        $0.00
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot class=" bg-gray-100">
+                                <tr class="font-semibold text-gray-900">
+                                    <th scope="row" class="px-6 py-3 text-base">Total Hours</th>
+                                    <td class="px-6 py-3">0.50</td>
+                                    <td class="px-6 py-3">0.00</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <div class="my-2">
+                    <div class="relative overflow-x-auto">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-300">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 rounded-s-lg">
+                                        Labour
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Estimated
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 rounded-e-lg">
+                                        Actual
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white">
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        Tracked Labour
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        ___
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        $0.00
+                                    </td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        Other Labour
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        ___
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        $0.00
+                                    </td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        Expense Labour
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        ___
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        $0.00
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot class=" bg-gray-100">
+                                <tr class="font-semibold text-gray-900">
+                                    <th scope="row" class="px-6 py-3 text-base">Total Labour</th>
+                                    <td class="px-6 py-3">12.50</td>
+                                    <td class="px-6 py-3">0.00</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <div class="my-2">
+                    <div class="relative overflow-x-auto">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-300">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 rounded-s-lg">
+                                        Material
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Estimated
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 rounded-e-lg">
+                                        Actual
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white">
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        Other Materials
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        ___
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        $0.00
+                                    </td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        Expense Materials
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        ___
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        $10.00
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot class=" bg-gray-100">
+                                <tr class="font-semibold text-gray-900">
+                                    <th scope="row" class="px-6 py-3 text-base">Total Materials</th>
+                                    <td class="px-6 py-3">$100.00</td>
+                                    <td class="px-6 py-3">$10.00</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <div class="my-2">
+                    <div class="relative overflow-x-auto">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-300">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 rounded-s-lg">
+                                        Profit
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Estimated
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 rounded-e-lg">
+                                        Actual
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white">
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        Sales
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        $175.00
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        $175.00
+                                    </td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        Costs
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        $112.50
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        $10.00
+                                    </td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        Profit
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        $62.50
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        $165.00
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot class=" bg-gray-100">
+                                <tr class="font-semibold text-gray-900">
+                                    <th scope="row" class="px-6 py-3 text-base">Total Hours</th>
+                                    <td class="px-6 py-3">35.7%</td>
+                                    <td class="px-6 py-3">94.3%</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <hr>
             </div>
         </div>
     </div>
@@ -2147,6 +2411,18 @@
     $(".modal-close").click(function(e) {
         e.preventDefault();
         $("#addItems-modal").addClass('hidden');
+        $("#formData")[0].reset()
+    });
+</script>
+<script>
+    $("#profitability-btn").click(function(e) {
+        e.preventDefault();
+        $("#profitability-btn-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#profitability-btn-modal").addClass('hidden');
         $("#formData")[0].reset()
     });
 </script>
