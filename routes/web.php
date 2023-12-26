@@ -79,7 +79,7 @@ Route::middleware('customauth')->group(function () {
     // Route::get('/group', function () {
     //     return view('group');
     // });
-    Route::get('/group',[ItemsController::class, 'getGroupsWithItems']);
+    Route::get('/group', [ItemsController::class, 'getGroupsWithItems']);
     Route::post('/addGroup', [GroupController::class, 'addGroup']);
     Route::match(['post', 'get'], '/delete/group/{id}', [GroupController::class, 'deleteGroup']);
     Route::get('/emails', function () {
@@ -114,6 +114,7 @@ Route::middleware('customauth')->group(function () {
     Route::match(['post', 'get'], 'deleteEstimateImage{id}', [EstimageImagesController::class, 'deleteEstimateImage']);
 
     Route::get('/calendar', [EstimateController::class, 'getEstimatesOnCalendar']);
+    Route::get('/getEstimateToSetSchedule{id}', [EstimateController::class, 'getEstimateToSetSchedule']);
     // Route::get('/calendar', function () {
     //     return view('calendar');
     // });

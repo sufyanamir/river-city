@@ -152,6 +152,7 @@
 
             </div>
         </div>
+
         <div class=" border-2  shadow-lg mt-7     bg-white rounded-3xl   ">
             <div class="">
                 <div class=" px-3  bg-[#930027] rounded-t-3xl">
@@ -245,6 +246,7 @@
                                     d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
                                     clip-rule="evenodd" />
                             </svg>
+
                         </button>
 
                     </div>
@@ -2072,18 +2074,6 @@
         e.preventDefault();
         $("#expenses-btn-modal").addClass('hidden');
         $("#expenses-btn-form")[0].reset()
-    });
-</script>
-<script>
-    $("#schedule-estimate").click(function(e) {
-        e.preventDefault();
-        $("#schedule-estimate-modal").removeClass('hidden');
-    });
-
-    $(".modal-close").click(function(e) {
-        e.preventDefault();
-        $("#schedule-estimate-modal").addClass('hidden');
-        $("#schedule-estimate-form")[0].reset()
     });
 </script>
 <script>
