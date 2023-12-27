@@ -113,7 +113,7 @@
                                     }
                                 });
                             });
-                        </script>                        
+                        </script>
                         @endforeach
                     </tbody>
                 </table>
