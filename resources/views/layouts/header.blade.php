@@ -276,7 +276,11 @@ $userPrivileges = session('user_details')['user_privileges'];
                 </div>
                 <div class="flex justify-end gap-5">
                     <div class=" my-auto">
-                        <x-add-button :title="'+Add Estimates'" :class="'addEstimate'" :id="''"></x-add-button>
+                        @if (session('user_details')['user_role'] == 'admin')
+                            <x-add-button :title="'+Add Estimates'" :class="'addEstimate'" :id="''"></x-add-button>
+                        @elseif(isset($userPrivileges->estimate) && isset($userPrivileges->estimate->add) && $userPrivileges->estimate->add === 'on')
+                            <x-add-button :title="'+Add Estimates'" :class="'addEstimate'" :id="''"></x-add-button>
+                        @endif
                     </div>
                     <!-------------------------------- plus icon ------------------------------------>
                     <div class=" my-auto">
