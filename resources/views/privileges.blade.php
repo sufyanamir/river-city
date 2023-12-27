@@ -32,26 +32,26 @@
                     <div class="p-3 ">
                         <div class="grid grid-cols-12 mt-4">
                             <div class="pl-[57px] col-span-8 ">
-                                <input type="checkbox" name="privileges[user]" id="addPrivilegeUser" {{ isset($user->user_privileges['user']) ? 'checked' : '' }}>
-                                <label for="addPrivilegeUser" class=" font-bold">Users</label>
+                                <input type="checkbox" name="privileges[customers]" id="addPrivilegecustomers" {{ isset($user->user_privileges['customers']) ? 'checked' : '' }}>
+                                <label for="addPrivilegecustomers" class=" font-bold">Customers</label>
                             </div>
                             <div class="col-span-4 mr-20">
                                 <div class="flex justify-between">
                                     <div>
-                                        <input type="checkbox" name="privileges[user][edit]" id="privilegeUserEdit" {{ isset($user->user_privileges['user']['edit']) ? 'checked' : '' }}>
-                                        <label for="privilegeUserEdit" class=" text-gray-500">Edit</label>
+                                        <input type="checkbox" name="privileges[customers][edit]" id="privilegeCustomersEdit" {{ isset($user->user_privileges['customers']['edit']) ? 'checked' : '' }}>
+                                        <label for="privilegeCustomersEdit" class=" text-gray-500">Edit</label>
                                     </div>
                                     <div>
-                                        <input type="checkbox" name="privileges[user][delete]" id="privilegeUserDelete" {{ isset($user->user_privileges['user']['delete']) ? 'checked' : '' }}>
-                                        <label for="privilegeUserDelete" class=" text-gray-500">Delete</label>
+                                        <input type="checkbox" name="privileges[customers][delete]" id="privilegeCustomersDelete" {{ isset($user->user_privileges['customers']['delete']) ? 'checked' : '' }}>
+                                        <label for="privilegeCustomersDelete" class=" text-gray-500">Delete</label>
                                     </div>
                                     <div>
-                                        <input type="checkbox" name="privileges[user][add]" id="privilegeUserAdd" {{ isset($user->user_privileges['user']['add']) ? 'checked' : '' }}>
-                                        <label for="privilegeUserAdd" class=" text-gray-500">Add</label>
+                                        <input type="checkbox" name="privileges[customers][add]" id="privilegeCustomersAdd" {{ isset($user->user_privileges['customers']['add']) ? 'checked' : '' }}>
+                                        <label for="privilegeCustomersAdd" class=" text-gray-500">Add</label>
                                     </div>
                                     <div>
-                                        <input type="checkbox" name="privileges[user][view]" id="privilegeUserView" {{ isset($user->user_privileges['user']['view']) ? 'checked' : '' }}>
-                                        <label for="privilegeUserView" class=" text-gray-500">View</label>
+                                        <input type="checkbox" name="privileges[customers][view]" id="privilegeCustomersView" {{ isset($user->user_privileges['customers']['view']) ? 'checked' : '' }}>
+                                        <label for="privilegeCustomersView" class=" text-gray-500">View</label>
                                     </div>
                                 </div>
                             </div>
@@ -84,32 +84,6 @@
                         </div>
                         <div class="grid grid-cols-12 mt-4">
                             <div class="pl-[57px] col-span-8 ">
-                                <input type="checkbox" name="privileges[schedule]" id="addprivilegeSchedule" {{ isset($user->user_privileges['schedule']) ? 'checked' : '' }}>
-                                <label for="addprivilegeSchedule" class=" font-bold">Schedule</label>
-                            </div>
-                            <div class="col-span-4 mr-20">
-                                <div class="flex justify-between">
-                                    <div>
-                                        <input type="checkbox" name="privileges[schedule][edit]" id="privilegeScheduleEdit" {{ isset($user->user_privileges['schedule']['edit']) ? 'checked' : '' }}>
-                                        <label for="privilegeScheduleEdit" class=" text-gray-500">Edit</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" name="privileges[schedule][delete]" id="privilegeScheduleDelete" {{ isset($user->user_privileges['schedule']['delete']) ? 'checked' : '' }}>
-                                        <label for="privilegeScheduleDelete" class=" text-gray-500">Delete</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" name="privileges[schedule][add]" id="privilegeScheduleAdd" {{ isset($user->user_privileges['schedule']['add']) ? 'checked' : '' }}>
-                                        <label for="privilegeScheduleAdd" class=" text-gray-500">Add</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" name="privileges[schedule][view]" id="privilegeScheduleView" {{ isset($user->user_privileges['schedule']['view']) ? 'checked' : '' }}>
-                                        <label for="privilegeScheduleView" class=" text-gray-500">View</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-12 mt-4">
-                            <div class="pl-[57px] col-span-8 ">
                                 <input type="checkbox" name="privileges[item]" id="addPrivilegeItem" {{ isset($user->user_privileges['item']) ? 'checked' : '' }}>
                                 <label for="addPrivilegeItem" class=" font-bold">Items</label>
                             </div>
@@ -136,91 +110,13 @@
                         </div>
                         <div class="grid grid-cols-12 mt-4">
                             <div class="pl-[57px] col-span-8 ">
-                                <input type="checkbox" name="privileges[labour]" id="addPrivilegeLabour" {{ isset($user->user_privileges['labour']) ? 'checked' : '' }}>
-                                <label for="addPrivilegeLabour" class=" font-bold">Labour</label>
-                            </div>
-                            <div class="col-span-4 mr-20">
-                                <div class="flex justify-between">
-                                    <div>
-                                        <input type="checkbox" name="privileges[labour][edit]" id="privilegeLabourEdit" {{ isset($user->user_privileges['labour']['edit']) ? 'checked' : '' }}>
-                                        <label for="privilegeLabourEdit" class=" text-gray-500">Edit</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" name="privileges[labour][delete]" id="privilegeLabourDelete" {{ isset($user->user_privileges['labour']['delete']) ? 'checked' : '' }}>
-                                        <label for="privilegeLabourDelete" class=" text-gray-500">Delete</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" name="privileges[labour][add]" id="privilegeLabourAdd" {{ isset($user->user_privileges['labour']['add']) ? 'checked' : '' }}>
-                                        <label for="privilegeLabourAdd" class=" text-gray-500">Add</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" name="privileges[labour][view]" id="privilegeLabourView" {{ isset($user->user_privileges['labour']['view']) ? 'checked' : '' }}>
-                                        <label for="privilegeLabourView" class=" text-gray-500">View</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-12 mt-4">
-                            <div class="pl-[57px] col-span-8 ">
-                                <input type="checkbox" name="privileges[materials]" id="addPrivilegeMaterials" {{ isset($user->user_privileges['materials']) ? 'checked' : '' }}>
-                                <label for="addPrivilegeMaterials" class=" font-bold">Materials</label>
-                            </div>
-                            <div class="col-span-4 mr-20">
-                                <div class="flex justify-between">
-                                    <div>
-                                        <input type="checkbox" name="privileges[materials][edit]" id="privilegeMaterialsEdit" {{ isset($user->user_privileges['materials']['edit']) ? 'checked' : '' }}>
-                                        <label for="privilegeMaterialsEdit" class=" text-gray-500">Edit</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" name="privileges[materials][delete]" id="privilegeMaterialsDelete" {{ isset($user->user_privileges['materials']['delete']) ? 'checked' : '' }}>
-                                        <label for="privilegeMaterialsDelete" class=" text-gray-500">Delete</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" name="privileges[materials][add]" id="privilegeMaterialsAdd" {{ isset($user->user_privileges['materials']['add']) ? 'checked' : '' }}>
-                                        <label for="privilegeMaterialsAdd" class=" text-gray-500">Add</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" name="privileges[materials][view]" id="privilegeMaterialsView" {{ isset($user->user_privileges['materials']['view']) ? 'checked' : '' }}>
-                                        <label for="privilegeMaterialsView" class=" text-gray-500">View</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-12 mt-4">
-                            <div class="pl-[57px] col-span-8 ">
-                                <input type="checkbox" name="privileges[files]" id="addPrivilegeFiles" {{ isset($user->user_privileges['files']) ? 'checked' : '' }}>
-                                <label for="addPrivilegeFiles" class=" font-bold">Files</label>
-                            </div>
-                            <div class="col-span-4 mr-20">
-                                <div class="flex justify-between">
-                                    <div>
-                                        <input type="checkbox" name="privileges[files][edit]" id="privilegeFilesEdit" {{ isset($user->user_privileges['files']['edit']) ? 'checked' : '' }}>
-                                        <label for="privilegeFilesEdit" class=" text-gray-500">Edit</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" name="privileges[files][delete]" id="privilegeFilesDelete" {{ isset($user->user_privileges['file']['delete']) ? 'checked' : '' }}>
-                                        <label for="privilegeFilesDelete" class=" text-gray-500">Delete</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" name="privileges[files][add]" id="privilegeFilesAdd"  {{ isset($user->user_privileges['files']['add']) ? 'checked' : '' }}>
-                                        <label for="privilegeFilesAdd" class=" text-gray-500">Add</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" name="privileges[files][view]" id="privilegeFilesView"  {{ isset($user->user_privileges['files']['view']) ? 'checked' : '' }}>
-                                        <label for="privilegeFilesView" class=" text-gray-500">View</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-12 mt-4">
-                            <div class="pl-[57px] col-span-8 ">
                                 <input type="checkbox" name="privileges[campaign]" id="addPrivilegeCampaign" {{ isset($user->user_privileges['campaign']) ? 'checked' : '' }}>
                                 <label for="addPrivilegeCampaign" class=" font-bold">Campaign</label>
                             </div>
                             <div class="col-span-4 mr-20">
                                 <div class="flex justify-between">
                                     <div>
-                                        <input type="checkbox" name="privileges[campaign][edit]" id="privilegeCampaignEdit" {{ isset($user->user_privileges['camapign']['edit']) ? 'checked' : '' }}>
+                                        <input type="checkbox" name="privileges[campaign][edit]" id="privilegeCampaignEdit" {{ isset($user->user_privileges['campaign']['edit']) ? 'checked' : '' }}>
                                         <label for="privilegeCampaignEdit" class=" text-gray-500">Edit</label>
                                     </div>
                                     <div>
@@ -238,6 +134,162 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="grid grid-cols-12 mt-4">
+                            <div class="pl-[57px] col-span-8 ">
+                                <input type="checkbox" name="privileges[emails]" id="addPrivilegeEmails" {{ isset($user->user_privileges['emails']) ? 'checked' : '' }}>
+                                <label for="addPrivilegeEmails" class=" font-bold">emails</label>
+                            </div>
+                            <div class="col-span-4 mr-20">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <input type="checkbox" name="privileges[emails][edit]" id="privilegeEmailsEdit" {{ isset($user->user_privileges['emails']['edit']) ? 'checked' : '' }}>
+                                        <label for="privilegeEmailsEdit" class=" text-gray-500">Edit</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[emails][delete]" id="privilegeEmailsDelete" {{ isset($user->user_privileges['emails']['delete']) ? 'checked' : '' }}>
+                                        <label for="privilegeEmailsDelete" class=" text-gray-500">Delete</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[emails][add]" id="privilegeEmailsAdd" {{ isset($user->user_privileges['emails']['add']) ? 'checked' : '' }}>
+                                        <label for="privilegeEmailsAdd" class=" text-gray-500">Add</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[emails][view]" id="privilegeEmailsView" {{ isset($user->user_privileges['emails']['view']) ? 'checked' : '' }}>
+                                        <label for="privilegeEmailsView" class=" text-gray-500">View</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- <div class="grid grid-cols-12 mt-4">
+                            <div class="pl-[57px] col-span-8 ">
+                                <input type="checkbox" name="privileges[user]" id="addPrivilegeUser" {{ isset($user->user_privileges['user']) ? 'checked' : '' }}>
+                                <label for="addPrivilegeUser" class=" font-bold">Users</label>
+                            </div>
+                            <div class="col-span-4 mr-20">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <input type="checkbox" name="privileges[user][edit]" id="privilegeUserEdit" {{ isset($user->user_privileges['user']['edit']) ? 'checked' : '' }}>
+                                        <label for="privilegeUserEdit" class=" text-gray-500">Edit</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[user][delete]" id="privilegeUserDelete" {{ isset($user->user_privileges['user']['delete']) ? 'checked' : '' }}>
+                                        <label for="privilegeUserDelete" class=" text-gray-500">Delete</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[user][add]" id="privilegeUserAdd" {{ isset($user->user_privileges['user']['add']) ? 'checked' : '' }}>
+                                        <label for="privilegeUserAdd" class=" text-gray-500">Add</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[user][view]" id="privilegeUserView" {{ isset($user->user_privileges['user']['view']) ? 'checked' : '' }}>
+                                        <label for="privilegeUserView" class=" text-gray-500">View</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> --}}
+                        <div class="grid grid-cols-12 mt-4">
+                            <div class="pl-[57px] col-span-8 ">
+                                <input type="checkbox" name="privileges[crew]" id="addPrivilegeCrew" {{ isset($user->user_privileges['user']) ? 'checked' : '' }}>
+                                <label for="addPrivilegeCrew" class=" font-bold">Crew</label>
+                            </div>
+                            <div class="col-span-4 mr-20">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <input type="checkbox" name="privileges[crew][edit]" id="privilegeCrewEdit" {{ isset($user->user_privileges['crew']['edit']) ? 'checked' : '' }}>
+                                        <label for="privilegeCrewEdit" class=" text-gray-500">Edit</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[crew][delete]" id="privilegeCrewDelete" {{ isset($user->user_privileges['crew']['delete']) ? 'checked' : '' }}>
+                                        <label for="privilegeCrewDelete" class=" text-gray-500">Delete</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[crew][add]" id="privilegeCrewAdd" {{ isset($user->user_privileges['crew']['add']) ? 'checked' : '' }}>
+                                        <label for="privilegeCrewAdd" class=" text-gray-500">Add</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[crew][view]" id="privilegeCrewView" {{ isset($user->user_privileges['crew']['view']) ? 'checked' : '' }}>
+                                        <label for="privilegeCrewView" class=" text-gray-500">View</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-12 mt-4">
+                            <div class="pl-[57px] col-span-8 ">
+                                <input type="checkbox" name="privileges[gallery]" id="addPrivilegeGallery" {{ isset($user->user_privileges['gallery']) ? 'checked' : '' }}>
+                                <label for="addPrivilegeGallery" class=" font-bold">Gallery</label>
+                            </div>
+                            <div class="col-span-4 mr-20">
+                                <div class="flex justify-between">
+                                    {{-- <div>
+                                        <input type="checkbox" name="privileges[calendar][edit]" id="privilegeCalendarEdit" {{ isset($user->user_privileges['calendar']['edit']) ? 'checked' : '' }}>
+                                        <label for="privilegeCalendarEdit" class=" text-gray-500">Edit</label>
+                                    </div> --}}
+                                    <div>
+                                        <input type="checkbox" name="privileges[gallery][delete]" id="privilegeGalleryDelete" {{ isset($user->user_privileges['gallery']['delete']) ? 'checked' : '' }}>
+                                        <label for="privilegeGalleryDelete" class=" text-gray-500">Delete</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[gallery][add]" id="privilegeGalleryAdd" {{ isset($user->user_privileges['gallery']['add']) ? 'checked' : '' }}>
+                                        <label for="privilegeGalleryAdd" class=" text-gray-500">Add</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[gallery][view]" id="privilegeGalleryView" {{ isset($user->user_privileges['gallery']['view']) ? 'checked' : '' }}>
+                                        <label for="privilegeGalleryView" class=" text-gray-500">View</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-12 mt-4">
+                            <div class="pl-[57px] col-span-8 ">
+                                <input type="checkbox" name="privileges[calendar]" id="addPrivilegeCalendar" {{ isset($user->user_privileges['calendar']) ? 'checked' : '' }}>
+                                <label for="addPrivilegeCalendar" class=" font-bold">Calendar</label>
+                            </div>
+                            <div class="col-span-4 mr-20">
+                                <div class="flex justify-between">
+                                    {{-- <div>
+                                        <input type="checkbox" name="privileges[calendar][edit]" id="privilegeCalendarEdit" {{ isset($user->user_privileges['calendar']['edit']) ? 'checked' : '' }}>
+                                        <label for="privilegeCalendarEdit" class=" text-gray-500">Edit</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[calendar][delete]" id="privilegeCalendarDelete" {{ isset($user->user_privileges['calendar']['delete']) ? 'checked' : '' }}>
+                                        <label for="privilegeCalendarDelete" class=" text-gray-500">Delete</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[calendar][add]" id="privilegeCalendarAdd" {{ isset($user->user_privileges['calendar']['add']) ? 'checked' : '' }}>
+                                        <label for="privilegeCalendarAdd" class=" text-gray-500">Add</label>
+                                    </div> --}}
+                                    <div>
+                                        <input type="checkbox" name="privileges[calendar][view]" id="privilegeCalendarView" {{ isset($user->user_privileges['calendar']['view']) ? 'checked' : '' }}>
+                                        <label for="privilegeCalendarView" class=" text-gray-500">View</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-12 mt-4">
+                            <div class="pl-[57px] col-span-8 ">
+                                <input type="checkbox" name="privileges[reports]" id="addPrivilegeReports" {{ isset($user->user_privileges['reports']) ? 'checked' : '' }}>
+                                <label for="addPrivilegeReports" class=" font-bold">Reports</label>
+                            </div>
+                            <div class="col-span-4 mr-20">
+                                <div class="flex justify-between">
+                                    {{-- <div>
+                                        <input type="checkbox" name="privileges[reports][edit]" id="privilegeReportsEdit" {{ isset($user->user_privileges['reports']['edit']) ? 'checked' : '' }}>
+                                        <label for="privilegeReportsEdit" class=" text-gray-500">Edit</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[reports][delete]" id="privilegeReportsDelete" {{ isset($user->user_privileges['reports']['delete']) ? 'checked' : '' }}>
+                                        <label for="privilegeReportsDelete" class=" text-gray-500">Delete</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="privileges[reports][add]" id="privilegeReportsAdd" {{ isset($user->user_privileges['reports']['add']) ? 'checked' : '' }}>
+                                        <label for="privilegeReportsAdd" class=" text-gray-500">Add</label>
+                                    </div> --}}
+                                    <div>
+                                        <input type="checkbox" name="privileges[reports][view]" id="privilegeReportsView" {{ isset($user->user_privileges['reports']['view']) ? 'checked' : '' }}>
+                                        <label for="privilegeReportsView" class=" text-gray-500">View</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -247,3 +299,29 @@
         </form>
     </div>
     @include('layouts.footer')
+    <script>
+        $(document).ready(function () {
+            // Function to toggle the state of related checkboxes
+            function toggleRelatedCheckboxes(mainCheckbox, relatedCheckboxes) {
+                const isChecked = mainCheckbox.prop('checked');
+
+                relatedCheckboxes.prop('disabled', !isChecked);
+                relatedCheckboxes.prop('checked', isChecked);
+            }
+
+            // Add event listener to each main checkbox
+            $('input[type="checkbox"][name^="privileges["]').each(function () {
+                const mainCheckbox = $(this);
+                const mainCheckboxName = mainCheckbox.attr('name');
+                const relatedCheckboxes = $(`input[type="checkbox"][name^="${mainCheckboxName}["]`);
+
+                // Click event handler for each main checkbox
+                mainCheckbox.on('click', function () {
+                    toggleRelatedCheckboxes(mainCheckbox, relatedCheckboxes);
+                });
+
+                // Initial toggle state based on the main checkbox state
+                toggleRelatedCheckboxes(mainCheckbox, relatedCheckboxes);
+            });
+        });
+    </script>

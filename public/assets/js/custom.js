@@ -137,17 +137,6 @@ $(document).ready(function () {
     }
   });
 
-  $("#action-menubutton").click(function (e) {
-    // $('#topbar-menu').toggleClass("hidden");
-    e.stopPropagation();
-    $('#action-menu').toggleClass("topbar-menuEntring topbar-manuLeaving");
-  });
-  $(document).on('click', function (e) {
-    if (!$("#action-menubutton").is(e.target) && !$('#action-menubutton').has(e.target).length) {
-      // Click occurred outside the button and dropdown, hide the dropdown
-      $('#action-menu').addClass("topbar-manuLeaving").removeClass("topbar-menuEntring");
-    }
-  })
   $('#emailAttachmentsCheck').click(function () {
     $("#emailAttachmentsfile").toggleClass("hidden");
   });

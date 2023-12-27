@@ -1,4 +1,7 @@
 @include('layouts.header')
+@php
+    $userPrivileges = session('user_details')['user_privileges'];
+@endphp
 <div class=" my-4">
     <h1 class=" text-2xl font-semibold mb-3">Campaign</h1>
     <div class=" bg-white w-full rounded-lg shadow-lg">
@@ -7,7 +10,11 @@
                 <h4>Campaign List</h4>
             </div>
             <div>
-                <x-add-button :id="'addCampaign'" :title="'+Add Campaign'" :class="''"></x-add-button>
+                @if (session('user_details')['user_role'] == 'admin')
+                    <x-add-button :id="'addCampaign'" :title="'+Add Campaign'" :class="''"></x-add-button>
+                @elseif(isset($userPrivileges->campaign) && isset($userPrivileges->campaign->add) && $userPrivileges->campaign->add === 'on')
+                    <x-add-button :id="'addCampaign'" :title="'+Add Campaign'" :class="''"></x-add-button>
+                @endif
             </div>
         </div>
         <div class="py-4">
@@ -39,34 +46,24 @@
                                 <button id="followUp-btn">
                                     <img src="{{ asset('assets/icons/check-icon.svg') }}" alt="btn">
                                 </button>
-                                <button>
+                                @if (session('user_details')['user_role'] == 'admin')
+                                    <button>
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                 </button>
-                                <button>
-                                    <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Sep 23, 2023</td>
-                            <td>Email Name</td>
-                            <td>Town, City, CountryTown, City, Country</td>
-                            <td>Plain Text</td>
-                            <td>5</td>
-                            <td>
-                                <span
-                                    class="inline-flex items-center rounded-md bg-[#50ABD780] px-2 py-1 text-sm font-medium  ring-inset">Manual</span>
-                            </td>
-                            <td>
-                                <button>
-                                    <img src="{{ asset('assets/icons/check-icon.svg') }}" alt="btn">
-                                </button>
-                                <button>
+                                @elseif(isset($userPrivileges->campaign) && isset($userPrivileges->campaign->edit) && $userPrivileges->campaign->edit === 'on')
+                                    <button>
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                 </button>
-                                <button>
+                                @endif
+                                @if (session('user_details')['user_role'] == 'admin')
+                                    <button>
                                     <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
                                 </button>
+                                @elseif(isset($userPrivileges->campaign) && isset($userPrivileges->campaign->delete) && $userPrivileges->campaign->delete === 'on')
+                                    <button>
+                                    <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
+                                </button>
+                                @endif
                             </td>
                         </tr>
                     </tbody>
