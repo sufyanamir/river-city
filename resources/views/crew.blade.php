@@ -1,4 +1,7 @@
 @include('layouts.header')
+@php
+    $userPrivileges = session('user_details')['user_privileges'];
+@endphp
 <div class=" my-4">
     <h1 class=" text-2xl font-semibold mb-3">Crew</h1>
     <div class=" bg-white w-full rounded-lg shadow-lg">
@@ -7,7 +10,11 @@
                 <h4>Crew List</h4>
             </div>
             <div>
+                @if (session('user_details')['user_role'] == 'admin')
                 <x-add-button :id="'addCrew'" :title="'+Add Crew'" :class="''"></x-add-button>
+                @elseif(isset($userPrivileges->crew) && isset($userPrivileges->crew->add) && $userPrivileges->crew->add === 'on')
+                <x-add-button :id="'addCrew'" :title="'+Add Crew'" :class="''"></x-add-button>
+                @endif
             </div>
         </div>
         <div class="py-4">
@@ -37,15 +44,30 @@
                             <td>{{ $item->phone }}</td>
                             <td>{{ $item->address }}</td>
                             <td>
+                                @if (session('user_details')['user_role'] == 'admin')
                                 <button>
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                 </button>
+                                @elseif(isset($userPrivileges->crew) && isset($userPrivileges->crew->edit) && $userPrivileges->crew->edit === 'on')
+                                <button>
+                                    <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
+                                </button>
+                                @endif
+                                @if (session('user_details')['user_role'] == 'admin')
                                 <form action="/delete/crew/{{ $item->id }}"  class=" inline-block" method="post">
                                     @csrf
                                     <button>
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
                                     </button>
                                 </form>
+                                @elseif(isset($userPrivileges->crew) && isset($userPrivileges->crew->delete) && $userPrivileges->crew->delete === 'on')
+                                <form action="/delete/crew/{{ $item->id }}"  class=" inline-block" method="post">
+                                    @csrf
+                                    <button>
+                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
+                                    </button>
+                                </form>
+                                @endif
                             </td>
                         </tr>
                         @endforeach

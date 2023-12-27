@@ -1,4 +1,7 @@
 @include('layouts.header')
+@php
+    $userPrivileges = session('user_details')['user_privileges'];
+@endphp
 <div class=" my-4">
     <h1 class=" text-2xl font-semibold mb-3">Estimates</h1>
     <div class=" bg-white w-full overflow-auto rounded-lg shadow-lg">
@@ -41,7 +44,11 @@
             <div class="col-span-1"></div>
             <div class="col-span-10 px-3  flex justify-between">
                 <p class="text-[22px]/[25.78px] font-medium">Images <span>{{count($estimate_images)}}</span></p>
-                <x-add-button :title="'Add Image'" :class="'px-4'" :id="''" />
+                @if (session('user_details')['user_role'] == 'admin')
+                    <x-add-button :title="'Add Image'" :class="'px-4'" :id="''" />
+                @elseif(isset($userPrivileges->gallery) && isset($userPrivileges->gallery->add) && $userPrivileges->gallery->add === 'on')
+                    <x-add-button :title="'Add Image'" :class="'px-4'" :id="''" />
+                @endif
             </div>
         </div>
         <hr class="bg-gray-300 h-[2px] w-full">
@@ -53,12 +60,21 @@
                     <a href="{{ asset('storage/' . $image->estimate_image) }}" data-fancybox="image-set" data-caption="Your Image Caption">
                         <img class="rounded-xl" style="width: 100%; height: 200px; object-fit: cover;" src="{{ asset('storage/' . $image->estimate_image) }}" alt="">
                     </a>
+                    @if (session('user_details')['user_role'] == 'admin')
                     <form action="/deleteEstimateImage{{$image->estimate_image_id}}" method="post">
                         @csrf
                         <button class="cursor-pointer absolute top-4 right-4">
                             <img class="" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
                         </button>
                     </form>
+                @elseif(isset($userPrivileges->gallery) && isset($userPrivileges->gallery->delete) && $userPrivileges->gallery->delete === 'on')
+                    <form action="/deleteEstimateImage{{$image->estimate_image_id}}" method="post">
+                        @csrf
+                        <button class="cursor-pointer absolute top-4 right-4">
+                            <img class="" src="{{asset('assets/icons/img-del-icon.svg')}}" alt="">
+                        </button>
+                    </form>
+                @endif
                 </div>
                 @endforeach
             </div>

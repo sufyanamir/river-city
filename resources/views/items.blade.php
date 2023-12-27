@@ -1,4 +1,7 @@
 @include('layouts.header')
+@php
+    $userPrivileges = session('user_details')['user_privileges'];
+@endphp
 <div class=" my-4">
     <h1 class=" text-2xl font-semibold mb-3">Items</h1>
     <div class=" bg-white w-full rounded-lg shadow-lg">
@@ -12,11 +15,10 @@
                 <x-add-button :id="''" :title="'Labour'" :class="''"></x-add-button>
                 <x-add-button :id="''" :title="'Assemblies'" :class="''"></x-add-button>
                 <x-add-button :id="''" :title="'Groups'" :class="''"></x-add-button>
-                @if($user_details['user_role'] == 'admin')
-                <x-add-button :id="'addItem'" :title="'+Add Item'" :class="''"></x-add-button>
-                @endif
-                @if(isset($userPrivileges->item) && $userPrivileges->item->add === "on")
-                <x-add-button :id="'addItem'" :title="'+Add Item'" :class="''"></x-add-button>
+                @if (session('user_details')['user_role'] == 'admin')
+                    <x-add-button :id="'addItem'" :title="'+Add Item'" :class="''"></x-add-button>
+                @elseif(isset($userPrivileges->item) && isset($userPrivileges->item->add) && $userPrivileges->item->add === 'on')
+                    <x-add-button :id="'addItem'" :title="'+Add Item'" :class="''"></x-add-button>
                 @endif
             </div>
         </div>
@@ -35,41 +37,43 @@
                         </tr>
                     </thead>
                     <tbody id="universalTableBody" class=" text-sm">
-                        @foreach($items as $item)
-                        <tr>
-                            <td>{{ $item->item_name }}</td>
-                            <td>{{ $item->item_type }}</td>
-                            <td>{{ $item->item_units }}</td>
-                            <td>{{ $item->item_cost }}</td>
-                            <td>{{ $item->item_price }}</td>
-                            <td>{{ $item->item_description }}</td>
-                            <td>
-                                @if($user_details['user_role'] == 'admin')
-                                <button>
-                                    <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
-                                </button>
-                                <form action="/delete/item/{{ $item->item_id }}" class=" inline-block" method="post">
-                                    @csrf
+                        @foreach ($items as $item)
+                            <tr>
+                                <td>{{ $item->item_name }}</td>
+                                <td>{{ $item->item_type }}</td>
+                                <td>{{ $item->item_units }}</td>
+                                <td>{{ $item->item_cost }}</td>
+                                <td>{{ $item->item_price }}</td>
+                                <td>{{ $item->item_description }}</td>
+                                <td>
+                                    @if (session('user_details')['user_role'] == 'admin')
                                     <button>
-                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
+                                        <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                     </button>
-                                </form>
-                                @endif
-                                @if(isset($userPrivileges->item) && $userPrivileges->item->edit === "on")
-                                <button>
-                                    <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
-                                </button>
-                                @endif
-                                @if(isset($userPrivileges->item) && $userPrivileges->item->delete === "on")
-                                <form action="/delete/item/{{ $item->item_id }}" class=" inline-block" method="post">
-                                    @csrf
+                                    @elseif(isset($userPrivileges->item) && isset($userPrivileges->item->edit) && $userPrivileges->item->edit === 'on')
                                     <button>
-                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
+                                        <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                     </button>
-                                </form>
-                                @endif
-                            </td>
-                        </tr>
+                                    @endif
+                                    @if (session('user_details')['user_role'] == 'admin')
+                                    <form action="/delete/item/{{ $item->item_id }}" class=" inline-block"
+                                        method="post">
+                                        @csrf
+                                        <button>
+                                            <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
+                                        </button>
+                                    </form>
+                                    @elseif(isset($userPrivileges->item) && isset($userPrivileges->item->delete) && $userPrivileges->item->delete === 'on')
+                                    <form action="/delete/item/{{ $item->item_id }}" class=" inline-block"
+                                        method="post">
+                                        @csrf
+                                        <button>
+                                            <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
+                                        </button>
+                                    </form>
+                                    @endif
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -85,7 +89,8 @@
         </div>
 
         <!-- Modal panel -->
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div
+            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <form action="/addItem" method="post" enctype="multipart/form-data" id="formData">
                 @csrf
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -100,7 +105,8 @@
                     <div class=" text-center grid grid-cols-2 gap-2">
                         <div class="  col-span-2 my-2">
                             <label for="" class="block text-left mb-1"> Items Type</label>
-                            <select id="type" name="item_type" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <select id="type" name="item_type" autocomplete="customer-name"
+                                class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                 <option>type</option>
                                 <option value="labour">labour</option>
                                 <option value="material">Material</option>
@@ -109,11 +115,14 @@
                         </div>
                         <div class=" my-2">
                             <label for="" class="block  text-left mb-1"> Item Name</label>
-                            <input type="text" name="item_name" id="itemName" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <input type="text" name="item_name" id="itemName" placeholder="Item Name"
+                                autocomplete="given-name"
+                                class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class="my-2">
                             <label for="" class="block text-left mb-1"> Item Unit</label>
-                            <select id="item_units" name="item_units" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <select id="item_units" name="item_units" autocomplete="customer-name"
+                                class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                 <option>Units</option>
                                 <option value="hour">Hour</option>
                                 <option value="gal">Gal</option>
@@ -121,40 +130,54 @@
                         </div>
                         <div class="my-2 text-left">
                             <label for="" class=" block text-left mb-1">Cost:</label>
-                            <input type="number" name="item_cost" id="item_cost" placeholder="00.0" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <input type="number" name="item_cost" id="item_cost" placeholder="00.0"
+                                autocomplete="given-name"
+                                class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class="my-2 text-left">
                             <label for="" class=" block text-left mb-1">Price:</label>
-                            <input type="number" name="item_price" id="item_price" placeholder="00.0" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <input type="number" name="item_price" id="item_price" placeholder="00.0"
+                                autocomplete="given-name"
+                                class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class="my-2 col-span-2" id="labourExpense">
                             <label for="" class="block text-left mb-1"> Labour Expense</label>
-                            <input type="number" name="labour_expense" id="labourExpense" placeholder="Labour Expense" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <input type="number" name="labour_expense" id="labourExpense"
+                                placeholder="Labour Expense" autocomplete="given-name"
+                                class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class=" my-2 col-span-2 hidden" id="multiAdd-items">
                             <div id="mulitple_input">
                                 <label for="" class="block text-left mb-1"> Assembly Name </label>
-                                <select name="assembly_name[]" id="" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <select name="assembly_name[]" id="" placeholder="Item Name"
+                                    autocomplete="given-name"
+                                    class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
                                     @foreach ($itemsForAssemblies as $item)
-                                    <option value="{{ $item->item_id }}">{{ $item->item_name }}</option>
+                                        <option value="{{ $item->item_id }}">{{ $item->item_name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class=" text-right mt-2">
-                                <button type="button" class=" gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="addbtn" aria-expanded="true" aria-haspopup="true">
+                                <button type="button"
+                                    class=" gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]"
+                                    id="addbtn" aria-expanded="true" aria-haspopup="true">
                                     <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
                                 </button>
                             </div>
                         </div>
                         <div class="my-2 col-span-2 relative">
                             <label for="" class="block text-left mb-1"> Item Description </label>
-                            <textarea name="item_description" id="item_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
-                            <button type="button" id="items-mic" class=" absolute mt-8 right-4" onclick="voice('items-mic', 'item_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                            <textarea name="item_description" id="item_description" placeholder="Description"
+                                class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                            <button type="button" id="items-mic" class=" absolute mt-8 right-4"
+                                onclick="voice('items-mic', 'item_description')"><i
+                                    class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
                     </div>
                     <div class="">
-                        <button id="updateEvent" class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                        <button id="updateEvent"
+                            class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
                         </button>
                     </div>
                 </div>

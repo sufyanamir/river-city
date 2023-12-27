@@ -1,4 +1,7 @@
 @include('layouts.header')
+@php
+$userPrivileges = session('user_details')['user_privileges'];
+@endphp
 <div class=" my-4">
     <h1 class=" text-2xl font-semibold mb-3">Customers</h1>
     <div class=" bg-white w-full rounded-lg shadow-lg">
@@ -35,12 +38,24 @@
                         <td>{{ $customer->customer_soource }}</td>
                         <td>{{ $customer->added_user_id }}</td>
                         <td>
+                            @if(session('user_details')['user_role'] == 'admin')
+                            <button>
+                                <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
+                            </button>    
+                            @elseif(isset($userPrivileges->customers) && isset($userPrivileges->customers->edit) && $userPrivileges->customers->edit === "on")
                             <button>
                                 <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                             </button>
+                            @endif
+                            @if (session('user_details')['user_role'] == 'admin')
                             <button>
                                 <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
                             </button>
+                            @elseif(isset($userPrivileges->customers) && isset($userPrivileges->customers->edit) && $userPrivileges->customers->delete === "on")
+                            <button>
+                                <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
+                            </button>
+                            @endif
                         </td>
                     </tr>
                     @endforeach

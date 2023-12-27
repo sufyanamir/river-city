@@ -95,7 +95,6 @@ $userPrivileges = session('user_details')['user_privileges'];
         </div>
         <x-sidebar-links :class="'text-white'" :url="'/calendar'" :title="'Calendar'" :hoverIcon="'hover-calendar-icon.svg'" :icon="'calendar-icon.svg'"></x-sidebar-links>
         <x-sidebar-links :class="'text-white'" :url="'/crewCalendar'" :title="'Crew Calendar'" :hoverIcon="'hover-calendar-icon.svg'" :icon="'calendar-icon.svg'"></x-sidebar-links>
-        <x-sidebar-links :class="'text-white'" :url="'/payment-template'" :title="'PAY Template'" :hoverIcon="'hover-calendar-icon.svg'" :icon="'calendar-icon.svg'"></x-sidebar-links>
         <x-sidebar-links :class="'text-white'" :url="'/feedGallery'" :title="'Gallery'" :hoverIcon="'hover-gallery-icon.svg'" :icon="'gallery-icon.svg'"></x-sidebar-links>
         <x-sidebar-links :class="'text-white'" :url="'/campaign'" :title="'Campaign'" :hoverIcon="'hover-campaign-icon.svg'" :icon="'campaign-icon.svg'"></x-sidebar-links>
         <x-sidebar-links :class="'text-white'" :url="'/reports'" :title="'Reports'" :hoverIcon="'hover-reports-icon.svg'" :icon="'reports-icon.svg'"></x-sidebar-links>
@@ -224,12 +223,14 @@ $userPrivileges = session('user_details')['user_privileges'];
             <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/group'" :title="'Groups'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
         </div>
         @endif
+        @if(isset($userPrivileges->calendar) && $userPrivileges->calendar->view === "on")
         <x-sidebar-links :class="'text-white'" :url="'/calendar'" :title="'Calendar'" :hoverIcon="'hover-calendar-icon.svg'" :icon="'calendar-icon.svg'"></x-sidebar-links>
+        @endif
         <x-sidebar-links :class="'text-white'" :url="'/crewCalendar'" :title="'Crew Calendar'" :hoverIcon="'hover-calendar-icon.svg'" :icon="'calendar-icon.svg'"></x-sidebar-links>
         @if(isset($userPrivileges->paymentTemplates) && $userPrivileges->paymentTemplates->view === "on")
         <x-sidebar-links :class="'text-white'" :url="'/payment-template'" :title="'PAY Template'" :hoverIcon="'hover-calendar-icon.svg'" :icon="'calendar-icon.svg'"></x-sidebar-links>
         @endif
-        @if(isset($userPrivileges->feedGallery) && $userPrivileges->feedGallery->view === "on")
+        @if(isset($userPrivileges->gallery) && $userPrivileges->gallery->view === "on")
         <x-sidebar-links :class="'text-white'" :url="'/feedGallery'" :title="'Gallery'" :hoverIcon="'hover-gallery-icon.svg'" :icon="'gallery-icon.svg'"></x-sidebar-links>
         @endif
         @if(isset($userPrivileges->campaign) && $userPrivileges->campaign->view === "on")
