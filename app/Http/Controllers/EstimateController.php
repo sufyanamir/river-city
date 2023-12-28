@@ -640,7 +640,7 @@ class EstimateController extends Controller
                     'item_id' => $item->item_id,
                     'item_name' => $item->item_name,
                     'item_type' => $item->item_type,
-                    'item_unit' => $item->item_unit,
+                    'item_unit' => $item->item_units,
                     'item_cost' => $item->item_cost,
                     'item_price' => $item->item_price,
                 ];
@@ -798,6 +798,9 @@ class EstimateController extends Controller
             $additionalContacts = EstimateContact::where('estimate_id', $estimate->estimate_id)->get();
             $estimateItems = EstimateItem::where('estimate_id', $estimate->estimate_id)->get();
             $items = Items::get();
+            $labourItems = Items::where('item_type', 'labour')->get();
+            $materialItems = Items::where('item_type', 'material')->get();
+            $assemblyItems = Items::where('item_type', 'assemblies')->get();
             $users = User::where('added_user_id', $userDetails['id'])->get();
             $estimateNotes = EstimateNote::where('estimate_id', $estimate->estimate_id)->get();
             $emailTemplates = Email::get();
@@ -821,6 +824,9 @@ class EstimateController extends Controller
                 'customer' => $customer,
                 'estimate' => $estimate,
                 'items' => $items,
+                'labour_items' => $labourItems,
+                'material_items' => $materialItems,
+                'assembly_items' => $assemblyItems,
                 'estimate_items' => $estimateItems,
                 'additional_contacts' => $additionalContacts,
                 'user_details' => $userDetails,

@@ -90,150 +90,164 @@
         {{-- <hr class="bg-gray-300"> --}}
         @if (session('user_details')['user_role'] == 'admin')
             <div class=" border-2  shadow-lg mt-7   bg-white   rounded-3xl ">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text- lg py-3 px-3  font-medium text-white">
-                    Contacts
-                </p>
-                <button type="button" class="flex" id="addContact">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
-            </div>
-            <div class="py-4     ">
-                <p class="text-lg py-3 my-auto  pl-9 text-[#707683] font-medium">
-                    Add Contacts to keep track of your project's stakeholders
-                </p>
-                <div class="relative overflow-x-auto">
-                    <div class="itemDiv">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Title
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Name
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    email
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Phone
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($additional_contacts as $contacts)
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ $contacts->contact_title }}
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{ $contacts->contact_first_name }} {{ $contacts->contact_last_name }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $contacts->contact_email }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $contacts->contact_phone }}
-                                    </td>
-                                    <td>
-                                        <button>
-                                            <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
-                                        </button>
-                                        <button>
-                                            <form action="/delete/additionalContact/{{ $contacts->contact_id }}" method="post">
-                                                @csrf
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text- lg py-3 px-3  font-medium text-white">
+                        Contacts
+                    </p>
+                    <button type="button" class="flex" id="addContact">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                            alt="">
+                    </button>
+                </div>
+                <div class="py-4     ">
+                    <p class="text-lg py-3 my-auto  pl-9 text-[#707683] font-medium">
+                        Add Contacts to keep track of your project's stakeholders
+                    </p>
+                    <div class="relative overflow-x-auto">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Title
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            email
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Phone
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($additional_contacts as $contacts)
+                                        <tr class="bg-white border-b">
+                                            <th scope="row"
+                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                {{ $contacts->contact_title }}
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                {{ $contacts->contact_first_name }} {{ $contacts->contact_last_name }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $contacts->contact_email }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $contacts->contact_phone }}
+                                            </td>
+                                            <td>
                                                 <button>
-                                                    <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                                    <img src="{{ asset('assets/icons/edit-icon.svg') }}"
+                                                        alt="icon">
                                                 </button>
-                                            </form>
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                </div>
-
-            </div>
-        </div>
-        @elseif(isset($userPrivileges->estimate) && isset($userPrivileges->estimate->contacts) && $userPrivileges->estimate->contacts === 'on')
-        <div class=" border-2  shadow-lg mt-7   bg-white   rounded-3xl ">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text- lg py-3 px-3  font-medium text-white">
-                    Contacts
-                </p>
-                <button type="button" class="flex" id="addContact">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
-            </div>
-            <div class="py-4     ">
-                <p class="text-lg py-3 my-auto  pl-9 text-[#707683] font-medium">
-                    Add Contacts to keep track of your project's stakeholders
-                </p>
-                <div class="relative overflow-x-auto">
-                    <div class="itemDiv">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Title
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Name
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    email
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Phone
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($additional_contacts as $contacts)
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ $contacts->contact_title }}
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{ $contacts->contact_first_name }} {{ $contacts->contact_last_name }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $contacts->contact_email }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $contacts->contact_phone }}
-                                    </td>
-                                    <td>
-                                        <button>
-                                            <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
-                                        </button>
-                                        <button>
-                                            <form action="/delete/additionalContact/{{ $contacts->contact_id }}" method="post">
-                                                @csrf
                                                 <button>
-                                                    <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                                    <form
+                                                        action="/delete/additionalContact/{{ $contacts->contact_id }}"
+                                                        method="post">
+                                                        @csrf
+                                                        <button>
+                                                            <img src="{{ asset('assets/icons/del-icon.svg') }}"
+                                                                alt="icon">
+                                                        </button>
+                                                    </form>
                                                 </button>
-                                            </form>
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
+                </div>
             </div>
-        </div>
+        @elseif(isset($userPrivileges->estimate) &&
+                isset($userPrivileges->estimate->contacts) &&
+                $userPrivileges->estimate->contacts === 'on')
+            <div class=" border-2  shadow-lg mt-7   bg-white   rounded-3xl ">
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text- lg py-3 px-3  font-medium text-white">
+                        Contacts
+                    </p>
+                    <button type="button" class="flex" id="addContact">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                            alt="">
+                    </button>
+                </div>
+                <div class="py-4     ">
+                    <p class="text-lg py-3 my-auto  pl-9 text-[#707683] font-medium">
+                        Add Contacts to keep track of your project's stakeholders
+                    </p>
+                    <div class="relative overflow-x-auto">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Title
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            email
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Phone
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($additional_contacts as $contacts)
+                                        <tr class="bg-white border-b">
+                                            <th scope="row"
+                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                {{ $contacts->contact_title }}
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                {{ $contacts->contact_first_name }} {{ $contacts->contact_last_name }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $contacts->contact_email }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $contacts->contact_phone }}
+                                            </td>
+                                            <td>
+                                                <button>
+                                                    <img src="{{ asset('assets/icons/edit-icon.svg') }}"
+                                                        alt="icon">
+                                                </button>
+                                                <button>
+                                                    <form
+                                                        action="/delete/additionalContact/{{ $contacts->contact_id }}"
+                                                        method="post">
+                                                        @csrf
+                                                        <button>
+                                                            <img src="{{ asset('assets/icons/del-icon.svg') }}"
+                                                                alt="icon">
+                                                        </button>
+                                                    </form>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         @endif
         <div class=" border-2  shadow-lg mt-7     bg-white rounded-3xl   ">
             <div class="">
@@ -424,105 +438,68 @@
         </div>
         @if (session('user_details')['user_role'] == 'admin')
             <div class="  border-2  shadow-lg mt-7  bg-white rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white font-medium">
-                    Items
-                </p>
-                <button type="button" class="flex addItems">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
-            </div>
-            <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
-                @php
-                    $totalPrice = 0; // Initialize total price variable
-                @endphp
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white font-medium">
+                        Items
+                    </p>
+                    <button type="button" class="flex addItems">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                            alt="">
+                    </button>
+                </div>
+                <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
+                    @php
+                        $totalPrice = 0; // Initialize total price variable
+                    @endphp
 
-                @foreach ($estimate_items as $item)
-                    <div class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
-                        <div class="flex">
-                            <button type="button" class="inline">
-                                <img class="h-[50px] w-[50px] "
-                                    src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                            </button>
-                            <div>
-                                <label class="text-lg font-semibold text-[#323C47]"
-                                    for="">{{ $item->item_name }}</label>
-                                <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }} </p>
+                    @foreach ($estimate_items as $item)
+                        <div
+                            class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
+                            <div class="flex">
+                                <button type="button" class="inline">
+                                    <img class="h-[50px] w-[50px] "
+                                        src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                </button>
+                                <div>
+                                    <label class="text-lg font-semibold text-[#323C47]"
+                                        for="">{{ $item->item_name }}</label>
+                                    <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }} </p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span>${{ $item->item_price }}</span>
+                                @php
+                                    $totalPrice += $item->item_price; // Add item price to total
+                                @endphp
                             </div>
                         </div>
-                        <div class="text-right">
-                            <span>${{ $item->item_price }}</span>
-                            @php
-                                $totalPrice += $item->item_price; // Add item price to total
-                            @endphp
-                        </div>
-                    </div>
-                @endforeach
+                    @endforeach
 
-                <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
-                    <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Total</span>
-                    <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
+                    <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
+                        <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Total</span>
+                        <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
+                    </div>
                 </div>
             </div>
-        </div>
-        @elseif(isset($userPrivileges->estimate) && isset($userPrivileges->estimate->items) && $userPrivileges->estimate->items === 'on')
+        @elseif(isset($userPrivileges->estimate) &&
+                isset($userPrivileges->estimate->items) &&
+                $userPrivileges->estimate->items === 'on')
             <div class="  border-2  shadow-lg mt-7  bg-white rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white font-medium">
-                    Items
-                </p>
-                <button type="button" class="flex addItems">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
-            </div>
-            <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
-                @php
-                    $totalPrice = 0; // Initialize total price variable
-                @endphp
-
-                @foreach ($estimate_items as $item)
-                    <div class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
-                        <div class="flex">
-                            <button type="button" class="inline">
-                                <img class="h-[50px] w-[50px] "
-                                    src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                            </button>
-                            <div>
-                                <label class="text-lg font-semibold text-[#323C47]"
-                                    for="">{{ $item->item_name }}</label>
-                                <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }} </p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <span>${{ $item->item_price }}</span>
-                            @php
-                                $totalPrice += $item->item_price; // Add item price to total
-                            @endphp
-                        </div>
-                    </div>
-                @endforeach
-
-                <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
-                    <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Total</span>
-                    <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white font-medium">
+                        Items
+                    </p>
+                    <button type="button" class="flex addItems">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                            alt="">
+                    </button>
                 </div>
-            </div>
-        </div>
-        @endif
-        @if (session('user_details')['user_role'] == 'admin')
-            <div class="mb-5 shadow-lg bg-white  rounded-3xl mt-7">
-            <div class="flex justify-between items-center px-3 py-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3  text-white font-medium">
-                    Labor
-                </p>
-            </div>
-            <div class=" itemDiv ">
-                @php
-                    $totalLaborPrice = 0; // Initialize total labor price variable
-                @endphp
+                <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
+                    @php
+                        $totalPrice = 0; // Initialize total price variable
+                    @endphp
 
-                @foreach ($estimate_items as $item)
-                    @if ($item->item_type === 'labour')
+                    @foreach ($estimate_items as $item)
                         <div
                             class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
                             <div class="flex">
@@ -532,707 +509,790 @@
                                 </button>
                                 <div>
                                     <label class="text-lg font-semibold text-[#323C47]"
-                                        for="groupName">{{ $item->item_name }}</label>
-                                    <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
+                                        for="">{{ $item->item_name }}</label>
+                                    <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }} </p>
                                 </div>
                             </div>
-                            <div>
+                            <div class="text-right">
                                 <span>${{ $item->item_price }}</span>
                                 @php
-                                    $totalLaborPrice += $item->item_price; // Add labor item price to total
+                                    $totalPrice += $item->item_price; // Add item price to total
                                 @endphp
                             </div>
                         </div>
-                    @endif
-                @endforeach
+                    @endforeach
 
-                <div class="text-right mr-4 py-6">
-                    <span>${{ number_format($totalLaborPrice, 2) }}</span> {{-- Display the formatted total labor price --}}
+                    <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
+                        <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Total</span>
+                        <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
+                    </div>
                 </div>
             </div>
-        </div>
-        @elseif(isset($userPrivileges->estimate) && isset($userPrivileges->estimate->items) && $userPrivileges->estimate->items === 'on')
+        @endif
+        @if (session('user_details')['user_role'] == 'admin')
             <div class="mb-5 shadow-lg bg-white  rounded-3xl mt-7">
-            <div class="flex justify-between items-center px-3 py-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3  text-white font-medium">
-                    Labor
-                </p>
-            </div>
-            <div class=" itemDiv ">
-                @php
-                    $totalLaborPrice = 0; // Initialize total labor price variable
-                @endphp
+                <div class="flex justify-between items-center px-3 py-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3  text-white font-medium">
+                        Labor
+                    </p>
+                </div>
+                <div class=" itemDiv ">
+                    @php
+                        $totalLaborPrice = 0; // Initialize total labor price variable
+                    @endphp
 
-                @foreach ($estimate_items as $item)
-                    @if ($item->item_type === 'labour')
-                        <div
-                            class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
-                            <div class="flex">
-                                <button type="button" class="inline">
-                                    <img class="h-[50px] w-[50px] "
-                                        src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                                </button>
+                    @foreach ($estimate_items as $item)
+                        @if ($item->item_type === 'labour')
+                            <div
+                                class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
+                                <div class="flex">
+                                    <button type="button" class="inline">
+                                        <img class="h-[50px] w-[50px] "
+                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                    </button>
+                                    <div>
+                                        <label class="text-lg font-semibold text-[#323C47]"
+                                            for="groupName">{{ $item->item_name }}</label>
+                                        <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
+                                    </div>
+                                </div>
                                 <div>
-                                    <label class="text-lg font-semibold text-[#323C47]"
-                                        for="groupName">{{ $item->item_name }}</label>
-                                    <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
+                                    <span>${{ $item->item_price }}</span>
+                                    @php
+                                        $totalLaborPrice += $item->item_price; // Add labor item price to total
+                                    @endphp
                                 </div>
                             </div>
-                            <div>
-                                <span>${{ $item->item_price }}</span>
-                                @php
-                                    $totalLaborPrice += $item->item_price; // Add labor item price to total
-                                @endphp
-                            </div>
-                        </div>
-                    @endif
-                @endforeach
+                        @endif
+                    @endforeach
 
-                <div class="text-right mr-4 py-6">
-                    <span>${{ number_format($totalLaborPrice, 2) }}</span> {{-- Display the formatted total labor price --}}
+                    <div class="text-right mr-4 py-6">
+                        <span>${{ number_format($totalLaborPrice, 2) }}</span> {{-- Display the formatted total labor price --}}
+                    </div>
                 </div>
             </div>
-        </div>
+        @elseif(isset($userPrivileges->estimate) &&
+                isset($userPrivileges->estimate->items) &&
+                $userPrivileges->estimate->items === 'on')
+            <div class="mb-5 shadow-lg bg-white  rounded-3xl mt-7">
+                <div class="flex justify-between items-center px-3 py-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3  text-white font-medium">
+                        Labor
+                    </p>
+                </div>
+                <div class=" itemDiv ">
+                    @php
+                        $totalLaborPrice = 0; // Initialize total labor price variable
+                    @endphp
+
+                    @foreach ($estimate_items as $item)
+                        @if ($item->item_type === 'labour')
+                            <div
+                                class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
+                                <div class="flex">
+                                    <button type="button" class="inline">
+                                        <img class="h-[50px] w-[50px] "
+                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                    </button>
+                                    <div>
+                                        <label class="text-lg font-semibold text-[#323C47]"
+                                            for="groupName">{{ $item->item_name }}</label>
+                                        <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span>${{ $item->item_price }}</span>
+                                    @php
+                                        $totalLaborPrice += $item->item_price; // Add labor item price to total
+                                    @endphp
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+
+                    <div class="text-right mr-4 py-6">
+                        <span>${{ number_format($totalLaborPrice, 2) }}</span> {{-- Display the formatted total labor price --}}
+                    </div>
+                </div>
+            </div>
         @endif
         @if (session('user_details')['user_role'] == 'admin')
             <div class=" mb-5 shadow-lg bg-white  mt-7 rounded-3xl">
-            <div class=" flex py-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium">
-                    Materials
-                </p>
-            </div>
-            <div class=" itemDiv col-span-10">
-                @php
-                    $totalMaterialPrice = 0; // Initialize total material price variable
-                @endphp
+                <div class=" flex py-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium">
+                        Materials
+                    </p>
+                </div>
+                <div class=" itemDiv col-span-10">
+                    @php
+                        $totalMaterialPrice = 0; // Initialize total material price variable
+                    @endphp
 
-                @foreach ($estimate_items as $item)
-                    @if ($item->item_type === 'material')
-                        <div class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center">
-                            <div class="flex">
-                                <button type="button" class="inline">
-                                    <img class="h-[50px] w-[50px] "
-                                        src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                                </button>
-                                <div>
-                                    <label class="text-lg font-semibold text-[#323C47]"
-                                        for="groupName">{{ $item->item_name }}</label>
-                                    <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
+                    @foreach ($estimate_items as $item)
+                        @if ($item->item_type === 'material')
+                            <div
+                                class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center">
+                                <div class="flex">
+                                    <button type="button" class="inline">
+                                        <img class="h-[50px] w-[50px] "
+                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                    </button>
+                                    <div>
+                                        <label class="text-lg font-semibold text-[#323C47]"
+                                            for="groupName">{{ $item->item_name }}</label>
+                                        <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span>${{ $item->item_price }}</span>
+                                    @php
+                                        $totalMaterialPrice += $item->item_price; // Add material item price to total
+                                    @endphp
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <span>${{ $item->item_price }}</span>
-                                @php
-                                    $totalMaterialPrice += $item->item_price; // Add material item price to total
-                                @endphp
-                            </div>
-                        </div>
-                    @endif
-                @endforeach
+                        @endif
+                    @endforeach
 
-                <div class="pt-4 px-4 pl-2 flex justify-end  py-7">
-                    <span>${{ number_format($totalMaterialPrice, 2) }}</span> {{-- Display the formatted total material price --}}
+                    <div class="pt-4 px-4 pl-2 flex justify-end  py-7">
+                        <span>${{ number_format($totalMaterialPrice, 2) }}</span> {{-- Display the formatted total material price --}}
+                    </div>
                 </div>
             </div>
-        </div>
-        @elseif(isset($userPrivileges->estimate) && isset($userPrivileges->estimate->items) && $userPrivileges->estimate->items === 'on')
+        @elseif(isset($userPrivileges->estimate) &&
+                isset($userPrivileges->estimate->items) &&
+                $userPrivileges->estimate->items === 'on')
             <div class=" mb-5 shadow-lg bg-white  mt-7 rounded-3xl">
-            <div class=" flex py-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium">
-                    Materials
-                </p>
-            </div>
-            <div class=" itemDiv col-span-10">
-                @php
-                    $totalMaterialPrice = 0; // Initialize total material price variable
-                @endphp
+                <div class=" flex py-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium">
+                        Materials
+                    </p>
+                </div>
+                <div class=" itemDiv col-span-10">
+                    @php
+                        $totalMaterialPrice = 0; // Initialize total material price variable
+                    @endphp
 
-                @foreach ($estimate_items as $item)
-                    @if ($item->item_type === 'material')
-                        <div class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center">
-                            <div class="flex">
-                                <button type="button" class="inline">
-                                    <img class="h-[50px] w-[50px] "
-                                        src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                                </button>
-                                <div>
-                                    <label class="text-lg font-semibold text-[#323C47]"
-                                        for="groupName">{{ $item->item_name }}</label>
-                                    <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
+                    @foreach ($estimate_items as $item)
+                        @if ($item->item_type === 'material')
+                            <div
+                                class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center">
+                                <div class="flex">
+                                    <button type="button" class="inline">
+                                        <img class="h-[50px] w-[50px] "
+                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                    </button>
+                                    <div>
+                                        <label class="text-lg font-semibold text-[#323C47]"
+                                            for="groupName">{{ $item->item_name }}</label>
+                                        <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span>${{ $item->item_price }}</span>
+                                    @php
+                                        $totalMaterialPrice += $item->item_price; // Add material item price to total
+                                    @endphp
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <span>${{ $item->item_price }}</span>
-                                @php
-                                    $totalMaterialPrice += $item->item_price; // Add material item price to total
-                                @endphp
-                            </div>
-                        </div>
-                    @endif
-                @endforeach
+                        @endif
+                    @endforeach
 
-                <div class="pt-4 px-4 pl-2 flex justify-end  py-7">
-                    <span>${{ number_format($totalMaterialPrice, 2) }}</span> {{-- Display the formatted total material price --}}
+                    <div class="pt-4 px-4 pl-2 flex justify-end  py-7">
+                        <span>${{ number_format($totalMaterialPrice, 2) }}</span> {{-- Display the formatted total material price --}}
+                    </div>
                 </div>
             </div>
-        </div>
         @endif
         @if (session('user_details')['user_role'] == 'admin')
             <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    Files
-                </p>
-                <button type="button" id="addFile-btn" class="flex">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Files
+                    </p>
+                    <button type="button" id="addFile-btn" class="flex">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                            alt="">
+                    </button>
+                </div>
+                <div class="col-span-10">
+                    <div class="itemDiv">
+                        <div class=" px-5 py-7">
+                            @foreach ($estimate_files as $file)
+                                <a href="{{ asset('storage/' . $file->estimate_file) }}"
+                                    class=" text-[#930027] hover:border-b border-[#930027]" target="_blank">
+                                    {{ $file->estimate_file_name }} ,
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-span-10">
-                <div class="itemDiv">
-                    <div class=" px-5 py-7">
-                        @foreach ($estimate_files as $file)
-                            <a href="{{ asset('storage/' . $file->estimate_file) }}"
-                                class=" text-[#930027] hover:border-b border-[#930027]" target="_blank">
-                                {{ $file->estimate_file_name }} ,
-                            </a>
+        @elseif(isset($userPrivileges->estimate) &&
+                isset($userPrivileges->estimate->files) &&
+                $userPrivileges->estimate->files === 'on')
+            <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Files
+                    </p>
+                    <button type="button" id="addFile-btn" class="flex">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                            alt="">
+                    </button>
+                </div>
+                <div class="col-span-10">
+                    <div class="itemDiv">
+                        <div class=" px-5 py-7">
+                            @foreach ($estimate_files as $file)
+                                <a href="{{ asset('storage/' . $file->estimate_file) }}"
+                                    class=" text-[#930027] hover:border-b border-[#930027]" target="_blank">
+                                    {{ $file->estimate_file_name }} ,
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+        @if (session('user_details')['user_role'] == 'admin')
+            <div class="mb-5 shadow-lg bg-white  mt-7 rounded-3xl">
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Photos
+                    </p>
+                    <button type="button" class="flex" id="addImage-btn">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                            alt="">
+                    </button>
+                </div>
+                <div class=" mx-auto  px-5 py-7">
+                    <div class="itemDiv">
+                        @foreach ($estimate_images as $image)
+                            <div class=" inline-block p-2 mx-auto">
+                                <img class=" w-16 h-16" src="{{ asset('storage/' . $image->estimate_image) }}"
+                                    alt="Estimate Image">
+                            </div>
                         @endforeach
                     </div>
                 </div>
             </div>
-        </div>
-        @elseif(isset($userPrivileges->estimate) && isset($userPrivileges->estimate->files) && $userPrivileges->estimate->files === 'on')
-            <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    Files
-                </p>
-                <button type="button" id="addFile-btn" class="flex">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
-            </div>
-            <div class="col-span-10">
-                <div class="itemDiv">
-                    <div class=" px-5 py-7">
-                        @foreach ($estimate_files as $file)
-                            <a href="{{ asset('storage/' . $file->estimate_file) }}"
-                                class=" text-[#930027] hover:border-b border-[#930027]" target="_blank">
-                                {{ $file->estimate_file_name }} ,
-                            </a>
+        @elseif(isset($userPrivileges->estimate) &&
+                isset($userPrivileges->estimate->photos) &&
+                $userPrivileges->estimate->photos === 'on')
+            <div class="mb-5 shadow-lg bg-white  mt-7 rounded-3xl">
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Photos
+                    </p>
+                    <button type="button" class="flex" id="addImage-btn">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                            alt="">
+                    </button>
+                </div>
+                <div class=" mx-auto  px-5 py-7">
+                    <div class="itemDiv">
+                        @foreach ($estimate_images as $image)
+                            <div class=" inline-block p-2 mx-auto">
+                                <img class=" w-16 h-16" src="{{ asset('storage/' . $image->estimate_image) }}"
+                                    alt="Estimate Image">
+                            </div>
                         @endforeach
                     </div>
                 </div>
             </div>
-        </div>
-        @endif
-        @if (session('user_details')['user_role'] == 'admin')
-            <div class="mb-5 shadow-lg bg-white  mt-7 rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    Photos
-                </p>
-                <button type="button" class="flex" id="addImage-btn">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
-            </div>
-            <div class=" mx-auto  px-5 py-7">
-                <div class="itemDiv">
-                @foreach ($estimate_images as $image)
-                    <div class=" inline-block p-2 mx-auto">
-                        <img class=" w-16 h-16" src="{{ asset('storage/' . $image->estimate_image) }}"
-                            alt="Estimate Image">
-                    </div>
-                @endforeach
-                </div>
-            </div>
-        </div>
-        @elseif(isset($userPrivileges->estimate) && isset($userPrivileges->estimate->photos) && $userPrivileges->estimate->photos === 'on')
-            <div class="mb-5 shadow-lg bg-white  mt-7 rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    Photos
-                </p>
-                <button type="button" class="flex" id="addImage-btn">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
-            </div>
-            <div class=" mx-auto  px-5 py-7">
-                <div class="itemDiv">
-                @foreach ($estimate_images as $image)
-                    <div class=" inline-block p-2 mx-auto">
-                        <img class=" w-16 h-16" src="{{ asset('storage/' . $image->estimate_image) }}"
-                            alt="Estimate Image">
-                    </div>
-                @endforeach
-                </div>
-            </div>
-        </div>
         @endif
         @if (session('user_details')['user_role'] == 'admin')
             <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    Proposals
-                </p>
-                <a href="/makeProposal/{{ $estimate->estimate_id }}">
-                    <button type="button" class="flex">
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Proposals
+                    </p>
+                    <a href="/makeProposal/{{ $estimate->estimate_id }}">
+                        <button type="button" class="flex">
+                            <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                                alt="">
+                        </button>
+                    </a>
+                </div>
+                <div>
+                    <div class="relative overflow-x-auto py-2">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Date
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Total
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Accepted
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Status
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($proposals as $proposal)
+                                        <tr class="bg-white border-b">
+                                            <th scope="row"
+                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                {{ $proposal->created_at }}
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                {{ $proposal->proposal_total }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $proposal->proposal_accepted }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $proposal->proposal_status }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @elseif(isset($userPrivileges->estimate) &&
+                isset($userPrivileges->estimate->proposals) &&
+                $userPrivileges->estimate->proposals === 'on')
+            <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Proposals
+                    </p>
+                    <a href="/makeProposal/{{ $estimate->estimate_id }}">
+                        <button type="button" class="flex">
+                            <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                                alt="">
+                        </button>
+                    </a>
+                </div>
+                <div>
+                    <div class="relative overflow-x-auto py-2">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Date
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Total
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Accepted
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Status
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($proposals as $proposal)
+                                        <tr class="bg-white border-b">
+                                            <th scope="row"
+                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                {{ $proposal->created_at }}
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                {{ $proposal->proposal_total }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $proposal->proposal_accepted }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $proposal->proposal_status }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+        @if (session('user_details')['user_role'] == 'admin')
+            <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Notes
+                    </p>
+                    <button type="button" class="flex" id="addNote-btn">
                         <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
                             alt="">
                     </button>
-                </a>
-            </div>
-            <div>
-                <div class="relative overflow-x-auto py-2">
+                </div>
+                <br>
+                <div class=" py-5 px-4  text-black mx-auto">
                     <div class="itemDiv">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Date
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Total
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Accepted
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Status
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($proposals as $proposal)
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ $proposal->created_at }}
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{ $proposal->proposal_total }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $proposal->proposal_accepted }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $proposal->proposal_status }}
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                        @foreach ($estimate_notes as $note)
+                            <p class=" text-sm my-2 ">
+                                {{ $note->estimate_note }}
+                            </p>
+                        @endforeach
+                    </div>
                 </div>
             </div>
-        </div>
-        @elseif(isset($userPrivileges->estimate) && isset($userPrivileges->estimate->proposals) && $userPrivileges->estimate->proposals === 'on')
+        @elseif(isset($userPrivileges->estimate) &&
+                isset($userPrivileges->estimate->notes) &&
+                $userPrivileges->estimate->notes === 'on')
             <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    Proposals
-                </p>
-                <a href="/makeProposal/{{ $estimate->estimate_id }}">
-                    <button type="button" class="flex">
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Notes
+                    </p>
+                    <button type="button" class="flex" id="addNote-btn">
                         <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
                             alt="">
                     </button>
-                </a>
-            </div>
-            <div>
-                <div class="relative overflow-x-auto py-2">
+                </div>
+                <br>
+                <div class=" py-5 px-4  text-black mx-auto">
                     <div class="itemDiv">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Date
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Total
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Accepted
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Status
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($proposals as $proposal)
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ $proposal->created_at }}
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{ $proposal->proposal_total }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $proposal->proposal_accepted }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $proposal->proposal_status }}
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                        @foreach ($estimate_notes as $note)
+                            <p class=" text-sm my-2 ">
+                                {{ $note->estimate_note }}
+                            </p>
+                        @endforeach
                     </div>
                 </div>
             </div>
-        </div>
         @endif
         @if (session('user_details')['user_role'] == 'admin')
             <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    Notes
-                </p>
-                <button type="button" class="flex" id="addNote-btn">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
-            </div>
-            <br>
-            <div class=" py-5 px-4  text-black mx-auto">
-                <div class="itemDiv">
-                @foreach ($estimate_notes as $note)
-                    <p class=" text-sm my-2 ">
-                        {{ $note->estimate_note }}
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Emails
                     </p>
-                @endforeach
+                    <button type="button" class="flex" id="addEmail-btn">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                            alt="">
+                    </button>
+                </div>
+                <div class=" py-2">
+                    <div class="relative overflow-x-auto">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Date
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Title
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Sent To
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Email Subject
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($estimate_emails as $email)
+                                        <tr class="bg-white border-b">
+                                            <th scope="row"
+                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                {{ $email->created_at }}
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                {{ $email->email_name }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $email->email_to }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $email->email_subject }}
+                                            </td>
+                                            <td>
+                                                <span
+                                                    class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded">Sent</span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        @elseif(isset($userPrivileges->estimate) && isset($userPrivileges->estimate->notes) && $userPrivileges->estimate->notes === 'on')
+        @elseif(isset($userPrivileges->estimate) &&
+                isset($userPrivileges->estimate->emails) &&
+                $userPrivileges->estimate->emails === 'on')
             <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    Notes
-                </p>
-                <button type="button" class="flex" id="addNote-btn">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
-            </div>
-            <br>
-            <div class=" py-5 px-4  text-black mx-auto">
-                <div class="itemDiv">
-                @foreach ($estimate_notes as $note)
-                    <p class=" text-sm my-2 ">
-                        {{ $note->estimate_note }}
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Emails
                     </p>
-                @endforeach
+                    <button type="button" class="flex" id="addEmail-btn">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                            alt="">
+                    </button>
                 </div>
-            </div>
-        </div>
-        @endif
-        @if (session('user_details')['user_role'] == 'admin')
-            <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    Emails
-                </p>
-                <button type="button" class="flex" id="addEmail-btn">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
-            </div>
-            <div class=" py-2">
-                <div class="relative overflow-x-auto">
-                    <div class="itemDiv">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Date
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Title
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Sent To
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Email Subject
-                                </th>
-                                <th scope="col" class="px-6 py-3">
+                <div class=" py-2">
+                    <div class="relative overflow-x-auto">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Date
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Title
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Sent To
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Email Subject
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
 
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($estimate_emails as $email)
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ $email->created_at }}
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{ $email->email_name }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $email->email_to }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $email->email_subject }}
-                                    </td>
-                                    <td>
-                                        <span
-                                            class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded">Sent</span>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($estimate_emails as $email)
+                                        <tr class="bg-white border-b">
+                                            <th scope="row"
+                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                {{ $email->created_at }}
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                {{ $email->email_name }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $email->email_to }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $email->email_subject }}
+                                            </td>
+                                            <td>
+                                                <span
+                                                    class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded">Sent</span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        @elseif(isset($userPrivileges->estimate) && isset($userPrivileges->estimate->emails) && $userPrivileges->estimate->emails === 'on')
-            <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    Emails
-                </p>
-                <button type="button" class="flex" id="addEmail-btn">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
-            </div>
-            <div class=" py-2">
-                <div class="relative overflow-x-auto">
-                    <div class="itemDiv">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Date
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Title
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Sent To
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Email Subject
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($estimate_emails as $email)
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ $email->created_at }}
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{ $email->email_name }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $email->email_to }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $email->email_subject }}
-                                    </td>
-                                    <td>
-                                        <span
-                                            class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded">Sent</span>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    </div>
-                </div>
-            </div>
-        </div>
         @endif
         @if (session('user_details')['user_role'] == 'admin')
             <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    Time Entries
-                </p>
-                <button type="button" class="flex" id="">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Time Entries
+                    </p>
+                    <button type="button" class="flex" id="">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                            alt="">
+                    </button>
+                </div>
+                <br>
+                <div class=" p-3 mx-auto">
+                    <p class=" text-sm">
+                        Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum
+                        ha
+                        sido el texto de relleno estándar de las.
+                    </p>
+                    <p class=" text-sm text-[#930027]">
+                        Find out more about using time tracking.
+                    </p>
+                </div>
             </div>
-            <br>
-            <div class=" p-3 mx-auto">
-                <p class=" text-sm">
-                    Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha
-                    sido el texto de relleno estándar de las.
-                </p>
-                <p class=" text-sm text-[#930027]">
-                    Find out more about using time tracking.
-                </p>
-            </div>
-        </div>
-        @elseif(isset($userPrivileges->estimates) && isset($userPrivileges->estimates->timeentries) && $userPrivileges->estimates->timeentries === 'on')
+        @elseif(isset($userPrivileges->estimates) &&
+                isset($userPrivileges->estimates->timeentries) &&
+                $userPrivileges->estimates->timeentries === 'on')
             <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    Time Entries
-                </p>
-                <button type="button" class="flex" id="">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Time Entries
+                    </p>
+                    <button type="button" class="flex" id="">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                            alt="">
+                    </button>
+                </div>
+                <br>
+                <div class=" p-3 mx-auto">
+                    <p class=" text-sm">
+                        Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum
+                        ha
+                        sido el texto de relleno estándar de las.
+                    </p>
+                    <p class=" text-sm text-[#930027]">
+                        Find out more about using time tracking.
+                    </p>
+                </div>
             </div>
-            <br>
-            <div class=" p-3 mx-auto">
-                <p class=" text-sm">
-                    Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha
-                    sido el texto de relleno estándar de las.
-                </p>
-                <p class=" text-sm text-[#930027]">
-                    Find out more about using time tracking.
-                </p>
-            </div>
-        </div>
         @endif
         @if (session('user_details')['user_role'] == 'admin')
             <div class="mb-5 shadow-lg bg-white  mt-7 rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    To-Dos
-                </p>
-                <button type="button" class="flex" id="to-do-button">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
-            </div>
-            <div class="p-2">
-                <div class="relative overflow-x-auto py-2">
-                    <div class="itemDiv">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Name
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Assign By
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Assigned To
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Satrt Date
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    End Date
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Status
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($toDos as $toDo)
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ $toDo->to_do_title }}
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{ $toDo->added_user_id }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $toDo->to_do_assigned_to }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $toDo->start_date }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $toDo->end_date }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $toDo->to_do_status }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <button id=""
-                                            class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Complete
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        To-Dos
+                    </p>
+                    <button type="button" class="flex" id="to-do-button">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                            alt="">
+                    </button>
+                </div>
+                <div class="p-2">
+                    <div class="relative overflow-x-auto py-2">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Assign By
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Assigned To
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Satrt Date
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            End Date
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Status
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($toDos as $toDo)
+                                        <tr class="bg-white border-b">
+                                            <th scope="row"
+                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                {{ $toDo->to_do_title }}
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                {{ $toDo->added_user_id }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $toDo->to_do_assigned_to }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $toDo->start_date }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $toDo->end_date }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $toDo->to_do_status }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <button id=""
+                                                    class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Complete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        @elseif(isset($userPrivileges->estimate) && isset($userPrivileges->estimate->todos) && $userPrivileges->estimate->todos === 'on')
+        @elseif(isset($userPrivileges->estimate) &&
+                isset($userPrivileges->estimate->todos) &&
+                $userPrivileges->estimate->todos === 'on')
             <div class="mb-5 shadow-lg bg-white  mt-7 rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    To-Dos
-                </p>
-                <button type="button" class="flex" id="to-do-button">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
-            </div>
-            <div class="p-2">
-                <div class="relative overflow-x-auto py-2">
-                    <div class="itemDiv">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Name
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Assign By
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Assigned To
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Satrt Date
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    End Date
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Status
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($toDos as $toDo)
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ $toDo->to_do_title }}
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{ $toDo->added_user_id }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $toDo->to_do_assigned_to }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $toDo->start_date }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $toDo->end_date }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $toDo->to_do_status }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <button id=""
-                                            class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Complete
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        To-Dos
+                    </p>
+                    <button type="button" class="flex" id="to-do-button">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                            alt="">
+                    </button>
+                </div>
+                <div class="p-2">
+                    <div class="relative overflow-x-auto py-2">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Assign By
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Assigned To
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Satrt Date
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            End Date
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Status
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($toDos as $toDo)
+                                        <tr class="bg-white border-b">
+                                            <th scope="row"
+                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                {{ $toDo->to_do_title }}
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                {{ $toDo->added_user_id }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $toDo->to_do_assigned_to }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $toDo->start_date }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $toDo->end_date }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $toDo->to_do_status }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <button id=""
+                                                    class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Complete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         @endif
         <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
             <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
@@ -1240,60 +1300,62 @@
                     Invoices
                 </p>
                 <button type="button" class="flex" id="">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
+                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                        alt="">
                 </button>
             </div>
             <div class="p-2">
                 <div class="relative overflow-x-auto py-2">
                     <div class="itemDiv">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Date
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Name
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Tax
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Total
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Due
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Status
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($invoices as $invoices)
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ $invoices->complete_invoice_date }}
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Date
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $invoices->invoice_name }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $invoices->tax_rate }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $invoices->invoice_total }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $invoices->invoice_due }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $invoices->invoice_status }}
-                                    </td>
+                                    <th scope="col" class="px-6 py-3">
+                                        Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Tax
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Total
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Due
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Status
+                                    </th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($invoices as $invoices)
+                                    <tr class="bg-white border-b">
+                                        <th scope="row"
+                                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                            {{ $invoices->complete_invoice_date }}
+                                        </th>
+                                        <td class="px-6 py-4">
+                                            {{ $invoices->invoice_name }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $invoices->tax_rate }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $invoices->invoice_total }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $invoices->invoice_due }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $invoices->invoice_status }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -1304,176 +1366,184 @@
                     Payments
                 </p>
                 <button type="button" class="flex" id="">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
+                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                        alt="">
                 </button>
             </div>
             <div class="p-2">
                 <div class="relative overflow-x-auto py-2">
                     <div class="itemDiv">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Date
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Description
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Total
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($payments as $payments)
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ $payments->complete_invoice_date }}
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Date
                                     </th>
-                                    <td class="px-6 py-4">
-                                        {{ $payments->note }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $payments->invoice_total }}
-                                    </td>
+                                    <th scope="col" class="px-6 py-3">
+                                        Description
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Total
+                                    </th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($payments as $payments)
+                                    <tr class="bg-white border-b">
+                                        <th scope="row"
+                                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                            {{ $payments->complete_invoice_date }}
+                                        </th>
+                                        <td class="px-6 py-4">
+                                            {{ $payments->note }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $payments->invoice_total }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
         @if (session('user_details')['user_role'] == 'admin')
             <div class="mb-5 shadow-lg bg-white   rounded-3xl ">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    Expenses
-                </p>
-                <button type="button" class="flex" id="expenses-btn">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
-            </div>
-            <div class="p-2">
-                <div class="relative overflow-x-auto py-2">
-                    <div class="itemDiv">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Date
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Vendor
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Description
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Hours
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Paid
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Total
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($expenses as $expense)
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ $expense->expense_date }}
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{ $expense->expense_vendor }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $expense->expense_description }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $expense->labour_hours }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $expense->expense_paid }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $expense->expense_total }}
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Expenses
+                    </p>
+                    <button type="button" class="flex" id="expenses-btn">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                            alt="">
+                    </button>
+                </div>
+                <div class="p-2">
+                    <div class="relative overflow-x-auto py-2">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Date
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Vendor
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Description
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Hours
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Paid
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Total
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($expenses as $expense)
+                                        <tr class="bg-white border-b">
+                                            <th scope="row"
+                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                {{ $expense->expense_date }}
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                {{ $expense->expense_vendor }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $expense->expense_description }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $expense->labour_hours }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $expense->expense_paid }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $expense->expense_total }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        @elseif(isset($userPrivileges->estimate) && isset($userPrivileges->estimate->expenses) && $userPrivileges->estimate->expenses === 'on')
+        @elseif(isset($userPrivileges->estimate) &&
+                isset($userPrivileges->estimate->expenses) &&
+                $userPrivileges->estimate->expenses === 'on')
             <div class="mb-5 shadow-lg bg-white   rounded-3xl ">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    Expenses
-                </p>
-                <button type="button" class="flex" id="expenses-btn">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-                </button>
-            </div>
-            <div class="p-2">
-                <div class="relative overflow-x-auto py-2">
-                    <div class="itemDiv">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Date
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Vendor
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Description
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Hours
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Paid
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Total
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($expenses as $expense)
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ $expense->expense_date }}
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{ $expense->expense_vendor }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $expense->expense_description }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $expense->labour_hours }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $expense->expense_paid }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $expense->expense_total }}
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Expenses
+                    </p>
+                    <button type="button" class="flex" id="expenses-btn">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
+                            alt="">
+                    </button>
+                </div>
+                <div class="p-2">
+                    <div class="relative overflow-x-auto py-2">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Date
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Vendor
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Description
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Hours
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Paid
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Total
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($expenses as $expense)
+                                        <tr class="bg-white border-b">
+                                            <th scope="row"
+                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                {{ $expense->expense_date }}
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                {{ $expense->expense_vendor }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $expense->expense_description }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $expense->labour_hours }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $expense->expense_paid }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ $expense->expense_total }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         @endif
     </div>
 </div>
@@ -1705,7 +1775,8 @@
             class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <form action="/addEstimateExpense" method="post" id="expenses-btn-form">
                 @csrf
-                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id"
+                    id="estimate_id">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between border-b">
@@ -1865,7 +1936,8 @@
             class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <form action="/addEstimateNote" method="post" id="addNote-form">
                 @csrf
-                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id"
+                    id="estimate_id">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between border-b">
@@ -1901,96 +1973,313 @@
         <div class="fixed inset-0 transition-opacity" aria-hidden="true">
             <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
         </div>
-
         <!-- Modal panel -->
         <div
             class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full lg:max-w-screen-md">
-
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <!-- Modal content here -->
-                <div class=" flex justify-between">
-                    <div class=" " id="">
-                        <x-add-button :id="''" :title="'All'" :class="' bg-[#E02B20] px-6'"></x-add-button>
-                        <x-add-button :id="''" :title="'Product'" :class="''"></x-add-button>
-                        <x-add-button :id="''" :title="'Labour'" :class="''"></x-add-button>
-                        <x-add-button :id="''" :title="'Assemblies'" :class="''"></x-add-button>
-                        <x-add-button :id="''" :title="'Groups'" :class="''"></x-add-button>
-                    </div>
+                <div class=" text-right">
                     <button class="modal-close" type="button">
                         <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
                     </button>
                 </div>
-                <div class=" my-2">
-                    <input type="text" name="search" id="search" placeholder="Search"
-                        autocomplete="given-name"
-                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                <div class="">
+                    <div class=" " id="">
+                        <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+                            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="items-tab"
+                                data-tabs-toggle="#items-tab-content" role="tablist">
+                                <li class="me-2" role="presentation">
+                                    <button class="inline-block p-4 border-b-2 rounded-t-lg" id="all-tab"
+                                        data-tabs-target="#all" type="button" role="tab"
+                                        aria-controls="all" aria-selected="false">all</button>
+                                </li>
+                                <li class="me-2" role="presentation">
+                                    <button
+                                        class="inline-block p-4 border-b-2 rounded-t-lg hover:text-[#930027] hover:border-[#930027] dark:hover:text-[#930027]"
+                                        id="labour-tab" data-tabs-target="#labour" type="button" role="tab"
+                                        aria-controls="labour" aria-selected="false">labour</button>
+                                </li>
+                                <li class="me-2" role="presentation">
+                                    <button
+                                        class="inline-block p-4 border-b-2 rounded-t-lg hover:text-[#930027] hover:border-[#930027] dark:hover:text-[#930027]"
+                                        id="material-tab" data-tabs-target="#material" type="button"
+                                        role="tab" aria-controls="material"
+                                        aria-selected="false">material</button>
+                                </li>
+                                <li role="presentation">
+                                    <button
+                                        class="inline-block p-4 border-b-2 rounded-t-lg hover:text-[#930027] hover:border-[#930027] dark:hover:text-[#930027]"
+                                        id="assemblies-tab" data-tabs-target="#assemblies" type="button"
+                                        role="tab" aria-controls="assemblies"
+                                        aria-selected="false">assemblies</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="items-tab-content">
+                            {{-- <div class=" my-2">
+                                <input type="text" name="search" id="search" placeholder="Search"
+                                    autocomplete="given-name"
+                                    class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            </div> --}}
+                            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="all"
+                                role="tabpanel" aria-labelledby="all-tab">
+                                <div class="relative overflow-x-auto w-full h-60 overflow-y-auto my-2">
+                                    @csrf
+                                    <input type="hidden" value="{{ $estimate->estimate_id }}"
+                                        name="estimate_id" id="estimate_id">
+                                    <table class="w-full text-sm text-left universalTable">
+                                        <thead class="text-xs text-white uppercase bg-[#930027]">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Item name
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    type
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Units
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Cost
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Price
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Actions
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($items as $item)
+                                                <tr class="bg-white border-b">
+                                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                        {{ $item->item_name }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        {{ $item->item_type }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        {{ $item->item_units }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        ${{ $item->item_cost }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        ${{ $item->item_price }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <input type="checkbox" name="selected_items[]"
+                                                            id="selected_items{{ $item->item_id }}"
+                                                            value="{{ $item->item_id }}">
+                                                        <label for="selected_items{{ $item->item_id }}"></label>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="labour"
+                                role="tabpanel" aria-labelledby="labour-tab">
+                                    <div class="relative overflow-x-auto w-full h-60 overflow-y-auto my-2">
+                                        @csrf
+                                        <input type="hidden" value="{{ $estimate->estimate_id }}"
+                                            name="estimate_id" id="estimate_id">
+                                        <table class="w-full text-sm text-left universalTable">
+                                            <thead class="text-xs text-white uppercase bg-[#930027]">
+                                                <tr>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Item name
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        type
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Units
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Cost
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Price
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Actions
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($labour_items as $item)
+                                                    <tr class="bg-white border-b">
+                                                        <td
+                                                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                            {{ $item->item_name }}
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            {{ $item->item_type }}
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            {{ $item->item_units }}
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            ${{ $item->item_cost }}
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            ${{ $item->item_price }}
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            <input type="checkbox" name="selected_items[]"
+                                                                id="selected_items{{ $item->item_id }}"
+                                                                value="{{ $item->item_id }}">
+                                                            <label for="selected_items{{ $item->item_id }}"></label>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                            </div>
+                            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="material"
+                                role="tabpanel" aria-labelledby="material-tab">
+                                    <div class="relative overflow-x-auto w-full h-60 overflow-y-auto my-2">
+                                        @csrf
+                                        <input type="hidden" value="{{ $estimate->estimate_id }}"
+                                            name="estimate_id" id="estimate_id">
+                                        <table class="w-full text-sm text-left universalTable">
+                                            <thead class="text-xs text-white uppercase bg-[#930027]">
+                                                <tr>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Item name
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        type
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Units
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Cost
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Price
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Actions
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($material_items as $item)
+                                                    <tr class="bg-white border-b">
+                                                        <td
+                                                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                            {{ $item->item_name }}
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            {{ $item->item_type }}
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            {{ $item->item_units }}
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            ${{ $item->item_cost }}
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            ${{ $item->item_price }}
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            <input type="checkbox" name="selected_items[]"
+                                                                id="selected_items{{ $item->item_id }}"
+                                                                value="{{ $item->item_id }}">
+                                                            <label for="selected_items{{ $item->item_id }}"></label>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                            </div>
+                            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="assemblies"
+                                role="tabpanel" aria-labelledby="assemblies-tab">
+                                    <div class="relative overflow-x-auto w-full h-60 overflow-y-auto my-2">
+                                        @csrf
+                                        <input type="hidden" value="{{ $estimate->estimate_id }}"
+                                            name="estimate_id" id="estimate_id">
+                                        <table class="w-full text-sm text-left universalTable">
+                                            <thead class="text-xs text-white uppercase bg-[#930027]">
+                                                <tr>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Item name
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        type
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Units
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Cost
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Price
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Actions
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($assembly_items as $item)
+                                                    <tr class="bg-white border-b">
+                                                        <td
+                                                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                            {{ $item->item_name }}
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            {{ $item->item_type }}
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            {{ $item->item_units }}
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            ${{ $item->item_cost }}
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            ${{ $item->item_price }}
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            <input type="checkbox" name="selected_items[]"
+                                                                id="selected_items{{ $item->item_id }}"
+                                                                value="{{ $item->item_id }}">
+                                                            <label for="selected_items{{ $item->item_id }}"></label>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                            </div>
+                            <div>
+                                <form action="/addEstimateItems" method="post" id="formData">
+                                    @csrf
+                                    <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                    <div id="selectedItemsContainer" class="mt-4">
+                                        <!-- Badges will be dynamically added here -->
+                                        
+                                      </div>
+                                    <div class=" flex justify-between pt-2 border-t">
+                                        <button type="submit" class=" mb-2 py-1 px-7 rounded-md border ">Cancel
+                                        </button>
+                                        <button
+                                            class=" mb-2 bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- task details -->
-
-                <form action="/addEstimateItems" method="post" id="formData">
-                    <div class="relative overflow-x-auto h-60 overflow-y-auto my-2">
-                        @csrf
-                        <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id"
-                            id="estimate_id">
-                        <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-white uppercase bg-[#930027]">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">
-                                        Item name
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        type
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Units
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Cost
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Price
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Actions
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($items as $item)
-                                    <tr class="bg-white border-b">
-                                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                            {{ $item->item_name }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ $item->item_type }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ $item->item_unit }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            ${{ $item->item_cost }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            ${{ $item->item_price }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <input type="checkbox" name="selected_items[]"
-                                                id="selected_items{{ $item->item_id }}"
-                                                value="{{ $item->item_id }}">
-                                            <label for="selected_items{{ $item->item_id }}"></label>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class=" flex justify-between pt-2 border-t">
-                        <button type="submit" class=" mb-2 py-1 px-7 rounded-md border ">Cancel
-                        </button>
-                        <button class=" mb-2 bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
-                        </button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -3094,3 +3383,101 @@
         }
     });
 </script>
+<script>
+    $(document).ready(function () {
+      // Function to create a badge element
+      function createBadge(item) {
+        var badge = $('<span/>', {
+          id: 'badge-' + item.item_id,
+          class: 'inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-gray-800 bg-gray-100 rounded dark:bg-gray-700 dark:text-gray-300',
+          text: item.item_name
+        });
+  
+        // Add hidden input for item ID
+        var hiddenInput = $('<input/>', {
+          type: 'hidden',
+          name: 'selected_items[]',
+          value: item.item_id
+        });
+  
+        badge.append(hiddenInput);
+  
+        // Add the cross button to remove the badge
+        var closeButton = $('<button/>', {
+          type: 'button',
+          class: 'inline-flex items-center p-1 ms-2 text-sm text-gray-400 bg-transparent rounded-sm hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-gray-300',
+          'data-dismiss-target': 'badge-' + item.item_id,
+          'aria-label': 'Remove'
+        });
+  
+        // Replace the SVG code with the img tag
+        var closeIcon = $('<img/>', {
+          src: '{{ asset('assets/icons/close-icon.svg') }}',
+          alt: 'Remove badge',
+          class: 'w-2 h-2'
+        });
+  
+        // Append elements to the badge and add to the container
+        closeButton.append(closeIcon);
+        badge.append(closeButton);
+        $('#selectedItemsContainer').append(badge);
+  
+        // Add event listener to the cross button for badge removal
+        closeButton.on('click', function () {
+          var badgeId = closeButton.attr('data-dismiss-target');
+          var checkboxId = badgeId.replace('badge-', 'selected_items');
+          var checkbox = $('#' + checkboxId);
+  
+          // Uncheck the corresponding checkbox
+          if (checkbox.length) {
+            checkbox.prop('checked', false);
+          }
+  
+          // Remove the badge
+          badge.remove();
+        });
+      }
+  
+      // Function to update the selected items badges
+      function updateSelectedItems() {
+        $('#selectedItemsContainer').empty(); // Clear previous badges
+  
+        $('input[name="selected_items[]"]:checked').each(function () {
+          var checkboxValue = $(this).val();
+          var item = {};
+  
+          // Find the corresponding table row and extract data
+          var tableRow = $(this).closest('tr');
+          item.item_id = checkboxValue;
+          item.item_name = tableRow.find('td:eq(0)').text(); // Assuming the item name is in the first column
+  
+          if (item.item_name.trim() !== '') {
+            createBadge(item);
+          }
+        });
+      }
+  
+      // Get all checkboxes
+      var checkboxes = $('input[name="selected_items[]"]');
+  
+      // Add event listener to each checkbox
+      checkboxes.on('change', function () {
+        updateSelectedItems();
+      });
+  
+      // Sample data for items (replace with your actual items data)
+      var items = [
+        { item_id: 1, item_name: 'Construction Material A' },
+        { item_id: 2, item_name: 'Labor Service B' },
+        { item_id: 3, item_name: 'Assembly C' },
+        { item_id: 4, item_name: 'Equipment D' },
+        // Add more items as needed
+      ];
+  
+      // Initial badge rendering
+      updateSelectedItems();
+    });
+  </script>
+  
+  
+  

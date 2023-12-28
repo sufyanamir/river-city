@@ -6,6 +6,7 @@
 <script src="{{ asset('assets/js/sweetalert2.js') }}"></script>
 <script src="{{ asset('assets/js/topbar.min.js') }}"></script>
 <script src="{{ asset('assets/js/fancybox.min.js') }}"></script>
+<script src="{{ mix('node_modules/flowbite/dist/flowbite.min.js') }}"></script>
 <script>
   $(".addEstimate").click(function(e) {
     e.preventDefault();
