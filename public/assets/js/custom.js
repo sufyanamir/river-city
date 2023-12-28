@@ -178,6 +178,7 @@ $(document).ready(function () {
   });
 
   new DataTable('#universalTable');
+  new DataTable('.universalTable');
 
   window.voice = function (buttonId, textareaId) {
     var recognition = new webkitSpeechRecognition();
