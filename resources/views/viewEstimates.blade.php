@@ -1990,7 +1990,7 @@
                             <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="items-tab"
                                 data-tabs-toggle="#items-tab-content" role="tablist">
                                 <li class="me-2" role="presentation">
-                                    <button class="inline-block p-4 border-b-2 rounded-t-lg" id="all-tab"
+                                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-[#930027] hover:border-[#930027] dark:hover:text-[#930027]" id="all-tab"
                                         data-tabs-target="#all" type="button" role="tab"
                                         aria-controls="all" aria-selected="false">all</button>
                                 </li>
@@ -2015,7 +2015,7 @@
                                         aria-selected="false">assemblies</button>
                                 </li>
                                 <li role="presentation">
-                                    <button class="inline-block p-4 border-b-2 rounded-t-lg" id="addItem-tab"
+                                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-[#930027] hover:border-[#930027] dark:hover:text-[#930027]" id="addItem-tab"
                                         data-tabs-target="#addItem" type="button"
                                         role="tab" aria-controls="addItem"
                                         aria-selected="false">Add Item</button>
@@ -3587,6 +3587,30 @@
                 // Hide the form
                 $("#formData").hide();
             }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        // Set the "all" tab as the default tab
+        let activeTab = $("#all");
+        activeTab.removeClass("hidden").addClass("active");
+
+        // Add click event listeners to tab buttons
+        $("[role='tab']").click(function () {
+            // Hide all tab contents
+            $("[role='tabpanel']").addClass("hidden");
+
+            // Remove the 'active' class from all tab buttons
+            $("[role='tab']").removeClass("active");
+
+            // Get the target tab content and display it
+            const targetId = $(this).attr("aria-controls");
+            activeTab = $("#" + targetId);
+            activeTab.removeClass("hidden").addClass("active");
+
+            // Set the 'active' class for the clicked tab button
+            $(this).addClass("active");
         });
     });
 </script>
