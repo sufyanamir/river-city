@@ -36,6 +36,52 @@ use Symfony\Contracts\Service\Attribute\Required;
 class EstimateController extends Controller
 {
 
+    public function addItemInEstimateAndItems(Request $request)
+    {
+        try {
+
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'item_name' => 'required|string',
+                'item_type' => 'required|string',
+                'item_units' => 'required|string',
+                'item_cost' => 'required|numeric',
+                'item_price' => 'required|numeric',
+                'labour_expense' => 'nullable|numeric',
+                'item_description' => 'required|string',
+                'estimate_id' => 'required',
+            ]);
+
+            $item = Items::create([
+                'item_name' => $validatedData['item_name'],
+                'item_type' => $validatedData['item_type'],
+                'item_units' => $validatedData['item_units'],
+                'item_cost' => $validatedData['item_cost'],
+                'item_price' => $validatedData['item_price'],
+                'labour_expense' => $validatedData['labour_expense'],
+                'item_description' => $validatedData['item_description'],
+            ]);
+
+                EstimateItem::create([
+                    'added_user_id' => $userDetails['id'],
+                    'estimate_id' => $validatedData['estimate_id'],
+                    'item_id' => $item['item_id'],
+                    'item_name' => $item['item_name'],
+                    'item_type' => $item['item_type'],
+                    'item_unit' => $item['item_unit'],
+                    'item_cost' => $item['item_cost'],
+                    'item_price' => $item['item_price'],
+                    // Add other fields as needed
+                ]);
+
+            return response()->json(['success' => true, 'message' => 'Item successfully added into estimate and Items!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
     public function getEstimateToSetSchedule($id)
     {
         $userDetails = session('user_details');
