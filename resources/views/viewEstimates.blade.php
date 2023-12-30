@@ -62,16 +62,16 @@
                         <p class="text-lg font-bold text-[#323C47]">
                             Estimate
                             <br>
-                            <span>{{ $customer->customer_project_name }}</span>
+                            <span>{{ $estimate->project_name }}</span>
                         </p>
                         <p class="mt-[2px] text-[#323C47]">
-                            {{ $customer->customer_project_number }}
+                            {{ $estimate->project_number }}
                         </p>
                         <p class="text-[#323C47]">
                             {{ $estimate->estimate_status }}
                         </p>
                         <p class="text-[#323C47]">
-                            {{ $customer->created_at }}
+                            {{ $estimate->created_at }}
                         </p>
                         <p class="mt-1 text-red-900">
                             Total: ${{ $estimate->estimate_total }}
