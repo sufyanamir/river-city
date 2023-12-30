@@ -29,7 +29,7 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody class=" universalTableBody text-sm">
+                    <tbody id="universalTableBody" class=" universalTableBody text-sm">
                         @foreach($estimates as $item)
                         <tr>
                             <td>{{ $item->created_at }}</td>
@@ -472,7 +472,9 @@
                         </div>
                         <div class=" col-span-2">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Owner</h5>
-                            <input type="text"class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" disabled name="owner" id="owner" value="{{ session('user_details')['name'] }} {{ session('user_details')['last_name'] }}" placeholder="{{ session('user_details')['name'] }} {{ session('user_details')['last_name'] }}">
+                            <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="owner" id="owner">
+                                <option value="{{ session('user_details')['name'] }} {{ session('user_details')['last_name'] }}">{{ session('user_details')['name'] }} {{ session('user_details')['last_name'] }}</option>
+                            </select>
                         </div>
                     </div>
                     <div class="">
@@ -591,3 +593,15 @@
         $("#addEstimate-form")[0].reset()
     });
 </script> --}}
+<script>
+    $(".addEstimate").click(function(e) {
+      e.preventDefault();
+      $("#addEstimate-modal").removeClass('hidden');
+    });
+  
+    $(".modal-close").click(function(e) {
+      e.preventDefault();
+      $("#addEstimate-modal").addClass('hidden');
+      $("#addEstimate-form")[0].reset()
+    });
+  </script>
