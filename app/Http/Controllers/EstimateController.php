@@ -63,20 +63,19 @@ class EstimateController extends Controller
                 'item_description' => $validatedData['item_description'],
             ]);
 
-                EstimateItem::create([
-                    'added_user_id' => $userDetails['id'],
-                    'estimate_id' => $validatedData['estimate_id'],
-                    'item_id' => $item['item_id'],
-                    'item_name' => $item['item_name'],
-                    'item_type' => $item['item_type'],
-                    'item_unit' => $item['item_unit'],
-                    'item_cost' => $item['item_cost'],
-                    'item_price' => $item['item_price'],
-                    // Add other fields as needed
-                ]);
+            EstimateItem::create([
+                'added_user_id' => $userDetails['id'],
+                'estimate_id' => $validatedData['estimate_id'],
+                'item_id' => $item['item_id'],
+                'item_name' => $item['item_name'],
+                'item_type' => $item['item_type'],
+                'item_unit' => $item['item_unit'],
+                'item_cost' => $item['item_cost'],
+                'item_price' => $item['item_price'],
+                // Add other fields as needed
+            ]);
 
             return response()->json(['success' => true, 'message' => 'Item successfully added into estimate and Items!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -104,10 +103,10 @@ class EstimateController extends Controller
     public function index()
     {
         $userDetails = session('user_details');
-
+        $customers = Customer::get();
         $estimates = Estimate::get();
 
-        return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails]);
+        return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails, 'customers' => $customers]);
     }
     // ==============================================================Estimate additional functions=========================================================
     // add files
@@ -824,22 +823,16 @@ class EstimateController extends Controller
     {
         try {
             $userDetails = session('user_details');
-            $customer = Customer::where('customer_id', $id)->first();
-
-            if (!$customer) {
-                // Handle the case where the customer is not found
-                // You may want to return a response or redirect to an error page
-                return response()->json(['success' => false, 'message' => 'Customer not found'], 404);
-            }
-
-            $customerId = $customer->customer_id;
-            $estimate = Estimate::where('customer_id', $customerId)->first();
-
+            $estimate = Estimate::where('estimate_id', $id)->first();
+            
             if (!$estimate) {
                 // Handle the case where the estimate is not found
                 // You may want to return a response or redirect to an error page
                 return response()->json(['success' => false, 'message' => 'Estimate not found'], 404);
             }
+            
+            $customer = Customer::where('customer_id', $estimate->customer_id)->first();
+
 
             $additionalContacts = EstimateContact::where('estimate_id', $estimate->estimate_id)->get();
             $estimateItems = EstimateItem::where('estimate_id', $estimate->estimate_id)->get();
@@ -862,7 +855,7 @@ class EstimateController extends Controller
             $expenses = EstimateExpenses::where('estimate_id', $estimate->estimate_id)->get();
             $estimateImages = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
             $estimateFiles = EstimateFile::where('estimate_id', $estimate->estimate_id)->get();
-            
+
             // Calculate the sum of item_price for the estimate
             $totalPrice = $estimateItems->sum('item_price');
 
@@ -901,6 +894,19 @@ class EstimateController extends Controller
 
     // view estimate
 
+    // get Customer details on estimate modal when selecting customer
+    public function getCustomerDetails($id)
+    {
+        try {
+            $customer = Customer::find($id);
+    
+            return response()->json(['success' => true, 'customer' => $customer], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // get Customer details on estimate modal when selecting customer
+
     // add  estimate
     public function addCustomerAndEstimate(Request $request)
     {
@@ -911,6 +917,7 @@ class EstimateController extends Controller
             // dd($userDetails);
 
             $validatedData = $request->validate([
+                'customer_id' => 'nullable',
                 'first_name' => 'required|string',
                 'last_name' => 'nullable|string',
                 'email' => 'required|string',
@@ -931,26 +938,28 @@ class EstimateController extends Controller
 
             ]);
 
-            $customer = Customer::create([
-                'added_user_id' => $userDetails['id'],
-                'customer_first_name' => $validatedData['first_name'],
-                'customer_last_name' => $validatedData['last_name'],
-                'customer_email' => $validatedData['email'],
-                'customer_phone' => $validatedData['phone'],
-                'customer_company_name' => $validatedData['company_name'],
-                'customer_project_name' => $validatedData['project_name'],
-                'customer_project_number' => $validatedData['project_number'],
-                'customer_primary_address' => $validatedData['first_address'],
-                'customer_secondary_address' => $validatedData['second_address'],
-                'customer_city' => $validatedData['city'],
-                'customer_state' => $validatedData['state'],
-                'customer_zip_code' => $validatedData['zip_code'],
-                'tax_rate' => $validatedData['tax_rate'],
-                'potential_value' => $validatedData['potential_value'],
-                'company_internal_note' => $validatedData['internal_note'],
-                'source' => $validatedData['source'],
-                'owner' => $validatedData['owner'],
-            ]);
+            if ($validatedData['customer_id']) {
+                $customer = Customer::find($validatedData['customer_id']);
+            } else {
+                $customer = Customer::create([
+                    'added_user_id' => $userDetails['id'],
+                    'customer_first_name' => $validatedData['first_name'],
+                    'customer_last_name' => $validatedData['last_name'],
+                    'customer_email' => $validatedData['email'],
+                    'customer_phone' => $validatedData['phone'],
+                    'customer_company_name' => $validatedData['company_name'],
+                    'customer_primary_address' => $validatedData['first_address'],
+                    'customer_secondary_address' => $validatedData['second_address'],
+                    'customer_city' => $validatedData['city'],
+                    'customer_state' => $validatedData['state'],
+                    'customer_zip_code' => $validatedData['zip_code'],
+                    'tax_rate' => $validatedData['tax_rate'],
+                    'potential_value' => $validatedData['potential_value'],
+                    'company_internal_note' => $validatedData['internal_note'],
+                    'source' => $validatedData['source'],
+                    'owner' => $validatedData['owner'],
+                ]);
+            }
 
             $estimate = Estimate::create([
                 'customer_id' => $customer->customer_id,

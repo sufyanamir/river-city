@@ -71,6 +71,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/addToDos', [EstimateController::class, 'addToDos']);
     Route::post('/addEstimateExpense', [EstimateController::class, 'addEstimateExpense']);
     Route::post('/addEstimateFile', [EstimateController::class, 'uploadFile']);
+    Route::get('/getCustomerDetails/{id}', [EstimateController::class, 'getCustomerDetails']);
     Route::get('/add-estimate', function () {
         return view('addEstimate');
     });

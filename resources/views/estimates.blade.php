@@ -81,7 +81,7 @@
                                             </div>
                                             <div id="action-menu{{$item->estimate_id}}" class=" topbar-manuLeaving absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                                 <div class="py-1" role="none">
-                                                    <a href="/viewEstimate/{{ $item->customer_id }}" class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-view-icon.svg') }}" alt="icon"> View</a>
+                                                    <a href="/viewEstimate/{{ $item->estimate_id }}" class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-view-icon.svg') }}" alt="icon"> View</a>
                                                     <a href="#" class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-edit-icon.svg') }}" alt="icon"> Edit</a>
                                                     <a href="#" class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-report-icon.svg') }}" alt="icon"> Report</a>
                                                     <a href="#" class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-activity-icon.svg') }}" alt="icon"> Activity</a>
@@ -345,7 +345,7 @@
 </div>
 <!-- chat  modal -->
 <!-- add estimate -->
-<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addEstimate-modal">
+{{-- <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addEstimate-modal">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <!-- Background overlay -->
         <div class="fixed inset-0 transition-opacity" aria-hidden="true">
@@ -369,9 +369,121 @@
             </form>
         </div>
     </div>
-</div>
+</div> --}}
 <!-- add estimate -->
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addEstimate-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
 
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full lg:max-w-screen-lg">
+            <form action="/addEstimate" method="post" id="addEstimate-form">
+                @csrf
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class=" flex justify-between border-b-2">
+                        <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Add Customer</h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div class=" text-center grid grid-cols-4 gap-2">
+                        <div class=" flex justify-between border-b-2 mb-2 col-span-4 mt-4">
+                            <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Contact</h2>
+                        </div>
+                        <div class="col-span-4">
+                            <select name="customer_id" id="customer_id" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <option value="">New Client</option>
+                                @foreach ($customers as $item)
+                                    <option value="{{ $item->customer_id }}">{{ $item->customer_first_name }} {{ $item->customer_last_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class=" ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">First Name</h5>
+                            <input type="text" name="first_name" id="first_name" placeholder="First Name" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Last Name</h5>
+                            <input type="text" name="last_name" id="last_name" placeholder="Last Name" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Email</h5>
+                            <input type="text" name="email" id="email" placeholder="Email" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Phone No.</h5>
+                            <input type="tel" name="phone" id="phone" placeholder="Phone No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-4 ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Company Name (Optional)</h5>
+                            <input type="text" name="company_name" id="company_name" placeholder="Company Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2 ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Project Name (Optional)</h5>
+                            <input type="text" name="project_name" id="project_name" placeholder="Company Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2 ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Project Number (Optional)</h5>
+                            <input type="number" name="project_number" id="project_number" placeholder="Company Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" flex justify-between border-b-2 mb-2 col-span-4  mt-1 mb-3">
+                            <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Billing</h2>
+                        </div>
+                        <div class=" col-span-2 ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Address 1</h5>
+                            <input type="text" name="first_address" id="first_address" placeholder="Address 1" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2 ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Address 2 (Optional)</h5>
+                            <input type="text" name="second_address" id="second_address" placeholder="Address 2 (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">City</h5>
+                            <input type="text" name="city" id="city" placeholder="City" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">State/Province</h5>
+                            <input type="text" name="state" id="state" placeholder="State/Province" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Zip/Postal Code</h5>
+                            <input type="number" name="zip_code" id="zip_code" placeholder="Zip/Postal Code" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Tax</h5>
+                            <input type="number" name="tax_rate" id="tax_rate" placeholder="Tax Rate (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Potential Value</h5>
+                            <input type="text" name="potential_value" id="potential_value" placeholder="Potential Value" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-4">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Note</h5>
+                            <input type="text" name="internal_note" id="internal_note" placeholder="Internal Notes (Optional, only visible to employees)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Source</h5>
+                            <input type="text" name="source" id="source" placeholder="Source (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Owner</h5>
+                            <input type="text"class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" disabled name="owner" id="owner" value="{{ session('user_details')['name'] }} {{ session('user_details')['last_name'] }}" placeholder="{{ session('user_details')['name'] }} {{ session('user_details')['last_name'] }}">
+                        </div>
+                    </div>
+                    <div class="">
+                        <button id="" class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Add
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @include('layouts.footer')
 <script>
     function openFileMenu() {
@@ -416,6 +528,58 @@
     });
 </script>
 <script>
+    $(document).ready(function () {
+        $('#customer_id').change(function () {
+            const selectedCustomerId = $(this).val();
+
+            if (selectedCustomerId) {
+                // Fetch customer details using AJAX
+                $.ajax({
+                    url: `/getCustomerDetails/${selectedCustomerId}`,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        // Populate input fields with customer details
+                        $('#first_name').val(data.customer.customer_first_name);
+                        $('#last_name').val(data.customer.customer_last_name);
+                        $('#email').val(data.customer.customer_email);
+                        $('#phone').val(data.customer.customer_phone);
+                        $('#company_name').val(data.customer.customer_company_name);
+                        $('#first_address').val(data.customer.customer_primary_address);
+                        $('#second_addresss').val(data.customer.customer_secondary_address);
+                        $('#city').val(data.customer.customer_city);
+                        $('#state').val(data.customer.customer_state);
+                        $('#zip_code').val(data.customer.customer_zip_code);
+                        $('#tax_rate').val(data.customer.tax_rate);
+                        $('#potential_value').val(data.customer.potential_value);
+                        $('#internal_note').val(data.customer.internal_note);
+                        // ... populate other fields as needed
+                    },
+                    error: function (error) {
+                        console.error('Error fetching customer details:', error);
+                    }
+                });
+            } else {
+                // Clear input fields if no customer is selected
+                $('#first_name').val('');
+                $('#last_name').val('');
+                $('#email').val('');
+                $('#phone').val('');
+                $('#company_name').val('');
+                $('#first_address').val('');
+                $('#second_address').val('');
+                $('#city').val('');
+                $('#state').val('');
+                $('#zip_code').val('');
+                $('#tax_rate').val('');
+                $('#potential_value').val('');
+                $('#internal_note').val('');
+                // ... clear other fields as needed
+            }
+        });
+    });
+</script>
+{{-- <script>
     $("#addEstimate").click(function(e) {
         e.preventDefault();
         $("#addEstimate-modal").removeClass('hidden');
@@ -426,4 +590,4 @@
         $("#addEstimate-modal").addClass('hidden');
         $("#addEstimate-form")[0].reset()
     });
-</script>
+</script> --}}
