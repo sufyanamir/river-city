@@ -48,7 +48,7 @@
                             <span class="pl-2">Estimate Pending Schedule
                             </span>
                         </p>
-                        <p class="mt-1 flex text-[#323C47] font-medium">
+                        {{-- <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/person-icon.svg') }}" alt="">
                             <span class="pl-2 flex">{{ $customer->owner }} Assigned To Schedule Estimate On <span
                                     class="pl-2 text-[#31A613] flex">
@@ -56,7 +56,7 @@
                                         alt="">
                                     {{ $customer->created_at }}</span>
                             </span>
-                        </p>
+                        </p> --}}
                     </div>
                     <div class=" col-span-2 p-3 text-right">
                         <p class="text-lg font-bold text-[#323C47]">
@@ -400,7 +400,7 @@
                 </div>
             </div>
         </div>
-
+        @if($user_details['user_role'] == 'admin')
         <div class="  border-2  shadow-lg my-5  bg-white rounded-3xl mt-7 ">
             <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
                 <p class="text-lg text-white pl-3 font-medium">
@@ -436,6 +436,7 @@
                 </div>
             </div>
         </div>
+        @endif
         @if (session('user_details')['user_role'] == 'admin')
             <div class="  border-2  shadow-lg mt-7  bg-white rounded-3xl">
                 <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
@@ -2013,6 +2014,12 @@
                                         role="tab" aria-controls="assemblies"
                                         aria-selected="false">assemblies</button>
                                 </li>
+                                <li role="presentation">
+                                    <button class="inline-block p-4 border-b-2 rounded-t-lg" id="addItem-tab"
+                                        data-tabs-target="#addItem" type="button"
+                                        role="tab" aria-controls="addItem"
+                                        aria-selected="false">Add Item</button>
+                                </li>
                             </ul>
                         </div>
                         <div id="items-tab-content">
@@ -2260,6 +2267,95 @@
                                         </table>
                                     </div>
                             </div>
+                            <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="addItem"
+                                role="tabpanel" aria-labelledby="addItem-tab">
+                                <form action="/addItemInEstimateAndItems" method="post" enctype="multipart/form-data" id="">
+                                    @csrf
+                                    <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
+                                    <div class="">
+                                        <!-- Modal content here -->
+                                        <div class=" flex justify-between">
+                                            <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Items</h2>
+                                        </div>
+                                        <!-- task details -->
+                                        <div class=" text-center grid grid-cols-2 gap-2">
+                                            <div class="  col-span-2 my-2">
+                                                <label for="" class="block text-left mb-1"> Items Type</label>
+                                                <select id="type" name="item_type" autocomplete="customer-name"
+                                                    class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                                                    <option>type</option>
+                                                    <option value="labour">labour</option>
+                                                    <option value="material">Material</option>
+                                                </select>
+                                            </div>
+                                            <div class=" my-2">
+                                                <label for="" class="block  text-left mb-1"> Item Name</label>
+                                                <input type="text" name="item_name" id="itemName" placeholder="Item Name"
+                                                    autocomplete="given-name"
+                                                    class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                            </div>
+                                            <div class="my-2">
+                                                <label for="" class="block text-left mb-1"> Item Unit</label>
+                                                <select id="item_units" name="item_units" autocomplete="customer-name"
+                                                    class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                                                    <option>Units</option>
+                                                    <option value="hour">Hour</option>
+                                                    <option value="gal">Gal</option>
+                                                </select>
+                                            </div>
+                                            <div class="my-2 text-left">
+                                                <label for="" class=" block text-left mb-1">Cost:</label>
+                                                <input type="number" name="item_cost" id="item_cost" placeholder="00.0"
+                                                    autocomplete="given-name"
+                                                    class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                            </div>
+                                            <div class="my-2 text-left">
+                                                <label for="" class=" block text-left mb-1">Price:</label>
+                                                <input type="number" name="item_price" id="item_price" placeholder="00.0"
+                                                    autocomplete="given-name"
+                                                    class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                            </div>
+                                            <div class="my-2 col-span-2" id="labourExpense">
+                                                <label for="" class="block text-left mb-1"> Labour Expense</label>
+                                                <input type="number" name="labour_expense" id="labourExpense"
+                                                    placeholder="Labour Expense" autocomplete="given-name"
+                                                    class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                            </div>
+                                            <div class=" my-2 col-span-2 hidden" id="multiAdd-items">
+                                                <div id="mulitple_input">
+                                                    <label for="" class="block text-left mb-1"> Assembly Name </label>
+                                                    <select name="assembly_name[]" id="" placeholder="Item Name"
+                                                        autocomplete="given-name"
+                                                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                        <option value="">Select Item</option>
+                                                        
+                                                    </select>
+                                                </div>
+                                                <div class=" text-right mt-2">
+                                                    <button type="button"
+                                                        class=" gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]"
+                                                        id="addbtn" aria-expanded="true" aria-haspopup="true">
+                                                        <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="my-2 col-span-2 relative">
+                                                <label for="" class="block text-left mb-1"> Item Description </label>
+                                                <textarea name="item_description" id="item_description" placeholder="Description"
+                                                    class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                                                <button type="button" id="items-mic" class=" absolute mt-8 right-4"
+                                                    onclick="voice('items-mic', 'item_description')"><i
+                                                        class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            <button id="updateEvent"
+                                                class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                             <div>
                                 <form action="/addEstimateItems" method="post" id="formData">
                                     @csrf
@@ -2269,7 +2365,7 @@
                                         
                                       </div>
                                     <div class=" flex justify-between pt-2 border-t">
-                                        <button type="submit" class=" mb-2 py-1 px-7 rounded-md border ">Cancel
+                                        <button type="button" class=" mb-2 py-1 px-7 rounded-md border ">Cancel
                                         </button>
                                         <button
                                             class=" mb-2 bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
@@ -3478,6 +3574,19 @@
       updateSelectedItems();
     });
   </script>
-  
-  
-  
+<script>
+    $(document).ready(function() {
+        // Initially hide the form
+
+        $("button[role='tab']").click(function() {
+            // Check if the clicked tab is not the "Add Item" tab
+            if ($(this).attr("id") !== "addItem-tab") {
+                // Show the form
+                $("#formData").show();
+            } else {
+                // Hide the form
+                $("#formData").hide();
+            }
+        });
+    });
+</script>
