@@ -39,7 +39,7 @@
             <div class="col-span-5 grid grid-cols-5 gap-3 mx-2 my-auto">
                 @foreach ($item['images']->take(5) as $image)
                 <div class="col-span-1 py-2">
-                    <img src="{{ asset('storage/' . $image->estimate_image) }}" class="  h-20" alt="Estimate Image">
+                    <img src="{{ asset('storage/' . $image->estimate_image) }}" style="object-fit: cover" class=" w-full h-20" alt="Estimate Image">
                 </div>
                 @endforeach
             </div>
