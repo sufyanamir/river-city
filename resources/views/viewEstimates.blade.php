@@ -94,9 +94,10 @@
                     <p class="text- lg py-3 px-3  font-medium text-white">
                         Contacts
                     </p>
-                    <button type="button" class="flex" id="addContact">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addContact">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <div class="py-4     ">
@@ -175,9 +176,10 @@
                     <p class="text- lg py-3 px-3  font-medium text-white">
                         Contacts
                     </p>
-                    <button type="button" class="flex" id="addContact">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addContact">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <div class="py-4     ">
@@ -400,42 +402,42 @@
                 </div>
             </div>
         </div>
-        @if($user_details['user_role'] == 'admin')
-        <div class="  border-2  shadow-lg my-5  bg-white rounded-3xl mt-7 ">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg text-white pl-3 font-medium">
-                    Profitability
-                </p>
-                <button type="button" id="profitability-btn" class="flex">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
-                        alt="">
-                </button>
-            </div>
-            <div class="p-2">
-                <div class=" relative overflow-x-auto">
-                    <table class=" w-full  ">
-                        <thead class=" text-center">
-                            <tr class="border border-solid border-l-0 border-r-0 border-t-0">
-                                <th></th>
-                                <th class="">Hours</th>
-                                <th class="">Cost</th>
-                                <th class="">Profit</th>
-                                <th class="">Margin</th>
-                            </tr>
-                        </thead>
-                        <tbody class=" text-center">
-                            <tr>
-                                <td class="font-semibold text-xl">Estimated</td>
-                                <td class="">120.66</td>
-                                <td class="">$250.55</td>
-                                <td class="">$25.565</td>
-                                <td class="">40.41%</td>
-                            </tr>
-                        </tbody>
-                    </table>
+        @if ($user_details['user_role'] == 'admin')
+            <div class="  border-2  shadow-lg my-5  bg-white rounded-3xl mt-7 ">
+                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg text-white pl-3 font-medium">
+                        Profitability
+                    </p>
+                    <button type="button" id="profitability-btn" class="flex">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
+                            alt="">
+                    </button>
+                </div>
+                <div class="p-2">
+                    <div class=" relative overflow-x-auto">
+                        <table class=" w-full  ">
+                            <thead class=" text-center">
+                                <tr class="border border-solid border-l-0 border-r-0 border-t-0">
+                                    <th></th>
+                                    <th class="">Hours</th>
+                                    <th class="">Cost</th>
+                                    <th class="">Profit</th>
+                                    <th class="">Margin</th>
+                                </tr>
+                            </thead>
+                            <tbody class=" text-center">
+                                <tr>
+                                    <td class="font-semibold text-xl">Estimated</td>
+                                    <td class="">120.66</td>
+                                    <td class="">$250.55</td>
+                                    <td class="">$25.565</td>
+                                    <td class="">40.41%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
         @endif
         @if (session('user_details')['user_role'] == 'admin')
             <div class="  border-2  shadow-lg mt-7  bg-white rounded-3xl">
@@ -443,9 +445,10 @@
                     <p class="text-lg px-3 text-white font-medium">
                         Items
                     </p>
-                    <button type="button" class="flex addItems">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" class="flex addItems bg-white p-1 m-2 rounded-lg">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
@@ -458,13 +461,13 @@
                             class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
                             <div class="flex">
                                 <button type="button" class="inline">
-                                    <img class="h-[50px] w-[50px] "
+                                    <img class="h-[50px] w-[50px]"
                                         src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                 </button>
                                 <div>
                                     <label class="text-lg font-semibold text-[#323C47]"
                                         for="">{{ $item->item_name }}</label>
-                                    <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }} </p>
+                                    <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
                                 </div>
                             </div>
                             <div class="text-right">
@@ -472,10 +475,32 @@
                                 @php
                                     $totalPrice += $item->item_price; // Add item price to total
                                 @endphp
+
+                                {{-- Check if the item is of type 'assemblies' --}}
+                                @if ($item->item_type === 'assemblies')
+                                    {{-- Get associated items from item_assemblies table --}}
+                                    @php
+                                        $associatedItems = \App\Models\ItemAssembly::where('item_id', $item->item_id)->get();
+                                    @endphp
+
+                                    {{-- Display associated items for assembly item --}}
+                                    @foreach ($associatedItems as $associatedItem)
+                                        <div class="">
+                                            {{-- Query the actual item based on assembly_name --}}
+                                            @php
+                                                $actualItem = \App\Models\Items::where('item_id', $associatedItem->assembly_name)->first();
+                                            @endphp
+
+                                            <label class="text-lg font-semibold text-[#323C47]"
+                                                for="">{{ $actualItem->item_name }}</label>
+                                            <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                {{ $actualItem->item_type }}</p>
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                     @endforeach
-
                     <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
                         <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Total</span>
                         <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
@@ -490,9 +515,10 @@
                     <p class="text-lg px-3 text-white font-medium">
                         Items
                     </p>
-                    <button type="button" class="flex addItems">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" class="flex addItems bg-white p-1 m-2 rounded-lg">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
@@ -505,13 +531,13 @@
                             class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
                             <div class="flex">
                                 <button type="button" class="inline">
-                                    <img class="h-[50px] w-[50px] "
+                                    <img class="h-[50px] w-[50px]"
                                         src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                 </button>
                                 <div>
                                     <label class="text-lg font-semibold text-[#323C47]"
                                         for="">{{ $item->item_name }}</label>
-                                    <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }} </p>
+                                    <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
                                 </div>
                             </div>
                             <div class="text-right">
@@ -519,10 +545,32 @@
                                 @php
                                     $totalPrice += $item->item_price; // Add item price to total
                                 @endphp
+
+                                {{-- Check if the item is of type 'assemblies' --}}
+                                @if ($item->item_type === 'assemblies')
+                                    {{-- Get associated items from item_assemblies table --}}
+                                    @php
+                                        $associatedItems = \App\Models\ItemAssembly::where('item_id', $item->item_id)->get();
+                                    @endphp
+
+                                    {{-- Display associated items for assembly item --}}
+                                    @foreach ($associatedItems as $associatedItem)
+                                        <div class="">
+                                            {{-- Query the actual item based on assembly_name --}}
+                                            @php
+                                                $actualItem = \App\Models\Items::where('item_id', $associatedItem->assembly_name)->first();
+                                            @endphp
+
+                                            <label class="text-lg font-semibold text-[#323C47]"
+                                                for="">{{ $actualItem->item_name }}</label>
+                                            <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                {{ $actualItem->item_type }}</p>
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                     @endforeach
-
                     <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
                         <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Total</span>
                         <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
@@ -710,9 +758,10 @@
                     <p class="text-lg px-3 text-white  font-medium ">
                         Files
                     </p>
-                    <button type="button" id="addFile-btn" class="flex">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" id="addFile-btn" class="flex bg-white p-1 m-2 rounded-lg">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <div class="col-span-10">
@@ -736,9 +785,10 @@
                     <p class="text-lg px-3 text-white  font-medium ">
                         Files
                     </p>
-                    <button type="button" id="addFile-btn" class="flex">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" id="addFile-btn" class="flex bg-white p-1 m-2 rounded-lg">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <div class="col-span-10">
@@ -761,9 +811,10 @@
                     <p class="text-lg px-3 text-white  font-medium ">
                         Photos
                     </p>
-                    <button type="button" class="flex" id="addImage-btn">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addImage-btn">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <div class=" mx-auto  px-5 py-7">
@@ -785,9 +836,10 @@
                     <p class="text-lg px-3 text-white  font-medium ">
                         Photos
                     </p>
-                    <button type="button" class="flex" id="addImage-btn">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addImage-btn">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <div class=" mx-auto  px-5 py-7">
@@ -809,9 +861,10 @@
                         Proposals
                     </p>
                     <a href="/makeProposal/{{ $estimate->estimate_id }}">
-                        <button type="button" class="flex">
-                            <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                                alt="">
+                        <button type="button" class="flex bg-white p-1 m-2 rounded-lg">
+                            <div class=" bg-[#930027] rounded-lg">
+                                <i class="fa-solid fa-plus text-white p-2"></i>
+                            </div>
                         </button>
                     </a>
                 </div>
@@ -925,9 +978,10 @@
                     <p class="text-lg px-3 text-white  font-medium ">
                         Notes
                     </p>
-                    <button type="button" class="flex" id="addNote-btn">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addNote-btn">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <br>
@@ -949,9 +1003,10 @@
                     <p class="text-lg px-3 text-white  font-medium ">
                         Notes
                     </p>
-                    <button type="button" class="flex" id="addNote-btn">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addNote-btn">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <br>
@@ -972,9 +1027,10 @@
                     <p class="text-lg px-3 text-white  font-medium ">
                         Emails
                     </p>
-                    <button type="button" class="flex" id="addEmail-btn">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addEmail-btn">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <div class=" py-2">
@@ -1036,9 +1092,10 @@
                     <p class="text-lg px-3 text-white  font-medium ">
                         Emails
                     </p>
-                    <button type="button" class="flex" id="addEmail-btn">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addEmail-btn">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <div class=" py-2">
@@ -1099,9 +1156,10 @@
                     <p class="text-lg px-3 text-white  font-medium ">
                         Time Entries
                     </p>
-                    <button type="button" class="flex" id="">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <br>
@@ -1124,9 +1182,10 @@
                     <p class="text-lg px-3 text-white  font-medium ">
                         Time Entries
                     </p>
-                    <button type="button" class="flex" id="">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <br>
@@ -1148,9 +1207,10 @@
                     <p class="text-lg px-3 text-white  font-medium ">
                         To-Dos
                     </p>
-                    <button type="button" class="flex" id="to-do-button">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="to-do-button">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <div class="p-2">
@@ -1225,9 +1285,10 @@
                     <p class="text-lg px-3 text-white  font-medium ">
                         To-Dos
                     </p>
-                    <button type="button" class="flex" id="to-do-button">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="to-do-button">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <div class="p-2">
@@ -1300,9 +1361,10 @@
                 <p class="text-lg px-3 text-white  font-medium ">
                     Invoices
                 </p>
-                <button type="button" class="flex" id="">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                        alt="">
+                <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="">
+                    <div class=" bg-[#930027] rounded-lg">
+                        <i class="fa-solid fa-plus text-white p-2"></i>
+                    </div>
                 </button>
             </div>
             <div class="p-2">
@@ -1366,9 +1428,10 @@
                 <p class="text-lg px-3 text-white  font-medium ">
                     Payments
                 </p>
-                <button type="button" class="flex" id="">
-                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                        alt="">
+                <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="">
+                    <div class=" bg-[#930027] rounded-lg">
+                        <i class="fa-solid fa-plus text-white p-2"></i>
+                    </div>
                 </button>
             </div>
             <div class="p-2">
@@ -1415,9 +1478,10 @@
                     <p class="text-lg px-3 text-white  font-medium ">
                         Expenses
                     </p>
-                    <button type="button" class="flex" id="expenses-btn">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="expenses-btn">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <div class="p-2">
@@ -1484,9 +1548,10 @@
                     <p class="text-lg px-3 text-white  font-medium ">
                         Expenses
                     </p>
-                    <button type="button" class="flex" id="expenses-btn">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}"
-                            alt="">
+                    <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="expenses-btn">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
                     </button>
                 </div>
                 <div class="p-2">
@@ -1990,8 +2055,9 @@
                             <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="items-tab"
                                 data-tabs-toggle="#items-tab-content" role="tablist">
                                 <li class="me-2" role="presentation">
-                                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-[#930027] hover:border-[#930027] dark:hover:text-[#930027]" id="all-tab"
-                                        data-tabs-target="#all" type="button" role="tab"
+                                    <button
+                                        class="inline-block p-4 border-b-2 rounded-t-lg hover:text-[#930027] hover:border-[#930027] dark:hover:text-[#930027]"
+                                        id="all-tab" data-tabs-target="#all" type="button" role="tab"
                                         aria-controls="all" aria-selected="false">all</button>
                                 </li>
                                 <li class="me-2" role="presentation">
@@ -2015,10 +2081,11 @@
                                         aria-selected="false">assemblies</button>
                                 </li>
                                 <li role="presentation">
-                                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-[#930027] hover:border-[#930027] dark:hover:text-[#930027]" id="addItem-tab"
-                                        data-tabs-target="#addItem" type="button"
-                                        role="tab" aria-controls="addItem"
-                                        aria-selected="false">Add Item</button>
+                                    <button
+                                        class="inline-block p-4 border-b-2 rounded-t-lg hover:text-[#930027] hover:border-[#930027] dark:hover:text-[#930027]"
+                                        id="addItem-tab" data-tabs-target="#addItem" type="button"
+                                        role="tab" aria-controls="addItem" aria-selected="false">Add
+                                        Item</button>
                                 </li>
                             </ul>
                         </div>
@@ -2089,189 +2156,188 @@
                             </div>
                             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="labour"
                                 role="tabpanel" aria-labelledby="labour-tab">
-                                    <div class="relative overflow-x-auto w-full h-60 overflow-y-auto my-2">
-                                        @csrf
-                                        <input type="hidden" value="{{ $estimate->estimate_id }}"
-                                            name="estimate_id" id="estimate_id">
-                                        <table class="w-full text-sm text-left universalTable">
-                                            <thead class="text-xs text-white uppercase bg-[#930027]">
-                                                <tr>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Item name
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        type
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Units
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Cost
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Price
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Actions
-                                                    </th>
+                                <div class="relative overflow-x-auto w-full h-60 overflow-y-auto my-2">
+                                    @csrf
+                                    <input type="hidden" value="{{ $estimate->estimate_id }}"
+                                        name="estimate_id" id="estimate_id">
+                                    <table class="w-full text-sm text-left universalTable">
+                                        <thead class="text-xs text-white uppercase bg-[#930027]">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Item name
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    type
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Units
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Cost
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Price
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Actions
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($labour_items as $item)
+                                                <tr class="bg-white border-b">
+                                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                        {{ $item->item_name }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        {{ $item->item_type }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        {{ $item->item_units }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        ${{ $item->item_cost }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        ${{ $item->item_price }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <input type="checkbox" name="selected_items[]"
+                                                            id="selected_items{{ $item->item_id }}"
+                                                            value="{{ $item->item_id }}">
+                                                        <label for="selected_items{{ $item->item_id }}"></label>
+                                                    </td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($labour_items as $item)
-                                                    <tr class="bg-white border-b">
-                                                        <td
-                                                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                                            {{ $item->item_name }}
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            {{ $item->item_type }}
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            {{ $item->item_units }}
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            ${{ $item->item_cost }}
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            ${{ $item->item_price }}
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            <input type="checkbox" name="selected_items[]"
-                                                                id="selected_items{{ $item->item_id }}"
-                                                                value="{{ $item->item_id }}">
-                                                            <label for="selected_items{{ $item->item_id }}"></label>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="material"
                                 role="tabpanel" aria-labelledby="material-tab">
-                                    <div class="relative overflow-x-auto w-full h-60 overflow-y-auto my-2">
-                                        @csrf
-                                        <input type="hidden" value="{{ $estimate->estimate_id }}"
-                                            name="estimate_id" id="estimate_id">
-                                        <table class="w-full text-sm text-left universalTable">
-                                            <thead class="text-xs text-white uppercase bg-[#930027]">
-                                                <tr>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Item name
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        type
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Units
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Cost
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Price
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Actions
-                                                    </th>
+                                <div class="relative overflow-x-auto w-full h-60 overflow-y-auto my-2">
+                                    @csrf
+                                    <input type="hidden" value="{{ $estimate->estimate_id }}"
+                                        name="estimate_id" id="estimate_id">
+                                    <table class="w-full text-sm text-left universalTable">
+                                        <thead class="text-xs text-white uppercase bg-[#930027]">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Item name
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    type
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Units
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Cost
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Price
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Actions
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($material_items as $item)
+                                                <tr class="bg-white border-b">
+                                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                        {{ $item->item_name }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        {{ $item->item_type }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        {{ $item->item_units }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        ${{ $item->item_cost }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        ${{ $item->item_price }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <input type="checkbox" name="selected_items[]"
+                                                            id="selected_items{{ $item->item_id }}"
+                                                            value="{{ $item->item_id }}">
+                                                        <label for="selected_items{{ $item->item_id }}"></label>
+                                                    </td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($material_items as $item)
-                                                    <tr class="bg-white border-b">
-                                                        <td
-                                                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                                            {{ $item->item_name }}
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            {{ $item->item_type }}
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            {{ $item->item_units }}
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            ${{ $item->item_cost }}
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            ${{ $item->item_price }}
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            <input type="checkbox" name="selected_items[]"
-                                                                id="selected_items{{ $item->item_id }}"
-                                                                value="{{ $item->item_id }}">
-                                                            <label for="selected_items{{ $item->item_id }}"></label>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="assemblies"
                                 role="tabpanel" aria-labelledby="assemblies-tab">
-                                    <div class="relative overflow-x-auto w-full h-60 overflow-y-auto my-2">
-                                        @csrf
-                                        <input type="hidden" value="{{ $estimate->estimate_id }}"
-                                            name="estimate_id" id="estimate_id">
-                                        <table class="w-full text-sm text-left universalTable">
-                                            <thead class="text-xs text-white uppercase bg-[#930027]">
-                                                <tr>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Item name
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        type
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Units
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Cost
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Price
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Actions
-                                                    </th>
+                                <div class="relative overflow-x-auto w-full h-60 overflow-y-auto my-2">
+                                    @csrf
+                                    <input type="hidden" value="{{ $estimate->estimate_id }}"
+                                        name="estimate_id" id="estimate_id">
+                                    <table class="w-full text-sm text-left universalTable">
+                                        <thead class="text-xs text-white uppercase bg-[#930027]">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Item name
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    type
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Units
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Cost
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Price
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Actions
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($assembly_items as $item)
+                                                <tr class="bg-white border-b">
+                                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                        {{ $item->item_name }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        {{ $item->item_type }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        {{ $item->item_units }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        ${{ $item->item_cost }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        ${{ $item->item_price }}
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <input type="checkbox" name="selected_items[]"
+                                                            id="selected_items{{ $item->item_id }}"
+                                                            value="{{ $item->item_id }}">
+                                                        <label for="selected_items{{ $item->item_id }}"></label>
+                                                    </td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($assembly_items as $item)
-                                                    <tr class="bg-white border-b">
-                                                        <td
-                                                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                                            {{ $item->item_name }}
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            {{ $item->item_type }}
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            {{ $item->item_units }}
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            ${{ $item->item_cost }}
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            ${{ $item->item_price }}
-                                                        </td>
-                                                        <td class="px-6 py-4">
-                                                            <input type="checkbox" name="selected_items[]"
-                                                                id="selected_items{{ $item->item_id }}"
-                                                                value="{{ $item->item_id }}">
-                                                            <label for="selected_items{{ $item->item_id }}"></label>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="addItem"
                                 role="tabpanel" aria-labelledby="addItem-tab">
-                                <form action="/addItemInEstimateAndItems" method="post" enctype="multipart/form-data" id="">
+                                <form action="/addItemInEstimateAndItems" method="post"
+                                    enctype="multipart/form-data" id="">
                                     @csrf
-                                    <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
+                                    <input type="hidden" name="estimate_id"
+                                        value="{{ $estimate->estimate_id }}">
                                     <div class="">
                                         <!-- Modal content here -->
                                         <div class=" flex justify-between">
@@ -2280,8 +2346,10 @@
                                         <!-- task details -->
                                         <div class=" text-center grid grid-cols-2 gap-2">
                                             <div class="  col-span-2 my-2">
-                                                <label for="" class="block text-left mb-1"> Items Type</label>
-                                                <select id="type" name="item_type" autocomplete="customer-name"
+                                                <label for="" class="block text-left mb-1"> Items
+                                                    Type</label>
+                                                <select id="type" name="item_type"
+                                                    autocomplete="customer-name"
                                                     class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                                     <option>type</option>
                                                     <option value="labour">labour</option>
@@ -2289,14 +2357,17 @@
                                                 </select>
                                             </div>
                                             <div class=" my-2">
-                                                <label for="" class="block  text-left mb-1"> Item Name</label>
-                                                <input type="text" name="item_name" id="itemName" placeholder="Item Name"
-                                                    autocomplete="given-name"
+                                                <label for="" class="block  text-left mb-1"> Item
+                                                    Name</label>
+                                                <input type="text" name="item_name" id="itemName"
+                                                    placeholder="Item Name" autocomplete="given-name"
                                                     class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                             </div>
                                             <div class="my-2">
-                                                <label for="" class="block text-left mb-1"> Item Unit</label>
-                                                <select id="item_units" name="item_units" autocomplete="customer-name"
+                                                <label for="" class="block text-left mb-1"> Item
+                                                    Unit</label>
+                                                <select id="item_units" name="item_units"
+                                                    autocomplete="customer-name"
                                                     class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                                     <option>Units</option>
                                                     <option value="hour">Hour</option>
@@ -2305,45 +2376,50 @@
                                             </div>
                                             <div class="my-2 text-left">
                                                 <label for="" class=" block text-left mb-1">Cost:</label>
-                                                <input type="number" name="item_cost" id="item_cost" placeholder="00.0"
-                                                    autocomplete="given-name"
+                                                <input type="number" name="item_cost" id="item_cost"
+                                                    placeholder="00.0" autocomplete="given-name"
                                                     class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                             </div>
                                             <div class="my-2 text-left">
                                                 <label for="" class=" block text-left mb-1">Price:</label>
-                                                <input type="number" name="item_price" id="item_price" placeholder="00.0"
-                                                    autocomplete="given-name"
+                                                <input type="number" name="item_price" id="item_price"
+                                                    placeholder="00.0" autocomplete="given-name"
                                                     class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                             </div>
                                             <div class="my-2 col-span-2" id="labourExpense">
-                                                <label for="" class="block text-left mb-1"> Labour Expense</label>
+                                                <label for="" class="block text-left mb-1"> Labour
+                                                    Expense</label>
                                                 <input type="number" name="labour_expense" id="labourExpense"
                                                     placeholder="Labour Expense" autocomplete="given-name"
                                                     class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                             </div>
                                             <div class=" my-2 col-span-2 hidden" id="multiAdd-items">
                                                 <div id="mulitple_input">
-                                                    <label for="" class="block text-left mb-1"> Assembly Name </label>
-                                                    <select name="assembly_name[]" id="" placeholder="Item Name"
-                                                        autocomplete="given-name"
+                                                    <label for="" class="block text-left mb-1"> Assembly
+                                                        Name </label>
+                                                    <select name="assembly_name[]" id=""
+                                                        placeholder="Item Name" autocomplete="given-name"
                                                         class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                                         <option value="">Select Item</option>
-                                                        
+
                                                     </select>
                                                 </div>
                                                 <div class=" text-right mt-2">
                                                     <button type="button"
                                                         class=" gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]"
                                                         id="addbtn" aria-expanded="true" aria-haspopup="true">
-                                                        <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                                                        <img src="{{ asset('assets/icons/plus-icon.svg') }}"
+                                                            alt="icon">
                                                     </button>
                                                 </div>
                                             </div>
                                             <div class="my-2 col-span-2 relative">
-                                                <label for="" class="block text-left mb-1"> Item Description </label>
+                                                <label for="" class="block text-left mb-1"> Item Description
+                                                </label>
                                                 <textarea name="item_description" id="item_description" placeholder="Description"
                                                     class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
-                                                <button type="button" id="items-mic" class=" absolute mt-8 right-4"
+                                                <button type="button" id="items-mic"
+                                                    class=" absolute mt-8 right-4"
                                                     onclick="voice('items-mic', 'item_description')"><i
                                                         class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                                             </div>
@@ -2359,11 +2435,12 @@
                             <div>
                                 <form action="/addEstimateItems" method="post" id="formData">
                                     @csrf
-                                    <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                    <input type="hidden" name="estimate_id"
+                                        value="{{ $estimate->estimate_id }}">
                                     <div id="selectedItemsContainer" class="mt-4">
                                         <!-- Badges will be dynamically added here -->
-                                        
-                                      </div>
+
+                                    </div>
                                     <div class=" flex justify-between pt-2 border-t">
                                         <button type="button" class=" mb-2 py-1 px-7 rounded-md border ">Cancel
                                         </button>
@@ -3480,100 +3557,112 @@
     });
 </script>
 <script>
-    $(document).ready(function () {
-      // Function to create a badge element
-      function createBadge(item) {
-        var badge = $('<span/>', {
-          id: 'badge-' + item.item_id,
-          class: 'inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-gray-800 bg-gray-100 rounded dark:bg-gray-700 dark:text-gray-300',
-          text: item.item_name
+    $(document).ready(function() {
+        // Function to create a badge element
+        function createBadge(item) {
+            var badge = $('<span/>', {
+                id: 'badge-' + item.item_id,
+                class: 'inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-gray-800 bg-gray-100 rounded dark:bg-gray-700 dark:text-gray-300',
+                text: item.item_name
+            });
+
+            // Add hidden input for item ID
+            var hiddenInput = $('<input/>', {
+                type: 'hidden',
+                name: 'selected_items[]',
+                value: item.item_id
+            });
+
+            badge.append(hiddenInput);
+
+            // Add the cross button to remove the badge
+            var closeButton = $('<button/>', {
+                type: 'button',
+                class: 'inline-flex items-center p-1 ms-2 text-sm text-gray-400 bg-transparent rounded-sm hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-gray-300',
+                'data-dismiss-target': 'badge-' + item.item_id,
+                'aria-label': 'Remove'
+            });
+
+            // Replace the SVG code with the img tag
+            var closeIcon = $('<img/>', {
+                src: '{{ asset('assets/icons/close-icon.svg') }}',
+                alt: 'Remove badge',
+                class: 'w-2 h-2'
+            });
+
+            // Append elements to the badge and add to the container
+            closeButton.append(closeIcon);
+            badge.append(closeButton);
+            $('#selectedItemsContainer').append(badge);
+
+            // Add event listener to the cross button for badge removal
+            closeButton.on('click', function() {
+                var badgeId = closeButton.attr('data-dismiss-target');
+                var checkboxId = badgeId.replace('badge-', 'selected_items');
+                var checkbox = $('#' + checkboxId);
+
+                // Uncheck the corresponding checkbox
+                if (checkbox.length) {
+                    checkbox.prop('checked', false);
+                }
+
+                // Remove the badge
+                badge.remove();
+            });
+        }
+
+        // Function to update the selected items badges
+        function updateSelectedItems() {
+            $('#selectedItemsContainer').empty(); // Clear previous badges
+
+            $('input[name="selected_items[]"]:checked').each(function() {
+                var checkboxValue = $(this).val();
+                var item = {};
+
+                // Find the corresponding table row and extract data
+                var tableRow = $(this).closest('tr');
+                item.item_id = checkboxValue;
+                item.item_name = tableRow.find('td:eq(0)')
+            .text(); // Assuming the item name is in the first column
+
+                if (item.item_name.trim() !== '') {
+                    createBadge(item);
+                }
+            });
+        }
+
+        // Get all checkboxes
+        var checkboxes = $('input[name="selected_items[]"]');
+
+        // Add event listener to each checkbox
+        checkboxes.on('change', function() {
+            updateSelectedItems();
         });
-  
-        // Add hidden input for item ID
-        var hiddenInput = $('<input/>', {
-          type: 'hidden',
-          name: 'selected_items[]',
-          value: item.item_id
-        });
-  
-        badge.append(hiddenInput);
-  
-        // Add the cross button to remove the badge
-        var closeButton = $('<button/>', {
-          type: 'button',
-          class: 'inline-flex items-center p-1 ms-2 text-sm text-gray-400 bg-transparent rounded-sm hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-gray-300',
-          'data-dismiss-target': 'badge-' + item.item_id,
-          'aria-label': 'Remove'
-        });
-  
-        // Replace the SVG code with the img tag
-        var closeIcon = $('<img/>', {
-          src: '{{ asset('assets/icons/close-icon.svg') }}',
-          alt: 'Remove badge',
-          class: 'w-2 h-2'
-        });
-  
-        // Append elements to the badge and add to the container
-        closeButton.append(closeIcon);
-        badge.append(closeButton);
-        $('#selectedItemsContainer').append(badge);
-  
-        // Add event listener to the cross button for badge removal
-        closeButton.on('click', function () {
-          var badgeId = closeButton.attr('data-dismiss-target');
-          var checkboxId = badgeId.replace('badge-', 'selected_items');
-          var checkbox = $('#' + checkboxId);
-  
-          // Uncheck the corresponding checkbox
-          if (checkbox.length) {
-            checkbox.prop('checked', false);
-          }
-  
-          // Remove the badge
-          badge.remove();
-        });
-      }
-  
-      // Function to update the selected items badges
-      function updateSelectedItems() {
-        $('#selectedItemsContainer').empty(); // Clear previous badges
-  
-        $('input[name="selected_items[]"]:checked').each(function () {
-          var checkboxValue = $(this).val();
-          var item = {};
-  
-          // Find the corresponding table row and extract data
-          var tableRow = $(this).closest('tr');
-          item.item_id = checkboxValue;
-          item.item_name = tableRow.find('td:eq(0)').text(); // Assuming the item name is in the first column
-  
-          if (item.item_name.trim() !== '') {
-            createBadge(item);
-          }
-        });
-      }
-  
-      // Get all checkboxes
-      var checkboxes = $('input[name="selected_items[]"]');
-  
-      // Add event listener to each checkbox
-      checkboxes.on('change', function () {
+
+        // Sample data for items (replace with your actual items data)
+        var items = [{
+                item_id: 1,
+                item_name: 'Construction Material A'
+            },
+            {
+                item_id: 2,
+                item_name: 'Labor Service B'
+            },
+            {
+                item_id: 3,
+                item_name: 'Assembly C'
+            },
+            {
+                item_id: 4,
+                item_name: 'Equipment D'
+            },
+            // Add more items as needed
+        ];
+
+        // Initial badge rendering
         updateSelectedItems();
-      });
-  
-      // Sample data for items (replace with your actual items data)
-      var items = [
-        { item_id: 1, item_name: 'Construction Material A' },
-        { item_id: 2, item_name: 'Labor Service B' },
-        { item_id: 3, item_name: 'Assembly C' },
-        { item_id: 4, item_name: 'Equipment D' },
-        // Add more items as needed
-      ];
-  
-      // Initial badge rendering
-      updateSelectedItems();
     });
-  </script>
+</script>
 <script>
     $(document).ready(function() {
         // Initially hide the form
@@ -3591,13 +3680,13 @@
     });
 </script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         // Set the "all" tab as the default tab
         let activeTab = $("#all");
         activeTab.removeClass("hidden").addClass("active");
 
         // Add click event listeners to tab buttons
-        $("[role='tab']").click(function () {
+        $("[role='tab']").click(function() {
             // Hide all tab contents
             $("[role='tabpanel']").addClass("hidden");
 
