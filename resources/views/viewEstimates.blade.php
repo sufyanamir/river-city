@@ -356,7 +356,9 @@
                     <p class="text-lg pl-4  text-white  font-medium">
                         Document
                     </p>
-
+                    <div class="p-4 text-white">
+                        <h1><i class="fa-solid fa-circle-exclamation"></i> Not Functioned!</h1>
+                    </div>
                 </div>
                 <div>
                     <div class="my-auto flex  py-4">
@@ -394,8 +396,6 @@
                             </svg>
                             <span class=" my-auto">Stop Campaign</span>
                         </button>
-
-
                     </div>
                 </div>
             </div>
@@ -406,6 +406,9 @@
                     <p class="text-lg text-white pl-3 font-medium">
                         Profitability
                     </p>
+                    <div class="p-4 text-white">
+                        <h1><i class="fa-solid fa-circle-exclamation"></i> Not Functioned!</h1>
+                    </div>
                     <button type="button" id="profitability-btn" class="flex">
                         <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                             alt="">
@@ -1154,6 +1157,9 @@
                     <p class="text-lg px-3 text-white  font-medium ">
                         Time Entries
                     </p>
+                    <div class="p-4 text-white">
+                        <h1><i class="fa-solid fa-circle-exclamation"></i> Not Functioned!</h1>
+                    </div>
                     <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="">
                         <div class=" bg-[#930027] rounded-lg">
                             <i class="fa-solid fa-plus text-white p-2"></i>
@@ -1180,6 +1186,9 @@
                     <p class="text-lg px-3 text-white  font-medium ">
                         Time Entries
                     </p>
+                    <div class="p-4 text-white">
+                        <h1><i class="fa-solid fa-circle-exclamation"></i> Not Functioned!</h1>
+                    </div>
                     <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="">
                         <div class=" bg-[#930027] rounded-lg">
                             <i class="fa-solid fa-plus text-white p-2"></i>
