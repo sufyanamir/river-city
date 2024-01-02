@@ -3,11 +3,13 @@
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EstimageImagesController;
+use App\Http\Controllers\EstimateChatController;
 use App\Http\Controllers\EstimateController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\UserController;
 use App\Models\Estimate;
+use App\Models\EstimateChat;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -72,6 +74,9 @@ Route::middleware('customauth')->group(function () {
     Route::post('/addEstimateExpense', [EstimateController::class, 'addEstimateExpense']);
     Route::post('/addEstimateFile', [EstimateController::class, 'uploadFile']);
     Route::get('/getCustomerDetails/{id}', [EstimateController::class, 'getCustomerDetails']);
+    Route::post('/sendChat', [EstimateChatController::class, 'sendChat']);
+    Route::get('/estimates/getChatMessage/{id}', [EstimateChatController::class, 'getChatMessage']);
+    
     Route::get('/add-estimate', function () {
         return view('addEstimate');
     });
