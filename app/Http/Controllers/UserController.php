@@ -21,6 +21,58 @@ class UserController extends Controller
         // Retrieve user details from session and store it in $userDetails
         $this->userDetails = Session::get('user_details');
     }
+    // ================================================== settings =====================================================================
+
+        // update UserDetails
+        public function updateSettings(Request $request)
+        {
+            try {
+                $userDetails = session('user_details');
+
+                $validatedData = $request->validate([
+                    'user_id' => 'required',
+                    'name' => 'nullable',
+                    'phone' => 'nullable',
+                    'address' => 'nullable',
+                    'old_password' => 'nullable',
+                    'confirm_password' => 'nullable',
+                ]);
+
+                $user = User::where('id', $validatedData['user_id'])->first();
+
+                $user->name = $validatedData['name'];
+                $user->phone = $validatedData['phone'];
+                $user->address = $validatedData['address'];
+
+                if (md5($validatedData['old_password']) == $user->password) {
+                    $user->password = md5($validatedData['confirm_password']);
+                }else {
+                    return response()->json(['success' => false, 'message' => 'Old Password is wrong!'], 400);
+                }
+
+                $user->save();
+
+                return response()->json(['success' => true, 'message' => 'Profile Updated!'], 200);
+
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+            }
+        }
+        // update UserDetails
+    
+        // get user on setting
+        public function getUserOnSettings()
+        {
+            $userDetails = session('user_details');
+
+            $user = User::find($userDetails['id']);
+
+            return view('settings', ['user_details' => $user]);
+        }
+        // get user on setting
+
+    // ================================================== settings =====================================================================
+    
     // ================================================== Crew =====================================================================
 
     // get user privileges
