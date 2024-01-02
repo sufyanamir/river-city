@@ -1,8 +1,7 @@
 @include('layouts.header')
 <div class=" my-4">
-    <h1 class=" text-2xl font-semibold mb-3">Groups</h1>
-    <div class=" bg-white w-full rounded-lg shadow-lg">
-        <div class=" flex justify-between p-3">
+    <div class=" bg-white w-full rounded-2xl shadow-lg">
+        <div class=" flex justify-between p-3 bg-[#930027] text-white rounded-t-2xl">
             <div class=" text-xl font-semibold">
                 <h4>Group List</h4>
             </div>

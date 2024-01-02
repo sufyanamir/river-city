@@ -3,9 +3,8 @@
     $userPrivileges = session('user_details')['user_privileges'];
 @endphp
 <div class=" my-4">
-    <h1 class=" text-2xl font-semibold mb-3">Campaign</h1>
-    <div class=" bg-white w-full rounded-lg shadow-lg">
-        <div class=" flex justify-between p-3">
+    <div class=" bg-white w-full rounded-2xl shadow-lg">
+        <div class=" flex justify-between p-3 bg-[#930027] text-white rounded-t-2xl">
             <div class=" text-xl font-semibold">
                 <h4>Campaign List</h4>
             </div>
