@@ -23,6 +23,7 @@ use App\Models\EstimateProposal;
 use App\Models\EstimateToDos;
 use App\Models\ItemAssembly;
 use App\Models\Items;
+use App\Models\Notifications;
 use App\Models\ScheduleEstimate;
 use App\Models\ScheduleWork;
 use Illuminate\Support\Str;
@@ -824,13 +825,13 @@ class EstimateController extends Controller
         try {
             $userDetails = session('user_details');
             $estimate = Estimate::where('estimate_id', $id)->first();
-            
+
             if (!$estimate) {
                 // Handle the case where the estimate is not found
                 // You may want to return a response or redirect to an error page
                 return response()->json(['success' => false, 'message' => 'Estimate not found'], 404);
             }
-            
+
             $customer = Customer::where('customer_id', $estimate->customer_id)->first();
 
 
@@ -899,7 +900,7 @@ class EstimateController extends Controller
     {
         try {
             $customer = Customer::find($id);
-    
+
             return response()->json(['success' => true, 'customer' => $customer], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -971,6 +972,21 @@ class EstimateController extends Controller
                 'project_name' => $validatedData['project_name'],
                 'project_number' => $validatedData['project_number'],
             ]);
+
+            if ($validatedData['customer_id']) {
+                $customer = Customer::find($validatedData['customer_id']);
+                $notificationMessage = "A new Estimate has been created for " . $customer->customer_first_name . " " . $customer->customer_last_name . ".";
+                $notification = Notifications::create([
+                    'added_user_id' => $userDetails['id'],
+                    'notification_message' => $notificationMessage,
+                ]);
+            } else {
+                $notificationMessage = "A new Customer has been added " . $customer->customer_first_name . " " . $customer->customer_last_name . " and created an Estimate.";
+                $notification = Notifications::create([
+                    'added_user_id' => $userDetails['id'],
+                    'notification_message' => $notificationMessage,
+                ]);
+            }
 
             return response()->json(['success' => true, 'message' => 'Estimate created Successfully!'], 200);
         } catch (\Exception $e) {
