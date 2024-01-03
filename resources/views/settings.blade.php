@@ -46,7 +46,9 @@
                     </div>
                 </div>
                 <div class="my-3 text-right">
-                    <x-add-button :title="'Update'" :id="''" :class="'px-7 bg-red-800 text-white'"></x-add-button>
+                    <button id=""  class="bg-[#930027] text-white p-2 px-7 rounded-md font-medium">
+                        Update
+                    </button>
                 </div>
             </form>
         </div>
