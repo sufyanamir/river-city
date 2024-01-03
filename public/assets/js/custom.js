@@ -84,34 +84,34 @@ $(document).ready(function () {
       'success'
     );
     topbar.hide();
-    // setInterval(
-    //   location.reload()
-    //   ,
-    //   5000
-    // );
-    var formData = new FormData($('form')[0]); // Assuming the form is the first and only form on the page
-  var estimateId = formData.get('estimate_id');
+    setInterval(
+      location.reload()
+      ,
+      5000
+    );
+  //   var formData = new FormData($('form')[0]); // Assuming the form is the first and only form on the page
+  // var estimateId = formData.get('estimate_id');
 
   // Reload the chat messages after successful submission
-  if (estimateId) {
-    $.ajax({
-      type: 'GET',
-      url: '/estimates/getChatMessage/' + estimateId,
-      success: function (response) {
-        if (response.success) {
-          // Update the chat messages container with the retrieved messages
-          $('.chat-messages-container').html(response.html);
-        } else {
-          console.error(response.message);
-        }
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        console.error("AJAX Error: " + textStatus, errorThrown);
-        console.log("Response:", jqXHR.responseText);
-      }
-    });
-  }
-    $("#universalTableBody").load(location.href + " #universalTableBody > *");
+  // if (estimateId) {
+  //   $.ajax({
+  //     type: 'GET',
+  //     url: '/estimates/getChatMessage/' + estimateId,
+  //     success: function (response) {
+  //       if (response.success) {
+  //         // Update the chat messages container with the retrieved messages
+  //         $('.chat-messages-container').html(response.html);
+  //       } else {
+  //         console.error(response.message);
+  //       }
+  //     },
+  //     error: function (jqXHR, textStatus, errorThrown) {
+  //       console.error("AJAX Error: " + textStatus, errorThrown);
+  //       console.log("Response:", jqXHR.responseText);
+  //     }
+  //   });
+  // }
+    // $("#universalTableBody").load(location.href + " #universalTableBody > *");
     // $("#chat-dialog").load(location.href + " #chat-dialog > *");
     // $(".modal-close").trigger("click");
     // $("#formData")[0].reset();
