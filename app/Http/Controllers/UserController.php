@@ -6,10 +6,12 @@ use App\Mail\AddUserMail;
 use App\Models\Email;
 use App\Models\User;
 use App\Models\UserRole;
+use App\Models\Notifications;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rules\Exists;
 
 class UserController extends Controller
 {
@@ -23,56 +25,63 @@ class UserController extends Controller
     }
     // ================================================== settings =====================================================================
 
-        // update UserDetails
-        public function updateSettings(Request $request)
-        {
-            try {
-                $userDetails = session('user_details');
-
-                $validatedData = $request->validate([
-                    'user_id' => 'required',
-                    'name' => 'nullable',
-                    'phone' => 'nullable',
-                    'address' => 'nullable',
-                    'old_password' => 'nullable',
-                    'confirm_password' => 'nullable',
-                ]);
-
-                $user = User::where('id', $validatedData['user_id'])->first();
-
-                $user->name = $validatedData['name'];
-                $user->phone = $validatedData['phone'];
-                $user->address = $validatedData['address'];
-
-                if (md5($validatedData['old_password']) == $user->password) {
-                    $user->password = md5($validatedData['confirm_password']);
-                }else {
-                    return response()->json(['success' => false, 'message' => 'Old Password is wrong!'], 400);
-                }
-
-                $user->save();
-
-                return response()->json(['success' => true, 'message' => 'Profile Updated!'], 200);
-
-            } catch (\Exception $e) {
-                return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
-            }
-        }
-        // update UserDetails
-    
-        // get user on setting
-        public function getUserOnSettings()
-        {
+    // update UserDetails
+    public function updateSettings(Request $request)
+    {
+        try {
             $userDetails = session('user_details');
 
-            $user = User::find($userDetails['id']);
+            $validatedData = $request->validate([
+                'user_id' => 'required',
+                'name' => 'nullable',
+                'phone' => 'nullable',
+                'address' => 'nullable',
+                'old_password' => 'nullable',
+                'confirm_password' => 'nullable',
+                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            ]);
 
-            return view('settings', ['user_details' => $user]);
+            $user = User::where('id', $validatedData['user_id'])->first();
+
+            $user->name = $validatedData['name'];
+            $user->phone = $validatedData['phone'];
+            $user->address = $validatedData['address'];
+
+            if (isset($validatedData['old_password'])) {
+                if (md5($validatedData['old_password']) == $user->password) {
+                    $user->password = md5($validatedData['confirm_password']);
+                }
+            }
+
+            if ($request->hasFile('upload_image')) {
+                $image = $request->file('upload_image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/user_images', $imageName); // Adjust storage path as needed
+                $user->user_image = 'storage/user_images/' . $imageName;
+            }
+
+            $user->save();
+
+            return response()->json(['success' => true, 'message' => 'Profile Updated!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
-        // get user on setting
+    }
+    // update UserDetails
+
+    // get user on setting
+    public function getUserOnSettings()
+    {
+        $userDetails = session('user_details');
+
+        $user = User::find($userDetails['id']);
+
+        return view('settings', ['user_details' => $user]);
+    }
+    // get user on setting
 
     // ================================================== settings =====================================================================
-    
+
     // ================================================== Crew =====================================================================
 
     // get user privileges
@@ -192,6 +201,12 @@ class UserController extends Controller
                 'added_user_id' => $userDetails['id'],
             ]);
 
+            $notificationMessage = "A new Crew member ". $users['name'] ." ". $users['last_name'] . " has been added in the Crews.";
+            $notification = Notifications::create([
+                'added_user_id' => $userDetails['id'],
+                'notification_message' => $notificationMessage,
+            ]);
+
             if ($request->hasFile('upload_image')) {
                 $image = $request->file('upload_image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
@@ -282,6 +297,12 @@ class UserController extends Controller
                 'address' => $validatedData['address'],
                 'password' => md5($password),
                 'added_user_id' => $userDetails['id'],
+            ]);
+
+            $notificationMessage = "A new user ". $users['name'] ." ". $users['last_name'] . " has been added with the user role ". $users['user_role'] .".";
+            $notification = Notifications::create([
+                'added_user_id' => $userDetails['id'],
+                'notification_message' => $notificationMessage,
             ]);
 
             if ($request->hasFile('upload_image')) {

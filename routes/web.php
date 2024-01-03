@@ -7,6 +7,7 @@ use App\Http\Controllers\EstimateChatController;
 use App\Http\Controllers\EstimateController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\UserController;
 use App\Models\Estimate;
 use App\Models\EstimateChat;
@@ -139,9 +140,7 @@ Route::middleware('customauth')->group(function () {
     Route::get('/help', function () {
         return view('help');
     });
-    Route::get('/notifications', function () {
-        return view('notifications');
-    });
+    Route::get('/notifications', [NotificationsController::class, 'index']);
     Route::get('/forgotPassword', function () {
         return view('forgotPassword');
     });

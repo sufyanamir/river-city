@@ -7,7 +7,7 @@
             @endif
         </div>
         <button type="button" class="w-10" id="profile-btn">
-            <img src="{{ asset('assets/icons/userprofile-icon.svg') }}" alt="icon">
+            <img class=" rounded-lg" src="{{ (isset(session('user_details')['user_image'])) ? asset(session('user_details')['user_image']) : 'assets/icons/userprofile-icon.svg'}}" alt="icon">
         </button>
     </div>
     <div id="profile-menu" class=" topbar-manuLeaving absolute right-1 z-10 mt-2 w-56 origin-top-right rounded-md bg-[#930027] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">

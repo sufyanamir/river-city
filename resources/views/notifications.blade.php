@@ -6,30 +6,17 @@
             <div class=" border-b-2">
                 <h4 class=" text-lg font-semibold">Notificaitons</h4>
             </div>
+            @foreach ($notifications as $notification)
             <div class=" bg-[#F5F5F5] rounded-lg p-3 m-2 relative">
+                @if ($notification->notification_status == 'unread')
                 <span class="absolute top-1 left-1 inline-flex items-center justify-center w-2 h-2 mr-2 text-sm font-semibold text-[#04BB16] bg-[#04BB16] rounded-full">
+                @endif
                 </span>
                 <div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ad fugiat esse quas, distinctio vel possimus ab enim id in necessitatibus quae corrupti debitis. Iusto aut reiciendis sunt error temporibus.</p>
+                    <p>{{ $notification->notification_message }}</p>
                 </div>
             </div>
-            <div class=" bg-[#F5F5F5] rounded-lg p-3 m-2 relative">
-                <span class="absolute top-1 left-1 inline-flex items-center justify-center w-2 h-2 mr-2 text-sm font-semibold text-[#04BB16] bg-[#04BB16] rounded-full">
-                </span>
-                <div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ad fugiat esse quas, distinctio vel possimus ab enim id in necessitatibus quae corrupti debitis. Iusto aut reiciendis sunt error temporibus.</p>
-                </div>
-            </div>
-            <div class=" bg-[#F5F5F5] rounded-lg p-3 m-2">
-                <div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ad fugiat esse quas, distinctio vel possimus ab enim id in necessitatibus quae corrupti debitis. Iusto aut reiciendis sunt error temporibus.</p>
-                </div>
-            </div>
-            <div class=" bg-[#F5F5F5] rounded-lg p-3 m-2">
-                <div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ad fugiat esse quas, distinctio vel possimus ab enim id in necessitatibus quae corrupti debitis. Iusto aut reiciendis sunt error temporibus.</p>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </div>

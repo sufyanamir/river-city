@@ -291,8 +291,8 @@ $userPrivileges = session('user_details')['user_privileges'];
                     <div class="relative my-auto">
                         <a href="/notifications">
                             <img src="{{ asset('assets/icons/bell.svg') }}" alt="logo">
-                            <div class="absolute top-0 right-0 bg-[#F5222D] text-white rounded-full w-4 h-4 flex items-center justify-center">
-                                3
+                            <div class="absolute top-0 right-0 bg-[#F5222D] text-white rounded-full w-3 h-3 flex items-center justify-center">
+                                
                             </div>
                         </a>
                     </div>
