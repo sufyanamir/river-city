@@ -458,9 +458,9 @@
                     @endphp
 
                     @foreach ($estimate_items as $item)
-                        <div
-                            class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
-                            <div class="flex">
+                        <div class=" border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
+                            <div class="flex justify-between">
+                              <div class="flex">
                                 <button type="button" class="inline">
                                     <img class="h-[50px] w-[50px]"
                                         src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
@@ -470,9 +470,12 @@
                                         for="">{{ $item->item_name }}</label>
                                     <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
                                 </div>
+                              </div>
+                              <div class="float pt-2">
+                               <strong> <span class="float-right">${{ $item->item_price }}</span></strong>
+                              </div>
                             </div>
-                            <div class="text-right">
-                                <span>${{ $item->item_price }}</span>
+                            <div class="pl-3 pb-">
                                 @php
                                     $totalPrice += $item->item_price; // Add item price to total
                                 @endphp
@@ -497,6 +500,7 @@
                                             <p class="text-[16px]/[18px] text-[#323C47] font">
                                                 {{ $actualItem->item_type }}</p>
                                         </div>
+                                        <hr class="my-3 px-[100px] border-gray-900">
                                     @endforeach
                                 @endif
                             </div>
