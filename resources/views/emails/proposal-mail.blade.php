@@ -19,7 +19,7 @@
 <body>
     <div class="container">
         <p><b>Hello {{ $emailData['email'] }}!</b> We have made a proposal for you of the estimate. You can view or accept the proposal through this link</p>
-        <a href="http://127.0.0.1:8007/viewProposal/{{ $emailData['estimate_id'] }}">View Proposal!</a>
+        <a href="https://rivercity.thewebconcept.tech/viewProposal/{{ $emailData['estimate_id'] }}">View Proposal!</a>
         <br>
         <p><b>Thank You!</b></p>
         <i>Team <a href="https://scubadiving.thewebconcept.tech/">River City</a></i>
