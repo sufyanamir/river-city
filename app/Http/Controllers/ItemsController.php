@@ -53,13 +53,14 @@ class ItemsController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'item_name' => 'required|string',
                 'item_type' => 'required|string',
-                'item_units' => 'required|string',
+                'item_name' => 'required|string',
+                'item_units' => 'nullable|string',
                 'item_cost' => 'required|numeric',
                 'item_price' => 'required|numeric',
                 'labour_expense' => 'nullable|numeric',
-                'item_description' => 'required|string',
+                'material_expense' => 'nullable|numeric',
+                'item_description' => 'nullable|string',
                 'assembly_name' => 'nullable|array',
             ]);
 
@@ -70,6 +71,7 @@ class ItemsController extends Controller
                 'item_cost' => $validatedData['item_cost'],
                 'item_price' => $validatedData['item_price'],
                 'labour_expense' => $validatedData['labour_expense'],
+                'material_expense' => $validatedData['material_expense'],
                 'item_description' => $validatedData['item_description'],
             ]);
 

@@ -25,6 +25,7 @@ class Items extends Model
         'item_cost',
         'item_price',
         'labour_expense',
+        'material_expense',
         'item_description',
     ];
 
