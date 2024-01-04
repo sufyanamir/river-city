@@ -77,6 +77,7 @@ Route::middleware('customauth')->group(function () {
     Route::get('/getCustomerDetails/{id}', [EstimateController::class, 'getCustomerDetails']);
     Route::post('/sendChat', [EstimateChatController::class, 'sendChat']);
     Route::get('/estimates/getChatMessage/{id}', [EstimateChatController::class, 'getChatMessage']);
+    Route::get('/getItemData/{id}', [ItemsController::class, 'getItemData']);
     
     Route::get('/add-estimate', function () {
         return view('addEstimate');

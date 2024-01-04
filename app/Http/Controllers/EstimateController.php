@@ -674,37 +674,65 @@ class EstimateController extends Controller
 
             $validatedData = $request->validate([
                 'estimate_id' => 'required',
-                'selected_items' => 'required|array',
+                'item_id' => 'required',
+                'item_type' => 'required|string',
+                'item_name' => 'required',
+                'item_units' => 'required',
+                'labour_expense' => 'nullable',
+                'material_expense' => 'nullable',
+                'item_cost' => 'required',
+                'item_price' => 'required',
+                'item_qty' => 'required',
+                'item_total' => 'required',
+                'item_description' => 'nullable',
+                'item_note' => 'nullable',
+                // 'selected_items' => 'required|array',
             ]);
 
             // Fetch the selected items from the database
-            $selectedItems = Items::whereIn('item_id', $validatedData['selected_items'])->get();
+            // $selectedItems = Items::whereIn('item_id', $validatedData['selected_items'])->get();
 
-            $itemsData = [];
-            foreach ($selectedItems as $item) {
-                $itemsData[] = [
-                    'item_id' => $item->item_id,
-                    'item_name' => $item->item_name,
-                    'item_type' => $item->item_type,
-                    'item_unit' => $item->item_units,
-                    'item_cost' => $item->item_cost,
-                    'item_price' => $item->item_price,
-                ];
-            }
+            // $itemsData = [];
+            // foreach ($selectedItems as $item) {
+            //     $itemsData[] = [
+            //         'item_id' => $item->item_id,
+            //         'item_name' => $item->item_name,
+            //         'item_type' => $item->item_type,
+            //         'item_unit' => $item->item_units,
+            //         'item_cost' => $item->item_cost,
+            //         'item_price' => $item->item_price,
+            //     ];
+            // }
 
-            foreach ($itemsData as $item) {
-                EstimateItem::create([
-                    'added_user_id' => $userDetails['id'],
-                    'estimate_id' => $validatedData['estimate_id'],
-                    'item_id' => $item['item_id'],
-                    'item_name' => $item['item_name'],
-                    'item_type' => $item['item_type'],
-                    'item_unit' => $item['item_unit'],
-                    'item_cost' => $item['item_cost'],
-                    'item_price' => $item['item_price'],
-                    // Add other fields as needed
-                ]);
-            }
+            $estimateItem = EstimateItem::create([
+                'added_user_id' => $userDetails['id'],
+                'estimate_id' => $validatedData['estimate_id'],
+                'item_id' => $validatedData['item_id'],
+                'item_name' => $validatedData['item_name'],
+                'item_type' => $validatedData['item_type'],
+                'item_unit' => $validatedData['item_units'],
+                'item_cost' => $validatedData['item_cost'],
+                'item_price' => $validatedData['item_price'],
+                'labour_expense' => $validatedData['labour_expense'],
+                'material_expense' => $validatedData['material_expense'],
+                'item_qty' => $validatedData['item_qty'],
+                'item_total' => $validatedData['item_total'],
+                'item_Description' => $validatedData['item_description'],
+                'item_note' => $validatedData['item_note'],
+            ]);
+            // foreach ($itemsData as $item) {
+            //     EstimateItem::create([
+            //         'added_user_id' => $userDetails['id'],
+            //         'estimate_id' => $validatedData['estimate_id'],
+            //         'item_id' => $item['item_id'],
+            //         'item_name' => $item['item_name'],
+            //         'item_type' => $item['item_type'],
+            //         'item_unit' => $item['item_unit'],
+            //         'item_cost' => $item['item_cost'],
+            //         'item_price' => $item['item_price'],
+            //         // Add other fields as needed
+            //     ]);
+            // }
 
             return response()->json(['success' => true, 'message' => 'Items added to estimate'], 200);
         } catch (\Exception $e) {
@@ -838,6 +866,7 @@ class EstimateController extends Controller
             $additionalContacts = EstimateContact::where('estimate_id', $estimate->estimate_id)->get();
             $estimateItems = EstimateItem::where('estimate_id', $estimate->estimate_id)->get();
             $items = Items::get();
+            $itemsForAssemblies = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
             $labourItems = Items::where('item_type', 'labour')->get();
             $materialItems = Items::where('item_type', 'material')->get();
             $assemblyItems = Items::where('item_type', 'assemblies')->get();
@@ -886,6 +915,7 @@ class EstimateController extends Controller
                 'estimate_images' => $estimateImages,
                 'estimate_files' => $estimateFiles,
                 'invoice' => $invoice,
+                'itemsForAssemblies' => $itemsForAssemblies,
             ]);
         } catch (\Exception $e) {
             // Handle the exception
