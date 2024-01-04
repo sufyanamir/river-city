@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id('item_id');
             $table->string('item_name');
             $table->string('item_type');
-            $table->string('item_units');
-            $table->float('item_cost');
-            $table->float('item_price');
-            $table->float('labour_expense')->nullable();
+            $table->string('item_units')->nullable();
+            $table->double('item_cost');
+            $table->double('item_price');
+            $table->double('labour_expense')->nullable();
             $table->text('item_description')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrent();
