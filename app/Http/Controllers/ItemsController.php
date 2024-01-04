@@ -14,6 +14,16 @@ use Illuminate\Http\Request;
 
 class ItemsController extends Controller
 {
+
+    // get item date
+    public function getItemData($id)
+    {
+        $item = Items::find($id);
+
+        return response()->json(['success' => true, 'item' => $item], 200);
+    }
+    // get item date
+
     // delete item
     public function deleteItem($id)
     {

@@ -22,6 +22,12 @@ class EstimateItem extends Model
         'item_unit',
         'item_cost',
         'item_price',
+        'labour_expense',
+        'material_expense',
+        'item_qty',
+        'item_total',
+        'item_Description',
+        'item_note',
     ];
 
     public $timestamps = true;
