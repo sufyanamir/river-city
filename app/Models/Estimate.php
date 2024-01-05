@@ -12,7 +12,7 @@ class Estimate extends Model
 
     public function images()
     {
-        return $this->hasMany(EstimateImage::class, 'estimate_id');
+        return $this->hasMany(EstimateImages::class, 'estimate_id');
     }
 
 
@@ -50,6 +50,8 @@ class Estimate extends Model
         'invoiced_payment',
         'invoice_paid',
         'invoice_paid_total',
+        'estimate_schedule_assigned',
+        'estimate_schedule_assigned_to',
     ];
 
     public $timestamps = true;

@@ -261,12 +261,12 @@
                 <div class=" px-3">
                     <div class="my-auto py-4 flex p-2">
                         @if ($estimate->schedule_assigned == 1 && $estimate->work_assigned != 1)
-                            <a href="/getEstimateToSetSchedule{{ $estimate->estimate_id }}">
+                            <a href="/getEstimateToSetScheduleWork{{ $estimate->estimate_id }}">
                                 <button type="button" id="schedule-estimate"
                                     class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                                     <img class="h-[14px] w-[14px] my-auto mx-1"
                                         src="{{ asset('assets/icons/calendar-icon.svg') }}" alt="">
-                                    <span class=" my-auto">Schedule Estimate</span>
+                                    <span class=" my-auto">Schedule Work</span>
                                 </button>
                             </a>
                         @endif
@@ -326,6 +326,14 @@
                                 <span class=" my-auto">Reassign</span>
                             </button>
                         @endif
+                        <a href="/getEstimateToSetSchedule{{$estimate->estimate_id}}">
+                            <button type="button" id="schedule-estimate"
+                                class=" schedule-estimate flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                                <img class="h-[14px] w-[14px] my-auto mx-1"
+                                    src="{{ asset('assets/icons/calendar-icon.svg') }}" alt="">
+                                <span class=" my-auto">Schedule Estimate</span>
+                            </button>
+                        </a>
                         @if ($estimate->estimate_assigned != 1)
                             <button type="button" id="complete-estimate"
                                 class=" complete-estimate flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
@@ -460,26 +468,27 @@
                     @foreach ($estimate_items as $item)
                         <div class=" border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
                             <div class="flex justify-between">
-                              <div class="flex items-center">
-                                <button type="button" class="inline">
-                                    <img class="h-[50px] w-[50px]"
-                                        src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                                </button>
-                                <div>
-                                    <label class="text-lg font-semibold text-[#323C47]"
-                                        for="">{{ $item->item_name }}</label>
-                                    <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_description }}</p>
-                                </div>
-                              </div>
-                              <div class="float-right pt-2">
-                                <div class="flex flex-col gap-3">
+                                <div class="flex items-center">
+                                    <button type="button" class="inline">
+                                        <img class="h-[50px] w-[50px]"
+                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                    </button>
                                     <div>
-
+                                        <label class="text-lg font-semibold text-[#323C47]"
+                                            for="">{{ $item->item_name }}</label>
+                                        <p class="text-[16px]/[18px] text-[#323C47] font">
+                                            {{ $item->item_description }}</p>
                                     </div>
-                                    <p class=""><strong>Qty:</strong> {{ $item->item_qty ? : 0 }}</p>
-                                    <p class=""><strong> Total:</strong> ${{ $item->item_price }}</p>
                                 </div>
-                              </div>
+                                <div class="float-right pt-2">
+                                    <div class="flex flex-col gap-3">
+                                        <div>
+
+                                        </div>
+                                        <p class=""><strong>Qty:</strong> {{ $item->item_qty ?: 0 }}</p>
+                                        <p class=""><strong> Total:</strong> ${{ $item->item_price }}</p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="pl-3 pb-">
                                 @php
@@ -548,7 +557,8 @@
                                 <div>
                                     <label class="text-lg font-semibold text-[#323C47]"
                                         for="">{{ $item->item_name }}</label>
-                                    <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_description }}</p>
+                                    <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_description }}
+                                    </p>
                                 </div>
                             </div>
                             <div class="text-right">
@@ -2909,7 +2919,7 @@
             class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <form action="/addEstimateItems" method="post" enctype="multipart/form-data" id="formData">
                 @csrf
-                <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
                 <input type="hidden" name="item_id" id="item_id" value="">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
@@ -2926,8 +2936,8 @@
                             <select id="selected_item" name="selected_item" autocomplete="customer-name"
                                 class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                 <option value="">select item</option>
-                                @foreach($items as $item)
-                                <option value="{{$item->item_id}}">{{ $item->item_name }}</option>
+                                @foreach ($items as $item)
+                                    <option value="{{ $item->item_id }}">{{ $item->item_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -2956,7 +2966,8 @@
                         <div class="my-2" id="labourExpense">
                             <label for="" class="block text-left mb-1"> Labour Cost (min/<span
                                     class="unit">unit</span>)</label>
-                            <input type="number" name="labour_expense" id="labour_expense" autocomplete="given-name"
+                            <input type="number" name="labour_expense" id="labour_expense"
+                                autocomplete="given-name"
                                 class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             <span class=" m-0 p-0 text-xs float-left text-gray-400">Labour Cost: $25.00/hr</span>
                         </div>
@@ -3002,7 +3013,8 @@
                                     class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
                                     @foreach ($itemsForAssemblies as $item)
-                                    <option value="{{ $item->item_id }}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
+                                        <option value="{{ $item->item_id }}"
+                                            data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
                                     @endforeach
                                 </select>
                                 <div class=" grid grid-cols-2 gap-3 mt-2">
@@ -3206,7 +3218,7 @@
     });
 </script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         // Get references to the relevant elements
         var selectedItemDropdown = $('#selected_item');
         var typeDropdown = $('#type');
@@ -3221,7 +3233,7 @@
         var itemId = $('#item_id');
 
         // Add a change event listener to the selected_item dropdown
-        selectedItemDropdown.on('change', function () {
+        selectedItemDropdown.on('change', function() {
             // Get the selected item value
             var selectedItem = selectedItemDropdown.val();
 
@@ -3231,7 +3243,7 @@
                 $.ajax({
                     url: '/getItemData/' + selectedItem, // Use the correct URL with the item ID
                     type: 'GET',
-                    success: function (data) {
+                    success: function(data) {
                         var itemData = data.item;
 
                         // Update the other input fields based on the item data
@@ -3257,7 +3269,7 @@
                         //     materialExpenseDiv.addClass('hidden');
                         // }
                     },
-                    error: function (error) {
+                    error: function(error) {
                         console.error('Error fetching item data:', error);
                     }
                 });
@@ -3277,23 +3289,23 @@
         $("#formData")[0].reset()
     });
     $('#mulitple_input').on('change', 'select[name="assembly_name[]"]', function() {
-            // Get the selected option
-            var selectedOption = $(this).find(':selected');
+        // Get the selected option
+        var selectedOption = $(this).find(':selected');
 
-            // Get the item_unit from the data-unit attribute
-            var itemUnit = selectedOption.data('unit');
+        // Get the item_unit from the data-unit attribute
+        var itemUnit = selectedOption.data('unit');
 
-            // Update the elements based on the item_unit only within the current row
-            var unitLabel = $(this).closest('.grid').find('.addedItemUnit');
-            unitLabel.text(itemUnit);
+        // Update the elements based on the item_unit only within the current row
+        var unitLabel = $(this).closest('.grid').find('.addedItemUnit');
+        unitLabel.text(itemUnit);
 
-            // You can add more logic here to update other elements based on the item_unit
-        });
+        // You can add more logic here to update other elements based on the item_unit
+    });
 
     let mulitple_input = $('#mulitple_input');
     let button = $('#addbtn');
 
-    button.on('click', function () {
+    button.on('click', function() {
         let newele = $('<div class="mt-5"></div>');
         let rembtn = $('<span></span>');
 
@@ -3327,7 +3339,7 @@
         mulitple_input.append(newele);
         newele.append(rembtn);
 
-        rembtn.on('click', function () {
+        rembtn.on('click', function() {
             newele.remove();
         });
     });
@@ -3402,7 +3414,7 @@
             priceMargin.text(finalMargin.toFixed(2));
         });
 
-        itemqty.on('input', function(){
+        itemqty.on('input', function() {
             itemTotal.val(itemqty.val() * itemPrice.val());
         });
     });

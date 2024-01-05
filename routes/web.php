@@ -65,7 +65,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/sendEmail', [EstimateController::class, 'sendEmail']);
     Route::post('/completeEstimate', [EstimateController::class, 'completeEstimate']);
     Route::post('/scheduleEstimate', [EstimateController::class, 'scheduleEstimate']);
-    Route::post('/setSchedule', [EstimateController::class, 'setSchedule']);
+    Route::post('/setScheduleWork', [EstimateController::class, 'setScheduleWork']);
     Route::post('/addEstimateImage', [EstimageImagesController::class, 'uploadImage']);
     Route::post('/completeWorkAndAssignInvoice', [EstimateController::class, 'completeWorkAndAssignInvoice']);
     Route::post('/completeInvoiceAndAssignPayment', [EstimateController::class, 'completeInvoiceAndAssignPayment']);
@@ -123,7 +123,9 @@ Route::middleware('customauth')->group(function () {
     Route::match(['post', 'get'], 'deleteEstimateImage{id}', [EstimageImagesController::class, 'deleteEstimateImage']);
 
     Route::get('/calendar', [EstimateController::class, 'getEstimatesOnCalendar']);
+    Route::get('/getEstimateToSetScheduleWork{id}', [EstimateController::class, 'getEstimateToSetScheduleWork']);
     Route::get('/getEstimateToSetSchedule{id}', [EstimateController::class, 'getEstimateToSetSchedule']);
+    Route::post('/setScheduleEstimate', [EstimateController::class, 'setScheduleEstimate']);
     // Route::get('/calendar', function () {
     //     return view('calendar');
     // });
