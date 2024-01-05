@@ -20,6 +20,7 @@ use App\Models\EstimateItem;
 use App\Models\EstimateNote;
 use App\Models\EstimatePayments;
 use App\Models\EstimateProposal;
+use App\Models\EstimateSchedule;
 use App\Models\EstimateToDos;
 use App\Models\ItemAssembly;
 use App\Models\Items;
@@ -36,6 +37,57 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class EstimateController extends Controller
 {
+
+    // schedule estimate
+    public function setScheduleEstimate(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'assign_estimate_completion' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'note' => 'nullable'
+            ]);
+
+            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
+
+            $estimateSchedule = EstimateSchedule::create([
+                'added_user_id' => $userDetails['id'],
+                'estimate_id' => $validatedData['estimate_id'],
+                'estimate_complete_assigned_to' => $validatedData['assign_estimate_completion'],
+                'start_date' => $validatedData['start_date'],
+                'end_date' => $validatedData['end_date'],
+                'note' => $validatedData['note'],
+            ]);
+
+            $estimate->estimate_schedule_assigned = 1;
+            $estimate->estimate_schedule_assigned_to = $validatedData['assign_estimate_completion'];
+            $estimate->save();
+            return response()->json(['success' => true, 'message' => 'Estimate is Scheduled!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // schedule estimate
+    
+    // get schedule estimate
+    public function getEstimateToSetSchedule($id)
+    {
+        $userDetails = session('user_details');
+
+        $estimate = Estimate::where('estimate_id', $id)->first();
+        $customer = Customer::where('customer_id', $estimate->customer_id)->first();
+        $estimates = Estimate::get();
+        $users = User::where('added_user_id', $userDetails['id'])->get();
+
+        return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users]);
+        // return response()->json(['success' => true, 'estimate' => $estimate]);
+    }
+    // get schedule estimate
 
     public function addItemInEstimateAndItems(Request $request)
     {
@@ -82,7 +134,7 @@ class EstimateController extends Controller
         }
     }
 
-    public function getEstimateToSetSchedule($id)
+    public function getEstimateToSetScheduleWork($id)
     {
         $userDetails = session('user_details');
 
@@ -371,7 +423,7 @@ class EstimateController extends Controller
     // Complete work  and assign invoice
 
     // set schedule
-    public function setSchedule(Request $request)
+    public function setScheduleWork(Request $request)
     {
         try {
             $userDetails = session('user_details');
