@@ -159,58 +159,87 @@
                                                     </form>
                                                 </button>
                                             </td>
-                                            <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="edit_contact_modal{{ $contacts->contact_id }}">
-                                                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                            <div class="fixed z-10 inset-0 overflow-y-auto hidden"
+                                                id="edit_contact_modal{{ $contacts->contact_id }}">
+                                                <div
+                                                    class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                                                     <!-- Background overlay -->
                                                     <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                                                         <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
                                                     </div>
-    
+
                                                     <!-- Modal panel -->
                                                     <div
                                                         class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                                                        <form action="/updateAdditionalContact" method="post" id="editContact-form">
+                                                        <form action="/updateAdditionalContact" method="post"
+                                                            id="editContact-form">
                                                             @csrf
-                                                            <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
-                                                            <input type="hidden" name="contact_id" value="{{$contacts->contact_id}}">
+                                                            <input type="hidden" value="{{ $estimate->estimate_id }}"
+                                                                name="estimate_id" id="estimate_id">
+                                                            <input type="hidden" name="contact_id"
+                                                                value="{{ $contacts->contact_id }}">
                                                             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                                                 <!-- Modal content here -->
                                                                 <div class=" flex justify-between border-b">
-                                                                    <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Contacts</h2>
-                                                                    <button class="modal-close{{ $contacts->contact_id }}" type="button">
-                                                                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                                                                    <h2 class=" text-xl font-semibold mb-2 "
+                                                                        id="modal-title">Add Contacts</h2>
+                                                                    <button
+                                                                        class="modal-close{{ $contacts->contact_id }}"
+                                                                        type="button">
+                                                                        <img src="{{ asset('assets/icons/close-icon.svg') }}"
+                                                                            alt="icon">
                                                                     </button>
                                                                 </div>
                                                                 <!-- task details -->
                                                                 <div class=" grid grid-cols-2 gap-2">
                                                                     <div class=" col-span-2" id="">
-                                                                        <label for="" class=" block">Title:</label>
-                                                                        <input value="{{ $contacts->contact_title }}" type="text" name="contact_title" id="contact_title" required
-                                                                            placeholder="Contact title" autocomplete="given-name"
-                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                                                    </div>
-                                                                    <div class="" id="">
-                                                                        <label for="" class=" block">First Name:</label>
-                                                                        <input value="{{ $contacts->contact_first_name }}" type="text" name="first_name" id="first_name" required
-                                                                            placeholder="First Name" autocomplete="given-name"
-                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                                                    </div>
-                                                                    <div class="" id="">
-                                                                        <label for="" class=" block">Last Name:</label>
-                                                                        <input value="{{ $contacts->contact_last_name }}" type="text" name="last_name" id="last_name" placeholder="Last Name"
+                                                                        <label for=""
+                                                                            class=" block">Title:</label>
+                                                                        <input value="{{ $contacts->contact_title }}"
+                                                                            type="text" name="contact_title"
+                                                                            id="contact_title" required
+                                                                            placeholder="Contact title"
                                                                             autocomplete="given-name"
                                                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                                                     </div>
                                                                     <div class="" id="">
-                                                                        <label for="" class=" block">Email:</label>
-                                                                        <input value="{{ $contacts->contact_email }}" type="text" name="email" id="email" required placeholder="Email"
+                                                                        <label for="" class=" block">First
+                                                                            Name:</label>
+                                                                        <input
+                                                                            value="{{ $contacts->contact_first_name }}"
+                                                                            type="text" name="first_name"
+                                                                            id="first_name" required
+                                                                            placeholder="First Name"
                                                                             autocomplete="given-name"
                                                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                                                     </div>
                                                                     <div class="" id="">
-                                                                        <label for="" class=" block">Phone:</label>
-                                                                        <input  value="{{ $contacts->contact_phone }}" type="tel" name="phone" id="phone" placeholder="Phone" required
+                                                                        <label for="" class=" block">Last
+                                                                            Name:</label>
+                                                                        <input
+                                                                            value="{{ $contacts->contact_last_name }}"
+                                                                            type="text" name="last_name"
+                                                                            id="last_name" placeholder="Last Name"
                                                                             autocomplete="given-name"
+                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                    </div>
+                                                                    <div class="" id="">
+                                                                        <label for=""
+                                                                            class=" block">Email:</label>
+                                                                        <input value="{{ $contacts->contact_email }}"
+                                                                            type="text" name="email"
+                                                                            id="email" required
+                                                                            placeholder="Email"
+                                                                            autocomplete="given-name"
+                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                    </div>
+                                                                    <div class="" id="">
+                                                                        <label for=""
+                                                                            class=" block">Phone:</label>
+                                                                        <input value="{{ $contacts->contact_phone }}"
+                                                                            type="tel" name="phone"
+                                                                            id="phone" placeholder="Phone"
+                                                                            required autocomplete="given-name"
                                                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                                                     </div>
                                                                 </div>
@@ -229,7 +258,7 @@
                                                     e.preventDefault();
                                                     document.getElementById("edit_contact_modal{{ $contacts->contact_id }}").classList.remove('hidden');
                                                 });
-    
+
                                                 document.querySelector(".modal-close{{ $contacts->contact_id }}").addEventListener("click", function(e) {
                                                     e.preventDefault();
                                                     document.getElementById("edit_contact_modal{{ $contacts->contact_id }}").classList.add('hidden');
@@ -317,58 +346,88 @@
                                                     </form>
                                                 </button>
                                             </td>
-                                            <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="edit_contact_modal{{ $contacts->contact_id }}">
-                                                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                            <div class="fixed z-10 inset-0 overflow-y-auto hidden"
+                                                id="edit_contact_modal{{ $contacts->contact_id }}">
+                                                <div
+                                                    class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                                                     <!-- Background overlay -->
                                                     <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                                                         <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
                                                     </div>
-    
+
                                                     <!-- Modal panel -->
                                                     <div
                                                         class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                                                        <form action="/updateAdditionalContact" method="post" id="editContact-form">
+                                                        <form action="/updateAdditionalContact" method="post"
+                                                            id="editContact-form">
                                                             @csrf
-                                                            <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
-                                                            <input type="hidden" name="contact_id" value="{{$contacts->contact_id}}">
+                                                            <input type="hidden"
+                                                                value="{{ $estimate->estimate_id }}"
+                                                                name="estimate_id" id="estimate_id">
+                                                            <input type="hidden" name="contact_id"
+                                                                value="{{ $contacts->contact_id }}">
                                                             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                                                 <!-- Modal content here -->
                                                                 <div class=" flex justify-between border-b">
-                                                                    <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Contacts</h2>
-                                                                    <button class="modal-close{{ $contacts->contact_id }}" type="button">
-                                                                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                                                                    <h2 class=" text-xl font-semibold mb-2 "
+                                                                        id="modal-title">Add Contacts</h2>
+                                                                    <button
+                                                                        class="modal-close{{ $contacts->contact_id }}"
+                                                                        type="button">
+                                                                        <img src="{{ asset('assets/icons/close-icon.svg') }}"
+                                                                            alt="icon">
                                                                     </button>
                                                                 </div>
                                                                 <!-- task details -->
                                                                 <div class=" grid grid-cols-2 gap-2">
                                                                     <div class=" col-span-2" id="">
-                                                                        <label for="" class=" block">Title:</label>
-                                                                        <input value="{{ $contacts->contact_title }}" type="text" name="contact_title" id="contact_title" required
-                                                                            placeholder="Contact title" autocomplete="given-name"
-                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                                                    </div>
-                                                                    <div class="" id="">
-                                                                        <label for="" class=" block">First Name:</label>
-                                                                        <input value="{{ $contacts->contact_first_name }}" type="text" name="first_name" id="first_name" required
-                                                                            placeholder="First Name" autocomplete="given-name"
-                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                                                    </div>
-                                                                    <div class="" id="">
-                                                                        <label for="" class=" block">Last Name:</label>
-                                                                        <input value="{{ $contacts->contact_last_name }}" type="text" name="last_name" id="last_name" placeholder="Last Name"
+                                                                        <label for=""
+                                                                            class=" block">Title:</label>
+                                                                        <input value="{{ $contacts->contact_title }}"
+                                                                            type="text" name="contact_title"
+                                                                            id="contact_title" required
+                                                                            placeholder="Contact title"
                                                                             autocomplete="given-name"
                                                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                                                     </div>
                                                                     <div class="" id="">
-                                                                        <label for="" class=" block">Email:</label>
-                                                                        <input value="{{ $contacts->contact_email }}" type="text" name="email" id="email" required placeholder="Email"
+                                                                        <label for="" class=" block">First
+                                                                            Name:</label>
+                                                                        <input
+                                                                            value="{{ $contacts->contact_first_name }}"
+                                                                            type="text" name="first_name"
+                                                                            id="first_name" required
+                                                                            placeholder="First Name"
                                                                             autocomplete="given-name"
                                                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                                                     </div>
                                                                     <div class="" id="">
-                                                                        <label for="" class=" block">Phone:</label>
-                                                                        <input  value="{{ $contacts->contact_phone }}" type="tel" name="phone" id="phone" placeholder="Phone" required
+                                                                        <label for="" class=" block">Last
+                                                                            Name:</label>
+                                                                        <input
+                                                                            value="{{ $contacts->contact_last_name }}"
+                                                                            type="text" name="last_name"
+                                                                            id="last_name" placeholder="Last Name"
                                                                             autocomplete="given-name"
+                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                    </div>
+                                                                    <div class="" id="">
+                                                                        <label for=""
+                                                                            class=" block">Email:</label>
+                                                                        <input value="{{ $contacts->contact_email }}"
+                                                                            type="text" name="email"
+                                                                            id="email" required
+                                                                            placeholder="Email"
+                                                                            autocomplete="given-name"
+                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                    </div>
+                                                                    <div class="" id="">
+                                                                        <label for=""
+                                                                            class=" block">Phone:</label>
+                                                                        <input value="{{ $contacts->contact_phone }}"
+                                                                            type="tel" name="phone"
+                                                                            id="phone" placeholder="Phone"
+                                                                            required autocomplete="given-name"
                                                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                                                     </div>
                                                                 </div>
@@ -387,7 +446,7 @@
                                                     e.preventDefault();
                                                     document.getElementById("edit_contact_modal{{ $contacts->contact_id }}").classList.remove('hidden');
                                                 });
-    
+
                                                 document.querySelector(".modal-close{{ $contacts->contact_id }}").addEventListener("click", function(e) {
                                                     e.preventDefault();
                                                     document.getElementById("edit_contact_modal{{ $contacts->contact_id }}").classList.add('hidden');
@@ -478,15 +537,15 @@
                                 <span class=" my-auto">Reassign</span>
                             </button>
                         @endif
-                        @if($estimate->estimate_schedule_assigned != 1)
-                        <a href="/getEstimateToSetSchedule{{$estimate->estimate_id}}">
-                            <button type="button" id="schedule-estimate"
-                                class=" schedule-estimate flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
-                                <img class="h-[14px] w-[14px] my-auto mx-1"
-                                    src="{{ asset('assets/icons/calendar-icon.svg') }}" alt="">
-                                <span class=" my-auto">Schedule Estimate</span>
-                            </button>
-                        </a>
+                        @if ($estimate->estimate_schedule_assigned != 1)
+                            <a href="/getEstimateToSetSchedule{{ $estimate->estimate_id }}">
+                                <button type="button" id="schedule-estimate"
+                                    class=" schedule-estimate flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                                    <img class="h-[14px] w-[14px] my-auto mx-1"
+                                        src="{{ asset('assets/icons/calendar-icon.svg') }}" alt="">
+                                    <span class=" my-auto">Schedule Estimate</span>
+                                </button>
+                            </a>
                         @endif
                         @if ($estimate->estimate_assigned != 1)
                             <button type="button" id="complete-estimate"
@@ -614,12 +673,74 @@
                         </div>
                     </button>
                 </div>
+                @php
+                    $totalPrice = 0; // Initialize total price variable
+                @endphp
                 <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
-                    @php
-                        $totalPrice = 0; // Initialize total price variable
-                    @endphp
+                    <div class="relative overflow-x-auto">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
 
-                    @foreach ($estimate_items as $item)
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Description
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Item Cost
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Item Qty
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Total
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($estimate_items as $item)
+                                        <tr class="bg-white border-b">
+                                            <th scope="row"
+                                                class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                                <button type="button" id="editEstimate-item{{ $item->item_id }}"
+                                                    class="inline">
+                                                    <img class="h-[50px] w-[50px]"
+                                                        src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
+                                                        alt="">
+                                                </button>
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                <label class="text-lg font-semibold text-[#323C47]"
+                                                    for="">{{ $item->item_name }}</label>
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                    {{ $item->item_description }}</p>
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $item->item_cost }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $item->item_qty }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $item->item_total }}
+                                            </td>
+                                        </tr>
+                                        @php
+                                            $totalPrice += $item->item_total; // Add item price to total
+                                        @endphp
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {{-- @foreach ($estimate_items as $item)
                         <div class=" border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
                             <div class="flex justify-between">
                                 <div class="flex items-center">
@@ -628,10 +749,8 @@
                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                     </button>
                                     <div>
-                                        <label class="text-lg font-semibold text-[#323C47]"
-                                            for="">{{ $item->item_name }}</label>
-                                        <p class="text-[16px]/[18px] text-[#323C47] font">
-                                            {{ $item->item_description }}</p>
+                                        
+                                        
                                     </div>
                                 </div>
                                 <div class="float-right pt-2">
@@ -645,21 +764,16 @@
                                 </div>
                             </div>
                             <div class="pl-3 pb-">
-                                @php
-                                    $totalPrice += $item->item_price; // Add item price to total
-                                @endphp
+                                
 
-                                {{-- Check if the item is of type 'assemblies' --}}
+                                
                                 @if ($item->item_type === 'assemblies')
-                                    {{-- Get associated items from item_assemblies table --}}
                                     @php
                                         $associatedItems = \App\Models\ItemAssembly::where('item_id', $item->item_id)->get();
                                     @endphp
 
-                                    {{-- Display associated items for assembly item --}}
                                     @foreach ($associatedItems as $associatedItem)
                                         <div class="">
-                                            {{-- Query the actual item based on assembly_name --}}
                                             @php
                                                 $actualItem = \App\Models\Items::where('item_id', $associatedItem->assembly_name)->first();
                                             @endphp
@@ -674,7 +788,7 @@
                                 @endif
                             </div>
                         </div>
-                    @endforeach
+                    @endforeach --}}
                     <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
                         <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Grand Total</span>
                         <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
@@ -695,43 +809,107 @@
                         </div>
                     </button>
                 </div>
+                @php
+                    $totalPrice = 0; // Initialize total price variable
+                @endphp
                 <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
-                    @php
-                        $totalPrice = 0; // Initialize total price variable
-                    @endphp
+                    <div class="relative overflow-x-auto">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
 
-                    @foreach ($estimate_items as $item)
-                        <div
-                            class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
-                            <div class="flex">
-                                <button type="button" id="editEstimate-item{{$item->item_id}}" class="inline">
-                                    <img class="h-[50px] w-[50px]"
-                                        src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                                </button>
-                                <div>
-                                    <label class="text-lg font-semibold text-[#323C47]"
-                                        for="">{{ $item->item_name }}</label>
-                                    <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_description }}
-                                    </p>
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Description
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Item Cost
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Item Qty
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Total
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($estimate_items as $item)
+                                        <tr class="bg-white border-b">
+                                            <th scope="row"
+                                                class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                                <button type="button" id="editEstimate-item{{ $item->item_id }}"
+                                                    class="inline">
+                                                    <img class="h-[50px] w-[50px]"
+                                                        src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
+                                                        alt="">
+                                                </button>
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                <label class="text-lg font-semibold text-[#323C47]"
+                                                    for="">{{ $item->item_name }}</label>
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                    {{ $item->item_description }}</p>
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $item->item_cost }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $item->item_qty }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $item->item_total }}
+                                            </td>
+                                        </tr>
+                                        @php
+                                            $totalPrice += $item->item_total; // Add item price to total
+                                        @endphp
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {{-- @foreach ($estimate_items as $item)
+                        <div class=" border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
+                            <div class="flex justify-between">
+                                <div class="flex items-center">
+                                    <button type="button" id="editEstimate-item{{$item->item_id}}" class="inline">
+                                        <img class="h-[50px] w-[50px]"
+                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                    </button>
+                                    <div>
+                                        
+                                        
+                                    </div>
+                                </div>
+                                <div class="float-right pt-2">
+                                    <div class="flex flex-col gap-3">
+                                        <div>
+
+                                        </div>
+                                        <p class=""><strong>Qty:</strong> {{ $item->item_qty ?: 0 }}</p>
+                                        <p class=""><strong> Total:</strong> ${{ $item->item_total }}</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <span>${{ $item->item_price }}</span>
-                                @php
-                                    $totalPrice += $item->item_price; // Add item price to total
-                                @endphp
+                            <div class="pl-3 pb-">
+                                
 
-                                {{-- Check if the item is of type 'assemblies' --}}
+                                
                                 @if ($item->item_type === 'assemblies')
-                                    {{-- Get associated items from item_assemblies table --}}
                                     @php
                                         $associatedItems = \App\Models\ItemAssembly::where('item_id', $item->item_id)->get();
                                     @endphp
 
-                                    {{-- Display associated items for assembly item --}}
                                     @foreach ($associatedItems as $associatedItem)
                                         <div class="">
-                                            {{-- Query the actual item based on assembly_name --}}
                                             @php
                                                 $actualItem = \App\Models\Items::where('item_id', $associatedItem->assembly_name)->first();
                                             @endphp
@@ -741,13 +919,14 @@
                                             <p class="text-[16px]/[18px] text-[#323C47] font">
                                                 {{ $actualItem->item_type }}</p>
                                         </div>
+                                        <hr class="my-3 px-[100px] border-gray-900">
                                     @endforeach
                                 @endif
                             </div>
                         </div>
-                    @endforeach
+                    @endforeach --}}
                     <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
-                        <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Total</span>
+                        <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Grand Total</span>
                         <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
                     </div>
                 </div>
@@ -764,8 +943,75 @@
                     @php
                         $totalLaborPrice = 0; // Initialize total labor price variable
                     @endphp
+                    <div class="relative overflow-x-auto">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
 
-                    @foreach ($estimate_items as $item)
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Description
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Item Cost
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Item Qty
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Total
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($estimate_items as $item)
+                                        @if ($item->item_type === 'labour')
+                                            <tr class="bg-white border-b">
+                                                <th scope="row"
+                                                    class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                                    <button type="button" id="editEstimate-item{{ $item->item_id }}"
+                                                        class="inline">
+                                                        <img class="h-[50px] w-[50px]"
+                                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
+                                                            alt="">
+                                                    </button>
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    <label class="text-lg font-semibold text-[#323C47]"
+                                                        for="">{{ $item->item_name }}</label>
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                        {{ $item->item_description }}</p>
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_cost }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_qty }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_total }}
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $totalLaborPrice += $item->item_price; // Add labor item price to total
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="text-right mr-4 py-6">
+                        <span>${{ number_format($totalLaborPrice, 2) }}</span> {{-- Display the formatted total labor price --}}
+                    </div>
+                    {{-- @foreach ($estimate_items as $item)
                         @if ($item->item_type === 'labour')
                             <div
                                 class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
@@ -788,11 +1034,7 @@
                                 </div>
                             </div>
                         @endif
-                    @endforeach
-
-                    <div class="text-right mr-4 py-6">
-                        <span>${{ number_format($totalLaborPrice, 2) }}</span> {{-- Display the formatted total labor price --}}
-                    </div>
+                    @endforeach --}}
                 </div>
             </div>
         @elseif(isset($userPrivileges->estimate) &&
@@ -808,8 +1050,75 @@
                     @php
                         $totalLaborPrice = 0; // Initialize total labor price variable
                     @endphp
+                    <div class="relative overflow-x-auto">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
 
-                    @foreach ($estimate_items as $item)
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Description
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Item Cost
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Item Qty
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Total
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($estimate_items as $item)
+                                        @if ($item->item_type === 'labour')
+                                            <tr class="bg-white border-b">
+                                                <th scope="row"
+                                                    class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                                    <button type="button"
+                                                        id="editEstimate-item{{ $item->item_id }}" class="inline">
+                                                        <img class="h-[50px] w-[50px]"
+                                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
+                                                            alt="">
+                                                    </button>
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    <label class="text-lg font-semibold text-[#323C47]"
+                                                        for="">{{ $item->item_name }}</label>
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                        {{ $item->item_description }}</p>
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_cost }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_qty }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_total }}
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $totalLaborPrice += $item->item_price; // Add labor item price to total
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="text-right mr-4 py-6">
+                        <span>${{ number_format($totalLaborPrice, 2) }}</span> {{-- Display the formatted total labor price --}}
+                    </div>
+                    {{-- @foreach ($estimate_items as $item)
                         @if ($item->item_type === 'labour')
                             <div
                                 class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
@@ -832,11 +1141,7 @@
                                 </div>
                             </div>
                         @endif
-                    @endforeach
-
-                    <div class="text-right mr-4 py-6">
-                        <span>${{ number_format($totalLaborPrice, 2) }}</span> {{-- Display the formatted total labor price --}}
-                    </div>
+                    @endforeach --}}
                 </div>
             </div>
         @endif
@@ -851,8 +1156,75 @@
                     @php
                         $totalMaterialPrice = 0; // Initialize total material price variable
                     @endphp
+                    <div class="relative overflow-x-auto">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
 
-                    @foreach ($estimate_items as $item)
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Description
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Item Cost
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Item Qty
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Total
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($estimate_items as $item)
+                                        @if ($item->item_type === 'material')
+                                            <tr class="bg-white border-b">
+                                                <th scope="row"
+                                                    class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                                    <button type="button"
+                                                        id="editEstimate-item{{ $item->item_id }}" class="inline">
+                                                        <img class="h-[50px] w-[50px]"
+                                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
+                                                            alt="">
+                                                    </button>
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    <label class="text-lg font-semibold text-[#323C47]"
+                                                        for="">{{ $item->item_name }}</label>
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                        {{ $item->item_description }}</p>
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_cost }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_qty }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_total }}
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $totalMaterialPrice += $item->item_price; // Add material item price to total
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="pt-4 px-4 pl-2 flex justify-end  py-7">
+                        <span>${{ number_format($totalMaterialPrice, 2) }}</span> {{-- Display the formatted total material price --}}
+                    </div>
+                    {{-- @foreach ($estimate_items as $item)
                         @if ($item->item_type === 'material')
                             <div
                                 class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center">
@@ -875,11 +1247,7 @@
                                 </div>
                             </div>
                         @endif
-                    @endforeach
-
-                    <div class="pt-4 px-4 pl-2 flex justify-end  py-7">
-                        <span>${{ number_format($totalMaterialPrice, 2) }}</span> {{-- Display the formatted total material price --}}
-                    </div>
+                    @endforeach --}}
                 </div>
             </div>
         @elseif(isset($userPrivileges->estimate) &&
@@ -895,8 +1263,75 @@
                     @php
                         $totalMaterialPrice = 0; // Initialize total material price variable
                     @endphp
+                    <div class="relative overflow-x-auto">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
 
-                    @foreach ($estimate_items as $item)
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Description
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Item Cost
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Item Qty
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Total
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($estimate_items as $item)
+                                        @if ($item->item_type === 'material')
+                                            <tr class="bg-white border-b">
+                                                <th scope="row"
+                                                    class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                                    <button type="button"
+                                                        id="editEstimate-item{{ $item->item_id }}" class="inline">
+                                                        <img class="h-[50px] w-[50px]"
+                                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
+                                                            alt="">
+                                                    </button>
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    <label class="text-lg font-semibold text-[#323C47]"
+                                                        for="">{{ $item->item_name }}</label>
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                        {{ $item->item_description }}</p>
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_cost }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_qty }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_total }}
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $totalMaterialPrice += $item->item_price; // Add material item price to total
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="pt-4 px-4 pl-2 flex justify-end  py-7">
+                        <span>${{ number_format($totalMaterialPrice, 2) }}</span> {{-- Display the formatted total material price --}}
+                    </div>
+                    {{-- @foreach ($estimate_items as $item)
                         @if ($item->item_type === 'material')
                             <div
                                 class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center">
@@ -919,11 +1354,7 @@
                                 </div>
                             </div>
                         @endif
-                    @endforeach
-
-                    <div class="pt-4 px-4 pl-2 flex justify-end  py-7">
-                        <span>${{ number_format($totalMaterialPrice, 2) }}</span> {{-- Display the formatted total material price --}}
-                    </div>
+                    @endforeach --}}
                 </div>
             </div>
         @endif
@@ -1806,7 +2237,8 @@
             class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <form action="/additionalContact" method="post" id="addContact-form">
                 @csrf
-                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id"
+                    id="estimate_id">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between border-b">
@@ -1868,9 +2300,11 @@
         <!-- Modal panel -->
         <div
             class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="/addEstimateImage" enctype="multipart/form-data" method="post" id="addImage-btn-form">
+            <form action="/addEstimateImage" enctype="multipart/form-data" method="post"
+                id="addImage-btn-form">
                 @csrf
-                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id"
+                    id="estimate_id">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between border-b">
@@ -1909,7 +2343,8 @@
             class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <form action="/addEstimateFile" enctype="multipart/form-data" method="post" id="addFile-btn-form">
                 @csrf
-                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id"
+                    id="estimate_id">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between border-b">
@@ -1948,7 +2383,8 @@
             class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <form action="/addToDos" method="post" id="to-do-button-form">
                 @csrf
-                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id"
+                    id="estimate_id">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between border-b">
@@ -3432,73 +3868,6 @@
     });
 </script>
 <script>
-    $(".addItems").click(function(e) {
-        e.preventDefault();
-        $("#addItems-modal").removeClass('hidden');
-    });
-
-    $(".modal-close").click(function(e) {
-        e.preventDefault();
-        $("#addItems-modal").addClass('hidden');
-        $("#formData")[0].reset()
-    });
-    $('#mulitple_input').on('change', 'select[name="assembly_name[]"]', function() {
-        // Get the selected option
-        var selectedOption = $(this).find(':selected');
-
-        // Get the item_unit from the data-unit attribute
-        var itemUnit = selectedOption.data('unit');
-
-        // Update the elements based on the item_unit only within the current row
-        var unitLabel = $(this).closest('.grid').find('.addedItemUnit');
-        unitLabel.text(itemUnit);
-
-        // You can add more logic here to update other elements based on the item_unit
-    });
-
-    let mulitple_input = $('#mulitple_input');
-    let button = $('#addbtn');
-
-    button.on('click', function() {
-        let newele = $('<div class="mt-5"></div>');
-        let rembtn = $('<span></span>');
-
-        newele.html(`
-            <select name="assembly_name[]" id="" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                <option value="">Select Item</option>
-                @foreach ($itemsForAssemblies as $item)
-                <option value="{{ $item->item_id }}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
-                @endforeach
-            </select>
-            <div class=" grid grid-cols-2 gap-3 mt-2 inline-block">
-                <div>
-                    <input type="number" name="assembly_unit_by_item_unit[]" id="assembly_unit_by_item_unit" placeholder="00.0" autocomplete="given-name"
-                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
-                </div>
-                <div>
-                    <input type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_assembly_unit" placeholder="00.0" autocomplete="given-name"
-                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
-                </div>
-            </div>
-        `);
-
-        rembtn.html(`
-            <button type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
-            </button>
-        `);
-
-        mulitple_input.append(newele);
-        newele.append(rembtn);
-
-        rembtn.on('click', function() {
-            newele.remove();
-        });
-    });
-</script>
-<script>
     $(document).ready(function() {
         // Get references to the select element and the relevant divs
         var typeDropdown = $('#type');
@@ -3582,7 +3951,7 @@
     $(".modal-close").click(function(e) {
         e.preventDefault();
         $("#profitability-btn-modal").addClass('hidden');
-        $("#formData")[0].reset()
+        // $("#formData")[0].reset()
     });
 </script>
 <script>
@@ -3673,14 +4042,14 @@
     // ... (existing script)
 
     // Add a click event listener to the edit buttons
-    $('[id^="editEstimate-item"]').click(function () {
+    $('[id^="editEstimate-item"]').click(function() {
         var itemId = this.id.replace('editEstimate-item', ''); // Extract item ID from button ID
 
         // Make an AJAX request to get item details
         $.ajax({
             url: '/getEstimateItem' + itemId,
             method: 'GET',
-            success: function (response) {
+            success: function(response) {
                 if (response.success) {
                     // Populate the modal with the retrieved data
                     var itemDetail = response.item_detail;
@@ -3708,11 +4077,78 @@
                     console.error('Error fetching item details.');
                 }
             },
-            error: function (error) {
+            error: function(error) {
                 console.error('AJAX request failed:', error);
             }
         });
     });
 
     // ... (continue with the existing script)
+</script>
+<script>
+    $(".addItems").click(function(e) {
+        e.preventDefault();
+        $("#addItems-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#addItems-modal").addClass('hidden');
+        // $("#formData")[0].reset()
+    });
+    $('#mulitple_input').on('change', 'select[name="assembly_name[]"]', function() {
+        // Get the selected option
+        var selectedOption = $(this).find(':selected');
+
+        // Get the item_unit from the data-unit attribute
+        var itemUnit = selectedOption.data('unit');
+
+        // Update the elements based on the item_unit only within the current row
+        var unitLabel = $(this).closest('.grid').find('.addedItemUnit');
+        unitLabel.text(itemUnit);
+
+        // You can add more logic here to update other elements based on the item_unit
+    });
+
+    let mulitple_input = $('#mulitple_input');
+    let button = $('#addbtn');
+
+    button.on('click', function() {
+        let newele = $('<div class="mt-5"></div>');
+        let rembtn = $('<span></span>');
+
+        newele.html(`
+            <select name="assembly_name[]" id="" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                <option value="">Select Item</option>
+                @foreach ($itemsForAssemblies as $item)
+                <option value="{{ $item->item_id }}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
+                @endforeach
+            </select>
+            <div class=" grid grid-cols-2 gap-3 mt-2 inline-block">
+                <div>
+                    <input type="number" name="assembly_unit_by_item_unit[]" id="assembly_unit_by_item_unit" placeholder="00.0" autocomplete="given-name"
+                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
+                </div>
+                <div>
+                    <input type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_assembly_unit" placeholder="00.0" autocomplete="given-name"
+                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
+                </div>
+            </div>
+        `);
+
+        rembtn.html(`
+            <button type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
+            </button>
+        `);
+
+        mulitple_input.append(newele);
+        newele.append(rembtn);
+
+        rembtn.on('click', function() {
+            newele.remove();
+        });
+    });
 </script>
