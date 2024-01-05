@@ -59,6 +59,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/additionalContact', [EstimateController::class,  'additionalContacts']);
     Route::match(['post', 'get'], '/delete/additionalContact/{id}', [EstimateController::class, 'deleteAdditionalContact']);
     Route::post('/addEstimateItems', [EstimateController::class, 'estimateItems']);
+    Route::get('/getEstimateItem{id}', [EstimateController::class, 'getEstimateItem']);
     Route::post('/addItemInEstimateAndItems', [EstimateController::class, 'addItemInEstimateAndItems']);
     Route::post('/addEstimateNote', [EstimateController::class, 'addEstimateNote']);
     Route::match(['get', 'post'], '/getemailDetails/{id}', [EstimateController::class, 'getEmailDetails']);
@@ -78,7 +79,8 @@ Route::middleware('customauth')->group(function () {
     Route::post('/sendChat', [EstimateChatController::class, 'sendChat']);
     Route::get('/estimates/getChatMessage/{id}', [EstimateChatController::class, 'getChatMessage']);
     Route::get('/getItemData/{id}', [ItemsController::class, 'getItemData']);
-    
+    Route::post('/updateEstimateItem', [EstimateController::class, 'updateEstimateItem']);
+    Route::post('/updateAdditionalContact', [EstimateController::class, 'updateAdditionalContact']);
     Route::get('/add-estimate', function () {
         return view('addEstimate');
     });

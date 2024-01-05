@@ -718,6 +718,59 @@ class EstimateController extends Controller
     }
     // estimate items
 
+    // update estimate item
+    public function updateEstimateItem(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'item_id' => 'required',
+                'item_name' => 'required',
+                'item_units' => 'required',
+                'labour_expense' => 'nullable',
+                'material_expense' => 'nullable',
+                'item_cost' => 'required',
+                'item_price' => 'required',
+                'item_qty' => 'required',
+                'item_total' => 'required',
+                'item_description' => 'nullable',
+                'item_note' => 'nullable',
+                // 'selected_items' => 'required|array',
+            ]);
+
+            $estimateItem = EstimateItem::where('estimate_item_id', $validatedData['item_id'])->first();
+
+            $estimateItem->item_name = $validatedData['item_name'];
+            $estimateItem->item_unit = $validatedData['item_units'];
+            $estimateItem->labour_expense = $validatedData['labour_expense'];
+            $estimateItem->material_expense = $validatedData['material_expense'];
+            $estimateItem->item_cost = $validatedData['item_cost'];
+            $estimateItem->item_price = $validatedData['item_price'];
+            $estimateItem->item_qty = $validatedData['item_qty'];
+            $estimateItem->item_total = $validatedData['item_total'];
+            $estimateItem->item_description = $validatedData['item_description'];
+            $estimateItem->item_note = $validatedData['item_note'];
+
+            $estimateItem->save();
+
+            return response()->json(['success' => true, 'message' => 'Item updated successfully!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // update estimate item
+
+    // get estimate item details for edit
+    public function getEstimateItem($id)
+    {
+        $estimateItem = EstimateItem::where('item_id', $id)->first();
+
+        return response()->json(['success' => true, 'item_detail' => $estimateItem], 200);
+    }
+    // get estimate item details for edit
+
     // estimate items
     public function estimateItems(Request $request)
     {
@@ -843,6 +896,39 @@ class EstimateController extends Controller
     // add image
 
     // add image
+
+    // update additional contact
+    public function updateAdditionalContact(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+            $validatedData = $request->validate([
+                'contact_id' => 'required',
+                'contact_title' => 'required|string',
+                'first_name' => 'required|string',
+                'last_name' => 'nullable|string',
+                'email' => 'required|string',
+                'phone' => 'required|numeric',
+                'estimate_id' => 'required',
+            ]);
+
+            $contactInfo = EstimateContact::where('contact_id', $validatedData['contact_id'])->first();
+
+            $contactInfo->contact_title = $validatedData['contact_title'];
+            $contactInfo->contact_first_name = $validatedData['first_name'];
+            $contactInfo->contact_last_name = $validatedData['last_name'];
+            $contactInfo->contact_email = $validatedData['email'];
+            $contactInfo->contact_phone = $validatedData['phone'];
+
+            $contactInfo->save();
+
+            return response()->json(['success' => true, 'message' => 'contact updated successfully!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // update additional contact
 
     // delete contact
     public function deleteAdditionalContact($id)

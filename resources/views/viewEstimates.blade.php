@@ -143,7 +143,7 @@
                                                 {{ $contacts->contact_phone }}
                                             </td>
                                             <td>
-                                                <button>
+                                                <button id="edit-Con-modal{{ $contacts->contact_id }}">
                                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}"
                                                         alt="icon">
                                                 </button>
@@ -159,6 +159,82 @@
                                                     </form>
                                                 </button>
                                             </td>
+                                            <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="edit_contact_modal{{ $contacts->contact_id }}">
+                                                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                                    <!-- Background overlay -->
+                                                    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                                                        <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+                                                    </div>
+    
+                                                    <!-- Modal panel -->
+                                                    <div
+                                                        class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                                        <form action="/updateAdditionalContact" method="post" id="editContact-form">
+                                                            @csrf
+                                                            <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                                                            <input type="hidden" name="contact_id" value="{{$contacts->contact_id}}">
+                                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                                                <!-- Modal content here -->
+                                                                <div class=" flex justify-between border-b">
+                                                                    <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Contacts</h2>
+                                                                    <button class="modal-close{{ $contacts->contact_id }}" type="button">
+                                                                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                                                                    </button>
+                                                                </div>
+                                                                <!-- task details -->
+                                                                <div class=" grid grid-cols-2 gap-2">
+                                                                    <div class=" col-span-2" id="">
+                                                                        <label for="" class=" block">Title:</label>
+                                                                        <input value="{{ $contacts->contact_title }}" type="text" name="contact_title" id="contact_title" required
+                                                                            placeholder="Contact title" autocomplete="given-name"
+                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                    </div>
+                                                                    <div class="" id="">
+                                                                        <label for="" class=" block">First Name:</label>
+                                                                        <input value="{{ $contacts->contact_first_name }}" type="text" name="first_name" id="first_name" required
+                                                                            placeholder="First Name" autocomplete="given-name"
+                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                    </div>
+                                                                    <div class="" id="">
+                                                                        <label for="" class=" block">Last Name:</label>
+                                                                        <input value="{{ $contacts->contact_last_name }}" type="text" name="last_name" id="last_name" placeholder="Last Name"
+                                                                            autocomplete="given-name"
+                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                    </div>
+                                                                    <div class="" id="">
+                                                                        <label for="" class=" block">Email:</label>
+                                                                        <input value="{{ $contacts->contact_email }}" type="text" name="email" id="email" required placeholder="Email"
+                                                                            autocomplete="given-name"
+                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                    </div>
+                                                                    <div class="" id="">
+                                                                        <label for="" class=" block">Phone:</label>
+                                                                        <input  value="{{ $contacts->contact_phone }}" type="tel" name="phone" id="phone" placeholder="Phone" required
+                                                                            autocomplete="given-name"
+                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                    </div>
+                                                                </div>
+                                                                <div class=" border-t">
+                                                                    <button id=""
+                                                                        class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <script>
+                                                document.getElementById("edit-Con-modal{{ $contacts->contact_id }}").addEventListener("click", function(e) {
+                                                    e.preventDefault();
+                                                    document.getElementById("edit_contact_modal{{ $contacts->contact_id }}").classList.remove('hidden');
+                                                });
+    
+                                                document.querySelector(".modal-close{{ $contacts->contact_id }}").addEventListener("click", function(e) {
+                                                    e.preventDefault();
+                                                    document.getElementById("edit_contact_modal{{ $contacts->contact_id }}").classList.add('hidden');
+                                                });
+                                            </script>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -225,7 +301,7 @@
                                                 {{ $contacts->contact_phone }}
                                             </td>
                                             <td>
-                                                <button>
+                                                <button id="edit-Con-modal{{ $contacts->contact_id }}">
                                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}"
                                                         alt="icon">
                                                 </button>
@@ -241,6 +317,82 @@
                                                     </form>
                                                 </button>
                                             </td>
+                                            <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="edit_contact_modal{{ $contacts->contact_id }}">
+                                                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                                    <!-- Background overlay -->
+                                                    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                                                        <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+                                                    </div>
+    
+                                                    <!-- Modal panel -->
+                                                    <div
+                                                        class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                                        <form action="/updateAdditionalContact" method="post" id="editContact-form">
+                                                            @csrf
+                                                            <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                                                            <input type="hidden" name="contact_id" value="{{$contacts->contact_id}}">
+                                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                                                <!-- Modal content here -->
+                                                                <div class=" flex justify-between border-b">
+                                                                    <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Contacts</h2>
+                                                                    <button class="modal-close{{ $contacts->contact_id }}" type="button">
+                                                                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                                                                    </button>
+                                                                </div>
+                                                                <!-- task details -->
+                                                                <div class=" grid grid-cols-2 gap-2">
+                                                                    <div class=" col-span-2" id="">
+                                                                        <label for="" class=" block">Title:</label>
+                                                                        <input value="{{ $contacts->contact_title }}" type="text" name="contact_title" id="contact_title" required
+                                                                            placeholder="Contact title" autocomplete="given-name"
+                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                    </div>
+                                                                    <div class="" id="">
+                                                                        <label for="" class=" block">First Name:</label>
+                                                                        <input value="{{ $contacts->contact_first_name }}" type="text" name="first_name" id="first_name" required
+                                                                            placeholder="First Name" autocomplete="given-name"
+                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                    </div>
+                                                                    <div class="" id="">
+                                                                        <label for="" class=" block">Last Name:</label>
+                                                                        <input value="{{ $contacts->contact_last_name }}" type="text" name="last_name" id="last_name" placeholder="Last Name"
+                                                                            autocomplete="given-name"
+                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                    </div>
+                                                                    <div class="" id="">
+                                                                        <label for="" class=" block">Email:</label>
+                                                                        <input value="{{ $contacts->contact_email }}" type="text" name="email" id="email" required placeholder="Email"
+                                                                            autocomplete="given-name"
+                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                    </div>
+                                                                    <div class="" id="">
+                                                                        <label for="" class=" block">Phone:</label>
+                                                                        <input  value="{{ $contacts->contact_phone }}" type="tel" name="phone" id="phone" placeholder="Phone" required
+                                                                            autocomplete="given-name"
+                                                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                    </div>
+                                                                </div>
+                                                                <div class=" border-t">
+                                                                    <button id=""
+                                                                        class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <script>
+                                                document.getElementById("edit-Con-modal{{ $contacts->contact_id }}").addEventListener("click", function(e) {
+                                                    e.preventDefault();
+                                                    document.getElementById("edit_contact_modal{{ $contacts->contact_id }}").classList.remove('hidden');
+                                                });
+    
+                                                document.querySelector(".modal-close{{ $contacts->contact_id }}").addEventListener("click", function(e) {
+                                                    e.preventDefault();
+                                                    document.getElementById("edit_contact_modal{{ $contacts->contact_id }}").classList.add('hidden');
+                                                });
+                                            </script>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -326,6 +478,7 @@
                                 <span class=" my-auto">Reassign</span>
                             </button>
                         @endif
+                        @if($estimate->estimate_schedule_assigned != 1)
                         <a href="/getEstimateToSetSchedule{{$estimate->estimate_id}}">
                             <button type="button" id="schedule-estimate"
                                 class=" schedule-estimate flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
@@ -334,6 +487,7 @@
                                 <span class=" my-auto">Schedule Estimate</span>
                             </button>
                         </a>
+                        @endif
                         @if ($estimate->estimate_assigned != 1)
                             <button type="button" id="complete-estimate"
                                 class=" complete-estimate flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
@@ -469,7 +623,7 @@
                         <div class=" border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
                             <div class="flex justify-between">
                                 <div class="flex items-center">
-                                    <button type="button" class="inline">
+                                    <button type="button" id="editEstimate-item{{$item->item_id}}" class="inline">
                                         <img class="h-[50px] w-[50px]"
                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                     </button>
@@ -486,7 +640,7 @@
 
                                         </div>
                                         <p class=""><strong>Qty:</strong> {{ $item->item_qty ?: 0 }}</p>
-                                        <p class=""><strong> Total:</strong> ${{ $item->item_price }}</p>
+                                        <p class=""><strong> Total:</strong> ${{ $item->item_total }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -550,7 +704,7 @@
                         <div
                             class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
                             <div class="flex">
-                                <button type="button" class="inline">
+                                <button type="button" id="editEstimate-item{{$item->item_id}}" class="inline">
                                     <img class="h-[50px] w-[50px]"
                                         src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                 </button>
@@ -2917,7 +3071,7 @@
         <!-- Modal panel -->
         <div
             class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="/addEstimateItems" method="post" enctype="multipart/form-data" id="formData">
+            <form action="/addEstimateItems" method="post" enctype="multipart/form-data" id="itemsForm">
                 @csrf
                 <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
                 <input type="hidden" name="item_id" id="item_id" value="">
@@ -3514,4 +3668,51 @@
             totalInput.val(totalValue);
         }
     });
+</script>
+<script>
+    // ... (existing script)
+
+    // Add a click event listener to the edit buttons
+    $('[id^="editEstimate-item"]').click(function () {
+        var itemId = this.id.replace('editEstimate-item', ''); // Extract item ID from button ID
+
+        // Make an AJAX request to get item details
+        $.ajax({
+            url: '/getEstimateItem' + itemId,
+            method: 'GET',
+            success: function (response) {
+                if (response.success) {
+                    // Populate the modal with the retrieved data
+                    var itemDetail = response.item_detail;
+
+                    // Update modal content with item details
+                    $('#type').val(itemDetail.item_type);
+                    $('#itemName').val(itemDetail.item_name);
+                    $('#item_units').val(itemDetail.item_unit);
+                    $('#labour_expense').val(itemDetail.labour_expense);
+                    $('#item_cost').val(itemDetail.item_cost);
+                    $('#item_price').val(itemDetail.item_price);
+                    $('#item_qty').val(itemDetail.item_qty);
+                    $('#item_total').val(itemDetail.item_total);
+                    $('#item_description').val(itemDetail.item_description);
+                    $('#note').val(itemDetail.item_note);
+                    // Add other fields as needed
+
+                    // Set the item ID in the hidden input field
+                    $('#item_id').val(itemDetail.estimate_item_id);
+                    var formUrl = $('#itemsForm').attr('action', '/updateEstimateItem');
+                    // Open the modal
+                    $('#addItems-modal').removeClass('hidden');
+                } else {
+                    // Handle error response
+                    console.error('Error fetching item details.');
+                }
+            },
+            error: function (error) {
+                console.error('AJAX request failed:', error);
+            }
+        });
+    });
+
+    // ... (continue with the existing script)
 </script>
