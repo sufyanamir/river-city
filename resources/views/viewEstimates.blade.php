@@ -709,7 +709,7 @@
                                                 class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                 <button type="button" id="editEstimate-item{{ $item->item_id }}"
                                                     class="inline">
-                                                    <img class="h-[50px] w-[50px]"
+                                                    <img class="h-full w-full"
                                                         src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                                                         alt="">
                                                 </button>
@@ -718,7 +718,7 @@
                                                 <label class="text-lg font-semibold text-[#323C47]"
                                                     for="">{{ $item->item_name }}</label>
                                             </td>
-                                            <td class="px-6 py-4">
+                                            <td class="px-6 py-4 w-[50%]">
                                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                                     {{ $item->item_description }}</p>
                                             </td>
@@ -854,7 +854,7 @@
                                                 <label class="text-lg font-semibold text-[#323C47]"
                                                     for="">{{ $item->item_name }}</label>
                                             </td>
-                                            <td class="px-6 py-4">
+                                            <td class="px-6 py-4 w-[50%]">
                                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                                     {{ $item->item_description }}</p>
                                             </td>
@@ -985,7 +985,7 @@
                                                     <label class="text-lg font-semibold text-[#323C47]"
                                                         for="">{{ $item->item_name }}</label>
                                                 </td>
-                                                <td class="px-6 py-4">
+                                                <td class="px-6 py-4 w-[50%]">
                                                     <p class="text-[16px]/[18px] text-[#323C47] font">
                                                         {{ $item->item_description }}</p>
                                                 </td>
@@ -1092,7 +1092,7 @@
                                                     <label class="text-lg font-semibold text-[#323C47]"
                                                         for="">{{ $item->item_name }}</label>
                                                 </td>
-                                                <td class="px-6 py-4">
+                                                <td class="px-6 py-4 w-[50%]">
                                                     <p class="text-[16px]/[18px] text-[#323C47] font">
                                                         {{ $item->item_description }}</p>
                                                 </td>
@@ -1198,7 +1198,7 @@
                                                     <label class="text-lg font-semibold text-[#323C47]"
                                                         for="">{{ $item->item_name }}</label>
                                                 </td>
-                                                <td class="px-6 py-4">
+                                                <td class="px-6 py-4 w-[50%]">
                                                     <p class="text-[16px]/[18px] text-[#323C47] font">
                                                         {{ $item->item_description }}</p>
                                                 </td>
@@ -1305,7 +1305,7 @@
                                                     <label class="text-lg font-semibold text-[#323C47]"
                                                         for="">{{ $item->item_name }}</label>
                                                 </td>
-                                                <td class="px-6 py-4">
+                                                <td class="px-6 py-4 w-[50%]">
                                                     <p class="text-[16px]/[18px] text-[#323C47] font">
                                                         {{ $item->item_description }}</p>
                                                 </td>
