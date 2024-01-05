@@ -1000,7 +1000,7 @@
                                                 </td>
                                             </tr>
                                             @php
-                                                $totalLaborPrice += $item->item_price; // Add labor item price to total
+                                                $totalLaborPrice += $item->item_total; // Add labor item price to total
                                             @endphp
                                         @endif
                                     @endforeach
@@ -1107,7 +1107,7 @@
                                                 </td>
                                             </tr>
                                             @php
-                                                $totalLaborPrice += $item->item_price; // Add labor item price to total
+                                                $totalLaborPrice += $item->item_total; // Add labor item price to total
                                             @endphp
                                         @endif
                                     @endforeach
@@ -1213,7 +1213,7 @@
                                                 </td>
                                             </tr>
                                             @php
-                                                $totalMaterialPrice += $item->item_price; // Add material item price to total
+                                                $totalMaterialPrice += $item->item_total; // Add material item price to total
                                             @endphp
                                         @endif
                                     @endforeach
@@ -1320,7 +1320,7 @@
                                                 </td>
                                             </tr>
                                             @php
-                                                $totalMaterialPrice += $item->item_price; // Add material item price to total
+                                                $totalMaterialPrice += $item->item_total; // Add material item price to total
                                             @endphp
                                         @endif
                                     @endforeach
