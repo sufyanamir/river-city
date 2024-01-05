@@ -33,9 +33,90 @@
                             <td>{{ $user->phone }}</td>
                             <td>{{ $user->address }}</td>
                             <td>
-                                <button>
+                                <button id="edit-user{{$user->id}}">
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                 </button>
+                                <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="edit-user-modal{{$user->id}}">
+                                    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                        <!-- Background overlay -->
+                                        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                                            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+                                        </div>
+
+                                        <!-- Modal panel -->
+                                        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                            <form action="/addUser" id="formData{{$user->id}}" enctype="multipart/form-data" method="post">
+                                                @csrf
+                                                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                                    <!-- Modal content here -->
+                                                    <div class=" flex justify-between border-b-2">
+                                                        <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add User</h2>
+                                                        <button class="modal-close{{$user->id}}" type="button">
+                                                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                                                        </button>
+                                                    </div>
+                                                    <!-- task details -->
+                                                    <div class=" text-center grid grid-cols-2 gap-2">
+                                                        <div class=" col-span-2">
+                                                            <h3 class=" text-lg font-medium text-left">Details</h3>
+                                                        </div>
+                                                        <div class=" pt-3">
+                                                            <label for="" class="text-gray-700 block text-left mb-1 "> First Name</label>
+                                                            <input type="text" name="firstName" id="firstName" placeholder="First Name" autocomplete="given-name" value="{{$user->name}}" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                            <label for="" class="text-gray-700 block text-left mb-1 ">Last Name</label>
+                                                            <input type="text" name="lastName" id="lastName" placeholder="Last Name" autocomplete="given-name"  value="{{$user->last_name}}" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                            <label for="" class="text-gray-700 block text-left mb-1 ">Email</label>
+                                                            <input   value="{{$user->email}}" type="email" name="email" id="email" placeholder="Email" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                            <label for="" class="text-gray-700 block text-left mb-1 ">Phone No</label>
+                                                            <input  value="{{$user->phone}}" type="tel" name="phone" id="phone" placeholder="Phone No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                        </div>
+                                                        <div>
+                                                            <div id="dropzone" class="dropzone" style=" width: 139px !important; height: 139px !important; padding:0%">
+                                                                <img id="profileImage" src="{{ asset('assets/images/demo-user.svg') }}" style="width:100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="text">
+                                                                <div class="file-input-container">
+                                                                    <input class="file-input" type="file" name="upload_image" id="fileInput1">
+                                                                    <div class="upload-icon" onclick="document.getElementById('fileInput1').click()">
+                                                                        <img src="{{ asset('assets/icons/{$user->user_image}') }}" class=" w-11" alt="icon">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <label for="" class="text-gray-700 block text-left mb-1 ">Role</label>
+                                                                <select id="role" name="role" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                                                                    <option value="">role</option>
+                                                                    @foreach ($user_roles as $row)
+                                                                    <option  {{ $user->user_role == $row['role'] ? 'selected' : '' }}>{{ $row['role'] }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class=" col-span-2 my-2">
+                                                            <label for="" class="text-gray-700 block text-left mb-1 ">Address</label>
+                                                            <textarea name="address" id="" placeholder="Address" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">{{$user->address}}</textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="">
+                                                        <button class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Add
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                    document.getElementById("edit-user{{$user->id}}").addEventListener("click", function(e) {
+                                        e.preventDefault();
+                                        document.getElementById("edit-user-modal{{$user->id}}").classList.remove('hidden');
+                                    });
+
+                                    document.querySelector(".modal-close{{$user->id}}").addEventListener("click", function(e) {
+                                        e.preventDefault();
+                                        document.getElementById("edit-user-modal{{$user->id}}").classList.add('hidden');
+                                        document.getElementById("formData{{$user->id}}").reset();
+                                    });
+                                </script>
+
                                 <form class=" inline-block" action="/delete/user/{{$user->id}}" method="post">
                                     @csrf
                                     <button>
