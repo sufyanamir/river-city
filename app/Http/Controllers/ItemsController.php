@@ -61,6 +61,7 @@ class ItemsController extends Controller
     // add item
     public function addItem(Request $request)
     {
+        // dd($request);
         try {
             $validatedData = $request->validate([
                 'item_type' => 'required|string',
@@ -72,6 +73,8 @@ class ItemsController extends Controller
                 'material_expense' => 'nullable|numeric',
                 'item_description' => 'nullable|string',
                 'assembly_name' => 'nullable|array',
+                'item_unit_by_ass_unit' => 'nullable|array',
+                'ass_unit_by_item_unit' => 'nullable|array',
             ]);
 
             $item = Items::create([
@@ -87,11 +90,17 @@ class ItemsController extends Controller
 
             if (isset($validatedData['assembly_name'])) {
                 // Iterate through each assembly name
-                foreach ($validatedData['assembly_name'] as $assemblyName) {
+                foreach ($validatedData['assembly_name'] as $key => $assemblyName) {
+                    // Calculate the sum for 'item_unit_by_ass_unit' and 'ass_unit_by_item_unit'
+                    $itemUnitByAssUnitSum = $validatedData['item_unit_by_ass_unit'][$key];
+                    $assUnitByItemUnitSum = $validatedData['ass_unit_by_item_unit'][$key];
+            
                     // Create a new ItemAssembly for each assembly name
                     ItemAssembly::create([
                         'item_id' => $item->item_id,
                         'assembly_name' => $assemblyName,
+                        'item_unit_by_ass_unit' => $itemUnitByAssUnitSum,
+                        'ass_unit_by_item_unit' => $assUnitByItemUnitSum,
                     ]);
                 }
             }
