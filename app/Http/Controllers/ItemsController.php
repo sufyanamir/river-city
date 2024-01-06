@@ -19,8 +19,13 @@ class ItemsController extends Controller
     public function getItemData($id)
     {
         $item = Items::find($id);
+        if ($item->item_type == 'assemblies') {
+            $assemblyItem = ItemAssembly::where('item_id', $item->item_id)->get();
+            return response()->json(['success' => true, 'item' => $item, 'assembly_items' => $assemblyItem], 200);
+        } else {
 
-        return response()->json(['success' => true, 'item' => $item], 200);
+            return response()->json(['success' => true, 'item' => $item], 200);
+        }
     }
     // get item date
 
@@ -94,7 +99,7 @@ class ItemsController extends Controller
                     // Calculate the sum for 'item_unit_by_ass_unit' and 'ass_unit_by_item_unit'
                     $itemUnitByAssUnitSum = $validatedData['item_unit_by_ass_unit'][$key];
                     $assUnitByItemUnitSum = $validatedData['ass_unit_by_item_unit'][$key];
-            
+
                     // Create a new ItemAssembly for each assembly name
                     ItemAssembly::create([
                         'item_id' => $item->item_id,

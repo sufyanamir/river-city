@@ -749,8 +749,8 @@
                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                     </button>
                                     <div>
-                                        
-                                        
+
+
                                     </div>
                                 </div>
                                 <div class="float-right pt-2">
@@ -764,9 +764,9 @@
                                 </div>
                             </div>
                             <div class="pl-3 pb-">
-                                
 
-                                
+
+
                                 @if ($item->item_type === 'assemblies')
                                     @php
                                         $associatedItems = \App\Models\ItemAssembly::where('item_id', $item->item_id)->get();
@@ -885,8 +885,8 @@
                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                     </button>
                                     <div>
-                                        
-                                        
+
+
                                     </div>
                                 </div>
                                 <div class="float-right pt-2">
@@ -900,9 +900,9 @@
                                 </div>
                             </div>
                             <div class="pl-3 pb-">
-                                
 
-                                
+
+
                                 @if ($item->item_type === 'assemblies')
                                     @php
                                         $associatedItems = \App\Models\ItemAssembly::where('item_id', $item->item_id)->get();
@@ -3600,7 +3600,8 @@
                         <div class=" my-0 col-span-2 hidden" id="multiAdd-items">
                             <div id="mulitple_input">
                                 <label for="" class="block text-left mb-1"> Assembly Name </label>
-                                <select name="assembly_name[]" id="" placeholder="Item Name"
+                                <div id="item_main">
+                                <select name="assembly_name[]" id="assembly_name" placeholder="Item Name"
                                     autocomplete="given-name"
                                     class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
@@ -3628,6 +3629,7 @@
                                                 class="addedItemUnit">LNFT</span>/<span
                                                 class="unit">unit</span></span>
                                     </div>
+                                </div>
                                 </div>
                             </div>
                             <div class=" text-right mt-2">
@@ -3823,6 +3825,9 @@
         var itemCost = $('#item_cost');
         var itemPrice = $('#item_price');
         var itemId = $('#item_id');
+        var assemblyName = $('#assembly_name');
+        var assByItem = $('#assembly_unit_by_item_unit');
+        var itemByAss = $('#item_unit_by_assembly_unit');
 
         // Add a change event listener to the selected_item dropdown
         selectedItemDropdown.on('change', function() {
@@ -3837,6 +3842,7 @@
                     type: 'GET',
                     success: function(data) {
                         var itemData = data.item;
+                        var assemblyItemData = data.assembly_items;
 
                         // Update the other input fields based on the item data
                         typeDropdown.val(itemData.item_type);
@@ -3847,6 +3853,58 @@
                         itemCost.val(itemData.item_cost);
                         itemPrice.val(itemData.item_price);
                         itemId.val(itemData.item_id);
+                        console.log(assemblyItemData);
+                        // assemblyName.val(assemblyItemData.assembly_name);
+                        // assByItem.val(assemblyItemData.item_unit_by_ass_unit);
+                        // itemByAss.val(assemblyItemData.ass_unit_by_item_unit);
+                        type.trigger('change');
+
+
+
+
+let mulitple_input = $('#mulitple_input');
+mulitple_input.html('');
+    $.each(assemblyItemData, function(index, itemData) {
+    console.log(itemData.assembly_name);
+    let newele = $('<div class="mt-5"></div>');
+    let delbtn = $('<span></span>');
+// ============
+newele.html(`
+            <select name="assembly_name[]" id="" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                <option value="">Select Item</option>
+                <option selected value="${itemData.assembly_name}" data-unit="{{ $item->item_units }}">${itemData.assembly_name}</option>
+                @foreach ($itemsForAssemblies as $item)
+                <option  data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
+                @endforeach
+            </select>
+            <div class=" grid grid-cols-2 gap-3 mt-2 inline-block">
+                <div>
+                    <input value="${itemData.item_unit_by_ass_unit}" type="number" name="assembly_unit_by_item_unit[]" id="assembly_unit_by_item_unit" placeholder="00.0" autocomplete="given-name"
+                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
+                </div>
+                <div>
+                    <input  value="${itemData.ass_unit_by_item_unit}" type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_assembly_unit" placeholder="00.0" autocomplete="given-name"
+                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
+                </div>
+            </div>
+        `);
+
+        delbtn.html(`
+            <button type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
+            </button>
+        `);
+        mulitple_input.append(newele);
+        newele.append(delbtn);
+        delbtn.on('click', function() {
+            newele.remove();
+        });
+// ============
+    });
+
+
 
                         // Show/hide expense fields based on the selected item type
                         // if (itemData.type === 'labour') {
@@ -3868,6 +3926,48 @@
             }
         });
     });
+    var type = $('#type');
+type.on('change', function() {
+    var typeDropdown = $('#type');
+        var multiAddItemsDiv = $('#multiAdd-items');
+        var labourExpenseDiv = $('#labourExpense');
+        var materialExpenseDiv = $('#materialExpense');
+        var unitItemInput = $('#item_units');
+        var unitLabel = $('.unit');
+        var itemCost = $('#item_cost');
+        var labourCost = $('#labour_expense');
+        var materialCost = $('#material_expense');
+        var itemPrice = $('#item_price');
+        var itemqty = $('#item_qty');
+        var itemTotal = $('#item_total');
+        var priceMargin = $('#price_margin')
+        var item_main = $('#item_main')
+    if (type.val() === 'assemblies') {
+                multiAddItemsDiv.removeClass('hidden');
+                item_main.addClass('hidden');
+                labourExpenseDiv.addClass('hidden');
+
+            } else {
+                multiAddItemsDiv.addClass('hidden');
+                labourExpenseDiv.removeClass('hidden');
+            }
+
+            if (type.val() === 'material') {
+                materialExpenseDiv.removeClass('hidden');
+                labourExpenseDiv.addClass('hidden');
+            } else {
+                materialExpenseDiv.addClass('hidden');
+                labourExpenseDiv.removeClass('hidden');
+            }
+
+            if (type.val() === 'labour') {
+                unitItemInput.val('hour');
+                unitLabel.text('hour');
+            } else {
+                unitItemInput.val(null);
+                unitLabel.text('unit');
+            }
+});
 </script>
 <script>
     $(document).ready(function() {
@@ -4085,7 +4185,7 @@
         });
     });
 
-    // ... (continue with the existing script)
+
 </script>
 <script>
     $(".addItems").click(function(e) {
