@@ -21,6 +21,8 @@ class ItemAssembly extends Model
     protected $fillable = [
         'item_id',
         'assembly_name',
+        'item_unit_by_ass_unit',
+        'ass_unit_by_item_unit',
     ];
 
     public $timestamps = true;
