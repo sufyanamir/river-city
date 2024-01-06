@@ -82,7 +82,7 @@
         <div class="p-4 flex justify-between gap-10">
             <!-- THE CALENDAR -->
             <div class=" w-[85%]">
-                <div id="calendar"></div>
+                <div id="calendar" data-schedule-assigned="{{ isset($estimate) && $estimate->schedule_assigned == 1 ? 'true' : 'false' }}"></div>
             </div>
             <div class="w-[15%]">
                 <div class=" bg-white rounded-lg mt-[100px] shadow-lg">
@@ -384,6 +384,7 @@
         var containerEl = document.getElementById('external-events');
         var checkbox = document.getElementById('drop-remove');
         var calendarEl = document.getElementById('calendar');
+    var scheduleAssigned = calendarEl.getAttribute('data-schedule-assigned') === 'true';
 
         new Draggable(containerEl, {
             itemSelector: '.external-event',
@@ -408,6 +409,12 @@
                 borderColor: '#your_color' // Choose a color or generate dynamically
             };
         });
+        function formatDate(date) {
+        var year = date.getFullYear();
+        var month = ('0' + (date.getMonth() + 1)).slice(-2);
+        var day = ('0' + date.getDate()).slice(-2);
+        return `${year}-${month}-${day}`;
+    }
 
         var calendar = new Calendar(calendarEl, {
             headerToolbar: {
@@ -420,10 +427,26 @@
             editable: true,
             droppable: true,
             drop: function(info) {
-                if (checkbox.checked) {
-                    info.draggedEl.parentNode.removeChild(info.draggedEl);
-                }
-            },
+            var date = info.date; // Get the dropped date
+
+            // Open the appropriate modal based on schedule type
+            var modalId = scheduleAssigned ? 'schedule-work-modal' : 'schedule-estimate-modal';
+            var modal = document.getElementById(modalId);
+            var modalTitle = document.getElementById('modal-title');
+            var modalStartDateInput = document.getElementById('start_date');
+            var modalEndDateInput = document.getElementById('end_date');
+
+            // Set modal title and open modal
+            modalTitle.textContent = info.draggedEl.innerText;
+            modalStartDateInput.value = formatDate(date); // Format the date as needed
+            modalEndDateInput.value = formatDate(date); // You may want to set the end date differently
+
+            modal.classList.remove('hidden');
+
+            if (checkbox.checked) {
+                info.draggedEl.parentNode.removeChild(info.draggedEl);
+            }
+        },
             eventClick: function(info) {
                 var modal = document.getElementById('modal');
                 var modalTitle = document.getElementById('modal-title');
@@ -482,7 +505,7 @@
     $(".modal-close").click(function(e) {
         e.preventDefault();
         $("#schedule-work-modal").addClass('hidden');
-        $("#schedule-work-form")[0].reset()
+        // $("#schedule-work-form")[0].reset()
     });
 </script>
 <script>
@@ -494,6 +517,6 @@
     $(".modal-close").click(function(e) {
         e.preventDefault();
         $("#schedule-estimate-modal").addClass('hidden');
-        $("#schedule-estimate-form")[0].reset()
+        // $("#schedule-estimate-form")[0].reset()
     });
 </script>
