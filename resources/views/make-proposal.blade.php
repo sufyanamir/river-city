@@ -1,5 +1,5 @@
 @include('layouts.header')
-<form action="/sendProposal" method="post">
+<form action="/sendProposal" method="post" id="sendProposalForm">
     @csrf
     <div class="my-4">
         <div class="bg-white w-full overflow-auto rounded-lg shadow-lg">
@@ -158,9 +158,30 @@
             <input type="hidden" name="estimate_total"
                 value="{{ number_format($subTotal + ($subTotal * $customer->tax_rate) / 100, 2) }}">
             <div class="col-span-12 p-4 flex justify-end mt-10">
-                <button class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 ">Send Proposal</button>
+                <button class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 " onclick="return confirmSendProposal()">Send Proposal</button>
             </div>
         </div>
     </div>
 </form>
 @include('layouts.footer')
+@php
+    $exsistingProposals = $existing_proposals;
+@endphp
+<script>
+    function confirmSendProposal() {
+        var existingProposals = @json($exsistingProposals); // Assuming you pass this variable from your controller
+
+        if (existingProposals.length > 0) {
+            var userResponse = confirm("If you make this proposal, all the previous proposals of this estimate will be deleted! Do you want to proceed?");
+
+            if (userResponse) {
+                return true; // Proceed with form submission
+                $('#sendProposalForm').submit();
+            } else {
+                return false; // Cancel form submission
+            }
+        }
+
+        return true; // No existing proposals, proceed with form submission
+    }
+</script>

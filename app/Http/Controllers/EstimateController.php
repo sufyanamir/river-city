@@ -598,6 +598,13 @@ class EstimateController extends Controller
                 'estimate_id' => $validatedData['estimate_id'],
                 'email' => $validatedData['customer_email'],
             ];
+            
+            $existingProposals = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->get();
+            if (!$existingProposals->isEmpty()) {
+                $existingProposals->each(function ($proposal) {
+                    $proposal->delete();
+                });
+            }
 
             $mail = new ProposalMail($emailData);
             Mail::to($validatedData['customer_email'])->send($mail);
@@ -623,6 +630,7 @@ class EstimateController extends Controller
             $estimate = Estimate::where('estimate_id', $id)->first();
             $customer = Customer::where('customer_id', $estimate->customer_id)->first();
             $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->get();
+            $existingProposals = EstimateProposal::where('estimate_id', $id)->get();
 
             // return response()->json(['success' => true, 'data' => ['user_details' => $userDetails, 'estimate' => $estimate, 'customer' => $customer, 'items' => $items]], 200);
             return view('make-proposal', [
@@ -630,6 +638,7 @@ class EstimateController extends Controller
                 'estimate' => $estimate,
                 'customer' => $customer,
                 'items' => $items,
+                'existing_proposals' => $existingProposals,
             ]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
