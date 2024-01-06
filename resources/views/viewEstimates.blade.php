@@ -1426,10 +1426,12 @@
                 <div class=" mx-auto  px-5 py-7">
                     <div class="itemDiv">
                         @foreach ($estimate_images as $image)
+                        <a href="/viewGallery{{ $image->estimate_id }}">
                             <div class=" inline-block p-2 mx-auto">
-                                <img class=" w-16 h-16" src="{{ asset('storage/' . $image->estimate_image) }}"
+                                <img class=" w-16 h-16 rounded-md hover:scale-105 duration-300" src="{{ asset('storage/' . $image->estimate_image) }}"
                                     alt="Estimate Image">
                             </div>
+                        </a>
                         @endforeach
                     </div>
                 </div>
@@ -3521,7 +3523,7 @@
                     </div>
                     <!-- task details -->
                     <div class=" text-center grid grid-cols-2 gap-2">
-                        <div class="  col-span-2 my-2">
+                        <div class="  col-span-2 my-0">
                             <label for="" class="block text-left mb-1">Select Item</label>
                             <select id="selected_item" name="selected_item" autocomplete="customer-name"
                                 class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
@@ -3531,7 +3533,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="  col-span-2 my-2">
+                        <div class="  col-span-2 my-0">
                             <label for="" class="block text-left mb-1"> Items Type</label>
                             <select id="type" name="item_type" autocomplete="customer-name"
                                 class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
@@ -3541,19 +3543,19 @@
                                 <option value="assemblies">Assemblies</option>
                             </select>
                         </div>
-                        <div class=" my-2">
+                        <div class=" my-0">
                             <label for="" class="block  text-left mb-1"> Item Name</label>
                             <input type="text" name="item_name" id="itemName" placeholder="Item Name"
                                 autocomplete="given-name"
                                 class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class="my-2">
+                        <div class="my-0">
                             <label for="" class="block text-left mb-1"> Item Unit</label>
                             <input type="text" id="item_units" name="item_units" autocomplete="customer-name"
                                 placeholder="Units(Optional)"
                                 class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                         </div>
-                        <div class="my-2" id="labourExpense">
+                        <div class="my-0" id="labourExpense">
                             <label for="" class="block text-left mb-1"> Labour Cost (min/<span
                                     class="unit">unit</span>)</label>
                             <input type="number" name="labour_expense" id="labour_expense"
@@ -3561,21 +3563,21 @@
                                 class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             <span class=" m-0 p-0 text-xs float-left text-gray-400">Labour Cost: $25.00/hr</span>
                         </div>
-                        <div class="my-2 hidden" id="materialExpense">
+                        <div class="my-0 hidden" id="materialExpense">
                             <label for="" class="block text-left mb-1"> material Cost ($/<span
                                     class="unit">unit</span>)</label>
                             <input type="number" name="material_expense" id="material_expense"
                                 autocomplete="given-name"
                                 class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class="my-2 text-left">
+                        <div class="my-0 text-left">
                             <label for="" class=" block text-left mb-1">Cost ($/<span
                                     class="unit">unit</span>)</label>
                             <input type="number" name="item_cost" id="item_cost" placeholder="0.00"
                                 autocomplete="given-name"
                                 class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class="my-2 col-span-2 text-left">
+                        <div class="my-0 col-span-2 text-left">
                             <label for="" class=" block text-left mb-1">Price:</label>
                             <input type="number" name="item_price" id="item_price" placeholder="00.0"
                                 autocomplete="given-name"
@@ -3583,19 +3585,19 @@
                             <span class=" m-0 p-0 text-xs float-left text-gray-400">Margin: <span
                                     id="price_margin">0.00</span>%</span>
                         </div>
-                        <div class="my-2 text-left">
+                        <div class="my-0 text-left">
                             <label for="" class=" block text-left mb-1">Quantity:</label>
                             <input type="number" name="item_qty" id="item_qty" placeholder="00.0"
                                 autocomplete="given-name"
                                 class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class="my-2 text-left">
+                        <div class="my-0 text-left">
                             <label for="" class=" block text-left mb-1">Total:</label>
                             <input type="number" name="item_total" id="item_total" placeholder="00.0"
                                 autocomplete="given-name"
                                 class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" my-2 col-span-2 hidden" id="multiAdd-items">
+                        <div class=" my-0 col-span-2 hidden" id="multiAdd-items">
                             <div id="mulitple_input">
                                 <label for="" class="block text-left mb-1"> Assembly Name </label>
                                 <select name="assembly_name[]" id="" placeholder="Item Name"
@@ -3636,7 +3638,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="my-2 col-span-2 relative">
+                        <div class="my-0 col-span-2 relative">
                             <label for="" class="block text-left mb-1"> Item Description </label>
                             <textarea name="item_description" id="item_description" placeholder="Description"
                                 class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
@@ -3644,7 +3646,7 @@
                                 onclick="voice('description-mic', 'item_description')"><i
                                     class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
-                        <div class="my-2 col-span-2 relative">
+                        <div class="my-0 col-span-2 relative">
                             <label for="" class="block text-left mb-1"> Note </label>
                             <textarea name="item_note" id="item_note" placeholder="Description"
                                 class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>

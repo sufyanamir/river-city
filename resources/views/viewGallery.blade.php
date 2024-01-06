@@ -47,7 +47,7 @@
                 <div class="col-span-10 px-3  flex justify-between">
                     <p class="text-[22px]/[25.78px] font-medium">Images <span>{{ count($estimate_images) }}</span></p>
                     @if (session('user_details')['user_role'] == 'admin')
-                        <x-add-button :title="'Add Image'" :class="'px-4'" :id="'addImage-btn'" />
+                        <x-add-button :title="'Add Image'" :class="'px-4 bg-red-800 text-white'" :id="'addImage-btn'" />
                     @elseif(isset($userPrivileges->gallery) && isset($userPrivileges->gallery->add) && $userPrivileges->gallery->add === 'on')
                         <x-add-button :title="'Add Image'" :class="'px-4'" :id="'addImage-btn'" />
                     @endif
@@ -58,7 +58,7 @@
                 <div class="col-span-1"></div>
                 <div class="col-span-10 p-3 grid grid-cols-3">
                     @foreach ($estimate_images as $image)
-                        <div class="col-span-1 p-2 relative">
+                        <div class="col-span-1 p-2 relative hover:scale-105 duration-300">
                             <a href="{{ asset('storage/' . $image->estimate_image) }}" data-fancybox="image-set"
                                 data-caption="Your Image Caption">
                                 <img class="rounded-xl" style="width: 100%; height: 200px; object-fit: cover;"
