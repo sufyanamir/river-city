@@ -55,8 +55,13 @@
                                 <td>
                                     <div class=" flex justify-evenly gap-2">
                                         <div class=" my-auto">
-                                            <button class="px-2 py-2 chat-btn" data-target="#chat-modal{{ $item->estimate_id }}" data-estimate-id="{{ $item->estimate_id }}">
-                                                <img class="w-9" src="{{ asset('assets/icons/dropdown-activity-icon.svg') }}" alt="icon">
+                                            <button class="p-2 my-auto chat-btn"
+                                                data-target="#chat-modal{{ $item->estimate_id }}"
+                                                data-estimate-id="{{ $item->estimate_id }}">
+                                                {{-- <img class="w-9"
+                                                    src="{{ asset('assets/icons/dropdown-activity-icon.svg') }}"
+                                                    alt="icon"> --}}
+                                                    <i class="fa-brands fa-rocketchat" style="color: #c50d0d;"></i>
                                             </button>
                                             <!-- chat  modal -->
                                             <div class="fixed z-10 inset-0 overflow-y-auto hidden"

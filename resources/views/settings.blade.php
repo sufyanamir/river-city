@@ -1,7 +1,9 @@
 @include('layouts.header')
 <div class=" my-4">
-    <h1 class=" text-2xl font-semibold mb-3">Settings</h1>
     <div class=" bg-white w-full rounded-lg shadow-lg">
+        <div class=" p-3 bg-[#930027] text-white text-xl font-semibold rounded-t-lg">
+            Settings
+        </div>
         <div class="p-3">
             <form action="/updateSettings" method="POST">
                 @csrf

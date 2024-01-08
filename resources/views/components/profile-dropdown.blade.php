@@ -3,7 +3,7 @@
         <div>
             @if(session()->has('user_details'))
             <h6 class="">{{ session('user_details')['name'] }}</h6>
-            <p class="text-xs text-[#ACADAE]">Administer</p>
+            <p class="text-xs text-[#ACADAE]">{{session('user_details')['user_role']}}</p>
             @endif
         </div>
         <button type="button" class="w-10" id="profile-btn">

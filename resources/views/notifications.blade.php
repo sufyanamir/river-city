@@ -1,14 +1,14 @@
 @include('layouts.header')
 <div class=" my-4">
-    <h1 class=" text-2xl font-semibold mb-3">Notifications</h1>
-    <div class=" bg-white w-full rounded-lg shadow-lg">
-        <div class="p-3">
-            <div class=" flex justify-between border-b-2">
-                <h4 class=" text-lg font-semibold">Notificaitons</h4>
+    <div class=" bg-white w-full rounded-2xl shadow-lg">
+        <div class=" flex justify-between p-2 bg-[#930027] text-white rounded-t-2xl">
+            <div class=" text-xl font-semibold">
+                <h4>Notifications</h4>
+            </div>
                 <form action="/markNotifications" method="post">
                     @csrf
                     <button id=""
-                        class="bg-red-800 text-white  p-2 rounded-md font-medium mb-2">
+                        class="bg-white text-black  p-2 rounded-md font-medium mb-2">
                         Mark as Read
                     </button>
                 </form>
