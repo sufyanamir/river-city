@@ -720,7 +720,15 @@
                                             </td>
                                             <td class="px-6 py-4 w-[50%]">
                                                 <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                    {{ $item->item_description }}</p>
+                                                    @if($item->item_description)
+                                                        <p class="font-medium">Description:</p>
+                                                        {{ $item->item_description }}
+                                                    @endif
+                                                    @if($item->item_note)
+                                                        <p class="font-medium">Note:</p>
+                                                        {{ $item->item_note }}
+                                                    @endif
+                                                </p>
                                             </td>
                                             <td class="text-center">
                                                 {{ $item->item_cost }}
@@ -856,7 +864,15 @@
                                             </td>
                                             <td class="px-6 py-4 w-[50%]">
                                                 <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                    {{ $item->item_description }}</p>
+                                                    @if($item->item_description)
+                                                        <p class="font-medium">Description:</p>
+                                                        {{ $item->item_description }}
+                                                    @endif
+                                                    @if($item->item_note)
+                                                        <p class="font-medium">Note:</p>
+                                                        {{ $item->item_note }}
+                                                    @endif
+                                                </p>
                                             </td>
                                             <td class="text-center">
                                                 {{ $item->item_cost }}
@@ -987,7 +1003,15 @@
                                                 </td>
                                                 <td class="px-6 py-4 w-[50%]">
                                                     <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                        {{ $item->item_description }}</p>
+                                                        @if($item->item_description)
+                                                            <p class="font-medium">Description:</p>
+                                                            {{ $item->item_description }}
+                                                        @endif
+                                                        @if($item->item_note)
+                                                            <p class="font-medium">Note:</p>
+                                                            {{ $item->item_note }}
+                                                        @endif
+                                                    </p>
                                                 </td>
                                                 <td class="text-center">
                                                     {{ $item->item_cost }}
@@ -1094,7 +1118,15 @@
                                                 </td>
                                                 <td class="px-6 py-4 w-[50%]">
                                                     <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                        {{ $item->item_description }}</p>
+                                                        @if($item->item_description)
+                                                            <p class="font-medium">Description:</p>
+                                                            {{ $item->item_description }}
+                                                        @endif
+                                                        @if($item->item_note)
+                                                            <p class="font-medium">Note:</p>
+                                                            {{ $item->item_note }}
+                                                        @endif
+                                                    </p>
                                                 </td>
                                                 <td class="text-center">
                                                     {{ $item->item_cost }}
@@ -1200,7 +1232,15 @@
                                                 </td>
                                                 <td class="px-6 py-4 w-[50%]">
                                                     <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                        {{ $item->item_description }}</p>
+                                                        @if($item->item_description)
+                                                            <p class="font-medium">Description:</p>
+                                                            {{ $item->item_description }}
+                                                        @endif
+                                                        @if($item->item_note)
+                                                            <p class="font-medium">Note:</p>
+                                                            {{ $item->item_note }}
+                                                        @endif
+                                                    </p>
                                                 </td>
                                                 <td class="text-center">
                                                     {{ $item->item_cost }}
@@ -1307,7 +1347,15 @@
                                                 </td>
                                                 <td class="px-6 py-4 w-[50%]">
                                                     <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                        {{ $item->item_description }}</p>
+                                                        @if($item->item_description)
+                                                            <p class="font-medium">Description:</p>
+                                                            {{ $item->item_description }}
+                                                        @endif
+                                                        @if($item->item_note)
+                                                            <p class="font-medium">Note:</p>
+                                                            {{ $item->item_note }}
+                                                        @endif
+                                                    </p>
                                                 </td>
                                                 <td class="text-center">
                                                     {{ $item->item_cost }}
@@ -3587,8 +3635,8 @@
                         </div>
                         <div class="my-0 text-left">
                             <div class="flex justify-around items-center">
-                                <div class="relative inline-block text-left">
-                                <div  id="cal-menubutton" aria-expanded="true" aria-haspopup="true">
+                                <div class="relative inline-block text-left mt-2">
+                                <div  id="cal-menubutton" class=" cursor-pointer" aria-expanded="true" aria-haspopup="true">
                                     <img id="calculater-modal"  class=" inline-block" src="{{ asset('assets/icons/calculator-icon.svg') }}"
                                     alt="icon">
                                 </div>

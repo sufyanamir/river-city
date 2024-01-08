@@ -21,6 +21,7 @@ class EstimateChatController extends Controller
             $message = EstimateChat::create([
                 'estimate_id' => $validatedData['estimate_id'],
                 'added_user_id' => $userDetails['id'],
+                'added_user_name' => $userDetails['name'],
                 'chat_message' => $validatedData['chat_message'],
             ]);
 

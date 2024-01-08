@@ -107,9 +107,10 @@ Route::middleware('customauth')->group(function () {
     Route::get('/reports', function () {
         return view('reports');
     });
-    Route::get('/jobs', function () {
-        return view('jobs');
-    });
+    ROute::get('/jobs', [EstimateController::class, 'getEstimateOnJobs']);
+    // Route::get('/jobs', function () {
+    //     return view('jobs');
+    // });
     Route::get('/crewCalendar', function () {
         return view('crewCalendar');
     });
