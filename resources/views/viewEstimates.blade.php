@@ -3508,7 +3508,7 @@
 
         <!-- Modal panel -->
         <div
-            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            class="inline-block align-bottom bg-white rounded-lg text-left  shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <form action="/addEstimateItems" method="post" enctype="multipart/form-data" id="itemsForm">
                 @csrf
                 <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
@@ -3586,11 +3586,51 @@
                                     id="price_margin">0.00</span>%</span>
                         </div>
                         <div class="my-0 text-left">
-                            <div class="flex justify-around">
-                                <div>
-                                    <img class=" inline-block" src="{{ asset('assets/icons/calculator-icon.svg') }}"
+                            <div class="flex justify-around items-center">
+                                <div class="relative inline-block text-left">
+                                <div  id="cal-menubutton" aria-expanded="true" aria-haspopup="true">
+                                    <img id="calculater-modal"  class=" inline-block" src="{{ asset('assets/icons/calculator-icon.svg') }}"
                                     alt="icon">
                                 </div>
+                                {{-- ====================== --}}
+                                <div class="absolute  text-left h-[100%]  z-[999] "
+                                    <div id="cal-menu"   style="background-color:#3a4655 !important;" class=" topbar-manuLeaving   z-10 mt-2 w-56 origin-top-right rounded-md bg-[#3a4655] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                                        <div class="py-1 left-5" role="none">
+                                           <div class="relative  bg-[#3a4655]">
+                                            <input class="block mx-2 mt-2 border bg-[#3a4655] h-[30px] rounded text-white border-white " type="text" readonly id="cal_display" >
+                                            <div class="grid text-white grid-cols-4 gap-y-3  p-2 mt-3">
+                                                <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">%</button>
+                                                <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">/</button>
+                                                <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] "><</p>
+                                                    <button id="clear_btn" type="button" class=" border rounded text-center mx-1  h-[30px] ">C</button>
+
+                                                    <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">7</button>
+                                                        <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">8</button>
+                                                        <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">9</button>
+                                                        <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">*</button>
+
+                                                        <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">4</button>
+                                                            <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">5</button>
+                                                            <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">6</button>
+                                                    <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">-</button>
+
+                                                    <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">1</button>
+                                                        <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">2</button>
+                                                        <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">3</button>
+                                                        <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">+</button>
+
+                                                        <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">0</button>
+                                                <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">00</button>
+                                                <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">.</button>
+                                                    <button id="equal_btn" type="button" class=" border rounded text-center mx-1  h-[30px] ">=</button>
+                                            </div>
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                {{-- ====================== --}}
                                 <div>
                                     <label for="" class=" block text-left mb-1">Quantity:</label>
                                     <input type="number" name="item_qty" id="item_qty" placeholder="00.0"
@@ -3599,6 +3639,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="my-0 text-left">
                             <label for="" class=" block text-left mb-1">Total:</label>
                             <input type="number" name="item_total" id="item_total" placeholder="00.0"
@@ -4196,6 +4237,13 @@ type.on('change', function() {
 
 </script>
 <script>
+
+$("#calculater-modal").click(function(e) {
+        e.preventDefault();
+        $("#cal-modal").removeClass('hidden');
+    });
+
+
     $(".addItems").click(function(e) {
         e.preventDefault();
         $("#addItems-modal").removeClass('hidden');
@@ -4261,4 +4309,42 @@ type.on('change', function() {
             newele.remove();
         });
     });
+
+
+    $("#cal-menubutton").click(function (e) {
+    e.stopPropagation(); // Prevents the click event from reaching the document body
+    $('#cal-menu').toggleClass("topbar-menuEntring topbar-manuLeaving");
+  });
+
+  $(document).on('click', function (e) {
+    if (!$("#cal-menubutton").is(e.target) && !$('#cal-menu').has(e.target).length) {
+      // Click occurred outside the button and dropdown, hide the dropdown
+      $('#cal-menu').addClass("topbar-manuLeaving").removeClass("topbar-menuEntring");
+    }
+  });
+
+  let cbuttons = document.querySelectorAll('.cal_btn');
+let display = document.querySelector('#cal_display');
+let equalButton = document.querySelector('#equal_btn');
+let clearbtn = document.querySelector('#clear_btn');
+
+cbuttons.forEach(button => {
+  button.addEventListener('click', () => {
+    display.value += button.innerHTML;
+  });
+});
+
+equalButton.addEventListener('click', () => {
+    // let calculator = document.querySelector('#cal-menu');
+    try {
+    display.value = eval(display.value );
+    item_qty.value  = display.value;
+    // calculator.classList.add('hidden')
+  } catch (error) {
+    display.value = 'Error';
+  }
+});
+clearbtn.addEventListener('click', () => {
+    display.value =  '';
+});
 </script>
