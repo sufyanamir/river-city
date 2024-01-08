@@ -1,7 +1,7 @@
 @include('layouts.header')
-<div class=" my-4">
-    <h1 class=" text-2xl font-semibold mb-3">Reports</h1>
-    <div class=" bg-white w-full rounded-lg shadow-lg">
+<div class=" my-4 rounded-lg shadow-lg">
+    <h1 class="  text-2xl font-semibold bg-[#930027] text-white py-3 px-4 rounded-t-xl">Reports</h1>
+    <div class=" bg-white w-full ">
         <div class="p-3">
             <div class="text-right mb-3">
                 <div class="inline-flex rounded-md shadow-sm" role="group">

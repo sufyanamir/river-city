@@ -24,8 +24,8 @@
         <!-- order summary & schedules -->
 
         <div class=" bg-white my-2 w-full rounded-xl">
-            <div class=" p-2 border-b-2">
-                <h3 class=" text-xl font-smibold">Orders Summary</h3>
+            <div class=" p-2 border-b-2 bg-[#930027] rounded-t-xl">
+                <h3 class=" text-xl font-smibold text-white ">Orders Summary</h3>
             </div>
             <div class=" lg:flex lg:justify-evenly xl:flex xl:justify-evenly md:grid md:grid-cols-1 sm:grid sm:grid-cols-1">
                 <div class=" p-2 text-center sm:mx-auto md:mx-auto lg:mx-0 xl:mx-0">
@@ -119,8 +119,8 @@
             </div>
         </div>
         <div class=" bg-white w-full rounded-xl">
-            <div class=" border-b-2 p-2">
-                <h3 class=" text-lg font-medium">To do List</h3>
+            <div class=" border-b-2 p-2 bg-[#930027] rounded-t-xl">
+                <h3 class=" text-lg font-medium text-white">To do List</h3>
             </div>
             <div>
                 <div class=" p-2">

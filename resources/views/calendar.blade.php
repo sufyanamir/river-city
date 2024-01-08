@@ -70,9 +70,9 @@
         border-radius: 0px 5px 5px 0px;
     }
 </style>
-<div class=" my-4">
-    <h1 class=" text-2xl font-semibold mb-3">Calendar</h1>
-    <div class=" bg-white w-full rounded-lg shadow-lg">
+<div class=" my-4  rounded-lg shadow-lg" >
+    <h1 class=" text-2xl font-semibold bg-[#930027] text-white py-3 px-4 rounded-t-xl">Calendar</h1>
+    <div class=" bg-white w-full">
         <div class=" border-b-2 py-3 px-10">
             <span class="bg-[#B7E4FF] text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">New</span>
             <span class="bg-[#DAEFD5] text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Complete</span>
@@ -87,14 +87,14 @@
             <div class="w-[15%]">
                 <div class=" bg-white rounded-lg mt-[100px] shadow-lg">
                     <div class=" bg-[#930027] rounded-t-lg">
-                        <p class="p-2 text-center text-white font-medium">Set Schedule</p>
+                        <p class="p-2 text-center text-white font-medium">Pending List</p>
                     </div>
                     <div id="external-events" class=" pt-3 pb-2 flex flex-col items-center">
                         @if(isset($estimate))
                             @if ($estimate->schedule_assigned == 1)
                                 <div class="external-event bg-[#B7E4FF] text-xs font-medium px-2 py-2 rounded-lg w-32 mb-2 cursor-pointer" id="schedule-work">{{ $estimate->customer_name }} {{$estimate->customer_last_name}}</div>
                             @else
-                                <div class="external-event bg-[#B7E4FF] text-xs font-medium px-2 py-2 rounded-lg w-32 mb-2 cursor-pointer" id="schedule-estimate">{{ $estimate->customer_name }} {{$estimate->customer_last_name}}</div>    
+                                <div class="external-event bg-[#B7E4FF] text-xs font-medium px-2 py-2 rounded-lg w-32 mb-2 cursor-pointer" id="schedule-estimate">{{ $estimate->customer_name }} {{$estimate->customer_last_name}}</div>
                             @endif
                         @endif
                     </div>
@@ -347,7 +347,7 @@
 <script src="assets/plugins/fullcalendar/main.js"></script>
 
 <script>
-    $("#editEvent").click(function (e) { 
+    $("#editEvent").click(function (e) {
         e.preventDefault();
         $("#estimators").toggleClass('hidden');
         $("#dropdown-div").toggleClass('hidden');
