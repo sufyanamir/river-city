@@ -161,7 +161,7 @@
                                     class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
                                     @foreach ($itemsForAssemblies as $item)
-                                    <option value="{{ $item->item_id }}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
+                                    <option value="{{ $item->item_name }}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
                                     @endforeach
                                 </select>
                                 <div class=" grid grid-cols-2 gap-3 mt-2">
@@ -250,7 +250,7 @@
             <select name="assembly_name[]" id="" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                 <option value="">Select Item</option>
                 @foreach ($itemsForAssemblies as $item)
-                <option value="{{ $item->item_id }}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
+                <option value="{{ $item->item_name }}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
                 @endforeach
             </select>
             <div class=" grid grid-cols-2 gap-3 mt-2 inline-block">

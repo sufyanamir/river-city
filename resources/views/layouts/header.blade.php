@@ -131,7 +131,7 @@ $userPrivileges = session('user_details')['user_privileges'];
         <input type="text" placeholder="Search" class="text-[15px] ml-4 w-full bg-transparent focus:outline-none" />
       </div> -->
         <x-sidebar-links :class="'text-white'" :url="'/dashboard'" :title="'Dashboard'" :hoverIcon="'hover-dashboard-icon.svg'" :icon="'dashboard-icon.svg'"></x-sidebar-links>
-        <div class="p-2.5 mt-3 sidebar-link flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white" id="crew-dropdown-card1">
+        {{-- <div class="p-2.5 mt-3 sidebar-link flex items-center rounded-md px-4 duration-300 cursor-pointer mx-5 hover:bg-[#edf2f7] hover:text-[#930027] text-white" id="crew-dropdown-card1">
             <img class=" plain-icon" src="{{ asset('assets/icons/estimate-icon.svg') }}" alt="icon">
             <img class=" hover-icon hidden" src="{{ asset('assets/icons/hover-estimate-icon.svg') }}" alt="icon">
             <div class="flex justify-between w-full items-center">
@@ -147,7 +147,8 @@ $userPrivileges = session('user_details')['user_privileges'];
             <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/pendigJobs'" :title="'Pending'" :hoverIcon="'item-icon.svg'" :icon="'item-icon.svg'"></x-sidebar-links>
             <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/approvedJobs'" :title="'Approved'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
             <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/cancelJobs'" :title="'Cancel'" :hoverIcon="'group-icon.svg'" :icon="'group-icon.svg'"></x-sidebar-links>
-        </div>
+        </div> --}}
+        <x-sidebar-links :class="'text-white'" :url="'/jobs'" :title="'Jobs'" :hoverIcon="'hover-item-icon.svg'" :icon="'item-icon.svg'"></x-sidebar-links>
         <x-sidebar-links :class="'text-white'" :url="'/calendar'" :title="'Calendar'" :hoverIcon="'hover-calendar-icon.svg'" :icon="'calendar-icon.svg'"></x-sidebar-links>
         <x-sidebar-links :class="'text-white'" :url="'/settings'" :title="'Settings'" :hoverIcon="'hover-settings-icon.svg'" :icon="'settings-icon.svg'"></x-sidebar-links>
         <x-sidebar-links :class="'text-white'" :url="'/help'" :title="'Help'" :hoverIcon="'hover-help-icon.svg'" :icon="'help-icon.svg'"></x-sidebar-links>

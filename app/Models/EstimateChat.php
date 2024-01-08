@@ -16,6 +16,7 @@ class EstimateChat extends Model
     protected $fillable = [
         'estimate_id',
         'added_user_id',
+        'added_user_name',
         'chat_message',
         'chat_image',
         'chat_emojis',

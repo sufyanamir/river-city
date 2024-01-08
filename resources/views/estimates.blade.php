@@ -82,7 +82,7 @@
                                                                 </button>
                                                             </div>
                                                             <!-- task details -->
-                                                            <div class=" py-2">
+                                                            {{-- <div class=" py-2">
                                                                 <label for="underline_select" class="sr-only">Underline
                                                                     select</label>
                                                                 <select id="underline_select"
@@ -93,7 +93,7 @@
                                                                     <option value="FR">Jordi</option>
                                                                     <option value="DE">Albert</option>
                                                                 </select>
-                                                            </div>
+                                                            </div> --}}
                                                             <div class=" pb-2">
                                                                 <div
                                                                     class=" border rounded-lg h-40 w-full overflow-auto">
@@ -169,7 +169,7 @@
                                                             </div>
                                                             <div class=" flex justify-between">
                                                                 <button type="button" id="updateEvent"
-                                                                    class=" mb-2 py-1 px-7 rounded-md border">Close
+                                                                    class=" modal-close mb-2 py-1 px-7 rounded-md border">Close
                                                                 </button>
                                                             </div>
                                                         </div>

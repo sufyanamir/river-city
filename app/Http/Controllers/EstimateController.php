@@ -17,6 +17,7 @@ use App\Models\EstimateFile;
 use App\Models\EstimateImage;
 use App\Models\EstimateImages;
 use App\Models\EstimateItem;
+use App\Models\EstimateItemAssembly;
 use App\Models\EstimateNote;
 use App\Models\EstimatePayments;
 use App\Models\EstimateProposal;
@@ -37,6 +38,33 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class EstimateController extends Controller
 {
+    // ==============================================================Jobs Portion=========================================================
+    // get estimate on jobs
+    public function getEstimateOnJobs()
+    {
+        $userDetails = session('user_details');
+
+        $scheduleEstimatesWithEstimates = [];
+
+        $scheduleEstimates = ScheduleEstimate::where('work_assign_id', $userDetails['id'])->get();
+
+        foreach ($scheduleEstimates as $scheduleEstimate) {
+            $estimate = Estimate::where('estimate_id', $scheduleEstimate->estimate_id)->first();
+
+            if ($estimate) {
+                // Associate ScheduleEstimate with Estimate
+                $scheduleEstimatesWithEstimates[] = [
+                    'schedule_estimate' => $scheduleEstimate,
+                    'estimate' => $estimate,
+                ];
+            }
+        }
+
+        return view('jobs', ['schedule_estimates_with_estimates' => $scheduleEstimatesWithEstimates]);
+        // return response()->json(['success' => true, 'schedule_estimates_with_estimates' => $scheduleEstimatesWithEstimates], 200);
+    }
+    // get estimate on jobs
+    // ==============================================================Jobs Portion=========================================================
 
     // schedule estimate
     public function setScheduleEstimate(Request $request)
@@ -67,13 +95,12 @@ class EstimateController extends Controller
             $estimate->estimate_schedule_assigned_to = $validatedData['assign_estimate_completion'];
             $estimate->save();
             return response()->json(['success' => true, 'message' => 'Estimate is Scheduled!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     // schedule estimate
-    
+
     // get schedule estimate
     public function getEstimateToSetSchedule($id)
     {
@@ -148,7 +175,20 @@ class EstimateController extends Controller
     }
     public function getEstimatesOnCalendar()
     {
-        $estimates = Estimate::get();
+        $userDetails = session('user_details');
+        if ($userDetails['user_role'] == 'crew') {
+            
+            $scheduleEstimates = ScheduleEstimate::where('work_assign_id', $userDetails['id'])->get();
+
+            foreach ($scheduleEstimates as $scheduleEstimate) {
+                $estimate = Estimate::where('estimate_id', $scheduleEstimate->estimate_id)->get();
+            }
+
+            return view('calendar', ['estimates' => $estimate]);
+
+        }else {
+            $estimates = Estimate::get();
+        }
 
         return view('calendar', ['estimates' => $estimates]);
     }
@@ -598,7 +638,7 @@ class EstimateController extends Controller
                 'estimate_id' => $validatedData['estimate_id'],
                 'email' => $validatedData['customer_email'],
             ];
-            
+
             $existingProposals = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->get();
             if (!$existingProposals->isEmpty()) {
                 $existingProposals->each(function ($proposal) {
@@ -764,7 +804,6 @@ class EstimateController extends Controller
             $estimateItem->save();
 
             return response()->json(['success' => true, 'message' => 'Item updated successfully!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -800,6 +839,9 @@ class EstimateController extends Controller
                 'item_total' => 'required',
                 'item_description' => 'nullable',
                 'item_note' => 'nullable',
+                'assembly_name' => 'nullable|array',
+                'assembly_unit_by_item_unit' => 'nullable|array',
+                'item_unit_by_assembly_unit' => 'nullable|array',
                 // 'selected_items' => 'required|array',
             ]);
 
@@ -834,6 +876,25 @@ class EstimateController extends Controller
                 'item_Description' => $validatedData['item_description'],
                 'item_note' => $validatedData['item_note'],
             ]);
+
+            if (isset($validatedData['assembly_name'])) {
+                // Iterate through each assembly name
+                foreach ($validatedData['assembly_name'] as $key => $assemblyName) {
+                    // Calculate the sum for 'assembly_unit_by_item_unit' and 'item_unit_by_assembly_unit'
+                    $itemUnitByAssUnitSum = $validatedData['assembly_unit_by_item_unit'][$key];
+                    $assUnitByItemUnitSum = $validatedData['item_unit_by_assembly_unit'][$key];
+
+                    // Create a new ItemAssembly for each assembly name
+                    EstimateItemAssembly::create([
+                        'added_user_id' => $userDetails['id'],
+                        'estimate_id' => $validatedData['estimate_id'],
+                        'estimate_item_id' => $estimateItem->estimate_item_id,
+                        'est_ass_item_name' => $assemblyName,
+                        'item_unit_by_ass_unit' => $itemUnitByAssUnitSum,
+                        'ass_unit_by_item_unit' => $assUnitByItemUnitSum,
+                    ]);
+                }
+            }
             // foreach ($itemsData as $item) {
             //     EstimateItem::create([
             //         'added_user_id' => $userDetails['id'],
@@ -932,7 +993,6 @@ class EstimateController extends Controller
             $contactInfo->save();
 
             return response()->json(['success' => true, 'message' => 'contact updated successfully!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }

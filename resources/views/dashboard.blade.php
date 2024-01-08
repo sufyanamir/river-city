@@ -1,6 +1,8 @@
 @include('layouts.header')
 <div class="my-2">
-    <h1 class=" text-2xl font-semibold">Dashboard</h1>
+    <h1 class=" text-2xl font-semibold">
+        {{session('user_details')['user_role']}} Dashboard
+    </h1>
     <div class=" flex justify-start gap-2 my-5">
         <div class="pt-3"><img src="{{ asset('assets/icons/borderbar.svg') }}" alt="img"></div>
         <div class=" text-gray-400">
