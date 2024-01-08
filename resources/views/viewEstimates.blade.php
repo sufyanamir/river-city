@@ -3586,10 +3586,18 @@
                                     id="price_margin">0.00</span>%</span>
                         </div>
                         <div class="my-0 text-left">
-                            <label for="" class=" block text-left mb-1">Quantity:</label>
-                            <input type="number" name="item_qty" id="item_qty" placeholder="00.0"
-                                autocomplete="given-name"
-                                class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <div class="flex justify-around">
+                                <div>
+                                    <img class=" inline-block" src="{{ asset('assets/icons/calculator-icon.svg') }}"
+                                    alt="icon">
+                                </div>
+                                <div>
+                                    <label for="" class=" block text-left mb-1">Quantity:</label>
+                                    <input type="number" name="item_qty" id="item_qty" placeholder="00.0"
+                                        autocomplete="given-name"
+                                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                </div>
+                            </div>
                         </div>
                         <div class="my-0 text-left">
                             <label for="" class=" block text-left mb-1">Total:</label>
