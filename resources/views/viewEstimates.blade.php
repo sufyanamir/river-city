@@ -6,13 +6,13 @@
     <h1 class=" text-2xl font-semibold mb-3">Estimates</h1>
     <div class=" bg-transparent w-full">
         <div class=" mb-5 shadow-lg bg-white text-white  rounded-3xl">
-            <div class="  flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg  px-3 font-medium">
-                    Project
-                </p>
+            <div class="  flex gap-x-1 items-center px-3  bg-[#930027] rounded-t-3xl">
                 <button type="button" class="flex" id="btnStartAdvanced">
                     <img class="" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="icon">
                 </button>
+                <p class="text-lg  font-medium">
+                    Project
+                </p>
             </div>
             <div class="col-span-10  pl-2 ">
                 <div class="grid sm:grid-cols-10">
@@ -90,15 +90,15 @@
         {{-- <hr class="bg-gray-300"> --}}
         @if (session('user_details')['user_role'] == 'admin')
             <div class=" border-2  shadow-lg mt-7   bg-white   rounded-3xl ">
-                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                    <p class="text- lg py-3 px-3  font-medium text-white">
-                        Contacts
-                    </p>
+                <div class="flex  items-center gap-2 px-3  bg-[#930027] rounded-t-3xl">
                     <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addContact">
                         <div class=" bg-[#930027] rounded-lg">
                             <i class="fa-solid fa-plus text-white p-2"></i>
                         </div>
                     </button>
+                    <p class="text- lg py-3  font-medium text-white">
+                        Contacts
+                    </p>
                 </div>
                 <div class="py-4     ">
                     <p class="text-lg py-3 my-auto  pl-9 text-[#707683] font-medium">
@@ -624,16 +624,18 @@
         @if ($user_details['user_role'] == 'admin')
             <div class="  border-2  shadow-lg my-5  bg-white rounded-3xl mt-7 ">
                 <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                    <p class="text-lg text-white pl-3 font-medium">
-                        Profitability
-                    </p>
+                    <div   class="flex items-center gap-2">
+                        <button type="button" id="profitability-btn" class="flex">
+                            <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
+                            alt="">
+                        </button>
+                        <p class="text-lg text-white pl-3 font-medium">
+                            Profitability
+                        </p>
+                    </div>
                     <div class="p-4 text-white">
                         <h1><i class="fa-solid fa-circle-exclamation"></i> Not Functioned!</h1>
                     </div>
-                    <button type="button" id="profitability-btn" class="flex">
-                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
-                            alt="">
-                    </button>
                 </div>
                 <div class="p-2">
                     <div class=" relative overflow-x-auto">
@@ -663,15 +665,15 @@
         @endif
         @if (session('user_details')['user_role'] == 'admin')
             <div class="  border-2  shadow-lg mt-7  bg-white rounded-3xl">
-                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                    <p class="text-lg px-3 text-white font-medium">
-                        Items
-                    </p>
+                <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
                     <button type="button" class="flex addItems bg-white p-1 m-2 rounded-lg">
                         <div class=" bg-[#930027] rounded-lg">
                             <i class="fa-solid fa-plus text-white p-2"></i>
                         </div>
                     </button>
+                    <p class="text-lg px-3 text-white font-medium">
+                        Items
+                    </p>
                 </div>
                 @php
                     $totalPrice = 0; // Initialize total price variable
@@ -1408,15 +1410,15 @@
         @endif
         @if (session('user_details')['user_role'] == 'admin')
             <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                    <p class="text-lg px-3 text-white  font-medium ">
-                        Files
-                    </p>
+                <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
                     <button type="button" id="addFile-btn" class="flex bg-white p-1 m-2 rounded-lg">
                         <div class=" bg-[#930027] rounded-lg">
                             <i class="fa-solid fa-plus text-white p-2"></i>
                         </div>
                     </button>
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Files
+                    </p>
                 </div>
                 <div class="col-span-10">
                     <div class="itemDiv">
@@ -1461,15 +1463,15 @@
         @endif
         @if (session('user_details')['user_role'] == 'admin')
             <div class="mb-5 shadow-lg bg-white  mt-7 rounded-3xl">
-                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                    <p class="text-lg px-3 text-white  font-medium ">
-                        Photos
-                    </p>
+                <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
                     <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addImage-btn">
                         <div class=" bg-[#930027] rounded-lg">
                             <i class="fa-solid fa-plus text-white p-2"></i>
                         </div>
                     </button>
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Photos
+                    </p>
                 </div>
                 <div class=" mx-auto  px-5 py-7">
                     <div class="itemDiv">
@@ -1512,10 +1514,7 @@
         @endif
         @if (session('user_details')['user_role'] == 'admin')
             <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                    <p class="text-lg px-3 text-white  font-medium ">
-                        Proposals
-                    </p>
+                <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
                     <a href="/makeProposal/{{ $estimate->estimate_id }}">
                         <button type="button" class="flex bg-white p-1 m-2 rounded-lg">
                             <div class=" bg-[#930027] rounded-lg">
@@ -1523,6 +1522,9 @@
                             </div>
                         </button>
                     </a>
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Proposals
+                    </p>
                 </div>
                 <div>
                     <div class="relative overflow-x-auto py-2">
@@ -1630,15 +1632,15 @@
         @endif
         @if (session('user_details')['user_role'] == 'admin')
             <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                    <p class="text-lg px-3 text-white  font-medium ">
-                        Notes
-                    </p>
+                <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
                     <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addNote-btn">
                         <div class=" bg-[#930027] rounded-lg">
                             <i class="fa-solid fa-plus text-white p-2"></i>
                         </div>
                     </button>
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Notes
+                    </p>
                 </div>
                 <br>
                 <div class=" py-5 px-4  text-black mx-auto">
@@ -1655,15 +1657,15 @@
                 isset($userPrivileges->estimate->notes) &&
                 $userPrivileges->estimate->notes === 'on')
             <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                    <p class="text-lg px-3 text-white  font-medium ">
-                        Notes
-                    </p>
+                <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
                     <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addNote-btn">
                         <div class=" bg-[#930027] rounded-lg">
                             <i class="fa-solid fa-plus text-white p-2"></i>
                         </div>
                     </button>
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Notes
+                    </p>
                 </div>
                 <br>
                 <div class=" py-5 px-4  text-black mx-auto">
@@ -1679,15 +1681,15 @@
         @endif
         @if (session('user_details')['user_role'] == 'admin')
             <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                    <p class="text-lg px-3 text-white  font-medium ">
-                        Emails
-                    </p>
+                <div class="flex items-center px-3  bg-[#930027] rounded-t-3xl">
                     <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addEmail-btn">
                         <div class=" bg-[#930027] rounded-lg">
                             <i class="fa-solid fa-plus text-white p-2"></i>
                         </div>
                     </button>
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Emails
+                    </p>
                 </div>
                 <div class=" py-2">
                     <div class="relative overflow-x-auto">
@@ -1809,17 +1811,20 @@
         @if (session('user_details')['user_role'] == 'admin')
             <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
                 <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                    <p class="text-lg px-3 text-white  font-medium ">
-                        Time Entries
-                    </p>
-                    <div class="p-4 text-white">
-                        <h1><i class="fa-solid fa-circle-exclamation"></i> Not Functioned!</h1>
-                    </div>
+                   <div class="flex items-center ">
                     <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="">
                         <div class=" bg-[#930027] rounded-lg">
                             <i class="fa-solid fa-plus text-white p-2"></i>
                         </div>
                     </button>
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Time Entries
+                    </p>
+                   </div>
+                    <div class="p-4 text-white">
+                        <h1><i class="fa-solid fa-circle-exclamation"></i> Not Functioned!</h1>
+                    </div>
+
                 </div>
                 <br>
                 <div class=" p-3 mx-auto">
@@ -1865,15 +1870,15 @@
         @endif
         @if (session('user_details')['user_role'] == 'admin')
             <div class="mb-5 shadow-lg bg-white  mt-7 rounded-3xl">
-                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                    <p class="text-lg px-3 text-white  font-medium ">
-                        To-Dos
-                    </p>
+                <div class="flex items-center px-3  bg-[#930027] rounded-t-3xl">
                     <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="to-do-button">
                         <div class=" bg-[#930027] rounded-lg">
                             <i class="fa-solid fa-plus text-white p-2"></i>
                         </div>
                     </button>
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        To-Dos
+                    </p>
                 </div>
                 <div class="p-2">
                     <div class="relative overflow-x-auto py-2">
@@ -2019,15 +2024,15 @@
             </div>
         @endif
         <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    Invoices
-                </p>
+            <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
                 <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="">
                     <div class=" bg-[#930027] rounded-lg">
                         <i class="fa-solid fa-plus text-white p-2"></i>
                     </div>
                 </button>
+                <p class="text-lg px-3 text-white  font-medium ">
+                    Invoices
+                </p>
             </div>
             <div class="p-2">
                 <div class="relative overflow-x-auto py-2">
@@ -2086,15 +2091,15 @@
             </div>
         </div>
         <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text-lg px-3 text-white  font-medium ">
-                    Payments
-                </p>
+            <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
                 <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="">
                     <div class=" bg-[#930027] rounded-lg">
                         <i class="fa-solid fa-plus text-white p-2"></i>
                     </div>
                 </button>
+                <p class="text-lg px-3 text-white  font-medium ">
+                    Payments
+                </p>
             </div>
             <div class="p-2">
                 <div class="relative overflow-x-auto py-2">
@@ -2136,15 +2141,15 @@
         </div>
         @if (session('user_details')['user_role'] == 'admin')
             <div class="mb-5 shadow-lg bg-white   rounded-3xl ">
-                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                    <p class="text-lg px-3 text-white  font-medium ">
-                        Expenses
-                    </p>
+                <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
                     <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="expenses-btn">
                         <div class=" bg-[#930027] rounded-lg">
                             <i class="fa-solid fa-plus text-white p-2"></i>
                         </div>
                     </button>
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Expenses
+                    </p>
                 </div>
                 <div class="p-2">
                     <div class="relative overflow-x-auto py-2">
@@ -2206,15 +2211,15 @@
                 isset($userPrivileges->estimate->expenses) &&
                 $userPrivileges->estimate->expenses === 'on')
             <div class="mb-5 shadow-lg bg-white   rounded-3xl ">
-                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                    <p class="text-lg px-3 text-white  font-medium ">
-                        Expenses
-                    </p>
+                <div class="flex items-center px-3  bg-[#930027] rounded-t-3xl">
                     <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="expenses-btn">
                         <div class=" bg-[#930027] rounded-lg">
                             <i class="fa-solid fa-plus text-white p-2"></i>
                         </div>
                     </button>
+                    <p class="text-lg px-3 text-white  font-medium ">
+                        Expenses
+                    </p>
                 </div>
                 <div class="p-2">
                     <div class="relative overflow-x-auto py-2">
@@ -4383,11 +4388,12 @@ cbuttons.forEach(button => {
 });
 
 equalButton.addEventListener('click', () => {
-    // let calculator = document.querySelector('#cal-menu');
     try {
     display.value = eval(display.value );
     item_qty.value  = display.value;
-    // calculator.classList.add('hidden')
+    var inputEvent = new Event('input');
+    item_qty.dispatchEvent(inputEvent);
+
   } catch (error) {
     display.value = 'Error';
   }
