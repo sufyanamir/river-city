@@ -1,10 +1,9 @@
 @include('layouts.header')
 <div class="my-4">
-    <h1 class=" text-2xl font-semibold mb-3">Gallery</h1>
     <div class=" bg-white w-full rounded-lg shadow-lg">
-        <div class="m-2  just grid sm:grid-cols-12 ">
+        <div class="rounded-t-lg bg-[#930027] grid sm:grid-cols-12 ">
             <div class="col-span-6 flex justify-between p-4">
-                <h2 class="my-auto pr-3 font-medium  text-black">Gallery list</h2>
+                <h2 class="my-auto pr-3 font-medium  text-white">Gallery list</h2>
                 <x-add-button :title="'All'" :id="''" :class="'bg-[#E02B20] px-6'"></x-add-button>
                 <x-add-button :title="'New'" :id="''" :class="' px-6'"></x-add-button>
                 <x-add-button :title="'Pending'" :id="''" :class="' px-6'"></x-add-button>
@@ -39,7 +38,7 @@
             <div class="col-span-5 grid grid-cols-5 gap-3 mx-2 my-auto">
                 @foreach ($item['images']->take(5) as $image)
                 <div class="col-span-1 py-2">
-                    <img src="{{ asset('storage/' . $image->estimate_image) }}" style="object-fit: cover" class=" w-full h-20" alt="Estimate Image">
+                    <img src="{{ asset('storage/' . $image->estimate_image) }}" style="object-fit: cover" class=" rounded-md w-full h-20" alt="Estimate Image">
                 </div>
                 @endforeach
             </div>

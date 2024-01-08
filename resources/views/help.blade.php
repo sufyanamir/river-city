@@ -1,7 +1,9 @@
 @include('layouts.header')
 <div class=" my-4">
-    <h1 class=" text-2xl font-semibold mb-3">Help</h1>
     <div class=" bg-white w-full rounded-lg shadow-lg">
+        <div class=" p-3 text-white bg-[#930027] rounded-t-lg text-xl font-semibold">
+            Help
+        </div>
         <div class="p-3">
             <div id="accordion-collapse" class="accordion-collapse my-3" data-accordion="collapse">
                 <h2 id="accordion-collapse-heading-1" class="border-b-2">

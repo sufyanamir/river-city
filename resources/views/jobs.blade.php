@@ -1,10 +1,9 @@
 @include('layouts.header')
 <div class=" my-4">
-    <h1 class=" text-2xl font-semibold mb-3">Jobs</h1>
-    <div class=" bg-white w-full rounded-lg shadow-lg">
-        <div class=" flex justify-between p-3">
+    <div class=" bg-white w-full rounded-2xl shadow-lg">
+        <div class=" flex justify-between p-3 bg-[#930027] text-white rounded-t-2xl">
             <div class=" text-xl font-semibold">
-                <h4>Jobs List</h4>
+                <h4>Items List</h4>
             </div>
         </div>
         <div class="py-4">
@@ -54,12 +53,13 @@
                                 <td>
                                     <div class="flex">
                                         <div class=" inline-block">
-                                            <button class="px-2 py-2 chat-btn"
+                                            <button class="p-2 my-auto chat-btn"
                                                 data-target="#chat-modal{{ $item['estimate']->estimate_id }}"
                                                 data-estimate-id="{{ $item['estimate']->estimate_id }}">
-                                                <img class="w-9"
+                                                {{-- <img class="w-9"
                                                     src="{{ asset('assets/icons/dropdown-activity-icon.svg') }}"
-                                                    alt="icon">
+                                                    alt="icon"> --}}
+                                                    <i class="fa-brands fa-rocketchat" style="color: #c50d0d;"></i>
                                             </button>
                                             <!-- chat  modal -->
                                             <div class="fixed z-10 inset-0 overflow-y-auto hidden"
@@ -183,7 +183,7 @@
                                         <div class=" inline-block">
                                             <a href="/makeProposal/{{ $item['schedule_estimate']->estimate_id }}">
                                                 <div class="inline-block items-center align-middle" id="">
-                                                    <button class=" p-2">
+                                                    <button class="">
                                                         <img class="w-9" src="{{ asset('assets/icons/view-icon.svg') }}"
                                                             alt="icon">
                                                     </button>
