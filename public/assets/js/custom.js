@@ -26,6 +26,7 @@ $(document).ready(function () {
 
     // Get the form data using FormData for handling file uploads
     var formData = new FormData(this);
+    var apiUrl = $(this).attr('action');
 
     // Make the AJAX request
     $.ajax({
@@ -56,6 +57,15 @@ $(document).ready(function () {
         if (response.success == true) {
           // Handle success, if needed
           handleSuccess(response);
+          if (apiUrl == '/addEstimate') {
+            window.location.assign('/viewEstimate/' + response.estimate_id);
+          }else{
+            setInterval(
+              location.reload()
+              ,
+              5000
+            );
+          }
         } else if (response.success == false) {
           // Handle failure, if needed
           handleFailure(response);
@@ -84,11 +94,6 @@ $(document).ready(function () {
       'success'
     );
     topbar.hide();
-    setInterval(
-      location.reload()
-      ,
-      5000
-    );
   //   var formData = new FormData($('form')[0]); // Assuming the form is the first and only form on the page
   // var estimateId = formData.get('estimate_id');
 

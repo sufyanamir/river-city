@@ -146,6 +146,7 @@ Route::middleware('customauth')->group(function () {
         return view('help');
     });
     Route::get('/notifications', [NotificationsController::class, 'index']);
+    Route::post('/markNotifications', [NotificationsController::class, 'markNotifications']);
     Route::get('/forgotPassword', function () {
         return view('forgotPassword');
     });
