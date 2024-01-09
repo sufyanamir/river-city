@@ -521,7 +521,7 @@
                                 </button>
                             </form>
                         @endif
-                        @if ($estimate->estimate_assigned == 1 && $estimate->schedule_assigned != 1)
+                        @if ($estimate->estimate_assigned == 1 && $estimate->schedule_assigned != 1 && $estimate->estimate_assigned_to == $user_details['id'])
                             <button type="button" id="accept-estimate"
                                 class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                                 <div class=" flex mx-auto">
@@ -547,7 +547,7 @@
                                 </button>
                             </a>
                         @endif
-                        @if ($estimate->estimate_assigned != 1)
+                        @if ($estimate->estimate_schedule_assigned_to != 1 && $estimate->estimate_schedule_assigned_to == $user_details['id'] && $estimate->estimate_assigned != 1)
                             <button type="button" id="complete-estimate"
                                 class=" complete-estimate flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                                 <img class="h-[14px] w-[14px] my-auto mx-1"
@@ -1400,6 +1400,241 @@
                                     <span>${{ $item->item_price }}</span>
                                     @php
                                         $totalMaterialPrice += $item->item_price; // Add material item price to total
+                                    @endphp
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach --}}
+                </div>
+            </div>
+        @endif
+        @if (session('user_details')['user_role'] == 'admin')
+            <div class="mb-5 shadow-lg bg-white  rounded-3xl mt-7">
+                <div class="flex justify-between items-center px-3 py-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3  text-white font-medium">
+                        Upgrade
+                    </p>
+                </div>
+                <div class=" itemDiv ">
+                    @php
+                        $totalUpgradePrice = 0; // Initialize total labor price variable
+                    @endphp
+                    <div class="relative overflow-x-auto">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Description
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Upgrade Status
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Item Cost
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Item Qty
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Total
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($estimate_items as $item)
+                                        @if ($item->item_type === 'upgrades')
+                                            <tr class="bg-white border-b">
+                                                <th scope="row"
+                                                    class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                                    <button type="button" id="editEstimate-item{{ $item->item_id }}"
+                                                        class="inline">
+                                                        <img class="h-[50px] w-[50px]"
+                                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
+                                                            alt="">
+                                                    </button>
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    <label class="text-lg font-semibold text-[#323C47]"
+                                                        for="">{{ $item->item_name }}</label>
+                                                </td>
+                                                <td class="px-6 py-4 w-[50%]">
+                                                    <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                        @if($item->item_description)
+                                                            <p class="font-medium">Description:</p>
+                                                            {{ $item->item_description }}
+                                                        @endif
+                                                        @if($item->item_note)
+                                                            <p class="font-medium">Note:</p>
+                                                            {{ $item->item_note }}
+                                                        @endif
+                                                    </p>
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->upgrade_status }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_cost }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_qty }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_total }}
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $totalUpgradePrice += $item->item_total; // Add labor item price to total
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="text-right mr-4 py-6">
+                        <span>${{ number_format($totalUpgradePrice, 2) }}</span> {{-- Display the formatted total labor price --}}
+                    </div>
+                    {{-- @foreach ($estimate_items as $item)
+                        @if ($item->item_type === 'labour')
+                            <div
+                                class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
+                                <div class="flex">
+                                    <button type="button" class="inline">
+                                        <img class="h-[50px] w-[50px] "
+                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                    </button>
+                                    <div>
+                                        <label class="text-lg font-semibold text-[#323C47]"
+                                            for="groupName">{{ $item->item_name }}</label>
+                                        <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span>${{ $item->item_price }}</span>
+                                    @php
+                                        $totalUpgradePrice += $item->item_price; // Add labor item price to total
+                                    @endphp
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach --}}
+                </div>
+            </div>
+        @elseif(isset($userPrivileges->estimate) &&
+                isset($userPrivileges->estimate->items) &&
+                $userPrivileges->estimate->items === 'on')
+            <div class="mb-5 shadow-lg bg-white  rounded-3xl mt-7">
+                <div class="flex justify-between items-center px-3 py-3  bg-[#930027] rounded-t-3xl">
+                    <p class="text-lg px-3  text-white font-medium">
+                        Upgrade
+                    </p>
+                </div>
+                <div class=" itemDiv ">
+                    @php
+                        $totalUpgradePrice = 0; // Initialize total labor price variable
+                    @endphp
+                    <div class="relative overflow-x-auto">
+                        <div class="itemDiv">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Description
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Item Cost
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Item Qty
+                                        </th>
+                                        <th scope="col" class="text-center">
+                                            Total
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($estimate_items as $item)
+                                        @if ($item->item_type === 'upgrades')
+                                            <tr class="bg-white border-b">
+                                                <th scope="row"
+                                                    class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                                    <button type="button"
+                                                        id="editEstimate-item{{ $item->item_id }}" class="inline">
+                                                        <img class="h-[50px] w-[50px]"
+                                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
+                                                            alt="">
+                                                    </button>
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    <label class="text-lg font-semibold text-[#323C47]"
+                                                        for="">{{ $item->item_name }}</label>
+                                                </td>
+                                                <td class="px-6 py-4 w-[50%]">
+                                                    <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                        @if($item->item_description)
+                                                            <p class="font-medium">Description:</p>
+                                                            {{ $item->item_description }}
+                                                        @endif
+                                                        @if($item->item_note)
+                                                            <p class="font-medium">Note:</p>
+                                                            {{ $item->item_note }}
+                                                        @endif
+                                                    </p>
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_cost }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_qty }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_total }}
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $totalUpgradePrice += $item->item_total; // Add labor item price to total
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="text-right mr-4 py-6">
+                        <span>${{ number_format($totalUpgradePrice, 2) }}</span> {{-- Display the formatted total labor price --}}
+                    </div>
+                    {{-- @foreach ($estimate_items as $item)
+                        @if ($item->item_type === 'labour')
+                            <div
+                                class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
+                                <div class="flex">
+                                    <button type="button" class="inline">
+                                        <img class="h-[50px] w-[50px] "
+                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                    </button>
+                                    <div>
+                                        <label class="text-lg font-semibold text-[#323C47]"
+                                            for="groupName">{{ $item->item_name }}</label>
+                                        <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span>${{ $item->item_price }}</span>
+                                    @php
+                                        $totalUpgradePrice += $item->item_price; // Add labor item price to total
                                     @endphp
                                 </div>
                             </div>
@@ -3566,6 +3801,7 @@
                 @csrf
                 <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
                 <input type="hidden" name="item_id" id="item_id" value="">
+                <input type="hidden" name="is_upgrade" id="is_upgrade" value="">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between">
@@ -3713,7 +3949,7 @@
                                     class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
                                     @foreach ($itemsForAssemblies as $item)
-                                        <option value="{{ $item->item_id }}"
+                                        <option value="{{ $item->item_name }}"
                                             data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
                                     @endforeach
                                 </select>
@@ -3920,6 +4156,7 @@
 </script>
 <script>
     $(document).ready(function() {
+        var type = $('#type');
         // Get references to the relevant elements
         var selectedItemDropdown = $('#selected_item');
         var typeDropdown = $('#type');
@@ -3935,15 +4172,20 @@
         var assemblyName = $('#assembly_name');
         var assByItem = $('#assembly_unit_by_item_unit');
         var itemByAss = $('#item_unit_by_assembly_unit');
+        var isUpgrade = $('#is_upgrade');
 
         // Add a change event listener to the selected_item dropdown
         selectedItemDropdown.on('change', function() {
             // Get the selected item value
             var selectedItem = selectedItemDropdown.val();
+            if(selectedItem == 'upgrades'){
+                
+                typeDropdown.val('upgrades');
+                isUpgrade.val('yes');
+                type.trigger('change');
 
-            // Check if a valid item is selected
-            if (selectedItem) {
-                // Your AJAX request to fetch item data based on the selected item
+            }else{
+                isUpgrade.val('');
                 $.ajax({
                     url: '/getItemData/' + selectedItem, // Use the correct URL with the item ID
                     type: 'GET',
@@ -3969,47 +4211,47 @@
 
 
 
-let mulitple_input = $('#mulitple_input');
-mulitple_input.html('');
-    $.each(assemblyItemData, function(index, itemData) {
-    console.log(itemData.assembly_name);
-    let newele = $('<div class="mt-5"></div>');
-    let delbtn = $('<span></span>');
-// ============
-newele.html(`
-            <select name="assembly_name[]" id="" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                <option value="">Select Item</option>
-                <option selected value="${itemData.assembly_name}" data-unit="{{ $item->item_units }}">${itemData.assembly_name}</option>
-                @foreach ($itemsForAssemblies as $item)
-                <option  data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
-                @endforeach
-            </select>
-            <div class=" grid grid-cols-2 gap-3 mt-2 inline-block">
-                <div>
-                    <input value="${itemData.item_unit_by_ass_unit}" type="number" name="assembly_unit_by_item_unit[]" id="assembly_unit_by_item_unit" placeholder="00.0" autocomplete="given-name"
-                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
-                </div>
-                <div>
-                    <input  value="${itemData.ass_unit_by_item_unit}" type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_assembly_unit" placeholder="00.0" autocomplete="given-name"
-                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
-                </div>
-            </div>
-        `);
+                    let mulitple_input = $('#mulitple_input');
+                    mulitple_input.html('');
+                        $.each(assemblyItemData, function(index, itemData) {
+                        console.log(itemData.assembly_name);
+                        let newele = $('<div class="mt-5"></div>');
+                        let delbtn = $('<span></span>');
+                    // ============
+                    newele.html(`
+                                <select name="assembly_name[]" id="" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                    <option value="">Select Item</option>
+                                    <option selected value="${itemData.assembly_name}" data-unit="{{ $item->item_units }}">${itemData.assembly_name}</option>
+                                    @foreach ($itemsForAssemblies as $item)
+                                    <option value="{{ $item->item_name }}"  data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class=" grid grid-cols-2 gap-3 mt-2 inline-block">
+                                    <div>
+                                        <input value="${itemData.item_unit_by_ass_unit}" type="number" name="assembly_unit_by_item_unit[]" id="assembly_unit_by_item_unit" placeholder="00.0" autocomplete="given-name"
+                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
+                                    </div>
+                                    <div>
+                                        <input  value="${itemData.ass_unit_by_item_unit}" type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_assembly_unit" placeholder="00.0" autocomplete="given-name"
+                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
+                                    </div>
+                                </div>
+                            `);
 
-        delbtn.html(`
-            <button type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
-            </button>
-        `);
-        mulitple_input.append(newele);
-        newele.append(delbtn);
-        delbtn.on('click', function() {
-            newele.remove();
-        });
-// ============
-    });
+                            delbtn.html(`
+                                <button type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                                    <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
+                                </button>
+                            `);
+                            mulitple_input.append(newele);
+                            newele.append(delbtn);
+                            delbtn.on('click', function() {
+                                newele.remove();
+                            });
+                    // ============
+                        });
 
 
 
@@ -4031,9 +4273,14 @@ newele.html(`
                     }
                 });
             }
+            // Check if a valid item is selected
+            // if (selectedItem) {
+            //     // Your AJAX request to fetch item data based on the selected item
+                
+            // }
         });
-    });
-    var type = $('#type');
+    
+    
 type.on('change', function() {
     var typeDropdown = $('#type');
         var multiAddItemsDiv = $('#multiAdd-items');
@@ -4049,7 +4296,7 @@ type.on('change', function() {
         var itemTotal = $('#item_total');
         var priceMargin = $('#price_margin')
         var item_main = $('#item_main')
-    if (type.val() === 'assemblies') {
+            if (type.val() === 'assemblies' || type.val() === 'upgrades') {
                 multiAddItemsDiv.removeClass('hidden');
                 item_main.addClass('hidden');
                 labourExpenseDiv.addClass('hidden');
@@ -4074,6 +4321,7 @@ type.on('change', function() {
                 unitItemInput.val(null);
                 unitLabel.text('unit');
             }
+});
 });
 </script>
 <script>
@@ -4100,7 +4348,7 @@ type.on('change', function() {
 
         // Add change event handler to the select element
         typeDropdown.on('change', function() {
-            if (typeDropdown.val() === 'assemblies') {
+            if (typeDropdown.val() === 'assemblies' || typeDropdown.val() === 'upgrades') {
                 multiAddItemsDiv.removeClass('hidden');
                 labourExpenseDiv.addClass('hidden');
             } else {
@@ -4337,7 +4585,7 @@ $("#calculater-modal").click(function(e) {
             <select name="assembly_name[]" id="" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                 <option value="">Select Item</option>
                 @foreach ($itemsForAssemblies as $item)
-                <option value="{{ $item->item_id }}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
+                <option value="{{ $item->item_name }}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
                 @endforeach
             </select>
             <div class=" grid grid-cols-2 gap-3 mt-2 inline-block">

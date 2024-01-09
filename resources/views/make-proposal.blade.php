@@ -77,7 +77,28 @@
                         @foreach ($items as $item)
                             <p class="flex justify-between pt-1 gap-4">
                                 <span class="py-2">
-                                    <strong>{{ $item->item_name }}</strong>
+                                    <strong>{{ ucwords($item->item_name) }}</strong>
+                                    <br>
+                                    <span class=" text-xs">
+                                        {{ $item->item_description }}
+                                    </span>
+                                </span>
+                                <span class="item-price">
+                                    ${{ $item->item_total }}
+                                </span>
+                            </p>
+                            <hr>
+                            @php
+                                $subTotal += $item->item_total;
+                            @endphp
+                        @endforeach
+                    </div>
+                    <div class="text-[#323C47] font-medium mt-4 border-b border-[#323C47] pb-6 border-solid">
+                        <h1 class=" text-xl font-semibold">Upgrades:</h1>
+                        @foreach ($upgrades as $item)
+                            <p class="flex justify-between pt-1 gap-4">
+                                <span class="py-2">
+                                    <strong>{{ ucwords($item->item_name) }}</strong>
                                     <br>
                                     <span class=" text-xs">
                                         {{ $item->item_description }}

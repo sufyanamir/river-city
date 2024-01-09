@@ -352,7 +352,9 @@
                 </div>
             </div>
             <div class="border text-right">
-                <x-add-button :title="'Update'" :id="''" :class="'m-5 px-6'"></x-add-button>
+                <button  class="bg-[#930027] text-white m-2  p-2 rounded-md font-medium">
+                    Update
+                </button>
             </div>
         </form>
     </div>
