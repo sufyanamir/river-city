@@ -31,9 +31,9 @@
                             <th>Units</th>
                             <th>Cost</th>
                             <th>Price</th>
-                            <th>Description</th>
+                            <th style="width:300px !important">Description</th>
                             <th>Actions</th>
-                        </tr>
+                        </tr>   
                     </thead>
                     <tbody id="universalTableBody" class=" text-sm">
                         @foreach ($items as $item)
@@ -43,7 +43,7 @@
                                 <td>{{ $item->item_units }}</td>
                                 <td>{{ $item->item_cost }}</td>
                                 <td>{{ $item->item_price }}</td>
-                                <td class=" w-[700px]">{{ $item->item_description }}</td>
+                                <td class=" w-[100px]">{{ $item->item_description }}</td>
                                 <td>
                                     @if (session('user_details')['user_role'] == 'admin')
                                         <button>
