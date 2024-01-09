@@ -12,7 +12,8 @@
             <div class="grid grid-cols-12 p-5">
                 <div class="col-span-6 p-4 ">
                     <div class="projectLogo ">
-                        <img class="w-[288px] h-[73px]" src="{{ asset('assets/icons/tproject-logo.svg') }}" alt="">
+                        <img class="w-[288px] h-[73px]" src="{{ asset('assets/icons/tproject-logo.svg') }}"
+                            alt="">
                     </div>
                     <div class="mt-12 p-4">
                         <p class="text-[22px]/[25.78px] font-bold text-[#323C47]">River City Painting Pro Demo</p>
@@ -99,7 +100,33 @@
                             @endphp
                         @endforeach
                     </div>
-
+                    <div class="text-[#323C47] font-medium mt-4 border-b border-[#323C47] pb-6 border-solid">
+                        <h1 class=" text-xl font-semibold my-2">Upgrades:</h1>
+                        <hr>
+                        @foreach ($upgrades as $item)
+                        <div class="my-1">
+                            @if ($item->upgrade_status != 'accepted')
+                            <div class=" text-right">
+                                <input type="radio" name="upgrade_accept_reject" value="accepted" id="upgrade_accept"> Accept
+                                <input type="radio" name="upgrade_accept_reject" value="rejected" id="upgrade_reject"> Reject
+                            </div>
+                            @endif
+                            <p class="flex justify-between pt-1 gap-4">
+                                <span class="py-2">
+                                    <strong>{{ ucwords($item->item_name) }}</strong>
+                                    <br>
+                                    <span class=" text-xs">
+                                        {{ $item->item_description }}
+                                    </span>
+                                </span>
+                                <span class="item-price">
+                                    ${{ $item->item_total }}
+                                </span>
+                            </p>
+                        </div>
+                            <hr>
+                        @endforeach
+                    </div>
                     <div class="mt-5 font-medium">
                         <div class="flex justify-end gap-6">
                             <div>
@@ -121,7 +148,8 @@
                                     {{ number_format($customer->tax_rate, 2) }}%
                                 </p>
                                 <p class="text-[#858585]">
-                                    ${{ number_format($subTotal + ($subTotal * $customer->tax_rate) / 100, 2) }}
+                                    {{-- ${{ number_format($subTotal + ($subTotal * $customer->tax_rate) / 100, 2) }} --}}
+                                    <span id="dynamic-total">{{ number_format($subTotal + ($subTotal * $customer->tax_rate) / 100, 2) }}</span>
                                 </p>
                             </div>
                         </div>
@@ -161,7 +189,8 @@
             </div>
             <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
             <input type="hidden" name="customer_email" value="{{ $customer->customer_email }}">
-            <input type="hidden" name="estimate_total" value="{{ number_format($subTotal + ($subTotal * $customer->tax_rate / 100), 2) }}">
+            <input type="hidden" name="estimate_total"
+                value="{{ number_format($subTotal + ($subTotal * $customer->tax_rate) / 100, 2) }}">
             <div class="col-span-12 p-4 flex justify-end mt-10">
                 <button class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 ">I Agree to Pay</button>
             </div>
@@ -169,6 +198,32 @@
     </div>
 </form>
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-<script src="{{ asset('assets/js/custom.js') }}"></script>
 <script src="{{ asset('assets/js/dataTables.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('assets/js/custom.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        var upgradeAcceptRadio = $('#upgrade_accept');
+        var upgradeRejectRadio = $('#upgrade_reject');
+        var dynamicTotalSpan = $('#dynamic-total');
+        var estimateTotalInput = $('input[name="estimate_total"]');
+
+        // Initial total value
+        var total = parseFloat(dynamicTotalSpan.text().replace('$', ''));
+
+        // Function to update total based on radio button selection
+        function updateTotal() {
+            if (upgradeAcceptRadio.prop('checked')) {
+                total += parseFloat("{{ $item->item_total }}");
+            } else if (upgradeRejectRadio.prop('checked')) {
+                total -= parseFloat("{{ $item->item_total }}");
+            }
+            dynamicTotalSpan.text('$' + total.toFixed(2));
+            estimateTotalInput.val(total.toFixed(2));
+        }
+
+        // Event listener for radio button changes
+        upgradeAcceptRadio.on('change', updateTotal);
+        upgradeRejectRadio.on('change', updateTotal);
+    });
+</script>

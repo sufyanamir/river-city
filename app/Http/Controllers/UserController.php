@@ -187,13 +187,21 @@ class UserController extends Controller
                 'address' => 'required|string',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
             ]);
+            $password = rand();
+            $emailData = [
+                'email' => $validatedData['email'],
+                'password' => $password,
+            ];
 
+            $mail = new AddUserMail($emailData);
+            Mail::to($validatedData['email'])->send($mail);
             $users = User::create([
                 'name' => $validatedData['firstName'],
                 'last_name' => $validatedData['lastName'],
                 'email' => $validatedData['email'],
                 'phone' => $validatedData['phone'],
                 'user_role' => 'crew',
+                'password' => md5($password),
                 'address' => $validatedData['address'],
                 'departement' => $validatedData['departement'],
                 'rating' => $validatedData['rate'],

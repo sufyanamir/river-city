@@ -94,7 +94,7 @@ class EstimateController extends Controller
             $estimate->estimate_schedule_assigned = 1;
             $estimate->estimate_schedule_assigned_to = $validatedData['assign_estimate_completion'];
             $estimate->save();
-            return response()->json(['success' => true, 'message' => 'Estimate is Scheduled!'], 200);
+            return response()->json(['success' => true, 'message' => 'Estimate is Scheduled!', 'estimate_id' => $estimate->estimate_id], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -109,7 +109,7 @@ class EstimateController extends Controller
         $estimate = Estimate::where('estimate_id', $id)->first();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
         $estimates = Estimate::get();
-        $users = User::where('added_user_id', $userDetails['id'])->get();
+        $users = User::where('added_user_id', $userDetails['id'])->where('user_role', 'schedular')->get();
 
         return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users]);
         // return response()->json(['success' => true, 'estimate' => $estimate]);
@@ -197,8 +197,13 @@ class EstimateController extends Controller
     public function index()
     {
         $userDetails = session('user_details');
-        $customers = Customer::get();
-        $estimates = Estimate::get();
+        if ($userDetails['user_role'] == 'admin') {
+            $customers = Customer::get();
+            $estimates = Estimate::get();
+        }elseif ($userDetails['user_role'] == 'schedular') {
+            $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->get();
+            $customers = Customer::get();
+        }
 
         return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails, 'customers' => $customers]);
     }
@@ -495,7 +500,7 @@ class EstimateController extends Controller
 
             $estimate->save();
 
-            return response()->json(['success' => true, 'message' => 'The work is scheduled!'], 200);
+            return response()->json(['success' => true, 'message' => 'The work is scheduled!', 'estimate_id' => $estimate->estimate_id], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -582,16 +587,23 @@ class EstimateController extends Controller
     // Complete Estimate
 
     // accept proposal
-    public function acceptProposal($id)
+    public function acceptProposal(Request $request, $id)
     {
         try {
+            $validatedData = $request->validate([
+                'estimate_total' => 'required',
+                'upgrade_accept_reject' => 'required',
+            ]);
             $estimate = Estimate::find($id);
+            $upgrade = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('is_upgrade', 'yes')->first();
+            $upgrade->upgrade_status = $validatedData['upgrade_accept_reject'];
             $proposal = EstimateProposal::where('estimate_id', $id)->first();
-
+            
             $proposal->proposal_status = 'accepted';
-            $proposal->proposal_accepted = $proposal->proposal_total;
-            $estimate->estimate_total = $proposal->proposal_total;
-
+            $proposal->proposal_accepted = $validatedData['estimate_total'];
+            $estimate->estimate_total = $validatedData['estimate_total'];
+            
+            $upgrade->save();
             $estimate->save();
             $proposal->save();
 
@@ -609,13 +621,15 @@ class EstimateController extends Controller
 
             $estimate = Estimate::where('estimate_id', $id)->first();
             $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-            $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->get();
+            $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', '<>', 'upgrades')->get();
+            $upgrades = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', 'upgrades')->get();
 
             // return response()->json(['success' => true, 'data' => ['user_details' => $userDetails, 'estimate' => $estimate, 'customer' => $customer, 'items' => $items]], 200);
             return view('accept-proposal', [
                 'estimate' => $estimate,
                 'customer' => $customer,
                 'items' => $items,
+                'upgrades' => $upgrades,
             ]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -670,7 +684,8 @@ class EstimateController extends Controller
 
             $estimate = Estimate::where('estimate_id', $id)->first();
             $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-            $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->get();
+            $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', '<>', 'upgrades')->get();
+            $upgrades = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', 'upgrades')->get();
             $existingProposals = EstimateProposal::where('estimate_id', $id)->get();
 
             // return response()->json(['success' => true, 'data' => ['user_details' => $userDetails, 'estimate' => $estimate, 'customer' => $customer, 'items' => $items]], 200);
@@ -680,6 +695,7 @@ class EstimateController extends Controller
                 'customer' => $customer,
                 'items' => $items,
                 'existing_proposals' => $existingProposals,
+                'upgrades' => $upgrades,
             ]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -828,7 +844,7 @@ class EstimateController extends Controller
 
             $validatedData = $request->validate([
                 'estimate_id' => 'required',
-                'item_id' => 'required',
+                'item_id' => 'nullable',
                 'item_type' => 'required|string',
                 'item_name' => 'required',
                 'item_units' => 'required',
@@ -843,6 +859,7 @@ class EstimateController extends Controller
                 'assembly_name' => 'nullable|array',
                 'assembly_unit_by_item_unit' => 'nullable|array',
                 'item_unit_by_assembly_unit' => 'nullable|array',
+                'is_upgrade' => 'nullable',
                 // 'selected_items' => 'required|array',
             ]);
 
@@ -876,6 +893,7 @@ class EstimateController extends Controller
                 'item_total' => $validatedData['item_total'],
                 'item_Description' => $validatedData['item_description'],
                 'item_note' => $validatedData['item_note'],
+                'is_upgrade' => $validatedData['is_upgrade'],
             ]);
 
             if (isset($validatedData['assembly_name'])) {
@@ -1078,7 +1096,7 @@ class EstimateController extends Controller
             $labourItems = Items::where('item_type', 'labour')->get();
             $materialItems = Items::where('item_type', 'material')->get();
             $assemblyItems = Items::where('item_type', 'assemblies')->get();
-            $users = User::where('added_user_id', $userDetails['id'])->get();
+            $users = User::get();
             $estimateNotes = EstimateNote::where('estimate_id', $estimate->estimate_id)->get();
             $emailTemplates = Email::get();
             $estimateEmails = EstimateEmail::where('estimate_id', $estimate->estimate_id)->get();

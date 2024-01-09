@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('estimate_item_id');
             $table->integer('added_user_id');
             $table->integer('estimate_id');
-            $table->integer('item_id');
+            $table->integer('item_id')->nullable();
             $table->string('item_name');
             $table->string('item_type');
             $table->string('item_unit')->nullable();
