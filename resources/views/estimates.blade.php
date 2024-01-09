@@ -55,13 +55,11 @@
                                 <td>
                                     <div class=" flex justify-evenly gap-2">
                                         <div class=" my-auto">
-                                            <button class="p-2 my-auto chat-btn"
+                                            <button type="button"
+                                                class="inline-flex w-full text-white justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold shadow-sm hover:bg-[#930017]"
                                                 data-target="#chat-modal{{ $item->estimate_id }}"
                                                 data-estimate-id="{{ $item->estimate_id }}">
-                                                {{-- <img class="w-9"
-                                                    src="{{ asset('assets/icons/dropdown-activity-icon.svg') }}"
-                                                    alt="icon"> --}}
-                                                    <i class="fa-brands fa-rocketchat" style="color: #c50d0d;"></i>
+                                                <i class="fa-brands fa-rocketchat"></i>
                                             </button>
                                             <!-- chat  modal -->
                                             <div class="fixed z-10 inset-0 overflow-y-auto hidden"

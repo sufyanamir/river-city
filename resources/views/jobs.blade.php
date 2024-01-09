@@ -51,15 +51,13 @@
                                 <td>{{ $item['schedule_estimate']->start_date }}</td>
                                 <td>{{ $item['schedule_estimate']->end_date }}</td>
                                 <td>
-                                    <div class="flex">
+                                    <div class="flex justify-between">
                                         <div class=" inline-block">
-                                            <button class="p-2 my-auto chat-btn"
-                                                data-target="#chat-modal{{ $item['estimate']->estimate_id }}"
-                                                data-estimate-id="{{ $item['estimate']->estimate_id }}">
-                                                {{-- <img class="w-9"
-                                                    src="{{ asset('assets/icons/dropdown-activity-icon.svg') }}"
-                                                    alt="icon"> --}}
-                                                    <i class="fa-brands fa-rocketchat" style="color: #c50d0d;"></i>
+                                            <button type="button"
+                                                class="inline-flex w-full text-white justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold shadow-sm hover:bg-[#930017]"
+                                                data-target="#chat-modal{{ $item['schedule_estimate']->estimate_id }}"
+                                                data-estimate-id="{{ $item['schedule_estimate']->estimate_id }}">
+                                                <i class="fa-brands fa-rocketchat"></i>
                                             </button>
                                             <!-- chat  modal -->
                                             <div class="fixed z-10 inset-0 overflow-y-auto hidden"
