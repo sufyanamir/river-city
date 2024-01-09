@@ -43,7 +43,7 @@
                                 <td>{{ $item->item_units }}</td>
                                 <td>{{ $item->item_cost }}</td>
                                 <td>{{ $item->item_price }}</td>
-                                <td>{{ $item->item_description }}</td>
+                                <td class=" w-[700px]">{{ $item->item_description }}</td>
                                 <td>
                                     @if (session('user_details')['user_role'] == 'admin')
                                         <button>
