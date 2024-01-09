@@ -179,12 +179,13 @@ class EstimateController extends Controller
         if ($userDetails['user_role'] == 'crew') {
             
             $scheduleEstimates = ScheduleEstimate::where('work_assign_id', $userDetails['id'])->get();
-
+            $estimates = [];
             foreach ($scheduleEstimates as $scheduleEstimate) {
-                $estimate = Estimate::where('estimate_id', $scheduleEstimate->estimate_id)->get();
+                $estimate = Estimate::where('estimate_id', $scheduleEstimate->estimate_id)->first();
+                $estimates[] = $estimate;
             }
 
-            return view('calendar', ['estimates' => $estimate]);
+            return view('calendar', ['estimates' => $estimates]);
 
         }else {
             $estimates = Estimate::get();
