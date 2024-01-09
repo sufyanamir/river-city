@@ -427,26 +427,35 @@
             editable: true,
             droppable: true,
             drop: function(info) {
-            var date = info.date; // Get the dropped date
+    var currentDate = new Date();
+    var droppedDate = info.date;
 
-            // Open the appropriate modal based on schedule type
-            var modalId = scheduleAssigned ? 'schedule-work-modal' : 'schedule-estimate-modal';
-            var modal = document.getElementById(modalId);
-            var modalTitle = document.getElementById('modal-title');
-            var modalStartDateInput = document.getElementById('start_date');
-            var modalEndDateInput = document.getElementById('end_date');
+    // Check if the dropped date is before the current date
+    if (droppedDate < currentDate) {
+        // Display an alert or perform any other action to notify the user
+        alert('Cannot schedule events on past dates.');
 
-            // Set modal title and open modal
-            modalTitle.textContent = info.draggedEl.innerText;
-            modalStartDateInput.value = formatDate(date); // Format the date as needed
-            modalEndDateInput.value = formatDate(date); // You may want to set the end date differently
+        // Revert the dragged element to its original position
+        info.revert(); // Revert the drag operation
+        return false; // Prevent the drop if the date is before the current date
+    }
 
-            modal.classList.remove('hidden');
+    // Continue with your existing logic for handling the drop
+    var date = info.date;
+    var modalId = scheduleAssigned ? 'schedule-work-modal' : 'schedule-estimate-modal';
+    var modal = document.getElementById(modalId);
+    var modalTitle = document.getElementById('modal-title');
+    var modalStartDateInput = document.getElementById('start_date');
+    var modalEndDateInput = document.getElementById('end_date');
 
-            if (checkbox.checked) {
-                info.draggedEl.parentNode.removeChild(info.draggedEl);
-            }
-        },
+    // Set modal title and open modal
+    modalTitle.textContent = info.draggedEl.innerText;
+    modalStartDateInput.value = formatDate(date);
+    modalEndDateInput.value = formatDate(date);
+
+    modal.classList.remove('hidden');
+},
+
             eventClick: function(info) {
                 var modal = document.getElementById('modal');
                 var modalTitle = document.getElementById('modal-title');

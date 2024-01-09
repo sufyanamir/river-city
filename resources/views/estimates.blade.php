@@ -235,11 +235,6 @@
                                                             role="menuitem" tabindex="-1" id="menu-item-1"><img
                                                                 src="{{ asset('assets/icons/dropdown-activity-icon.svg') }}"
                                                                 alt="icon"> Activity</a>
-                                                        <a href="#"
-                                                            class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4"
-                                                            role="menuitem" tabindex="-1" id="menu-item-1"><img
-                                                                src="{{ asset('assets/icons/dropdown-files-icon.svg') }}"
-                                                                alt="icon"> Files</a>
                                                         <a href="/viewGallery{{ $item->estimate_id }}"
                                                             class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4"
                                                             role="menuitem" tabindex="-1" id="menu-item-1"><img
