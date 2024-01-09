@@ -3579,8 +3579,9 @@
                         <div class="  col-span-12 my-0">
                             <label for="" class="block text-left mb-1">Select Item</label>
                             <select id="selected_item" name="selected_item" autocomplete="customer-name"
-                                class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                                class=" p-2 w-[100%] outline-none rounded-md  -0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                 <option value="">select item</option>
+                                <option value="upgrades">Upgrades</option>
                                 @foreach ($items as $item)
                                     <option value="{{ $item->item_id }}">{{ $item->item_name }}</option>
                                 @endforeach
@@ -3591,6 +3592,7 @@
                             <select id="type" name="item_type" autocomplete="customer-name"
                                 class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                 <option>type</option>
+                                <option value="upgrades">Upgrades</option>
                                 <option value="labour">labour</option>
                                 <option value="material">Material</option>
                                 <option value="assemblies">Assemblies</option>
@@ -3657,7 +3659,7 @@
                                             <div class="grid text-white grid-cols-4 gap-y-3  p-2 mt-3">
                                                 <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">%</button>
                                                 <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">/</button>
-                                                <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] "><</p>
+                                                <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] "><</button>
                                                     <button id="clear_btn" type="button" class=" border rounded text-center mx-1  h-[30px] ">C</button>
 
                                                     <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">7</button>
