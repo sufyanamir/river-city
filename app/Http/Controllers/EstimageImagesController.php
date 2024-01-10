@@ -4,11 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Estimate;
+use App\Models\EstimateActivity;
 use App\Models\EstimateImages;
 use Illuminate\Http\Request;
 
 class EstimageImagesController extends Controller
 {
+
+    // estimate activity
+    private function addEstimateActivity($userDetails, $estimateId, $activityTitle, $activityDescription)
+    {
+        EstimateActivity::create([
+            'added_user_id' => $userDetails['id'],
+            'estimate_id' => $estimateId,
+            'activity_title' => $activityTitle,
+            'activity_description' => $activityDescription,
+        ]);
+    }
+    // estimate activity
 
     public function deleteEstimateImage($id)
     {
@@ -84,6 +97,8 @@ class EstimageImagesController extends Controller
 
                 $estimateImage->save();
             }
+
+            $this->addEstimateActivity($userDetails, $estimateId, 'Image Uploaded', "New Images has been uploaded in Photos Section");
 
             // Redirect or respond accordingly
             return response()->json(['success' => true, 'message' => 'Images uploaded successfully'], 200);

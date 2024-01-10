@@ -10,6 +10,7 @@ use App\Models\CompleteEstimateInvoiceWork;
 use App\Models\Customer;
 use App\Models\Email;
 use App\Models\Estimate;
+use App\Models\EstimateActivity;
 use App\Models\EstimateContact;
 use App\Models\EstimateEmail;
 use App\Models\EstimateExpenses;
@@ -38,6 +39,30 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class EstimateController extends Controller
 {
+    // ==============================================================private functions=========================================================
+
+    // estimate activity
+    private function addEstimateActivity($userDetails, $estimateId, $activityTitle, $activityDescription)
+    {
+        EstimateActivity::create([
+            'added_user_id' => $userDetails['id'],
+            'estimate_id' => $estimateId,
+            'activity_title' => $activityTitle,
+            'activity_description' => $activityDescription,
+        ]);
+    }
+
+    public function getEstimateActivity($id)
+    {
+        $userDetails = session('user_details');
+        $activities = EstimateActivity::where('estimate_id', $id)->get();
+
+        return view('estimate_activity', ['user_details' => $userDetails, 'activities' => $activities]);
+    }
+    // estimate activity
+
+    // ==============================================================private functions=========================================================
+
     // ==============================================================Jobs Portion=========================================================
     // get estimate on jobs
     public function getEstimateOnJobs()
@@ -237,6 +262,8 @@ class EstimateController extends Controller
 
             $estimateFile->save();
 
+            $this->addEstimateActivity($userDetails, $estimateId, 'File Uploaded', "A new File has been upload in Files Section");
+
             // Redirect or respond accordingly
             return response()->json(['success' => true, 'message' => 'File uploaded successfully'], 200);
         } catch (\Exception $e) {
@@ -278,6 +305,8 @@ class EstimateController extends Controller
                 'expense_description' => $validatedData['description'],
             ]);
 
+            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Expense Added', "A new Expense added in Expenses Section");
+
             return response()->json(['success' => true, 'message' => 'Expense added successfully!'], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -309,6 +338,8 @@ class EstimateController extends Controller
                 'end_date' => $validatedData['end_date'],
                 'note' => $validatedData['note'],
             ]);
+
+            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'To-Do Added', "A new To-Do added in To-Dos Section");
 
             return response()->json(['success' => true, 'message' => 'To Do Added!'], 200);
         } catch (\Exception $e) {
@@ -378,6 +409,7 @@ class EstimateController extends Controller
                 'note' => $validatedData['note'],
             ]);
 
+            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Payment Completed', "Payment has been completed of the Estimate.");
 
             return response()->json(['success' => true, 'message' => 'Payment has been completed!'], 200);
         } catch (\Exception $e) {
@@ -421,6 +453,8 @@ class EstimateController extends Controller
             ]);
 
             $estimate->save();
+
+            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Invoice Created', "A new Invoice has been created for the customer, added in Invoices Section");
 
             return response()->json(['success' => true, 'message' => 'Invoice Completed and Payment assigned!'], 200);
         } catch (\Exception $e) {
@@ -669,6 +703,8 @@ class EstimateController extends Controller
                 'proposal_total' => $validatedData['estimate_total'],
             ]);
 
+            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Proposal Sent', "A Proposal has been created and sent to the Customer");
+
             return response()->json(['success' => true, 'message' => 'Proposal Sent Successfully!'], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -752,6 +788,8 @@ class EstimateController extends Controller
                 'email_body' => $validatedData['email_body'],
             ]);
 
+            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Email Sent', "An Email has been sent to the Customer. The Subject of the email is ". $validatedData['email_subject'] . ".");
+
             return response()->json(['success' => true, 'message' => 'Email sent to the client!'], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -776,6 +814,8 @@ class EstimateController extends Controller
                 'estimate_id' => $validatedData['estimate_id'],
                 'estimate_note' => $validatedData['estimate_note'],
             ]);
+
+            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Note Added', "A new Note added in Notes Section");
 
             return response()->json(['success' => true, 'message' => 'Note added!'], 200);
         } catch (\Exception $e) {
@@ -927,6 +967,7 @@ class EstimateController extends Controller
             //         // Add other fields as needed
             //     ]);
             // }
+            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Line Item Added', "A new Line Item added in Items Section. The name of the Line Item is ". $validatedData['item_name'] . ".");
 
             return response()->json(['success' => true, 'message' => 'Items added to estimate'], 200);
         } catch (\Exception $e) {
@@ -1061,6 +1102,8 @@ class EstimateController extends Controller
                 'contact_email' => $validatedData['email'],
                 'contact_phone' => $validatedData['phone'],
             ]);
+
+            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Contact Added', "A new Contact added in Contacts Section");
 
             return  response()->json(['success' => true, 'message' => 'Addtitional contact added'], 200);
         } catch (\Exception $e) {
