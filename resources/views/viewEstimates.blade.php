@@ -602,6 +602,14 @@
                                 </svg>
                             </button>
                         </a>
+                        <a href="https://maps.google.com/?q={{$customer->customer_primary_address}}" target="_blank" class="pl-3">
+                            <button type="button"
+                                class="flex h-[40px] w-[190px] ml-2  px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#4088CD]"
+                                id="action-menubutton" aria-expanded="true" aria-haspopup="true">
+                                <span class=" my-auto">Location</span>
+                                <i class="fa-solid fa-location-dot my-auto mx-auto"></i>
+                            </button>
+                        </a>
                         <button type="button"
                             class=" flex h-[40px] w-[190px] ml-2 px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#4088CD]">
                             <img class="h-[14px] w-[14px]  my-auto mx-1"

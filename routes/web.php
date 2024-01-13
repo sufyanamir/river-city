@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EstimageImagesController;
 use App\Http\Controllers\EstimateChatController;
@@ -133,9 +134,10 @@ Route::middleware('customauth')->group(function () {
     // Route::get('/calendar', function () {
     //     return view('calendar');
     // });
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    });
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+    // Route::get('/dashboard', function () {
+    //     return view('dashboard');
+    // });
     Route::get('//addEmail', function () {
         return view('addEmail');
     });
