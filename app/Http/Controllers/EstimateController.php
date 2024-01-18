@@ -19,6 +19,8 @@ use App\Models\EstimateImage;
 use App\Models\EstimateImages;
 use App\Models\EstimateItem;
 use App\Models\EstimateItemAssembly;
+use App\Models\EstimateItemTemplateItems;
+use App\Models\EstimateItemTemplates;
 use App\Models\EstimateNote;
 use App\Models\EstimatePayments;
 use App\Models\EstimateProposal;
@@ -26,6 +28,8 @@ use App\Models\EstimateSchedule;
 use App\Models\EstimateToDos;
 use App\Models\ItemAssembly;
 use App\Models\Items;
+use App\Models\ItemTemplateItems;
+use App\Models\ItemTemplates;
 use App\Models\Notifications;
 use App\Models\ScheduleEstimate;
 use App\Models\ScheduleWork;
@@ -62,6 +66,86 @@ class EstimateController extends Controller
     // estimate activity
 
     // ==============================================================private functions=========================================================
+
+    // ==============================================================item template functions=========================================================
+    // get ItemTemplates and Items
+    public function addEstimateItemTemplate(Request $request)
+    {
+        // dd($request);
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'est_template_id' => 'required',
+                'est_template_name' => 'required',
+                'template_item_name' => 'nullable|array',
+                'template_item_qty' => 'nullable|array',
+                'template_item_id' => 'required|array',
+                'estimate_template_description' => 'nullable',
+                'estimate_template_note' => 'nullable',
+            ]);
+
+            $estTemplate = EstimateItemTemplates::create([
+                'added_user_id' => $userDetails['id'],
+                'estimate_id' => $validatedData['estimate_id'],
+                'item_template_id' => $validatedData['est_template_id'],
+                'item_template_name' => $validatedData['est_template_name'],
+                'description' => $validatedData['estimate_template_description'],
+                'note' => $validatedData['estimate_template_note'],
+            ]);
+
+            if (isset($validatedData['template_item_id'])) {
+                foreach ($validatedData['template_item_id'] as $key => $itemId) {
+                    $itemQty = $validatedData['template_item_qty'][$key];
+
+                    EstimateItemTemplateItems::create([
+                        'added_user_id' => $userDetails['id'],
+                        'estimate_id' => $validatedData['estimate_id'],
+                        'est_template_id' => $validatedData['est_template_id'],
+                        'item_id' => $itemId,
+                        'item_qty' => $itemQty,
+                    ]);
+                }
+            }
+
+            return response()->json(['success' => true, 'message' => 'Item Added!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // get ItemTemplates and Items
+    
+    // get ItemTemplates and Items
+    public function getItemTemplateItems($id)
+    {
+        try {
+            $itemTemplate = ItemTemplates::where('item_template_id', $id)->first();
+
+            $itemTemplateItems = ItemTemplateItems::where('item_template_id', $itemTemplate->item_template_id)->get();
+
+            // Extracting item_ids from itemTemplateItems
+            $itemIds = $itemTemplateItems->pluck('item_id')->toArray();
+
+            // Fetching data from Items model based on item_ids
+            $itemsData = Items::whereIn('item_id', $itemIds)->get();
+
+            // Combining the data and returning the response
+            $responseData = [
+                'item_template' => $itemTemplate,
+                'item_template_items' => $itemTemplateItems,
+                'items_data' => $itemsData,
+            ];
+
+            return response()->json(['success' => true, 'data' => $responseData], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
+    // get ItemTemplates and Items
+    // ==============================================================item template functions=========================================================
 
     // ==============================================================Jobs Portion=========================================================
     // get estimate on jobs
@@ -202,7 +286,7 @@ class EstimateController extends Controller
     {
         $userDetails = session('user_details');
         if ($userDetails['user_role'] == 'crew') {
-            
+
             $scheduleEstimates = ScheduleEstimate::where('work_assign_id', $userDetails['id'])->get();
             $estimates = [];
             foreach ($scheduleEstimates as $scheduleEstimate) {
@@ -211,8 +295,7 @@ class EstimateController extends Controller
             }
 
             return view('calendar', ['estimates' => $estimates]);
-
-        }else {
+        } else {
             $estimates = Estimate::get();
         }
 
@@ -225,7 +308,7 @@ class EstimateController extends Controller
         if ($userDetails['user_role'] == 'admin') {
             $customers = Customer::get();
             $estimates = Estimate::get();
-        }elseif ($userDetails['user_role'] == 'schedular') {
+        } elseif ($userDetails['user_role'] == 'schedular') {
             $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->get();
             $customers = Customer::get();
         }
@@ -632,11 +715,11 @@ class EstimateController extends Controller
             $upgrade = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('is_upgrade', 'yes')->first();
             $upgrade->upgrade_status = $validatedData['upgrade_accept_reject'];
             $proposal = EstimateProposal::where('estimate_id', $id)->first();
-            
+
             $proposal->proposal_status = 'accepted';
             $proposal->proposal_accepted = $validatedData['estimate_total'];
             $estimate->estimate_total = $validatedData['estimate_total'];
-            
+
             $upgrade->save();
             $estimate->save();
             $proposal->save();
@@ -788,7 +871,7 @@ class EstimateController extends Controller
                 'email_body' => $validatedData['email_body'],
             ]);
 
-            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Email Sent', "An Email has been sent to the Customer. The Subject of the email is ". $validatedData['email_subject'] . ".");
+            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Email Sent', "An Email has been sent to the Customer. The Subject of the email is " . $validatedData['email_subject'] . ".");
 
             return response()->json(['success' => true, 'message' => 'Email sent to the client!'], 200);
         } catch (\Exception $e) {
@@ -967,7 +1050,7 @@ class EstimateController extends Controller
             //         // Add other fields as needed
             //     ]);
             // }
-            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Line Item Added', "A new Line Item added in Items Section. The name of the Line Item is ". $validatedData['item_name'] . ".");
+            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Line Item Added', "A new Line Item added in Items Section. The name of the Line Item is " . $validatedData['item_name'] . ".");
 
             return response()->json(['success' => true, 'message' => 'Items added to estimate'], 200);
         } catch (\Exception $e) {
@@ -1154,6 +1237,7 @@ class EstimateController extends Controller
             $expenses = EstimateExpenses::where('estimate_id', $estimate->estimate_id)->get();
             $estimateImages = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
             $estimateFiles = EstimateFile::where('estimate_id', $estimate->estimate_id)->get();
+            $itemTemplates = ItemTemplates::get();
 
             // Calculate the sum of item_price for the estimate
             $totalPrice = $estimateItems->sum('item_price');
@@ -1185,6 +1269,7 @@ class EstimateController extends Controller
                 'estimate_files' => $estimateFiles,
                 'invoice' => $invoice,
                 'itemsForAssemblies' => $itemsForAssemblies,
+                'item_templates' => $itemTemplates,
             ]);
         } catch (\Exception $e) {
             // Handle the exception
