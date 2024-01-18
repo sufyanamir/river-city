@@ -521,7 +521,11 @@
                                 </button>
                             </form>
                         @endif
-                        @if ($estimate->estimate_assigned == 1 && $estimate->schedule_assigned != 1 && $estimate->estimate_assigned_to == $user_details['id'])
+                        @if (
+                            $estimate->estimate_assigned == 1 &&
+                                $estimate->schedule_assigned != 1 &&
+                                $estimate->estimate_assigned_to == $user_details['id']
+                        )
                             <button type="button" id="accept-estimate"
                                 class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                                 <div class=" flex mx-auto">
@@ -547,7 +551,10 @@
                                 </button>
                             </a>
                         @endif
-                        @if ($estimate->estimate_schedule_assigned_to != 1 && $estimate->estimate_schedule_assigned_to == $user_details['id'] && $estimate->estimate_assigned != 1)
+                        @if (
+                            $estimate->estimate_schedule_assigned_to != 1 &&
+                                $estimate->estimate_schedule_assigned_to == $user_details['id'] &&
+                                $estimate->estimate_assigned != 1)
                             <button type="button" id="complete-estimate"
                                 class=" complete-estimate flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                                 <img class="h-[14px] w-[14px] my-auto mx-1"
@@ -602,7 +609,8 @@
                                 </svg>
                             </button>
                         </a>
-                        <a href="https://maps.google.com/?q={{$customer->customer_primary_address}}" target="_blank" class="pl-3">
+                        <a href="https://maps.google.com/?q={{ $customer->customer_primary_address }}"
+                            target="_blank" class="pl-3">
                             <button type="button"
                                 class="flex h-[40px] w-[190px] ml-2  px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#4088CD]"
                                 id="action-menubutton" aria-expanded="true" aria-haspopup="true">
@@ -632,10 +640,10 @@
         @if ($user_details['user_role'] == 'admin')
             <div class="  border-2  shadow-lg my-5  bg-white rounded-3xl mt-7 ">
                 <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                    <div   class="flex items-center gap-2">
+                    <div class="flex items-center gap-2">
                         <button type="button" id="profitability-btn" class="flex">
                             <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
-                            alt="">
+                                alt="">
                         </button>
                         <p class="text-lg text-white pl-3 font-medium">
                             Profitability
@@ -674,11 +682,34 @@
         @if (session('user_details')['user_role'] == 'admin')
             <div class="  border-2  shadow-lg mt-7  bg-white rounded-3xl">
                 <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
-                    <button type="button" class="flex addItems bg-white p-1 m-2 rounded-lg">
+                    <button type="button" id="addItem-menubutton" class="flex bg-white p-1 m-2 rounded-lg">
                         <div class=" bg-[#930027] rounded-lg">
                             <i class="fa-solid fa-plus text-white p-2"></i>
                         </div>
                     </button>
+                    <!-- Dropdown menu -->
+                    <div id="addItem-menu"
+                        class="z-10 topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                            <li>
+                                <button id="" type="button"
+                                    class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    Add Item
+                                </button>
+                            </li>
+                            <hr>
+                            {{-- <li>
+                                <button id="addTemplate" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Template Name</button>
+                            </li> --}}
+                            @foreach ($item_templates as $template)
+                                <li>
+                                    <button id="addTemplate{{ $template->item_template_id }}"
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}</button>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
                     <p class="text-lg px-3 text-white font-medium">
                         Items
                     </p>
@@ -730,11 +761,11 @@
                                             </td>
                                             <td class="px-6 py-4 w-[50%]">
                                                 <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                    @if($item->item_description)
+                                                    @if ($item->item_description)
                                                         <p class="font-medium">Description:</p>
                                                         {{ $item->item_description }}
                                                     @endif
-                                                    @if($item->item_note)
+                                                    @if ($item->item_note)
                                                         <p class="font-medium">Note:</p>
                                                         {{ $item->item_note }}
                                                     @endif
@@ -874,11 +905,11 @@
                                             </td>
                                             <td class="px-6 py-4 w-[50%]">
                                                 <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                    @if($item->item_description)
+                                                    @if ($item->item_description)
                                                         <p class="font-medium">Description:</p>
                                                         {{ $item->item_description }}
                                                     @endif
-                                                    @if($item->item_note)
+                                                    @if ($item->item_note)
                                                         <p class="font-medium">Note:</p>
                                                         {{ $item->item_note }}
                                                     @endif
@@ -1000,8 +1031,8 @@
                                             <tr class="bg-white border-b">
                                                 <th scope="row"
                                                     class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                                    <button type="button" id="editEstimate-item{{ $item->item_id }}"
-                                                        class="inline">
+                                                    <button type="button"
+                                                        id="editEstimate-item{{ $item->item_id }}" class="inline">
                                                         <img class="h-[50px] w-[50px]"
                                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                                                             alt="">
@@ -1013,11 +1044,11 @@
                                                 </td>
                                                 <td class="px-6 py-4 w-[50%]">
                                                     <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                        @if($item->item_description)
+                                                        @if ($item->item_description)
                                                             <p class="font-medium">Description:</p>
                                                             {{ $item->item_description }}
                                                         @endif
-                                                        @if($item->item_note)
+                                                        @if ($item->item_note)
                                                             <p class="font-medium">Note:</p>
                                                             {{ $item->item_note }}
                                                         @endif
@@ -1128,11 +1159,11 @@
                                                 </td>
                                                 <td class="px-6 py-4 w-[50%]">
                                                     <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                        @if($item->item_description)
+                                                        @if ($item->item_description)
                                                             <p class="font-medium">Description:</p>
                                                             {{ $item->item_description }}
                                                         @endif
-                                                        @if($item->item_note)
+                                                        @if ($item->item_note)
                                                             <p class="font-medium">Note:</p>
                                                             {{ $item->item_note }}
                                                         @endif
@@ -1242,11 +1273,11 @@
                                                 </td>
                                                 <td class="px-6 py-4 w-[50%]">
                                                     <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                        @if($item->item_description)
+                                                        @if ($item->item_description)
                                                             <p class="font-medium">Description:</p>
                                                             {{ $item->item_description }}
                                                         @endif
-                                                        @if($item->item_note)
+                                                        @if ($item->item_note)
                                                             <p class="font-medium">Note:</p>
                                                             {{ $item->item_note }}
                                                         @endif
@@ -1357,11 +1388,11 @@
                                                 </td>
                                                 <td class="px-6 py-4 w-[50%]">
                                                     <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                        @if($item->item_description)
+                                                        @if ($item->item_description)
                                                             <p class="font-medium">Description:</p>
                                                             {{ $item->item_description }}
                                                         @endif
-                                                        @if($item->item_note)
+                                                        @if ($item->item_note)
                                                             <p class="font-medium">Note:</p>
                                                             {{ $item->item_note }}
                                                         @endif
@@ -1461,8 +1492,8 @@
                                             <tr class="bg-white border-b">
                                                 <th scope="row"
                                                     class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                                    <button type="button" id="editEstimate-item{{ $item->item_id }}"
-                                                        class="inline">
+                                                    <button type="button"
+                                                        id="editEstimate-item{{ $item->item_id }}" class="inline">
                                                         <img class="h-[50px] w-[50px]"
                                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                                                             alt="">
@@ -1474,11 +1505,11 @@
                                                 </td>
                                                 <td class="px-6 py-4 w-[50%]">
                                                     <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                        @if($item->item_description)
+                                                        @if ($item->item_description)
                                                             <p class="font-medium">Description:</p>
                                                             {{ $item->item_description }}
                                                         @endif
-                                                        @if($item->item_note)
+                                                        @if ($item->item_note)
                                                             <p class="font-medium">Note:</p>
                                                             {{ $item->item_note }}
                                                         @endif
@@ -1592,11 +1623,11 @@
                                                 </td>
                                                 <td class="px-6 py-4 w-[50%]">
                                                     <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                        @if($item->item_description)
+                                                        @if ($item->item_description)
                                                             <p class="font-medium">Description:</p>
                                                             {{ $item->item_description }}
                                                         @endif
-                                                        @if($item->item_note)
+                                                        @if ($item->item_note)
                                                             <p class="font-medium">Note:</p>
                                                             {{ $item->item_note }}
                                                         @endif
@@ -1719,12 +1750,12 @@
                 <div class=" mx-auto  px-5 py-7">
                     <div class="itemDiv">
                         @foreach ($estimate_images as $image)
-                        <a href="/viewGallery{{ $image->estimate_id }}">
-                            <div class=" inline-block p-2 mx-auto">
-                                <img class=" w-16 h-16 rounded-md hover:scale-105 duration-300" src="{{ asset('storage/' . $image->estimate_image) }}"
-                                    alt="Estimate Image">
-                            </div>
-                        </a>
+                            <a href="/viewGallery{{ $image->estimate_id }}">
+                                <div class=" inline-block p-2 mx-auto">
+                                    <img class=" w-16 h-16 rounded-md hover:scale-105 duration-300"
+                                        src="{{ asset('storage/' . $image->estimate_image) }}" alt="Estimate Image">
+                                </div>
+                            </a>
                         @endforeach
                     </div>
                 </div>
@@ -2054,16 +2085,16 @@
         @if (session('user_details')['user_role'] == 'admin')
             <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
                 <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                   <div class="flex items-center ">
-                    <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="">
-                        <div class=" bg-[#930027] rounded-lg">
-                            <i class="fa-solid fa-plus text-white p-2"></i>
-                        </div>
-                    </button>
-                    <p class="text-lg px-3 text-white  font-medium ">
-                        Time Entries
-                    </p>
-                   </div>
+                    <div class="flex items-center ">
+                        <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="">
+                            <div class=" bg-[#930027] rounded-lg">
+                                <i class="fa-solid fa-plus text-white p-2"></i>
+                            </div>
+                        </button>
+                        <p class="text-lg px-3 text-white  font-medium ">
+                            Time Entries
+                        </p>
+                    </div>
                     <div class="p-4 text-white">
                         <h1><i class="fa-solid fa-circle-exclamation"></i> Not Functioned!</h1>
                     </div>
@@ -3887,46 +3918,74 @@
                         <div class="my-0 text-left col-span-4">
                             <div class="flex justify-around items-center">
                                 <div class="relative inline-block text-left mt-2">
-                                    <button type="button" class="bg-[#930027] py-[6px] px-2 mt-5 rounded-l-md text-white">
-                                        <div  id="cal-menubutton" class=" cursor-pointer" aria-expanded="true" aria-haspopup="true">
+                                    <button type="button"
+                                        class="bg-[#930027] py-[6px] px-2 mt-5 rounded-l-md text-white">
+                                        <div id="cal-menubutton" class=" cursor-pointer" aria-expanded="true"
+                                            aria-haspopup="true">
                                             {{-- <img id="calculater-modal"  class=" inline-block" src="{{ asset('assets/icons/calculator-icon.svg') }}"
                                             alt="icon"> --}}
                                             <i id="calculater-modal" class="fa-solid fa-calculator"></i>
                                         </div>
                                     </button>
-                                {{-- ====================== --}}
-                                <div class="absolute  text-left h-[100%]  z-[999] "
-                                    <div id="cal-menu"   style="background-color:#3a4655 !important;" class=" topbar-manuLeaving   z-10 mt-2 w-56 origin-top-right rounded-md bg-[#3a4655] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                                    {{-- ====================== --}}
+                                    <div class="absolute  text-left h-[100%]  z-[999] " <div id="cal-menu"
+                                        style="background-color:#3a4655 !important;"
+                                        class=" topbar-manuLeaving   z-10 mt-2 w-56 origin-top-right rounded-md bg-[#3a4655] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                        role="menu" aria-orientation="vertical" aria-labelledby="menu-button"
+                                        tabindex="-1">
                                         <div class="py-1 left-5" role="none">
-                                           <div class="relative  bg-[#3a4655]">
-                                            <input class="block mx-2 mt-2 border bg-[#3a4655] h-[30px] rounded text-white border-white " type="text" readonly id="cal_display" >
-                                            <div class="grid text-white grid-cols-4 gap-y-3  p-2 mt-3">
-                                                <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">%</button>
-                                                <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">/</button>
-                                                <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] "><</button>
-                                                    <button id="clear_btn" type="button" class=" border rounded text-center mx-1  h-[30px] ">C</button>
+                                            <div class="relative  bg-[#3a4655]">
+                                                <input
+                                                    class="block mx-2 mt-2 border bg-[#3a4655] h-[30px] rounded text-white border-white "
+                                                    type="text" readonly id="cal_display">
+                                                <div class="grid text-white grid-cols-4 gap-y-3  p-2 mt-3">
+                                                    <button type="button"
+                                                        class="cal_btn border rounded text-center mx-1  h-[30px]">%</button>
+                                                    <button type="button"
+                                                        class="cal_btn border rounded text-center mx-1  h-[30px]">/</button>
+                                                    <button type="button"
+                                                        class="cal_btn border rounded text-center mx-1  h-[30px] ">
+                                                        << /button>
+                                                            <button id="clear_btn" type="button"
+                                                                class=" border rounded text-center mx-1  h-[30px] ">C</button>
 
-                                                    <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">7</button>
-                                                        <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">8</button>
-                                                        <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">9</button>
-                                                        <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">*</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">7</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">8</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">9</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">*</button>
 
-                                                        <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">4</button>
-                                                            <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">5</button>
-                                                            <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">6</button>
-                                                    <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">-</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">4</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">5</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">6</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">-</button>
 
-                                                    <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">1</button>
-                                                        <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">2</button>
-                                                        <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">3</button>
-                                                        <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">+</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">1</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">2</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">3</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">+</button>
 
-                                                        <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">0</button>
-                                                <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px]">00</button>
-                                                <button type="button" class="cal_btn border rounded text-center mx-1  h-[30px] ">.</button>
-                                                    <button id="equal_btn" type="button" class=" border rounded text-center mx-1  h-[30px] ">=</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">0</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">00</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">.</button>
+                                                            <button id="equal_btn" type="button"
+                                                                class=" border rounded text-center mx-1  h-[30px] ">=</button>
+                                                </div>
                                             </div>
-                                           </div>
                                         </div>
                                     </div>
                                 </div>
@@ -3952,35 +4011,36 @@
                             <div id="mulitple_input">
                                 <label for="" class="block text-left mb-1"> Assembly Name </label>
                                 <div id="item_main">
-                                <select name="assembly_name[]" id="assembly_name" placeholder="Item Name"
-                                    autocomplete="given-name"
-                                    class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                    <option value="">Select Item</option>
-                                    @foreach ($itemsForAssemblies as $item)
-                                        <option value="{{ $item->item_name }}"
-                                            data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
-                                    @endforeach
-                                </select>
-                                <div class=" grid grid-cols-2 gap-3 mt-2">
-                                    <div>
-                                        <input type="number" name="assembly_unit_by_item_unit[]"
-                                            id="assembly_unit_by_item_unit" placeholder="00.0"
-                                            autocomplete="given-name"
-                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                        <span class=" m-0 p-0 text-xs float-left text-gray-400"><span
-                                                class="unit">unit</span>/<span
-                                                class="addedItemUnit">LNFT</span></span>
+                                    <select name="assembly_name[]" id="assembly_name" placeholder="Item Name"
+                                        autocomplete="given-name"
+                                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <option value="">Select Item</option>
+                                        @foreach ($itemsForAssemblies as $item)
+                                            <option value="{{ $item->item_name }}"
+                                                data-unit="{{ $item->item_units }}">{{ $item->item_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class=" grid grid-cols-2 gap-3 mt-2">
+                                        <div>
+                                            <input type="number" name="assembly_unit_by_item_unit[]"
+                                                id="assembly_unit_by_item_unit" placeholder="00.0"
+                                                autocomplete="given-name"
+                                                class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                            <span class=" m-0 p-0 text-xs float-left text-gray-400"><span
+                                                    class="unit">unit</span>/<span
+                                                    class="addedItemUnit">LNFT</span></span>
+                                        </div>
+                                        <div>
+                                            <input type="number" name="item_unit_by_assembly_unit[]"
+                                                id="item_unit_by_assembly_unit" placeholder="00.0"
+                                                autocomplete="given-name"
+                                                class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                            <span class=" m-0 p-0 text-xs float-left text-gray-400"><span
+                                                    class="addedItemUnit">LNFT</span>/<span
+                                                    class="unit">unit</span></span>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <input type="number" name="item_unit_by_assembly_unit[]"
-                                            id="item_unit_by_assembly_unit" placeholder="00.0"
-                                            autocomplete="given-name"
-                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                        <span class=" m-0 p-0 text-xs float-left text-gray-400"><span
-                                                class="addedItemUnit">LNFT</span>/<span
-                                                class="unit">unit</span></span>
-                                    </div>
-                                </div>
                                 </div>
                             </div>
                             <div class=" text-right mt-2">
@@ -4005,6 +4065,63 @@
                                 class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
                             <button type="button" id="items-mic" class=" absolute mt-8 right-4"
                                 onclick="voice('note-mic', 'item_note')"><i
+                                    class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                        </div>
+                    </div>
+                    <div class="">
+                        <button id="updateEvent"
+                            class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addTemplate-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div
+            class="inline-block align-bottom bg-white rounded-lg text-left  shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="/addEstimateItemTemplate" method="post" enctype="multipart/form-data"
+                id="itemTemplatesForm">
+                @csrf
+                <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
+                <input type="hidden" name="est_template_id" id="estimate_template_id">
+                <input type="hidden" name="est_template_name" id="estimate_template_name">
+                {{-- <input type="hidden" name="is_upgrade" id="is_upgrade" value=""> --}}
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class=" flex justify-between">
+                        <h2 class=" text-xl font-semibold mb-2 " id="itemTemplate-title"></h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div class=" text-center grid grid-cols-12 gap-2">
+                        <div id="template-items" class=" col-span-12">
+
+                        </div>
+                        <div class="my-0 col-span-12 relative">
+                            <label for="" class="block text-left mb-1"> Item Description </label>
+                            <textarea name="estimate_template_description" id="estimate_template_description" placeholder="Description"
+                                class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                            <button type="button" id="items-mic" class=" absolute mt-8 right-4"
+                                onclick="voice('description-mic', 'estimate_template_description')"><i
+                                    class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                        </div>
+                        <div class="my-0 col-span-12 relative">
+                            <label for="" class="block text-left mb-1"> Note </label>
+                            <textarea name="estimate_template_note" id="estimate_template_note" placeholder="Description"
+                                class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                            <button type="button" id="items-mic" class=" absolute mt-8 right-4"
+                                onclick="voice('note-mic', 'estimate_template_note')"><i
                                     class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
                     </div>
@@ -4186,13 +4303,13 @@
         selectedItemDropdown.on('change', function() {
             // Get the selected item value
             var selectedItem = selectedItemDropdown.val();
-            if(selectedItem == 'upgrades'){
-                
+            if (selectedItem == 'upgrades') {
+
                 typeDropdown.val('upgrades');
                 isUpgrade.val('yes');
                 type.trigger('change');
 
-            }else{
+            } else {
                 isUpgrade.val('');
                 $.ajax({
                     url: '/getItemData/' + selectedItem, // Use the correct URL with the item ID
@@ -4219,14 +4336,14 @@
 
 
 
-                    let mulitple_input = $('#mulitple_input');
-                    mulitple_input.html('');
+                        let mulitple_input = $('#mulitple_input');
+                        mulitple_input.html('');
                         $.each(assemblyItemData, function(index, itemData) {
-                        console.log(itemData.assembly_name);
-                        let newele = $('<div class="mt-5"></div>');
-                        let delbtn = $('<span></span>');
-                    // ============
-                    newele.html(`
+                            console.log(itemData.assembly_name);
+                            let newele = $('<div class="mt-5"></div>');
+                            let delbtn = $('<span></span>');
+                            // ============
+                            newele.html(`
                                 <select name="assembly_name[]" id="" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
                                     <option selected value="${itemData.assembly_name}" data-unit="{{ $item->item_units }}">${itemData.assembly_name}</option>
@@ -4258,7 +4375,7 @@
                             delbtn.on('click', function() {
                                 newele.remove();
                             });
-                    // ============
+                            // ============
                         });
 
 
@@ -4284,26 +4401,26 @@
             // Check if a valid item is selected
             // if (selectedItem) {
             //     // Your AJAX request to fetch item data based on the selected item
-                
+
             // }
         });
-    
-    
-type.on('change', function() {
-    var typeDropdown = $('#type');
-        var multiAddItemsDiv = $('#multiAdd-items');
-        var labourExpenseDiv = $('#labourExpense');
-        var materialExpenseDiv = $('#materialExpense');
-        var unitItemInput = $('#item_units');
-        var unitLabel = $('.unit');
-        var itemCost = $('#item_cost');
-        var labourCost = $('#labour_expense');
-        var materialCost = $('#material_expense');
-        var itemPrice = $('#item_price');
-        var itemqty = $('#item_qty');
-        var itemTotal = $('#item_total');
-        var priceMargin = $('#price_margin')
-        var item_main = $('#item_main')
+
+
+        type.on('change', function() {
+            var typeDropdown = $('#type');
+            var multiAddItemsDiv = $('#multiAdd-items');
+            var labourExpenseDiv = $('#labourExpense');
+            var materialExpenseDiv = $('#materialExpense');
+            var unitItemInput = $('#item_units');
+            var unitLabel = $('.unit');
+            var itemCost = $('#item_cost');
+            var labourCost = $('#labour_expense');
+            var materialCost = $('#material_expense');
+            var itemPrice = $('#item_price');
+            var itemqty = $('#item_qty');
+            var itemTotal = $('#item_total');
+            var priceMargin = $('#price_margin')
+            var item_main = $('#item_main')
             if (type.val() === 'assemblies' || type.val() === 'upgrades') {
                 multiAddItemsDiv.removeClass('hidden');
                 item_main.addClass('hidden');
@@ -4329,8 +4446,8 @@ type.on('change', function() {
                 unitItemInput.val(null);
                 unitLabel.text('unit');
             }
-});
-});
+        });
+    });
 </script>
 <script>
     $(document).ready(function() {
@@ -4504,6 +4621,73 @@ type.on('change', function() {
     });
 </script>
 <script>
+    $('[id^="addTemplate"]').click(function() {
+        var itemId = this.id.replace('addTemplate', '');
+        $.ajax({
+            url: '/getItemTemplateItems/' + itemId,
+            method: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    var itemTemplate = response.data.item_template;
+                    var itemTemplateItems = response.data.item_template_items;
+                    var itemsData = response.data.items_data;
+
+                    for (var i = 0; i < itemTemplateItems.length; i++) {
+                        var currentItem = itemTemplateItems[i];
+
+                        // Find the corresponding item data based on item_id
+                        var correspondingItemData = itemsData.find(item => item.item_id ===
+                            currentItem.item_id);
+
+                        // Assuming currentItem has properties 'name' and 'quantity'
+                        var itemNameInput = $('#template_item_name');
+                        // var itemQtyInput = $('#template_item_qty');
+                        var itemTemplateTitle = $('#itemTemplate-title');
+                        itemTemplateTitle.text(itemTemplate.item_template_name)
+                        // Update input values with currentItem and item data
+                        var estimateTemplateId = $('#estimate_template_id');
+                        var estimateTemplateName = $('#estimate_template_name');
+                        estimateTemplateId.val(itemTemplate.item_template_id);
+                        estimateTemplateName.val(itemTemplate.item_template_name);
+                        var demoInput = $('<div>').html(`
+                            <input type="hidden" name="template_item_id[]" id="template_item_id" placeholder="Item Name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <div class="my-0">
+                                <label for="" class="block text-left mb-1"> Item Name </label>
+                                <input type="text" name="template_item_name[]" id="template_item_name" placeholder="Item Name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            </div>
+                            <div class="my-0">
+                                <label for="" class="block text-left mb-1"> Item Quantity </label>
+                                <input type="number" name="template_item_qty[]" id="template_item_qty" placeholder="Item Quantity" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            </div>`);
+                        var itemNameInput = demoInput.find('#template_item_name');
+                        var itemQtyInput = demoInput.find('#template_item_qty');
+                        var itemIdInput = demoInput.find('#template_item_id');
+
+                        itemNameInput.attr('id', 'template_item_name_' + i);
+                        itemQtyInput.attr('id', 'template_item_qty_' + i);
+                        itemIdInput.attr('id', 'template_item_id_' + i);
+                        var templateItemDiv = $('#template-items');
+
+                        demoInput.addClass('flex justify-between');
+
+                        templateItemDiv.append(demoInput);
+
+                        $('#template_item_name_' + i).val(correspondingItemData.item_name);
+                        $('#template_item_id_' + i).val(correspondingItemData.item_id);
+                        // console.log(itemTemplateItems.length)
+                        // itemQtyInput.val(currentItem.quantity);
+
+                        $('#addTemplate-modal').removeClass('hidden');
+                    }
+                }
+            },
+            error: function(error) {
+                console.error('AJAX request failed:', error);
+            }
+        });
+    });
+</script>
+<script>
     // ... (existing script)
 
     // Add a click event listener to the edit buttons
@@ -4547,12 +4731,9 @@ type.on('change', function() {
             }
         });
     });
-
-
 </script>
 <script>
-
-$("#calculater-modal").click(function(e) {
+    $("#calculater-modal").click(function(e) {
         e.preventDefault();
         $("#cal-modal").removeClass('hidden');
     });
@@ -4567,6 +4748,17 @@ $("#calculater-modal").click(function(e) {
         e.preventDefault();
         $("#addItems-modal").addClass('hidden');
         // $("#formData")[0].reset()
+    });
+    $("#addTemplate").click(function(e) {
+        e.preventDefault();
+        $("#addTemplate-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#addTemplate-modal").addClass('hidden');
+        // $("#itemTemplatesForm")[0].reset()
+        $('#template-items').empty();
     });
     $('#mulitple_input').on('change', 'select[name="assembly_name[]"]', function() {
         // Get the selected option
@@ -4625,41 +4817,41 @@ $("#calculater-modal").click(function(e) {
     });
 
 
-    $("#cal-menubutton").click(function (e) {
-    e.stopPropagation(); // Prevents the click event from reaching the document body
-    $('#cal-menu').toggleClass("topbar-menuEntring topbar-manuLeaving");
-  });
+    $("#cal-menubutton").click(function(e) {
+        e.stopPropagation(); // Prevents the click event from reaching the document body
+        $('#cal-menu').toggleClass("topbar-menuEntring topbar-manuLeaving");
+    });
 
-  $(document).on('click', function (e) {
-    if (!$("#cal-menubutton").is(e.target) && !$('#cal-menu').has(e.target).length) {
-      // Click occurred outside the button and dropdown, hide the dropdown
-      $('#cal-menu').addClass("topbar-manuLeaving").removeClass("topbar-menuEntring");
-    }
-  });
+    $(document).on('click', function(e) {
+        if (!$("#cal-menubutton").is(e.target) && !$('#cal-menu').has(e.target).length) {
+            // Click occurred outside the button and dropdown, hide the dropdown
+            $('#cal-menu').addClass("topbar-manuLeaving").removeClass("topbar-menuEntring");
+        }
+    });
 
-  let cbuttons = document.querySelectorAll('.cal_btn');
-let display = document.querySelector('#cal_display');
-let equalButton = document.querySelector('#equal_btn');
-let clearbtn = document.querySelector('#clear_btn');
+    let cbuttons = document.querySelectorAll('.cal_btn');
+    let display = document.querySelector('#cal_display');
+    let equalButton = document.querySelector('#equal_btn');
+    let clearbtn = document.querySelector('#clear_btn');
 
-cbuttons.forEach(button => {
-  button.addEventListener('click', () => {
-    display.value += button.innerHTML;
-  });
-});
+    cbuttons.forEach(button => {
+        button.addEventListener('click', () => {
+            display.value += button.innerHTML;
+        });
+    });
 
-equalButton.addEventListener('click', () => {
-    try {
-    display.value = eval(display.value );
-    item_qty.value  = display.value;
-    var inputEvent = new Event('input');
-    item_qty.dispatchEvent(inputEvent);
+    equalButton.addEventListener('click', () => {
+        try {
+            display.value = eval(display.value);
+            item_qty.value = display.value;
+            var inputEvent = new Event('input');
+            item_qty.dispatchEvent(inputEvent);
 
-  } catch (error) {
-    display.value = 'Error';
-  }
-});
-clearbtn.addEventListener('click', () => {
-    display.value =  '';
-});
+        } catch (error) {
+            display.value = 'Error';
+        }
+    });
+    clearbtn.addEventListener('click', () => {
+        display.value = '';
+    });
 </script>

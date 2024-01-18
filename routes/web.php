@@ -8,6 +8,7 @@ use App\Http\Controllers\EstimateChatController;
 use App\Http\Controllers\EstimateController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\ItemTemplatesController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\UserController;
 use App\Models\Estimate;
@@ -83,9 +84,11 @@ Route::middleware('customauth')->group(function () {
     Route::post('/updateEstimateItem', [EstimateController::class, 'updateEstimateItem']);
     Route::post('/updateAdditionalContact', [EstimateController::class, 'updateAdditionalContact']);
     Route::get('/getEstimateActivity/{id}', [EstimateController::class, 'getEstimateActivity']);
-    Route::get('/add-estimate', function () {
-        return view('addEstimate');
-    });
+    Route::get('/getItemTemplateItems/{id}', [EstimateController::class, 'getItemTemplateItems']);
+    Route::post('/addEstimateItemTemplate', [EstimateController::class, 'addEstimateItemTemplate']);
+
+    Route::post('/addItemTemplate', [ItemTemplatesController::class, 'addItemTemplate']);
+    Route::get('/itemTemplates', [ItemTemplatesController::class, 'index']);
     Route::get('/items', [ItemsController::class, 'getItems']);
     Route::post('/addItem', [ItemsController::class, 'addItem']);
     Route::match(['get', 'post'], '/delete/item/{id}', [ItemsController::class, 'deleteItem']);
