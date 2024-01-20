@@ -84,21 +84,25 @@
             <div class=" w-[85%]">
                 <div id="calendar" data-schedule-assigned="{{ isset($estimate) && $estimate->schedule_assigned == 1 ? 'true' : 'false' }}"></div>
             </div>
-            <div class="w-[15%]">
-                <div class=" bg-white rounded-lg mt-[100px] shadow-lg">
-                    <div class=" bg-[#930027] rounded-t-lg">
-                        <p class="p-2 text-center text-white font-medium">Pending List</p>
-                    </div>
-                    <div id="external-events" class=" pt-3 pb-2 flex flex-col items-center">
-                        @if(isset($estimate))
-                            @if ($estimate->schedule_assigned == 1)
-                                <div class="external-event bg-[#B7E4FF] text-xs font-medium px-2 py-2 rounded-lg w-32 mb-2 cursor-pointer" id="schedule-work">{{ $estimate->customer_name }} {{$estimate->customer_last_name}}</div>
-                            @else
-                                <div class="external-event bg-[#B7E4FF] text-xs font-medium px-2 py-2 rounded-lg w-32 mb-2 cursor-pointer" id="schedule-estimate">{{ $estimate->customer_name }} {{$estimate->customer_last_name}}</div>
+            <div id="external-events" class="w-[15%]">
+                @if (session('user_details')['user_role'] != 'crew')
+                <div class="">
+                    <div class=" bg-white rounded-lg mt-[100px] shadow-lg">
+                        <div class=" bg-[#930027] rounded-t-lg">
+                            <p class="p-2 text-center text-white font-medium">Pending List</p>
+                        </div>
+                        <div class=" pt-3 pb-2 flex flex-col items-center">
+                            @if(isset($estimate))
+                                @if ($estimate->schedule_assigned == 1)
+                                    <div class="external-event bg-[#B7E4FF] text-xs font-medium px-2 py-2 rounded-lg w-32 mb-2 cursor-pointer" id="schedule-work">{{ $estimate->customer_name }} {{$estimate->customer_last_name}}</div>
+                                @else
+                                    <div class="external-event bg-[#B7E4FF] text-xs font-medium px-2 py-2 rounded-lg w-32 mb-2 cursor-pointer" id="schedule-estimate">{{ $estimate->customer_name }} {{$estimate->customer_last_name}}</div>
+                                @endif
                             @endif
-                        @endif
+                        </div>
                     </div>
-                </div>
+                </div>  
+                @endif
             </div>
         </div>
         <!-- /.card-body -->
