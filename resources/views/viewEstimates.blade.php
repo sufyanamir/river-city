@@ -789,6 +789,90 @@
                             </table>
                         </div>
                     </div>
+                    @foreach ($estimateItemTemplates as $estItemTemplate)
+                        <div class="mb-2 bg-white shadow-xl">
+                            <div class=" flex p-1 bg-[#930027] text-white w-full rounded-t-lg">
+                                <button type="button" id="editEstimate-template{{ $estItemTemplate['est_template_id'] }}"
+                                    class="inline my-auto">
+                                    <img class="h-full w-full"
+                                        src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                </button>
+                                <h1 class=" font-medium my-auto">{{ $estItemTemplate['item_template_name'] }}</h1>
+                            </div>
+                            <div class="relative overflow-x-auto">
+                                <div class="itemDiv">
+                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Item Name
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Item Description
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Item Price
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Item Qty
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Total
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($estItemTemplate['estimateItemTemplateItems'] as $item)
+                                                <tr class="bg-white border-b">
+                                                    <th scope="row"
+                                                        class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                                        <button type="button"
+                                                            id="editEstimateTemplate-item{{ $item['est_template_item_id'] }}"
+                                                            class="inline">
+                                                            <img class="h-full w-full"
+                                                                src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
+                                                                alt="">
+                                                        </button>
+                                                    </th>
+                                                    <td class="px-6 py-4">
+                                                        <label class="text-lg font-semibold text-[#323C47]"
+                                                            for="">{{ $item['item_name'] }}</label>
+                                                    </td>
+                                                    <td class="px-6 py-4 w-[50%]">
+                                                        <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                            @if ($item['item_description'])
+                                                                <p class="font-medium">Description:</p>
+                                                                {{ $item['item_description'] }}
+                                                            @endif
+                                                            @if ($item['item_note'])
+                                                                <p class="font-medium">Note:</p>
+                                                                {{ $item['item_note'] }}
+                                                            @endif
+                                                        </p>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{ $item['item_price'] }}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{ $item['item_qty'] }}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{ $item['item_total'] }}
+                                                    </td>
+                                                </tr>
+                                                @php
+                                            $totalPrice += $item['item_total']; // Add item price to total
+                                        @endphp
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                     {{-- @foreach ($estimate_items as $item)
                         <div class=" border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
                             <div class="flex justify-between">
@@ -4621,6 +4705,76 @@
     });
 </script>
 <script>
+    $('[id^="editEstimate-template"]').click(function() {
+        var itemId = this.id.replace('editEstimate-template', '');
+        $.ajax({
+            url: '/getEstItemTemplateToEdit/' + itemId,
+            method: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    var itemTemplate = response.data.estimate_template;
+                    var itemTemplateItems = response.data.estimate_item_template_items;
+                    var itemsData = response.data.item_data;
+
+                    for (var i = 0; i < itemTemplateItems.length; i++) {
+                        var currentItem = itemTemplateItems[i];
+
+                        // Find the corresponding item data based on item_id
+                        var correspondingItemData = itemsData.find(item => item.item_id ===
+                            currentItem.item_id);
+
+                        // Assuming currentItem has properties 'name' and 'quantity'
+                        var itemNameInput = $('#template_item_name');
+                        // var itemQtyInput = $('#template_item_qty');
+                        var itemTemplateTitle = $('#itemTemplate-title');
+                        itemTemplateTitle.text(itemTemplate.item_template_name)
+                        $('#estimate_template_description').val(itemTemplate.description);
+                        $('#estimate_template_note').val(itemTemplate.note);
+                        // Update input values with currentItem and item data
+                        var estimateTemplateId = $('#estimate_template_id');
+                        var estimateTemplateName = $('#estimate_template_name');
+                        estimateTemplateId.val(itemTemplate.est_template_id);
+                        estimateTemplateName.val(itemTemplate.item_template_name);
+                        var demoInput = $('<div>').html(`
+                            <input type="hidden" name="est_template_item_id[]" id="est_template_item_id" placeholder="Item Name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <div class="my-0">
+                                <label for="" class="block text-left mb-1"> Item Name </label>
+                                <input type="text" name="template_item_name[]" id="template_item_name" placeholder="Item Name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            </div>
+                            <div class="my-0">
+                                <label for="" class="block text-left mb-1"> Item Quantity </label>
+                                <input type="number" name="template_item_qty[]" id="template_item_qty" placeholder="Item Quantity" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            </div>`);
+                        var itemNameInput = demoInput.find('#template_item_name');
+                        var itemQtyInput = demoInput.find('#template_item_qty');
+                        var itemIdInput = demoInput.find('#est_template_item_id');
+
+                        itemNameInput.attr('id', 'template_item_name_' + i);
+                        itemQtyInput.attr('id', 'template_item_qty_' + i);
+                        itemIdInput.attr('id', 'est_template_item_id_' + i);
+                        var templateItemDiv = $('#template-items');
+
+                        demoInput.addClass('flex justify-between');
+
+                        templateItemDiv.append(demoInput);
+
+                        $('#template_item_name_' + i).val(correspondingItemData.item_name);
+                        $('#est_template_item_id_' + i).val(currentItem.est_template_item_id);
+                        itemQtyInput.val(currentItem.item_qty);
+                        $('#itemTemplatesForm').attr('action', '/updateEstimateItemTemplate');
+                        // console.log(itemTemplateItems.length)
+
+                        $('#addTemplate-modal').removeClass('hidden');
+                    }
+                }
+            },
+            error: function(error) {
+                console.error('AJAX request failed:', error);
+            }
+        });
+    });
+</script>
+<script>
     $('[id^="addTemplate"]').click(function() {
         var itemId = this.id.replace('addTemplate', '');
         $.ajax({
@@ -4647,6 +4801,8 @@
                         // Update input values with currentItem and item data
                         var estimateTemplateId = $('#estimate_template_id');
                         var estimateTemplateName = $('#estimate_template_name');
+                        $('#estimate_template_description').val(itemTemplate.description);
+                        $('#estimate_template_note').val(itemTemplate.note);
                         estimateTemplateId.val(itemTemplate.item_template_id);
                         estimateTemplateName.val(itemTemplate.item_template_name);
                         var demoInput = $('<div>').html(`
@@ -4688,7 +4844,48 @@
     });
 </script>
 <script>
-    // ... (existing script)
+    $('[id^="editEstimateTemplate-item"]').click(function() {
+        var itemId = this.id.replace('editEstimateTemplate-item', ''); // Extract item ID from button ID
+
+        // Make an AJAX request to get item details
+        $.ajax({
+            url: '/getEstimateTemplateItem' + itemId,
+            method: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    // Populate the modal with the retrieved data
+                    var itemDetail = response.data.item_detail;
+                    var templateItem = response.data.template_item;
+
+                    // Update modal content with item details
+                    $('#type').val(itemDetail.item_type);
+                    $('#itemName').val(itemDetail.item_name);
+                    $('#item_units').val(itemDetail.item_units);
+                    $('#labour_expense').val(templateItem.labour_expense);
+                    $('#material_expense').val(templateItem.material_expense);
+                    $('#item_cost').val(templateItem.item_cost);
+                    $('#item_price').val(templateItem.item_price);
+                    $('#item_qty').val(templateItem.item_qty);
+                    $('#item_total').val(templateItem.item_total);
+                    $('#item_description').val(templateItem.item_description);
+                    $('#item_note').val(templateItem.item_note);
+                    // Add other fields as needed
+
+                    // Set the item ID in the hidden input field
+                    $('#item_id').val(templateItem.est_template_item_id);
+                    var formUrl = $('#itemsForm').attr('action', '/updateEstimateTemplateItem');
+                    // Open the modal
+                    $('#addItems-modal').removeClass('hidden');
+                } else {
+                    // Handle error response
+                    console.error('Error fetching item details.');
+                }
+            },
+            error: function(error) {
+                console.error('AJAX request failed:', error);
+            }
+        });
+    });
 
     // Add a click event listener to the edit buttons
     $('[id^="editEstimate-item"]').click(function() {
@@ -4706,7 +4903,7 @@
                     // Update modal content with item details
                     $('#type').val(itemDetail.item_type);
                     $('#itemName').val(itemDetail.item_name);
-                    $('#item_units').val(itemDetail.item_unit);
+                    $('#item_units').val(itemDetail.item_units);
                     $('#labour_expense').val(itemDetail.labour_expense);
                     $('#item_cost').val(itemDetail.item_cost);
                     $('#item_price').val(itemDetail.item_price);

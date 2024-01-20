@@ -86,6 +86,10 @@ Route::middleware('customauth')->group(function () {
     Route::get('/getEstimateActivity/{id}', [EstimateController::class, 'getEstimateActivity']);
     Route::get('/getItemTemplateItems/{id}', [EstimateController::class, 'getItemTemplateItems']);
     Route::post('/addEstimateItemTemplate', [EstimateController::class, 'addEstimateItemTemplate']);
+    Route::get('/getEstItemTemplateToEdit/{id}', [EstimateController::class, 'getEstItemTemplateToEdit']);
+    Route::post('/updateEstimateItemTemplate', [EstimateController::class, 'updateEstimateItemTemplate']);
+    Route::get('/getEstimateTemplateItem{id}', [EstimateController::class, 'getEstimateTemplateItem']);
+    Route::post('/updateEstimateTemplateItem', [EstimateController::class, 'updateEstimateTemplateItem']);
 
     Route::post('/addItemTemplate', [ItemTemplatesController::class, 'addItemTemplate']);
     Route::get('/itemTemplates', [ItemTemplatesController::class, 'index']);

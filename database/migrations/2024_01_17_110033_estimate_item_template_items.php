@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('est_template_id');
             $table->integer('item_id');
             $table->integer('item_qty')->nullable();
+            $table->double('item_total')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrent();
         });
