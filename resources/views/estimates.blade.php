@@ -225,7 +225,7 @@
                                                             role="menuitem" tabindex="-1" id="menu-item-1"><img
                                                                 src="{{ asset('assets/icons/dropdown-edit-icon.svg') }}"
                                                                 alt="icon"> Edit</a>
-                                                        <a href="#"
+                                                        <a href="#" 
                                                             class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4"
                                                             role="menuitem" tabindex="-1" id="menu-item-1"><img
                                                                 src="{{ asset('assets/icons/dropdown-report-icon.svg') }}"
