@@ -55,9 +55,6 @@
                                 <td>
                                     <div class=" flex justify-evenly gap-2">
                                         <div class=" my-auto">
-                                            <button class="groupDetails">
-                                                helloe
-                                            </button>
                                             <button
                                                 class="inline-flex w-full chat-btn text-white justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold shadow-sm hover:bg-[#930017]"
                                                 data-target="#chat-modal{{ $item->estimate_id }}"
