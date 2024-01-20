@@ -96,31 +96,32 @@
                     <div class=" text-center grid grid-cols-2 gap-2">
                         <div class=" my-2 col-span-2">
                             <label for="" class="block  text-left mb-1"> Template Name</label>
-                            <input type="text" name="item_template_name" id="item_template_name" placeholder="Template Name"
-                                autocomplete="given-name"
+                            <input type="text" name="item_template_name" id="item_template_name"
+                                placeholder="Template Name" autocomplete="given-name"
                                 class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class=" my-2 col-span-2" id="multiAdd-items">
-                            <div id="mulitple_input">
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div>
-                                        <label for="" class="block text-left mb-1"> Assembly Name </label>
-                                        <select name="item_id[]" id="" placeholder="Item Name"
-                                            autocomplete="given-name"
-                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                            <option value="">Select Item</option>
-                                            @foreach ($items as $item)
-                                        <option value="{{ $item->item_id }}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label for="" class="block text-left mb-1"> Assembly Name </label>
+                                    <select name="item_id[]" id="" placeholder="Item Name"
+                                        autocomplete="given-name"
+                                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <option value="">Select Item</option>
+                                        @foreach ($items as $item)
+                                            <option value="{{ $item->item_id }}" data-unit="{{ $item->item_units }}">
+                                                {{ $item->item_name }}</option>
                                         @endforeach
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label for="" class="block text-left mb-1"> Quantity(optional) </label>
-                                        <input type="number" name="item_qty[]" id="item_qty" placeholder="00.0"
-                                            autocomplete="given-name"
-                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                    </div>
+                                    </select>
                                 </div>
+                                <div>
+                                    <label for="" class="block text-left mb-1"> Quantity(optional) </label>
+                                    <input type="number" name="item_qty[]" id="item_qty" placeholder="00.0"
+                                        autocomplete="given-name"
+                                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                </div>
+                            </div>
+                            <div id="mulitple_input">
                             </div>
                             <div class=" text-right mt-2">
                                 <button type="button"
@@ -136,7 +137,7 @@
                                 class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
                             <button type="button" id="desc-mic" class=" absolute mt-8 right-4"
                                 onclick="voice('desc-mic', 'description')"><i
-                                class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                                    class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
                         <div class=" col-span-2 relative">
                             <label for="" class="block text-left mb-1"> Note </label>
@@ -144,7 +145,7 @@
                                 class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
                             <button type="button" id="note-mic" class=" absolute mt-8 right-4"
                                 onclick="voice('note-mic', 'note')"><i
-                                class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                                    class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
                     </div>
                     <div class="">
@@ -188,9 +189,9 @@
     let button = $('#addbtn');
 
     button.on('click', function() {
-        let newele = $('<div class="mt-5"></div>');
+        let id = Math.floor(Math.random() * 999 + 1);
+        let newele = $('<div class="mt-5" id="renid' + id + '"></div>');
         let rembtn = $('<span></span>');
-
         newele.html(`
         <div class="grid grid-cols-2 gap-2">
                                     <div>
@@ -201,31 +202,33 @@
                                             <option value="">Select Item</option>
                                             @foreach ($items as $item)
                                         <option value="{{ $item->item_id }}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
-                                        @endforeach 
+                                        @endforeach
                                         </select>
                                     </div>
                                     <div>
-                                        <label for="" class="block text-left mb-1"> Quantity(optional) </label>
+                                        <div class=d-flex>
+                                            <label for="" class="block text-left mb-1"> Quantity(optional) </label>
                                         <input type="number" name="item_qty[]" id="item_qty"
                                                 placeholder="00.0" autocomplete="given-name"
-                                                class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                    </div>
-                                </div>
-        `);
-
-        rembtn.html(`
-            <button type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
-            </button>
+                                                class=" w-[70%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">.
+                                            <button onclick="remitems('#renid${id}')"  type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                                                <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
+                                                </button>
+                                                </div>
+                                                </div></div>
         `);
 
         mulitple_input.append(newele);
         newele.append(rembtn);
 
-        rembtn.on('click', function() {
-            newele.remove();
-        });
     });
+
+    function remitems(e) {
+        let ele = document.querySelector(e);
+        if (ele) {
+            ele.remove();
+        }
+    }
 </script>
 <script>
     $(document).ready(function() {
