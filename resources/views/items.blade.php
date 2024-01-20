@@ -33,7 +33,7 @@
                             <th>Price</th>
                             <th style="width:300px !important">Description</th>
                             <th>Actions</th>
-                        </tr>   
+                        </tr>
                     </thead>
                     <tbody id="universalTableBody" class=" text-sm">
                         @foreach ($items as $item)
@@ -161,14 +161,14 @@
                                     class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
                                     @foreach ($itemsForAssemblies as $item)
-                                    <option value="{{ $item->item_name }}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
+                                        <option value="{{ $item->item_name }}" data-unit="{{ $item->item_units }}">
+                                            {{ $item->item_name }}</option>
                                     @endforeach
                                 </select>
                                 <div class=" grid grid-cols-2 gap-3 mt-2">
                                     <div>
                                         <input type="number" name="item_unit_by_ass_unit[]"
-                                            id="item_unit_by_ass_unit" placeholder="00.0"
-                                            autocomplete="given-name"
+                                            id="item_unit_by_ass_unit" placeholder="00.0" autocomplete="given-name"
                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                         <span class=" m-0 p-0 text-xs float-left text-gray-400"><span
                                                 class="unit">unit</span>/<span
@@ -176,8 +176,7 @@
                                     </div>
                                     <div>
                                         <input type="number" name="ass_unit_by_item_unit[]"
-                                            id="ass_unit_by_item_unit" placeholder="00.0"
-                                            autocomplete="given-name"
+                                            id="ass_unit_by_item_unit" placeholder="00.0" autocomplete="given-name"
                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                         <span class=" m-0 p-0 text-xs float-left text-gray-400"><span
                                                 class="addedItemUnit">LNFT</span>/<span
@@ -226,24 +225,25 @@
         $("#formData")[0].reset()
     });
     $('#mulitple_input').on('change', 'select[name="assembly_name[]"]', function() {
-            // Get the selected option
-            var selectedOption = $(this).find(':selected');
+        // Get the selected option
+        var selectedOption = $(this).find(':selected');
 
-            // Get the item_unit from the data-unit attribute
-            var itemUnit = selectedOption.data('unit');
+        // Get the item_unit from the data-unit attribute
+        var itemUnit = selectedOption.data('unit');
 
-            // Update the elements based on the item_unit only within the current row
-            var unitLabel = $(this).closest('.grid').find('.addedItemUnit');
-            unitLabel.text(itemUnit);
+        // Update the elements based on the item_unit only within the current row
+        var unitLabel = $(this).closest('.grid').find('.addedItemUnit');
+        unitLabel.text(itemUnit);
 
-            // You can add more logic here to update other elements based on the item_unit
-        });
+        // You can add more logic here to update other elements based on the item_unit
+    });
 
     let mulitple_input = $('#mulitple_input');
     let button = $('#addbtn');
 
-    button.on('click', function () {
-        let newele = $('<div class="mt-5"></div>');
+    button.on('click', function() {
+        let id = Math.floor(Math.random()*999 + 1);
+        let newele = $('<div class="mt-5"  id="unid' + id + '"></div>');
         let rembtn = $('<span></span>');
 
         newele.html(`
@@ -259,27 +259,28 @@
                         class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
                 </div>
-                <div>
-                    <input type="number" name="ass_unit_by_item_unit[]" id="ass_unit_by_item_unit" placeholder="00.0" autocomplete="given-name"
-                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
+                <div class="d-flex flex-col">
+                <div class="d-flex">
+                        <input type="number" name="ass_unit_by_item_unit[]" id="ass_unit_by_item_unit" placeholder="00.0" autocomplete="given-name" class=" w-[70%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        <button  onclick="remass('#unid${id}')"   class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                    <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
+                    </button>
+                </div>
+                <span   class=" m-0 ml-4 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
                 </div>
             </div>
-        `);
-
-        rembtn.html(`
-            <button type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
-            </button>
         `);
 
         mulitple_input.append(newele);
         newele.append(rembtn);
 
-        rembtn.on('click', function () {
-            newele.remove();
-        });
     });
+    function remass(e) {
+        let ele = document.querySelector(e);
+        if (ele) {
+            ele.remove();
+        }
+    }
 </script>
 <script>
     $(document).ready(function() {
