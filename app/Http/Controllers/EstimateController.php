@@ -69,6 +69,140 @@ class EstimateController extends Controller
 
     // ==============================================================item template functions=========================================================
     // get ItemTemplates and Items
+    public function updateEstimateTemplateItem(Request $request)
+    {
+        // dd($request);
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'item_id' => 'required',
+                'item_qty' => 'nullable',
+                'item_total' => 'nullable',
+                'labour_expense' => 'nullable',
+                'material_expense' => 'nullable',
+                'item_cost' => 'nullable',
+                'item_price' => 'nullable',
+                'item_description' => 'nullable',
+                'item_note' => 'nullable',
+            ]);
+
+            $templateItem = EstimateItemTemplateItems::where('est_template_item_id', $validatedData['item_id'])->first();
+
+            $templateItem->item_qty = $validatedData['item_qty'];
+            $templateItem->item_total = $validatedData['item_total'];
+            $templateItem->labour_expense = $validatedData['labour_expense'];
+            $templateItem->material_expense = $validatedData['material_expense'];
+            $templateItem->item_cost = $validatedData['item_cost'];
+            $templateItem->item_price = $validatedData['item_price'];
+            $templateItem->item_description = $validatedData['item_description'];
+            $templateItem->item_note = $validatedData['item_note'];
+
+            $templateItem->save();
+
+            return response()->json(['success' => true, 'message' => 'Item updated!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // get ItemTemplates and Items
+    
+    // get ItemTemplates and Items
+    public function getEstimateTemplateItem($id)
+    {
+        try {
+
+            $userDetails = session('user_details');
+            
+            $templateItem = EstimateItemTemplateItems::where('est_template_item_id', $id)->first();
+            $item = Items::where('item_id', $templateItem->item_id)->first();
+
+            return response(['success' => true, 'data' => ['template_item' => $templateItem, 'item_detail' => $item]], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // get ItemTemplates and Items
+    
+    // get ItemTemplates and Items
+    public function updateEstimateItemTemplate(Request $request){
+        // dd($request);
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'est_template_id' => 'required',
+                'est_template_item_id' => 'required|array',
+                'template_item_qty' => 'nullable|array',
+                'estimate_template_description' => 'nullable',
+                'estimate_template_note' => 'nullable',
+            ]);
+
+            $itemTemplate = EstimateItemTemplates::where('est_template_id', $validatedData['est_template_id'])->first();
+            $itemTemplate->description = $validatedData['estimate_template_description'];
+            $itemTemplate->note = $validatedData['estimate_template_note'];
+            
+            foreach ($validatedData['est_template_item_id'] as $key => $tempItemId) {
+                $templateItem = EstimateItemTemplateItems::where('est_template_item_id', $tempItemId)->first();
+            
+                if ($templateItem) {
+                    // Retrieve the related item
+                    $relatedItem = Items::find($templateItem->item_id);
+            
+                    if ($relatedItem) {
+                        // Update template item properties based on related item information
+                        $templateItem->item_qty = $validatedData['template_item_qty'][$key];
+                        // $templateItem->item_price = $relatedItem->item_price;
+            
+                        // Calculate item_total by multiplying item_qty with item_price
+                        $templateItem->item_total = $templateItem->item_qty * $relatedItem->item_price;
+            
+                        // Save the changes to the template item
+                        $templateItem->save();
+                    }
+                }
+            }       
+
+            $itemTemplate->save();
+
+            return response()->json(['success' => true, 'message' => 'Item updated successfully!'], 200);
+        
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // get ItemTemplates and Items
+    
+    // get ItemTemplates and Items
+    public function getEstItemTemplateToEdit($id)
+    {
+        try {
+
+            $userDetails = session('user_details');
+            $estItemTemplate = EstimateItemTemplates::where('est_template_id', $id)->first();
+            $estItemTemplateItems = EstimateItemTemplateItems::where('est_template_id', $id)->get();
+
+            $itemIds = $estItemTemplateItems->pluck('item_id')->toArray();
+
+            $itemsData = Items::whereIn('item_id', $itemIds)->get();
+
+            $responseData = [
+                'estimate_template' => $estItemTemplate,
+                'estimate_item_template_items' => $estItemTemplateItems,
+                'item_data' => $itemsData,
+            ];
+
+            return response()->json(['success' => true, 'data' => $responseData], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // get ItemTemplates and Items
+    
+    // get ItemTemplates and Items
     public function addEstimateItemTemplate(Request $request)
     {
         // dd($request);
@@ -98,25 +232,44 @@ class EstimateController extends Controller
             if (isset($validatedData['template_item_id'])) {
                 foreach ($validatedData['template_item_id'] as $key => $itemId) {
                     $itemQty = $validatedData['template_item_qty'][$key];
-
-                    EstimateItemTemplateItems::create([
-                        'added_user_id' => $userDetails['id'],
-                        'estimate_id' => $validatedData['estimate_id'],
-                        'est_template_id' => $validatedData['est_template_id'],
-                        'item_id' => $itemId,
-                        'item_qty' => $itemQty,
-                    ]);
+                    if ($itemQty > 0) {
+                        
+                        $item = Items::find($itemId);
+    
+                        if ($item) {
+                            $itemTotal = $itemQty * $item['item_price'];
+                            // Create EstimateItemTemplateItems with item details
+                            EstimateItemTemplateItems::create([
+                                'added_user_id' => $userDetails['id'],
+                                'estimate_id' => $validatedData['estimate_id'],
+                                'est_template_id' => $estTemplate->est_template_id,
+                                'item_id' => $itemId,
+                                'item_qty' => $itemQty,
+                                'item_total' => $itemTotal,
+                                'labour_expense' => $item->labour_expense,
+                                'material_expense' => $item->material_expense,
+                                'item_cost' => $item->item_cost,
+                                'item_price' => $item->item_price,
+                                'item_description' => $item->item_description,
+                                'item_note' => $item->item_note,
+                                // You can add other item details here if needed
+                            ]);
+                        } else {
+                            // Handle the case where the item with the given item_id is not found
+                            return response()->json(['success' => false, 'message' => 'Item not found for item_id ' . $itemId], 404);
+                        }
+                    
+                    }
                 }
             }
 
             return response()->json(['success' => true, 'message' => 'Item Added!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     // get ItemTemplates and Items
-    
+
     // get ItemTemplates and Items
     public function getItemTemplateItems($id)
     {
@@ -1238,10 +1391,50 @@ class EstimateController extends Controller
             $estimateImages = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
             $estimateFiles = EstimateFile::where('estimate_id', $estimate->estimate_id)->get();
             $itemTemplates = ItemTemplates::get();
+            // $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->get();
+            $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->get();
+            $estimateItemTemplateItems = [];
+
+            foreach ($estimateItemTemplates as $key => $itemTemplate) {
+                $templateItems = EstimateItemTemplateItems::where('est_template_id', $itemTemplate->est_template_id)->get();
+
+                // Extract item_qty from the template items
+                $itemQuantities = $templateItems->pluck('item_qty')->toArray();
+                $itemTotals = $templateItems->pluck('item_total')->toArray();
+
+                // Fetch all data for Items
+                $items = Items::whereIn('item_id', $templateItems->pluck('item_id')->toArray())->get(); // Replace 'Item' with your actual model name
+
+                // Combine item_qty and Items data in a new array
+                $combinedItems = [];
+                foreach ($items as $index => $item) {
+                    $combinedItems[] = [
+                        'est_template_item_id' => $templateItems[$index]->est_template_item_id,
+                        'item_qty' => $itemQuantities[$index],
+                        'item_total' => $itemTotals[$index],
+                        'item_id' => $item->item_id,
+                        'item_name' => $item->item_name,
+                        'item_type' => $item->item_type,
+                        'item_units' => $item->item_units,
+                        'item_cost' => $templateItems[$index]->item_cost,
+                        'item_price' => $templateItems[$index]->item_price,
+                        'labour_expense' => $templateItems[$index]->labour_expense,
+                        'material_expense' => $templateItems[$index]->material_expense,
+                        'item_description' => $templateItems[$index]->item_description,
+                        'item_note' => $templateItems[$index]->item_note,
+                    ];
+                }
+
+                // Add the combinedItems to the template items
+                $itemTemplate->estimateItemTemplateItems = $combinedItems;
+
+                // Add the modified itemTemplate to the result array
+                $estimateItemTemplateItems[] = $itemTemplate;
+            }
 
             // Calculate the sum of item_price for the estimate
             $totalPrice = $estimateItems->sum('item_price');
-
+            // return response()->json(['estimateItemTemplates' => $estimateItemTemplates]);
             return view('viewEstimates', [
                 'customer' => $customer,
                 'estimate' => $estimate,
@@ -1270,6 +1463,7 @@ class EstimateController extends Controller
                 'invoice' => $invoice,
                 'itemsForAssemblies' => $itemsForAssemblies,
                 'item_templates' => $itemTemplates,
+                'estimateItemTemplates' => $estimateItemTemplates
             ]);
         } catch (\Exception $e) {
             // Handle the exception

@@ -19,6 +19,13 @@ class EstimateItemTemplateItems extends Model
         'est_template_id',
         'item_id',
         'item_qty',
+        'item_total',
+        'labour_expense',
+        'material_expense',
+        'item_cost',
+        'item_price',
+        'item_description',
+        'item_note',
     ];
 
     public $timestamps = true;
