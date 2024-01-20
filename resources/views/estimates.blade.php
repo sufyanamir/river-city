@@ -55,6 +55,9 @@
                                 <td>
                                     <div class=" flex justify-evenly gap-2">
                                         <div class=" my-auto">
+                                            <button class="groupDetails">
+                                                helloe
+                                            </button>
                                             <button
                                                 class="inline-flex w-full chat-btn text-white justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold shadow-sm hover:bg-[#930017]"
                                                 data-target="#chat-modal{{ $item->estimate_id }}"
@@ -225,7 +228,7 @@
                                                             role="menuitem" tabindex="-1" id="menu-item-1"><img
                                                                 src="{{ asset('assets/icons/dropdown-edit-icon.svg') }}"
                                                                 alt="icon"> Edit</a>
-                                                        <a href="#"
+                                                        <a href="#" 
                                                             class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4"
                                                             role="menuitem" tabindex="-1" id="menu-item-1"><img
                                                                 src="{{ asset('assets/icons/dropdown-report-icon.svg') }}"

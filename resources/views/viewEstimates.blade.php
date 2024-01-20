@@ -718,6 +718,7 @@
                     $totalPrice = 0; // Initialize total price variable
                 @endphp
                 <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
+                    @if($estimate_items->count() > 0)
                     <div class="relative overflow-x-auto">
                         <div class="itemDiv">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -789,6 +790,7 @@
                             </table>
                         </div>
                     </div>
+                    @endif
                     @foreach ($estimateItemTemplates as $estItemTemplate)
                         <div class="mb-2 bg-white shadow-xl">
                             <div class=" flex p-1 bg-[#930027] text-white w-full rounded-t-lg">
@@ -841,7 +843,7 @@
                                                         <label class="text-lg font-semibold text-[#323C47]"
                                                             for="">{{ $item['item_name'] }}</label>
                                                     </td>
-                                                    <td class="px-6 py-4 w-[50%]">
+                                                    <td class="px-6 py-4 w-[40%]">
                                                         <p class="text-[16px]/[18px] text-[#323C47] font">
                                                             @if ($item['item_description'])
                                                                 <p class="font-medium">Description:</p>
@@ -932,20 +934,44 @@
                 isset($userPrivileges->estimate->items) &&
                 $userPrivileges->estimate->items === 'on')
             <div class="  border-2  shadow-lg mt-7  bg-white rounded-3xl">
-                <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                    <p class="text-lg px-3 text-white font-medium">
-                        Items
-                    </p>
-                    <button type="button" class="flex addItems bg-white p-1 m-2 rounded-lg">
+                <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
+                    <button type="button" id="addItem-menubutton" class="flex bg-white p-1 m-2 rounded-lg">
                         <div class=" bg-[#930027] rounded-lg">
                             <i class="fa-solid fa-plus text-white p-2"></i>
                         </div>
                     </button>
+                    <!-- Dropdown menu -->
+                    <div id="addItem-menu"
+                        class="z-10 topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                            <li>
+                                <button id="" type="button"
+                                    class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    Add Item
+                                </button>
+                            </li>
+                            <hr>
+                            {{-- <li>
+                                <button id="addTemplate" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Template Name</button>
+                            </li> --}}
+                            @foreach ($item_templates as $template)
+                                <li>
+                                    <button id="addTemplate{{ $template->item_template_id }}"
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}</button>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                    <p class="text-lg px-3 text-white font-medium">
+                        Items
+                    </p>
                 </div>
                 @php
                     $totalPrice = 0; // Initialize total price variable
                 @endphp
                 <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
+                    @if($estimate_items->count() > 0)
                     <div class="relative overflow-x-auto">
                         <div class="itemDiv">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -978,7 +1004,7 @@
                                                 class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                 <button type="button" id="editEstimate-item{{ $item->item_id }}"
                                                     class="inline">
-                                                    <img class="h-[50px] w-[50px]"
+                                                    <img class="h-full w-full"
                                                         src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                                                         alt="">
                                                 </button>
@@ -1017,6 +1043,91 @@
                             </table>
                         </div>
                     </div>
+                    @endif
+                    @foreach ($estimateItemTemplates as $estItemTemplate)
+                        <div class="mb-2 bg-white shadow-xl">
+                            <div class=" flex p-1 bg-[#930027] text-white w-full rounded-t-lg">
+                                <button type="button" id="editEstimate-template{{ $estItemTemplate['est_template_id'] }}"
+                                    class="inline my-auto">
+                                    <img class="h-full w-full"
+                                        src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                </button>
+                                <h1 class=" font-medium my-auto">{{ $estItemTemplate['item_template_name'] }}</h1>
+                            </div>
+                            <div class="relative overflow-x-auto">
+                                <div class="itemDiv">
+                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Item Name
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Item Description
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Item Price
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Item Qty
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Total
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($estItemTemplate['estimateItemTemplateItems'] as $item)
+                                                <tr class="bg-white border-b">
+                                                    <th scope="row"
+                                                        class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                                        <button type="button"
+                                                            id="editEstimateTemplate-item{{ $item['est_template_item_id'] }}"
+                                                            class="inline">
+                                                            <img class="h-full w-full"
+                                                                src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
+                                                                alt="">
+                                                        </button>
+                                                    </th>
+                                                    <td class="px-6 py-4">
+                                                        <label class="text-lg font-semibold text-[#323C47]"
+                                                            for="">{{ $item['item_name'] }}</label>
+                                                    </td>
+                                                    <td class="px-6 py-4 w-[40%]">
+                                                        <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                            @if ($item['item_description'])
+                                                                <p class="font-medium">Description:</p>
+                                                                {{ $item['item_description'] }}
+                                                            @endif
+                                                            @if ($item['item_note'])
+                                                                <p class="font-medium">Note:</p>
+                                                                {{ $item['item_note'] }}
+                                                            @endif
+                                                        </p>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{ $item['item_price'] }}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{ $item['item_qty'] }}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{ $item['item_total'] }}
+                                                    </td>
+                                                </tr>
+                                                @php
+                                            $totalPrice += $item['item_total']; // Add item price to total
+                                        @endphp
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                     {{-- @foreach ($estimate_items as $item)
                         <div class=" border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
                             <div class="flex justify-between">
@@ -4737,14 +4848,83 @@
                         estimateTemplateName.val(itemTemplate.item_template_name);
                         var demoInput = $('<div>').html(`
                             <input type="hidden" name="est_template_item_id[]" id="est_template_item_id" placeholder="Item Name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                            <div class="my-0">
-                                <label for="" class="block text-left mb-1"> Item Name </label>
-                                <input type="text" name="template_item_name[]" id="template_item_name" placeholder="Item Name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <div class="my-0 flex items-center gap-2 text-left">
+                                <div class="relative text-left my-1">
+                                    <button type="button"
+                                        class="bg-[#930027] py-[6px] px-2 rounded-md text-white">
+                                        <div id="cal-menubutton" class=" cursor-pointer" aria-expanded="true"
+                                            aria-haspopup="true">
+                                            {{-- <img id="calculater-modal"  class="" src="{{ asset('assets/icons/calculator-icon.svg') }}"
+                                            alt="icon"> --}}
+                                            <i id="calculater-modal" class="fa-solid fa-calculator"></i>
+                                        </div>
+                                    </button>
+                                    {{-- ====================== --}}
+                                    <div class="absolute hidden  text-left h-[100%]  z-[999] " <div id="cal-menu"
+                                        style="background-color:#3a4655 !important;"
+                                        class=" topbar-manuLeaving   z-10 mt-2 w-56 origin-top-right rounded-md bg-[#3a4655] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                        role="menu" aria-orientation="vertical" aria-labelledby="menu-button"
+                                        tabindex="-1">
+                                        <div class="py-1 left-5" role="none">
+                                            <div class="relative  bg-[#3a4655]">
+                                                <input
+                                                    class="block mx-2 mt-2 border bg-[#3a4655] h-[30px] rounded text-white border-white "
+                                                    type="text" readonly id="cal_display">
+                                                <div class="grid text-white grid-cols-4 gap-y-3  p-2 mt-3">
+                                                    <button type="button"
+                                                        class="cal_btn border rounded text-center mx-1  h-[30px]">%</button>
+                                                    <button type="button"
+                                                        class="cal_btn border rounded text-center mx-1  h-[30px]">/</button>
+                                                    <button type="button"
+                                                        class="cal_btn border rounded text-center mx-1  h-[30px] ">
+                                                        << /button>
+                                                            <button id="clear_btn" type="button"
+                                                                class=" border rounded text-center mx-1  h-[30px] ">C</button>
+
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">7</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">8</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">9</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">*</button>
+
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">4</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">5</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">6</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">-</button>
+
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">1</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">2</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">3</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">+</button>
+
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">0</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">00</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">.</button>
+                                                            <button id="equal_btn" type="button"
+                                                                class=" border rounded text-center mx-1  h-[30px] ">=</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="number" name="template_item_qty[]" id="template_item_qty" placeholder="" class=" w-[15%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <p id="template_item_name" class=" font-medium overflow-hidden items-center bg-[#EBEAEB] py-1 px-2 rounded-lg w-[75%]"></p>    
                             </div>
-                            <div class="my-0">
-                                <label for="" class="block text-left mb-1"> Item Quantity </label>
-                                <input type="number" name="template_item_qty[]" id="template_item_qty" placeholder="Item Quantity" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                            </div>`);
+                            `);
                         var itemNameInput = demoInput.find('#template_item_name');
                         var itemQtyInput = demoInput.find('#template_item_qty');
                         var itemIdInput = demoInput.find('#est_template_item_id');
@@ -4754,11 +4934,11 @@
                         itemIdInput.attr('id', 'est_template_item_id_' + i);
                         var templateItemDiv = $('#template-items');
 
-                        demoInput.addClass('flex justify-between');
+                        // demoInput.addClass('flex justify-start');
 
                         templateItemDiv.append(demoInput);
 
-                        $('#template_item_name_' + i).val(correspondingItemData.item_name);
+                        $('#template_item_name_' + i).text(correspondingItemData.item_name + correspondingItemData.item_description + correspondingItemData.item_note);
                         $('#est_template_item_id_' + i).val(currentItem.est_template_item_id);
                         itemQtyInput.val(currentItem.item_qty);
                         $('#itemTemplatesForm').attr('action', '/updateEstimateItemTemplate');
@@ -4807,14 +4987,83 @@
                         estimateTemplateName.val(itemTemplate.item_template_name);
                         var demoInput = $('<div>').html(`
                             <input type="hidden" name="template_item_id[]" id="template_item_id" placeholder="Item Name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                            <div class="my-0">
-                                <label for="" class="block text-left mb-1"> Item Name </label>
-                                <input type="text" name="template_item_name[]" id="template_item_name" placeholder="Item Name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <div class="my-0 flex items-center gap-2 text-left">
+                                <div class="relative text-left my-1">
+                                    <button type="button"
+                                        class="bg-[#930027] py-[6px] px-2 rounded-md text-white">
+                                        <div id="cal-menubutton" class=" cursor-pointer" aria-expanded="true"
+                                            aria-haspopup="true">
+                                            {{-- <img id="calculater-modal"  class="" src="{{ asset('assets/icons/calculator-icon.svg') }}"
+                                            alt="icon"> --}}
+                                            <i id="calculater-modal" class="fa-solid fa-calculator"></i>
+                                        </div>
+                                    </button>
+                                    {{-- ====================== --}}
+                                    <div class="absolute hidden  text-left h-[100%]  z-[999] " <div id="cal-menu"
+                                        style="background-color:#3a4655 !important;"
+                                        class=" topbar-manuLeaving   z-10 mt-2 w-56 origin-top-right rounded-md bg-[#3a4655] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                        role="menu" aria-orientation="vertical" aria-labelledby="menu-button"
+                                        tabindex="-1">
+                                        <div class="py-1 left-5" role="none">
+                                            <div class="relative  bg-[#3a4655]">
+                                                <input
+                                                    class="block mx-2 mt-2 border bg-[#3a4655] h-[30px] rounded text-white border-white "
+                                                    type="text" readonly id="cal_display">
+                                                <div class="grid text-white grid-cols-4 gap-y-3  p-2 mt-3">
+                                                    <button type="button"
+                                                        class="cal_btn border rounded text-center mx-1  h-[30px]">%</button>
+                                                    <button type="button"
+                                                        class="cal_btn border rounded text-center mx-1  h-[30px]">/</button>
+                                                    <button type="button"
+                                                        class="cal_btn border rounded text-center mx-1  h-[30px] ">
+                                                        << /button>
+                                                            <button id="clear_btn" type="button"
+                                                                class=" border rounded text-center mx-1  h-[30px] ">C</button>
+
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">7</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">8</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">9</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">*</button>
+
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">4</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">5</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">6</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">-</button>
+
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">1</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">2</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">3</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">+</button>
+
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">0</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">00</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">.</button>
+                                                            <button id="equal_btn" type="button"
+                                                                class=" border rounded text-center mx-1  h-[30px] ">=</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="number" name="template_item_qty[]" id="template_item_qty" placeholder="" class=" w-[15%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <p id="template_item_name" class=" font-medium overflow-hidden items-center bg-[#EBEAEB] py-1 px-2 rounded-lg w-[75%]"></p>    
                             </div>
-                            <div class="my-0">
-                                <label for="" class="block text-left mb-1"> Item Quantity </label>
-                                <input type="number" name="template_item_qty[]" id="template_item_qty" placeholder="Item Quantity" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                            </div>`);
+                            `);
                         var itemNameInput = demoInput.find('#template_item_name');
                         var itemQtyInput = demoInput.find('#template_item_qty');
                         var itemIdInput = demoInput.find('#template_item_id');
@@ -4824,12 +5073,13 @@
                         itemIdInput.attr('id', 'template_item_id_' + i);
                         var templateItemDiv = $('#template-items');
 
-                        demoInput.addClass('flex justify-between');
+                        // demoInput.addClass('flex justify-between');
 
                         templateItemDiv.append(demoInput);
 
-                        $('#template_item_name_' + i).val(correspondingItemData.item_name);
+                        $('#template_item_name_' + i).text(correspondingItemData.item_name + correspondingItemData.item_description + correspondingItemData.item_note);
                         $('#template_item_id_' + i).val(correspondingItemData.item_id);
+                        $('#template_item_qty_' + i).val(currentItem.item_qty);
                         // console.log(itemTemplateItems.length)
                         // itemQtyInput.val(currentItem.quantity);
 
