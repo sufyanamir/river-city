@@ -380,7 +380,7 @@
                     <div class=" my-2">
                         <img class=" inline-block" src="{{ asset('assets/icons/calculator-icon.svg') }}"
                             alt="icon">
-                        <input type="number" name="departement" id="departement" placeholder="gal"
+                        <input type="number" step="any" name="departement" id="departement" placeholder="gal"
                             autocomplete="given-name"
                             class=" w-[15%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         <p class=" font-medium inline-block items-center bg-[#EBEAEB] py-1 px-2 rounded-lg">65 Water
@@ -389,7 +389,7 @@
                     <div class=" my-2">
                         <img class=" inline-block" src="{{ asset('assets/icons/calculator-icon.svg') }}"
                             alt="icon">
-                        <input type="number" name="departement" id="departement" placeholder="gal"
+                        <input type="number" step="any" name="departement" id="departement" placeholder="gal"
                             autocomplete="given-name"
                             class=" w-[15%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         <p class=" font-medium inline-block items-center bg-[#EBEAEB] py-1 px-2 rounded-lg">65 Water
@@ -398,7 +398,7 @@
                     <div class=" my-2">
                         <img class=" inline-block" src="{{ asset('assets/icons/calculator-icon.svg') }}"
                             alt="icon">
-                        <input type="number" name="departement" id="departement" placeholder="gal"
+                        <input type="number" step="any" name="departement" id="departement" placeholder="gal"
                             autocomplete="given-name"
                             class=" w-[15%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         <p class=" font-medium inline-block items-center bg-[#EBEAEB] py-1 px-2 rounded-lg">65 Water
@@ -525,7 +525,7 @@
                         </div>
                         <div class=" col-span-2 ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Project Number (Optional)</h5>
-                            <input type="number" name="project_number" id="project_number"
+                            <input type="number" step="any" name="project_number" id="project_number"
                                 placeholder="Company Name (Optional)" autocomplete="given-name"
                                 class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
@@ -558,13 +558,13 @@
                         </div>
                         <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Zip/Postal Code</h5>
-                            <input type="number" name="zip_code" id="zip_code" placeholder="Zip/Postal Code"
+                            <input type="number" step="any" name="zip_code" id="zip_code" placeholder="Zip/Postal Code"
                                 autocomplete="given-name"
                                 class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class=" col-span-2">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Tax</h5>
-                            <input type="number" name="tax_rate" id="tax_rate" placeholder="Tax Rate (Optional)"
+                            <input type="number" step="any" name="tax_rate" id="tax_rate" placeholder="Tax Rate (Optional)"
                                 autocomplete="given-name"
                                 class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
@@ -601,7 +601,7 @@
                     </div>
                     <div class="">
                         <button id=""
-                            class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Add
+                            class=" save-btn mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Add
                         </button>
                     </div>
                 </div>
