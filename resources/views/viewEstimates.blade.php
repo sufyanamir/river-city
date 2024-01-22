@@ -678,7 +678,7 @@
             </div>
         @endif
         @if (session('user_details')['user_role'] == 'admin')
-            <div class="  border-2  shadow-lg mt-7  bg-white rounded-3xl">
+            <div class=" relative  border-2  shadow-lg mt-7  bg-white rounded-3xl">
                 <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
                     <button type="button" id="addItem-menubutton" class="flex bg-white p-1 m-2 rounded-lg">
                         <div class=" bg-[#930027] rounded-lg">
@@ -686,27 +686,30 @@
                         </div>
                     </button>
                     <!-- Dropdown menu -->
-                    <div id="addItem-menu"
-                        class="z-10 topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                            <li>
-                                <button id="" type="button"
-                                    class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                    Add Item
-                                </button>
-                            </li>
-                            <hr>
-                            {{-- <li>
-                                <button id="addTemplate" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Template Name</button>
-                            </li> --}}
-                            @foreach ($item_templates as $template)
+                    <div class="absolute top-14 z-10">
+                        <div id="addItem-menu"
+                            class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                                 <li>
-                                    <button id="addTemplate{{ $template->item_template_id }}"
-                                        class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}
+                                    <button id="" type="button"
+                                        class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        Add Item
                                     </button>
                                 </li>
-                            @endforeach
-                        </ul>
+                                <hr>
+                                {{-- <li>
+                                    <button id="addTemplate" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Template Name</button>
+                                </li> --}}
+                                @foreach ($item_templates as $template)
+                                    <li>
+                                        <button id="addTemplate{{ $template->item_template_id }}"
+                                            class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}
+                                        </button>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+
                     </div>
 
                     <p class="text-lg px-3 text-white font-medium">
@@ -932,7 +935,7 @@
         @elseif(isset($userPrivileges->estimate) &&
                 isset($userPrivileges->estimate->items) &&
                 $userPrivileges->estimate->items === 'on')
-            <div class="  border-2  shadow-lg mt-7  bg-white rounded-3xl">
+            <div class=" relative  border-2  shadow-lg mt-7  bg-white rounded-3xl">
                 <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
                     <button type="button" id="addItem-menubutton" class="flex bg-white p-1 m-2 rounded-lg">
                         <div class=" bg-[#930027] rounded-lg">
@@ -940,26 +943,28 @@
                         </div>
                     </button>
                     <!-- Dropdown menu -->
-                    <div id="addItem-menu"
-                        class="z-10 topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                            <li>
-                                <button id="" type="button"
-                                    class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                    Add Item
-                                </button>
-                            </li>
-                            <hr>
-                            {{-- <li>
-                                <button id="addTemplate" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Template Name</button>
-                            </li> --}}
-                            @foreach ($item_templates as $template)
+                    <div class=" absolute z-10 top-14">
+                        <div id="addItem-menu"
+                            class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                                 <li>
-                                    <button id="addTemplate{{ $template->item_template_id }}"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}</button>
+                                    <button id="" type="button"
+                                        class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        Add Item
+                                    </button>
                                 </li>
-                            @endforeach
-                        </ul>
+                                <hr>
+                                {{-- <li>
+                                    <button id="addTemplate" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Template Name</button>
+                                </li> --}}
+                                @foreach ($item_templates as $template)
+                                    <li>
+                                        <button id="addTemplate{{ $template->item_template_id }}"
+                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}</button>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
 
                     <p class="text-lg px-3 text-white font-medium">
