@@ -751,7 +751,7 @@
                                         <tr class="bg-white border-b">
                                             <th scope="row"
                                                 class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                                <button type="button" id="editEstimate-item{{ $item->item_id }}"
+                                                <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}"
                                                     class="inline">
                                                     <img class="h-full w-full"
                                                         src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
@@ -1006,7 +1006,7 @@
                                         <tr class="bg-white border-b">
                                             <th scope="row"
                                                 class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                                <button type="button" id="editEstimate-item{{ $item->item_id }}"
+                                                <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}"
                                                     class="inline">
                                                     <img class="h-full w-full"
                                                         src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
@@ -1231,7 +1231,7 @@
                                                 <th scope="row"
                                                     class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                     <button type="button"
-                                                        id="editEstimate-item{{ $item->item_id }}" class="inline">
+                                                        id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                                                         <img class="h-[50px] w-[50px]"
                                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                                                             alt="">
@@ -1346,7 +1346,7 @@
                                                 <th scope="row"
                                                     class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                     <button type="button"
-                                                        id="editEstimate-item{{ $item->item_id }}" class="inline">
+                                                        id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                                                         <img class="h-[50px] w-[50px]"
                                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                                                             alt="">
@@ -1460,7 +1460,7 @@
                                                 <th scope="row"
                                                     class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                     <button type="button"
-                                                        id="editEstimate-item{{ $item->item_id }}" class="inline">
+                                                        id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                                                         <img class="h-[50px] w-[50px]"
                                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                                                             alt="">
@@ -1575,7 +1575,7 @@
                                                 <th scope="row"
                                                     class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                     <button type="button"
-                                                        id="editEstimate-item{{ $item->item_id }}" class="inline">
+                                                        id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                                                         <img class="h-[50px] w-[50px]"
                                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                                                             alt="">
@@ -1692,7 +1692,7 @@
                                                 <th scope="row"
                                                     class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                     <button type="button"
-                                                        id="editEstimate-item{{ $item->item_id }}" class="inline">
+                                                        id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                                                         <img class="h-[50px] w-[50px]"
                                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                                                             alt="">
@@ -1810,7 +1810,7 @@
                                                 <th scope="row"
                                                     class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                     <button type="button"
-                                                        id="editEstimate-item{{ $item->item_id }}" class="inline">
+                                                        id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                                                         <img class="h-[50px] w-[50px]"
                                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                                                             alt="">
@@ -4926,7 +4926,7 @@
                                     </div>
                                 </div>
                                 <input type="number" name="template_item_qty[]" id="template_item_qty" placeholder="" class=" w-[15%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                <p id="template_item_name" class=" font-medium overflow-hidden items-center bg-[#EBEAEB] py-1 px-2 rounded-lg w-[75%]"></p>    
+                                <p id="template_item_name" class=" font-medium overflow-hidden whitespace-nowrap items-center bg-[#EBEAEB] py-1 px-2 rounded-lg w-[75%]"></p>    
                             </div>
                             `);
                         var itemNameInput = demoInput.find('#template_item_name');
@@ -5065,7 +5065,7 @@
                                     </div>
                                 </div>
                                 <input type="number" name="template_item_qty[]" id="template_item_qty" placeholder="" class=" w-[15%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                <p id="template_item_name" class=" font-medium overflow-hidden items-center bg-[#EBEAEB] py-1 px-2 rounded-lg w-[75%]"></p>    
+                                <p id="template_item_name" class=" font-medium overflow-hidden whitespace-nowrap items-center bg-[#EBEAEB] py-1 px-2 rounded-lg w-[75%]"></p>    
                             </div>
                             `);
                         var itemNameInput = demoInput.find('#template_item_name');
