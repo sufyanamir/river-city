@@ -957,7 +957,7 @@ class EstimateController extends Controller
             $validatedData = $request->validate([
                 'estimate_id' => 'required',
                 'customer_email' => 'required|string',
-                'estimate_total' => 'required|numeric',
+                'estimate_total' => 'required',
             ]);
 
             $emailData = [
