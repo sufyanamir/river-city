@@ -1187,7 +1187,7 @@ class EstimateController extends Controller
     // get estimate item details for edit
     public function getEstimateItem($id)
     {
-        $estimateItem = EstimateItem::where('item_id', $id)->first();
+        $estimateItem = EstimateItem::where('estimate_item_id', $id)->first();
 
         return response()->json(['success' => true, 'item_detail' => $estimateItem], 200);
     }

@@ -288,7 +288,7 @@
         function updateTotal() {
             if (upgradeAcceptRadio.prop('checked')) {
                 total += parseFloat("{{ $item['item_total'] }}");
-            } else if (upgradeRejectRadio.prop('checked')) {
+            } else {
                 total -= parseFloat("{{ $item['item_total'] }}");
             }
             dynamicTotalSpan.text('$' + total.toFixed(2));
