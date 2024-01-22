@@ -36,6 +36,8 @@ $(document).ready(function () {
       processData: false, // Important: Don't process the data
       contentType: false, // Important: Don't set content type (jQuery will automatically set it based on FormData)
       beforeSend: function () {
+        $('.text').addClass('hidden');
+        $('.spinner').removeClass('hidden');
         topbar.config({
           autoRun: false,
           barThickness: 3,
@@ -52,6 +54,9 @@ $(document).ready(function () {
             if (topbar.progress('+.01') < 1) step()
           }, 16)
         })()
+        // $('.save-btn').attr('disabled', true);
+        // $('.save-btn').removeClass('bg-[#930027]');
+        // $('.save-btn').addClass('bg-[#0000]');
       },
       success: function (response) {
         if (response.success == true) {
@@ -59,7 +64,7 @@ $(document).ready(function () {
           handleSuccess(response);
           if (apiUrl == '/addEstimate' || apiUrl == '/setScheduleWork' || apiUrl == '/setScheduleEstimate') {
             window.location.assign('/viewEstimate/' + response.estimate_id);
-          }else{
+          } else {
             setInterval(
               location.reload()
               ,
@@ -94,28 +99,31 @@ $(document).ready(function () {
       'success'
     );
     topbar.hide();
-  //   var formData = new FormData($('form')[0]); // Assuming the form is the first and only form on the page
-  // var estimateId = formData.get('estimate_id');
+    // $('.save-btn').attr('disabled', false);
+    // $('.save-btn').addClass('bg-[#930027]');
+    // $('.save-btn').removeClass('bg-[#0000]');
+    //   var formData = new FormData($('form')[0]); // Assuming the form is the first and only form on the page
+    // var estimateId = formData.get('estimate_id');
 
-  // Reload the chat messages after successful submission
-  // if (estimateId) {
-  //   $.ajax({
-  //     type: 'GET',
-  //     url: '/estimates/getChatMessage/' + estimateId,
-  //     success: function (response) {
-  //       if (response.success) {
-  //         // Update the chat messages container with the retrieved messages
-  //         $('.chat-messages-container').html(response.html);
-  //       } else {
-  //         console.error(response.message);
-  //       }
-  //     },
-  //     error: function (jqXHR, textStatus, errorThrown) {
-  //       console.error("AJAX Error: " + textStatus, errorThrown);
-  //       console.log("Response:", jqXHR.responseText);
-  //     }
-  //   });
-  // }
+    // Reload the chat messages after successful submission
+    // if (estimateId) {
+    //   $.ajax({
+    //     type: 'GET',
+    //     url: '/estimates/getChatMessage/' + estimateId,
+    //     success: function (response) {
+    //       if (response.success) {
+    //         // Update the chat messages container with the retrieved messages
+    //         $('.chat-messages-container').html(response.html);
+    //       } else {
+    //         console.error(response.message);
+    //       }
+    //     },
+    //     error: function (jqXHR, textStatus, errorThrown) {
+    //       console.error("AJAX Error: " + textStatus, errorThrown);
+    //       console.log("Response:", jqXHR.responseText);
+    //     }
+    //   });
+    // }
     // $("#universalTableBody").load(location.href + " #universalTableBody > *");
     // $("#chat-dialog").load(location.href + " #chat-dialog > *");
     // $(".modal-close").trigger("click");
@@ -134,6 +142,9 @@ $(document).ready(function () {
     $('.text').removeClass('hidden');
     $('.spinner').addClass('hidden');
     $('#loginBtn').attr('disabled', false);
+    // $('.save-btn').attr('disabled', false);
+    // $('.save-btn').addClass('bg-[#930027]');
+    // $('.save-btn').removeClass('bg-[#0000]');
   }
 
   $("#accordion-collapse").click(function () {
