@@ -523,8 +523,7 @@
                         @endif
                         @if (
                             $estimate->estimate_assigned == 1 &&
-                                $estimate->schedule_assigned != 1 &&
-                                $estimate->estimate_assigned_to == $user_details['id']
+                                $estimate->schedule_assigned != 1
                         )
                             <button type="button" id="accept-estimate"
                                 class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
@@ -553,7 +552,6 @@
                         @endif
                         @if (
                             $estimate->estimate_schedule_assigned_to != 1 &&
-                                $estimate->estimate_schedule_assigned_to == $user_details['id'] &&
                                 $estimate->estimate_assigned != 1)
                             <button type="button" id="complete-estimate"
                                 class=" complete-estimate flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
@@ -704,7 +702,8 @@
                             @foreach ($item_templates as $template)
                                 <li>
                                     <button id="addTemplate{{ $template->item_template_id }}"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}</button>
+                                        class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}
+                                    </button>
                                 </li>
                             @endforeach
                         </ul>
