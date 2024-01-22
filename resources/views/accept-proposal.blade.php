@@ -257,7 +257,11 @@
             <input type="hidden" name="estimate_total"
                 value="{{ $subTotal + ($subTotal * $customer->tax_rate) / 100 }}">
             <div class="col-span-12 p-4 flex justify-end mt-10">
+                @if($estimate->estimate_total == null )
                 <button class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 ">I Agree to Pay</button>
+                @else
+                <span class="bg-[#930027] text-white p-2 rounded-md">Proposal Accepted</span>
+                @endif
             </div>
         </div>
     </div>
