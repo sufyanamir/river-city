@@ -4543,8 +4543,9 @@
                         let mulitple_input = $('#mulitple_input');
                         mulitple_input.html('');
                         $.each(assemblyItemData, function(index, itemData) {
+                            let id = Math.floor(Math.random() * 999 + 1);
                             console.log(itemData.assembly_name);
-                            let newele = $('<div class="mt-5"></div>');
+                            let newele = $('<div class="mt-5" id="ele' + id + '"></div>');
                             let delbtn = $('<span></span>');
                             // ============
                             newele.html(`
@@ -4561,27 +4562,39 @@
                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                         <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
                                     </div>
-                                    <div>
-                                        <input  value="${itemData.ass_unit_by_item_unit}" type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_assembly_unit" placeholder="00.0" autocomplete="given-name"
-                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                        <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
-                                    </div>
+                                    <div class="flex ">
+                    <div class="w-[80%]  ">
+                    <input  value="${itemData.ass_unit_by_item_unit}"  type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_assembly_unit" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
+                  </div>
+                   <div class="mt-1" >
+                    <button   type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                                                <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
+                            </button>
+                    </div>
+                </div>
                                 </div>
                             `);
+                            $(document).on('click', `#ele${id} button`, function() {
+        reminputs(`#ele${id}`);
+    });
 
-                            delbtn.html(`
-                                <button type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                                    <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
-                                </button>
-                            `);
+
                             mulitple_input.append(newele);
                             newele.append(delbtn);
                             delbtn.on('click', function() {
                                 newele.remove();
                             });
                             // ============
+
                         });
 
+                        function reminputs(e) {
+    let ele = document.querySelector(e);
+    if (ele) {
+        ele.remove();
+    }
+}
 
 
                         // Show/hide expense fields based on the selected item type
@@ -5238,8 +5251,8 @@
     let button = $('#addbtn');
 
     button.on('click', function() {
-        let id = Math.floor(Math.random() * 999 + 1);
-        let newele = $('<div class="mt-5" id="rem' + id + ' " ></div>');
+        let iid = Math.floor(Math.random() * 999 + 1);
+        let newele = $('<div class="mt-5" id="rendid' + iid + '" ></div>');
         let rembtn = $('<span></span>');
 
         newele.html(`
@@ -5260,10 +5273,10 @@
                     <input type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_assembly_unit" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
                   </div>
-                   <div class="mt-1">
-                    <button onclick="remveinputs('#rem${id}')" type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                     <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
-                     </button>
+                   <div class="mt-1" >
+                    <button onclick="remveinputs('#rendid${iid}')"  type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                                                <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
+                            </button>
                     </div>
                 </div>
             </div>
@@ -5272,14 +5285,11 @@
         mulitple_input.append(newele);
         newele.append(rembtn);
 
-        rembtn.on('click', function() {
-            newele.remove();
-        }); 
-    });
 
+    });
     function remveinputs(e) {
         let ele = document.querySelector(e);
-          if(ele){
+        if (ele) {
             ele.remove();
         }
     }
