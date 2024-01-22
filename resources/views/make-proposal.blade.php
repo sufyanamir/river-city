@@ -244,7 +244,7 @@
                 <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
                 <input type="hidden" name="customer_email" value="{{ $customer->customer_email }}">
                 <input type="hidden" name="estimate_total"
-                    value="{{ number_format($subTotal + ($subTotal * $customer->tax_rate) / 100, 2) }}">
+                    value="{{ $subTotal + ($subTotal * $customer->tax_rate) / 100 }}">
                 <div class="col-span-12 p-4 flex justify-end mt-10">
                     <button class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 "
                         onclick="return confirmSendProposal()">Send Proposal</button>
