@@ -32,7 +32,11 @@
                         @foreach ($estimates as $item)
                             <tr>
                                 <td>{{ $item->created_at }}</td>
-                                <td>{{ $item->customer_name }}</td>
+                                <td>
+                                    <a href="/viewEstimate/{{ $item->estimate_id }}" class=" text-[#930027] hover:border-b hover:border-[#930027]">
+                                        {{ $item->customer_name }}
+                                    </a>
+                                </td>
                                 <td>{{ $item->customer_phone }}</td>
                                 <td>{{ $item->customer_address }}</td>
                                 <td>{{ $item->edited_by }}</td>
@@ -110,7 +114,8 @@
                                                             <div class=" pb-2">
                                                                 <form method="POST" action="/sendChat" id="chat-form">
                                                                     @csrf
-                                                                    <input type="hidden" name="estimate_id" value="{{$item->estimate_id}}">
+                                                                    <input type="hidden" name="estimate_id"
+                                                                        value="{{ $item->estimate_id }}">
                                                                     <label for="chat" class="sr-only">Your
                                                                         message</label>
                                                                     <div
@@ -159,8 +164,7 @@
                                                                             <svg class="w-5 h-5 rotate-90 rtl:-rotate-90"
                                                                                 aria-hidden="true"
                                                                                 xmlns="http://www.w3.org/2000/svg"
-                                                                                fill="currentColor"
-                                                                                viewBox="0 0 18 20">
+                                                                                fill="currentColor" viewBox="0 0 18 20">
                                                                                 <path
                                                                                     d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z" />
                                                                             </svg>
@@ -225,12 +229,12 @@
                                                             role="menuitem" tabindex="-1" id="menu-item-1"><img
                                                                 src="{{ asset('assets/icons/dropdown-edit-icon.svg') }}"
                                                                 alt="icon"> Edit</a>
-                                                        <a href="#" 
+                                                        <a href="#"
                                                             class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4"
                                                             role="menuitem" tabindex="-1" id="menu-item-1"><img
                                                                 src="{{ asset('assets/icons/dropdown-report-icon.svg') }}"
                                                                 alt="icon"> Report</a>
-                                                        <a href="/getEstimateActivity/{{$item->estimate_id}}"
+                                                        <a href="/getEstimateActivity/{{ $item->estimate_id }}"
                                                             class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4"
                                                             role="menuitem" tabindex="-1" id="menu-item-1"><img
                                                                 src="{{ asset('assets/icons/dropdown-activity-icon.svg') }}"
@@ -632,7 +636,8 @@
 
             // Make an AJAX request to fetch chat messages
             $.ajax({
-                url: '/estimates/getChatMessage/' + estimateId, // Adjust the URL based on your route
+                url: '/estimates/getChatMessage/' +
+                estimateId, // Adjust the URL based on your route
                 type: 'GET',
                 success: function(response) {
                     // Check if the request was successful
@@ -775,116 +780,117 @@
     });
 </script>
 <script>
-    $(document).ready(function () {
-      $("#chat-form").on('submit', 'form', function (event) {
-    // Prevent the default form submission
-    event.preventDefault();
+    $(document).ready(function() {
+        $("#chat-form").on('submit', 'form', function(event) {
+            // Prevent the default form submission
+            event.preventDefault();
 
-    // Get the form data using FormData for handling file uploads
-    var formData = new FormData(this);
+            // Get the form data using FormData for handling file uploads
+            var formData = new FormData(this);
 
-    // Make the AJAX request
-    $.ajax({
-      type: 'POST',
-      url: $(this).attr('action'),
-      data: formData,
-      processData: false, // Important: Don't process the data
-      contentType: false, // Important: Don't set content type (jQuery will automatically set it based on FormData)
-      beforeSend: function () {
-        topbar.config({
-          autoRun: false,
-          barThickness: 3,
-          barColors: {
-            '0': '#930027'
-          },
-          shadowBlur: 5,
-          shadowColor: 'rgba(0, 0, 0, .5)',
-          className: 'topbar',
-        })
-        topbar.show();
-        (function step() {
-          setTimeout(function () {
-            if (topbar.progress('+.01') < 1) step()
-          }, 16)
-        })()
-      },
-      success: function (response) {
-        if (response.success == true) {
-          // Handle success, if needed
-          handleSuccess(response);
-        } else if (response.success == false) {
-          // Handle failure, if needed
-          handleFailure(response);
+            // Make the AJAX request
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: formData,
+                processData: false, // Important: Don't process the data
+                contentType: false, // Important: Don't set content type (jQuery will automatically set it based on FormData)
+                beforeSend: function() {
+                    topbar.config({
+                        autoRun: false,
+                        barThickness: 3,
+                        barColors: {
+                            '0': '#930027'
+                        },
+                        shadowBlur: 5,
+                        shadowColor: 'rgba(0, 0, 0, .5)',
+                        className: 'topbar',
+                    })
+                    topbar.show();
+                    (function step() {
+                        setTimeout(function() {
+                            if (topbar.progress('+.01') < 1) step()
+                        }, 16)
+                    })()
+                },
+                success: function(response) {
+                    if (response.success == true) {
+                        // Handle success, if needed
+                        handleSuccess(response);
+                    } else if (response.success == false) {
+                        // Handle failure, if needed
+                        handleFailure(response);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Log the error response to the console
+                    console.error("AJAX Error: " + textStatus, errorThrown);
+
+                    // Log the response content for further investigation
+                    console.log("Response:", jqXHR.responseText);
+
+                    // Handle the error here
+                    handleFailure(JSON.parse(jqXHR.responseText));
+                }
+            });
+        });
+
+        function handleSuccess(response) {
+            // Redirect to the dashboard or do something else
+            $('.text').removeClass('hidden');
+            $('.spinner').addClass('hidden');
+            Swal.fire(
+                'Success!',
+                response.message,
+                'success'
+            );
+            topbar.hide();
+            // setInterval(
+            //   location.reload()
+            //   ,
+            //   5000
+            // );
+            var formData = new FormData($('form')[
+            0]); // Assuming the form is the first and only form on the page
+            var estimateId = formData.get('estimate_id');
+
+            // Reload the chat messages after successful submission
+            if (estimateId) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/estimates/getChatMessage/' + estimateId,
+                    success: function(response) {
+                        if (response.success) {
+                            // Update the chat messages container with the retrieved messages
+                            $('.chat-messages-container').html(response.html);
+                        } else {
+                            console.error(response.message);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error("AJAX Error: " + textStatus, errorThrown);
+                        console.log("Response:", jqXHR.responseText);
+                    }
+                });
+            }
+            // $("#universalTableBody").load(location.href + " #universalTableBody > *");
+            // $("#chat-dialog").load(location.href + " #chat-dialog > *");
+            // $(".modal-close").trigger("click");
+            // $("#formData")[0].reset();
+            // window.location.href = "/dashboard";
         }
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        // Log the error response to the console
-        console.error("AJAX Error: " + textStatus, errorThrown);
 
-        // Log the response content for further investigation
-        console.log("Response:", jqXHR.responseText);
-
-        // Handle the error here
-        handleFailure(JSON.parse(jqXHR.responseText));
-      }
-    });
-  });
-
-  function handleSuccess(response) {
-    // Redirect to the dashboard or do something else
-    $('.text').removeClass('hidden');
-    $('.spinner').addClass('hidden');
-    Swal.fire(
-      'Success!',
-      response.message,
-      'success'
-    );
-    topbar.hide();
-    // setInterval(
-    //   location.reload()
-    //   ,
-    //   5000
-    // );
-    var formData = new FormData($('form')[0]); // Assuming the form is the first and only form on the page
-  var estimateId = formData.get('estimate_id');
-
-  // Reload the chat messages after successful submission
-  if (estimateId) {
-    $.ajax({
-      type: 'GET',
-      url: '/estimates/getChatMessage/' + estimateId,
-      success: function (response) {
-        if (response.success) {
-          // Update the chat messages container with the retrieved messages
-          $('.chat-messages-container').html(response.html);
-        } else {
-          console.error(response.message);
+        function handleFailure(response) {
+            Swal.fire(
+                'Warning!',
+                response.message,
+                'warning'
+            );
+            topbar.hide();
+            // Additional failure handling if needed
+            $('.text').removeClass('hidden');
+            $('.spinner').addClass('hidden');
+            $('#loginBtn').attr('disabled', false);
         }
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        console.error("AJAX Error: " + textStatus, errorThrown);
-        console.log("Response:", jqXHR.responseText);
-      }
     });
-  }
-    // $("#universalTableBody").load(location.href + " #universalTableBody > *");
-    // $("#chat-dialog").load(location.href + " #chat-dialog > *");
-    // $(".modal-close").trigger("click");
-    // $("#formData")[0].reset();
-    // window.location.href = "/dashboard";
-  }
-
-  function handleFailure(response) {
-    Swal.fire(
-      'Warning!',
-      response.message,
-      'warning'
-    );
-    topbar.hide();
-    // Additional failure handling if needed
-    $('.text').removeClass('hidden');
-    $('.spinner').addClass('hidden');
-    $('#loginBtn').attr('disabled', false);
-  }
-});
 </script>
