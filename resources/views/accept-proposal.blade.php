@@ -1,10 +1,9 @@
 <!-- <link href="https://cdn.tailwindcss.com" rel="stylesheet"> -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" />
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" />
-<link rel="stylesheet" href="{{ asset('assets/css/dataTables.min.css') }}">
-<script src="https://kit.fontawesome.com/4ae3f77a6d.js" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@5.9.2/dist/dropzone.css" />
-@vite('resources/css/app.css')
+    <link rel="stylesheet" href="{{ asset('assets/css/dataTables.min.css') }}">
+    <script src="{{ asset('assets/js/fontawesome.js') }}" crossorigin="anonymous"></script>
+    @vite('resources/css/app.css')
+    <link rel="stylesheet" href="{{ asset('assets/css/fancybox.min.css') }}" />
 <form action="/acceptProposal/{{ $estimate->estimate_id }}" method="post">
     @csrf
     <div class="my-4">
@@ -127,6 +126,72 @@
                             <hr>
                         @endforeach
                     </div>
+                    @foreach ($estimateItemTemplates as $estItemTemplate)
+                        <div class="my-2 bg-white shadow-xl">
+                            <div class=" flex p-3 bg-[#930027] text-white w-full rounded-t-lg">
+                                <h1 class=" font-medium my-auto">{{ $estItemTemplate['item_template_name'] }}</h1>
+                            </div>
+                            <div class="relative overflow-x-auto">
+                                <div class="itemDiv">
+                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Item Name
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Item Description
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Item Price
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Item Qty
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Total
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($estItemTemplate['estimateItemTemplateItems'] as $item)
+                                                <tr class="bg-white border-b">
+                                                    <td class="px-6 py-4">
+                                                        <label class="text-lg font-semibold text-[#323C47]"
+                                                            for="">{{ $item['item_name'] }}</label>
+                                                    </td>
+                                                    <td class="px-6 py-4 w-[40%]">
+                                                        <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                            @if ($item['item_description'])
+                                                                <p class="font-medium">Description:</p>
+                                                                {{ $item['item_description'] }}
+                                                            @endif
+                                                            @if ($item['item_note'])
+                                                                <p class="font-medium">Note:</p>
+                                                                {{ $item['item_note'] }}
+                                                            @endif
+                                                        </p>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{ $item['item_price'] }}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{ $item['item_qty'] }}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{ $item['item_total'] }}
+                                                    </td>
+                                                </tr>
+                                                @php
+                                                    $subTotal += $item['item_total'];
+                                                @endphp
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                     <div class="mt-5 font-medium">
                         <div class="flex justify-end gap-6">
                             <div>
@@ -198,9 +263,13 @@
     </div>
 </form>
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-<script src="{{ asset('assets/js/dataTables.min.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('assets/js/custom.js') }}"></script>
+<script src="{{ asset('assets/js/dataTables.min.js') }}"></script>
+<script src="{{ asset('assets/js/sweetalert2.js') }}"></script>
+<script src="{{ asset('assets/js/topbar.min.js') }}"></script>
+<script src="{{ asset('assets/js/fancybox.min.js') }}"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function () {
         var upgradeAcceptRadio = $('#upgrade_accept');
@@ -214,9 +283,9 @@
         // Function to update total based on radio button selection
         function updateTotal() {
             if (upgradeAcceptRadio.prop('checked')) {
-                total += parseFloat("{{ $item->item_total }}");
+                total += parseFloat("{{ $item['item_total'] }}");
             } else if (upgradeRejectRadio.prop('checked')) {
-                total -= parseFloat("{{ $item->item_total }}");
+                total -= parseFloat("{{ $item['item_total'] }}");
             }
             dynamicTotalSpan.text('$' + total.toFixed(2));
             estimateTotalInput.val(total.toFixed(2));
