@@ -862,18 +862,20 @@ class EstimateController extends Controller
         try {
             $validatedData = $request->validate([
                 'estimate_total' => 'required',
-                'upgrade_accept_reject' => 'required',
+                'upgrade_accept_reject' => 'nullable',
             ]);
             $estimate = Estimate::find($id);
             $upgrade = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('is_upgrade', 'yes')->first();
-            $upgrade->upgrade_status = $validatedData['upgrade_accept_reject'];
+            if (isset($validatedData['upgrade_accept_reject'])) {
+                $upgrade->upgrade_status = $validatedData['upgrade_accept_reject'];
+                $upgrade->save();
+            }
             $proposal = EstimateProposal::where('estimate_id', $id)->first();
 
             $proposal->proposal_status = 'accepted';
             $proposal->proposal_accepted = $validatedData['estimate_total'];
             $estimate->estimate_total = $validatedData['estimate_total'];
 
-            $upgrade->save();
             $estimate->save();
             $proposal->save();
 
@@ -893,13 +895,52 @@ class EstimateController extends Controller
             $customer = Customer::where('customer_id', $estimate->customer_id)->first();
             $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', '<>', 'upgrades')->get();
             $upgrades = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', 'upgrades')->get();
+            $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->get();
+            $estimateItemTemplateItems = [];
 
+            foreach ($estimateItemTemplates as $key => $itemTemplate) {
+                $templateItems = EstimateItemTemplateItems::where('est_template_id', $itemTemplate->est_template_id)->get();
+
+                // Extract item_qty from the template items
+                $itemQuantities = $templateItems->pluck('item_qty')->toArray();
+                $itemTotals = $templateItems->pluck('item_total')->toArray();
+
+                // Fetch all data for Items
+                $itemss = Items::whereIn('item_id', $templateItems->pluck('item_id')->toArray())->get(); // Replace 'Item' with your actual model name
+
+                // Combine item_qty and Items data in a new array
+                $combinedItems = [];
+                foreach ($itemss as $index => $item) {
+                    $combinedItems[] = [
+                        'est_template_item_id' => $templateItems[$index]->est_template_item_id,
+                        'item_qty' => $itemQuantities[$index],
+                        'item_total' => $itemTotals[$index],
+                        'item_id' => $item->item_id,
+                        'item_name' => $item->item_name,
+                        'item_type' => $item->item_type,
+                        'item_units' => $item->item_units,
+                        'item_cost' => $templateItems[$index]->item_cost,
+                        'item_price' => $templateItems[$index]->item_price,
+                        'labour_expense' => $templateItems[$index]->labour_expense,
+                        'material_expense' => $templateItems[$index]->material_expense,
+                        'item_description' => $templateItems[$index]->item_description,
+                        'item_note' => $templateItems[$index]->item_note,
+                    ];
+                }
+
+                // Add the combinedItems to the template items
+                $itemTemplate->estimateItemTemplateItems = $combinedItems;
+
+                // Add the modified itemTemplate to the result array
+                $estimateItemTemplateItems[] = $itemTemplate;
+            }
             // return response()->json(['success' => true, 'data' => ['user_details' => $userDetails, 'estimate' => $estimate, 'customer' => $customer, 'items' => $items]], 200);
             return view('accept-proposal', [
                 'estimate' => $estimate,
                 'customer' => $customer,
                 'items' => $items,
                 'upgrades' => $upgrades,
+                'estimateItemTemplates' => $estimateItemTemplates,
             ]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -959,6 +1000,45 @@ class EstimateController extends Controller
             $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', '<>', 'upgrades')->get();
             $upgrades = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', 'upgrades')->get();
             $existingProposals = EstimateProposal::where('estimate_id', $id)->get();
+            $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->get();
+            $estimateItemTemplateItems = [];
+
+            foreach ($estimateItemTemplates as $key => $itemTemplate) {
+                $templateItems = EstimateItemTemplateItems::where('est_template_id', $itemTemplate->est_template_id)->get();
+
+                // Extract item_qty from the template items
+                $itemQuantities = $templateItems->pluck('item_qty')->toArray();
+                $itemTotals = $templateItems->pluck('item_total')->toArray();
+
+                // Fetch all data for Items
+                $itemss = Items::whereIn('item_id', $templateItems->pluck('item_id')->toArray())->get(); // Replace 'Item' with your actual model name
+
+                // Combine item_qty and Items data in a new array
+                $combinedItems = [];
+                foreach ($itemss as $index => $item) {
+                    $combinedItems[] = [
+                        'est_template_item_id' => $templateItems[$index]->est_template_item_id,
+                        'item_qty' => $itemQuantities[$index],
+                        'item_total' => $itemTotals[$index],
+                        'item_id' => $item->item_id,
+                        'item_name' => $item->item_name,
+                        'item_type' => $item->item_type,
+                        'item_units' => $item->item_units,
+                        'item_cost' => $templateItems[$index]->item_cost,
+                        'item_price' => $templateItems[$index]->item_price,
+                        'labour_expense' => $templateItems[$index]->labour_expense,
+                        'material_expense' => $templateItems[$index]->material_expense,
+                        'item_description' => $templateItems[$index]->item_description,
+                        'item_note' => $templateItems[$index]->item_note,
+                    ];
+                }
+
+                // Add the combinedItems to the template items
+                $itemTemplate->estimateItemTemplateItems = $combinedItems;
+
+                // Add the modified itemTemplate to the result array
+                $estimateItemTemplateItems[] = $itemTemplate;
+            }
 
             // return response()->json(['success' => true, 'data' => ['user_details' => $userDetails, 'estimate' => $estimate, 'customer' => $customer, 'items' => $items]], 200);
             return view('make-proposal', [
@@ -968,6 +1048,7 @@ class EstimateController extends Controller
                 'items' => $items,
                 'existing_proposals' => $existingProposals,
                 'upgrades' => $upgrades,
+                'estimateItemTemplates' => $estimateItemTemplates
             ]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);

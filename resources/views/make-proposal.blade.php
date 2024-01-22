@@ -6,7 +6,8 @@
             <div class="grid grid-cols-12 p-5">
                 <div class="col-span-6 p-4 ">
                     <div class="projectLogo ">
-                        <img class="w-[288px] h-[73px]" src="{{ asset('assets/icons/tproject-logo.svg') }}" alt="">
+                        <img class="w-[288px] h-[73px]" src="{{ asset('assets/icons/tproject-logo.svg') }}"
+                            alt="">
                     </div>
                     <div class="mt-12 p-4">
                         <p class="text-[22px]/[25.78px] font-bold text-[#323C47]">River City Painting Pro Demo</p>
@@ -114,7 +115,72 @@
                             @endphp
                         @endforeach
                     </div>
-
+                    @foreach ($estimateItemTemplates as $estItemTemplate)
+                        <div class="my-2 bg-white shadow-xl">
+                            <div class=" flex p-3 bg-[#930027] text-white w-full rounded-t-lg">
+                                <h1 class=" font-medium my-auto">{{ $estItemTemplate['item_template_name'] }}</h1>
+                            </div>
+                            <div class="relative overflow-x-auto">
+                                <div class="itemDiv">
+                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Item Name
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Item Description
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Item Price
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Item Qty
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Total
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($estItemTemplate['estimateItemTemplateItems'] as $item)
+                                                <tr class="bg-white border-b">
+                                                    <td class="px-6 py-4">
+                                                        <label class="text-lg font-semibold text-[#323C47]"
+                                                            for="">{{ $item['item_name'] }}</label>
+                                                    </td>
+                                                    <td class="px-6 py-4 w-[40%]">
+                                                        <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                            @if ($item['item_description'])
+                                                                <p class="font-medium">Description:</p>
+                                                                {{ $item['item_description'] }}
+                                                            @endif
+                                                            @if ($item['item_note'])
+                                                                <p class="font-medium">Note:</p>
+                                                                {{ $item['item_note'] }}
+                                                            @endif
+                                                        </p>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{ $item['item_price'] }}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{ $item['item_qty'] }}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{ $item['item_total'] }}
+                                                    </td>
+                                                </tr>
+                                                @php
+                                                    $subTotal += $item['item_total'];
+                                                @endphp
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                     <div class="mt-5 font-medium">
                         <div class="flex justify-end gap-6">
                             <div>
@@ -175,15 +241,15 @@
 
             </div>
             @if ($user_details['user_role'] != 'crew')
-            <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
-            <input type="hidden" name="customer_email" value="{{ $customer->customer_email }}">
-            <input type="hidden" name="estimate_total"
-                value="{{ number_format($subTotal + ($subTotal * $customer->tax_rate) / 100, 2) }}">
-            <div class="col-span-12 p-4 flex justify-end mt-10">
-                <button class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 " onclick="return confirmSendProposal()">Send Proposal</button>
-            </div>
+                <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
+                <input type="hidden" name="customer_email" value="{{ $customer->customer_email }}">
+                <input type="hidden" name="estimate_total"
+                    value="{{ number_format($subTotal + ($subTotal * $customer->tax_rate) / 100, 2) }}">
+                <div class="col-span-12 p-4 flex justify-end mt-10">
+                    <button class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 "
+                        onclick="return confirmSendProposal()">Send Proposal</button>
+                </div>
             @else
-                
             @endif
         </div>
     </div>
@@ -197,7 +263,9 @@
         var existingProposals = @json($exsistingProposals); // Assuming you pass this variable from your controller
 
         if (existingProposals.length > 0) {
-            var userResponse = confirm("If you make this proposal, all the previous proposals of this estimate will be deleted! Do you want to proceed?");
+            var userResponse = confirm(
+                "If you make this proposal, all the previous proposals of this estimate will be deleted! Do you want to proceed?"
+                );
 
             if (userResponse) {
                 return true; // Proceed with form submission
