@@ -521,10 +521,7 @@
                                 </button>
                             </form>
                         @endif
-                        @if (
-                            $estimate->estimate_assigned == 1 &&
-                                $estimate->schedule_assigned != 1
-                        )
+                        @if ($estimate->estimate_assigned == 1 && $estimate->schedule_assigned != 1)
                             <button type="button" id="accept-estimate"
                                 class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                                 <div class=" flex mx-auto">
@@ -550,9 +547,7 @@
                                 </button>
                             </a>
                         @endif
-                        @if (
-                            $estimate->estimate_schedule_assigned_to != 1 &&
-                                $estimate->estimate_assigned != 1)
+                        @if ($estimate->estimate_schedule_assigned_to != 1 && $estimate->estimate_assigned != 1)
                             <button type="button" id="complete-estimate"
                                 class=" complete-estimate flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                                 <img class="h-[14px] w-[14px] my-auto mx-1"
@@ -720,83 +715,85 @@
                     $totalPrice = 0; // Initialize total price variable
                 @endphp
                 <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
-                    @if($estimate_items->count() > 0)
-                    <div class="relative overflow-x-auto">
-                        <div class="itemDiv">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3">
+                    @if ($estimate_items->count() > 0)
+                        <div class="relative overflow-x-auto">
+                            <div class="itemDiv">
+                                <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3">
 
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Item Name
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Item Description
-                                        </th>
-                                        <th scope="col" class="text-center">
-                                            Item Cost
-                                        </th>
-                                        <th scope="col" class="text-center">
-                                            Item Qty
-                                        </th>
-                                        <th scope="col" class="text-center">
-                                            Total
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($estimate_items as $item)
-                                        <tr class="bg-white border-b">
-                                            <th scope="row"
-                                                class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                                <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}"
-                                                    class="inline">
-                                                    <img class="h-full w-full"
-                                                        src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
-                                                        alt="">
-                                                </button>
                                             </th>
-                                            <td class="px-6 py-4">
-                                                <label class="text-lg font-semibold text-[#323C47]"
-                                                    for="">{{ $item->item_name }}</label>
-                                            </td>
-                                            <td class="px-6 py-4 w-[50%]">
-                                                <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                    @if ($item->item_description)
-                                                        <p class="font-medium">Description:</p>
-                                                        {{ $item->item_description }}
-                                                    @endif
-                                                    @if ($item->item_note)
-                                                        <p class="font-medium">Note:</p>
-                                                        {{ $item->item_note }}
-                                                    @endif
-                                                </p>
-                                            </td>
-                                            <td class="text-center">
-                                                {{ $item->item_cost }}
-                                            </td>
-                                            <td class="text-center">
-                                                {{ $item->item_qty }}
-                                            </td>
-                                            <td class="text-center">
-                                                {{ $item->item_total }}
-                                            </td>
+                                            <th scope="col" class="px-6 py-3">
+                                                Item Name
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                Item Description
+                                            </th>
+                                            <th scope="col" class="text-center">
+                                                Item Cost
+                                            </th>
+                                            <th scope="col" class="text-center">
+                                                Item Qty
+                                            </th>
+                                            <th scope="col" class="text-center">
+                                                Total
+                                            </th>
                                         </tr>
-                                        @php
-                                            $totalPrice += $item->item_total; // Add item price to total
-                                        @endphp
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($estimate_items as $item)
+                                            <tr class="bg-white border-b">
+                                                <th scope="row"
+                                                    class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                                    <button type="button"
+                                                        id="editEstimate-item{{ $item->estimate_item_id }}"
+                                                        class="inline">
+                                                        <img class="h-full w-full"
+                                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
+                                                            alt="">
+                                                    </button>
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    <label class="text-lg font-semibold text-[#323C47]"
+                                                        for="">{{ $item->item_name }}</label>
+                                                </td>
+                                                <td class="px-6 py-4 w-[50%]">
+                                                    <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                        @if ($item->item_description)
+                                                            <p class="font-medium">Description:</p>
+                                                            {{ $item->item_description }}
+                                                        @endif
+                                                        @if ($item->item_note)
+                                                            <p class="font-medium">Note:</p>
+                                                            {{ $item->item_note }}
+                                                        @endif
+                                                    </p>
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_cost }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_qty }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_total }}
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $totalPrice += $item->item_total; // Add item price to total
+                                            @endphp
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
                     @endif
                     @foreach ($estimateItemTemplates as $estItemTemplate)
                         <div class="mb-2 bg-white shadow-xl">
                             <div class=" flex p-1 bg-[#930027] text-white w-full rounded-t-lg">
-                                <button type="button" id="editEstimate-template{{ $estItemTemplate['est_template_id'] }}"
+                                <button type="button"
+                                    id="editEstimate-template{{ $estItemTemplate['est_template_id'] }}"
                                     class="inline my-auto">
                                     <img class="h-full w-full"
                                         src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
@@ -868,8 +865,8 @@
                                                     </td>
                                                 </tr>
                                                 @php
-                                            $totalPrice += $item['item_total']; // Add item price to total
-                                        @endphp
+                                                    $totalPrice += $item['item_total']; // Add item price to total
+                                                @endphp
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -975,83 +972,85 @@
                     $totalPrice = 0; // Initialize total price variable
                 @endphp
                 <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
-                    @if($estimate_items->count() > 0)
-                    <div class="relative overflow-x-auto">
-                        <div class="itemDiv">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3">
+                    @if ($estimate_items->count() > 0)
+                        <div class="relative overflow-x-auto">
+                            <div class="itemDiv">
+                                <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3">
 
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Item Name
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Item Description
-                                        </th>
-                                        <th scope="col" class="text-center">
-                                            Item Cost
-                                        </th>
-                                        <th scope="col" class="text-center">
-                                            Item Qty
-                                        </th>
-                                        <th scope="col" class="text-center">
-                                            Total
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($estimate_items as $item)
-                                        <tr class="bg-white border-b">
-                                            <th scope="row"
-                                                class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                                <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}"
-                                                    class="inline">
-                                                    <img class="h-full w-full"
-                                                        src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
-                                                        alt="">
-                                                </button>
                                             </th>
-                                            <td class="px-6 py-4">
-                                                <label class="text-lg font-semibold text-[#323C47]"
-                                                    for="">{{ $item->item_name }}</label>
-                                            </td>
-                                            <td class="px-6 py-4 w-[50%]">
-                                                <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                    @if ($item->item_description)
-                                                        <p class="font-medium">Description:</p>
-                                                        {{ $item->item_description }}
-                                                    @endif
-                                                    @if ($item->item_note)
-                                                        <p class="font-medium">Note:</p>
-                                                        {{ $item->item_note }}
-                                                    @endif
-                                                </p>
-                                            </td>
-                                            <td class="text-center">
-                                                {{ $item->item_cost }}
-                                            </td>
-                                            <td class="text-center">
-                                                {{ $item->item_qty }}
-                                            </td>
-                                            <td class="text-center">
-                                                {{ $item->item_total }}
-                                            </td>
+                                            <th scope="col" class="px-6 py-3">
+                                                Item Name
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                Item Description
+                                            </th>
+                                            <th scope="col" class="text-center">
+                                                Item Cost
+                                            </th>
+                                            <th scope="col" class="text-center">
+                                                Item Qty
+                                            </th>
+                                            <th scope="col" class="text-center">
+                                                Total
+                                            </th>
                                         </tr>
-                                        @php
-                                            $totalPrice += $item->item_total; // Add item price to total
-                                        @endphp
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($estimate_items as $item)
+                                            <tr class="bg-white border-b">
+                                                <th scope="row"
+                                                    class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                                    <button type="button"
+                                                        id="editEstimate-item{{ $item->estimate_item_id }}"
+                                                        class="inline">
+                                                        <img class="h-full w-full"
+                                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
+                                                            alt="">
+                                                    </button>
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    <label class="text-lg font-semibold text-[#323C47]"
+                                                        for="">{{ $item->item_name }}</label>
+                                                </td>
+                                                <td class="px-6 py-4 w-[50%]">
+                                                    <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                        @if ($item->item_description)
+                                                            <p class="font-medium">Description:</p>
+                                                            {{ $item->item_description }}
+                                                        @endif
+                                                        @if ($item->item_note)
+                                                            <p class="font-medium">Note:</p>
+                                                            {{ $item->item_note }}
+                                                        @endif
+                                                    </p>
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_cost }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_qty }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $item->item_total }}
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $totalPrice += $item->item_total; // Add item price to total
+                                            @endphp
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
                     @endif
                     @foreach ($estimateItemTemplates as $estItemTemplate)
                         <div class="mb-2 bg-white shadow-xl">
                             <div class=" flex p-1 bg-[#930027] text-white w-full rounded-t-lg">
-                                <button type="button" id="editEstimate-template{{ $estItemTemplate['est_template_id'] }}"
+                                <button type="button"
+                                    id="editEstimate-template{{ $estItemTemplate['est_template_id'] }}"
                                     class="inline my-auto">
                                     <img class="h-full w-full"
                                         src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
@@ -1123,8 +1122,8 @@
                                                     </td>
                                                 </tr>
                                                 @php
-                                            $totalPrice += $item['item_total']; // Add item price to total
-                                        @endphp
+                                                    $totalPrice += $item['item_total']; // Add item price to total
+                                                @endphp
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -1231,7 +1230,8 @@
                                                 <th scope="row"
                                                     class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                     <button type="button"
-                                                        id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
+                                                        id="editEstimate-item{{ $item->estimate_item_id }}"
+                                                        class="inline">
                                                         <img class="h-[50px] w-[50px]"
                                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                                                             alt="">
@@ -1346,7 +1346,8 @@
                                                 <th scope="row"
                                                     class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                     <button type="button"
-                                                        id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
+                                                        id="editEstimate-item{{ $item->estimate_item_id }}"
+                                                        class="inline">
                                                         <img class="h-[50px] w-[50px]"
                                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                                                             alt="">
@@ -1460,7 +1461,8 @@
                                                 <th scope="row"
                                                     class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                     <button type="button"
-                                                        id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
+                                                        id="editEstimate-item{{ $item->estimate_item_id }}"
+                                                        class="inline">
                                                         <img class="h-[50px] w-[50px]"
                                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                                                             alt="">
@@ -1575,7 +1577,8 @@
                                                 <th scope="row"
                                                     class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                     <button type="button"
-                                                        id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
+                                                        id="editEstimate-item{{ $item->estimate_item_id }}"
+                                                        class="inline">
                                                         <img class="h-[50px] w-[50px]"
                                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                                                             alt="">
@@ -1692,7 +1695,8 @@
                                                 <th scope="row"
                                                     class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                     <button type="button"
-                                                        id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
+                                                        id="editEstimate-item{{ $item->estimate_item_id }}"
+                                                        class="inline">
                                                         <img class="h-[50px] w-[50px]"
                                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                                                             alt="">
@@ -1810,7 +1814,8 @@
                                                 <th scope="row"
                                                     class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                     <button type="button"
-                                                        id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
+                                                        id="editEstimate-item{{ $item->estimate_item_id }}"
+                                                        class="inline">
                                                         <img class="h-[50px] w-[50px]"
                                                             src="{{ asset('assets/icons/edit-estimate-icon.svg') }}"
                                                             alt="">
@@ -4538,8 +4543,9 @@
                         let mulitple_input = $('#mulitple_input');
                         mulitple_input.html('');
                         $.each(assemblyItemData, function(index, itemData) {
+                            let id = Math.floor(Math.random() * 999 + 1);
                             console.log(itemData.assembly_name);
-                            let newele = $('<div class="mt-5"></div>');
+                            let newele = $('<div class="mt-5" id="ele' + id + '"></div>');
                             let delbtn = $('<span></span>');
                             // ============
                             newele.html(`
@@ -4556,27 +4562,39 @@
                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                         <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
                                     </div>
-                                    <div>
-                                        <input  value="${itemData.ass_unit_by_item_unit}" type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_assembly_unit" placeholder="00.0" autocomplete="given-name"
-                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                        <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
-                                    </div>
+                                    <div class="flex ">
+                    <div class="w-[80%]  ">
+                    <input  value="${itemData.ass_unit_by_item_unit}"  type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_assembly_unit" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
+                  </div>
+                   <div class="mt-1" >
+                    <button   type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                                                <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
+                            </button>
+                    </div>
+                </div>
                                 </div>
                             `);
+                            $(document).on('click', `#ele${id} button`, function() {
+        reminputs(`#ele${id}`);
+    });
 
-                            delbtn.html(`
-                                <button type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                                    <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
-                                </button>
-                            `);
+
                             mulitple_input.append(newele);
                             newele.append(delbtn);
                             delbtn.on('click', function() {
                                 newele.remove();
                             });
                             // ============
+
                         });
 
+                        function reminputs(e) {
+    let ele = document.querySelector(e);
+    if (ele) {
+        ele.remove();
+    }
+}
 
 
                         // Show/hide expense fields based on the selected item type
@@ -4926,7 +4944,7 @@
                                     </div>
                                 </div>
                                 <input type="number" name="template_item_qty[]" id="template_item_qty" placeholder="" class=" w-[15%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                <p id="template_item_name" class=" font-medium overflow-hidden whitespace-nowrap items-center bg-[#EBEAEB] py-1 px-2 rounded-lg w-[75%]"></p>    
+                                <p id="template_item_name" class=" font-medium overflow-hidden whitespace-nowrap items-center bg-[#EBEAEB] py-1 px-2 rounded-lg w-[75%]"></p>
                             </div>
                             `);
                         var itemNameInput = demoInput.find('#template_item_name');
@@ -4942,7 +4960,9 @@
 
                         templateItemDiv.append(demoInput);
 
-                        $('#template_item_name_' + i).text(correspondingItemData.item_name + correspondingItemData.item_description + correspondingItemData.item_note);
+                        $('#template_item_name_' + i).text(correspondingItemData.item_name +
+                            correspondingItemData.item_description + correspondingItemData
+                            .item_note);
                         $('#est_template_item_id_' + i).val(currentItem.est_template_item_id);
                         itemQtyInput.val(currentItem.item_qty);
                         $('#itemTemplatesForm').attr('action', '/updateEstimateItemTemplate');
@@ -5065,7 +5085,7 @@
                                     </div>
                                 </div>
                                 <input type="number" name="template_item_qty[]" id="template_item_qty" placeholder="" class=" w-[15%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                <p id="template_item_name" class=" font-medium overflow-hidden whitespace-nowrap items-center bg-[#EBEAEB] py-1 px-2 rounded-lg w-[75%]"></p>    
+                                <p id="template_item_name" class=" font-medium overflow-hidden whitespace-nowrap items-center bg-[#EBEAEB] py-1 px-2 rounded-lg w-[75%]"></p>
                             </div>
                             `);
                         var itemNameInput = demoInput.find('#template_item_name');
@@ -5081,7 +5101,9 @@
 
                         templateItemDiv.append(demoInput);
 
-                        $('#template_item_name_' + i).text(correspondingItemData.item_name + correspondingItemData.item_description + correspondingItemData.item_note);
+                        $('#template_item_name_' + i).text(correspondingItemData.item_name +
+                            correspondingItemData.item_description + correspondingItemData
+                            .item_note);
                         $('#template_item_id_' + i).val(correspondingItemData.item_id);
                         $('#template_item_qty_' + i).val(currentItem.item_qty);
                         // console.log(itemTemplateItems.length)
@@ -5229,7 +5251,8 @@
     let button = $('#addbtn');
 
     button.on('click', function() {
-        let newele = $('<div class="mt-5"></div>');
+        let iid = Math.floor(Math.random() * 999 + 1);
+        let newele = $('<div class="mt-5" id="rendid' + iid + '" ></div>');
         let rembtn = $('<span></span>');
 
         newele.html(`
@@ -5245,28 +5268,31 @@
                         class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
                 </div>
-                <div>
-                    <input type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_assembly_unit" placeholder="00.0" autocomplete="given-name"
-                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                <div class="flex ">
+                    <div class="w-[80%]  ">
+                    <input type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_assembly_unit" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
+                  </div>
+                   <div class="mt-1" >
+                    <button onclick="remveinputs('#rendid${iid}')"  type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                                                <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
+                            </button>
+                    </div>
                 </div>
             </div>
-        `);
-
-        rembtn.html(`
-            <button type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
-            </button>
         `);
 
         mulitple_input.append(newele);
         newele.append(rembtn);
 
-        rembtn.on('click', function() {
-            newele.remove();
-        });
-    });
 
+    });
+    function remveinputs(e) {
+        let ele = document.querySelector(e);
+        if (ele) {
+            ele.remove();
+        }
+    }
 
     $("#cal-menubutton").click(function(e) {
         e.stopPropagation(); // Prevents the click event from reaching the document body
