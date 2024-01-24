@@ -1,9 +1,9 @@
 <!-- <link href="https://cdn.tailwindcss.com" rel="stylesheet"> -->
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/css/dataTables.min.css') }}">
-    <script src="{{ asset('assets/js/fontawesome.js') }}" crossorigin="anonymous"></script>
-    @vite('resources/css/app.css')
-    <link rel="stylesheet" href="{{ asset('assets/css/fancybox.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('assets/css/dataTables.min.css') }}">
+<script src="{{ asset('assets/js/fontawesome.js') }}" crossorigin="anonymous"></script>
+@vite('resources/css/app.css')
+<link rel="stylesheet" href="{{ asset('assets/css/fancybox.min.css') }}" />
 <form action="/acceptProposal/{{ $estimate->estimate_id }}" method="post">
     @csrf
     <div class="my-4">
@@ -11,8 +11,7 @@
             <div class="grid grid-cols-12 p-5">
                 <div class="col-span-6 p-4 ">
                     <div class="projectLogo ">
-                        <img class="w-[288px] h-[73px]" src="{{ asset('assets/icons/tproject-logo.svg') }}"
-                            alt="">
+                        <img class="w-[288px] h-[73px]" src="{{ asset('assets/icons/tproject-logo.svg') }}" alt="">
                     </div>
                     <div class="mt-12 p-4">
                         <p class="text-[22px]/[25.78px] font-bold text-[#323C47]">River City Painting Pro Demo</p>
@@ -77,26 +76,26 @@
                     </div>
                     <div class="text-[#323C47] font-medium mt-4 border-b border-[#323C47] pb-6 border-solid">
                         @php
-                            $subTotal = 0;
+                        $subTotal = 0;
                         @endphp
 
                         @foreach ($items as $item)
-                            <p class="flex justify-between pt-1 gap-4">
-                                <span class="py-2">
-                                    <strong>{{ $item->item_name }}</strong>
-                                    <br>
-                                    <span class=" text-xs">
-                                        {{ $item->item_description }}
-                                    </span>
+                        <p class="flex justify-between pt-1 gap-4">
+                            <span class="py-2">
+                                <strong>{{ $item->item_name }}</strong>
+                                <br>
+                                <span class=" text-xs">
+                                    {{ $item->item_description }}
                                 </span>
-                                <span class="item-price">
-                                    ${{ $item->item_total }}
-                                </span>
-                            </p>
-                            <hr>
-                            @php
-                                $subTotal += $item->item_total;
-                            @endphp
+                            </span>
+                            <span class="item-price">
+                                ${{ $item->item_total }}
+                            </span>
+                        </p>
+                        <hr>
+                        @php
+                        $subTotal += $item->item_total;
+                        @endphp
                         @endforeach
                     </div>
                     <div class="text-[#323C47] font-medium mt-4 border-b border-[#323C47] pb-6 border-solid">
@@ -120,77 +119,77 @@
                                 </span>
                                 <span class="item-price">
                                     ${{ $item->item_total }}
+                                    <input type="hidden" id="upgrade_total" value="{{$item->item_total}}">
                                 </span>
                             </p>
                         </div>
-                            <hr>
+                        <hr>
                         @endforeach
                     </div>
                     @foreach ($estimateItemTemplates as $estItemTemplate)
-                        <div class="my-2 bg-white shadow-xl">
-                            <div class=" flex p-3 bg-[#930027] text-white w-full rounded-t-lg">
-                                <h1 class=" font-medium my-auto">{{ $estItemTemplate['item_template_name'] }}</h1>
-                            </div>
-                            <div class="relative overflow-x-auto">
-                                <div class="itemDiv">
-                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                            <tr>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Item Name
-                                                </th>
-                                                <th scope="col" class="px-6 py-3">
-                                                    Item Description
-                                                </th>
-                                                <th scope="col" class="text-center">
-                                                    Item Price
-                                                </th>
-                                                <th scope="col" class="text-center">
-                                                    Item Qty
-                                                </th>
-                                                <th scope="col" class="text-center">
-                                                    Total
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($estItemTemplate['estimateItemTemplateItems'] as $item)
-                                                <tr class="bg-white border-b">
-                                                    <td class="px-6 py-4">
-                                                        <label class="text-lg font-semibold text-[#323C47]"
-                                                            for="">{{ $item['item_name'] }}</label>
-                                                    </td>
-                                                    <td class="px-6 py-4 w-[40%]">
-                                                        <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                            @if ($item['item_description'])
-                                                                <p class="font-medium">Description:</p>
-                                                                {{ $item['item_description'] }}
-                                                            @endif
-                                                            @if ($item['item_note'])
-                                                                <p class="font-medium">Note:</p>
-                                                                {{ $item['item_note'] }}
-                                                            @endif
-                                                        </p>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        {{ $item['item_price'] }}
-                                                    </td>
-                                                    <td class="text-center">
-                                                        {{ $item['item_qty'] }}
-                                                    </td>
-                                                    <td class="text-center">
-                                                        {{ $item['item_total'] }}
-                                                    </td>
-                                                </tr>
-                                                @php
-                                                    $subTotal += $item['item_total'];
-                                                @endphp
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                    <div class="my-2 bg-white shadow-xl">
+                        <div class=" flex p-3 bg-[#930027] text-white w-full rounded-t-lg">
+                            <h1 class=" font-medium my-auto">{{ $estItemTemplate['item_template_name'] }}</h1>
+                        </div>
+                        <div class="relative overflow-x-auto">
+                            <div class="itemDiv">
+                                <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3">
+                                                Item Name
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                Item Description
+                                            </th>
+                                            <th scope="col" class="text-center">
+                                                Item Price
+                                            </th>
+                                            <th scope="col" class="text-center">
+                                                Item Qty
+                                            </th>
+                                            <th scope="col" class="text-center">
+                                                Total
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($estItemTemplate['estimateItemTemplateItems'] as $item)
+                                        <tr class="bg-white border-b">
+                                            <td class="px-6 py-4">
+                                                <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_name'] }}</label>
+                                            </td>
+                                            <td class="px-6 py-4 w-[40%]">
+                                                <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                    @if ($item['item_description'])
+                                                <p class="font-medium">Description:</p>
+                                                {{ $item['item_description'] }}
+                                                @endif
+                                                @if ($item['item_note'])
+                                                <p class="font-medium">Note:</p>
+                                                {{ $item['item_note'] }}
+                                                @endif
+                                                </p>
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $item['item_price'] }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $item['item_qty'] }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $item['item_total'] }}
+                                            </td>
+                                        </tr>
+                                        @php
+                                        $subTotal += $item['item_total'];
+                                        @endphp
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
+                    </div>
                     @endforeach
                     <div class="mt-5 font-medium">
                         <div class="flex justify-end gap-6">
@@ -213,8 +212,9 @@
                                     {{ number_format($customer->tax_rate, 2) }}%
                                 </p>
                                 <p class="text-[#858585]">
-                                    {{-- ${{ number_format($subTotal + ($subTotal * $customer->tax_rate) / 100, 2) }} --}}
+
                                     <span id="dynamic-total">{{ number_format($subTotal + ($subTotal * $customer->tax_rate) / 100, 2) }}</span>
+                                    <input type="hidden" id="dynamic_total_input" value="{{$subTotal + ($subTotal * $customer->tax_rate) / 100}}">
                                 </p>
                             </div>
                         </div>
@@ -254,8 +254,7 @@
             </div>
             <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
             <input type="hidden" name="customer_email" value="{{ $customer->customer_email }}">
-            <input type="hidden" name="estimate_total"
-                value="{{ $subTotal + ($subTotal * $customer->tax_rate) / 100 }}">
+            <input type="hidden" name="estimate_total" value="{{ $subTotal + ($subTotal * $customer->tax_rate) / 100 }}">
             <div class="col-span-12 p-4 flex justify-end mt-10">
                 @if($estimate->estimate_total == null )
                 <button class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 ">I Agree to Pay</button>
@@ -275,24 +274,27 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         var upgradeAcceptRadio = $('#upgrade_accept');
         var upgradeRejectRadio = $('#upgrade_reject');
+        var upgradeTotal = $('#upgrade_total');
         var dynamicTotalSpan = $('#dynamic-total');
+        var dynamicTotalInput = $('#dynamic_total_input');
         var estimateTotalInput = $('input[name="estimate_total"]');
 
         // Initial total value
-        var total = parseFloat(dynamicTotalSpan.text().replace('$', ''));
 
+        // console.log(total);
         // Function to update total based on radio button selection
         function updateTotal() {
             if (upgradeAcceptRadio.prop('checked')) {
-                total += parseFloat("{{ $item['item_total'] }}");
+                var total = parseFloat(dynamicTotalInput.val()) + parseFloat(upgradeTotal.val());
             } else {
-                total -= parseFloat("{{ $item['item_total'] }}");
+                total = parseFloat(dynamicTotalInput.val()) - parseFloat(upgradeTotal.val());
             }
-            dynamicTotalSpan.text('$' + total.toFixed(2));
-            estimateTotalInput.val(total.toFixed(2));
+            dynamicTotalSpan.text('$' + total);
+            estimateTotalInput.val(total);
+            dynamicTotalInput.val(total);
         }
 
         // Event listener for radio button changes
