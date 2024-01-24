@@ -90,6 +90,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/updateEstimateItemTemplate', [EstimateController::class, 'updateEstimateItemTemplate']);
     Route::get('/getEstimateTemplateItem{id}', [EstimateController::class, 'getEstimateTemplateItem']);
     Route::post('/updateEstimateTemplateItem', [EstimateController::class, 'updateEstimateTemplateItem']);
+    Route::post('/deleteEstimateItem/{id}', [EstimateController::class, 'deleteEstimateItem']);
 
     Route::post('/addItemTemplate', [ItemTemplatesController::class, 'addItemTemplate']);
     Route::get('/itemTemplates', [ItemTemplatesController::class, 'index']);

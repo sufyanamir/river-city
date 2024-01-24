@@ -3869,7 +3869,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                     </div>
                     <div class="">
-                        <button id="updateEvent" class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
+                        <button class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
@@ -3882,6 +3882,10 @@ $userPrivileges->estimate->expenses === 'on')
                         </button>
                     </div>
                 </div>
+            </form>
+            <form action="/deleteEstimateItem/" method="post" id="deleteEstimateItem" class="inline-block ml-4">
+                @csrf
+                <button id="deleteItem-btn" class=" mb-2 mx-2 float-right bg-[#fff] border-2 py-1 px-7 hidden rounded-md">Delete</button>
             </form>
         </div>
     </div>
@@ -4778,7 +4782,8 @@ $userPrivileges->estimate->expenses === 'on')
                     var itemDetail = response.item_detail;
                     var assemblyItemData = response.assembly_items;
                     console.log(assemblyItemData)
-
+                    $('#deleteItem-btn').removeClass('hidden');
+                    $('#deleteEstimateItem').attr('action', '/deleteEstimateItem/' + itemDetail.estimate_item_id);
                     // Update modal content with item details
                     $('#type').val(itemDetail.item_type);
                     $('#itemName').val(itemDetail.item_name);
@@ -4860,6 +4865,7 @@ $userPrivileges->estimate->expenses === 'on')
                 } else {
                     // Handle error response
                     console.error('Error fetching item details.');
+                    $('#deleteItem-btn').addClass('hidden');
                 }
             },
             error: function(error) {
