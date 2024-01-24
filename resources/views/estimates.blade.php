@@ -592,10 +592,12 @@
                             <select
                                 class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"
                                 name="owner" id="owner">
-                                <option
-                                    value="{{ session('user_details')['name'] }} {{ session('user_details')['last_name'] }}">
-                                    {{ session('user_details')['name'] }} {{ session('user_details')['last_name'] }}
+                                <option>Select User</option>
+                                @foreach($users as $user)
+                                <option value="{{ $user->name }} {{ $user->last_name }}">
+                                    {{ $user->name }} {{ $user->last_name }}
                                 </option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

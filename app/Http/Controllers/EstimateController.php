@@ -457,12 +457,13 @@ class EstimateController extends Controller
         if ($userDetails['user_role'] == 'admin') {
             $customers = Customer::get();
             $estimates = Estimate::get();
+            $users = User::where('user_role', '<>', 'crew')->get();
         } elseif ($userDetails['user_role'] == 'schedular') {
             $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->get();
             $customers = Customer::get();
         }
 
-        return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails, 'customers' => $customers]);
+        return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails, 'customers' => $customers, 'users' => $users]);
     }
     // ==============================================================Estimate additional functions=========================================================
     // add files
