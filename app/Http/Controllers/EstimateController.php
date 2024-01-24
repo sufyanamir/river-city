@@ -43,6 +43,37 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class EstimateController extends Controller
 {
+
+
+    // delete estimate item
+    public function deleteEstimateItem($id)
+{
+    try {
+        $estimateItem = EstimateItem::where('estimate_item_id', $id)->first();
+
+        if (!$estimateItem) {
+            return response()->json(['success' => false, 'message' => 'Item not Found!'], 404);
+        }
+
+        $estimateItemAssemblies = EstimateItemAssembly::where('estimate_item_id', $estimateItem->estimate_item_id)->get();
+
+        // Iterate over each item in the collection and delete it
+        foreach ($estimateItemAssemblies as $assembly) {
+            $assembly->delete();
+        }
+
+        // Delete the main item
+        $estimateItem->delete();
+
+        return response()->json(['success' => true, 'message' => 'Item Deleted!'], 200);
+
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+    }
+}
+
+    // delete estimate item
+
     // ==============================================================private functions=========================================================
 
     // estimate activity
