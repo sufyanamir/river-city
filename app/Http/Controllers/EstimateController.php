@@ -101,33 +101,32 @@ class EstimateController extends Controller
             $templateItem->save();
 
             return response()->json(['success' => true, 'message' => 'Item updated!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     // get ItemTemplates and Items
-    
+
     // get ItemTemplates and Items
     public function getEstimateTemplateItem($id)
     {
         try {
 
             $userDetails = session('user_details');
-            
+
             $templateItem = EstimateItemTemplateItems::where('est_template_item_id', $id)->first();
             $item = Items::where('item_id', $templateItem->item_id)->first();
 
             return response(['success' => true, 'data' => ['template_item' => $templateItem, 'item_detail' => $item]], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     // get ItemTemplates and Items
-    
+
     // get ItemTemplates and Items
-    public function updateEstimateItemTemplate(Request $request){
+    public function updateEstimateItemTemplate(Request $request)
+    {
         // dd($request);
         try {
             $userDetails = session('user_details');
@@ -143,38 +142,37 @@ class EstimateController extends Controller
             $itemTemplate = EstimateItemTemplates::where('est_template_id', $validatedData['est_template_id'])->first();
             $itemTemplate->description = $validatedData['estimate_template_description'];
             $itemTemplate->note = $validatedData['estimate_template_note'];
-            
+
             foreach ($validatedData['est_template_item_id'] as $key => $tempItemId) {
                 $templateItem = EstimateItemTemplateItems::where('est_template_item_id', $tempItemId)->first();
-            
+
                 if ($templateItem) {
                     // Retrieve the related item
                     $relatedItem = Items::find($templateItem->item_id);
-            
+
                     if ($relatedItem) {
                         // Update template item properties based on related item information
                         $templateItem->item_qty = $validatedData['template_item_qty'][$key];
                         // $templateItem->item_price = $relatedItem->item_price;
-            
+
                         // Calculate item_total by multiplying item_qty with item_price
                         $templateItem->item_total = $templateItem->item_qty * $relatedItem->item_price;
-            
+
                         // Save the changes to the template item
                         $templateItem->save();
                     }
                 }
-            }       
+            }
 
             $itemTemplate->save();
 
             return response()->json(['success' => true, 'message' => 'Item updated successfully!'], 200);
-        
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     // get ItemTemplates and Items
-    
+
     // get ItemTemplates and Items
     public function getEstItemTemplateToEdit($id)
     {
@@ -195,13 +193,12 @@ class EstimateController extends Controller
             ];
 
             return response()->json(['success' => true, 'data' => $responseData], 200);
-            
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     // get ItemTemplates and Items
-    
+
     // get ItemTemplates and Items
     public function addEstimateItemTemplate(Request $request)
     {
@@ -233,9 +230,9 @@ class EstimateController extends Controller
                 foreach ($validatedData['template_item_id'] as $key => $itemId) {
                     $itemQty = $validatedData['template_item_qty'][$key];
                     if ($itemQty > 0) {
-                        
+
                         $item = Items::find($itemId);
-    
+
                         if ($item) {
                             $itemTotal = $itemQty * $item['item_price'];
                             // Create EstimateItemTemplateItems with item details
@@ -258,7 +255,6 @@ class EstimateController extends Controller
                             // Handle the case where the item with the given item_id is not found
                             return response()->json(['success' => false, 'message' => 'Item not found for item_id ' . $itemId], 404);
                         }
-                    
                     }
                 }
             }
@@ -1145,12 +1141,13 @@ class EstimateController extends Controller
     public function updateEstimateItem(Request $request)
     {
         try {
+            // dd($request);
             $userDetails = session('user_details');
             $validatedData = $request->validate([
                 'estimate_id' => 'required',
                 'item_id' => 'required',
                 'item_name' => 'required',
-                'item_units' => 'required',
+                'item_units' => 'nullable',
                 'labour_expense' => 'nullable',
                 'material_expense' => 'nullable',
                 'item_cost' => 'required',
@@ -1159,10 +1156,15 @@ class EstimateController extends Controller
                 'item_total' => 'required',
                 'item_description' => 'nullable',
                 'item_note' => 'nullable',
+                'assembly_id' => 'nullable|array',
+                'assembly_name' => 'nullable|array',
+                'assembly_unit_by_item_unit' => 'nullable|array',
+                'item_unit_by_assembly_unit' => 'nullable|array',
                 // 'selected_items' => 'required|array',
             ]);
 
             $estimateItem = EstimateItem::where('estimate_item_id', $validatedData['item_id'])->first();
+            $estimateItemAssembly = EstimateItemAssembly::where('estimate_item_id', $estimateItem->estimate_item_id)->get();
 
             $estimateItem->item_name = $validatedData['item_name'];
             $estimateItem->item_unit = $validatedData['item_units'];
@@ -1177,6 +1179,37 @@ class EstimateController extends Controller
 
             $estimateItem->save();
 
+            // Delete EstimateItemAssembly data that is not in the request
+            if ($validatedData['assembly_id'] != null) {
+                $assemblyIdsInRequest = $validatedData['assembly_id'];
+                EstimateItemAssembly::where('estimate_item_id', $validatedData['item_id'])
+                    ->whereNotIn('estimate_item_assembly_id', $assemblyIdsInRequest)
+                    ->delete();
+            }
+            // Update or insert EstimateItemAssembly data
+            foreach ($validatedData['assembly_name'] as $key => $assemblyName) {
+                // Check if assembly ID exists, update if it does, otherwise insert
+                if (isset($validatedData['assembly_id'][$key])) {
+                    // Update existing record
+                    $assemblyId = $validatedData['assembly_id'][$key];
+                    $assembly = EstimateItemAssembly::find($assemblyId);
+                    $assembly->est_ass_item_name = $validatedData['assembly_name'][$key];
+                    $assembly->item_unit_by_ass_unit = $validatedData['assembly_unit_by_item_unit'][$key];
+                    $assembly->ass_unit_by_item_unit = $validatedData['item_unit_by_assembly_unit'][$key];
+                    $assembly->save();
+                } else {
+                    // Insert new record
+                    $assemblyData = [
+                        'added_user_id' => $userDetails['id'],
+                        'estimate_id' => $validatedData['estimate_id'],
+                        'estimate_item_id' => $validatedData['item_id'],
+                        'est_ass_item_name' => $validatedData['assembly_name'][$key],
+                        'item_unit_by_ass_unit' => $validatedData['assembly_unit_by_item_unit'][$key],
+                        'ass_unit_by_item_unit' => $validatedData['item_unit_by_assembly_unit'][$key],
+                    ];
+                    EstimateItemAssembly::create($assemblyData);
+                }
+            }
             return response()->json(['success' => true, 'message' => 'Item updated successfully!'], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -1188,8 +1221,9 @@ class EstimateController extends Controller
     public function getEstimateItem($id)
     {
         $estimateItem = EstimateItem::where('estimate_item_id', $id)->first();
+        $estimateItemAssembly = EstimateItemAssembly::where('estimate_item_id', $estimateItem->estimate_item_id)->get();
 
-        return response()->json(['success' => true, 'item_detail' => $estimateItem], 200);
+        return response()->json(['success' => true, 'item_detail' => $estimateItem, 'assembly_items' => $estimateItemAssembly], 200);
     }
     // get estimate item details for edit
 
@@ -1484,11 +1518,11 @@ class EstimateController extends Controller
                 $itemTotals = $templateItems->pluck('item_total')->toArray();
 
                 // Fetch all data for Items
-                $items = Items::whereIn('item_id', $templateItems->pluck('item_id')->toArray())->get(); // Replace 'Item' with your actual model name
+                $itemss = Items::whereIn('item_id', $templateItems->pluck('item_id')->toArray())->get(); // Replace 'Item' with your actual model name
 
                 // Combine item_qty and Items data in a new array
                 $combinedItems = [];
-                foreach ($items as $index => $item) {
+                foreach ($itemss as $index => $item) {
                     $combinedItems[] = [
                         'est_template_item_id' => $templateItems[$index]->est_template_item_id,
                         'item_qty' => $itemQuantities[$index],
