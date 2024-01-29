@@ -98,6 +98,7 @@
                         @endphp
                         @endforeach
                     </div>
+                    @if(count($upgrades) > 0)
                     <div class="text-[#323C47] font-medium mt-4 border-b border-[#323C47] pb-6 border-solid">
                         <h1 class=" text-xl font-semibold my-2">Upgrades:</h1>
                         <hr>
@@ -126,6 +127,7 @@
                         <hr>
                         @endforeach
                     </div>
+                    @endif
                     @foreach ($estimateItemTemplates as $estItemTemplate)
                     <div class="my-2 bg-white shadow-xl">
                         <div class=" flex p-3 bg-[#930027] text-white w-full rounded-t-lg">
