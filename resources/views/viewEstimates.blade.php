@@ -551,10 +551,10 @@ $userPrivileges = session('user_details')['user_privileges'];
                         <tbody class=" text-center">
                             <tr>
                                 <td class="font-semibold text-xl">Estimated</td>
-                                <td class="">120.66</td>
-                                <td class="">$250.55</td>
-                                <td class="">$25.565</td>
-                                <td class="">40.41%</td>
+                                <td class="">{{$profitHours}}</td>
+                                <td class="">${{$profitCost}}</td>
+                                <td class="">${{$mainProfit}}</td>
+                                <td class="">{{$profitMargin}}%</td>
                             </tr>
                         </tbody>
                     </table>
@@ -1676,13 +1676,39 @@ $userPrivileges->estimate->items === 'on')
     </div>
     <div class="col-span-10">
         <div class="itemDiv">
-            <div class=" px-5 py-7">
-                @foreach ($estimate_files as $file)
-                <a href="{{ asset('storage/' . $file->estimate_file) }}" class=" text-[#930027] hover:border-b border-[#930027]" target="_blank">
-                    {{ $file->estimate_file_name }} ,
-                </a>
-                @endforeach
-            </div>
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Files
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($estimate_files as $file)
+                    <tr class="bg-white border-b">
+                        <td class="px-6 py-4">
+                            <a href="{{ asset('storage/' . $file->estimate_file) }}" class=" text-[#930027] hover:border-b border-[#930027]" target="_blank">
+                                {{ $file->estimate_file_name }} ,
+                            </a>
+                        </td>
+                        <td>
+                            <button>
+                                <form action="/deleteFile{{ $file->estimate_file_id }}" method="post">
+                                    @csrf
+                                    <button>
+                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                    </button>
+                                </form>
+                            </button>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -1690,25 +1716,51 @@ $userPrivileges->estimate->items === 'on')
 isset($userPrivileges->estimate->files) &&
 $userPrivileges->estimate->files === 'on')
 <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-    <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-        <p class="text-lg px-3 text-white  font-medium ">
-            Files
-        </p>
+    <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
         <button type="button" id="addFile-btn" class="flex bg-white p-1 m-2 rounded-lg">
             <div class=" bg-[#930027] rounded-lg">
                 <i class="fa-solid fa-plus text-white p-2"></i>
             </div>
         </button>
+        <p class="text-lg px-3 text-white  font-medium ">
+            Files
+        </p>
     </div>
     <div class="col-span-10">
         <div class="itemDiv">
-            <div class=" px-5 py-7">
-                @foreach ($estimate_files as $file)
-                <a href="{{ asset('storage/' . $file->estimate_file) }}" class=" text-[#930027] hover:border-b border-[#930027]" target="_blank">
-                    {{ $file->estimate_file_name }} ,
-                </a>
-                @endforeach
-            </div>
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Files
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($estimate_files as $file)
+                    <tr class="bg-white border-b">
+                        <td class="px-6 py-4">
+                            <a href="{{ asset('storage/' . $file->estimate_file) }}" class=" text-[#930027] hover:border-b border-[#930027]" target="_blank">
+                                {{ $file->estimate_file_name }} ,
+                            </a>
+                        </td>
+                        <td>
+                            <button>
+                                <form action="/deleteFile{{ $file->estimate_file_id }}" method="post">
+                                    @csrf
+                                    <button>
+                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                    </button>
+                                </form>
+                            </button>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -1892,11 +1944,105 @@ $userPrivileges->estimate->proposals === 'on')
     <br>
     <div class=" py-5 px-4  text-black mx-auto">
         <div class="itemDiv">
-            @foreach ($estimate_notes as $note)
-            <p class=" text-sm my-2 ">
-                {{ $note->estimate_note }}
-            </p>
-            @endforeach
+            <div class="relative overflow-x-auto py-2">
+                <div class="itemDiv">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Notes
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($estimate_notes as $note)
+                            <tr class="bg-white border-b">
+                                <td class="px-6 py-4">
+                                    {{ $note->estimate_note }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <button id="edit-note-modal{{ $note->estimate_note_id }}">
+                                        <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
+                                    </button>
+                                    <button>
+                                        <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" method="post">
+                                            @csrf
+                                            <button>
+                                                <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                            </button>
+                                        </form>
+                                    </button>
+                                </td>
+                            </tr>
+                            <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addNote-modal{{ $note->estimate_note_id }}">
+                                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                    <!-- Background overlay -->
+                                    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                                        <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+                                    </div>
+
+                                    <!-- Modal panel -->
+                                    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                        <form action="/editEstimateNote" method="post" id="addNote-form{{ $note->estimate_note_id }}">
+                                            @csrf
+                                            <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                                            <input type="hidden" value="{{ $note->estimate_note_id }}" name="note_id" id="note_id">
+                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                                <!-- Modal content here -->
+                                                <div class=" flex justify-between border-b">
+                                                    <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Note</h2>
+                                                    <button class="modal-close" type="button">
+                                                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                                                    </button>
+                                                </div>
+                                                <!-- task details -->
+                                                <div class=" grid grid-cols-2 gap-2">
+                                                    <div class=" col-span-2 my-2">
+                                                        <label for="estimate_note">Add Note:</label>
+                                                        <textarea name="estimate_note" id="estimate_note" placeholder="Add Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $note->estimate_note }}">{{ $note->estimate_note }}</textarea>
+                                                        <button type="button" id="items-mic" class=" absolute mt-8 right-8" onclick="voice('note-mic', 'estimate_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div class=" border-t">
+                                                    <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
+                                                        <div class=" text-center hidden spinner" id="spinner">
+                                                            <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                                                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                                                            </svg>
+                                                        </div>
+                                                        <div class="text" id="text">
+                                                            Save
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                                document.getElementById("edit-note-modal{{ $note->estimate_note_id }}").addEventListener("click", function(e) {
+                                    e.preventDefault();
+                                    document.getElementById("addNote-modal{{ $note->estimate_note_id }}").classList.remove('hidden');
+                                });
+
+                                document.querySelectorAll(".modal-close").forEach(function(element) {
+                                    element.addEventListener("click", function(e) {
+                                        e.preventDefault();
+                                        document.getElementById("addNote-modal{{ $note->estimate_note_id }}").classList.add('hidden');
+                                        document.getElementById("addNote-form{{ $note->estimate_note_id }}").reset();
+                                    });
+                                });
+                            </script>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -1917,11 +2063,105 @@ $userPrivileges->estimate->notes === 'on')
     <br>
     <div class=" py-5 px-4  text-black mx-auto">
         <div class="itemDiv">
-            @foreach ($estimate_notes as $note)
-            <p class=" text-sm my-2 ">
-                {{ $note->estimate_note }}
-            </p>
-            @endforeach
+            <div class="relative overflow-x-auto py-2">
+                <div class="itemDiv">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Notes
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($estimate_notes as $note)
+                            <tr class="bg-white border-b">
+                                <td class="px-6 py-4">
+                                    {{ $note->estimate_note }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <button id="edit-note-modal{{ $note->estimate_note_id }}">
+                                        <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
+                                    </button>
+                                    <button>
+                                        <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" method="post">
+                                            @csrf
+                                            <button>
+                                                <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                            </button>
+                                        </form>
+                                    </button>
+                                </td>
+                            </tr>
+                            <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addNote-modal{{ $note->estimate_note_id }}">
+                                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                    <!-- Background overlay -->
+                                    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                                        <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+                                    </div>
+
+                                    <!-- Modal panel -->
+                                    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                        <form action="/editEstimateNote" method="post" id="addNote-form{{ $note->estimate_note_id }}">
+                                            @csrf
+                                            <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                                            <input type="hidden" value="{{ $note->estimate_note_id }}" name="note_id" id="note_id">
+                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                                <!-- Modal content here -->
+                                                <div class=" flex justify-between border-b">
+                                                    <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Note</h2>
+                                                    <button class="modal-close" type="button">
+                                                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                                                    </button>
+                                                </div>
+                                                <!-- task details -->
+                                                <div class=" grid grid-cols-2 gap-2">
+                                                    <div class=" col-span-2 my-2">
+                                                        <label for="estimate_note">Add Note:</label>
+                                                        <textarea name="estimate_note" id="estimate_note" placeholder="Add Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $note->estimate_note }}">{{ $note->estimate_note }}</textarea>
+                                                        <button type="button" id="items-mic" class=" absolute mt-8 right-8" onclick="voice('note-mic', 'estimate_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div class=" border-t">
+                                                    <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
+                                                        <div class=" text-center hidden spinner" id="spinner">
+                                                            <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                                                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                                                            </svg>
+                                                        </div>
+                                                        <div class="text" id="text">
+                                                            Save
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                                document.getElementById("edit-note-modal{{ $note->estimate_note_id }}").addEventListener("click", function(e) {
+                                    e.preventDefault();
+                                    document.getElementById("addNote-modal{{ $note->estimate_note_id }}").classList.remove('hidden');
+                                });
+
+                                document.querySelectorAll(".modal-close").forEach(function(element) {
+                                    element.addEventListener("click", function(e) {
+                                        e.preventDefault();
+                                        document.getElementById("addNote-modal{{ $note->estimate_note_id }}").classList.add('hidden');
+                                        document.getElementById("addNote-form{{ $note->estimate_note_id }}").reset();
+                                    });
+                                });
+                            </script>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -2174,8 +2414,20 @@ $userPrivileges->estimates->timeentries === 'on')
                                 {{ $toDo->to_do_status }}
                             </td>
                             <td class="px-6 py-4">
-                                <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Complete
-                                </button>
+                                @if($toDo->to_do_status != 'complete')
+                                <form action="/completeToDo{{$toDo->to_do_id}}" method="post">
+                                    @csrf
+                                    <button type="submit" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
+                                        Complete
+                                    </button>
+                                </form>
+                                @endif
+                                <form action="/deleteToDo{{$toDo->to_do_id}}" method="post">
+                                    @csrf
+                                    <button>
+                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         @endforeach
@@ -2394,6 +2646,7 @@ $userPrivileges->estimate->todos === 'on')
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
+                            <th></th>
                             <th scope="col" class="px-6 py-3">
                                 Date
                             </th>
@@ -2412,11 +2665,17 @@ $userPrivileges->estimate->todos === 'on')
                             <th scope="col" class="px-6 py-3">
                                 Total
                             </th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($expenses as $expense)
                         <tr class="bg-white border-b">
+                            <td>
+                                <button type="button" id="editExpense-btn{{ $expense->estimate_expense_id }}" class="flex">
+                                    <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                </button>
+                            </td>
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ $expense->expense_date }}
                             </th>
@@ -2434,6 +2693,14 @@ $userPrivileges->estimate->todos === 'on')
                             </td>
                             <td class="px-6 py-4">
                                 {{ $expense->expense_total }}
+                            </td>
+                            <td>
+                                <form action="/deleteEstimateExpense/{{$expense->estimate_expense_id}}" method="post">
+                                    @csrf
+                                    <button>
+                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         @endforeach
@@ -2750,6 +3017,7 @@ $userPrivileges->estimate->expenses === 'on')
             <form action="/addEstimateExpense" method="post" id="expenses-btn-form">
                 @csrf
                 <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                <input type="hidden" value="" name="estimate_expense_id" id="estimate_expense_id">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between border-b">
@@ -4725,6 +4993,59 @@ $userPrivileges->estimate->expenses === 'on')
     });
 </script>
 <script>
+    $('[id^="editExpense-btn"]').click(function() {
+        var itemId = this.id.replace('editExpense-btn', ''); // Extract item ID from button ID
+
+        // Make an AJAX request to get item details
+        $.ajax({
+            url: '/getExpenseDataToEdit' + itemId,
+            method: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    // Populate the modal with the retrieved data
+                    var expenseDetail = response.expense_detail;
+                    console.log(expenseDetail);
+                    // Update modal content with item details
+                    $('#date').val(formatDate(expenseDetail.expense_date));
+                    $('#item_type').val(expenseDetail.expense_item_type);
+                    $('#vendor').val(expenseDetail.expense_vendor);
+                    $('#hours').val(expenseDetail.labour_hours);
+                    $('#subtotal').val(expenseDetail.expense_subtotal);
+                    $('#tax').val(expenseDetail.expense_tax);
+                    $('#total').val(expenseDetail.expense_total);
+                    if (response.expense_paid === 'paid') {
+                        $('#paid').prop('checked', true);
+                    } else {
+                        $('#paid').prop('checked', false);
+                    }
+                    $('#description').val(expenseDetail.expense_description);
+                    // Add other fields as needed
+
+                    // Set the item ID in the hidden input field
+                    $('#estimate_expense_id').val(expenseDetail.estimate_expense_id);
+                    var formUrl = $('#expenses-btn-form').attr('action', '/updateEstimateExpense');
+                    // Open the modal
+                    $('#expenses-btn-modal').removeClass('hidden');
+                } else {
+                    // Handle error response
+                    console.error('Error fetching item details.');
+                }
+            },
+            error: function(error) {
+                console.error('AJAX request failed:', error);
+            }
+        });
+    });
+
+    function formatDate(dateString) {
+        // Assuming dateString is in the format "DD/MM/YYYY"
+        var parts = dateString.split('/');
+        if (parts.length === 3) {
+            return parts[2] + '-' + parts[1] + '-' + parts[0];
+        }
+        return dateString; // return as is if already in "YYYY-MM-DD" format
+    }
+
     $('[id^="editEstimateTemplate-item"]').click(function() {
         var itemId = this.id.replace('editEstimateTemplate-item', ''); // Extract item ID from button ID
 

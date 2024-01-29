@@ -9,6 +9,11 @@ class Customer extends Model
 {
     use HasFactory;
 
+    public function addedBy()
+    {
+        return $this->belongsTo(User::class, 'added_user_id');
+    }
+
     public function estimates()
     {
         return $this->hasMany(Estimate::class, 'customer_id');

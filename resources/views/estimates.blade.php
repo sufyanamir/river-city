@@ -525,7 +525,7 @@
                         </div>
                         <div class=" col-span-2 ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Project Number (Optional)</h5>
-                            <input type="number" step="any" name="project_number" id="project_number"
+                            <input type="text" step="any" name="project_number" id="project_number"
                                 placeholder="Company Name (Optional)" autocomplete="given-name"
                                 class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>

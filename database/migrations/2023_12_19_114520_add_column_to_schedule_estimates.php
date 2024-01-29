@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::table('schedule_estimates', function (Blueprint $table) {
             $table->integer('work_assigned')->default(0);
             $table->integer('work_assign_id');
-            $table->text('note');
+            $table->text('note')->nullable();
         });
     }
 
