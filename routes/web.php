@@ -41,7 +41,10 @@ Route::middleware('customauth')->group(function () {
     Route::post('/addUser', [UserController::class, 'addUsers']);
     Route::match(['get', 'post'], '/delete/user/{id}', [UserController::class, 'deleteUser']);
     Route::match(['get', 'post'], '/delete/userRole/{id}', [UserController::class, 'deleteUserRole']);
+    
     Route::get('/customers', [CustomerController::class, 'index']);
+    Route::get('/getCustomerToEdit{id}', [CustomerController::class, 'getCustomerToEdit']);
+    Route::post('/updateCustomer', [CustomerController::class, 'updateCustomer']);
     // Route::get('/users', function () {
     //     return view('users');
     // });
@@ -64,6 +67,8 @@ Route::middleware('customauth')->group(function () {
     Route::get('/getEstimateItem{id}', [EstimateController::class, 'getEstimateItem']);
     Route::post('/addItemInEstimateAndItems', [EstimateController::class, 'addItemInEstimateAndItems']);
     Route::post('/addEstimateNote', [EstimateController::class, 'addEstimateNote']);
+    Route::post('/editEstimateNote', [EstimateController::class, 'editEstimateNote']);
+    Route::match(['post', 'get'], '/deleteEstimateNote{id}', [EstimateController::class, 'deleteEstimateNote']);
     Route::match(['get', 'post'], '/getemailDetails/{id}', [EstimateController::class, 'getEmailDetails']);
     Route::post('/sendEmail', [EstimateController::class, 'sendEmail']);
     Route::post('/completeEstimate', [EstimateController::class, 'completeEstimate']);
@@ -77,6 +82,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/addToDos', [EstimateController::class, 'addToDos']);
     Route::post('/addEstimateExpense', [EstimateController::class, 'addEstimateExpense']);
     Route::post('/addEstimateFile', [EstimateController::class, 'uploadFile']);
+    ROute::match(['get', 'post'], '/deleteFile{id}', [EstimateController::class, 'deleteFile']);
     Route::get('/getCustomerDetails/{id}', [EstimateController::class, 'getCustomerDetails']);
     Route::post('/sendChat', [EstimateChatController::class, 'sendChat']);
     Route::get('/estimates/getChatMessage/{id}', [EstimateChatController::class, 'getChatMessage']);
@@ -91,6 +97,13 @@ Route::middleware('customauth')->group(function () {
     Route::get('/getEstimateTemplateItem{id}', [EstimateController::class, 'getEstimateTemplateItem']);
     Route::post('/updateEstimateTemplateItem', [EstimateController::class, 'updateEstimateTemplateItem']);
     Route::post('/deleteEstimateItem/{id}', [EstimateController::class, 'deleteEstimateItem']);
+
+    Route::get('/getExpenseDataToEdit{id}', [EstimateController::class, 'getExpenseDataToEdit']);
+    ROute::post('/updateEstimateExpense', [EstimateController::class, 'updateEstimateExpense']);
+    Route::match(['get', 'post'], '/deleteEstimateExpense/{id}', [EstimateController::class, 'deleteEstimateExpense']);
+
+    Route::post('/completeToDo{id}', [EstimateController::class, 'completeToDo']);
+    Route::match(['get', 'post'], '/deleteToDo{id}', [EstimateController::class, 'deleteToDo']);
 
     Route::post('/addItemTemplate', [ItemTemplatesController::class, 'addItemTemplate']);
     Route::get('/itemTemplates', [ItemTemplatesController::class, 'index']);

@@ -264,7 +264,7 @@
 
         if (existingProposals.length > 0) {
             var userResponse = confirm(
-                "If you make this proposal, all the previous proposals of this estimate will be deleted! Do you want to proceed?"
+                "If you make this proposal, all the previous proposals of this estimate will be canceled! Do you want to proceed?"
                 );
 
             if (userResponse) {

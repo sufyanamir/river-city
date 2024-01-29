@@ -47,30 +47,29 @@ class EstimateController extends Controller
 
     // delete estimate item
     public function deleteEstimateItem($id)
-{
-    try {
-        $estimateItem = EstimateItem::where('estimate_item_id', $id)->first();
+    {
+        try {
+            $estimateItem = EstimateItem::where('estimate_item_id', $id)->first();
 
-        if (!$estimateItem) {
-            return response()->json(['success' => false, 'message' => 'Item not Found!'], 404);
+            if (!$estimateItem) {
+                return response()->json(['success' => false, 'message' => 'Item not Found!'], 404);
+            }
+
+            $estimateItemAssemblies = EstimateItemAssembly::where('estimate_item_id', $estimateItem->estimate_item_id)->get();
+
+            // Iterate over each item in the collection and delete it
+            foreach ($estimateItemAssemblies as $assembly) {
+                $assembly->delete();
+            }
+
+            // Delete the main item
+            $estimateItem->delete();
+
+            return response()->json(['success' => true, 'message' => 'Item Deleted!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
-
-        $estimateItemAssemblies = EstimateItemAssembly::where('estimate_item_id', $estimateItem->estimate_item_id)->get();
-
-        // Iterate over each item in the collection and delete it
-        foreach ($estimateItemAssemblies as $assembly) {
-            $assembly->delete();
-        }
-
-        // Delete the main item
-        $estimateItem->delete();
-
-        return response()->json(['success' => true, 'message' => 'Item Deleted!'], 200);
-
-    } catch (\Exception $e) {
-        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
     }
-}
 
     // delete estimate item
 
@@ -492,11 +491,38 @@ class EstimateController extends Controller
         } elseif ($userDetails['user_role'] == 'schedular') {
             $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->get();
             $customers = Customer::get();
+            $users = User::where('user_role', '<>', 'crew')->get();
         }
 
         return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails, 'customers' => $customers, 'users' => $users]);
     }
     // ==============================================================Estimate additional functions=========================================================
+    // delete files
+    public function deleteFile($id)
+    {
+        try {
+            $file = EstimateFile::where('estimate_file_id', $id)->first();
+
+            if (!$file) {
+                return response()->json(['success' => false, 'message' => 'File not found!'], 404);
+            }
+
+            $filePath = $file->estimate_file;
+
+            // Delete file from storage
+            Storage::delete($filePath);
+
+            // Delete record from the database
+            $file->delete();
+
+            return response()->json(['success' => true, 'message' => 'File deleted successfully'], 200);
+        } catch (\Exception $e) {
+            // Handle the exception if needed
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // delete files
+
     // add files
     public function uploadFile(Request $request)
     {
@@ -535,6 +561,119 @@ class EstimateController extends Controller
         }
     }
     // add files
+
+    // delete estimate expenses
+    public function deleteEstimateExpense($id)
+    {
+        try {
+
+            $expense = EstimateExpenses::where('estimate_expense_id', $id)->first();
+
+            if (!$expense) {
+                return response()->json(['success' => false, 'message' => 'Expense not found!'], 404);
+            }
+
+            $expense->delete();
+
+            return response()->json(['success' => true, 'message' => 'Expense deleted!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // delete estimate expenses
+
+    // delete to do
+    public function deleteToDo($id)
+    {
+        try {
+            $toDo = EstimateToDos::where('to_do_id', $id)->first();
+
+            if (!$toDo) {
+                return response()->json(['success' => false, 'message' => 'No To Do found!'], 404);
+            }
+
+            $toDo->delete();
+
+            return response()->json(['success' => true, 'message' => 'To Do deleted!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // delete to do
+
+    // update to do
+    public function completeToDo($id)
+    {
+        try {
+            $toDo = EstimateToDos::where('to_do_id', $id)->first();
+
+            $toDo->to_do_status = 'complete';
+
+            $toDo->save();
+
+            return response()->json(['success' => true, 'message' => 'To Do completed!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+    // update to do
+
+    // edit estimate expenses
+    public function getExpenseDataToEdit($id)
+    {
+        try {
+            $expense = EstimateExpenses::where('estimate_expense_id', $id)->first();
+
+            return response()->json(['success' => true, 'expense_detail' => $expense], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // edit estimate expenses
+
+    // edit estimate expenses
+    public function updateEstimateExpense(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_expense_id' => 'required',
+                'date' => 'nullable',
+                'item_type' => 'nullable',
+                'vendor' => 'nullable',
+                'hours' => 'nullable',
+                'subtotal' => 'nullable',
+                'tax' => 'nullable',
+                'total' => 'nullable',
+                'paid' => 'nullable',
+                'description' => 'nullable',
+            ]);
+
+            $expense = EstimateExpenses::where('estimate_expense_id', $validatedData['estimate_expense_id'])->first();
+
+            if (isset($validatedData['date'])) {
+                $expense->expense_date = $validatedData['date'];
+            }
+            $expense->expense_item_type = $validatedData['item_type'];
+            $expense->expense_vendor = $validatedData['vendor'];
+            $expense->labour_hours = $validatedData['hours'];
+            $expense->expense_subtotal = $validatedData['subtotal'];
+            $expense->expense_tax = $validatedData['tax'];
+            $expense->expense_total = $validatedData['total'];
+            if (isset($validatedData['paid']) == 'paid') {
+                $expense->expense_paid = 'paid';
+            }
+            $expense->expense_description = $validatedData['description'];
+
+            $expense->save();
+
+            return response()->json(['success' => true, 'message' => 'Expense Updated!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // edit estimate expenses
 
     // estimate expenses
     public function addEstimateExpense(Request $request)
@@ -898,7 +1037,7 @@ class EstimateController extends Controller
                 $upgrade->upgrade_status = $validatedData['upgrade_accept_reject'];
                 $upgrade->save();
             }
-            $proposal = EstimateProposal::where('estimate_id', $id)->first();
+            $proposal = EstimateProposal::where('estimate_id', $id)->where('proposal_status', 'pending')->first();
 
             $proposal->proposal_status = 'accepted';
             $proposal->proposal_accepted = $validatedData['estimate_total'];
@@ -992,17 +1131,20 @@ class EstimateController extends Controller
                 'estimate_id' => $validatedData['estimate_id'],
                 'email' => $validatedData['customer_email'],
             ];
+            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
 
             $existingProposals = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->get();
             if (!$existingProposals->isEmpty()) {
                 $existingProposals->each(function ($proposal) {
-                    $proposal->delete();
+                    $proposal->proposal_status = 'canceled';
+                    $proposal->save();
                 });
             }
 
             $mail = new ProposalMail($emailData);
             Mail::to($validatedData['customer_email'])->send($mail);
-
+            $estimate->estimate_total = null;
+            $estimate->save();
             $proposal = EstimateProposal::create([
                 'estimate_id' => $validatedData['estimate_id'],
                 'proposal_total' => $validatedData['estimate_total'],
@@ -1010,7 +1152,7 @@ class EstimateController extends Controller
 
             $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Proposal Sent', "A Proposal has been created and sent to the Customer");
 
-            return response()->json(['success' => true, 'message' => 'Proposal Sent Successfully!'], 200);
+            return response()->json(['success' => true, 'message' => 'Proposal Sent Successfully!', 'estimate_id' => $validatedData['estimate_id']], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -1142,7 +1284,54 @@ class EstimateController extends Controller
     }
     // estimate emails
 
-    // estimate items
+    // delete estimate note
+    public function deleteEstimateNote($id)
+    {
+        try {
+            $estimateNote = EstimateNote::where('estimate_note_id', $id)->first();
+
+            if (!$estimateNote) {
+                return response()->json(['success' => false, 'message' => 'Note not found!'], 404);
+            }
+
+            $estimateNote->delete();
+
+            return response()->json(['success' => true, 'message' => 'Note deleted!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // delete estimate note
+
+    // edit estimate note
+    public function editEstimateNote(Request $request)
+    {
+        try {
+
+            $userDetails = session('user_details');
+            $validatedData = $request->validate([
+                'note_id' => 'required',
+                'estimate_note' => 'required',
+            ]);
+
+            $estimateNote = EstimateNote::where('estimate_note_id', $validatedData['note_id'])->first();
+
+            if (!$estimateNote) {
+                return response()->json(['success' => false, 'message' => 'Note not found!'], 404);
+            }
+
+            $estimateNote->estimate_note = $validatedData['estimate_note'];
+
+            $estimateNote->save();
+
+            return response()->json(['success' => true, 'message' => 'Note updated!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // edit estimate note
+
+    // estimate note
     public function addEstimateNote(Request $request)
     {
         try {
@@ -1167,7 +1356,7 @@ class EstimateController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
-    // estimate items
+    // estimate note
 
     // update estimate item
     public function updateEstimateItem(Request $request)
@@ -1579,6 +1768,20 @@ class EstimateController extends Controller
                 $estimateItemTemplateItems[] = $itemTemplate;
             }
 
+            $profitHours = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->sum('item_qty');
+            $profitCost = $estimateItems->sum(function ($itemm) {
+                return $itemm->item_cost * $itemm->item_qty;
+            });
+
+            $profitItems = $estimateItems->sum('item_total');
+            $mainProfit = $profitItems - $profitCost;
+            if ($profitItems) {
+                
+                $profitMargin = $mainProfit / $profitItems * 100;
+            }else {
+                $profitMargin = 0;
+            }
+
             // Calculate the sum of item_price for the estimate
             $totalPrice = $estimateItems->sum('item_price');
             // return response()->json(['estimateItemTemplates' => $estimateItemTemplates]);
@@ -1610,7 +1813,11 @@ class EstimateController extends Controller
                 'invoice' => $invoice,
                 'itemsForAssemblies' => $itemsForAssemblies,
                 'item_templates' => $itemTemplates,
-                'estimateItemTemplates' => $estimateItemTemplates
+                'estimateItemTemplates' => $estimateItemTemplates,
+                'profitHours' => $profitHours,
+                'profitCost' => $profitCost,
+                'mainProfit' => $mainProfit,
+                'profitMargin' => $profitMargin,
             ]);
         } catch (\Exception $e) {
             // Handle the exception
@@ -1650,7 +1857,7 @@ class EstimateController extends Controller
                 'phone' => 'required|numeric',
                 'company_name' => 'nullable|string',
                 'project_name' => 'nullable|string',
-                'project_number' => 'nullable|numeric',
+                'project_number' => 'nullable|string',
                 'first_address' => 'required|string',
                 'second_address' => 'nullable|string',
                 'city' => 'required|string',

@@ -62,7 +62,7 @@ $(document).ready(function () {
         if (response.success == true) {
           // Handle success, if needed
           handleSuccess(response);
-          if (apiUrl == '/addEstimate' || apiUrl == '/setScheduleWork' || apiUrl == '/setScheduleEstimate') {
+          if (apiUrl == '/addEstimate' || apiUrl == '/setScheduleWork' || apiUrl == '/setScheduleEstimate' || apiUrl == '/sendProposal') {
             window.location.assign('/viewEstimate/' + response.estimate_id);
           } else {
             setInterval(

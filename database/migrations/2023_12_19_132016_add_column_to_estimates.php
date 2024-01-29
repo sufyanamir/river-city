@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('customer_last_name')->nullable();
             $table->float('tax_rate')->nullable();
             $table->text('project_name')->nullable();
-            $table->integer('project_number')->nullable();
+            $table->text('project_number')->nullable();
         });
     }
 
