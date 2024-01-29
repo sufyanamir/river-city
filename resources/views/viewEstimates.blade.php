@@ -532,9 +532,6 @@ $userPrivileges = session('user_details')['user_privileges'];
                         Profitability
                     </p>
                 </div>
-                <div class="p-4 text-white">
-                    <h1><i class="fa-solid fa-circle-exclamation"></i> Not Functioned!</h1>
-                </div>
             </div>
             <div class="p-2">
                 <div class=" relative overflow-x-auto">
