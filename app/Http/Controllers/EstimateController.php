@@ -45,6 +45,18 @@ class EstimateController extends Controller
 {
 
 
+    public function viewEstimateMaterials($id)
+    {
+            
+            $userDetails = session('user_details');
+            $estimate = Estimate::where('estimate_id', $id)->first();
+            $materialItems = EstimateItem::where('estimate_id', $id)->where('item_type', 'material')->get();
+            $customer = Customer::where('customer_id', $estimate->customer_id)->first();
+
+            return view('viewEstimateMaterials', ['items' => $materialItems, 'customer' => $customer, 'estimate' => $estimate]);
+
+    }
+
     // delete estimate item
     public function deleteEstimateItem($id)
     {
@@ -89,7 +101,7 @@ class EstimateController extends Controller
     public function getEstimateActivity($id)
     {
         $userDetails = session('user_details');
-        $activities = EstimateActivity::where('estimate_id', $id)->get();
+        $activities = EstimateActivity::with('user')->where('estimate_id', $id)->get();
 
         return view('estimate_activity', ['user_details' => $userDetails, 'activities' => $activities]);
     }
@@ -1724,6 +1736,7 @@ class EstimateController extends Controller
             $payments = EstimatePayments::where('estimate_id', $estimate->estimate_id)->get();
             $toDos = EstimateToDos::where('estimate_id', $estimate->estimate_id)->get();
             $expenses = EstimateExpenses::where('estimate_id', $estimate->estimate_id)->get();
+            $expenseTotal = $expenses->sum('expense_total');
             $estimateImages = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
             $estimateFiles = EstimateFile::where('estimate_id', $estimate->estimate_id)->get();
             $itemTemplates = ItemTemplates::get();
@@ -1768,18 +1781,25 @@ class EstimateController extends Controller
                 $estimateItemTemplateItems[] = $itemTemplate;
             }
 
+            $profitItems = $estimateItems->sum('item_total');
             $profitHours = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->sum('item_qty');
+            $budgetLabour = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->sum('item_total');
+            $budgetMaterial = EstimateItem::where('item_type', 'Material')->where('estimate_id', $id)->sum('item_total');
+            $budgetLabour = $budgetLabour * 38 / 100;
+            $budgetMaterial = $budgetMaterial * 15 / 100;
+            $budgetProfit = $budgetLabour + $budgetMaterial;
+            $budgetProfit = $profitItems - $budgetProfit;
             $profitCost = $estimateItems->sum(function ($itemm) {
                 return $itemm->item_cost * $itemm->item_qty;
             });
 
-            $profitItems = $estimateItems->sum('item_total');
             $mainProfit = $profitItems - $profitCost;
             if ($profitItems) {
-                
+                $budgetMargin = $budgetProfit / $profitItems * 100;
                 $profitMargin = $mainProfit / $profitItems * 100;
-            }else {
+            } else {
                 $profitMargin = 0;
+                $budgetMargin = 0;
             }
 
             // Calculate the sum of item_price for the estimate
@@ -1818,6 +1838,11 @@ class EstimateController extends Controller
                 'profitCost' => $profitCost,
                 'mainProfit' => $mainProfit,
                 'profitMargin' => $profitMargin,
+                'budgetLabour' => $budgetLabour,
+                'budgetMaterial' => $budgetMaterial,
+                'budgetProfit' => $budgetProfit,
+                'budgetMargin' => $budgetMargin,
+                'expenseTotal' => $expenseTotal,
             ]);
         } catch (\Exception $e) {
             // Handle the exception

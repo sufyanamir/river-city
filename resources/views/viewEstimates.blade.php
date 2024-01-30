@@ -541,6 +541,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                 <th></th>
                                 <th class="">Hours</th>
                                 <th class="">Cost</th>
+                                <th>Expenses</th>
                                 <th class="">Profit</th>
                                 <th class="">Margin</th>
                             </tr>
@@ -550,8 +551,47 @@ $userPrivileges = session('user_details')['user_privileges'];
                                 <td class="font-semibold text-xl">Estimated</td>
                                 <td class="">{{$profitHours}}</td>
                                 <td class="">${{$profitCost}}</td>
+                                <td>${{$expenseTotal}}</td>
                                 <td class="">${{$mainProfit}}</td>
                                 <td class="">{{$profitMargin}}%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="  border-2  shadow-lg my-5  bg-white rounded-3xl mt-7 ">
+            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+                <div class="flex items-center gap-2">
+                    <button type="button" id="profitability-btn" class="flex">
+                        <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                    </button>
+                    <p class="text-lg text-white pl-3 font-medium">
+                        Budgets
+                    </p>
+                </div>
+            </div>
+            <div class="p-2">
+                <div class=" relative overflow-x-auto">
+                    <table class=" w-full  ">
+                        <thead class=" text-center">
+                            <tr class="border border-solid border-l-0 border-r-0 border-t-0">
+                                <th></th>
+                                <th class="">Labour</th>
+                                <th class="">Material</th>
+                                <th>Expenses</th>
+                                <th class="">Profit</th>
+                                <th class="">Margin</th>
+                            </tr>
+                        </thead>
+                        <tbody class=" text-center">
+                            <tr>
+                                <td class="font-semibold text-xl">Estimated</td>
+                                <td class="">${{$budgetLabour}}</td>
+                                <td class="">${{$budgetMaterial}}</td>
+                                <td>${{$expenseTotal}}</td>
+                                <td class="">${{$budgetProfit}}</td>
+                                <td class="">{{$budgetMargin}}%</td>
                             </tr>
                         </tbody>
                     </table>
@@ -614,6 +654,9 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     <th scope="col" class="px-6 py-3">
                                         Item Description
                                     </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Item Status (excluded/included)
+                                    </th>
                                     <th scope="col" class="text-center">
                                         Item Cost
                                     </th>
@@ -636,7 +679,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     <td class="px-6 py-4">
                                         <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
                                     </td>
-                                    <td class="px-6 py-4 w-[50%]">
+                                    <td class="px-6 py-4 w-[30%]">
                                         <p class="text-[16px]/[18px] text-[#323C47] font">
                                             @if ($item->item_description)
                                         <p class="font-medium">Description:</p>
@@ -647,6 +690,9 @@ $userPrivileges = session('user_details')['user_privileges'];
                                         {{ $item->item_note }}
                                         @endif
                                         </p>
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $item->item_status }}
                                     </td>
                                     <td class="text-center">
                                         {{ $item->item_cost }}
@@ -1843,6 +1889,9 @@ $userPrivileges->estimate->photos === 'on')
                             <th scope="col" class="px-6 py-3">
                                 Status
                             </th>
+                            <th scope="col" class="px-6 py-3">
+                                View
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1860,6 +1909,13 @@ $userPrivileges->estimate->photos === 'on')
                             <td class="px-6 py-4">
                                 {{ $proposal->proposal_status }}
                             </td>
+                            <td class="px-6 py-4">
+                                <a href="/viewProposal/{{ $estimate->estimate_id }}">
+                                    <button class=" px-2 py-2">
+                                        <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
+                                    </button>
+                                </a>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -1872,15 +1928,17 @@ $userPrivileges->estimate->photos === 'on')
 isset($userPrivileges->estimate->proposals) &&
 $userPrivileges->estimate->proposals === 'on')
 <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-    <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
+    <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
+        <a href="/makeProposal/{{ $estimate->estimate_id }}">
+            <button type="button" class="flex bg-white p-1 m-2 rounded-lg">
+                <div class=" bg-[#930027] rounded-lg">
+                    <i class="fa-solid fa-plus text-white p-2"></i>
+                </div>
+            </button>
+        </a>
         <p class="text-lg px-3 text-white  font-medium ">
             Proposals
         </p>
-        <a href="/makeProposal/{{ $estimate->estimate_id }}">
-            <button type="button" class="flex">
-                <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/pluss-icon.svg') }}" alt="">
-            </button>
-        </a>
     </div>
     <div>
         <div class="relative overflow-x-auto py-2">
@@ -1900,6 +1958,9 @@ $userPrivileges->estimate->proposals === 'on')
                             <th scope="col" class="px-6 py-3">
                                 Status
                             </th>
+                            <th scope="col" class="px-6 py-3">
+                                View
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1916,6 +1977,13 @@ $userPrivileges->estimate->proposals === 'on')
                             </td>
                             <td class="px-6 py-4">
                                 {{ $proposal->proposal_status }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="/viewProposal/{{ $estimate->estimate_id }}">
+                                    <button class=" px-2 py-2">
+                                        <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
+                                    </button>
+                                </a>
                             </td>
                         </tr>
                         @endforeach
