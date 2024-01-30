@@ -9,6 +9,11 @@ class EstimateActivity extends Model
 {
     use HasFactory;
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'added_user_id');
+    }
+
     protected $table = 'estimate_activity';
 
     protected $primaryKey = 'estimate_activity_id';

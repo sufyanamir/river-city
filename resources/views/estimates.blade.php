@@ -184,13 +184,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class=" my-auto">
+                                        <!-- <div class=" my-auto">
                                             <button type="button"
                                                 class="inline-flex w-full justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]"
                                                 id="estimateDetails" aria-expanded="true" aria-haspopup="true">
                                                 <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
                                             </button>
-                                        </div>
+                                        </div> -->
                                         {{-- <div class=" my-auto">
                                         <a href="/viewEstimate/{{ $item->customer_id }}">
                                             <button class=" px-2 py-2">
@@ -224,16 +224,16 @@
                                                             role="menuitem" tabindex="-1" id="menu-item-1"><img
                                                                 src="{{ asset('assets/icons/dropdown-view-icon.svg') }}"
                                                                 alt="icon"> View</a>
-                                                        <a href="#"
+                                                        <a href="/viewEstimate/{{ $item->estimate_id }}"
                                                             class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4"
                                                             role="menuitem" tabindex="-1" id="menu-item-1"><img
                                                                 src="{{ asset('assets/icons/dropdown-edit-icon.svg') }}"
                                                                 alt="icon"> Edit</a>
-                                                        <a href="#"
+                                                        <a href="/viewEstimateMaterials/{{ $item->estimate_id }}"
                                                             class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4"
                                                             role="menuitem" tabindex="-1" id="menu-item-1"><img
                                                                 src="{{ asset('assets/icons/dropdown-report-icon.svg') }}"
-                                                                alt="icon"> Report</a>
+                                                                alt="icon"> Materials</a>
                                                         <a href="/getEstimateActivity/{{ $item->estimate_id }}"
                                                             class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4"
                                                             role="menuitem" tabindex="-1" id="menu-item-1"><img

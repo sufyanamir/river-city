@@ -98,6 +98,8 @@ Route::middleware('customauth')->group(function () {
     Route::post('/updateEstimateTemplateItem', [EstimateController::class, 'updateEstimateTemplateItem']);
     Route::post('/deleteEstimateItem/{id}', [EstimateController::class, 'deleteEstimateItem']);
 
+    Route::get('/viewEstimateMaterials/{id}', [EstimateController::class, 'viewEstimateMaterials']);
+
     Route::get('/getExpenseDataToEdit{id}', [EstimateController::class, 'getExpenseDataToEdit']);
     ROute::post('/updateEstimateExpense', [EstimateController::class, 'updateEstimateExpense']);
     Route::match(['get', 'post'], '/deleteEstimateExpense/{id}', [EstimateController::class, 'deleteEstimateExpense']);
