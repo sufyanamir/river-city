@@ -10,20 +10,21 @@
     // --------------------------- Data --------------------------------
     var estimateEvents = {!! json_encode($estimates) !!};
     // console.log({!! json_encode($estimates) !!});
+    
     var locations = estimateEvents.map(function(estimate){
         return {
-            id: String(estimate.added_user_id),
-            name: String(estimate.added_user_id),
+            id: String(estimate.assignedUserName),
+            name: String(estimate.assignedUserName),
             tzOffset: 7 * 60,
         }
     });
 
     var events = estimateEvents.map(function (estimate) {
     return {
-        name: String(estimate.added_user_id), // Convert to string if necessary
-        location: String(estimate.added_user_id),
-        start: new Date(estimate.created_at),
-        end: new Date(ezstimate.updated_at)
+        name: String(estimate.customerName), // Convert to string if necessary
+        location: String(estimate.assignedUserName),
+        start: new Date(estimate.start_date),
+        end: new Date(estimate.end_date)
     };
 });
     // -------------------------- Helpers ------------------------------
@@ -46,7 +47,7 @@
     }
     // --------------------------- Example 2 ---------------------------
     var sked2Config = {
-        caption: 'Cities',
+        caption: 'Crew',
         start: yesterday(23, 0),
         end: tomorrow(0, 0),
         showEventTime: true,

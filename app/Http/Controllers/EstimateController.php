@@ -44,6 +44,18 @@ use Symfony\Contracts\Service\Attribute\Required;
 class EstimateController extends Controller
 {
 
+    // estimate activity
+    private function addEstimateActivity($userDetails, $estimateId, $activityTitle, $activityDescription)
+    {
+        EstimateActivity::create([
+            'added_user_id' => $userDetails['id'],
+            'estimate_id' => $estimateId,
+            'activity_title' => $activityTitle,
+            'activity_description' => $activityDescription,
+        ]);
+    }
+    // estimate activity
+
     // update item status
     public function includeexcludeEstimateItem(Request $request)
     {
@@ -111,17 +123,6 @@ class EstimateController extends Controller
     // delete estimate item
 
     // ==============================================================private functions=========================================================
-
-    // estimate activity
-    private function addEstimateActivity($userDetails, $estimateId, $activityTitle, $activityDescription)
-    {
-        EstimateActivity::create([
-            'added_user_id' => $userDetails['id'],
-            'estimate_id' => $estimateId,
-            'activity_title' => $activityTitle,
-            'activity_description' => $activityDescription,
-        ]);
-    }
 
     public function getEstimateActivity($id)
     {
@@ -523,9 +524,18 @@ class EstimateController extends Controller
 
         $estimates = ScheduleEstimate::with(['estimate', 'assigenedUser'])->get();
 
-        // return response()->json(['estimates' => $estimates]);
-        return view('crewCalendar', ['estimates' => $estimates]);
+        $formattedEstimates = $estimates->map(function ($estimate) {
+            $assignedUserName = $estimate->assigenedUser->name; // Replace 'name' with the actual attribute holding the user's name
+            $customerName = $estimate->estimate->customer_name; // Replace 'customer_name' with the actual attribute holding the customer's name
+            $estimate->assignedUserName = $assignedUserName;
+            $estimate->customerName = $customerName;
+            return $estimate;
+        });
+
+        // return response()->json(['estimates' => $formattedEstimates]);
+        return view('crewCalendar', ['estimates' => $formattedEstimates]);
     }
+
 
     public function index()
     {
