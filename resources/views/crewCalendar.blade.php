@@ -1,8 +1,17 @@
 @include('layouts.header')
 <link rel="stylesheet" href="{{ asset('assets/css/jquery.skedTape.css') }}">
 <div class=" my-4">
-    <h1 class=" text-2xl font-semibold mb-3">Crew Calendar</h1>
-    <div id="sked2"></div>
+    <div class=" bg-white w-full rounded-2xl shadow-lg">
+        <div class=" flex justify-between p-3 bg-[#930027] text-white rounded-t-2xl">
+            <div class=" text-xl font-semibold">
+                <h4>Customer List</h4>
+            </div>
+            <div>
+                <!-- <x-add-button :title="'+Add Customer'" :class="''" :id="'addCustomer'"></x-add-button> -->
+            </div>
+        </div>
+        <div id="sked2"></div>
+    </div>
 </div>
 @include('layouts.footer')
 <script src="{{asset('assets/js/jquery.skedTape.js')}}"></script>
@@ -10,7 +19,7 @@
     // --------------------------- Data --------------------------------
     var estimateEvents = {!! json_encode($estimates) !!};
     // console.log({!! json_encode($estimates) !!});
-    
+
     var locations = estimateEvents.map(function(estimate){
         return {
             id: String(estimate.assignedUserName),
