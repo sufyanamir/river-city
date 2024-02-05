@@ -4,13 +4,15 @@
     <div class=" bg-white w-full rounded-2xl shadow-lg">
         <div class=" flex justify-between p-3 bg-[#930027] text-white rounded-t-2xl">
             <div class=" text-xl font-semibold">
-                <h4>Customer List</h4>
+                <h4>Crew Calendar</h4>
             </div>
             <div>
                 <!-- <x-add-button :title="'+Add Customer'" :class="''" :id="'addCustomer'"></x-add-button> -->
             </div>
         </div>
-        <div id="sked2"></div>
+        <div class=" my-2">
+            <div id="sked2"></div>
+        </div>
     </div>
 </div>
 @include('layouts.footer')
