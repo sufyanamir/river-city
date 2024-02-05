@@ -44,18 +44,43 @@ use Symfony\Contracts\Service\Attribute\Required;
 class EstimateController extends Controller
 {
 
+    // update item status
+    public function includeexcludeEstimateItem(Request $request)
+    {
+        try {
 
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'estimate_item_id' => 'required',
+                'item_status' => 'required',
+            ]);
+
+            $estimateItem = EstimateItem::where('estimate_item_id', $validatedData['estimate_item_id'])->first();
+            $estimateItem->item_status = $validatedData['item_status'];
+
+            $estimateItem->save();
+
+            return response()->json(['success' => true, 'message' => 'Item status changed to ' . $validatedData['item_status']], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // update item status
+
+    // view Estimate Materials
     public function viewEstimateMaterials($id)
     {
-            
-            $userDetails = session('user_details');
-            $estimate = Estimate::where('estimate_id', $id)->first();
-            $materialItems = EstimateItem::where('estimate_id', $id)->where('item_type', 'material')->get();
-            $customer = Customer::where('customer_id', $estimate->customer_id)->first();
 
-            return view('viewEstimateMaterials', ['items' => $materialItems, 'customer' => $customer, 'estimate' => $estimate]);
+        $userDetails = session('user_details');
+        $estimate = Estimate::where('estimate_id', $id)->first();
+        $materialItems = EstimateItem::where('estimate_id', $id)->where('item_type', 'material')->get();
+        $customer = Customer::where('customer_id', $estimate->customer_id)->first();
 
+        return view('viewEstimateMaterials', ['items' => $materialItems, 'customer' => $customer, 'estimate' => $estimate]);
     }
+    // view Estimate Materials
 
     // delete estimate item
     public function deleteEstimateItem($id)
@@ -491,6 +516,15 @@ class EstimateController extends Controller
         }
 
         return view('calendar', ['estimates' => $estimates]);
+    }
+    public function getEstimatesOnCrewCalendar()
+    {
+        $userDetails = session('user_details');
+
+        $estimates = ScheduleEstimate::with(['estimate', 'assigenedUser'])->get();
+
+        // return response()->json(['estimates' => $estimates]);
+        return view('crewCalendar', ['estimates' => $estimates]);
     }
 
     public function index()
@@ -1072,8 +1106,8 @@ class EstimateController extends Controller
 
             $estimate = Estimate::where('estimate_id', $id)->first();
             $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-            $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', '<>', 'upgrades')->get();
-            $upgrades = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', 'upgrades')->get();
+            $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', '<>', 'upgrades')->where('item_status', 'included')->get();
+            $upgrades = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', 'upgrades')->where('item_status', 'included')->get();
             $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->get();
             $estimateItemTemplateItems = [];
 
@@ -1179,8 +1213,8 @@ class EstimateController extends Controller
 
             $estimate = Estimate::where('estimate_id', $id)->first();
             $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-            $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', '<>', 'upgrades')->get();
-            $upgrades = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', 'upgrades')->get();
+            $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', '<>', 'upgrades')->where('item_status', 'included')->get();
+            $upgrades = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', 'upgrades')->where('item_status', 'included')->get();
             $existingProposals = EstimateProposal::where('estimate_id', $id)->get();
             $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->get();
             $estimateItemTemplateItems = [];
@@ -1735,7 +1769,31 @@ class EstimateController extends Controller
             $invoice = AssignPayment::where('estimate_id', $estimate->estimate_id)->first();
             $payments = EstimatePayments::where('estimate_id', $estimate->estimate_id)->get();
             $toDos = EstimateToDos::where('estimate_id', $estimate->estimate_id)->get();
-            $expenses = EstimateExpenses::where('estimate_id', $estimate->estimate_id)->get();
+            //$expenses = EstimateExpenses::where('estimate_id', $estimate->estimate_id)->get();
+
+            $estimateId = $estimate->estimate_id;
+            $expenses = EstimateExpenses::where('estimate_id', $estimateId)->get();
+
+            // Initialize an array to store vendor-wise totals
+            $vendorTotals = [];
+
+            foreach ($expenses as $expense) {
+                $vendorId = $expense->expense_vendor;
+
+                // If vendorId is not set in the array, initialize it
+                if (!isset($vendorTotals[$vendorId])) {
+                    $vendorTotals[$vendorId] = 0;
+                }
+
+                // Add the expense total to the vendor's total
+                $vendorTotals[$vendorId] += $expense->expense_total;
+            }
+
+            // Now $vendorTotals array contains vendor-wise total expenses
+            // You can use it as needed in your application
+
+
+            //dd($vendorTotals);
             $expenseTotal = $expenses->sum('expense_total');
             $estimateImages = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
             $estimateFiles = EstimateFile::where('estimate_id', $estimate->estimate_id)->get();
@@ -1843,6 +1901,7 @@ class EstimateController extends Controller
                 'budgetProfit' => $budgetProfit,
                 'budgetMargin' => $budgetMargin,
                 'expenseTotal' => $expenseTotal,
+                'vendorTotals' => $vendorTotals,
             ]);
         } catch (\Exception $e) {
             // Handle the exception
@@ -1893,7 +1952,8 @@ class EstimateController extends Controller
                 'internal_note' => 'nullable|string',
                 'source' => 'nullable|string',
                 'owner' => 'nullable|string',
-
+                'project_type' => 'nullable|string',
+                'building_type' => 'nullable|string',
             ]);
 
             if ($validatedData['customer_id']) {
@@ -1928,6 +1988,8 @@ class EstimateController extends Controller
                 'tax_rate' => $validatedData['tax_rate'],
                 'project_name' => $validatedData['project_name'],
                 'project_number' => $validatedData['project_number'],
+                'project_type' => $validatedData['project_type'],
+                'building_type' => $validatedData['building_type'],
             ]);
 
             if ($validatedData['customer_id']) {

@@ -4,7 +4,7 @@
     <div class="bg-white w-full rounded-2xl shadow-lg">
         <div class="flex justify-between p-3 bg-[#930027] text-white rounded-t-2xl">
             <div class="text-xl font-semibold">
-                <h4>Estimate Materials</h4>
+                <h4>Work Order</h4>
             </div>
             <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
                 <button class=" bg-white p-2 text-black rounded-md">
@@ -27,16 +27,6 @@
                         <p class="mt-2 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/home-icon.svg') }}" alt="">
                             <span class="pl-2">{{ $customer->customer_primary_address }}</span>
-                        </p>
-                        <p class="mt-1 flex text-[#323C47] font-medium">
-                            <img src="{{ asset('assets/icons/mail-icon.svg') }}" alt="">
-                            <span class="pl-2">{{ $customer->customer_email }}
-                            </span>
-                        </p>
-                        <p class="mt-1 flex text-[#323C47]  font-medium">
-                            <img src="{{ asset('assets/icons/tel-icon.svg') }}" alt="">
-                            <span class="pl-2">{{ $customer->customer_phone }}
-                            </span>
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
@@ -72,16 +62,6 @@
                         <p class="text-[#323C47]">
                             {{ $estimate->created_at }}
                         </p>
-                        <p class="mt-1 text-red-900">
-                            Total: ${{ $estimate->estimate_total }}
-                        </p>
-                        <p class="flex justify-end text-blue-900">
-                            Invoiced: ${{ $estimate->invoiced_payment }}
-                        </p>
-                        <p class="flex justify-end text-green-900">
-                            Paid: ${{ $estimate->invoice_paid_total }}
-                        </p>
-
                     </div>
                 </div>
             </div>
@@ -104,7 +84,11 @@
                                 {{$item->item_name}}
                             </th>
                             <td class="px-6 py-4">
+                                @if($item->item_qty == null)
+                                <p>This product does not have quantity. Please add the quantity of the product.</p>
+                                @else
                                 {{$item->item_qty}}
+                                @endif
                             </td>
                         </tr>
                         @endforeach

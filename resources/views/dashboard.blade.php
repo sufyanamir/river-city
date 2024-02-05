@@ -131,7 +131,7 @@
                                             <p class="text-[#323C47]">{{ $item['estimate']->customer_address }}</p>
                                         </td>
                                         <td class=" pl-8">
-                                            <a href="/makeProposal/{{ $item['schedule_estimate']->estimate_id }}"
+                                            <a href="/viewEstimateMaterials/{{ $item['schedule_estimate']->estimate_id }}"
                                                 class="">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
                                                     viewBox="0 0 22 22" fill="none">

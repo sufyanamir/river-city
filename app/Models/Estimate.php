@@ -52,6 +52,8 @@ class Estimate extends Model
         'invoice_paid_total',
         'estimate_schedule_assigned',
         'estimate_schedule_assigned_to',
+        'building_type',
+        'project_type',
     ];
 
     public $timestamps = true;

@@ -16,6 +16,7 @@ class Notifications extends Model
     protected $fillable = [
         'added_user_id',
         'notification_message',
+        'mentioned_user_id',
     ];
 
     public $timestamps = true;

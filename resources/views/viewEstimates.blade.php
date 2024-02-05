@@ -42,6 +42,16 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <span class="pl-2">Project Owner: {{ $customer->owner }}
                             </span>
                         </p>
+                        <p class="mt-1 flex text-[#323C47] font-medium">
+                            <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
+                            <span class="pl-2">Project Type: {{ $estimate->project_type }}
+                            </span>
+                        </p>
+                        <p class="mt-1 flex text-[#323C47] font-medium">
+                            <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
+                            <span class="pl-2">Building Type: {{ $estimate->building_type }}
+                            </span>
+                        </p>
                         <hr class="bg-gray-300 my-2 w-full">
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/page-icon.svg') }}" alt="">
@@ -577,8 +587,8 @@ $userPrivileges = session('user_details')['user_privileges'];
                         <thead class=" text-center">
                             <tr class="border border-solid border-l-0 border-r-0 border-t-0">
                                 <th></th>
-                                <th class="">Labour</th>
-                                <th class="">Material</th>
+                                <th class="">Labour(38%)</th>
+                                <th class="">Material(15%)</th>
                                 <th>Expenses</th>
                                 <th class="">Profit</th>
                                 <th class="">Margin</th>
@@ -640,7 +650,7 @@ $userPrivileges = session('user_details')['user_privileges'];
             @endphp
             <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
                 @if ($estimate_items->count() > 0)
-                <div class="relative overflow-x-auto">
+                <div class="relative overflow-x-auto mb-8">
                     <div class="itemDiv">
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -692,7 +702,63 @@ $userPrivileges = session('user_details')['user_privileges'];
                                         </p>
                                     </td>
                                     <td class="text-center">
-                                        {{ $item->item_status }}
+                                        @if($item->item_status == 'included')
+                                        <span class="inline-flex my-auto items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $item->item_status }}</span>
+                                        @elseif($item->item_status == 'excluded')
+                                        <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">{{ $item->item_status }}</span>
+                                        @endif
+                                        <button type="button" id="exclude-include-menuBtn{{$item->estimate_item_id}}" class="inline p-2">
+                                            <i class="fa-solid fa-square-caret-down text-[#930027] text-lg"></i>
+                                        </button>
+                                        <!-- Dropdown menu -->
+                                        <div class="absolute z-10">
+                                            <div id="exclude-include-menu{{$item->estimate_item_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                                                    <li>
+                                                        <form action="/includeexcludeEstimateItem" method="post">
+                                                            @csrf
+                                                            <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                            <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
+                                                            <input type="hidden" name="item_status" value="included">
+                                                            <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                                Include
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                    <hr>
+                                                    <li>
+                                                        <form action="/includeexcludeEstimateItem" method="post">
+                                                            @csrf
+                                                            <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                            <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
+                                                            <input type="hidden" name="item_status" value="excluded">
+                                                            <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                                Exclude
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}").addEventListener("click", function(e) {
+                                                e.stopPropagation(); // Prevents the click event from reaching the document body
+                                                var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
+                                                dropdownMenu.classList.toggle("topbar-menuEntring");
+                                                dropdownMenu.classList.toggle("topbar-manuLeaving");
+                                            });
+
+                                            document.addEventListener('click', function(e) {
+                                                var btn = document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}");
+                                                var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
+
+                                                if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                                                    // Click occurred outside the button and dropdown, hide the dropdown
+                                                    dropdownMenu.classList.add("topbar-manuLeaving");
+                                                    dropdownMenu.classList.remove("topbar-menuEntring");
+                                                }
+                                            });
+                                        </script>
                                     </td>
                                     <td class="text-center">
                                         {{ $item->item_cost }}
@@ -2770,6 +2836,17 @@ $userPrivileges->estimate->todos === 'on')
                         </tr>
                         @endforeach
                     </tbody>
+                    <tfoot class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th colspan="8" scope="col" class="px-6 py-3 text-center">Vendors</th>
+                        </tr>
+                        @foreach($vendorTotals as $vendorId => $total)
+                        <tr class="text-right">
+                            <th colspan="6" scope="col" class="px-6 py-3">{{$vendorId}}</th>
+                            <th colspan="2" scope="col" class="px-6 py-3">{{$total}}</th>
+                        </tr>
+                        @endforeach
+                    </tfoot>
                 </table>
             </div>
         </div>

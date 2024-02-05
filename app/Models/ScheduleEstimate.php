@@ -9,6 +9,16 @@ class ScheduleEstimate extends Model
 {
     use HasFactory;
 
+    public function estimate()
+    {
+        return $this->belongsTo(Estimate::class, 'estimate_id');
+    }
+
+    public function assigenedUser()
+    {
+        return $this->belongsTo(User::class, 'work_assign_id');
+    }
+
     protected $table = 'schedule_estimates';
     
     protected $primaryKey = 'schedule_estimate_id';

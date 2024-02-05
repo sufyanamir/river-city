@@ -97,6 +97,7 @@ Route::middleware('customauth')->group(function () {
     Route::get('/getEstimateTemplateItem{id}', [EstimateController::class, 'getEstimateTemplateItem']);
     Route::post('/updateEstimateTemplateItem', [EstimateController::class, 'updateEstimateTemplateItem']);
     Route::post('/deleteEstimateItem/{id}', [EstimateController::class, 'deleteEstimateItem']);
+    Route::post('/includeexcludeEstimateItem', [EstimateController::class, 'includeexcludeEstimateItem']);
 
     Route::get('/viewEstimateMaterials/{id}', [EstimateController::class, 'viewEstimateMaterials']);
 
@@ -136,9 +137,7 @@ Route::middleware('customauth')->group(function () {
     // Route::get('/jobs', function () {
     //     return view('jobs');
     // });
-    Route::get('/crewCalendar', function () {
-        return view('crewCalendar');
-    });
+    Route::get('/crewCalendar', [EstimateController::class, 'getEstimatesOnCrewCalendar']);
     Route::get('/feedGallery', [EstimateController::class, 'getEstimateWithImages']);
     // Route::get('/feedGallery', function () {
     //     return view('feedGallery');
