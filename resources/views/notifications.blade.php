@@ -24,8 +24,9 @@
                 <span class="absolute top-1 left-1 inline-flex items-center justify-center w-2 h-2 mr-2 text-sm font-semibold text-[#04BB16] bg-[#04BB16] rounded-full">
                     @endif
                 </span>
-                <div>
+                <div class=" flex justify-between gap-2">
                     <p>{{ $notification->notification_message }}</p>
+                    <p class=" text-xs">{{ $notification->created_at }}</p>
                 </div>
             </div>
             @endforeach
@@ -36,8 +37,9 @@
             <span class="absolute top-1 left-1 inline-flex items-center justify-center w-2 h-2 mr-2 text-sm font-semibold text-[#04BB16] bg-[#04BB16] rounded-full">
                 @endif
             </span>
-            <div>
+            <div class=" flex justify-between gap-2">
                 <p>{{ $notification->notification_message }}</p>
+                <p class=" text-xs">{{ $notification->created_at }}</p>
             </div>
         </div>
         @endforeach
