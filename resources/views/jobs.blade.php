@@ -179,7 +179,7 @@
                                             </div>
                                         </div>
                                         <div class=" inline-block">
-                                            <a href="/makeProposal/{{ $item['schedule_estimate']->estimate_id }}">
+                                            <a href="/viewEstimateMaterials/{{ $item['schedule_estimate']->estimate_id }}">
                                                 <div class="inline-block items-center align-middle" id="">
                                                     <button class="">
                                                         <img class="w-9" src="{{ asset('assets/icons/view-icon.svg') }}"

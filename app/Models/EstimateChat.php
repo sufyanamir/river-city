@@ -20,6 +20,7 @@ class EstimateChat extends Model
         'chat_message',
         'chat_image',
         'chat_emojis',
+        'mentioned_user_ids',
     ];
 
     public $timestamps = true;

@@ -20,74 +20,74 @@ $(document).ready(function () {
   });
   // Listen for form submissions
   // Listen for form submissions
-  $(document).on('submit', 'form', function (event) {
-    // Prevent the default form submission
-    event.preventDefault();
+  // $(document).on('submit', 'form', function (event) {
+  //   // Prevent the default form submission
+  //   event.preventDefault();
 
-    // Get the form data using FormData for handling file uploads
-    var formData = new FormData(this);
-    var apiUrl = $(this).attr('action');
+  //   // Get the form data using FormData for handling file uploads
+  //   var formData = new FormData(this);
+  //   var apiUrl = $(this).attr('action');
 
-    // Make the AJAX request
-    $.ajax({
-      type: 'POST',
-      url: $(this).attr('action'),
-      data: formData,
-      processData: false, // Important: Don't process the data
-      contentType: false, // Important: Don't set content type (jQuery will automatically set it based on FormData)
-      beforeSend: function () {
-        $('.text').addClass('hidden');
-        $('.spinner').removeClass('hidden');
-        topbar.config({
-          autoRun: false,
-          barThickness: 3,
-          barColors: {
-            '0': '#930027'
-          },
-          shadowBlur: 5,
-          shadowColor: 'rgba(0, 0, 0, .5)',
-          className: 'topbar',
-        })
-        topbar.show();
-        (function step() {
-          setTimeout(function () {
-            if (topbar.progress('+.01') < 1) step()
-          }, 16)
-        })()
-        // $('.save-btn').attr('disabled', true);
-        // $('.save-btn').removeClass('bg-[#930027]');
-        // $('.save-btn').addClass('bg-[#0000]');
-      },
-      success: function (response) {
-        if (response.success == true) {
-          // Handle success, if needed
-          handleSuccess(response);
-          if (apiUrl == '/addEstimate' || apiUrl == '/setScheduleWork' || apiUrl == '/setScheduleEstimate' || apiUrl == '/sendProposal') {
-            window.location.assign('/viewEstimate/' + response.estimate_id);
-          } else {
-            setInterval(
-              location.reload()
-              ,
-              5000
-            );
-          }
-        } else if (response.success == false) {
-          // Handle failure, if needed
-          handleFailure(response);
-        }
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        // Log the error response to the console
-        console.error("AJAX Error: " + textStatus, errorThrown);
+  //   // Make the AJAX request
+  //   $.ajax({
+  //     type: 'POST',
+  //     url: $(this).attr('action'),
+  //     data: formData,
+  //     processData: false, // Important: Don't process the data
+  //     contentType: false, // Important: Don't set content type (jQuery will automatically set it based on FormData)
+  //     beforeSend: function () {
+  //       $('.text').addClass('hidden');
+  //       $('.spinner').removeClass('hidden');
+  //       topbar.config({
+  //         autoRun: false,
+  //         barThickness: 3,
+  //         barColors: {
+  //           '0': '#930027'
+  //         },
+  //         shadowBlur: 5,
+  //         shadowColor: 'rgba(0, 0, 0, .5)',
+  //         className: 'topbar',
+  //       })
+  //       topbar.show();
+  //       (function step() {
+  //         setTimeout(function () {
+  //           if (topbar.progress('+.01') < 1) step()
+  //         }, 16)
+  //       })()
+  //       // $('.save-btn').attr('disabled', true);
+  //       // $('.save-btn').removeClass('bg-[#930027]');
+  //       // $('.save-btn').addClass('bg-[#0000]');
+  //     },
+  //     success: function (response) {
+  //       if (response.success == true) {
+  //         // Handle success, if needed
+  //         handleSuccess(response);
+  //         if (apiUrl == '/addEstimate' || apiUrl == '/setScheduleWork' || apiUrl == '/setScheduleEstimate' || apiUrl == '/sendProposal') {
+  //           window.location.assign('/viewEstimate/' + response.estimate_id);
+  //         } else {
+  //           setInterval(
+  //             location.reload()
+  //             ,
+  //             5000
+  //           );
+  //         }
+  //       } else if (response.success == false) {
+  //         // Handle failure, if needed
+  //         handleFailure(response);
+  //       }
+  //     },
+  //     error: function (jqXHR, textStatus, errorThrown) {
+  //       // Log the error response to the console
+  //       console.error("AJAX Error: " + textStatus, errorThrown);
 
-        // Log the response content for further investigation
-        console.log("Response:", jqXHR.responseText);
+  //       // Log the response content for further investigation
+  //       console.log("Response:", jqXHR.responseText);
 
-        // Handle the error here
-        handleFailure(JSON.parse(jqXHR.responseText));
-      }
-    });
-  });
+  //       // Handle the error here
+  //       handleFailure(JSON.parse(jqXHR.responseText));
+  //     }
+  //   });
+  // });
 
   function handleSuccess(response) {
     // Redirect to the dashboard or do something else
