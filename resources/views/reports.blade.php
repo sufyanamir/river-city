@@ -66,7 +66,7 @@
                     <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
                         <h3>Sales By Source</h3>
                     </div>
-                    <div class=" relative h-42 overflow-auto border rounded-b-lg">
+                    <div class=" relative overflow-auto border rounded-b-lg">
                         <table class=" w-full text-sm">
                             <thead class=" border-b-2">
                                 <tr>
@@ -75,28 +75,35 @@
                                     <th class=" text-right pr-1 py-2">Total</th>
                                 </tr>
                             </thead>
-                            <tbody class=" ">
-                                <tr class=" border-b">
-                                    <td class=" text-left pl-1 py-2">Google</td>
-                                    <td class=" text-center">15</td>
-                                    <td class=" text-right pr-1 py-2">26</td>
-                                </tr>
-                                <tr class=" border-b">
-                                    <td class=" text-left pl-1 py-2">Google</td>
-                                    <td class=" text-center">15</td>
-                                    <td class=" text-right pr-1 py-2">26</td>
-                                </tr>
-                                <tr class=" border-b">
-                                    <td class=" text-left pl-1 py-2">Google</td>
-                                    <td class=" text-center">15</td>
-                                    <td class=" text-right pr-1 py-2">26</td>
-                                </tr>
-                            </tbody>
+                        </table>
+                        <div style="height: 100px !important; overflow-y:scroll !important;">
+                            <table class=" w-full text-sm">
+                                @php
+                                $source_customer_total = 0;
+                                $source_estimate_total = 0;
+                                @endphp
+
+                                <tbody class="">
+                                    @foreach($sources as $source => $data)
+                                    <tr class=" border-b">
+                                        <td class=" text-left pl-1 py-2">{{$source}}</td>
+                                        <td class=" text-center">{{$data['total_customers']}}</td>
+                                        <td class=" text-right pr-1 py-2">${{$data['estimate_total']}}</td>
+                                    </tr>
+                                    @php
+                                    $source_customer_total += $data['total_customers'];
+                                    $source_estimate_total += $data['estimate_total'];
+                                    @endphp
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <table class=" w-full text-sm">
                             <tfoot>
                                 <tr>
                                     <th class=" text-left pl-1 py-2"> Grand Total</th>
-                                    <td class=" text-center">123</td>
-                                    <td class=" text-right pr-1 py-2">202135</td>
+                                    <td class=" text-center">{{$source_customer_total}}</td>
+                                    <td class=" text-right pr-1 py-2">${{$source_estimate_total}}</td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -104,79 +111,45 @@
                 </div>
                 <div class="card px-3">
                     <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
-                        <h3>Sales By Source</h3>
+                        <h3>Completed Estimates</h3>
                     </div>
-                    <div class=" relative h-42 overflow-auto border rounded-b-lg">
+                    <div class=" relative overflow-auto border rounded-b-lg">
                         <table class=" w-full text-sm">
                             <thead class=" border-b-2">
                                 <tr>
-                                    <th class=" text-left pl-1 py-2">Source</th>
+                                    <th class=" text-left pl-1 py-2">Estimator</th>
                                     <th>#</th>
                                     <th class=" text-right pr-1 py-2">Total</th>
                                 </tr>
                             </thead>
-                            <tbody class=" ">
-                                <tr class=" border-b">
-                                    <td class=" text-left pl-1 py-2">Google</td>
-                                    <td class=" text-center">15</td>
-                                    <td class=" text-right pr-1 py-2">26</td>
-                                </tr>
-                                <tr class=" border-b">
-                                    <td class=" text-left pl-1 py-2">Google</td>
-                                    <td class=" text-center">15</td>
-                                    <td class=" text-right pr-1 py-2">26</td>
-                                </tr>
-                                <tr class=" border-b">
-                                    <td class=" text-left pl-1 py-2">Google</td>
-                                    <td class=" text-center">15</td>
-                                    <td class=" text-right pr-1 py-2">26</td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th class=" text-left pl-1 py-2"> Grand Total</th>
-                                    <td class=" text-center">123</td>
-                                    <td class=" text-right pr-1 py-2">202135</td>
-                                </tr>
-                            </tfoot>
                         </table>
-                    </div>
-                </div>
-                <div class="card px-3">
-                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
-                        <h3>Sales By Source</h3>
-                    </div>
-                    <div class=" relative h-42 overflow-auto border rounded-b-lg">
+                        <div style="height: 100px !important; overflow-y:scroll !important;">
+                            <table class=" w-full text-sm">
+                                @php
+                                $completed_estimates_total = 0;
+                                $completed_estimate_total = 0;
+                                @endphp
+                                <tbody class="">
+                                    @foreach($completed_estimators as $estimators => $data)
+                                    <tr class=" border-b">
+                                        <td class=" text-left pl-1 py-2">{{$estimators}}</td>
+                                        <td class=" text-center">{{$data['total_estimates']}}</td>
+                                        <td class=" text-right pr-1 py-2">${{$data['estimate_total']}}</td>
+                                    </tr>
+                                    @php
+                                    $completed_estimates_total += $data['total_estimates'];
+                                    $completed_estimate_total += $data['estimate_total'];
+                                    @endphp
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                         <table class=" w-full text-sm">
-                            <thead class=" border-b-2">
-                                <tr>
-                                    <th class=" text-left pl-1 py-2">Source</th>
-                                    <th>#</th>
-                                    <th class=" text-right pr-1 py-2">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody class=" ">
-                                <tr class=" border-b">
-                                    <td class=" text-left pl-1 py-2">Google</td>
-                                    <td class=" text-center">15</td>
-                                    <td class=" text-right pr-1 py-2">26</td>
-                                </tr>
-                                <tr class=" border-b">
-                                    <td class=" text-left pl-1 py-2">Google</td>
-                                    <td class=" text-center">15</td>
-                                    <td class=" text-right pr-1 py-2">26</td>
-                                </tr>
-                                <tr class=" border-b">
-                                    <td class=" text-left pl-1 py-2">Google</td>
-                                    <td class=" text-center">15</td>
-                                    <td class=" text-right pr-1 py-2">26</td>
-                                </tr>
-                            </tbody>
                             <tfoot>
                                 <tr>
                                     <th class=" text-left pl-1 py-2"> Grand Total</th>
-                                    <td class=" text-center">123</td>
-                                    <td class=" text-right pr-1 py-2">202135</td>
+                                    <td class=" text-center">{{$completed_estimates_total}}</td>
+                                    <td class=" text-right pr-1 py-2">${{$completed_estimate_total}}</td>
                                 </tr>
                             </tfoot>
                         </table>

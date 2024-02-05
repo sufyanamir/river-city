@@ -10,6 +10,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ItemTemplatesController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UserController;
 use App\Models\Estimate;
 use App\Models\EstimateChat;
@@ -130,9 +131,9 @@ Route::middleware('customauth')->group(function () {
     Route::get('/payment-template', function () {
         return view('paymentTemplate');
     });
-    Route::get('/reports', function () {
-        return view('reports');
-    });
+
+    Route::get('/reports', [ReportsController::class, 'index']);
+    
     ROute::get('/jobs', [EstimateController::class, 'getEstimateOnJobs']);
     // Route::get('/jobs', function () {
     //     return view('jobs');

@@ -678,9 +678,7 @@
 </script>
 <script>
     // Your list of users with names and ids
-    const users = {
-        !!json_encode($users - > pluck('name', 'id')) !!
-    };
+    const users = {!!json_encode($users->pluck('name', 'id')) !!};
 
     // Get the textarea, user dropdown, and hidden input elements
     const messageTextarea = $(".message");
