@@ -67,92 +67,9 @@
                             <td>
                                 <div class=" flex justify-evenly gap-2">
                                     <div class=" my-auto">
-                                        <button class="inline-flex w-full chat-btn text-white justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold shadow-sm hover:bg-[#930017]" data-target="#chat-modal{{ $item->estimate_id }}" data-estimate-id="{{ $item->estimate_id }}">
+                                        <button id="chat-btn{{$item->estimate_id}}" class="inline-flex w-full chat-btn text-white justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold shadow-sm hover:bg-[#930017]" data-target="#chat-modal{{ $item->estimate_id }}" data-estimate-id="{{ $item->estimate_id }}">
                                             <i class="fa-brands fa-rocketchat"></i>
                                         </button>
-                                        <!-- chat  modal -->
-                                        <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="chat-modal{{ $item->estimate_id }}">
-                                            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                                                <!-- Background overlay -->
-                                                <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                                                    <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
-                                                </div>
-
-                                                <!-- Modal panel -->
-                                                <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full lg:max-w-screen-md">
-                                                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                                        <!-- Modal content here -->
-                                                        <div class=" flex justify-between">
-                                                            <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">Project Chat</h2>
-                                                            <button class="modal-close" type="button">
-                                                                <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-                                                            </button>
-                                                        </div>
-                                                        <!-- task details -->
-                                                        {{-- <div class=" py-2">
-                                                                <label for="underline_select" class="sr-only">Underline
-                                                                    select</label>
-                                                                <select id="underline_select"
-                                                                    class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                                                                    <option selected>Mention</option>
-                                                                    <option value="US">David</option>
-                                                                    <option value="CA">Tony</option>
-                                                                    <option value="FR">Jordi</option>
-                                                                    <option value="DE">Albert</option>
-                                                                </select>
-                                                            </div> --}}
-                                                        <div class=" pb-2">
-                                                            <div class=" border rounded-lg h-40 w-full overflow-auto">
-                                                                <div class=" m-2" id="chat-dialog">
-                                                                    <div class="pb-2 chat-messages-container">
-                                                                        <!-- Chat messages will be dynamically inserted here -->
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class=" pb-2">
-                                                            <form method="POST" action="/sendChat" id="chat-form">
-                                                                @csrf
-                                                                <input type="hidden" name="estimate_id" value="{{ $item->estimate_id }}">
-                                                                <label for="chat" class="sr-only">Your
-                                                                    message</label>
-                                                                <div class="flex items-center px-3 py-2 rounded-lg bg-gray-50">
-                                                                    <button type="button" onclick="openFileMenu()" class="inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100">
-                                                                        <input type="file" class="hidden" id="fileInput">
-                                                                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
-                                                                            <path fill="currentColor" d="M13 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM7.565 7.423 4.5 14h11.518l-2.516-3.71L11 13 7.565 7.423Z" />
-                                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 1H2a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z" />
-                                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM7.565 7.423 4.5 14h11.518l-2.516-3.71L11 13 7.565 7.423Z" />
-                                                                        </svg>
-                                                                        <span class="sr-only">Upload
-                                                                            image</span>
-                                                                    </button>
-                                                                    <button type="button" class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100">
-                                                                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.408 7.5h.01m-6.876 0h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM4.6 11a5.5 5.5 0 0 0 10.81 0H4.6Z" />
-                                                                        </svg>
-                                                                        <span class="sr-only">Add emoji</span>
-                                                                    </button>
-                                                                    <textarea id="message" name="chat_message" rows="1" class="message block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Your message..."></textarea>
-                                                                    <div id="userDropdown" class="userDropdown"></div>
-                                                                    <button class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100">
-                                                                        <svg class="w-5 h-5 rotate-90 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                                                                            <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z" />
-                                                                        </svg>
-                                                                        <span class="sr-only">Send
-                                                                            message</span>
-                                                                    </button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                        <div class=" flex justify-between">
-                                                            <button type="button" id="updateEvent" class=" modal-close mb-2 py-1 px-7 rounded-md border">Close
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                     <!-- <div class=" my-auto">
                                             <button type="button"
@@ -506,13 +423,97 @@
         </div>
     </div>
 </div>
+<!-- chat  modal -->
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="chat-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full lg:max-w-screen-md">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <!-- Modal content here -->
+                <div class=" flex justify-between">
+                    <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">Project Chat</h2>
+                    <button class="modal-close" type="button">
+                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                    </button>
+                </div>
+                <!-- task details -->
+                {{-- <div class=" py-2">
+                                                                <label for="underline_select" class="sr-only">Underline
+                                                                    select</label>
+                                                                <select id="underline_select"
+                                                                    class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                                                                    <option selected>Mention</option>
+                                                                    <option value="US">David</option>
+                                                                    <option value="CA">Tony</option>
+                                                                    <option value="FR">Jordi</option>
+                                                                    <option value="DE">Albert</option>
+                                                                </select>
+                                                            </div> --}}
+                <div class=" pb-2">
+                    <div class=" border rounded-lg h-40 w-full overflow-auto">
+                        <div class=" m-2" id="chat-dialog">
+                            <div class="pb-2 chat-messages-container">
+                                <!-- Chat messages will be dynamically inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class=" pb-2">
+                    <form method="POST" action="/sendChat" id="chat-form">
+                        @csrf
+                        <input type="hidden" name="estimate_id" id="estimate_id" value="">
+                        <label for="chat" class="sr-only">Your
+                            message</label>
+                        <div class="flex items-center px-3 py-2 rounded-lg bg-gray-50">
+                            <button type="button" onclick="openFileMenu()" class="inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100">
+                                <input type="file" class="hidden" id="fileInput">
+                                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
+                                    <path fill="currentColor" d="M13 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM7.565 7.423 4.5 14h11.518l-2.516-3.71L11 13 7.565 7.423Z" />
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 1H2a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z" />
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM7.565 7.423 4.5 14h11.518l-2.516-3.71L11 13 7.565 7.423Z" />
+                                </svg>
+                                <span class="sr-only">Upload
+                                    image</span>
+                            </button>
+                            <button type="button" class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100">
+                                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.408 7.5h.01m-6.876 0h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM4.6 11a5.5 5.5 0 0 0 10.81 0H4.6Z" />
+                                </svg>
+                                <span class="sr-only">Add emoji</span>
+                            </button>
+                            <textarea id="message" name="chat_message" rows="1" class="message block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Your message..."></textarea>
+                            <div id="userDropdown" class="userDropdown"></div>
+                            <button class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100">
+                                <svg class="w-5 h-5 rotate-90 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                                    <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z" />
+                                </svg>
+                                <span class="sr-only">Send
+                                    message</span>
+                            </button>
+                        </div>
+                        <input type="hidden" name="mentioned_user_ids[]" id="mentioned_user_ids">
+                    </form>
+                </div>
+                <div class=" flex justify-between">
+                    <button type="button" id="updateEvent" class=" modal-close mb-2 py-1 px-7 rounded-md border">Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @include('layouts.footer')
 <script>
     $(document).ready(function() {
         // Add click event listener to all buttons with class 'chat-btn'
         $('.chat-btn').on('click', function() {
             // Get the target modal ID from the 'data-target' attribute
-            var targetModalId = $(this).data('target');
+            var targetModalId = $("#chat-modal");
 
             // Show the modal with the corresponding ID
             $(targetModalId).removeClass('hidden');
@@ -521,14 +522,14 @@
         // Add click event listener to close button inside the modal
         $('.modal-close').on('click', function() {
             // Close the modal
-            $(this).closest('.fixed').addClass('hidden');
+            $("#chat-modal").addClass('hidden');
         });
     });
 </script>
 <script>
     $(document).ready(function() {
         $('.chat-btn').on('click', function() {
-            var targetModalId = $(this).data('target');
+            var targetModalId = $("#chat-modal");
             var estimateId = $(this).data('estimate-id');
 
             // Make an AJAX request to fetch chat messages
@@ -541,7 +542,8 @@
                     if (response.success) {
                         // Update the modal content with the retrieved chat messages
                         console.log(response.html);
-                        $(targetModalId + ' .chat-messages-container').html(response.html);
+                        $("#estimate_id").val(estimateId);
+                        $(' .chat-messages-container').html(response.html);
                     } else {
                         // Handle error, display a message, etc.
                         console.error(response.message);
@@ -678,12 +680,12 @@
 </script>
 <script>
     // Your list of users with names and ids
-    const users = {!!json_encode($users->pluck('name', 'id')) !!};
+    const users = {!!json_encode($users -> pluck('name', 'id')) !!};
 
     // Get the textarea, user dropdown, and hidden input elements
     const messageTextarea = $(".message");
     const userDropdown = $(".userDropdown");
-    const userIdInput = $("<input type='hidden' name='mentioned_user_ids[]'>");
+    const userIdInput = $("#mentioned_user_ids");
 
     // Append the hidden input to the form
     $("#chat-form").append(userIdInput);
