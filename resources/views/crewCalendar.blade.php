@@ -171,7 +171,7 @@
 
         // Create a span for crew name
         const crewNameSpan = document.createElement('span');
-        crewNameSpan.textContent = crew.name;
+        crewNameSpan.textContent = crew.name + ' ' + (crew.rating ? crew.rating : '');
         crewNameSpan.classList.add('crew-name');
 
         // Append image and name elements to the container
@@ -241,6 +241,7 @@
     const crewsData = crewData.map(crew => ({
     name: crew.name + ' ' + crew.last_name,
     image: crew.user_image,
+    rating: crew.rating,
     estimates: estimates.filter(estimate => estimate.work_assign_id === crew.id)
     }));
 
