@@ -781,11 +781,70 @@ $userPrivileges = session('user_details')['user_privileges'];
                 @endif
                 @foreach ($estimateItemTemplates as $estItemTemplate)
                 <div class="mb-2 bg-white shadow-xl">
-                    <div class=" flex p-1 bg-[#930027] text-white w-full rounded-t-lg">
+                    <div class=" flex gap-3 p-1 bg-[#930027] text-white w-full rounded-t-lg">
                         <button type="button" id="editEstimate-template{{ $estItemTemplate['est_template_id'] }}" class="inline my-auto">
                             <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                         </button>
                         <h1 class=" font-medium my-auto">{{ $estItemTemplate['item_template_name'] }}</h1>
+                        @if($estItemTemplate['template_status'] == 'included')
+                        <span class="inline-flex my-auto items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $estItemTemplate['template_status'] }}</span>
+                        @elseif($estItemTemplate['template_status'] == 'excluded')
+                        <span class="bg-red-100 text-red-800 my-auto inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">{{ $estItemTemplate['template_status'] }}</span>
+                        @endif
+                        <button type="button" id="exclude-include-menuBtn{{$estItemTemplate['est_template_id']}}" class="inline p-2">
+                            <i class="fa-solid fa-square-caret-down  text-lg"></i>
+                        </button>
+                        <!-- Dropdown menu -->
+                        <div class="absolute z-50">
+                            <div id="exclude-include-menu{{$estItemTemplate['est_template_id']}}" class=" bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 topbar-manuLeaving">
+                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                                    <li>
+                                        <form action="/includeexcludeEstimateItem" method="post">
+                                            @csrf
+                                            <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                            <input type="hidden" name="estimate_item_id" value="{{$estItemTemplate['est_template_id']}}">
+                                            <input type="hidden" name="template_status" value="1">
+                                            <input type="hidden" name="item_status" value="included">
+                                            <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                Include
+                                            </button>
+                                        </form>
+                                    </li>
+                                    <hr>
+                                    <li>
+                                        <form action="/includeexcludeEstimateItem" method="post">
+                                            @csrf
+                                            <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                            <input type="hidden" name="estimate_item_id" value="{{$estItemTemplate['est_template_id']}}">
+                                            <input type="hidden" name="template_status" value="1">
+                                            <input type="hidden" name="item_status" value="excluded">
+                                            <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                Exclude
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <script>
+                            document.getElementById("exclude-include-menuBtn{{$estItemTemplate['est_template_id']}}").addEventListener("click", function(e) {
+                                e.stopPropagation(); // Prevents the click event from reaching the document body
+                                var dropdownMenu = document.getElementById("exclude-include-menu{{$estItemTemplate['est_template_id']}}");
+                                dropdownMenu.classList.toggle("topbar-menuEntring");
+                                dropdownMenu.classList.toggle("topbar-manuLeaving");
+                            });
+
+                            document.addEventListener('click', function(e) {
+                                var btn = document.getElementById("exclude-include-menuBtn{{$estItemTemplate['est_template_id']}}");
+                                var dropdownMenu = document.getElementById("exclude-include-menu{{$estItemTemplate['est_template_id']}}");
+
+                                if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                                    // Click occurred outside the button and dropdown, hide the dropdown
+                                    dropdownMenu.classList.add("topbar-manuLeaving");
+                                    dropdownMenu.classList.remove("topbar-menuEntring");
+                                }
+                            });
+                        </script>
                     </div>
                     <div class="relative overflow-x-auto">
                         <div class="itemDiv">
@@ -920,7 +979,7 @@ $userPrivileges->estimate->items === 'on')
             </div>
         </button>
         <!-- Dropdown menu -->
-        <div class=" absolute z-10 top-14">
+        <div class="absolute top-14 z-10">
             <div id="addItem-menu" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                 <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                     <li>
@@ -934,11 +993,13 @@ $userPrivileges->estimate->items === 'on')
                                 </li> --}}
                     @foreach ($item_templates as $template)
                     <li>
-                        <button id="addTemplate{{ $template->item_template_id }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}</button>
+                        <button id="addTemplate{{ $template->item_template_id }}" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}
+                        </button>
                     </li>
                     @endforeach
                 </ul>
             </div>
+
         </div>
 
         <p class="text-lg px-3 text-white font-medium">
@@ -950,7 +1011,7 @@ $userPrivileges->estimate->items === 'on')
     @endphp
     <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
         @if ($estimate_items->count() > 0)
-        <div class="relative overflow-x-auto">
+        <div class="relative overflow-x-auto mb-8">
             <div class="itemDiv">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -963,6 +1024,9 @@ $userPrivileges->estimate->items === 'on')
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Item Description
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Item Status (excluded/included)
                             </th>
                             <th scope="col" class="text-center">
                                 Item Cost
@@ -986,7 +1050,7 @@ $userPrivileges->estimate->items === 'on')
                             <td class="px-6 py-4">
                                 <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
                             </td>
-                            <td class="px-6 py-4 w-[50%]">
+                            <td class="px-6 py-4 w-[30%]">
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item->item_description)
                                 <p class="font-medium">Description:</p>
@@ -997,6 +1061,65 @@ $userPrivileges->estimate->items === 'on')
                                 {{ $item->item_note }}
                                 @endif
                                 </p>
+                            </td>
+                            <td class="text-center">
+                                @if($item->item_status == 'included')
+                                <span class="inline-flex my-auto items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $item->item_status }}</span>
+                                @elseif($item->item_status == 'excluded')
+                                <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">{{ $item->item_status }}</span>
+                                @endif
+                                <button type="button" id="exclude-include-menuBtn{{$item->estimate_item_id}}" class="inline p-2">
+                                    <i class="fa-solid fa-square-caret-down text-[#930027] text-lg"></i>
+                                </button>
+                                <!-- Dropdown menu -->
+                                <div class="absolute z-10">
+                                    <div id="exclude-include-menu{{$item->estimate_item_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                                            <li>
+                                                <form action="/includeexcludeEstimateItem" method="post">
+                                                    @csrf
+                                                    <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                    <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
+                                                    <input type="hidden" name="item_status" value="included">
+                                                    <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                        Include
+                                                    </button>
+                                                </form>
+                                            </li>
+                                            <hr>
+                                            <li>
+                                                <form action="/includeexcludeEstimateItem" method="post">
+                                                    @csrf
+                                                    <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                    <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
+                                                    <input type="hidden" name="item_status" value="excluded">
+                                                    <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                        Exclude
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <script>
+                                    document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}").addEventListener("click", function(e) {
+                                        e.stopPropagation(); // Prevents the click event from reaching the document body
+                                        var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
+                                        dropdownMenu.classList.toggle("topbar-menuEntring");
+                                        dropdownMenu.classList.toggle("topbar-manuLeaving");
+                                    });
+
+                                    document.addEventListener('click', function(e) {
+                                        var btn = document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}");
+                                        var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
+
+                                        if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                                            // Click occurred outside the button and dropdown, hide the dropdown
+                                            dropdownMenu.classList.add("topbar-manuLeaving");
+                                            dropdownMenu.classList.remove("topbar-menuEntring");
+                                        }
+                                    });
+                                </script>
                             </td>
                             <td class="text-center">
                                 {{ $item->item_cost }}
@@ -1019,11 +1142,70 @@ $userPrivileges->estimate->items === 'on')
         @endif
         @foreach ($estimateItemTemplates as $estItemTemplate)
         <div class="mb-2 bg-white shadow-xl">
-            <div class=" flex p-1 bg-[#930027] text-white w-full rounded-t-lg">
+            <div class=" flex gap-3 p-1 bg-[#930027] text-white w-full rounded-t-lg">
                 <button type="button" id="editEstimate-template{{ $estItemTemplate['est_template_id'] }}" class="inline my-auto">
                     <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                 </button>
                 <h1 class=" font-medium my-auto">{{ $estItemTemplate['item_template_name'] }}</h1>
+                @if($estItemTemplate['template_status'] == 'included')
+                <span class="inline-flex my-auto items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $estItemTemplate['template_status'] }}</span>
+                @elseif($estItemTemplate['template_status'] == 'excluded')
+                <span class="bg-red-100 text-red-800 my-auto inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">{{ $estItemTemplate['template_status'] }}</span>
+                @endif
+                <button type="button" id="exclude-include-menuBtn{{$estItemTemplate['est_template_id']}}" class="inline p-2">
+                    <i class="fa-solid fa-square-caret-down  text-lg"></i>
+                </button>
+                <!-- Dropdown menu -->
+                <div class="absolute z-50">
+                    <div id="exclude-include-menu{{$estItemTemplate['est_template_id']}}" class=" bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 topbar-manuLeaving">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                            <li>
+                                <form action="/includeexcludeEstimateItem" method="post">
+                                    @csrf
+                                    <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                    <input type="hidden" name="estimate_item_id" value="{{$estItemTemplate['est_template_id']}}">
+                                    <input type="hidden" name="template_status" value="1">
+                                    <input type="hidden" name="item_status" value="included">
+                                    <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        Include
+                                    </button>
+                                </form>
+                            </li>
+                            <hr>
+                            <li>
+                                <form action="/includeexcludeEstimateItem" method="post">
+                                    @csrf
+                                    <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                    <input type="hidden" name="estimate_item_id" value="{{$estItemTemplate['est_template_id']}}">
+                                    <input type="hidden" name="template_status" value="1">
+                                    <input type="hidden" name="item_status" value="excluded">
+                                    <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        Exclude
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <script>
+                    document.getElementById("exclude-include-menuBtn{{$estItemTemplate['est_template_id']}}").addEventListener("click", function(e) {
+                        e.stopPropagation(); // Prevents the click event from reaching the document body
+                        var dropdownMenu = document.getElementById("exclude-include-menu{{$estItemTemplate['est_template_id']}}");
+                        dropdownMenu.classList.toggle("topbar-menuEntring");
+                        dropdownMenu.classList.toggle("topbar-manuLeaving");
+                    });
+
+                    document.addEventListener('click', function(e) {
+                        var btn = document.getElementById("exclude-include-menuBtn{{$estItemTemplate['est_template_id']}}");
+                        var dropdownMenu = document.getElementById("exclude-include-menu{{$estItemTemplate['est_template_id']}}");
+
+                        if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                            // Click occurred outside the button and dropdown, hide the dropdown
+                            dropdownMenu.classList.add("topbar-manuLeaving");
+                            dropdownMenu.classList.remove("topbar-menuEntring");
+                        }
+                    });
+                </script>
             </div>
             <div class="relative overflow-x-auto">
                 <div class="itemDiv">
@@ -4354,6 +4536,10 @@ $userPrivileges->estimate->expenses === 'on')
                     </div>
                 </div>
             </form>
+            <form action="/deleteEstimateTemplate/" method="post" id="deleteEstimateTemplate" class="inline-block ml-4">
+                @csrf
+                <button id="deleteTemplate-btn" class=" mb-2 mx-2 float-right bg-[#fff] border-2 py-1 px-7 hidden rounded-md">Delete</button>
+            </form>
         </div>
     </div>
 </div>
@@ -4984,6 +5170,10 @@ $userPrivileges->estimate->expenses === 'on')
                         // console.log(itemTemplateItems.length)
 
                         $('#addTemplate-modal').removeClass('hidden');
+
+
+                        $('#deleteTemplate-btn').removeClass('hidden');
+                        $('#deleteEstimateTemplate').attr('action', '/deleteEstimateTemplate/' + itemTemplate.est_template_id);
                     }
                 }
             },

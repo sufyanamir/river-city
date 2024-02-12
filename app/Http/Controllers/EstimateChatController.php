@@ -41,6 +41,7 @@ class EstimateChatController extends Controller
                             'added_user_id' => $userDetails['id'],
                             'notification_message' => $notificationMessage,
                             'mentioned_user_id' => $singleMentionedId,
+                            'notification_type' => 'mention',
                         ]);
                     }
                 }

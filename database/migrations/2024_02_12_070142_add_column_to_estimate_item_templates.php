@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('estimates', function (Blueprint $table) {
-            $table->text('project_type')->nullable();
-            $table->text('building_type')->nullable();
+        Schema::table('estimate_item_templates', function (Blueprint $table) {
+            $table->string('template_status')->default('included');
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('estimates');
+        Schema::dropIfExists('estimate_item_templates');
     }
 };

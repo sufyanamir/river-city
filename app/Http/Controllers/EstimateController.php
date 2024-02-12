@@ -67,12 +67,25 @@ class EstimateController extends Controller
                 'estimate_id' => 'required',
                 'estimate_item_id' => 'required',
                 'item_status' => 'required',
+                'template_status' => 'nullable',
             ]);
 
-            $estimateItem = EstimateItem::where('estimate_item_id', $validatedData['estimate_item_id'])->first();
-            $estimateItem->item_status = $validatedData['item_status'];
+            if (isset($validatedData['template_status']) == 1) {
+                
+                $estimateItem = EstimateItemTemplates::where('est_template_id', $validatedData['estimate_item_id'])->first();
+                $estimateItem->template_status = $validatedData['item_status'];
 
-            $estimateItem->save();
+                $estimateItem->save();
+            
+            }else {
+                
+                $estimateItem = EstimateItem::where('estimate_item_id', $validatedData['estimate_item_id'])->first();
+                $estimateItem->item_status = $validatedData['item_status'];
+    
+                $estimateItem->save();
+                
+            }
+
 
             return response()->json(['success' => true, 'message' => 'Item status changed to ' . $validatedData['item_status']], 200);
         } catch (\Exception $e) {
@@ -87,7 +100,7 @@ class EstimateController extends Controller
 
         $userDetails = session('user_details');
         $estimate = Estimate::where('estimate_id', $id)->first();
-        $materialItems = EstimateItem::where('estimate_id', $id)->where('item_type', 'material')->get();
+        $materialItems = EstimateItem::where('estimate_id', $id)->where('item_type', '<>', 'upgrades')->get();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
 
         return view('viewEstimateMaterials', ['items' => $materialItems, 'customer' => $customer, 'estimate' => $estimate]);
@@ -267,7 +280,28 @@ class EstimateController extends Controller
     }
     // get ItemTemplates and Items
 
-    // get ItemTemplates and Items
+    // delete ItemTemplates and Items
+    public function deleteEstimateTemplate($id)
+    {
+        try {
+
+            $itemTemplate = EstimateItemTemplates::where('est_template_id', $id)->first();
+            $templateItems = EstimateItemTemplateItems::where('est_template_id', $id)->get();
+
+            $itemTemplate->delete();
+            foreach ($templateItems as $item) {
+                $item->delete();
+            }
+
+            return response()->json(['success' => true, 'message' => 'Template Deleted!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message'=>  $e->getMessage()], 400);
+        }
+    }
+    // delete ItemTemplates and Items
+    
+    // add ItemTemplates and Items
     public function addEstimateItemTemplate(Request $request)
     {
         // dd($request);
@@ -332,7 +366,7 @@ class EstimateController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
-    // get ItemTemplates and Items
+    // add ItemTemplates and Items
 
     // get ItemTemplates and Items
     public function getItemTemplateItems($id)
@@ -518,22 +552,35 @@ class EstimateController extends Controller
 
         return view('calendar', ['estimates' => $estimates]);
     }
+
+    public function viewDataOnCrewCalendar($id)
+    {
+        $userDetails = session('user_details');
+
+        $estimate = Estimate::where('estimate_id', $id)->first();
+        $estimateSchedule = ScheduleEstimate::where('estimate_id', $id)->first();
+        $user = User::where('id', $estimateSchedule->work_assign_id)->first();
+
+        return response()->json(['success' => true, 'estimate' => $estimate, 'estimateSchedule' => $estimateSchedule, 'crew' => $user], 200);
+    }
+
     public function getEstimatesOnCrewCalendar()
     {
         $userDetails = session('user_details');
 
-        $estimates = ScheduleEstimate::with(['estimate', 'assigenedUser'])->get();
+        $crew = User::where('user_role', 'crew')->get();
+        $estimates = ScheduleEstimate::with(['estimate'])->get();
 
-        $formattedEstimates = $estimates->map(function ($estimate) {
-            $assignedUserName = $estimate->assigenedUser->name; // Replace 'name' with the actual attribute holding the user's name
-            $customerName = $estimate->estimate->customer_name; // Replace 'customer_name' with the actual attribute holding the customer's name
-            $estimate->assignedUserName = $assignedUserName;
-            $estimate->customerName = $customerName;
-            return $estimate;
-        });
+        // $formattedEstimates = $estimates->map(function ($estimate) {
+        //     $assignedUserName = $estimate->assigenedUser->name; // Replace 'name' with the actual attribute holding the user's name
+        //     $customerName = $estimate->estimate->customer_name; // Replace 'customer_name' with the actual attribute holding the customer's name
+        //     $estimate->assignedUserName = $assignedUserName;
+        //     $estimate->customerName = $customerName;
+        //     return $estimate;
+        // });
 
-        // return response()->json(['estimates' => $formattedEstimates]);
-        return view('crewCalendar', ['estimates' => $formattedEstimates]);
+        // return response()->json(['estimates' => $estimates, 'crew' => $crew]);
+        return view('crewCalendar', ['estimates' => $estimates, 'crew' => $crew]);
     }
 
 
@@ -1118,7 +1165,7 @@ class EstimateController extends Controller
             $customer = Customer::where('customer_id', $estimate->customer_id)->first();
             $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', '<>', 'upgrades')->where('item_status', 'included')->get();
             $upgrades = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', 'upgrades')->where('item_status', 'included')->get();
-            $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->get();
+            $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->where('template_status', 'included')->get();
             $estimateItemTemplateItems = [];
 
             foreach ($estimateItemTemplates as $key => $itemTemplate) {
@@ -1226,7 +1273,7 @@ class EstimateController extends Controller
             $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', '<>', 'upgrades')->where('item_status', 'included')->get();
             $upgrades = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', 'upgrades')->where('item_status', 'included')->get();
             $existingProposals = EstimateProposal::where('estimate_id', $id)->get();
-            $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->get();
+            $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->where('template_status', 'included')->get();
             $estimateItemTemplateItems = [];
 
             foreach ($estimateItemTemplates as $key => $itemTemplate) {

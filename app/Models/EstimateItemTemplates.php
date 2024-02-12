@@ -20,6 +20,7 @@ class EstimateItemTemplates extends Model
         'item_template_name',
         'description',
         'note',
+        'template_status',
     ];
 
     public $timestamps = true;
