@@ -353,15 +353,15 @@
                         </div>
                         <div class=" col-span-2 ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Project Type (Optional)</h5>
-                            <select name="project_type" id="project_type" placeholder="Project Type (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <input type="text" step="any" name="project_type" id="project_type" placeholder="Project Type (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2 ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Building Type (Optional)</h5>
+                            <select name="building_type" id="building_type" placeholder="Building Type (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 <option value="">Select Type</option>
                                 <option value="residential">Residential</option>
                                 <option value="commercial">Commercial</option>
                             </select>
-                        </div>
-                        <div class=" col-span-2 ">
-                            <h5 class="text-gray-600 mb-1  font-medium text-left">Building Type (Optional)</h5>
-                            <input type="text" step="any" name="building_type" id="building_type" placeholder="Building Type (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class=" flex justify-between border-b-2 mb-2 col-span-4  mt-1 mb-3">
                             <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Billing</h2>
@@ -441,19 +441,6 @@
                         <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
                     </button>
                 </div>
-                <!-- task details -->
-                {{-- <div class=" py-2">
-                                                                <label for="underline_select" class="sr-only">Underline
-                                                                    select</label>
-                                                                <select id="underline_select"
-                                                                    class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                                                                    <option selected>Mention</option>
-                                                                    <option value="US">David</option>
-                                                                    <option value="CA">Tony</option>
-                                                                    <option value="FR">Jordi</option>
-                                                                    <option value="DE">Albert</option>
-                                                                </select>
-                                                            </div> --}}
                 <div class=" pb-2">
                     <div class=" border rounded-lg h-40 w-full overflow-auto">
                         <div class=" m-2" id="chat-dialog">

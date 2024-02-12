@@ -65,10 +65,11 @@
                     </div>
                 </div>
             </div>
-            <div class="relative overflow-x-auto">
+            <div class="relative overflow-x-auto  rounded-2xl">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
+                            <th scope="col" class="px-6 py-3"></th>
                             <th scope="col" class="px-6 py-3">
                                 Product name
                             </th>
@@ -80,6 +81,10 @@
                     <tbody>
                         @foreach($items as $item)
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td class="px-6 py-4">
+                                <input type="checkbox" disabled name="privileges[reports][view]" id="privilegeReportsView">
+                                <label for="privilegeReportsView" class=" text-gray-500"></label>
+                            </td>
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {{$item->item_name}}
                             </th>
@@ -98,7 +103,7 @@
         </div>
         <hr>
         @else
-        <div class="py-1 text-center">
+        <div class="py-1 text-center  rounded-2xl">
             <div class="bg-[#F5F5F5] rounded-lg p-3 m-2">
                 <h1>No Items Right Now!</h1>
             </div>

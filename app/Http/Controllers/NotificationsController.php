@@ -11,8 +11,8 @@ class NotificationsController extends Controller
     {
         $userDetails = session('user_details');
 
-        $notifications = Notifications::where('added_user_id', $userDetails['id'])->orderBy('notification_id', 'desc')->get();
-        $mentions = Notifications::where('mentioned_user_id', $userDetails['id'])->orderBy('notification_id', 'desc')->get();
+        $notifications = Notifications::where('added_user_id', $userDetails['id'])->where('notification_type', '<>', 'mention')->orderBy('created_at', 'desc')->get();
+        $mentions = Notifications::where('mentioned_user_id', $userDetails['id'])->where('notification_type', 'mention')->orderBy('created_at', 'desc')->get();
 
         return view('notifications', ['user_details' => $userDetails, 'notifications' => $notifications, 'mentions' => $mentions]);
 

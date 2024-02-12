@@ -12,13 +12,23 @@
                 </button>
             </form>
         </div>
-        <div class=" p-2 m-3">
-            <div class=" p-2 bg-[#930027] text-white rounded-t-2xl">
-                <div class=" text-xl font-semibold">
-                    <h4>Mentions</h4>
+        <div class="py-2">
+            @if(count($notifications) > 0 || count($mentions) > 0)
+            @foreach ($mentions as $notification)
+            <div class=" bg-[#F5F5F5] rounded-lg p-3 m-2 relative">
+                @if ($notification->notification_status == 'unread')
+                <span class="absolute top-1 left-1 inline-flex items-center justify-center w-2 h-2 mr-2 text-sm font-semibold text-[#04BB16] bg-[#04BB16] rounded-full">
+                    @endif
+                </span>
+                <div class=" flex justify-between gap-2">
+                    <a href="" class=" hover:border-b border-[#930027]">
+                        <p class=" text-[#930027]">{{ $notification->notification_message }}</p>
+                    </a>
+                    <p class=" text-xs">{{ $notification->created_at }}</p>
                 </div>
             </div>
-            @foreach ($mentions as $notification)
+            @endforeach
+            @foreach ($notifications as $notification)
             <div class=" bg-[#F5F5F5] rounded-lg p-3 m-2 relative">
                 @if ($notification->notification_status == 'unread')
                 <span class="absolute top-1 left-1 inline-flex items-center justify-center w-2 h-2 mr-2 text-sm font-semibold text-[#04BB16] bg-[#04BB16] rounded-full">
@@ -30,20 +40,14 @@
                 </div>
             </div>
             @endforeach
-        </div>
-        @foreach ($notifications as $notification)
-        <div class=" bg-[#F5F5F5] rounded-lg p-3 m-2 relative">
-            @if ($notification->notification_status == 'unread')
-            <span class="absolute top-1 left-1 inline-flex items-center justify-center w-2 h-2 mr-2 text-sm font-semibold text-[#04BB16] bg-[#04BB16] rounded-full">
-                @endif
-            </span>
-            <div class=" flex justify-between gap-2">
-                <p>{{ $notification->notification_message }}</p>
-                <p class=" text-xs">{{ $notification->created_at }}</p>
+            @else
+            <div class=" bg-[#F5F5F5] rounded-lg p-3 m-2 relative">
+                <div class=" text-center">
+                    <p>No notifications right now!</p>
+                </div>
             </div>
+            @endif
         </div>
-        @endforeach
     </div>
-</div>
 </div>
 @include('layouts.footer')

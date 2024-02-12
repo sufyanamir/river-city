@@ -17,6 +17,7 @@ class Notifications extends Model
         'added_user_id',
         'notification_message',
         'mentioned_user_id',
+        'notification_type',
     ];
 
     public $timestamps = true;
