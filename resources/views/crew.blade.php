@@ -44,11 +44,11 @@
                             <td>{{ $item->address }}</td>
                             <td>
                                 @if (session('user_details')['user_role'] == 'admin')
-                                <button>
+                                <button id="editCrew{{$item->id}}">
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                 </button>
                                 @elseif(isset($userPrivileges->crew) && isset($userPrivileges->crew->edit) && $userPrivileges->crew->edit === 'on')
-                                <button>
+                                <button id="editCrew{{$item->id}}">
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                 </button>
                                 @endif
@@ -87,6 +87,7 @@
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <form action="/addCrew" id="formData" method="post" enctype="multipart/form-data">
                 @csrf
+                <input type="hidden" name="crewId" id="crewId" value="">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between border-b-2">
@@ -183,4 +184,44 @@
         $("#addCrew-modal").addClass('hidden');
         $("#formData")[0].reset()
     });
+
+    $('[id^="editCrew"]').click(function() {
+        var itemId = this.id.replace('editCrew', ''); // Extract item ID from button ID
+
+        // Make an AJAX request to get item details
+        $.ajax({
+            url: '/getCrewOnAction/' + itemId,
+            method: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    // Populate the modal with the retrieved data
+                    var crewDetail = response.crew;
+                    console.log(crewDetail);
+                    // Update modal content with item details
+                    $('#firstName').val(crewDetail.name);
+                    $('#lastName').val(crewDetail.last_name);
+                    $('#email').val(crewDetail.email);
+                    $('#phone').val(crewDetail.phone);
+                    $('#departement').val(crewDetail.departement);
+                    $('#teamNumber').val(crewDetail.team_number);
+                    $('#address').val(crewDetail.address);
+                    // $('#description').val(crewDetail.expense_description);
+                    // Add other fields as needed
+
+                    // Set the item ID in the hidden input field
+                    $('#crewId').val(crewDetail.id);
+                    var formUrl = $('#formData').attr('action', '/updateCrew');
+                    // Open the modal
+                    $('#addCrew-modal').removeClass('hidden');
+                } else {
+                    // Handle error response
+                    console.error('Error fetching item details.');
+                }
+            },
+            error: function(error) {
+                console.error('AJAX request failed:', error);
+            }
+        });
+    });
+
 </script>
