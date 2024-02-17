@@ -169,6 +169,58 @@ class UserController extends Controller
     }
     // get crew departement on crew
 
+    // update crew
+    public function updateCrew(Request $request)
+    {
+        try {
+            
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'crewId' => 'required',
+                'firstName' => 'nullable',
+                'lastName' => 'nullable',
+                'email' => 'nullable',
+                'phone' => 'nullable',
+                'departement' => 'nullable',
+                'rate' => 'nullable',
+                'teamNumber' => 'nullable',
+                'address' => 'nullable',
+
+            ]);
+
+            $crew = User::where('id', $validatedData['crewId'])->where('user_role', 'crew')->first();
+
+            $crew->name = $validatedData['firstName'];
+            $crew->last_name = $validatedData['lastName'];
+            $crew->email = $validatedData['email'];
+            $crew->phone = $validatedData['phone'];
+            $crew->departement = $validatedData['departement'];
+            if (isset($validatedData['rate']) != null) {
+                $crew->rating = $validatedData['rate'];
+            }
+            $crew->team_number = $validatedData['teamNumber'];
+            $crew->address = $validatedData['address'];
+
+            $crew->save();
+
+            return response()->json(['success' => true, 'message' => 'Crew data updated!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // update crew
+
+    // get crew
+    public function getCrewOnAction($id)
+    {
+        $crew = User::where('id', $id)->where('user_role', 'crew')->first();
+
+        return response()->json(['success' => true, 'crew' => $crew], 200);
+    }
+    // get crew
+
     // add crew
     public function addCrew(Request $request)
     {

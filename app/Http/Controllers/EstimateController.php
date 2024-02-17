@@ -37,6 +37,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -71,19 +72,17 @@ class EstimateController extends Controller
             ]);
 
             if (isset($validatedData['template_status']) == 1) {
-                
+
                 $estimateItem = EstimateItemTemplates::where('est_template_id', $validatedData['estimate_item_id'])->first();
                 $estimateItem->template_status = $validatedData['item_status'];
 
                 $estimateItem->save();
-            
-            }else {
-                
+            } else {
+
                 $estimateItem = EstimateItem::where('estimate_item_id', $validatedData['estimate_item_id'])->first();
                 $estimateItem->item_status = $validatedData['item_status'];
-    
+
                 $estimateItem->save();
-                
             }
 
 
@@ -294,13 +293,12 @@ class EstimateController extends Controller
             }
 
             return response()->json(['success' => true, 'message' => 'Template Deleted!'], 200);
-
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message'=>  $e->getMessage()], 400);
+            return response()->json(['success' => false, 'message' =>  $e->getMessage()], 400);
         }
     }
     // delete ItemTemplates and Items
-    
+
     // add ItemTemplates and Items
     public function addEstimateItemTemplate(Request $request)
     {
@@ -1007,6 +1005,37 @@ class EstimateController extends Controller
         }
     }
     // Complete work  and assign invoice
+
+    // update schedule
+    public function updateScheuleWork(Request $request)
+    {
+        try {
+
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'startDate' => 'nullable',
+                'fendDate' => 'nullable',
+            ]);
+
+            $schedule = ScheduleEstimate::where('estimate_id', $validatedData['estimate_id'])->first();
+
+            if (isset($validatedData['startDate']) != null) {
+                $schedule->start_date = $validatedData['startDate'];
+            }
+            if (isset($validatedData['fendDate']) != null) {
+                $schedule->end_date = $validatedData['fendDate'];
+            }
+
+            $schedule->save();
+
+            return response()->json(['success' => true, 'message' => 'Work date updated!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // update schedule
 
     // set schedule
     public function setScheduleWork(Request $request)
@@ -2049,6 +2078,19 @@ class EstimateController extends Controller
                 'building_type' => $validatedData['building_type'],
             ]);
 
+            // After saving the customer, trigger the Zapier webhook
+            try {
+                $response = Http::post('https://hooks.zapier.com/hooks/catch/7921384/3ethsdd/', [
+                    $estimate,
+                    // Add any additional data you want to send to Zapier
+                ]);
+
+                $zr = ['zapier' => 'message sent to zapier!'];
+
+            } catch (\Exception $e) {
+                $zr = ['error' => $e->getMessage()];
+            }
+
             if ($validatedData['customer_id']) {
                 $customer = Customer::find($validatedData['customer_id']);
                 $notificationMessage = "A new Estimate has been created for " . $customer->customer_first_name . " " . $customer->customer_last_name . ".";
@@ -2064,7 +2106,7 @@ class EstimateController extends Controller
                 ]);
             }
 
-            return response()->json(['success' => true, 'message' => 'Estimate created Successfully!', 'estimate_id' => $estimate->estimate_id], 200);
+            return response()->json(['success' => true, 'zr' => $zr, 'message' => 'Estimate created Successfully!', 'estimate_id' => $estimate->estimate_id], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }

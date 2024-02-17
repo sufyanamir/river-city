@@ -54,6 +54,8 @@ Route::middleware('customauth')->group(function () {
     // });
     Route::get('/crew', [UserController::class, 'getDepartementOnCrew']);
     Route::post('/addCrew', [UserController::class, 'addCrew']);
+    Route::get('/getCrewOnAction/{id}', [UserController::class, 'getCrewOnAction']);
+    Route::post('/updateCrew', [UserController::class, 'updateCrew']);
     Route::match(['get', 'post'], '/delete/crew/{id}', [UserController::class, 'deleteCrew']);
     // Route::get('/crew', function () {
     //     return view('crew');
@@ -75,6 +77,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/completeEstimate', [EstimateController::class, 'completeEstimate']);
     Route::post('/scheduleEstimate', [EstimateController::class, 'scheduleEstimate']);
     Route::post('/setScheduleWork', [EstimateController::class, 'setScheduleWork']);
+    Route::post('/updateScheuleWork', [EstimateController::class, 'updateScheuleWork']);
     Route::post('/addEstimateImage', [EstimageImagesController::class, 'uploadImage']);
     Route::post('/completeWorkAndAssignInvoice', [EstimateController::class, 'completeWorkAndAssignInvoice']);
     Route::post('/completeInvoiceAndAssignPayment', [EstimateController::class, 'completeInvoiceAndAssignPayment']);
