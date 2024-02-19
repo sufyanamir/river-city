@@ -2080,8 +2080,14 @@ class EstimateController extends Controller
 
             // After saving the customer, trigger the Zapier webhook
             try {
-                $response = Http::post('https://hooks.zapier.com/hooks/catch/7921384/3ethsdd/', [
-                    $estimate,
+                $response = Http::post('https://hooks.zapier.com/hooks/catch/7921384/3ethi9f/', [
+                    'first_name' => $estimate->customer_name,
+                    'last_name' => $estimate->customer_last_name,
+                    'phone' => $estimate->customer_phone,
+                    'address' =>  $estimate->customer_address,
+                    'project_name' => $estimate->project_name,
+                    'project_type' => $estimate->project_type,
+                    'building_type' => $estimate->building_type,
                     // Add any additional data you want to send to Zapier
                 ]);
 
