@@ -9,6 +9,11 @@ class ItemTemplates extends Model
 {
     use HasFactory;
 
+    public function templateItems()
+    {
+        return $this->hasMany(ItemTemplateItems::class, 'item_template_id');
+    }
+
     protected $table = 'item_templates';
 
     protected $primaryKey = 'item_template_id';

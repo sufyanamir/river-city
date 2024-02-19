@@ -36,6 +36,8 @@ Route::post('/acceptProposal/{id}', [EstimateController::class, 'acceptProposal'
 
 Route::middleware('customauth')->group(function () {
 
+    Route::post('/sendInvoiceToQB', [EstimateController::class, 'sendInvoiceToQB']);
+
     Route::post('/addUserRole',  [UserController::class, 'addUserRole']);
     Route::get('/userRole', [UserController::class, 'getUserRole']);
     Route::get('/users', [UserController::class, 'getUsersWithRoles']);
@@ -115,6 +117,9 @@ Route::middleware('customauth')->group(function () {
 
     Route::post('/addItemTemplate', [ItemTemplatesController::class, 'addItemTemplate']);
     Route::get('/itemTemplates', [ItemTemplatesController::class, 'index']);
+    Route::get('/getTemplateToEdit/{id}', [ItemTemplatesController::class, 'getTemplateToEdit']);
+    Route::post('/updateItemTemplate', [ItemTemplatesController::class, 'updateItemTemplate']);
+    Route::match(['post', 'get'], '/deleteTemplate/{id}', [ItemTemplatesController::class, 'deleteTemplate']);
     Route::get('/items', [ItemsController::class, 'getItems']);
     Route::post('/addItem', [ItemsController::class, 'addItem']);
     Route::match(['get', 'post'], '/delete/item/{id}', [ItemsController::class, 'deleteItem']);

@@ -474,6 +474,20 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <span class=" my-auto">Complete Estimate</span>
                         </button>
                         @endif
+                        <form action="/sendInvoiceToQB" method="post">
+                            @csrf
+                            <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                            <input type="hidden" name="total_amount" value="{{ $estimate->estimate_total }}">
+                            <input type="hidden" name="customer_first_name" value="{{$customer->customer_first_name}}">
+                            <input type="hidden" name="customer_last_name" value="{{$customer->customer_last_name}}">
+                            <input type="hidden" name="customer_email" value="{{$customer->customer_email}}">
+                            <button id="" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                                <div class=" flex mx-auto">
+                                    <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
+                                    <span class=" my-auto">Send invoice to QB</span>
+                                </div>
+                            </button>
+                        </form>
                         {{-- <button type="button"
                             class="flex h-[40px] w-[190px] ml-2  px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#F4AC50]"
                             id=" action-menubutton" aria-expanded="true" aria-haspopup="true">

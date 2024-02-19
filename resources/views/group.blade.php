@@ -29,10 +29,10 @@
                             <td>{{ $group->total_items }}</td>
                             <td>{{ $group->group_description }}</td>
                             <td>
-                                <button>
+                                <button id="editGroup{{$group->group_id}}">
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
                                 </button>
-                                <form action="/delete/group/{{ $group->group_id }}" method="post">
+                                <form class=" inline-block" action="/delete/group/{{ $group->group_id }}" method="post">
                                     @csrf
                                     <button>
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">

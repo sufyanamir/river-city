@@ -57,6 +57,36 @@ class EstimateController extends Controller
     }
     // estimate activity
 
+    public function sendInvoiceToQB(Request $request)
+    {
+
+        try {
+            
+            $userDetails = session('user_details');
+    
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'total_amount' => 'required',
+                'customer_first_name' => 'nullable',
+                'customer_last_name' => 'nullable',
+                'customer_email' => 'required',
+            ]);
+    
+            $estimateSending = Http::post('https://hooks.zapier.com/hooks/catch/7921384/3ethsdd/',[
+                'amount' => $validatedData['total_amount'],
+                'first_name' => $validatedData['customer_first_name'],
+                'last_name' => $validatedData['customer_last_name'],
+                'customer_email' => $validatedData['customer_email'],
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Invoice sent to QB!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+
+    }
+
     // update item status
     public function includeexcludeEstimateItem(Request $request)
     {
