@@ -270,8 +270,8 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     <label for="" class="block text-left mb-1"> Quantity(optional) </label>
                                     <input type="number" step="any" name="item_qty[]" placeholder="00.0" autocomplete="given-name" class="w-[70%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <button onclick="remitems(this)" type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" aria-expanded="true" aria-haspopup="true">
-                                        <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
-                                    </button>
+    <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
+</button>
                                 </div>
                             </div>
                         </div>
@@ -314,4 +314,7 @@ $userPrivileges = session('user_details')['user_privileges'];
             }
         });
     });
+    function remitems(button) {
+    $(button).closest('.mt-5').remove(); // Remove the closest parent div with class mt-5
+}
 </script>

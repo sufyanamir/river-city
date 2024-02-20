@@ -23,7 +23,6 @@ class ItemTemplatesController extends Controller
         }
 
         return view('itemTemplates', ['items' => $items, 'item_templates' => $itemTemplates]);
-        
     }
 
     // update item template
@@ -35,9 +34,9 @@ class ItemTemplatesController extends Controller
             'item_template_name' => 'required',
             'description' => 'nullable',
             'note' => 'nullable',
-            'it_item_id' => 'required|array',
-            'item_id' => 'required|array',
-            'item_qty' => 'required|array',
+            'it_item_id' => 'nullable|array', // Changed to nullable
+            'item_id' => 'nullable|array',
+            'item_qty' => 'nullable|array',
         ]);
 
         // Retrieve the item template
@@ -52,23 +51,17 @@ class ItemTemplatesController extends Controller
         $itemTemplate->note = $validatedData['note'];
         $itemTemplate->save();
 
-        // Iterate over the received item IDs and quantities
-        foreach ($validatedData['it_item_id'] as $key => $itItemId) {
-            $templateItem = $itemTemplate->templateItems->where('it_item_id', $itItemId)->first();
+        // Delete all existing item template items
+        $itemTemplate->templateItems()->delete();
 
-            // If the template item exists, update its item ID and quantity
-            if ($templateItem) {
-                $templateItem->item_id = $validatedData['item_id'][$key];
-                $templateItem->item_qty = $validatedData['item_qty'][$key];
-                $templateItem->save();
-            } else {
-                // If the template item doesn't exist, create a new one
-                $item = new ItemTemplateItems();
-                $item->item_template_id = $validatedData['template_id'];
-                // $item->it_item_id = $itItemId;
-                $item->item_id = $validatedData['item_id'][$key];
-                $item->item_qty = $validatedData['item_qty'][$key];
-                $item->save();
+        // Iterate over the received item IDs and quantities
+        if (!empty($validatedData['item_id'])) {
+            foreach ($validatedData['item_id'] as $key => $itemId) {
+                $items = ItemTemplateItems::create([
+                    'item_template_id' => $validatedData['template_id'],
+                    'item_id' => $itemId,
+                    'item_qty' => $validatedData['item_qty'][$key],
+                ]);
             }
         }
 
@@ -78,6 +71,7 @@ class ItemTemplatesController extends Controller
     }
 }
 
+
     // update item template
 
     // delete item template
@@ -85,22 +79,21 @@ class ItemTemplatesController extends Controller
     {
         try {
 
-            $itemTemplate= ItemTemplates::with('templateItems')->where('item_template_id', $id)->first();
+            $itemTemplate = ItemTemplates::with('templateItems')->where('item_template_id', $id)->first();
 
             $itemIds = $itemTemplate->templateItems()->pluck('item_id')->toArray();
-            
+
             $items = Items::whereIn('item_id', $itemIds)->get();
 
             $responseData = [
                 'itemTemplate' => $itemTemplate,
                 'itemsData' => $items,
             ];
-        
-            return response()->json(['success' => true, 'data' => $responseData], 200);
 
+            return response()->json(['success' => true, 'data' => $responseData], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
-        }    
+        }
     }
     // delete item template
 
@@ -108,14 +101,13 @@ class ItemTemplatesController extends Controller
     public function deleteTemplate($id)
     {
         try {
-            
+
             $itemTemplate = ItemTemplates::with('templateItems')->where('item_template_id', $id)->first();
-            
+
             $itemTemplate->templateItems()->delete();
             $itemTemplate->delete();
-    
+
             return response()->json(['success' => true, 'message' => 'Template deleted!'], 200);
-            
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -154,12 +146,10 @@ class ItemTemplatesController extends Controller
                         'item_id' => $itemId,
                         'item_qty' => $itemQty,
                     ]);
-
                 }
             }
 
             return response()->json(['success' => true, 'message' => 'Item Template Created!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
