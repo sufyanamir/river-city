@@ -122,6 +122,8 @@ Route::middleware('customauth')->group(function () {
     Route::match(['post', 'get'], '/deleteTemplate/{id}', [ItemTemplatesController::class, 'deleteTemplate']);
     Route::get('/items', [ItemsController::class, 'getItems']);
     Route::post('/addItem', [ItemsController::class, 'addItem']);
+    Route::get('/getItemToEdit/{id}', [ItemsController::class, 'getItemToEdit']);
+    Route::post('/updateItem', [ItemsController::class, 'updateItem']);
     Route::match(['get', 'post'], '/delete/item/{id}', [ItemsController::class, 'deleteItem']);
     // Route::get('/group', function () {
     //     return view('group');

@@ -63,6 +63,78 @@ class ItemsController extends Controller
     }
     // get item
 
+    // get item to edit
+    public function updateItem(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'item_id' => 'required',
+                'item_type' => 'required|string',
+                'item_name' => 'required|string',
+                'item_units' => 'nullable|string',
+                'item_cost' => 'required|numeric',
+                'item_price' => 'required|numeric',
+                'labour_expense' => 'nullable|numeric',
+                'material_expense' => 'nullable|numeric',
+                'item_description' => 'nullable|string',
+                'assembly_name' => 'nullable|array',
+                'item_unit_by_ass_unit' => 'nullable|array',
+                'ass_unit_by_item_unit' => 'nullable|array',
+            ]);
+
+            $item = Items::with('assemblies')->where('item_id', $validatedData['item_id'])->first();
+
+            $item->item_type = $validatedData['item_type'];
+            $item->item_name = $validatedData['item_name'];
+            $item->item_units = $validatedData['item_units'];
+            $item->item_cost = $validatedData['item_cost'];
+            $item->item_price = $validatedData['item_price'];
+            $item->labour_expense = $validatedData['labour_expense'];
+            $item->material_expense = $validatedData['material_expense'];
+
+            $item->save();
+
+            $item->assemblies()->delete();
+
+            if (!empty($validatedData['assembly_name'])) {
+                foreach ($validatedData['assembly_name'] as $key => $assemblyName) {
+                    if (!empty($assemblyName)) {
+                        $itemUnitByAssUnitSum = $validatedData['item_unit_by_ass_unit'][$key];
+                        $assUnitByItemUnitSum = $validatedData['ass_unit_by_item_unit'][$key];
+    
+                        // Create a new ItemAssembly for each assembly name
+                        ItemAssembly::create([
+                            'item_id' => $item->item_id,
+                            'assembly_name' => $assemblyName,
+                            'item_unit_by_ass_unit' => $itemUnitByAssUnitSum,
+                            'ass_unit_by_item_unit' => $assUnitByItemUnitSum,
+                        ]);
+                    }
+                }
+            }
+
+            return response()->json(['success' => true, 'message' => 'Item Updated!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // get item to edit
+
+    // get item to edit
+    public function getItemToEdit($id)
+    {
+        $userDetails = session('user_details');
+
+        $item = Items::with('assemblies')->where('item_id', $id)->first();
+
+        return response()->json(['success' => true, 'data' => ['item' => $item]], 200);
+
+    }
+    // get item to edit
+
     // add item
     public function addItem(Request $request)
     {
@@ -97,16 +169,20 @@ class ItemsController extends Controller
                 // Iterate through each assembly name
                 foreach ($validatedData['assembly_name'] as $key => $assemblyName) {
                     // Calculate the sum for 'item_unit_by_ass_unit' and 'ass_unit_by_item_unit'
-                    $itemUnitByAssUnitSum = $validatedData['item_unit_by_ass_unit'][$key];
-                    $assUnitByItemUnitSum = $validatedData['ass_unit_by_item_unit'][$key];
+                    if (!empty($assemblyName)) {
+                        
+                        $itemUnitByAssUnitSum = $validatedData['item_unit_by_ass_unit'][$key];
+                        $assUnitByItemUnitSum = $validatedData['ass_unit_by_item_unit'][$key];
+    
+                        // Create a new ItemAssembly for each assembly name
+                        ItemAssembly::create([
+                            'item_id' => $item->item_id,
+                            'assembly_name' => $assemblyName,
+                            'item_unit_by_ass_unit' => $itemUnitByAssUnitSum,
+                            'ass_unit_by_item_unit' => $assUnitByItemUnitSum,
+                        ]);
 
-                    // Create a new ItemAssembly for each assembly name
-                    ItemAssembly::create([
-                        'item_id' => $item->item_id,
-                        'assembly_name' => $assemblyName,
-                        'item_unit_by_ass_unit' => $itemUnitByAssUnitSum,
-                        'ass_unit_by_item_unit' => $assUnitByItemUnitSum,
-                    ]);
+                    }
                 }
             }
 
