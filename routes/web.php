@@ -181,6 +181,8 @@ Route::middleware('customauth')->group(function () {
     Route::match(['get', 'post'], '/delete/email/{id}', [EmailController::class, 'deleteEmail']);
     Route::get('/settings', [UserController::class, 'getUserOnSettings']);
     Route::post('/updateSettings', [UserController::class, 'updateSettings']);
+    Route::get('/getEmailToEdit/{id}', [EmailController::class, 'getEmailToEdit']);
+    Route::post('/updateEmail', [EmailController::class, 'updateEmail']);
     Route::get('/help', function () {
         return view('help');
     });

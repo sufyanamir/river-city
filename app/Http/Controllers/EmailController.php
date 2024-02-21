@@ -19,6 +19,50 @@ class EmailController extends Controller
 
     // ================================================== email =====================================================================
     // get emails
+    public function getEmailToEdit($id)
+    {
+        $email = Email::where('email_id', $id)->first();
+
+        return response()->json(['success' => true, 'emailData' => $email], 200);
+        
+    }
+    // get emails
+
+    // get emails
+    public function updateEmail(Request $request)
+    {
+        try {
+            
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'email_id' => 'required',
+                'email_name' => 'required|string',
+                'email_type'  => 'required|string',
+                'email_to' => 'nullable|string',
+                'email_subject' => 'required|string',
+                'email_body' => 'nullable|string',
+            ]);
+
+            $email = Email::where('email_id', $validatedData['email_id'])->first();
+
+            $email->email_name = $validatedData['email_name'];
+            $email->email_type = $validatedData['email_type'];
+            $email->email_to = $validatedData['email_to'];
+            $email->email_subject = $validatedData['email_subject'];
+            $email->email_body = $validatedData['email_body'];
+
+            $email->save();
+
+            return response()->json(['success' => true, 'message' => 'Email Updated!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // get emails
+
+    // get emails
     public function deleteEmail($id)
     {
         try {
