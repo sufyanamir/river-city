@@ -7,6 +7,7 @@ use App\Models\Estimate;
 use App\Models\EstimateSchedule;
 use App\Models\ScheduleEstimate;
 use App\Models\User;
+use App\Models\UserToDo;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -44,12 +45,15 @@ class DashboardController extends Controller
             // Count complete jobs
             $completeJobsCount = $scheduleEstimates->where('status', 'Complete')->count();
 
+            $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->get();
+
             return view('dashboard', [
                 'schedule_estimates_with_estimates' => $scheduleEstimatesWithEstimates,
                 'todayJobsCount' => $todayJobsCount,
                 'pendingJobsCount' => $pendingJobsCount,
                 'completeJobsCount' => $completeJobsCount,
                 'totalJobsCount' => $totalJobsCount,
+                'Todos' => $userToDos,
             ]);
         } else {
             $customers = Customer::get();
@@ -60,16 +64,24 @@ class DashboardController extends Controller
                 $estimate = Estimate::where('estimate_id', $schedule->estimate_id)->first();
                 $estimates[] = $estimate;
             }
+            $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->get();
+            $completeEstimates = Estimate::where('estimate_status', 'complete')->count();
+            $pendingEstimates = Estimate::where('estimate_status', 'pending')->count();
+            $cancelEstimates = Estimate::where('estimate_status', 'cancel')->count();
 
 
             return view('dashboard', [
                 'customers' => $customers,
                 'staff' => $staff,
                 'confirm_orders' => $confirmedOrders,
+                'Todos' => $userToDos,
                 'schedules' => [
                     $schedules,
                     $estimates,
                 ],
+                'completeEstimates' => $completeEstimates,
+                'pendingEstimates' => $pendingEstimates,
+                'cancelEstimates' => $cancelEstimates,
             ]);
         }
     }

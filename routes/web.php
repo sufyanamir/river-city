@@ -12,6 +12,7 @@ use App\Http\Controllers\ItemTemplatesController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserToDoController;
 use App\Models\Estimate;
 use App\Models\EstimateChat;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,10 @@ Route::post('/acceptProposal/{id}', [EstimateController::class, 'acceptProposal'
 Route::middleware('customauth')->group(function () {
 
     Route::post('/sendInvoiceToQB', [EstimateController::class, 'sendInvoiceToQB']);
+
+    Route::post('/addUserToDo', [UserToDoController::class, 'addUserToDo']);
+    Route::post('/deleteUserToDo/{id}', [UserToDoController::class, 'deleteUserToDo']);
+    Route::post('/completeUserToDo/{id}', [UserToDoController::class, 'completeUserToDo']);
 
     Route::post('/addUserRole',  [UserController::class, 'addUserRole']);
     Route::get('/userRole', [UserController::class, 'getUserRole']);
@@ -64,6 +69,7 @@ Route::middleware('customauth')->group(function () {
     // });
     Route::match(['get', 'post'], '/getEstimateWithImages', [EstimateController::class, 'getEstimateWithImages']);
     Route::get('/estimates', [EstimateController::class, 'index']);
+    Route::post('/cancelEstimate/{id}', [EstimateController::class, 'cancelEstimate']);
     Route::post('/addEstimate', [EstimateController::class, 'addCustomerAndEstimate']);
     Route::get('/viewEstimate/{id}', [EstimateController::class, 'viewEstimate']);
     Route::post('/additionalContact', [EstimateController::class,  'additionalContacts']);

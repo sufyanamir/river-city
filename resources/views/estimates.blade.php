@@ -61,7 +61,7 @@
                             </td>
                             @elseif($item->estimate_status == 'cancel')
                             <td>
-                                <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">Cancel</span>
+                                <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">Canceled</span>
                             </td>
                             @endif
                             <td>
@@ -102,7 +102,12 @@
                                                     <a href="/viewEstimateMaterials/{{ $item->estimate_id }}" class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-report-icon.svg') }}" alt="icon"> Work Order</a>
                                                     <a href="/getEstimateActivity/{{ $item->estimate_id }}" class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-activity-icon.svg') }}" alt="icon"> Activity</a>
                                                     <a href="/viewGallery{{ $item->estimate_id }}" class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-gallery-icon.svg') }}" alt="icon"> Gallery</a>
-                                                    <a href="#" class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-del-icon.svg') }}" alt="icon"> Delete</a>
+                                                    <form action="/cancelEstimate/{{$item->estimate_id}}" method="post">
+                                                        @csrf
+                                                        <button class=" w-full">
+                                                            <p class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-del-icon.svg') }}" alt="icon"> Cancel</p>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>

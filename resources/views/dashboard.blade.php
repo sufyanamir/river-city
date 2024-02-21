@@ -60,16 +60,16 @@
                     </div>
                     <div class=" p-2 my-full">
                         <div class=" border my-2 py-3 px-7 text-center rounded-xl">
-                            <h3 class=" text-lg font-medium">25</h3>
-                            <p class=" text-[#2A2B43] text-sm">Approved</p>
+                            <h3 class=" text-lg font-medium">{{$completeEstimates}}</h3>
+                            <p class=" text-[#2A2B43] text-sm">Complete</p>
                         </div>
                         <div class=" border my-2 py-3 px-7 text-center rounded-xl">
-                            <h3 class=" text-lg font-medium">25</h3>
-                            <p class=" text-[#2A2B43] text-sm">Approved</p>
+                            <h3 class=" text-lg font-medium">{{$pendingEstimates}}</h3>
+                            <p class=" text-[#2A2B43] text-sm">Pending</p>
                         </div>
                         <div class=" border my-2 py-3 px-7 text-center rounded-xl">
-                            <h3 class=" text-lg font-medium">25</h3>
-                            <p class=" text-[#2A2B43] text-sm">Approved</p>
+                            <h3 class=" text-lg font-medium">{{$cancelEstimates}}</h3>
+                            <p class=" text-[#2A2B43] text-sm">Cancel</p>
                         </div>
                     </div>
                 </div>
@@ -165,47 +165,45 @@
                         <h3 class=" text-lg font-medium text-white">To do List</h3>
                     </div>
                     <div>
-                        <div class=" p-2">
-                            <form action="">
+                        <div class=" py-4 px-2 my-2">
+                            <form action="/addUserToDo" method="post">
+                                @csrf
                                 <div class=" flex justify-between">
-                                    <input type="text" name="add_new" id="add_new" placeholder="Add New"
+                                    <input type="text" name="to_do_title" id="to_do_title" placeholder="Add New"
                                         autocomplete="given-name"
                                         class=" inline-block mb-2 w-full rounded-md border-0 text-gray-400 p-2 ring-0 border-b-2 focus:border-0 border-[#f5f5f5] placeholder:text-gray-400 outline-none focus:ring-0 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                    <x-quick-add-btn :icon="'plus-icon.svg'"></x-quick-add-btn>
+                                    <button class=" rounded-lg bg-[#930027] px-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]">
+                                        <img src="{{asset('assets/icons/plus-icon.svg')}}" alt="">
+                                    </button>
                                 </div>
                             </form>
+                            @foreach($Todos as $todo)
                             <div class=" flex justify-between px-3">
                                 <div>
                                     <div class=" inline-block">
-                                        <input type="checkbox" name="Edit" id="privilegeUserEdit">
-                                        <label for="privilegeUserEdit" class=" text-gray-500"></label>
+                                        <form action="/completeUserToDo/{{$todo->to_do_id}}" method="post">
+                                            @csrf
+                                            <button>
+                                            <input type="checkbox" name="completed" id="completedToDo_{{$todo->to_do_id}}" value="completed" {{ $todo->to_do_status == 'completed' ? 'checked' : '' }}>
+                                                <label for="completedToDo_{{$todo->to_do_id}}" class=" text-gray-500"></label>
+                                            </button>
+                                        </form>
                                     </div>
                                     <div class=" inline-block font-semibold">
-                                        <p>feature for the app</p>
+                                        <p>{{$todo->to_do_title}}</p>
                                     </div>
                                 </div>
                                 <div>
-                                    <button>
-                                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-                                    </button>
+                                    <form action="/deleteUserToDo/{{$todo->to_do_id}}" method="post">
+                                        @csrf
+                                        <button>
+                                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
-                            <div class=" flex justify-between px-3">
-                                <div>
-                                    <div class=" inline-block">
-                                        <input type="checkbox" name="Edit" id="privilegeUserEdit">
-                                        <label for="privilegeUserEdit" class=" text-gray-500"></label>
-                                    </div>
-                                    <div class=" inline-block font-semibold">
-                                        <p>feature for the app</p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <button>
-                                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-                                    </button>
-                                </div>
-                            </div>
+                            <hr>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -265,55 +263,53 @@
                     </div>
                 </div>
             </div>
-            <div class=" bg-white w-[420px] rounded-xl">
-                <div class=" border-b-2 p-2 bg-[#930027] rounded-t-xl">
-                    <h3 class=" text-lg font-medium text-white">To do List</h3>
-                </div>
-                <div>
-                    <div class=" p-2">
-                        <form action="">
-                            <div class=" flex justify-between">
-                                <input type="text" name="add_new" id="add_new" placeholder="Add New"
-                                    autocomplete="given-name"
-                                    class=" inline-block mb-2 w-full rounded-md border-0 text-gray-400 p-2 ring-0 border-b-2 focus:border-0 border-[#f5f5f5] placeholder:text-gray-400 outline-none focus:ring-0 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                <x-quick-add-btn :icon="'plus-icon.svg'"></x-quick-add-btn>
-                            </div>
-                        </form>
-                        <div class=" flex justify-between px-3">
-                            <div>
-                                <div class=" inline-block">
-                                    <input type="checkbox" name="Edit" id="privilegeUserEdit">
-                                    <label for="privilegeUserEdit" class=" text-gray-500"></label>
+            <div class=" bg-white w-full rounded-xl">
+                    <div class=" border-b-2 p-2 bg-[#930027] rounded-t-xl">
+                        <h3 class=" text-lg font-medium text-white">To do List</h3>
+                    </div>
+                    <div>
+                        <div class=" py-4 px-2 my-2">
+                            <form action="/addUserToDo" method="post">
+                                @csrf
+                                <div class=" flex justify-between">
+                                    <input type="text" name="to_do_title" id="to_do_title" placeholder="Add New"
+                                        autocomplete="given-name"
+                                        class=" inline-block mb-2 w-full rounded-md border-0 text-gray-400 p-2 ring-0 border-b-2 focus:border-0 border-[#f5f5f5] placeholder:text-gray-400 outline-none focus:ring-0 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                    <button class=" rounded-lg bg-[#930027] px-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]">
+                                        <img src="{{asset('assets/icons/plus-icon.svg')}}" alt="">
+                                    </button>
                                 </div>
-                                <div class=" inline-block font-semibold">
-                                    <p>feature for the app</p>
+                            </form>
+                            @foreach($Todos as $todo)
+                            <div class=" flex justify-between px-3">
+                                <div>
+                                    <div class=" inline-block">
+                                        <form action="/completeUserToDo/{{$todo->to_do_id}}" method="post">
+                                            @csrf
+                                            <button>
+                                            <input type="checkbox" name="completed" id="completedToDo_{{$todo->to_do_id}}" value="completed" {{ $todo->to_do_status == 'completed' ? 'checked' : '' }}>
+                                                <label for="completedToDo_{{$todo->to_do_id}}" class=" text-gray-500"></label>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class=" inline-block font-semibold">
+                                        <p>{{$todo->to_do_title}}</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <form action="/deleteUserToDo/{{$todo->to_do_id}}" method="post">
+                                        @csrf
+                                        <button>
+                                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
-                            <div>
-                                <button>
-                                    <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-                                </button>
-                            </div>
-                        </div>
-                        <div class=" flex justify-between px-3">
-                            <div>
-                                <div class=" inline-block">
-                                    <input type="checkbox" name="Edit" id="privilegeUserEdit">
-                                    <label for="privilegeUserEdit" class=" text-gray-500"></label>
-                                </div>
-                                <div class=" inline-block font-semibold">
-                                    <p>feature for the app</p>
-                                </div>
-                            </div>
-                            <div>
-                                <button>
-                                    <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-                                </button>
-                            </div>
+                            <hr>
+                            @endforeach
                         </div>
                     </div>
                 </div>
-            </div>
         @endif
     </div>
 </div>
