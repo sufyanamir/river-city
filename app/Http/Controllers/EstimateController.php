@@ -612,6 +612,25 @@ class EstimateController extends Controller
     }
 
 
+    public function cancelEstimate($id)
+    {
+        try {
+
+            $userDetails = session('user_detalis');
+
+            $estimate = Estimate::where('estimate_id', $id)->first();
+
+            $estimate->estimate_status = 'cancel';
+
+            $estimate->save();
+
+            return response()->json(['success' => true, 'message' => 'Estimate Canceled!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
     public function index()
     {
         $userDetails = session('user_details');
