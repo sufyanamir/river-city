@@ -285,9 +285,11 @@ $userPrivileges = session('user_details')['user_privileges'];
                         @endif
                     </div> --}}
                     <!-------------------------------- plus icon ------------------------------------>
+                    @if(session('user_details')['user_role'] == 'admin')
                     <div class=" my-auto">
                         <x-quick-add-btn :hoverIcon="''" :icon="'plus-icon.svg'"></x-quick-add-btn>
                     </div>
+                    @endif
                     <!-------------------------------- plus icon ------------------------------------>
                     <!-------------------------------- notification icon ------------------------------------>
                     <div class="relative my-auto">

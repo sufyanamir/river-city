@@ -155,6 +155,52 @@
                         </table>
                     </div>
                 </div>
+                <div class="card px-3">
+                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
+                        <h3>Pending Estimates</h3>
+                    </div>
+                    <div class=" relative overflow-auto border rounded-b-lg">
+                        <table class=" w-full text-sm">
+                            <thead class=" border-b-2">
+                                <tr>
+                                    <th class=" text-left pl-1 py-2">Estimator</th>
+                                    <th>#</th>
+                                    <th class=" text-right pr-1 py-2">Total</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div style="height: 100px !important; overflow-y:scroll !important;">
+                            <table class=" w-full text-sm">
+                                @php
+                                $pending_estimates_total = 0;
+                                $pending_estimate_total = 0;
+                                @endphp
+                                <tbody class="">
+                                    @foreach($pending_estimators as $estimators => $data)
+                                    <tr class=" border-b">
+                                        <td class=" text-left pl-1 py-2">{{$estimators}}</td>
+                                        <td class=" text-center">{{$data['total_estimates']}}</td>
+                                        <td class=" text-right pr-1 py-2">${{$data['estimate_total']}}</td>
+                                    </tr>
+                                    @php
+                                    $pending_estimates_total += $data['total_estimates'];
+                                    $pending_estimate_total += $data['estimate_total'];
+                                    @endphp
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <table class=" w-full text-sm">
+                            <tfoot>
+                                <tr>
+                                    <th class=" text-left pl-1 py-2"> Grand Total</th>
+                                    <td class=" text-center">{{$pending_estimates_total}}</td>
+                                    <td class=" text-right pr-1 py-2">${{$pending_estimate_total}}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

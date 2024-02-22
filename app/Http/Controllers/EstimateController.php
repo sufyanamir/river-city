@@ -574,7 +574,10 @@ class EstimateController extends Controller
             }
 
             return view('calendar', ['estimates' => $estimates]);
-        } else {
+        }elseif($userDetails['user_role'] == 'schedular'){
+            $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->get();
+        } 
+        else {
             $estimates = Estimate::get();
         }
 

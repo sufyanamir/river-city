@@ -1,7 +1,9 @@
 @include('layouts.header')
 <div class="my-4">
-    <h1 class=" text-2xl font-semibold mb-3">Privileges</h1>
     <div class=" bg-white w-full rounded-lg shadow-lg">
+        <div class=" p-3 bg-[#930027] rounded-t-lg">
+        <h1 class=" text-2xl font-semibold text-white">Privileges</h1>
+        </div>
         <div class=" lg:flex justify-between p-3 grid sm:grid-cols-2 mx-auto">
 
             <img class=" w-28 h-28 rounded-full" style="object-fit: cover;" src="{{ (isset($user->user_image)) ? asset($user->user_image) : 'assets/images/demo-user.svg'}}" alt="">

@@ -18,6 +18,8 @@ class EstimateChatController extends Controller
                 'chat_message' => 'required',
                 'mentioned_user_ids' => 'nullable|array',
             ]);
+
+            // dd($validatedData);
     
             $message = EstimateChat::create([
                 'estimate_id' => $validatedData['estimate_id'],
@@ -26,7 +28,7 @@ class EstimateChatController extends Controller
                 'chat_message' => $validatedData['chat_message'],
             ]);
     
-            if (isset($validatedData['mentioned_user_ids'])) {
+            if (isset($validatedData['mentioned_user_ids']) && !empty($validatedData['mentioned_user_ids'])) {
                 foreach ($validatedData['mentioned_user_ids'] as $mentionedId) {
                     $message->mentioned_user_ids = $mentionedId;
                     $message->save();
@@ -36,13 +38,15 @@ class EstimateChatController extends Controller
     
                     // Loop through each mentioned user ID and create a separate notification
                     foreach ($mentionedUserIds as $singleMentionedId) {
-                        $notificationMessage = $userDetails['name'] . " mentioned you in the chat of this estimate " . $validatedData['estimate_id'] . ".";
-                        $notification = Notifications::create([
-                            'added_user_id' => $userDetails['id'],
-                            'notification_message' => $notificationMessage,
-                            'mentioned_user_id' => $singleMentionedId,
-                            'notification_type' => 'mention',
-                        ]);
+                        if ($singleMentionedId != null) {
+                            $notificationMessage = $userDetails['name'] . " mentioned you in the chat of this estimate " . $validatedData['estimate_id'] . ".";
+                            $notification = Notifications::create([
+                                'added_user_id' => $userDetails['id'],
+                                'notification_message' => $notificationMessage,
+                                'mentioned_user_id' => $singleMentionedId,
+                                'notification_type' => 'mention',
+                            ]);
+                        }
                     }
                 }
             }

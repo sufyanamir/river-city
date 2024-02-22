@@ -474,6 +474,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <span class=" my-auto">Complete Estimate</span>
                         </button>
                         @endif
+                        @if($user_details['user_role'] == 'admin')
                         <form action="/sendInvoiceToQB" method="post">
                             @csrf
                             <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
@@ -488,6 +489,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                 </div>
                             </button>
                         </form>
+                        @endif
                         {{-- <button type="button"
                             class="flex h-[40px] w-[190px] ml-2  px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#F4AC50]"
                             id=" action-menubutton" aria-expanded="true" aria-haspopup="true">
@@ -601,8 +603,8 @@ $userPrivileges = session('user_details')['user_privileges'];
                         <thead class=" text-center">
                             <tr class="border border-solid border-l-0 border-r-0 border-t-0">
                                 <th></th>
-                                <th class="">Labour(38%)</th>
-                                <th class="">Material(15%)</th>
+                                <th class="">Labour</th>
+                                <th class="">Material</th>
                                 <th>Expenses</th>
                                 <th class="">Profit</th>
                                 <th class="">Margin</th>

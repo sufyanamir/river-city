@@ -20,7 +20,7 @@
                 <x-dashboard-cards :title="'Complete Jobs'" :value="$completeJobsCount" :img="'dashboard-orders.svg'"></x-dashboard-cards>
                 <x-dashboard-cards :title="'Total Jobs'" :value="$totalJobsCount" :img="'dashboard-dollar.svg'"></x-dashboard-cards>
             </div>
-        @else
+        @elseif(session('user_details')['user_role'] == 'admin')
             <div class="grid lg:grid-cols-4 sm:grid-cols-1 gap-3">
                 <x-dashboard-cards :title="'Total Customers'" :value="count($customers)" :img="'dashboard-graphs.svg'"></x-dashboard-cards>
                 <x-dashboard-cards :title="'Total Staff'" :value="count($staff)" :img="'dashboard-users.svg'"></x-dashboard-cards>
@@ -30,7 +30,7 @@
         @endif
     </div>
     @if (session('user_details')['user_role'] == 'crew')
-    @else
+    @elseif(session('user_details')['user_role'] == 'admin')
         <div
             class=" lg:flex lg:justify-between xl:flex xl:justify-between sm:grid sm:grid-cols-1 md:grid md:grid-cols-1 gap-2">
             <!-- order summary & schedules -->
@@ -92,13 +92,12 @@
         class=" lg:flex lg:justify-between gap-2 xl:flex xl:justify-between sm:grid sm:grid-cols-1 md:grid md:grid-cols-1 my-2">
         @if (session('user_details')['user_role'] == 'crew')
             <div class=" bg-white w-full rounded-xl">
-                <div class=" p-2">
+            <div class="bg-[#930027] p-2 text-white rounded-t-xl">
                     <div class=" flex justify-between gap-10">
                         <h3 class=" text-lg font-medium">Schedules</h3>
-                        <input type="text" name="search" id="search" placeholder="Search"
-                            autocomplete="given-name"
-                            class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     </div>
+                </div>
+                <div class=" p-2">
                     <div class="relative overflow-x-auto h-60 overflow-y-auto my-2">
                         <table class="w-full text-sm text-left ">
                             <thead class="text-xs text-white uppercase bg-[#930027]">
@@ -151,15 +150,15 @@
                 </div>
             </div>
             <!-- orders chart & to do list -->
-            <div class=" my-2 rounded-2xl w-auto">
-                <div class=" bg-[#930027] rounded-2xl">
+            <div class=" my-2 rounded-2xl w-full">
+                <!-- <div class=" bg-[#930027] rounded-2xl">
                     <div class=" border-b-2 p-2 text-white">
                         <h3 class=" text-lg font-medium">Orders</h3>
                     </div>
                     <div class=" my-2 text-white text-center mx-auto">
                         <canvas id="myDoughnutChart"></canvas>
                     </div>
-                </div>
+                </div> -->
                 <div class=" bg-white w-full rounded-xl">
                     <div class=" border-b-2 p-2 bg-[#930027] rounded-t-xl">
                         <h3 class=" text-lg font-medium text-white">To do List</h3>
@@ -211,13 +210,12 @@
             <!-- orders chart & to do list -->
         @else
             <div class=" bg-white w-full rounded-xl">
-                <div class=" p-2">
+                <div class="bg-[#930027] p-2 text-white rounded-t-xl">
                     <div class=" flex justify-between gap-10">
                         <h3 class=" text-lg font-medium">Schedules</h3>
-                        <input type="text" name="search" id="search" placeholder="Search"
-                            autocomplete="given-name"
-                            class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     </div>
+                </div>
+                <div class=" p-2">
                     <div class="relative overflow-x-auto h-60 overflow-y-auto my-2">
                         <table class="w-full text-sm text-left ">
                             <thead class="text-xs text-white uppercase bg-[#930027]">
@@ -238,12 +236,14 @@
                                 </tr>
                             </thead>
                             <tbody class=" text-center">
-                                @foreach ($schedules[0] as $index => $schedule)
-                                    @php
-                                        $estimate = $schedules[1][$index];
-                                        $scheduler = \App\Models\User::find($schedule->estimate_complete_assigned_to);
-                                    @endphp
+                            @foreach ($schedules[0] as $index => $schedule)
+                                @php
+                                    $estimate = $schedules[1][$index];
+                                    $scheduler = \App\Models\User::find($schedule->estimate_complete_assigned_to);
+                                @endphp
 
+                                @if (session('user_details')['user_role'] == 'schedular')
+                                    @if($estimate->estimate_schedule_assigned_to == session('user_details')['id'])
                                     <tr>
                                         <td>{{ $estimate->created_at }}</td>
                                         <td>
@@ -251,14 +251,36 @@
                                             <p class="text-[#198CF6]">{{ $estimate->customer_phone }}</p>
                                         </td>
                                         <td>
-                                            <p class="text-[#323C47]">{{ $estimate->customer_address }}</p>
+                                            <a href="https://maps.google.com/?q={{ $estimate->customer_address }}" target="_blank" class="pl-3">
+                                                <p class="text-[#323C47] hover:border-b">{{ $estimate->customer_address }}</p>
+                                            </a>
                                         </td>
                                         <td>
                                             <h3 class="text-lg font-medium">{{ $scheduler->name }}</h3>
                                             <p class="text-[#198CF6]">{{ $scheduler->phone }}</p>
                                         </td>
                                     </tr>
-                                @endforeach
+                                    @endif
+                                @else
+                                    <tr>
+                                        <td>{{ $estimate->created_at }}</td>
+                                        <td>
+                                            <h3 class="text-lg font-medium">{{ $estimate->customer_name }}</h3>
+                                            <p class="text-[#198CF6]">{{ $estimate->customer_phone }}</p>
+                                        </td>
+                                        <td>
+                                            <a href="https://maps.google.com/?q={{ $estimate->customer_address }}" target="_blank" class="pl-3">
+                                                <p class="text-[#323C47] hover:border-b">{{ $estimate->customer_address }}</p>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <h3 class="text-lg font-medium">{{ $scheduler->name }}</h3>
+                                            <p class="text-[#198CF6]">{{ $scheduler->phone }}</p>
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
