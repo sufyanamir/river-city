@@ -264,25 +264,21 @@
     </div>
     @endif
 @endif
-<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="modal">
+<!-- <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="modal">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <!-- Background overlay -->
         <div class="fixed inset-0 transition-opacity" aria-hidden="true">
             <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
         </div>
 
-        <!-- Modal panel -->
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <form action="" id="updateevent-form">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <!-- Modal content here -->
                     <div class=" flex justify-between">
                         <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">Coyne Development Corp - Steve</h2>
                         <button class="modal-close" type="button">
                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
                         </button>
                     </div>
-                    <!-- task details -->
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
                         <p class=" font-medium inline-block items-center">65 Water St, Newburyport, MA, 01950</p>
@@ -327,9 +323,7 @@
                         <input type="date" name="fendDate" id="fendDate" autocomplete="given-name" class=" se_date hidden w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     </div>
                     <textarea placeholder="Note " disabled class=" w-[100%] outline-none rounded-md p-2 border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6" name="" id="noteText"></textarea>
-                    <!-- task details -->
                     <p class="text-sm mb-4" id="modal-description"></p>
-                    <!-- You can customize this part according to your needs -->
                     <div>
                         <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
                         <button type="button" id="editEvent" class=" float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Edit
@@ -344,7 +338,7 @@
             </form>
         </div>
     </div>
-</div>
+</div> -->
 
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js" integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY=" crossorigin="anonymous"></script>
@@ -470,11 +464,11 @@
             }
         });
 
-        var modalClose = document.querySelector('.modal-close');
-        modalClose.addEventListener('click', function() {
-            var modal = document.getElementById('modal');
-            modal.classList.add('hidden');
-        });
+        // var modalClose = document.querySelector('.modal-close');
+        // modalClose.addEventListener('click', function() {
+        //     var modal = document.getElementById('modal');
+        //     modal.classList.add('hidden');
+        // });
 
         calendar.render();
 

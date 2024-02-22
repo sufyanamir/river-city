@@ -179,10 +179,13 @@
         crewContainer.classList.add('crew-container');
 
         // Create image element for the crew
+        // Create image element for the crew
         const crewImage = document.createElement('img');
-        crewImage.src = "{{ asset('') }}" + crew.image;
+        // Check if crew has an image, if not, set default image path
+        crewImage.src = crew.image ? "{{ asset('') }}" + crew.image : "{{ asset('assets/images/demo-user.svg') }}";
         crewImage.alt = crew.name;
         crewImage.classList.add('crew-image');
+
 
         // Create a span for crew name
         const crewNameSpan = document.createElement('span');
@@ -198,6 +201,22 @@
 
         // Append the crew cell to the row
         row.appendChild(crewCell);
+        // Create a span for crew rating
+const crewRatingSpan = document.createElement('span');
+const rating = crew.rating;
+let ratingStars = '';
+
+// Generate "*" characters based on the rating value
+for (let i = 0; i < rating; i++) {
+    ratingStars += '*';
+}
+
+crewRatingSpan.textContent = ratingStars;
+crewRatingSpan.classList.add('crew-rating');
+crewRatingSpan.classList.add('text-right');
+
+// Append the rating span to the crew container
+crewContainer.appendChild(crewRatingSpan);
 
         // Loop through each day of the week
         for (let i = 0; i < 7; i++) {

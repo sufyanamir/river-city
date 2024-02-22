@@ -17,6 +17,7 @@ class ReportsController extends Controller
 
         $sources = [];
         $completedEstimators = [];
+        $pendingEstimators = [];
 
         foreach ($customers as $customer) {
             $sourceName = $customer->source;
@@ -49,9 +50,25 @@ class ReportsController extends Controller
                     $completedEstimators[$ownerName]['estimate_total'] += $estimate->estimate_total;
                 }
             }
+            foreach ($customer->estimates as $estimate) {
+                if ($estimate->estimate_status === 'pending') {
+                    $ownerName = $customer->owner;
+
+                    if (!isset($pendingEstimators[$ownerName]['total_estimates'])) {
+                        $pendingEstimators[$ownerName]['total_estimates'] = 0;
+                    }
+
+                    if (!isset($pendingEstimators[$ownerName]['estimate_total'])) {
+                        $pendingEstimators[$ownerName]['estimate_total'] = 0;
+                    }
+
+                    $pendingEstimators[$ownerName]['total_estimates'] += 1;
+                    $pendingEstimators[$ownerName]['estimate_total'] += $estimate->estimate_total;
+                }
+            }
         }
 
         // return response()->json(['sources' => $sources, 'completed_estimators' => $completedEstimators]);
-        return view('reports', ['sources' => $sources, 'completed_estimators' => $completedEstimators]);
+        return view('reports', ['sources' => $sources, 'completed_estimators' => $completedEstimators, 'pending_estimators' => $pendingEstimators]);
     }
 }
