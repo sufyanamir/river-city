@@ -227,8 +227,12 @@ $(document).ready(function () {
     dropdown('crew-submenu1', 'crew-arrow1', 'crew-dropdown-card1', 'crew-dropdown-text1');
   });
 
-  new DataTable('#universalTable');
+  // new DataTable('#universalTable');
   new DataTable('.universalTable');
+
+  $('#universalTable').DataTable({
+    "order": [[0, "desc"]]
+  });
 
   window.voice = function (buttonId, textareaId) {
     var recognition = new webkitSpeechRecognition();

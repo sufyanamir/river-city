@@ -635,20 +635,21 @@ class EstimateController extends Controller
     }
 
     public function index()
-    {
-        $userDetails = session('user_details');
-        if ($userDetails['user_role'] == 'admin') {
-            $customers = Customer::get();
-            $estimates = Estimate::get();
-            $users = User::where('user_role', '<>', 'crew')->get();
-        } elseif ($userDetails['user_role'] == 'schedular') {
-            $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->get();
-            $customers = Customer::get();
-            $users = User::where('user_role', '<>', 'crew')->get();
-        }
-
-        return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails, 'customers' => $customers, 'users' => $users]);
+{
+    $userDetails = session('user_details');
+    if ($userDetails['user_role'] == 'admin') {
+        $customers = Customer::get();
+        $estimates = Estimate::orderBy('created_at', 'desc')->get(); // Retrieve estimates in descending order
+        $users = User::where('user_role', '<>', 'crew')->get();
+    } elseif ($userDetails['user_role'] == 'schedular') {
+        $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->orderBy('created_at', 'desc')->get(); // Retrieve estimates in descending order
+        $customers = Customer::get();
+        $users = User::where('user_role', '<>', 'crew')->get();
     }
+
+    return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails, 'customers' => $customers, 'users' => $users]);
+}
+
     // ==============================================================Estimate additional functions=========================================================
     // delete files
     public function deleteFile($id)
