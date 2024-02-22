@@ -202,14 +202,23 @@
         // Append the crew cell to the row
         row.appendChild(crewCell);
         // Create a span for crew rating
-const crewRatingSpan = document.createElement('span');
+        const crewRatingSpan = document.createElement('span');
 const rating = crew.rating;
 let ratingStars = '';
 
-// Generate "*" characters based on the rating value
-for (let i = 0; i < rating; i++) {
-    ratingStars += '*';
+// Check if crew has a rating
+if (rating) {
+    // Generate "(*...*)" string based on the rating value
+    for (let i = 0; i < rating; i++) {
+        ratingStars += '*';
+    }
+
+    ratingStars = `(${ratingStars})`; // Enclose the stars within parentheses
 }
+
+crewRatingSpan.textContent = ratingStars;
+crewRatingSpan.classList.add('crew-rating');
+
 
 crewRatingSpan.textContent = ratingStars;
 crewRatingSpan.classList.add('crew-rating');

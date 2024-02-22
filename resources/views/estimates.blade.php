@@ -19,19 +19,20 @@
                 <table id="universalTable" class="display" style="width:100%">
                     <thead class="bg-[#930027] text-white text-sm">
                         <tr>
-                            <th>Date</th>
+                            <th></th>
                             <th>Name</th>
                             <th>Phone Number</th>
                             <th>Address</th>
                             <th>Type</th>
                             <th>Status</th>
+                            <th>Date</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="universalTableBody" class=" universalTableBody text-sm">
                         @foreach ($estimates as $item)
                         <tr>
-                            <td>{{ $item->created_at }}</td>
+                            <td>{{$item->estimate_id}}</td>
                             <td>
                                 <a href="/viewEstimate/{{ $item->estimate_id }}" class=" text-[#930027] hover:border-b hover:border-[#930027]">
                                     {{ $item->customer_name }}
@@ -64,6 +65,7 @@
                                 <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">Canceled</span>
                             </td>
                             @endif
+                            <td>{{ $item->created_at }}</td>
                             <td>
                                 <div class=" flex justify-evenly gap-2">
                                     <div class=" my-auto">
@@ -72,9 +74,9 @@
                                         </button>
                                     </div>
                                     <!-- <div class=" my-auto">
-                                            <button type="button"
-                                                class="inline-flex w-full justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]"
-                                                id="estimateDetails" aria-expanded="true" aria-haspopup="true">
+                                        <button type="button"
+                                        class="inline-flex w-full justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]"
+                                        id="estimateDetails" aria-expanded="true" aria-haspopup="true">
                                                 <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
                                             </button>
                                         </div> -->
