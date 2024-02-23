@@ -21,9 +21,10 @@
                         <tr>
                             <th></th>
                             <th>Name</th>
-                            <th>Phone Number</th>
-                            <th>Address</th>
+                            <th>Phone Number/Address</th>
                             <th>Type</th>
+                            <th>Schedular Assigned</th>
+                            <th>Crew Leader</th>
                             <th>Status</th>
                             <th>Date</th>
                             <th>Actions</th>
@@ -38,8 +39,13 @@
                                     {{ $item->customer_name }}
                                 </a>
                             </td>
-                            <td>{{ $item->customer_phone }}</td>
-                            <td>{{ $item->customer_address }}</td>
+                            <td style=" width:50px;">
+                                {{ $item->customer_phone }}
+                                <p class="font-medium">Address:</p>
+                                <a href="https://maps.google.com/?q={{ $item->customer_address }}" target="_blank" class=" text-[#930027]">
+                                    {{ $item->customer_address }}
+                                </a>
+                            </td>
                             <td>
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item->project_type)
@@ -52,6 +58,8 @@
                                 @endif
                                 </p>
                             </td>
+                            <td>{{ $item->schedular ? $item->schedular->name : 'Not Assigned' }}</td>
+                            <td>{{ $item->crew ? $item->crew->name : 'Not Assigned' }}</td>
                             @if ($item->estimate_status == 'pending')
                             <td>
                                 <span class="bg-gray-100 text-gray-800 text-sm font-medium px-2 py-1 rounded ring-1 ring-inset ring-gray-600/20">Pending</span>
@@ -69,9 +77,11 @@
                             <td>
                                 <div class=" flex justify-evenly gap-2">
                                     <div class=" my-auto">
-                                        <button id="chat-btn{{$item->estimate_id}}" class="inline-flex w-full chat-btn text-white justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold shadow-sm hover:bg-[#930017]" data-target="#chat-modal{{ $item->estimate_id }}" data-estimate-id="{{ $item->estimate_id }}">
-                                            <i class="fa-brands fa-rocketchat"></i>
-                                        </button>
+                                        <a href="/estimates/getChatMessage/{{$item->estimate_id}}">
+                                            <button id="" class="inline-flex w-full chat-btn text-white justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold shadow-sm hover:bg-[#930017]" data-target="#chat-modal{{ $item->estimate_id }}" data-estimate-id="{{ $item->estimate_id }}">
+                                                <i class="fa-brands fa-rocketchat"></i>
+                                            </button>
+                                        </a>
                                     </div>
                                     <!-- <div class=" my-auto">
                                         <button type="button"
@@ -674,7 +684,6 @@
 </script>
 <script>
     // Your list of users with names and ids
-    const users = {!!json_encode($users -> pluck('name', 'id')) !!};
 
     // Get the textarea, user dropdown, and hidden input elements
     const messageTextarea = $(".message");

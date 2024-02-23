@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Estimate;
 use App\Models\EstimateChat;
 use App\Models\Notifications;
 use Illuminate\Http\Request;
@@ -59,16 +60,14 @@ class EstimateChatController extends Controller
     
     public function getChatMessage($id)
     {
-        try {
             $userDetails = session('user_details');
+            $estimate = Estimate::where('estimate_id', $id)->first();
+            $customer = Estimate::where('customer_id', $estimate->customer_id)->first();
             $chatMessages = EstimateChat::where('estimate_id', $id)->get();
 
             // Assuming you have a Blade view named 'chat_messages.blade.php' for formatting the messages
-            $html = view('chat_messages', compact('chatMessages'))->render();
+            // $html = view('chat_messages', compact('chatMessages'))->render();
 
-            return response()->json(['success' => true, 'html' => $html], 200);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
-        }
+            return view('estimateChat', ['chatMessages' => $chatMessages, 'estimate' => $estimate, 'customer' => $customer]);
     }
 }

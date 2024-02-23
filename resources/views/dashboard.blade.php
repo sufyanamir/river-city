@@ -124,7 +124,6 @@
                                         <td>
                                             <h3 class="text-lg font-medium">{{ $item['estimate']->customer_name }}
                                                 {{ $item['estimate']->customer_last_name }}</h3>
-                                            <p class="text-[#198CF6]">{{ $item['estimate']->customer_phone }}</p>
                                         </td>
                                         <td>
                                             <p class="text-[#323C47]">{{ $item['estimate']->customer_address }}</p>
@@ -248,7 +247,6 @@
                                         <td>{{ $estimate->created_at }}</td>
                                         <td>
                                             <h3 class="text-lg font-medium">{{ $estimate->customer_name }}</h3>
-                                            <p class="text-[#198CF6]">{{ $estimate->customer_phone }}</p>
                                         </td>
                                         <td>
                                             <a href="https://maps.google.com/?q={{ $estimate->customer_address }}" target="_blank" class="pl-3">
@@ -266,7 +264,6 @@
                                         <td>{{ $estimate->created_at }}</td>
                                         <td>
                                             <h3 class="text-lg font-medium">{{ $estimate->customer_name }}</h3>
-                                            <p class="text-[#198CF6]">{{ $estimate->customer_phone }}</p>
                                         </td>
                                         <td>
                                             <a href="https://maps.google.com/?q={{ $estimate->customer_address }}" target="_blank" class="pl-3">
