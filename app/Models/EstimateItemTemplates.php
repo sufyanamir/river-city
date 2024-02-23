@@ -9,6 +9,10 @@ class EstimateItemTemplates extends Model
 {
     use HasFactory;
 
+    public function templateItems(){
+        return $this->hasMany(EstimateItemTemplateItems::class, 'est_template_id');
+    }
+
     protected $table = 'estimate_item_templates';
 
     protected $primaryKey = 'est_template_id';

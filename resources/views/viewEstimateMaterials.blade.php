@@ -69,7 +69,7 @@
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="px-6 py-3"></th>
+                            <th scope="col" class="px-6 py-3">Check</th>
                             <th scope="col" class="px-6 py-3">
                                 Product name
                             </th>
@@ -100,6 +100,90 @@
                     </tbody>
                 </table>
             </div>
+            @foreach($templates as $template)
+            <div class="mb-2 p-2 bg-white shadow-xl">
+                <div class=" flex justify-between p-3 bg-[#930027] text-white w-full rounded-t-lg">
+                    <h1 class=" font-medium my-auto">{{ $template->item_template_name }}</h1>
+                </div>
+                <div class="relative overflow-x-auto">
+                    <div class="itemDiv">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">Check</th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Item Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Item QTY
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                $templateItems = $template->templateItems; // Fetch related EstimateItemAssembly items
+                                @endphp
+                                @foreach ($templateItems as $item)
+                                @php
+                                $itemName = App\Models\Items::where('item_id', $item->item_id)->first();
+                                @endphp
+                                <tr class="bg-white border-b">
+                                    <td class="px-6 py-4">
+                                        <input type="checkbox" disabled name="privileges[reports][view]" id="privilegeReportsView">
+                                        <label for="privilegeReportsView" class=" text-gray-500"></label>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <label class="text-lg font-semibold text-[#323C47]" for="">{{ $itemName->item_name }}</label>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_qty'] }}</label>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+            @foreach($upgrades as $upgrade)
+            <div class="mb-2 p-2 bg-white shadow-xl">
+                <div class=" flex justify-between p-3 bg-[#930027] text-white w-full rounded-t-lg">
+                    <h1 class=" font-medium my-auto">{{ $upgrade->item_name }} ({{ $upgrade->upgrade_status }})</h1>
+                    <h1 class=" font-medium my-auto">QTY: {{ $upgrade->item_qty }}</h1>
+                </div>
+                <div class="relative overflow-x-auto">
+                    <div class="itemDiv">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">Check</th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Item Name
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                $assemblies = $upgrade->assemblies; // Fetch related EstimateItemAssembly items
+                                @endphp
+                                @foreach ($assemblies as $assembly)
+                                <tr class="bg-white border-b">
+                                    <td class="px-6 py-4">
+                                        <input type="checkbox" disabled name="privileges[reports][view]" id="privilegeReportsView">
+                                        <label for="privilegeReportsView" class=" text-gray-500"></label>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <label class="text-lg font-semibold text-[#323C47]" for="">{{ $assembly['est_ass_item_name'] }}</label>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @endforeach
         </div>
         <hr>
         @else

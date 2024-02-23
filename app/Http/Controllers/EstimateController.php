@@ -61,9 +61,9 @@ class EstimateController extends Controller
     {
 
         try {
-            
+
             $userDetails = session('user_details');
-    
+
             $validatedData = $request->validate([
                 'estimate_id' => 'required',
                 'total_amount' => 'nullable',
@@ -71,8 +71,8 @@ class EstimateController extends Controller
                 'customer_last_name' => 'nullable',
                 'customer_email' => 'required',
             ]);
-    
-            $estimateSending = Http::post('https://hooks.zapier.com/hooks/catch/7921384/3ethsdd/',[
+
+            $estimateSending = Http::post('https://hooks.zapier.com/hooks/catch/7921384/3ethsdd/', [
                 'amount' => $validatedData['total_amount'],
                 'first_name' => $validatedData['customer_first_name'],
                 'last_name' => $validatedData['customer_last_name'],
@@ -80,11 +80,9 @@ class EstimateController extends Controller
             ]);
 
             return response()->json(['success' => true, 'message' => 'Invoice sent to QB!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
-
     }
 
     // update item status
@@ -130,9 +128,11 @@ class EstimateController extends Controller
         $userDetails = session('user_details');
         $estimate = Estimate::where('estimate_id', $id)->first();
         $materialItems = EstimateItem::where('estimate_id', $id)->where('item_type', '<>', 'upgrades')->get();
+        $upgrades = EstimateItem::with('assemblies')->where('estimate_id', $id)->where('item_type', 'upgrades')->where('upgrade_status', 'accepted')->get();
+        $itemTemplates = EstimateItemTemplates::with('templateItems')->where('estimate_id', $id)->get();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
 
-        return view('viewEstimateMaterials', ['items' => $materialItems, 'customer' => $customer, 'estimate' => $estimate]);
+        return view('viewEstimateMaterials', ['items' => $materialItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
     }
     // view Estimate Materials
 
@@ -574,10 +574,9 @@ class EstimateController extends Controller
             }
 
             return view('calendar', ['estimates' => $estimates]);
-        }elseif($userDetails['user_role'] == 'schedular'){
+        } elseif ($userDetails['user_role'] == 'schedular') {
             $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->get();
-        } 
-        else {
+        } else {
             $estimates = Estimate::get();
         }
 
@@ -628,27 +627,40 @@ class EstimateController extends Controller
             $estimate->save();
 
             return response()->json(['success' => true, 'message' => 'Estimate Canceled!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
 
     public function index()
-{
-    $userDetails = session('user_details');
-    if ($userDetails['user_role'] == 'admin') {
-        $customers = Customer::get();
-        $estimates = Estimate::orderBy('created_at', 'desc')->get(); // Retrieve estimates in descending order
-        $users = User::where('user_role', '<>', 'crew')->get();
-    } elseif ($userDetails['user_role'] == 'schedular') {
-        $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->orderBy('created_at', 'desc')->get(); // Retrieve estimates in descending order
-        $customers = Customer::get();
-        $users = User::where('user_role', '<>', 'crew')->get();
+    {
+        $userDetails = session('user_details');
+        if ($userDetails['user_role'] == 'admin') {
+            $customers = Customer::get();
+            $estimates = Estimate::with('schedular', 'assigned_work')->orderBy('created_at', 'desc')->get();
+            $users = User::where('user_role', '<>', 'crew')->get();
+        } elseif ($userDetails['user_role'] == 'schedular') {
+            $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->orderBy('created_at', 'desc')->get();
+            $customers = Customer::get();
+            $users = User::where('user_role', '<>', 'crew')->get();
+        }
+
+        // Access related data for each estimate
+        foreach ($estimates as $estimate) {
+            if ($estimate->assigned_work) {
+                $crew = User::find($estimate->assigned_work->work_assign_id);
+                $estimate->crew = $crew;
+            } else {
+                // Handle the case where assigned_work is null
+                $estimate->crew = null;
+            }
+        }
+
+        // dd($estimates);
+
+        return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails, 'customers' => $customers, 'users' => $users]);
     }
 
-    return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails, 'customers' => $customers, 'users' => $users]);
-}
 
     // ==============================================================Estimate additional functions=========================================================
     // delete files
@@ -1585,26 +1597,15 @@ class EstimateController extends Controller
 
             $estimateItem->save();
 
-            // Delete EstimateItemAssembly data that is not in the request
-            if ($validatedData['assembly_id'] != null) {
-                $assemblyIdsInRequest = $validatedData['assembly_id'];
-                EstimateItemAssembly::where('estimate_item_id', $validatedData['item_id'])
-                    ->whereNotIn('estimate_item_assembly_id', $assemblyIdsInRequest)
-                    ->delete();
+            $estItemAssembly = EstimateItemAssembly::where('estimate_item_id', $validatedData['item_id'])->get();
+
+            foreach ($estItemAssembly as $assembly) {
+                $assembly->delete();
             }
+            
             // Update or insert EstimateItemAssembly data
             foreach ($validatedData['assembly_name'] as $key => $assemblyName) {
-                // Check if assembly ID exists, update if it does, otherwise insert
-                if (isset($validatedData['assembly_id'][$key])) {
-                    // Update existing record
-                    $assemblyId = $validatedData['assembly_id'][$key];
-                    $assembly = EstimateItemAssembly::find($assemblyId);
-                    $assembly->est_ass_item_name = $validatedData['assembly_name'][$key];
-                    $assembly->item_unit_by_ass_unit = $validatedData['assembly_unit_by_item_unit'][$key];
-                    $assembly->ass_unit_by_item_unit = $validatedData['item_unit_by_assembly_unit'][$key];
-                    $assembly->save();
-                } else {
-                    // Insert new record
+                if ($assemblyName != null) {
                     $assemblyData = [
                         'added_user_id' => $userDetails['id'],
                         'estimate_id' => $validatedData['estimate_id'],
@@ -1615,6 +1616,7 @@ class EstimateController extends Controller
                     ];
                     EstimateItemAssembly::create($assemblyData);
                 }
+                // Insert new record
             }
             return response()->json(['success' => true, 'message' => 'Item updated successfully!'], 200);
         } catch (\Exception $e) {
@@ -1696,19 +1698,21 @@ class EstimateController extends Controller
             if (isset($validatedData['assembly_name'])) {
                 // Iterate through each assembly name
                 foreach ($validatedData['assembly_name'] as $key => $assemblyName) {
-                    // Calculate the sum for 'assembly_unit_by_item_unit' and 'item_unit_by_assembly_unit'
-                    $itemUnitByAssUnitSum = $validatedData['assembly_unit_by_item_unit'][$key];
-                    $assUnitByItemUnitSum = $validatedData['item_unit_by_assembly_unit'][$key];
+                    if ($assemblyName != null) {
+                        // Calculate the sum for 'assembly_unit_by_item_unit' and 'item_unit_by_assembly_unit'
+                        $itemUnitByAssUnitSum = $validatedData['assembly_unit_by_item_unit'][$key];
+                        $assUnitByItemUnitSum = $validatedData['item_unit_by_assembly_unit'][$key];
 
-                    // Create a new ItemAssembly for each assembly name
-                    EstimateItemAssembly::create([
-                        'added_user_id' => $userDetails['id'],
-                        'estimate_id' => $validatedData['estimate_id'],
-                        'estimate_item_id' => $estimateItem->estimate_item_id,
-                        'est_ass_item_name' => $assemblyName,
-                        'item_unit_by_ass_unit' => $itemUnitByAssUnitSum,
-                        'ass_unit_by_item_unit' => $assUnitByItemUnitSum,
-                    ]);
+                        // Create a new ItemAssembly for each assembly name
+                        EstimateItemAssembly::create([
+                            'added_user_id' => $userDetails['id'],
+                            'estimate_id' => $validatedData['estimate_id'],
+                            'estimate_item_id' => $estimateItem->estimate_item_id,
+                            'est_ass_item_name' => $assemblyName,
+                            'item_unit_by_ass_unit' => $itemUnitByAssUnitSum,
+                            'ass_unit_by_item_unit' => $assUnitByItemUnitSum,
+                        ]);
+                    }
                 }
             }
             // foreach ($itemsData as $item) {
@@ -2145,7 +2149,6 @@ class EstimateController extends Controller
                 ]);
 
                 $zr = ['zapier' => 'message sent to zapier!'];
-
             } catch (\Exception $e) {
                 $zr = ['error' => $e->getMessage()];
             }

@@ -15,6 +15,15 @@ class Estimate extends Model
         return $this->hasMany(EstimateImages::class, 'estimate_id');
     }
 
+    public function schedular()
+    {
+        return $this->belongsTo(User::class, 'estimate_schedule_assigned_to');
+    }
+
+    public function assigned_work()
+    {
+        return $this->belongsTo(ScheduleEstimate::class, 'estimate_id');
+    }
 
     protected $table = 'estimates';
 

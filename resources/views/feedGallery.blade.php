@@ -4,15 +4,6 @@
         <div class="rounded-t-lg bg-[#930027] grid sm:grid-cols-12 ">
             <div class="col-span-6 flex justify-between p-4">
                 <h2 class="my-auto pr-3 font-medium  text-white">Gallery list</h2>
-                <x-add-button :title="'All'" :id="''" :class="'bg-[#E02B20] px-6'"></x-add-button>
-                <x-add-button :title="'New'" :id="''" :class="' px-6'"></x-add-button>
-                <x-add-button :title="'Pending'" :id="''" :class="' px-6'"></x-add-button>
-                <x-add-button :title="'Complete'" :id="''" :class="' px-6'"></x-add-button>
-            </div>
-            <div class="col-span-6 flex justify-end">
-                <div class="my-auto">
-                    <img class=" m-2" src="{{ asset('assets/images/searchbox.svg') }}" alt="">
-                </div>
             </div>
         </div>
         <hr class="bg-gray-900">

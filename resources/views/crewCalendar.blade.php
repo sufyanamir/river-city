@@ -156,125 +156,123 @@
         </div>
     </div>
 </div>
-    <script>
+<style>
+    .crew-rating-container {
+        display: flex;
+    }
+</style>
+
+<script>
     let currentDate = new Date();
 
     function generateWeek(startDate, crewsData) {
-    const tableBody = document.getElementById('table-body');
-    tableBody.innerHTML = '';
+        const tableBody = document.getElementById('table-body');
+        tableBody.innerHTML = '';
 
-    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const headerCells = document.getElementsByTagName('th');
+        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const headerCells = document.getElementsByTagName('th');
 
-    // Loop through each crew
-    crewsData.forEach(crew => {
-        // Create a single row for each crew
-        const row = document.createElement('tr');
+        // Loop through each crew
+        crewsData.forEach(crew => {
+            // Create a single row for each crew
+            const row = document.createElement('tr');
 
-        // Create a crew cell for crew name and image
-        const crewCell = document.createElement('td');
+            // Create a crew cell for crew name and image
+            const crewCell = document.createElement('td');
 
-        // Create a container for crew image and name
-        const crewContainer = document.createElement('div');
-        crewContainer.classList.add('crew-container');
+            // Create a container for crew image and name
+            const crewContainer = document.createElement('div');
+            crewContainer.classList.add('crew-container');
 
-        // Create image element for the crew
-        // Create image element for the crew
-        const crewImage = document.createElement('img');
-        // Check if crew has an image, if not, set default image path
-        crewImage.src = crew.image ? "{{ asset('') }}" + crew.image : "{{ asset('assets/images/demo-user.svg') }}";
-        crewImage.alt = crew.name;
-        crewImage.classList.add('crew-image');
+            // Create image element for the crew
+            const crewImage = document.createElement('img');
+            // Check if crew has an image, if not, set default image path
+            crewImage.src = crew.image ? "{{ asset('') }}" + crew.image : "{{ asset('assets/images/demo-user.svg') }}";
+            crewImage.alt = crew.name;
+            crewImage.classList.add('crew-image');
 
+            // Create a span for crew name
+            const crewNameSpan = document.createElement('span');
+            crewNameSpan.textContent = crew.name + ' ';
+            crewNameSpan.classList.add('crew-name');
 
-        // Create a span for crew name
-        const crewNameSpan = document.createElement('span');
-        crewNameSpan.textContent = crew.name + ' ' + (crew.rating ? crew.rating : '');
-        crewNameSpan.classList.add('crew-name');
+            // Append image and name elements to the container
+            crewContainer.appendChild(crewImage);
+            crewContainer.appendChild(crewNameSpan);
 
-        // Append image and name elements to the container
-        crewContainer.appendChild(crewImage);
-        crewContainer.appendChild(crewNameSpan);
+            // Append the container to the crew cell
+            crewCell.appendChild(crewContainer);
 
-        // Append the container to the crew cell
-        crewCell.appendChild(crewContainer);
+            // Append the crew cell to the row
+            row.appendChild(crewCell);
 
-        // Append the crew cell to the row
-        row.appendChild(crewCell);
-        // Create a span for crew rating
-        const crewRatingSpan = document.createElement('span');
-const rating = crew.rating;
-let ratingStars = '';
+            // Create a container for crew rating stars
+            const crewRatingContainer = document.createElement('div');
+            crewRatingContainer.classList.add('crew-rating-container');
 
-// Check if crew has a rating
-if (rating) {
-    // Generate "(*...*)" string based on the rating value
-    for (let i = 0; i < rating; i++) {
-        ratingStars += '*';
-    }
-
-    ratingStars = `(${ratingStars})`; // Enclose the stars within parentheses
-}
-
-crewRatingSpan.textContent = ratingStars;
-crewRatingSpan.classList.add('crew-rating');
-
-
-crewRatingSpan.textContent = ratingStars;
-crewRatingSpan.classList.add('crew-rating');
-crewRatingSpan.classList.add('text-right');
-
-// Append the rating span to the crew container
-crewContainer.appendChild(crewRatingSpan);
-
-        // Loop through each day of the week
-        for (let i = 0; i < 7; i++) {
-            const loopDate = new Date(startDate);
-            loopDate.setDate(startDate.getDate() + i);
-            const day = daysOfWeek[loopDate.getDay()];
-            const date = loopDate.getDate();
-
-            headerCells[i + 1].textContent = day + ' ' + date;
-
-            // Check if any estimates fall within the current day and crew
-            const badges = [];
-
-            crew.estimates.forEach(estimate => {
-                const estimateStartDate = new Date(estimate.start_date);
-                const estimateEndDate = new Date(estimate.end_date);
-
-                if (
-                    loopDate.getTime() >= estimateStartDate.getTime() &&
-                    loopDate.getTime() <= estimateEndDate.getTime() + (24 * 60 * 60 * 1000) // Add one day to include the end date
-                ) {
-                    // Create a clickable badge
-                    const badge = document.createElement('button');
-                    badge.className = 'badge';
-                    badge.textContent = estimate.estimate.customer_name + (estimate.estimate.project_name ? ' (' + estimate.estimate.project_name + ')' : '');
-                    // badge.href = '/viewEstimate/' + estimate.estimate_id; // Set the URL here
-                    badge.id = 'viewEstimate' + estimate.estimate_id;
-                    badges.push(badge);
+            // Check if crew has a rating
+            if (crew.rating) {
+                // Create rating star images based on the crew's rating
+                for (let i = 0; i < crew.rating; i++) {
+                    const ratingStar = document.createElement('img');
+                    ratingStar.src = "{{ asset('assets/icons/rating-star.svg') }}"; // Path to rating star image
+                    ratingStar.alt = 'rating-star';
+                    ratingStar.classList.add('rating-star');
+                    crewRatingContainer.appendChild(ratingStar);
                 }
-            });
-
-            // Create a cell for each day
-            const cell = document.createElement('td');
-
-            // If badges exist for the current day, append them to the cell
-            if (badges.length > 0) {
-                badges.forEach(badge => {
-                    cell.appendChild(badge);
-                });
             }
 
-            // Append the cell to the row
-            row.appendChild(cell);
-        }
+            // Append the rating stars container to the crew container
+            crewContainer.appendChild(crewRatingContainer);
 
-        // Append the row to the table body
-        tableBody.appendChild(row);
-    });
-}
+            // Loop through each day of the week
+            for (let i = 0; i < 7; i++) {
+                const loopDate = new Date(startDate);
+                loopDate.setDate(startDate.getDate() + i);
+                const day = daysOfWeek[loopDate.getDay()];
+                const date = loopDate.getDate();
+
+                headerCells[i + 1].textContent = day + ' ' + date;
+
+                // Check if any estimates fall within the current day and crew
+                const badges = [];
+
+                crew.estimates.forEach(estimate => {
+                    const estimateStartDate = new Date(estimate.start_date);
+                    const estimateEndDate = new Date(estimate.end_date);
+
+                    if (
+                        loopDate.getTime() >= estimateStartDate.getTime() &&
+                        loopDate.getTime() <= estimateEndDate.getTime() + (24 * 60 * 60 * 1000) // Add one day to include the end date
+                    ) {
+                        // Create a clickable badge
+                        const badge = document.createElement('button');
+                        badge.className = 'badge';
+                        badge.textContent = estimate.estimate.customer_name + (estimate.estimate.project_name ? ' (' + estimate.estimate.project_name + ')' : '');
+                        // badge.href = '/viewEstimate/' + estimate.estimate_id; // Set the URL here
+                        badge.id = 'viewEstimate' + estimate.estimate_id;
+                        badges.push(badge);
+                    }
+                });
+
+                // Create a cell for each day
+                const cell = document.createElement('td');
+
+                // If badges exist for the current day, append them to the cell
+                if (badges.length > 0) {
+                    badges.forEach(badge => {
+                        cell.appendChild(badge);
+                    });
+                }
+
+                // Append the cell to the row
+                row.appendChild(cell);
+            }
+
+            // Append the row to the table body
+            tableBody.appendChild(row);
+        });
+    }
 
     // Data retrieved from the Laravel backend
     const estimates = {!! json_encode($estimates) !!};
@@ -282,12 +280,11 @@ crewContainer.appendChild(crewRatingSpan);
 
     // Transform data to match the structure expected by generateWeek function
     const crewsData = crewData.map(crew => ({
-    name: crew.name + ' ' + crew.last_name,
-    image: crew.user_image,
-    rating: crew.rating,
-    estimates: estimates.filter(estimate => estimate.work_assign_id === crew.id)
+        name: crew.name + ' ' + crew.last_name,
+        image: crew.user_image,
+        rating: crew.rating,
+        estimates: estimates.filter(estimate => estimate.work_assign_id === crew.id)
     }));
-
 
     // Usage:
     generateWeek(currentDate, crewsData);
@@ -309,59 +306,61 @@ crewContainer.appendChild(crewRatingSpan);
         $("#view-customerDetails").addClass('hidden');
         // $("#complete-estimate-form")[0].reset()
         $('#start_date').toggleClass('hidden');
-       $('#end_date').toggleClass('hidden');
-       $('#startDate').toggleClass('hidden');
-       $('#fendDate').toggleClass('hidden');
-       $('#editEvent').toggleClass('hidden');
-       $('#updateEvent').toggleClass('hidden');
+        $('#end_date').toggleClass('hidden');
+        $('#startDate').toggleClass('hidden');
+        $('#fendDate').toggleClass('hidden');
+        $('#editEvent').toggleClass('hidden');
+        $('#updateEvent').toggleClass('hidden');
     });
+
     // Event delegation for dynamic elements
-document.getElementById('table-body').addEventListener('click', function(event) {
-    if (event.target && event.target.matches('[id^="viewEstimate"]')) {
-        var itemId = event.target.id.replace('viewEstimate', ''); // Extract item ID from button ID
-        // Your AJAX request and modal manipulation code here...
-        // Make an AJAX request to get item details
-        $.ajax({
-            url: '/viewDataOnCrewCalendar' + itemId,
-            method: 'GET',
-            success: function(response) {
-                if (response.success) {
-                    // Populate the modal with the retrieved data
-                    var estimate = response.estimate;
-                    var estimateSchedule = response.estimateSchedule;
-                    var crew = response.crew;
-                    console.log(estimate);
-                    // Update modal content with item details
-                    $('#modal-title').text(estimate.customer_name + ' ' + estimate.customer_last_name);
-                    $('#customer_address').text(estimate.customer_address);
-                    $('#customer_email').text(estimate.customer_email);
-                    $('#customer_phone').text(estimate.customer_phone);
-                    $('#start_date').text(estimateSchedule.start_date);
-                    $('#end_date').text(estimateSchedule.end_date);
-                    $('#note').text(estimateSchedule.note);
-                    $('#estimate_id').val(estimateSchedule.estimate_id);
-                    // $('#date').val(formatDate(expenseDetail.expense_date));
-                    
-                    // Open the modal
-                    $('#view-customerDetails').removeClass('hidden');
-                } else {
-                    // Handle error response
-                    console.error('Error fetching item details.');
+    document.getElementById('table-body').addEventListener('click', function(event) {
+        if (event.target && event.target.matches('[id^="viewEstimate"]')) {
+            var itemId = event.target.id.replace('viewEstimate', ''); // Extract item ID from button ID
+            // Your AJAX request and modal manipulation code here...
+            // Make an AJAX request to get item details
+            $.ajax({
+                url: '/viewDataOnCrewCalendar' + itemId,
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        // Populate the modal with the retrieved data
+                        var estimate = response.estimate;
+                        var estimateSchedule = response.estimateSchedule;
+                        var crew = response.crew;
+                        console.log(estimate);
+                        // Update modal content with item details
+                        $('#modal-title').text(estimate.customer_name + ' ' + estimate.customer_last_name);
+                        $('#customer_address').text(estimate.customer_address);
+                        $('#customer_email').text(estimate.customer_email);
+                        $('#customer_phone').text(estimate.customer_phone);
+                        $('#start_date').text(estimateSchedule.start_date);
+                        $('#end_date').text(estimateSchedule.end_date);
+                        $('#note').text(estimateSchedule.note);
+                        $('#estimate_id').val(estimateSchedule.estimate_id);
+                        // $('#date').val(formatDate(expenseDetail.expense_date));
+
+                        // Open the modal
+                        $('#view-customerDetails').removeClass('hidden');
+                    } else {
+                        // Handle error response
+                        console.error('Error fetching item details.');
+                    }
+                },
+                error: function(error) {
+                    console.error('AJAX request failed:', error);
                 }
-            },
-            error: function(error) {
-                console.error('AJAX request failed:', error);
-            }
-        });
-    }
-});
-$("#editEvent").click(function (e) {
+            });
+        }
+    });
+
+    $("#editEvent").click(function (e) {
         e.preventDefault();
-       $('#start_date').toggleClass('hidden');
-       $('#end_date').toggleClass('hidden');
-       $('#startDate').toggleClass('hidden');
-       $('#fendDate').toggleClass('hidden');
-       $('#editEvent').toggleClass('hidden');
-       $('#updateEvent').toggleClass('hidden');
+        $('#start_date').toggleClass('hidden');
+        $('#end_date').toggleClass('hidden');
+        $('#startDate').toggleClass('hidden');
+        $('#fendDate').toggleClass('hidden');
+        $('#editEvent').toggleClass('hidden');
+        $('#updateEvent').toggleClass('hidden');
     });
 </script>
