@@ -36,12 +36,11 @@
                             <td>{{$item->estimate_id}}</td>
                             <td>
                                 <a href="/viewEstimate/{{ $item->estimate_id }}" class=" text-[#930027] hover:border-b hover:border-[#930027]">
-                                    {{ $item->customer_name }}
+                                    {{ $item->customer_name }} {{ $item->customer_last_name }}
                                 </a>
                             </td>
                             <td style=" width:50px;">
                                 {{ $item->customer_phone }}
-                                <p class="font-medium">Address:</p>
                                 <a href="https://maps.google.com/?q={{ $item->customer_address }}" target="_blank" class=" text-[#930027]">
                                     {{ $item->customer_address }}
                                 </a>
