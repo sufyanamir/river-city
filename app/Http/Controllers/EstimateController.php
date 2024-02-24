@@ -2118,7 +2118,6 @@ class EstimateController extends Controller
                     'potential_value' => $validatedData['potential_value'],
                     'company_internal_note' => $validatedData['internal_note'],
                     'source' => $validatedData['source'],
-                    'owner' => $validatedData['owner'],
                 ]);
             }
 
@@ -2133,6 +2132,7 @@ class EstimateController extends Controller
                 'project_number' => $validatedData['project_number'],
                 'project_type' => $validatedData['project_type'],
                 'building_type' => $validatedData['building_type'],
+                'project_owner' => $validatedData['owner'],
             ]);
 
             // After saving the customer, trigger the Zapier webhook

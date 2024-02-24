@@ -1,4 +1,4 @@
-@include('layouts.header');
+@include('layouts.header')
 <div class=" my-4">
     <div class=" bg-white w-full rounded-2xl shadow-lg">
         <div class=" flex justify-between p-3 bg-[#930027] text-white rounded-t-2xl">

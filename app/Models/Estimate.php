@@ -63,6 +63,7 @@ class Estimate extends Model
         'estimate_schedule_assigned_to',
         'building_type',
         'project_type',
+        'project_owner',
     ];
 
     public $timestamps = true;

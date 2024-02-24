@@ -78,7 +78,7 @@
                                 <div class=" flex justify-evenly gap-2">
                                     <div class=" my-auto">
                                         <a href="/estimates/getChatMessage/{{$item->estimate_id}}">
-                                            <button id="" class="inline-flex w-full chat-btn text-white justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold shadow-sm hover:bg-[#930017]" data-target="#chat-modal{{ $item->estimate_id }}" data-estimate-id="{{ $item->estimate_id }}">
+                                            <button id="" class="inline-flex w-full text-white justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold shadow-sm hover:bg-[#930017]" data-target="#chat-modal{{ $item->estimate_id }}" data-estimate-id="{{ $item->estimate_id }}">
                                                 <i class="fa-brands fa-rocketchat"></i>
                                             </button>
                                         </a>
