@@ -321,6 +321,41 @@ class UserController extends Controller
         }
     }
     // get users with roles
+    //edit users
+    public function editUser(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'userId' => 'required',
+                'firstName' => 'required|string',
+                'lastName' => 'nullable|string',
+                'email' => 'required|string',
+                'phone' => 'required|string',
+                'role' => 'required|string',
+                'address' => 'required|string',
+            ]);
+
+            $user = User::where('id', $validatedData['userId'])->first();
+
+            $user->name = $validatedData['firstName'];
+            $user->last_name = $validatedData['lastName'];
+            $user->email = $validatedData['email'];
+            $user->phone = $validatedData['phone'];
+            $user->user_role = $validatedData['role'];
+            $user->address = $validatedData['address'];
+
+            $user->save();
+
+            return response()->json(['success' => true, 'message' => 'User Updated!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    //edit users
+
     //add users
     public function addUsers(Request $request)
     {

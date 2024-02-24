@@ -45,8 +45,9 @@
 
                                         <!-- Modal panel -->
                                         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                                            <form action="/addUser" id="formData{{$user->id}}" enctype="multipart/form-data" method="post">
+                                            <form action="/editUser" id="formData{{$user->id}}" enctype="multipart/form-data" method="post">
                                                 @csrf
+                                                <input type="hidden" name="userId" value="{{$user->id}}">
                                                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                                     <!-- Modal content here -->
                                                     <div class=" flex justify-between border-b-2">
@@ -104,7 +105,7 @@
                                                                 </svg>
                                                             </div>
                                                             <div class="text" id="text">
-                                                                Add
+                                                                save
                                                             </div>
                                                         </button>
                                                     </div>

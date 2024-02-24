@@ -47,6 +47,7 @@ Route::middleware('customauth')->group(function () {
     Route::get('/userRole', [UserController::class, 'getUserRole']);
     Route::get('/users', [UserController::class, 'getUsersWithRoles']);
     Route::post('/addUser', [UserController::class, 'addUsers']);
+    Route::post('/editUser', [UserController::class, 'editUser']);
     Route::match(['get', 'post'], '/delete/user/{id}', [UserController::class, 'deleteUser']);
     Route::match(['get', 'post'], '/delete/userRole/{id}', [UserController::class, 'deleteUserRole']);
     
