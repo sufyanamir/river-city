@@ -58,7 +58,7 @@
                                 @endif
                                 </p>
                             </td>
-                            <td>{{ $item->schedular ? $item->schedular->name : 'Not Assigned' }}</td>
+                            <td>{{ $item->scheduler ? $item->scheduler->name : 'Not Assigned' }}</td>
                             <td>{{ $item->crew ? $item->crew->name : 'Not Assigned' }}</td>
                             @if ($item->estimate_status == 'pending')
                             <td>

@@ -20,7 +20,7 @@ class Estimate extends Model
         return $this->hasMany(EstimateImages::class, 'estimate_id');
     }
 
-    public function schedular()
+    public function scheduler()
     {
         return $this->belongsTo(User::class, 'estimate_schedule_assigned_to');
     }
