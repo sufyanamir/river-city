@@ -2150,7 +2150,7 @@ class EstimateController extends Controller
                 ]);
             }
 
-            return response()->json(['success' => true, 'zr' => $zr, 'message' => 'Estimate created Successfully!', 'estimate_id' => $estimate->estimate_id], 200);
+            return response()->json(['success' => true, 'message' => 'Estimate created Successfully!', 'estimate_id' => $estimate->estimate_id], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
