@@ -123,7 +123,6 @@
                     <form action="/setScheduleWork" id="schedule-work-form">
                         @csrf
                         <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
-                        <h1>Schedule Work</h1>
                         <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                             <!-- Modal content here -->
                             <div class=" flex justify-between">
@@ -199,7 +198,6 @@
                 <form action="/setScheduleEstimate" id="schedule-estimate-form">
                     @csrf
                     <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
-                    <h1>Schedule Estimate</h1>
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <!-- Modal content here -->
                         <div class=" flex justify-between">
