@@ -2135,24 +2135,6 @@ class EstimateController extends Controller
                 'project_owner' => $validatedData['owner'],
             ]);
 
-            // After saving the customer, trigger the Zapier webhook
-            try {
-                $response = Http::post('https://hooks.zapier.com/hooks/catch/7921384/3ethi9f/', [
-                    'first_name' => $estimate->customer_name,
-                    'last_name' => $estimate->customer_last_name,
-                    'phone' => $estimate->customer_phone,
-                    'address' =>  $estimate->customer_address,
-                    'project_name' => $estimate->project_name,
-                    'project_type' => $estimate->project_type,
-                    'building_type' => $estimate->building_type,
-                    // Add any additional data you want to send to Zapier
-                ]);
-
-                $zr = ['zapier' => 'message sent to zapier!'];
-            } catch (\Exception $e) {
-                $zr = ['error' => $e->getMessage()];
-            }
-
             if ($validatedData['customer_id']) {
                 $customer = Customer::find($validatedData['customer_id']);
                 $notificationMessage = "A new Estimate has been created for " . $customer->customer_first_name . " " . $customer->customer_last_name . ".";
