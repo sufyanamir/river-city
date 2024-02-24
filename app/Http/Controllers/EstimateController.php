@@ -637,7 +637,7 @@ class EstimateController extends Controller
         $userDetails = session('user_details');
         if ($userDetails['user_role'] == 'admin') {
             $customers = Customer::get();
-            $estimates = Estimate::with('schedular', 'assigned_work')->orderBy('created_at', 'desc')->get();
+            $estimates = Estimate::with('schedular', 'assigned_work', 'customer')->orderBy('created_at', 'desc')->get();
             $users = User::where('user_role', '<>', 'crew')->get();
         } elseif ($userDetails['user_role'] == 'schedular') {
             $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->orderBy('created_at', 'desc')->get();

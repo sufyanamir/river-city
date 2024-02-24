@@ -36,11 +36,12 @@
                             <td>{{$item->estimate_id}}</td>
                             <td>
                                 <a href="/viewEstimate/{{ $item->estimate_id }}" class=" text-[#930027] hover:border-b hover:border-[#930027]">
-                                    {{ $item->customer_name }} {{ $item->customer_last_name }}
+                                    {{ ucwords($item->customer_name) }} {{ ucwords($item->customer_last_name) }} {{ isset($item->customer->customer_company_name) ? '('.$item->customer->customer_company_name.')' : '' }}
                                 </a>
                             </td>
                             <td style=" width:50px;">
                                 {{ $item->customer_phone }}
+                                <br>
                                 <a href="https://maps.google.com/?q={{ $item->customer_address }}" target="_blank" class=" text-[#930027]">
                                     {{ $item->customer_address }}
                                 </a>
@@ -49,11 +50,11 @@
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item->project_type)
                                 <p class="font-medium">Project Type:</p>
-                                {{ $item->project_type }}
+                                {{ ucwords($item->project_type) }}
                                 @endif
                                 @if ($item->building_type)
                                 <p class="font-medium">Building Type:</p>
-                                {{ $item->building_type }}
+                                {{ ucwords($item->building_type) }}
                                 @endif
                                 </p>
                             </td>
