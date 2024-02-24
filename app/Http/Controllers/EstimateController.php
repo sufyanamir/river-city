@@ -481,6 +481,8 @@ class EstimateController extends Controller
 
             $estimate->estimate_schedule_assigned = 1;
             $estimate->estimate_schedule_assigned_to = $validatedData['assign_estimate_completion'];
+            $estimate->scheduled_start_date = $validatedData['start_date'];
+            $estimate->scheduled_end_date = $validatedData['end_date'];
             $estimate->save();
             return response()->json(['success' => true, 'message' => 'Estimate is Scheduled!', 'estimate_id' => $estimate->estimate_id], 200);
         } catch (\Exception $e) {
@@ -497,7 +499,7 @@ class EstimateController extends Controller
         $estimate = Estimate::where('estimate_id', $id)->first();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
         $estimates = Estimate::get();
-        $users = User::where('added_user_id', $userDetails['id'])->where('user_role', 'schedular')->get();
+        $users = User::where('added_user_id', $userDetails['id'])->where('user_role', 'scheduler')->get();
 
         return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users]);
         // return response()->json(['success' => true, 'estimate' => $estimate]);
@@ -574,7 +576,7 @@ class EstimateController extends Controller
             }
 
             return view('calendar', ['estimates' => $estimates]);
-        } elseif ($userDetails['user_role'] == 'schedular') {
+        } elseif ($userDetails['user_role'] == 'scheduler') {
             $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->get();
         } else {
             $estimates = Estimate::get();
@@ -637,9 +639,9 @@ class EstimateController extends Controller
         $userDetails = session('user_details');
         if ($userDetails['user_role'] == 'admin') {
             $customers = Customer::get();
-            $estimates = Estimate::with('schedular', 'assigned_work', 'customer')->orderBy('created_at', 'desc')->get();
+            $estimates = Estimate::with('scheduler', 'assigned_work', 'customer')->orderBy('created_at', 'desc')->get();
             $users = User::where('user_role', '<>', 'crew')->get();
-        } elseif ($userDetails['user_role'] == 'schedular') {
+        } elseif ($userDetails['user_role'] == 'scheduler') {
             $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->orderBy('created_at', 'desc')->get();
             $customers = Customer::get();
             $users = User::where('user_role', '<>', 'crew')->get();

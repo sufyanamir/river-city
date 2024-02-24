@@ -240,7 +240,7 @@
                                     $scheduler = \App\Models\User::find($schedule->estimate_complete_assigned_to);
                                 @endphp
 
-                                @if (session('user_details')['user_role'] == 'schedular')
+                                @if (session('user_details')['user_role'] == 'scheduler')
                                     @if($estimate->estimate_schedule_assigned_to == session('user_details')['id'])
                                     <tr>
                                         <td>{{ $estimate->created_at }}</td>
