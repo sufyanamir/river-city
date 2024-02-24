@@ -10,6 +10,11 @@ class Estimate extends Model
     use HasFactory;
     // Estimate.php
 
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
     public function images()
     {
         return $this->hasMany(EstimateImages::class, 'estimate_id');
