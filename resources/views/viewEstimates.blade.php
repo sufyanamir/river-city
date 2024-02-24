@@ -474,6 +474,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <span class=" my-auto">Complete Estimate</span>
                         </button>
                         @endif
+                        @if($estimate->estimate_total != null)
                         @if($user_details['user_role'] == 'admin')
                         <form action="/sendInvoiceToQB" method="post">
                             @csrf
@@ -489,6 +490,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                 </div>
                             </button>
                         </form>
+                        @endif
                         @endif
                         {{-- <button type="button"
                             class="flex h-[40px] w-[190px] ml-2  px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#F4AC50]"
@@ -4768,7 +4770,7 @@ $userPrivileges->estimate->expenses === 'on')
                             newele.html(`
                                 <select name="assembly_name[]" id="" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
-                                    <option selected value="${itemData.assembly_name}" data-unit="{{ $item->item_units }}">${itemData.assembly_name}</option>
+                                    <option selected value="${itemData.assembly_name}" data-unit="{{ isset($item) ? $item->item_units : '' }}">${itemData.assembly_name}</option>
                                     @foreach ($itemsForAssemblies as $item)
                                     <option value="{{ $item->item_name }}"  data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
                                     @endforeach
@@ -5480,7 +5482,7 @@ $userPrivileges->estimate->expenses === 'on')
                             <input type="hidden" name="assembly_id[]" id="assembly_id" value="${itemData.estimate_item_assembly_id}">
                                 <select name="assembly_name[]" id="" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
-                                    <option selected value="${itemData.est_ass_item_name}" data-unit="{{ $item->item_units }}">${itemData.est_ass_item_name}</option>
+                                    <option selected value="${itemData.est_ass_item_name}" data-unit="{{ isset($item) ? $item->item_units : '' }}">${itemData.est_ass_item_name}</option>
                                     @foreach ($itemsForAssemblies as $item)
                                     <option value="{{ $item->item_name }}"  data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
                                     @endforeach
@@ -5558,7 +5560,11 @@ $userPrivileges->estimate->expenses === 'on')
     $(".modal-close").click(function(e) {
         e.preventDefault();
         $("#addItems-modal").addClass('hidden');
-        // $("#formData")[0].reset()
+        $("#itemsForm")[0].reset()
+        $('#itemsForm').attr('action', '/addEstimateItems');
+        $('#deleteItem-btn').addClass('hidden')
+        $('#mulitple_input').empty();
+        $('#multiAdd-items').addClass('hidden');
     });
     $("#addTemplate").click(function(e) {
         e.preventDefault();

@@ -58,7 +58,8 @@ class DashboardController extends Controller
         } else {
             $customers = Customer::get();
             $staff = User::where('user_role', '<>', 'admin')->get();
-            $confirmedOrders = Estimate::get();
+            $confirmedOrders = Estimate::where('estimate_status', '<>', 'cancel')->get();
+            $totalRevenue = Estimate::where('estimate_status', '<>', 'cancel')->sum('estimate_total');
             $schedules = EstimateSchedule::get();
             
             // Initialize $estimates as an empty array
@@ -86,6 +87,7 @@ class DashboardController extends Controller
                 'completeEstimates' => $completeEstimates,
                 'pendingEstimates' => $pendingEstimates,
                 'cancelEstimates' => $cancelEstimates,
+                'revenue' => $totalRevenue,
             ]);
         }
     }

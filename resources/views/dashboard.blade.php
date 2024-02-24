@@ -1,7 +1,7 @@
 @include('layouts.header')
 <div class="my-2">
     <h1 class=" text-2xl font-semibold">
-        {{ session('user_details')['user_role'] }} Dashboard
+        Hello! {{ session('user_details')['name'] }}
     </h1>
     <div class=" flex justify-start gap-2 my-5">
         <div class="pt-3"><img src="{{ asset('assets/icons/borderbar.svg') }}" alt="img"></div>
@@ -9,7 +9,7 @@
             <p>Today</p>
         </div>
         <div class="font-semibold">
-            <p> 23, December 2023</p>
+        <p>{{ date('d, F Y') }}</p>
         </div>
     </div>
     <div>
@@ -25,7 +25,7 @@
                 <x-dashboard-cards :title="'Total Customers'" :value="count($customers)" :img="'dashboard-graphs.svg'"></x-dashboard-cards>
                 <x-dashboard-cards :title="'Total Staff'" :value="count($staff)" :img="'dashboard-users.svg'"></x-dashboard-cards>
                 <x-dashboard-cards :title="'Confirm Orders'" :value="count($confirm_orders)" :img="'dashboard-orders.svg'"></x-dashboard-cards>
-                <x-dashboard-cards :title="'Total Revenue'" :value="'5732'" :img="'dashboard-dollar.svg'"></x-dashboard-cards>
+                <x-dashboard-cards :title="'Total Revenue'" :value="$revenue" :img="'dashboard-dollar.svg'"></x-dashboard-cards>
             </div>
         @endif
     </div>
@@ -46,8 +46,7 @@
                     </div>
                     <div class=" p-2 my-auto text-center">
                         <div class=" my-2">
-                            <h2 class=" text-2xl font-semibold">$456,005.56</h2>
-                            <p class=" text-sm text-gray-300">from $500,000.00</p>
+                            <h2 class=" text-2xl font-semibold">${{$revenue}}</h2>
                         </div>
                         <div class=" my-2">
                             <p class=" text-sm text-gray-300">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
