@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Estimate;
 use App\Models\EstimateChat;
 use App\Models\Notifications;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class EstimateChatController extends Controller
@@ -43,6 +44,7 @@ class EstimateChatController extends Controller
                             $notificationMessage = $userDetails['name'] . " mentioned you in the chat of this estimate " . $validatedData['estimate_id'] . ".";
                             $notification = Notifications::create([
                                 'added_user_id' => $userDetails['id'],
+                                'estimate_id' => $validatedData['estimate_id'],
                                 'notification_message' => $notificationMessage,
                                 'mentioned_user_id' => $singleMentionedId,
                                 'notification_type' => 'mention',
@@ -64,10 +66,11 @@ class EstimateChatController extends Controller
             $estimate = Estimate::where('estimate_id', $id)->first();
             $customer = Estimate::where('customer_id', $estimate->customer_id)->first();
             $chatMessages = EstimateChat::where('estimate_id', $id)->get();
+            $users = User::where('id', '<>', $userDetails['id'])->get();
 
             // Assuming you have a Blade view named 'chat_messages.blade.php' for formatting the messages
             // $html = view('chat_messages', compact('chatMessages'))->render();
 
-            return view('estimateChat', ['chatMessages' => $chatMessages, 'estimate' => $estimate, 'customer' => $customer]);
+            return view('estimateChat', ['chatMessages' => $chatMessages, 'estimate' => $estimate, 'customer' => $customer, 'users' => $users]);
     }
 }

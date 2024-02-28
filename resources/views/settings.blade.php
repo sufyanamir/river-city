@@ -27,7 +27,7 @@
                     </div>
                     <div>
                         <label for="phone_number" class="block mb-2 font-medium text-[#930027]">Phone Number</label>
-                        <input type="text" id="phone_number" name="phone" class="bg-gray-50 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ $user_details['phone'] }}" placeholder="Enter Your Number">
+                        <input type="text" id="phone_number" name="phone" pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}" class="bg-gray-50 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ $user_details['phone'] }}" placeholder="XXX-XXX-XXXX/XXXXXXXXXX">
                     </div>
                     <div class=" col-span-2">
                         <label for="Address" class="block mb-2 font-medium text-[#930027]">Address</label>

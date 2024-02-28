@@ -173,7 +173,7 @@ class UserController extends Controller
     public function updateCrew(Request $request)
     {
         try {
-            
+
             $userDetails = session('user_details');
 
             $validatedData = $request->validate([
@@ -191,6 +191,24 @@ class UserController extends Controller
 
             $crew = User::where('id', $validatedData['crewId'])->where('user_role', 'crew')->first();
 
+            if ($request->hasFile('upload_image')) {
+                // Delete previous image if exists
+                if ($crew->user_image) {
+                    // Construct full path to the previous image
+                    $previousImagePath = public_path($crew->user_image);
+
+                    // Check if the file exists before attempting to delete it
+                    if (file_exists($previousImagePath)) {
+                        unlink($previousImagePath);
+                    }
+                }
+
+                $image = $request->file('upload_image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/user_images', $imageName);
+                $crew->user_image = 'storage/user_images/' . $imageName;
+            }
+
             $crew->name = $validatedData['firstName'];
             $crew->last_name = $validatedData['lastName'];
             $crew->email = $validatedData['email'];
@@ -205,7 +223,6 @@ class UserController extends Controller
             $crew->save();
 
             return response()->json(['success' => true, 'message' => 'Crew data updated!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -261,7 +278,7 @@ class UserController extends Controller
                 'added_user_id' => $userDetails['id'],
             ]);
 
-            $notificationMessage = "A new Crew member ". $users['name'] ." ". $users['last_name'] . " has been added in the Crews.";
+            $notificationMessage = "A new Crew member " . $users['name'] . " " . $users['last_name'] . " has been added in the Crews.";
             $notification = Notifications::create([
                 'added_user_id' => $userDetails['id'],
                 'notification_message' => $notificationMessage,
@@ -339,6 +356,25 @@ class UserController extends Controller
 
             $user = User::where('id', $validatedData['userId'])->first();
 
+            // Handle image upload
+            if ($request->hasFile('upload_image')) {
+                // Delete previous image if exists
+                if ($user->user_image) {
+                    // Construct full path to the previous image
+                    $previousImagePath = public_path($user->user_image);
+
+                    // Check if the file exists before attempting to delete it
+                    if (file_exists($previousImagePath)) {
+                        unlink($previousImagePath);
+                    }
+                }
+
+                $image = $request->file('upload_image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/user_images', $imageName);
+                $user->user_image = 'storage/user_images/' . $imageName;
+            }
+
             $user->name = $validatedData['firstName'];
             $user->last_name = $validatedData['lastName'];
             $user->email = $validatedData['email'];
@@ -349,7 +385,6 @@ class UserController extends Controller
             $user->save();
 
             return response()->json(['success' => true, 'message' => 'User Updated!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -394,7 +429,7 @@ class UserController extends Controller
                 'added_user_id' => $userDetails['id'],
             ]);
 
-            $notificationMessage = "A new user ". $users['name'] ." ". $users['last_name'] . " has been added with the user role ". $users['user_role'] .".";
+            $notificationMessage = "A new user " . $users['name'] . " " . $users['last_name'] . " has been added with the user role " . $users['user_role'] . ".";
             $notification = Notifications::create([
                 'added_user_id' => $userDetails['id'],
                 'notification_message' => $notificationMessage,

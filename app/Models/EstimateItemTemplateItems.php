@@ -26,6 +26,7 @@ class EstimateItemTemplateItems extends Model
         'item_price',
         'item_description',
         'item_note',
+        'item_type',
     ];
 
     public $timestamps = true;

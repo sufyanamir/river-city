@@ -60,7 +60,7 @@
                             {{ $estimate->estimate_status }}
                         </p>
                         <p class="text-[#323C47]">
-                            {{ $estimate->created_at }}
+                            {{ date('d, F Y', strtotime($estimate->created_at)) }}
                         </p>
                     </div>
                 </div>
@@ -100,6 +100,50 @@
                     </tbody>
                 </table>
             </div>
+            @foreach($assemblies as $item)
+            <div class="mb-2 p-2 bg-white shadow-xl">
+                <div class=" flex justify-between p-3 bg-[#930027] text-white w-full rounded-t-lg">
+                    <h1 class=" font-medium my-auto">{{ $item->item_name }}</h1>
+                    <h1 class=" font-medium my-auto">QTY: {{ $item->item_qty }}</h1>
+                </div>
+                <div class="relative overflow-x-auto">
+                    <div class="itemDiv">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">Check</th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Item Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Quantity
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                $assemblyItems = $item->assemblies; // Fetch related EstimateItemAssembly items
+                                @endphp
+                                @foreach ($assemblyItems as $assembly)
+                                <tr class="bg-white border-b">
+                                    <td class="px-6 py-4">
+                                        <input type="checkbox" disabled name="privileges[reports][view]" id="privilegeReportsView">
+                                        <label for="privilegeReportsView" class=" text-gray-500"></label>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <label class="text-lg font-semibold text-[#323C47]" for="">{{ $assembly['est_ass_item_name'] }}</label>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <label class="text-lg font-semibold text-[#323C47]" for="">{{ $assembly['item_unit_by_ass_unit'] }}</label>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @endforeach
             @foreach($templates as $template)
             <div class="mb-2 p-2 bg-white shadow-xl">
                 <div class=" flex justify-between p-3 bg-[#930027] text-white w-full rounded-t-lg">

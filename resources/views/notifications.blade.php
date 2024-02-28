@@ -21,10 +21,10 @@
                     @endif
                 </span>
                 <div class=" flex justify-between gap-2">
-                    <a href="" class=" hover:border-b border-[#930027]">
+                    <a href="/estimates/getChatMessage/{{$notification->estimate_id}}" class=" hover:border-b border-[#930027]">
                         <p class=" text-[#930027]">{{ $notification->notification_message }}</p>
                     </a>
-                    <p class=" text-xs">{{ $notification->created_at }}</p>
+                    <p class=" text-xs">{{ date('d, F Y', strtotime($notification->created_at)) }}</p>
                 </div>
             </div>
             @endforeach
@@ -36,7 +36,7 @@
                 </span>
                 <div class=" flex justify-between gap-2">
                     <p>{{ $notification->notification_message }}</p>
-                    <p class=" text-xs">{{ $notification->created_at }}</p>
+                    <p class=" text-xs">{{ date('d, F Y', strtotime($notification->created_at)) }}</p>
                 </div>
             </div>
             @endforeach

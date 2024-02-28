@@ -1,4 +1,27 @@
 @include('layouts.header')
+<style>
+    /* Add your CSS styling here */
+#userDropdown {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+#userDropdown button {
+    width: 100%;
+    padding: 8px;
+    text-align: left;
+    border: none;
+    background-color: white;
+    border-radius: 4px;
+}
+#userDropdown button:hover{
+    background-color: #f5f5f5;
+}
+</style>
 <div class="bg-white rounded-lg mt-2">
     <div class=" flex justify-between bg-[#930027] p-3 rounded-t-lg">
         <h2 class=" text-xl font-semibold mb-2 text-white " id="modal-title">Project Chat</h2>
@@ -32,7 +55,7 @@
                             <img src="{{ asset('assets/icons/person-icon.svg') }}" alt="">
                 <span class="pl-2 flex">{{ $customer->owner }} Assigned To Schedule Estimate On <span class="pl-2 text-[#31A613] flex">
                         <img class="pr-1" src="{{ asset('assets/icons/green-calendar.svg') }}" alt="">
-                        {{ $customer->created_at }}</span>
+                        {{ date('d, F Y', strtotime($customer->created_at)) }}</span>
                 </span>
                 </p> --}}
             </div>
@@ -49,7 +72,7 @@
                     {{ $estimate->estimate_status }}
                 </p>
                 <p class="text-[#323C47]">
-                    {{ $estimate->created_at }}
+                    {{ date('d, F Y', strtotime($estimate->created_at)) }}
                 </p>
             </div>
         </div>
@@ -63,7 +86,7 @@
                     <div class="m-2">
                         <div>
                             <div class="text-right">
-                                <span class="text-sm">{{ $message->created_at->format('m/d/Y, H:i:s') }}</span>
+                                <span class="text-sm">{{ date('d, F Y', strtotime($message->created_at)) }}</span>
                             </div>
                             <div class="flex justify-start gap-2">
                                 <h6 class="font-medium text-red-500">{{ $message->added_user_name }}: </h6>
@@ -98,3 +121,77 @@
     </div>
 </div>
 @include('layouts.footer')
+<script>
+    // Your existing JavaScript code
+        // Your list of users with names and ids
+const users = {!! json_encode($users->pluck('name', 'id')) !!};
+
+// Get the textarea, user dropdown, and hidden input elements
+const messageTextarea = $("#message");
+const userDropdown = $("#userDropdown");
+const userIdInput = $("#mentioned_user_ids");
+
+// Append the hidden input to the form
+// $("#chat-form").append(userIdInput);
+
+// Track mentioned user ids
+let mentionedUserIds = [];
+
+// Event listener for typing '@' in the textarea
+messageTextarea.on("input", function(event) {
+    const text = event.target.value;
+    const lastIndex = text.lastIndexOf("@");
+
+    if (lastIndex !== -1) {
+        const query = text.substring(lastIndex + 1);
+        const matchingUsers = Object.entries(users)
+            .filter(([id, name]) =>
+                name.toLowerCase().includes(query.toLowerCase())
+            );
+
+        // Display matching users in the dropdown
+        renderDropdown(matchingUsers);
+    } else {
+        // Hide the dropdown if '@' is not present
+        userDropdown.hide();
+    }
+});
+
+// Function to render the user dropdown
+function renderDropdown(users) {
+    if (users.length > 0) {
+        const dropdownContent = users.map(([id, name]) => `
+            <button type="button" onclick="mentionUser('${name}', '${id}')">${name}</button>
+        `).join("");
+
+        userDropdown.html(dropdownContent).show();
+    } else {
+        userDropdown.hide();
+    }
+}
+
+// Function to handle user selection from the dropdown
+function mentionUser(userName, userId) {
+    const currentText = messageTextarea.val();
+    const lastIndex = currentText.lastIndexOf("@");
+    const newText = currentText.substring(0, lastIndex) + `@${userName} `;
+
+    messageTextarea.val(newText);
+
+    // Add the mentioned user's id to the array
+    mentionedUserIds.push(userId);
+    
+    // Set the array of mentioned user ids in the hidden input
+    userIdInput.val(mentionedUserIds);
+    
+    userDropdown.hide();
+}
+
+// Close the dropdown when clicking outside of it
+$(document).on("click", function(event) {
+    if (!$(event.target).closest("#userDropdown").length && !$(event.target).is("#message")) {
+        userDropdown.hide();
+    }
+});
+
+</script>

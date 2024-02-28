@@ -165,14 +165,14 @@
                             <div>
                                 <p class=" font-medium inline-block items-center">When should it be completed?</p>
                             </div>
-                            <div class=" flex justify-start gap-3 mb-2">
-                                <label>Start date:</label>
-                                <input type="datetime-local" name="start_date" id="start_date" autocomplete="given-name" class=" se_date  w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                            </div>
-                            <div class=" flex justify-start gap-3 mb-2">
-                                <label>End date:</label>
-                                <input type="datetime-local" name="end_date" id="end_date" autocomplete="given-name" class=" se_date  w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                            </div>
+                            <div class="flex justify-start gap-3 mb-2">
+    <label for="start_date">Start date:</label>
+    <input type="datetime-local" name="start_date" id="start_date" autocomplete="given-name" class="se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+</div>
+<div class="flex justify-start gap-3 mb-2">
+    <label for="end_date">End date:</label>
+    <input type="datetime-local" name="end_date" id="end_date" autocomplete="given-name" class="se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+</div>
                             <textarea placeholder="Note " class=" w-[100%] outline-none rounded-md p-2 border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6" name="note" id="note"></textarea>
                             <!-- You can customize this part according to your needs -->
                             <div>
@@ -354,6 +354,24 @@
         $(".modalClose-btn").text('Cancel');
     });
 </script>
+<script>
+    $(document).ready(function() {
+        $('#start_date').change(function() {
+            // Get the selected start date and time
+            var startDateValue = new Date($(this).val());
+            
+            // Adjust the end date by adding 1 hour
+            var endDateValue = new Date(startDateValue.getTime() + 6 * 60 * 60 * 1000);
+// console.log(endDateValue);
+            // Format the end date to match the input type
+            var formattedEndDate = endDateValue.toISOString().slice(0, 16);
+
+            // Update the value of the end date input
+            $('#end_date').val(formattedEndDate);
+        });
+    });
+</script>
+
 <script>
     $(function() {
         // Initialize the external events
