@@ -46,11 +46,16 @@ class ItemsController extends Controller
     // delete item
 
     // get item
-    public function getItems()
+    public function getItems($type = null)
     {
         $userDetails = session('user_details');
-        $items = Items::get();
-        $itemsForAssemblis = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
+        if ($type === 'material' || $type === 'labour' || $type === 'assemblies') {
+            $items = Items::where('item_type', $type)->get();
+            $itemsForAssemblis = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
+        }else{
+            $items = Items::get();
+            $itemsForAssemblis = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
+        }
         return view('items', ['items' => $items, 'user_details' => $userDetails, 'itemsForAssemblies' => $itemsForAssemblis]);
     }
     public function getGroupsWithItems()
@@ -93,6 +98,7 @@ class ItemsController extends Controller
             $item->item_price = $validatedData['item_price'];
             $item->labour_expense = $validatedData['labour_expense'];
             $item->material_expense = $validatedData['material_expense'];
+            $item->item_description = $validatedData['item_description'];
 
             $item->save();
 

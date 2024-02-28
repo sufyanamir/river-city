@@ -119,7 +119,7 @@
                             <tbody class=" text-center">
                                 @foreach ($schedule_estimates_with_estimates as $item)
                                     <tr>
-                                        <td>{{ $item['estimate']->created_at }}</td>
+                                        <td>{{ date('d, F Y', strtotime($item['estimate']->created_at)) }}</td>
                                         <td>
                                             <h3 class="text-lg font-medium">{{ $item['estimate']->customer_name }}
                                                 {{ $item['estimate']->customer_last_name }}</h3>
@@ -218,10 +218,18 @@
                         <table class="w-full text-sm text-left ">
                             <thead class="text-xs text-white uppercase bg-[#930027]">
                                 <tr>
+                                @if (session('user_details')['user_role'] == 'scheduler')
+                                    <th scope="col" class="px-6 py-3">
+                                        Start Date
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        End Date
+                                    </th>
+                                    @else
                                     <th scope="col" class="px-6 py-3">
                                         Date
                                     </th>
-
+                                @endif
                                     <th scope="col" class="px-6 py-3">
                                         Name/Number
                                     </th>
@@ -243,7 +251,8 @@
                                 @if (session('user_details')['user_role'] == 'scheduler')
                                     @if($estimate->estimate_schedule_assigned_to == session('user_details')['id'])
                                     <tr>
-                                        <td>{{ $estimate->created_at }}</td>
+                                        <td>{{ date('d, F Y', strtotime($estimate->scheduled_start_date)) }}</td>
+                                        <td>{{ date('d, F Y', strtotime($estimate->scheduled_end_date)) }}</td>
                                         <td>
                                             <h3 class="text-lg font-medium">{{ $estimate->customer_name }}</h3>
                                         </td>
@@ -260,7 +269,7 @@
                                     @endif
                                 @else
                                     <tr>
-                                        <td>{{ $estimate->created_at }}</td>
+                                        <td>{{ date('d, F Y', strtotime($estimate->created_at)) }}</td>
                                         <td>
                                             <h3 class="text-lg font-medium">{{ $estimate->customer_name }}</h3>
                                         </td>

@@ -65,38 +65,55 @@
                                 {{ $customer->customer_project_name }}
                             </span> <br>
                         </p>
-                        <p class="py-2 px-4 text-white italic flex justify-between ">
-                            <span class="">
-                                Description
-                            </span>
-                            <span>
-                                Total
-                            </span>
-                        </p>
                     </div>
                     <div class="text-[#323C47] font-medium mt-4 border-b border-[#323C47] pb-6 border-solid">
                         @php
                         $subTotal = 0;
                         @endphp
-
-                        @foreach ($items as $item)
-                        <p class="flex justify-between pt-1 gap-4">
-                            <span class="py-2">
-                                <strong>{{ $item->item_name }}</strong>
-                                <br>
-                                <span class=" text-xs">
-                                    {{ $item->item_description }}
-                                </span>
-                            </span>
-                            <span class="item-price">
-                                ${{ $item->item_total }}
-                            </span>
-                        </p>
-                        <hr>
-                        @php
-                        $subTotal += $item->item_total;
-                        @endphp
-                        @endforeach
+                        <div class="relative overflow-x-auto">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Description
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Cost
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Qty
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Total
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($items as $item)
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{$item->item_name}}
+                                            <br>
+                                            {{$item->item_description}}
+                                        </th>
+                                        <td class="px-6 py-4">
+                                            {{$item->item_cost}}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{$item->item_qty}}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{$item->item_total}}
+                                        </td>
+                                    </tr>
+                                    <hr>
+                                    @php
+                                    $subTotal += $item->item_total;
+                                    @endphp
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     @if(count($upgrades) > 0)
                     <div class="text-[#323C47] font-medium mt-4 border-b border-[#323C47] pb-6 border-solid">
@@ -104,11 +121,13 @@
                         <hr>
                         @foreach ($upgrades as $item)
                         <div class="my-1">
-                            @if ($item->upgrade_status != 'accepted')
-                            <div class=" text-right">
-                                <input type="radio" name="upgrade_accept_reject" value="accepted" id="upgrade_accept"> Accept
-                                <input type="radio" name="upgrade_accept_reject" value="rejected" id="upgrade_reject"> Reject
-                            </div>
+                            @if(!session()->has('user_details'))
+                                @if ($item->upgrade_status != 'accepted')
+                                    <div class=" text-right">
+                                        <input type="radio" name="upgrade_accept_reject" value="accepted" id="upgrade_accept"> Accept
+                                        <input type="radio" name="upgrade_accept_reject" value="rejected" id="upgrade_reject"> Reject
+                                    </div>
+                                @endif
                             @endif
                             <p class="flex justify-between pt-1 gap-4">
                                 <span class="py-2">

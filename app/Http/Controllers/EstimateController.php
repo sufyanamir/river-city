@@ -127,12 +127,13 @@ class EstimateController extends Controller
 
         $userDetails = session('user_details');
         $estimate = Estimate::where('estimate_id', $id)->first();
-        $materialItems = EstimateItem::where('estimate_id', $id)->where('item_type', '<>', 'upgrades')->get();
+        $materialItems = EstimateItem::where('estimate_id', $id)->where('item_type', '<>', 'upgrades')->orwhere('item_type', '<>', 'assemblies')->get();
+        $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->get();
         $upgrades = EstimateItem::with('assemblies')->where('estimate_id', $id)->where('item_type', 'upgrades')->where('upgrade_status', 'accepted')->get();
         $itemTemplates = EstimateItemTemplates::with('templateItems')->where('estimate_id', $id)->get();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
 
-        return view('viewEstimateMaterials', ['items' => $materialItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
+        return view('viewEstimateMaterials', ['items' => $materialItems,'assemblies' => $estimateAssemblyItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
     }
     // view Estimate Materials
 
@@ -379,6 +380,7 @@ class EstimateController extends Controller
                                 'item_price' => $item->item_price,
                                 'item_description' => $item->item_description,
                                 'item_note' => $item->item_note,
+                                'item_type' => $item->item_type,
                                 // You can add other item details here if needed
                             ]);
                         } else {
@@ -1801,7 +1803,7 @@ class EstimateController extends Controller
                 'first_name' => 'required|string',
                 'last_name' => 'nullable|string',
                 'email' => 'required|string',
-                'phone' => 'required|numeric',
+                'phone' => 'required|string',
                 'estimate_id' => 'required',
             ]);
 
@@ -1852,7 +1854,7 @@ class EstimateController extends Controller
                 'first_name' => 'required|string',
                 'last_name' => 'nullable|string',
                 'email' => 'required|string',
-                'phone' => 'required|numeric',
+                'phone' => 'required|string',
                 'estimate_id' => 'required',
             ]);
 
@@ -1896,7 +1898,8 @@ class EstimateController extends Controller
 
 
             $additionalContacts = EstimateContact::where('estimate_id', $estimate->estimate_id)->get();
-            $estimateItems = EstimateItem::where('estimate_id', $estimate->estimate_id)->get();
+            $estimateItems = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', 'labour')->orwhere('item_type', 'material')->get();
+            $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->get();
             $items = Items::get();
             $itemsForAssemblies = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
             $labourItems = Items::where('item_type', 'labour')->get();
@@ -1946,13 +1949,27 @@ class EstimateController extends Controller
             // $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->get();
             $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->get();
             $estimateItemTemplateItems = [];
-
+            $profitCostTemplateItems = 0;
+            $profitFromTemplateItems = 0;
+            $budgetLabourFromTemplateItems = 0;
+            $budgetMaterialFromTemplateItems = 0;
             foreach ($estimateItemTemplates as $key => $itemTemplate) {
                 $templateItems = EstimateItemTemplateItems::where('est_template_id', $itemTemplate->est_template_id)->get();
 
                 // Extract item_qty from the template items
                 $itemQuantities = $templateItems->pluck('item_qty')->toArray();
                 $itemTotals = $templateItems->pluck('item_total')->toArray();
+
+                $labourTemplateItems = EstimateItemTemplateItems::where('est_template_id', $itemTemplate->est_template_id)->where('item_type', 'labour')->get();
+                $budgetLabourFromTemplateItems += $labourTemplateItems->sum('item_total');
+
+                $materialTemplateItems = EstimateItemTemplateItems::where('est_template_id', $itemTemplate->est_template_id)->where('item_type', 'material')->get();
+                $budgetMaterialFromTemplateItems += $materialTemplateItems->sum('item_total');
+
+                $profitFromTemplateItems += $templateItems->sum('item_total');
+                $profitCostTemplateItems += $templateItems->sum(function ($templateItem) {
+                    return $templateItem->item_cost * $templateItem->item_qty;
+                });
 
                 // Fetch all data for Items
                 $itemss = Items::whereIn('item_id', $templateItems->pluck('item_id')->toArray())->get(); // Replace 'Item' with your actual model name
@@ -1984,17 +2001,27 @@ class EstimateController extends Controller
                 $estimateItemTemplateItems[] = $itemTemplate;
             }
 
-            $profitItems = $estimateItems->sum('item_total');
+            $profitFromEstimateItems = $estimateItems->sum('item_total');
             $profitHours = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->sum('item_qty');
-            $budgetLabour = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->sum('item_total');
-            $budgetMaterial = EstimateItem::where('item_type', 'Material')->where('estimate_id', $id)->sum('item_total');
-            $budgetLabour = $budgetLabour * 38 / 100;
-            $budgetMaterial = $budgetMaterial * 15 / 100;
-            $budgetProfit = $budgetLabour + $budgetMaterial;
-            $budgetProfit = $profitItems - $budgetProfit;
-            $profitCost = $estimateItems->sum(function ($itemm) {
+            
+            $profitCostEstimateItems = $estimateItems->sum(function ($itemm) {
                 return $itemm->item_cost * $itemm->item_qty;
             });
+
+            $profitCost = $profitCostEstimateItems + $profitCostTemplateItems;
+            $profitItems = $profitFromEstimateItems + $profitFromTemplateItems;
+
+            $budgetLabourFromEstimateItems  = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->sum('item_total');
+            $budgetMaterialFromEstimateItems = EstimateItem::where('item_type', 'Material')->where('estimate_id', $id)->sum('item_total');
+
+            $budgetLabour = $budgetLabourFromEstimateItems + $budgetLabourFromTemplateItems;
+            $budgetLabour = $budgetLabour * 38 / 100;
+
+            $budgetMaterial = $budgetMaterialFromEstimateItems + $budgetMaterialFromTemplateItems;
+            $budgetMaterial = $budgetMaterial * 15 / 100;
+            
+            $budgetProfit = $budgetLabour + $budgetMaterial;
+            $budgetProfit = $profitItems - $budgetProfit;
 
             $mainProfit = $profitItems - $profitCost;
             if ($profitItems) {
@@ -2016,6 +2043,7 @@ class EstimateController extends Controller
                 'material_items' => $materialItems,
                 'assembly_items' => $assemblyItems,
                 'estimate_items' => $estimateItems,
+                'estimate_assembly_items' => $estimateAssemblyItems,
                 'additional_contacts' => $additionalContacts,
                 'user_details' => $userDetails,
                 'item_total' => $totalPrice, // Pass the total price to the view
@@ -2083,7 +2111,7 @@ class EstimateController extends Controller
                 'first_name' => 'required|string',
                 'last_name' => 'nullable|string',
                 'email' => 'required|string',
-                'phone' => 'required|numeric',
+                'phone' => 'required|string',
                 'company_name' => 'nullable|string',
                 'project_name' => 'nullable|string',
                 'project_number' => 'nullable|string',

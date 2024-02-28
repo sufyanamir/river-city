@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('estimate_id');
             $table->integer('customer_id');
             $table->string('customer_name');
-            $table->bigInteger('customer_phone');
+            $table->text('customer_phone');
             $table->text('customer_address');
             $table->integer('edited_by')->nullable();
             $table->string('estimate_status')->default('pending');

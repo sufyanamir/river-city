@@ -65,28 +65,64 @@
                                                             <label for="" class="text-gray-700 block text-left mb-1 "> First Name</label>
                                                             <input type="text" name="firstName" id="firstName" placeholder="First Name" autocomplete="given-name" value="{{$user->name}}" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                                             <label for="" class="text-gray-700 block text-left mb-1 ">Last Name</label>
-                                                            <input type="text" name="lastName" id="lastName" placeholder="Last Name" autocomplete="given-name"  value="{{$user->last_name}}" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                            <input type="text" name="lastName" id="lastName" placeholder="Last Name" autocomplete="given-name" value="{{$user->last_name}}" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                                             <label for="" class="text-gray-700 block text-left mb-1 ">Email</label>
-                                                            <input   value="{{$user->email}}" type="email" name="email" id="email" placeholder="Email" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                            <input value="{{$user->email}}" type="email" name="email" id="email" placeholder="Email" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                                             <label for="" class="text-gray-700 block text-left mb-1 ">Phone No</label>
-                                                            <input  value="{{$user->phone}}" type="tel" name="phone" id="phone" placeholder="Phone No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                            <input value="{{$user->phone}}" type="tel" name="phone" id="phone" placeholder="XXX-XXX-XXXX/XXXXXXXXXX" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}" title="Phone number must be in the format XXX-XXX-XXXX or XXXXXXXXXX">
                                                         </div>
                                                         <div>
-                                                            <div id="dropzone" class="dropzone" style=" width: 139px !important; height: 139px !important; padding:0%">
-                                                                <img id="profileImage" src="{{ asset('assets/images/demo-user.svg') }}" style="width:100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="text">
+                                                            <div id="dropzone{{$user->id}}" class="dropzone" style=" width: 139px !important; height: 139px !important; padding:0%">
+                                                                <img id="profileImage{{$user->id}}" src="{{ (isset($user->user_image)) ? asset($user->user_image) : asset('assets/images/demo-user.svg') }}" style="width:100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="text">
                                                                 <div class="file-input-container">
-                                                                    <input class="file-input" type="file" name="upload_image" id="fileInput1">
-                                                                    <div class="upload-icon" onclick="document.getElementById('fileInput1').click()">
-                                                                        <img src="{{ asset('assets/icons/{$user->user_image}') }}" class=" w-11" alt="icon">
+                                                                    <input class="file-input" type="file" name="upload_image" id="fileInput1{{$user->id}}">
+                                                                    <div class="upload-icon" onclick="document.getElementById('fileInput1{{$user->id}}').click()">
+                                                                        <img src="{{ asset('assets/icons/edit-icon.svg') }}" class=" w-11" alt="icon">
                                                                     </div>
                                                                 </div>
+                                                                <script>
+                                                                    // Get references to the necessary elements
+                                                                    const fileInput{{$user->id}} = document.getElementById('fileInput1{{$user->id}}');
+                                                                    const profileImage{{$user->id}} = document.getElementById('profileImage{{$user->id}}');
+                                                                    const form{{$user->id}} = document.getElementById('myForm');
+
+                                                                    // Handle file input change
+                                                                    fileInput{{$user->id}}.addEventListener('change', function(event) {
+                                                                        const file = event.target.files[0];
+                                                                        const reader = new FileReader();
+                                                                        if (!$('.error-image').hasClass('d-none')) {
+                                                                            $('.error-image').addClass('d-none');
+                                                                        }
+
+                                                                        // Check the file size and type of file
+                                                                        if (file.type.startsWith('image/')) {
+                                                                            if (file.size <= 1048576) {
+                                                                                reader.readAsDataURL(file);
+
+                                                                                reader.onload = function(e) {
+                                                                                    profileImage{{$user->id}}.src = e.target.result;
+                                                                                    form{{$user->id}}.action = "";
+                                                                                };
+                                                                            } else {
+                                                                                $('.error-image').removeClass('d-none').text(
+                                                                                    'The user pic should be less than or equal to 1024KB');
+                                                                                console.log("Image size exceeds the limit of 1 MB.");
+                                                                                fileInput{{$user->id}}.value = "";
+                                                                            }
+                                                                        } else {
+                                                                            $('.error-image').removeClass('d-none').text('Please select an image file.');
+                                                                            console.log("Please select an image file.");
+                                                                            fileInput{{$user->id}}.value = "";
+                                                                        }
+                                                                    });
+                                                                </script>
                                                             </div>
                                                             <div>
                                                                 <label for="" class="text-gray-700 block text-left mb-1 ">Role</label>
                                                                 <select id="role" name="role" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                                                     <option value="">role</option>
                                                                     @foreach ($user_roles as $row)
-                                                                    <option  {{ $user->user_role == $row['role'] ? 'selected' : '' }}>{{ $row['role'] }}</option>
+                                                                    <option {{ $user->user_role == $row['role'] ? 'selected' : '' }}>{{ $row['role'] }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
@@ -98,7 +134,7 @@
                                                     </div>
                                                     <div class="">
                                                         <button class=" save-btn mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
-                                                            <div  class=" text-center hidden spinner" id="spinner">
+                                                            <div class=" text-center hidden spinner" id="spinner">
                                                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
                                                                     <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
@@ -187,7 +223,7 @@
                             <label for="" class="text-gray-700 block text-left mb-1 ">Email</label>
                             <input type="email" name="email" id="email" placeholder="Email" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             <label for="" class="text-gray-700 block text-left mb-1 ">Phone No</label>
-                            <input type="tel" name="phone" id="phone" placeholder="Phone No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <input type="tel" name="phone" id="phone" placeholder="XXX-XXX-XXXX/XXXXXXXXXX" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}" title="Phone number must be in the format XXX-XXX-XXXX" required>
                         </div>
                         <div>
                             <div id="dropzone" class="dropzone" style=" width: 139px !important; height: 139px !important; padding:0%">
@@ -216,7 +252,7 @@
                     </div>
                     <div class="">
                         <button class=" save-btn mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
-                            <div  class=" text-center hidden spinner" id="spinner">
+                            <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
                                     <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />

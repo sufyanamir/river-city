@@ -13,12 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('last_name')->nullable();
-            $table->text('phone')->nullable();
-            $table->string('user_role')->nullable();
-            $table->text('address')->nullable();
-            $table->text('user_image')->nullable();
+        Schema::table('notifications', function (Blueprint $table) {
+            $table->integer('estimate_id')->nullable();
         });
     }
 
@@ -29,6 +25,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('notifications');
     }
 };

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('contact_first_name');
             $table->string('contact_last_name')->nullable();
             $table->text('contact_email');
-            $table->bigInteger('contact_phone');
+            $table->text('contact_phone');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrent();
         });
