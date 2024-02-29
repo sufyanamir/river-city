@@ -1665,7 +1665,7 @@ class EstimateController extends Controller
                 'is_upgrade' => 'nullable',
                 // 'selected_items' => 'required|array',
             ]);
-
+// dd($validatedData);
             // Fetch the selected items from the database
             // $selectedItems = Items::whereIn('item_id', $validatedData['selected_items'])->get();
 
@@ -1704,8 +1704,8 @@ class EstimateController extends Controller
                 foreach ($validatedData['assembly_name'] as $key => $assemblyName) {
                     if ($assemblyName != null) {
                         // Calculate the sum for 'assembly_unit_by_item_unit' and 'item_unit_by_assembly_unit'
-                        $itemUnitByAssUnitSum = $validatedData['assembly_unit_by_item_unit'][$key];
-                        $assUnitByItemUnitSum = $validatedData['item_unit_by_assembly_unit'][$key];
+                        $itemUnitByAssUnitSum = $validatedData['item_unit_by_assembly_unit'][$key];
+                        $assUnitByItemUnitSum = $validatedData['assembly_unit_by_item_unit'][$key];
 
                         // Create a new ItemAssembly for each assembly name
                         EstimateItemAssembly::create([
