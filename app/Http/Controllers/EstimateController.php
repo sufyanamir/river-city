@@ -2000,11 +2000,11 @@ class EstimateController extends Controller
                 // Add the modified itemTemplate to the result array
                 $estimateItemTemplateItems[] = $itemTemplate;
             }
-
-            $profitFromEstimateItems = $estimateItems->sum('item_total');
+            $sumEstimateItems = EstimateItem::where('estimate_id', $id)->get();
+            $profitFromEstimateItems = $sumEstimateItems->sum('item_total');
             $profitHours = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->sum('item_qty');
             
-            $profitCostEstimateItems = $estimateItems->sum(function ($itemm) {
+            $profitCostEstimateItems = $sumEstimateItems->sum(function ($itemm) {
                 return $itemm->item_cost * $itemm->item_qty;
             });
 
@@ -2033,7 +2033,7 @@ class EstimateController extends Controller
             }
 
             // Calculate the sum of item_price for the estimate
-            $totalPrice = $estimateItems->sum('item_price');
+            $totalPrice = $sumEstimateItems->sum('item_price');
             // return response()->json(['estimateItemTemplates' => $estimateItemTemplates]);
             return view('viewEstimates', [
                 'customer' => $customer,
