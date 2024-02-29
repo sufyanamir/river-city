@@ -943,10 +943,10 @@ $userPrivileges = session('user_details')['user_privileges'];
                                             <label class="text-lg font-semibold text-[#323C47]" for="">{{ $assembly['est_ass_item_name'] }}</label>
                                         </td>
                                         <td class="text-center">
-                                            {{ $assembly['ass_unit_by_item_unit'] }}
+                                            {{ number_format($assembly['ass_unit_by_item_unit'], 2) }}
                                         </td>
                                         <td class="text-center">
-                                            {{ $assembly['item_unit_by_ass_unit'] }}
+                                            {{ number_format($assembly['item_unit_by_ass_unit'], 2) }}
                                         </td>
                                     </tr>
                                     @endforeach
@@ -4893,13 +4893,13 @@ $userPrivileges->estimate->expenses === 'on')
                                 </select>
                                 <div class=" grid grid-cols-2 gap-3 mt-2 inline-block">
                                     <div>
-                                        <input value="${itemData.item_unit_by_ass_unit}" type="number" name="item_unit_by_ass_unit[]" id="item_unit_by_ass_unit_${index}" placeholder="00.0" autocomplete="given-name"
+                                        <input value="${itemData.item_unit_by_ass_unit}" type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_ass_unit_${index}" placeholder="00.0" autocomplete="given-name"
                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                         <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
                                     </div>
                                     <div class="flex ">
                     <div class="w-[80%]  ">
-                    <input  value="${itemData.ass_unit_by_item_unit}"  type="number" name="ass_unit_by_item_unit[]" id="ass_unit_by_item_unit_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    <input  value="${itemData.ass_unit_by_item_unit}"  type="number" name="assembly_unit_by_item_unit[]" id="ass_unit_by_item_unit_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
                   </div>
                    <div class="mt-1" >
@@ -5009,13 +5009,13 @@ $('[id^="editEstimate-item"]').click(function() {
                                 </select>
                                 <div class=" grid grid-cols-2 gap-3 mt-2 inline-block">
                                     <div>
-                                    <input value="${itemData.item_unit_by_ass_unit}" type="number" name="item_unit_by_ass_unit[]" id="item_unit_by_ass_unit_${index}" placeholder="00.0" autocomplete="given-name"
+                                    <input value="${itemData.item_unit_by_ass_unit}" type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_ass_unit_${index}" placeholder="00.0" autocomplete="given-name"
                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                         <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
                                     </div>
                                     <div class="flex ">
                     <div class="w-[80%]  ">
-                    <input  value="${itemData.ass_unit_by_item_unit}"  type="number" name="ass_unit_by_item_unit[]" id="ass_unit_by_item_unit_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    <input  value="${itemData.ass_unit_by_item_unit}"  type="number" name="assembly_unit_by_item_unit[]" id="ass_unit_by_item_unit_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
                   </div>
                    <div class="mt-1" >
