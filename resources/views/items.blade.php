@@ -57,12 +57,12 @@ $userPrivileges = session('user_details')['user_privileges'];
                     <tbody id="universalTableBody" class=" text-sm">
                         @foreach ($items as $item)
                         <tr>
-                            <td>{{ $item->item_name }}</td>
-                            <td>{{ $item->item_type }}</td>
-                            <td>{{ $item->item_units }}</td>
+                            <td>{{ ucwords($item->item_name) }}</td>
+                            <td>{{ ucwords($item->item_type) }}</td>
+                            <td>{{ ucwords($item->item_units) }}</td>
                             <td>{{ number_format($item->item_cost, 2) }}</td>
                             <td>{{ number_format($item->item_price, 2) }}</td>
-                            <td class=" w-[100px]">{{ $item->item_description }}</td>
+                            <td class=" w-[100px]">{{ ucfirst($item->item_description) }}</td>
                             <td>
                                 @if (session('user_details')['user_role'] == 'admin')
                                 <button id="editItem{{$item->item_id}}">
@@ -129,31 +129,31 @@ $userPrivileges = session('user_details')['user_privileges'];
                             </select>
                         </div>
                         <div class=" my-2 col-span-2">
-                            <label for="" class="block  text-left text-sm mb-1"> Item Name</label>
+                            <label for="" class="block  text-left text-xs mb-1"> Item Name</label>
                             <input type="text" name="item_name" id="itemName" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class="my-2">
-                            <label for="" class="block text-left text-sm mb-1"> Item Unit</label>
+                            <label for="" class="block text-left text-xs mb-1"> Item Unit</label>
                             <input type="text" id="item_units" name="item_units" autocomplete="customer-name" placeholder="Units(Optional)" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                         </div>
                         <div class="my-2 text-left">
-                            <label for="" class=" block text-left text-sm mb-1">Price:</label>
+                            <label for="" class=" block text-left text-xs mb-1">Price:</label>
                             <input type="number" step="any" name="item_price" id="item_price" placeholder="00.0" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             <span class=" m-0 p-0 text-xs float-left text-gray-400">Margin: <span id="price_margin">0.00</span>%</span>
                         </div>
                         <div></div>
                         <div></div>
                         <div class="my-2 text-left">
-                            <label for="" class=" block text-left text-sm mb-1">Cost ($/<span class="unit">unit</span>)</label>
-                            <input type="number" step="any" name="item_cost" id="item_cost" readonly placeholder="0.00" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <label for="" class=" block text-left text-xs mb-1">Cost ($/<span class="unit">unit</span>)</label>
+                            <input type="number" step="any" name="item_cost" id="item_cost" readonly placeholder="0.00" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 bg-gray-200 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class="my-2" id="labourExpense">
-                            <label for="" class="block text-left text-sm mb-1"> Labour Cost (min/<span class="unit">unit</span>)</label>
+                            <label for="" class="block text-left text-xs mb-1"> Labour Cost (min/<span class="unit">unit</span>)</label>
                             <input type="number" step="any" name="labour_expense" id="labour_expense" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             <span class=" m-0 p-0 text-xs float-left text-gray-400">Labour Cost: $23.50/hr</span>
                         </div>
                         <div class="my-2" id="materialExpense">
-                            <label for="" class="block text-left text-sm mb-1"> Material Cost ($/<span class="unit">unit</span>)</label>
+                            <label for="" class="block text-left text-xs mb-1"> Material Cost ($/<span class="unit">unit</span>)</label>
                             <input type="number" step="any" name="material_expense" id="material_expense" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class=" my-2 col-span-3 hidden" id="multiAdd-items">
@@ -227,16 +227,8 @@ $userPrivileges = session('user_details')['user_privileges'];
         $('#formData').attr('action', '/addItem');
     });
     $('#mulitple_input').on('change', 'select[name="assembly_name[]"]', function() {
-        // Get the selected option
-        var selectedOption = $(this).find(':selected');
-
-        // Get the item_unit from the data-unit attribute
-        var itemUnit = selectedOption.data('unit');
-
-        // Update the elements based on the item_unit only within the current row
-        var unitLabel = $(this).closest('.grid').find('.addedItemUnit');
-        unitLabel.text(itemUnit);
-
+        var mainItemUnit = $('#item_units').val();
+        $('.unit').text(mainItemUnit);
         // You can add more logic here to update other elements based on the item_unit
     });
 
@@ -250,6 +242,7 @@ $userPrivileges = session('user_details')['user_privileges'];
         let itemUnitById = 'item_unit_by_ass_unit_' + id; // Dynamic ID for item_unit_by_ass_unit input
         let assUnitById = 'ass_unit_by_item_unit_' + id; // Dynamic ID for ass_unit_by_item_unit input
         let rembtn = $('<span></span>');
+        let addedItemUnit = 'addedItemUnit' + id;
 
         newele.html(`
         <select name="assembly_name[]" id="${selectId}" placeholder="Item Name" autocomplete="given-name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
@@ -261,7 +254,7 @@ $userPrivileges = session('user_details')['user_privileges'];
         <div class="grid grid-cols-2 gap-3 mt-2 inline-block">
             <div>
                 <input type="number" step="any" name="item_unit_by_ass_unit[]" id="${itemUnitById}" placeholder="00.0" autocomplete="given-name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                <span class="m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">unit</span></span>
+                <span class="m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="${addedItemUnit}">unit</span></span>
             </div>
             <div class="d-flex flex-col">
                 <div class="d-flex">
@@ -270,7 +263,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                         <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
                     </button>
                 </div>
-                <span class="m-0 ml-4 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">unit</span>/<span class="unit">unit</span></span>
+                <span class="m-0 ml-4 p-0 text-xs float-left text-gray-400"><span class="${addedItemUnit}">unit</span>/<span class="unit">unit</span></span>
             </div>
         </div>
     `);
@@ -287,67 +280,71 @@ $userPrivileges = session('user_details')['user_privileges'];
     }
 
     $(document).on('input', '[id^="item_unit_by_ass_unit_"]', function() {
-    // Initialize variables to store total expenses for labour and material items
-    var totalLabourExpense = 0;
-    var totalMaterialExpense = 0;
+        // Initialize variables to store total expenses for labour and material items
+        var totalLabourExpense = 0;
+        var totalMaterialExpense = 0;
 
-    // Iterate over each row
-    $('[id^="item_unit_by_ass_unit_"]').each(function() {
-        // Get the ID of the item_unit_by_ass_unit input for the current row
-        var itemId = $(this).attr('id').replace('item_unit_by_ass_unit_', '');
+        // Iterate over each row
+        $('[id^="item_unit_by_ass_unit_"]').each(function() {
+            // Get the ID of the item_unit_by_ass_unit input for the current row
+            var itemId = $(this).attr('id').replace('item_unit_by_ass_unit_', '');
 
-        // Retrieve the selected option from the corresponding select element for the current row
-        var selectedOption = $('#assembly_id_' + itemId + ' option:selected');
+            // Retrieve the selected option from the corresponding select element for the current row
+            var selectedOption = $('#assembly_id_' + itemId + ' option:selected');
 
-        // Retrieve data from the selected option for the current row
-        var itemType = selectedOption.data('item-type');
-        var labourExpense = selectedOption.data('labour-expense');
-        var materialExpense = selectedOption.data('material-expense');
-        var itemPrice = selectedOption.data('item-price');
+            // Retrieve data from the selected option for the current row
+            var itemType = selectedOption.data('item-type');
+            var labourExpense = selectedOption.data('labour-expense');
+            var materialExpense = selectedOption.data('material-expense');
+            var itemPrice = selectedOption.data('item-price');
+            var itemUnit = selectedOption.data('unit');
 
-        // Get the value entered in the item_unit_by_ass_unit input for the current row
-        var itemUnitValue = parseFloat($(this).val());
+            $('.addedItemUnit' + itemId).text(itemUnit);
 
-        // Perform calculations based on item type for the current row
-        if (itemType === 'labour') {
-            if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                var calculatedValue = (itemPrice / labourExpense) / itemUnitValue;
 
-                $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(4));
-                // Update total labour expense for the current row
-                totalLabourExpense += calculatedValue * 1 * itemPrice;
-            }else{
-                $('#labour_expense').val('');
-                $('#ass_unit_by_item_unit_' + itemId).val('');
+
+            // Get the value entered in the item_unit_by_ass_unit input for the current row
+            var itemUnitValue = parseFloat($(this).val());
+
+            // Perform calculations based on item type for the current row
+            if (itemType === 'labour') {
+                if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
+                    var calculatedValue = (itemPrice / labourExpense) / itemUnitValue;
+
+                    $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(4));
+                    // Update total labour expense for the current row
+                    totalLabourExpense += calculatedValue * 1 * itemPrice;
+                } else {
+                    $('#labour_expense').val('');
+                    $('#ass_unit_by_item_unit_' + itemId).val('');
+                }
+            } else if (itemType === 'material') {
+                if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
+                    var calculatedValue = (itemPrice / materialExpense) / itemUnitValue;
+                    $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(4));
+                    // Update total material expense for the current row
+                    totalMaterialExpense += calculatedValue * 1 * itemPrice;
+                } else {
+                    $('#material_expense').val('');
+                    $('#ass_unit_by_item_unit_' + itemId).val('');
+                }
             }
-        } else if (itemType === 'material') {
-            if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                var calculatedValue = (itemPrice / materialExpense) / itemUnitValue;
-                $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(4));
-                // Update total material expense for the current row
-                totalMaterialExpense += calculatedValue * 1 * itemPrice;
-            }else{
-                $('#material_expense').val('');
-                $('#ass_unit_by_item_unit_' + itemId).val('');
-            }
-        }
+        });
+
+        // Set the total labour and material expenses in their respective inputs
+        $('#labour_expense').val(totalLabourExpense.toFixed(2));
+        $('#material_expense').val(totalMaterialExpense.toFixed(2));
+
+        // Calculate the sum of labour expense and material expense
+        var totalExpense = totalLabourExpense + totalMaterialExpense;
+
+        // Calculate the item cost as half of the total expense
+        var itemCost = totalExpense / 2;
+
+        // Set the total expense and item cost in their respective inputs
+        $('#item_price').val(totalExpense.toFixed(2));
+        $('#item_cost').val(itemCost.toFixed(2));
     });
-
-    // Set the total labour and material expenses in their respective inputs
-    $('#labour_expense').val(totalLabourExpense.toFixed(2));
-    $('#material_expense').val(totalMaterialExpense.toFixed(2));
-
-    // Calculate the sum of labour expense and material expense
-    var totalExpense = totalLabourExpense + totalMaterialExpense;
-
-    // Calculate the item cost as half of the total expense
-    var itemCost = totalExpense / 2;
-
-    // Set the total expense and item cost in their respective inputs
-    $('#item_price').val(totalExpense.toFixed(2));
-    $('#item_cost').val(itemCost.toFixed(2));
-});
-
 </script>
 <script>
     $('[id^="editItem"]').click(function() {
@@ -377,9 +374,9 @@ $userPrivileges = session('user_details')['user_privileges'];
                     var priceMargin = $('#price_margin');
                     unitLabel.text(item.item_units);
                     var priceMinusCost = item.item_price - item.item_cost;
-            var priceMinusCostbyitemPrice = priceMinusCost / item.item_price;
-            var finalMargin = priceMinusCostbyitemPrice * 100;
-            priceMargin.text(finalMargin.toFixed(2));
+                    var priceMinusCostbyitemPrice = priceMinusCost / item.item_price;
+                    var finalMargin = priceMinusCostbyitemPrice * 100;
+                    priceMargin.text(finalMargin.toFixed(2));
                     $('#formData').attr('action', '/updateItem');
 
                     // Reset the assemblies container
@@ -436,68 +433,67 @@ $userPrivileges = session('user_details')['user_privileges'];
     });
 
     function applyInputEventListenerForAssUnit() {
-    $('[id^="item_unit_by_ass_unit_"]').on('input', function() {
-        // Initialize variables to store total expenses for labour and material items
-        var totalLabourExpense = 0;
-        var totalMaterialExpense = 0;
+        $('[id^="item_unit_by_ass_unit_"]').on('input', function() {
+            // Initialize variables to store total expenses for labour and material items
+            var totalLabourExpense = 0;
+            var totalMaterialExpense = 0;
 
-        // Iterate over each row
-        $('[id^="item_unit_by_ass_unit_"]').each(function() {
-            // Get the ID of the item_unit_by_ass_unit input for the current row
-            var itemId = $(this).attr('id').replace('item_unit_by_ass_unit_', '');
+            // Iterate over each row
+            $('[id^="item_unit_by_ass_unit_"]').each(function() {
+                // Get the ID of the item_unit_by_ass_unit input for the current row
+                var itemId = $(this).attr('id').replace('item_unit_by_ass_unit_', '');
 
-            // Retrieve the selected option from the corresponding select element for the current row
-            var selectedOption = $('#assembly_id_' + itemId + ' option:selected');
+                // Retrieve the selected option from the corresponding select element for the current row
+                var selectedOption = $('#assembly_id_' + itemId + ' option:selected');
 
-            // Retrieve data from the selected option for the current row
-            var itemType = selectedOption.data('item-type');
-            var labourExpense = selectedOption.data('labour-expense');
-            var materialExpense = selectedOption.data('material-expense');
-            var itemPrice = selectedOption.data('item-price');
+                // Retrieve data from the selected option for the current row
+                var itemType = selectedOption.data('item-type');
+                var labourExpense = selectedOption.data('labour-expense');
+                var materialExpense = selectedOption.data('material-expense');
+                var itemPrice = selectedOption.data('item-price');
 
-            // Get the value entered in the item_unit_by_ass_unit input for the current row
-            var itemUnitValue = parseFloat($(this).val());
+                // Get the value entered in the item_unit_by_ass_unit input for the current row
+                var itemUnitValue = parseFloat($(this).val());
 
-            // Perform calculations based on item type for the current row
-            if (itemType === 'labour') {
-                if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                    var calculatedValue = (itemPrice / labourExpense) / itemUnitValue;
+                // Perform calculations based on item type for the current row
+                if (itemType === 'labour') {
+                    if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
+                        var calculatedValue = (itemPrice / labourExpense) / itemUnitValue;
 
-                    // Update total labour expense for the current row
-                    totalLabourExpense += calculatedValue * 1 * itemPrice;
-                }else{
-                $('#labour_expense').val('');
-                $('#ass_unit_by_item_unit_' + itemId).val('');
-            }
-            } else if (itemType === 'material') {
-                if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                    var calculatedValue = (itemPrice / materialExpense) / itemUnitValue;
+                        // Update total labour expense for the current row
+                        totalLabourExpense += calculatedValue * 1 * itemPrice;
+                    } else {
+                        $('#labour_expense').val('');
+                        $('#ass_unit_by_item_unit_' + itemId).val('');
+                    }
+                } else if (itemType === 'material') {
+                    if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
+                        var calculatedValue = (itemPrice / materialExpense) / itemUnitValue;
 
-                    // Update total material expense for the current row
-                    totalMaterialExpense += calculatedValue * 1 * itemPrice;
-                }else{
-                $('#material_expense').val('');
-                $('#ass_unit_by_item_unit_' + itemId).val('');
-            }
-            }
+                        // Update total material expense for the current row
+                        totalMaterialExpense += calculatedValue * 1 * itemPrice;
+                    } else {
+                        $('#material_expense').val('');
+                        $('#ass_unit_by_item_unit_' + itemId).val('');
+                    }
+                }
+            });
+
+            // Set the total labour and material expenses in their respective inputs
+            $('#labour_expense').val(totalLabourExpense.toFixed(2));
+            $('#material_expense').val(totalMaterialExpense.toFixed(2));
+
+            // Calculate the sum of labour expense and material expense
+            var totalExpense = totalLabourExpense + totalMaterialExpense;
+
+            // Calculate the item cost as half of the total expense
+            var itemCost = totalExpense / 2;
+
+            // Set the total expense and item cost in their respective inputs
+            $('#item_price').val(totalExpense.toFixed(2));
+            $('#item_cost').val(itemCost.toFixed(2));
         });
-
-        // Set the total labour and material expenses in their respective inputs
-        $('#labour_expense').val(totalLabourExpense.toFixed(2));
-        $('#material_expense').val(totalMaterialExpense.toFixed(2));
-
-        // Calculate the sum of labour expense and material expense
-        var totalExpense = totalLabourExpense + totalMaterialExpense;
-
-        // Calculate the item cost as half of the total expense
-        var itemCost = totalExpense / 2;
-
-        // Set the total expense and item cost in their respective inputs
-        $('#item_price').val(totalExpense.toFixed(2));
-        $('#item_cost').val(itemCost.toFixed(2));
-    });
-}
-
+    }
 </script>
 <script>
     $(document).ready(function() {
@@ -521,70 +517,35 @@ $userPrivileges = session('user_details')['user_privileges'];
 
         // Add change event handler to the select element
         typeDropdown.on('change', function() {
-            if (typeDropdown.val() === 'assemblies') {
+            var selectedValue = typeDropdown.val();
+
+            // Reset all fields
+            $('#labour_expense, #material_expense, #item_price').val('');
+
+            if (selectedValue === 'assemblies') {
                 multiAddItemsDiv.removeClass('hidden');
-                // labourExpenseDiv.addClass('hidden');
-                $('#material_expense').addClass('bg-gray-200');
-                $('#labour_expense').addClass('bg-gray-200');
-                $('#item_price').addClass('bg-gray-200');
-                $('#item_cost').addClass('bg-gray-200');
-                $('#item_price').attr('readonly', true);
-                $('#labour_expense').attr('readonly', true);
-                $('#material_expense').attr('readonly', true);
-                $('#labour_expense').val('');
-                $('#material_expense').val('');
-                $('#item_price').val('');
-            } else {
+                $('#labour_expense, #material_expense, #item_price').attr('readonly', true).addClass('bg-gray-200');
+            } else if (selectedValue === 'material') {
                 multiAddItemsDiv.addClass('hidden');
-                $('#material_expense').removeClass('bg-gray-200');
-                $('#labour_expense').removeClass('bg-gray-200');
-                $('#item_price').removeClass('bg-gray-200');
-                $('#item_cost').removeClass('bg-gray-200');
-                // labourExpenseDiv.removeClass('hidden');
-                $('#item_price').attr('readonly', false);
-                $('#material_expense').attr('readonly', true);
-                $('#labour_expense').val('');
-                $('#material_expense').val('');
-                $('#item_price').val('');
-            }
-
-            if (typeDropdown.val() === 'material') {
-                $('#labour_expense').attr('readonly', true);
-                // materialExpenseDiv.removeClass('hidden');
-                // labourExpenseDiv.addClass('hidden');
-                $('#labour_expense').addClass('bg-gray-200');
-                $('#labour_expense').val('');
-                $('#material_expense').val('');
-                $('#item_price').val('');
-            } else {
-                $('#labour_expense').attr('readonly', false);
-                // materialExpenseDiv.addClass('hidden');
-                // labourExpenseDiv.removeClass('hidden');
-                $('#labour_expense').removeClass('bg-gray-200');
-                $('#labour_expense').val('');
-                $('#material_expense').val('');
-                $('#item_price').val('');
-            }
-
-            if (typeDropdown.val() === 'labour') {
+                $('#labour_expense').attr('readonly', true).addClass('bg-gray-200');
+                $('#material_expense').removeClass('bg-gray-200').attr('readonly', false);
+                // $('#item_price').attr('readonly', true).addClass('bg-gray-200');
+            } else if (selectedValue === 'labour') {
+                multiAddItemsDiv.addClass('hidden');
                 unitItemInput.val('hour');
                 unitLabel.text('hour');
-                $('#material_expense').attr('readonly', true);
-                $('#material_expense').addClass('bg-gray-200');
-                $('#labour_expense').val('');
-                $('#material_expense').val('');
-                $('#item_price').val('');
+                $('#material_expense').attr('readonly', true).addClass('bg-gray-200');
+                $('#labour_expense, #item_price').attr('readonly', false).removeClass('bg-gray-200');
             } else {
+                // If none of the above, reset all fields
+                multiAddItemsDiv.addClass('hidden');
+                $('#labour_expense, #material_expense').attr('readonly', false).removeClass('bg-gray-200');
                 unitItemInput.val(null);
-                $('#material_expense').removeClass('bg-gray-200');
                 unitLabel.text('unit');
-                $('#material_expense').attr('readonly', false);
-                $('#labour_expense').val('');
-                $('#material_expense').val('');
-                $('#item_price').val('');
+                $('#item_price').attr('readonly', false).removeClass('bg-gray-200');
             }
-
         });
+
 
         unitItemInput.on('input', function() {
             unitLabel.text(unitItemInput.val());
