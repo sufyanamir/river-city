@@ -11,7 +11,7 @@ $userPrivileges = session('user_details')['user_privileges'];
             <div class=" flex gap-5">
                 @if (session('user_details')['user_role'] == 'admin')
                 <a href="/items">
-                    <x-add-button :id="'all'" :title="'all'" :class="''"></x-add-button>
+                    <x-add-button :id="'all'" :title="'All'" :class="''"></x-add-button>
                 </a>
                 <a href="{{ route('items', ['type' => 'labour']) }}">
                     <x-add-button :id="'Labor'" :title="'Labor'" :class="''"></x-add-button>
@@ -122,8 +122,8 @@ $userPrivileges = session('user_details')['user_privileges'];
                         <div class="  col-span-3 my-2">
                             <label for="" class="block text-left mb-1"> Items Type</label>
                             <select id="type" name="item_type" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                                <option>type</option>
-                                <option value="labour">labour</option>
+                                <option value="">Select Type</option>
+                                <option value="labour">Labour</option>
                                 <option value="material">Material</option>
                                 <option value="assemblies">Assemblies</option>
                             </select>
@@ -153,7 +153,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <span class=" m-0 p-0 text-xs float-left text-gray-400">Labour Cost: $23.50/hr</span>
                         </div>
                         <div class="my-2" id="materialExpense">
-                            <label for="" class="block text-left text-sm mb-1"> material Cost ($/<span class="unit">unit</span>)</label>
+                            <label for="" class="block text-left text-sm mb-1"> Material Cost ($/<span class="unit">unit</span>)</label>
                             <input type="number" step="any" name="material_expense" id="material_expense" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class=" my-2 col-span-3 hidden" id="multiAdd-items">
@@ -373,6 +373,13 @@ $userPrivileges = session('user_details')['user_privileges'];
                     $('#item_cost').val(item.item_cost);
                     $('#item_price').val(item.item_price);
                     $('#item_description').val(item.item_description);
+                    var unitLabel = $('.unit');
+                    var priceMargin = $('#price_margin');
+                    unitLabel.text(item.item_units);
+                    var priceMinusCost = item.item_price - item.item_cost;
+            var priceMinusCostbyitemPrice = priceMinusCost / item.item_price;
+            var finalMargin = priceMinusCostbyitemPrice * 100;
+            priceMargin.text(finalMargin.toFixed(2));
                     $('#formData').attr('action', '/updateItem');
 
                     // Reset the assemblies container
@@ -517,6 +524,10 @@ $userPrivileges = session('user_details')['user_privileges'];
             if (typeDropdown.val() === 'assemblies') {
                 multiAddItemsDiv.removeClass('hidden');
                 // labourExpenseDiv.addClass('hidden');
+                $('#material_expense').addClass('bg-gray-200');
+                $('#labour_expense').addClass('bg-gray-200');
+                $('#item_price').addClass('bg-gray-200');
+                $('#item_cost').addClass('bg-gray-200');
                 $('#item_price').attr('readonly', true);
                 $('#labour_expense').attr('readonly', true);
                 $('#material_expense').attr('readonly', true);
@@ -525,6 +536,10 @@ $userPrivileges = session('user_details')['user_privileges'];
                 $('#item_price').val('');
             } else {
                 multiAddItemsDiv.addClass('hidden');
+                $('#material_expense').removeClass('bg-gray-200');
+                $('#labour_expense').removeClass('bg-gray-200');
+                $('#item_price').removeClass('bg-gray-200');
+                $('#item_cost').removeClass('bg-gray-200');
                 // labourExpenseDiv.removeClass('hidden');
                 $('#item_price').attr('readonly', false);
                 $('#material_expense').attr('readonly', true);
@@ -537,6 +552,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                 $('#labour_expense').attr('readonly', true);
                 // materialExpenseDiv.removeClass('hidden');
                 // labourExpenseDiv.addClass('hidden');
+                $('#labour_expense').addClass('bg-gray-200');
                 $('#labour_expense').val('');
                 $('#material_expense').val('');
                 $('#item_price').val('');
@@ -544,6 +560,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                 $('#labour_expense').attr('readonly', false);
                 // materialExpenseDiv.addClass('hidden');
                 // labourExpenseDiv.removeClass('hidden');
+                $('#labour_expense').removeClass('bg-gray-200');
                 $('#labour_expense').val('');
                 $('#material_expense').val('');
                 $('#item_price').val('');
@@ -553,11 +570,13 @@ $userPrivileges = session('user_details')['user_privileges'];
                 unitItemInput.val('hour');
                 unitLabel.text('hour');
                 $('#material_expense').attr('readonly', true);
+                $('#material_expense').addClass('bg-gray-200');
                 $('#labour_expense').val('');
                 $('#material_expense').val('');
                 $('#item_price').val('');
             } else {
                 unitItemInput.val(null);
+                $('#material_expense').removeClass('bg-gray-200');
                 unitLabel.text('unit');
                 $('#material_expense').attr('readonly', false);
                 $('#labour_expense').val('');
