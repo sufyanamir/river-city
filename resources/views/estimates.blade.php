@@ -1,21 +1,21 @@
 @include('layouts.header')
 <div class=" my-4">
     <div class=" bg-white w-full rounded-2xl shadow-lg">
-        <div class=" flex justify-between p-3 bg-[#930027] text-white rounded-t-2xl">
+        <div class=" flex justify-between items-center p-3 bg-[#930027] text-white rounded-t-2xl">
             <div class=" text-xl font-semibold">
                 <h4>Estimates List</h4>
             </div>
             <div>
                 @if ($user_details['user_role'] == 'admin')
-                <x-add-button :title="'+Add Estimates'" :class="'addEstimate'" :id="''"></x-add-button>
+                <x-add-button :title="'+ Add Estimates'" :class="'addEstimate'" :id="''"></x-add-button>
                 @endif
                 @if (isset($userPrivileges->estimate) && $userPrivileges->estimate->add === 'on')
-                <x-add-button :title="'+Add Estimates'" :class="'addEstimate'" :id="''"></x-add-button>
+                <x-add-button :title="'+ Add Estimates'" :class="'addEstimate'" :id="''"></x-add-button>
                 @endif
             </div>
         </div>
         <div class="py-4">
-            <div class=" overflow-x-auto">
+            <div class="">
                 <table id="universalTable" class="display" style="width:100%">
                     <thead class="bg-[#930027] text-white text-sm">
                         <tr>
