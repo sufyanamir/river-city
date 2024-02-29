@@ -9,19 +9,19 @@
             <p>Today</p>
         </div>
         <div class="font-semibold">
-        <p>{{ date('d, F Y') }}</p>
+            <p>{{ date('d, F Y') }}</p>
         </div>
     </div>
-    <div>
+    <div class="mb-4">
         @if (session('user_details')['user_role'] == 'crew')
-            <div class="grid lg:grid-cols-4 sm:grid-cols-1 gap-3">
+            <div class="grid lg:grid-cols-4 sm:grid-cols-1 gap-6">
                 <x-dashboard-cards :title="'Today Jobs'" :value="$todayJobsCount" :img="'dashboard-graphs.svg'"></x-dashboard-cards>
                 <x-dashboard-cards :title="'Pending Jobs'" :value="$pendingJobsCount" :img="'dashboard-users.svg'"></x-dashboard-cards>
                 <x-dashboard-cards :title="'Complete Jobs'" :value="$completeJobsCount" :img="'dashboard-orders.svg'"></x-dashboard-cards>
                 <x-dashboard-cards :title="'Total Jobs'" :value="$totalJobsCount" :img="'dashboard-dollar.svg'"></x-dashboard-cards>
             </div>
         @elseif(session('user_details')['user_role'] == 'admin')
-            <div class="grid lg:grid-cols-4 sm:grid-cols-1 gap-3">
+            <div class="grid lg:grid-cols-4 sm:grid-cols-1 gap-6">
                 <x-dashboard-cards :title="'Total Customers'" :value="count($customers)" :img="'dashboard-graphs.svg'"></x-dashboard-cards>
                 <x-dashboard-cards :title="'Total Staff'" :value="count($staff)" :img="'dashboard-users.svg'"></x-dashboard-cards>
                 <x-dashboard-cards :title="'Confirm Orders'" :value="count($confirm_orders)" :img="'dashboard-orders.svg'"></x-dashboard-cards>
@@ -32,12 +32,12 @@
     @if (session('user_details')['user_role'] == 'crew')
     @elseif(session('user_details')['user_role'] == 'admin')
         <div
-            class=" lg:flex lg:justify-between xl:flex xl:justify-between sm:grid sm:grid-cols-1 md:grid md:grid-cols-1 gap-2">
+            class=" lg:flex lg:justify-between xl:flex xl:justify-between sm:grid sm:grid-cols-1 md:grid md:grid-cols-1 gap-4">
             <!-- order summary & schedules -->
 
-            <div class=" bg-white my-2 w-full rounded-xl">
+            <div class=" bg-white my-2 w-full rounded-xl shadow-med xl:w-[80%]">
                 <div class=" p-2 border-b-2 bg-[#930027] rounded-t-xl">
-                    <h3 class=" text-xl font-smibold text-white ">Orders Summary</h3>
+                    <h3 class=" text-xl font-semibold text-white ">Orders Summary</h3>
                 </div>
                 <div
                     class=" lg:flex lg:justify-evenly xl:flex xl:justify-evenly md:grid md:grid-cols-1 sm:grid sm:grid-cols-1">
@@ -46,7 +46,7 @@
                     </div>
                     <div class=" p-2 my-auto text-center">
                         <div class=" my-2">
-                            <h2 class=" text-2xl font-semibold">${{$revenue}}</h2>
+                            <h2 class=" text-2xl font-semibold">${{ $revenue }}</h2>
                         </div>
                         <div class=" my-2">
                             <p class=" text-sm text-gray-300">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
@@ -54,21 +54,22 @@
                                 do</p>
                         </div>
                         <div class=" mt-7">
-                            <button class=" text-[#FF8356] bg-[#FFE0AE] p-4 rounded-full">See More</button>
+                            <button class=" text-[#930027a8] bg-[#FFE0AE] p-4 font-semibold rounded-full">See
+                                More</button>
                         </div>
                     </div>
                     <div class=" p-2 my-full">
-                        <div class=" border my-2 py-3 px-7 text-center rounded-xl">
-                            <h3 class=" text-lg font-medium">{{$completeEstimates}}</h3>
-                            <p class=" text-[#2A2B43] text-sm">Complete</p>
+                        <div class=" border  my-2 py-3 px-7 text-center rounded-xl">
+                            <h3 class=" text-lg font-medium">{{ $completeEstimates }}</h3>
+                            <p class=" text-[#930027] font-semibold text-sm">Complete</p>
                         </div>
                         <div class=" border my-2 py-3 px-7 text-center rounded-xl">
-                            <h3 class=" text-lg font-medium">{{$pendingEstimates}}</h3>
-                            <p class=" text-[#2A2B43] text-sm">Pending</p>
+                            <h3 class=" text-lg font-medium">{{ $pendingEstimates }}</h3>
+                            <p class=" text-[#930027] font-semibold text-sm">Pending</p>
                         </div>
                         <div class=" border my-2 py-3 px-7 text-center rounded-xl">
-                            <h3 class=" text-lg font-medium">{{$cancelEstimates}}</h3>
-                            <p class=" text-[#2A2B43] text-sm">Cancel</p>
+                            <h3 class=" text-lg font-medium">{{ $cancelEstimates }}</h3>
+                            <p class=" text-[#930027] font-semibold text-sm">Cancel</p>
                         </div>
                     </div>
                 </div>
@@ -76,9 +77,9 @@
 
             <!-- order summary & schedules -->
             <!-- orders chart & to do list -->
-            <div class=" bg-[#930027] my-2 rounded-2xl w-auto">
-                <div class=" border-b-2 p-2 text-white">
-                    <h3 class=" text-lg font-medium">Orders</h3>
+            <div class="bg-white  my-2 rounded-2xl w-auto xl:w-[20%]">
+                <div class="bg-[#930027] rounded-t-2xl border-b-2 p-2 text-white">
+                    <h3 class=" text-lg font-semibold">Orders</h3>
                 </div>
                 <div class=" my-2 text-white text-center mx-auto">
                     <canvas id="myDoughnutChart"></canvas>
@@ -91,7 +92,7 @@
         class=" lg:flex lg:justify-between gap-2 xl:flex xl:justify-between sm:grid sm:grid-cols-1 md:grid md:grid-cols-1 my-2">
         @if (session('user_details')['user_role'] == 'crew')
             <div class=" bg-white w-full rounded-xl">
-            <div class="bg-[#930027] p-2 text-white rounded-t-xl">
+                <div class="bg-[#930027] p-2 text-white rounded-t-xl">
                     <div class=" flex justify-between gap-10">
                         <h3 class=" text-lg font-medium">Schedules</h3>
                     </div>
@@ -169,37 +170,41 @@
                                     <input type="text" name="to_do_title" id="to_do_title" placeholder="Add New"
                                         autocomplete="given-name"
                                         class=" inline-block mb-2 w-full rounded-md border-0 text-gray-400 p-2 ring-0 border-b-2 focus:border-0 border-[#f5f5f5] placeholder:text-gray-400 outline-none focus:ring-0 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                    <button class=" rounded-lg bg-[#930027] px-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]">
-                                        <img src="{{asset('assets/icons/plus-icon.svg')}}" alt="">
+                                    <button
+                                        class=" rounded-lg bg-[#930027] px-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]">
+                                        <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="">
                                     </button>
                                 </div>
                             </form>
-                            @foreach($Todos as $todo)
-                            <div class=" flex justify-between px-3">
-                                <div>
-                                    <div class=" inline-block">
-                                        <form action="/completeUserToDo/{{$todo->to_do_id}}" method="post">
+                            @foreach ($Todos as $todo)
+                                <div class=" flex justify-between px-3">
+                                    <div>
+                                        <div class=" inline-block">
+                                            <form action="/completeUserToDo/{{ $todo->to_do_id }}" method="post">
+                                                @csrf
+                                                <button>
+                                                    <input type="checkbox" name="completed"
+                                                        id="completedToDo_{{ $todo->to_do_id }}" value="completed"
+                                                        {{ $todo->to_do_status == 'completed' ? 'checked' : '' }}>
+                                                    <label for="completedToDo_{{ $todo->to_do_id }}"
+                                                        class=" text-gray-500"></label>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class=" inline-block font-semibold">
+                                            <p>{{ $todo->to_do_title }}</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <form action="/deleteUserToDo/{{ $todo->to_do_id }}" method="post">
                                             @csrf
                                             <button>
-                                            <input type="checkbox" name="completed" id="completedToDo_{{$todo->to_do_id}}" value="completed" {{ $todo->to_do_status == 'completed' ? 'checked' : '' }}>
-                                                <label for="completedToDo_{{$todo->to_do_id}}" class=" text-gray-500"></label>
+                                                <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
                                             </button>
                                         </form>
                                     </div>
-                                    <div class=" inline-block font-semibold">
-                                        <p>{{$todo->to_do_title}}</p>
-                                    </div>
                                 </div>
-                                <div>
-                                    <form action="/deleteUserToDo/{{$todo->to_do_id}}" method="post">
-                                        @csrf
-                                        <button>
-                                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                            <hr>
+                                <hr>
                             @endforeach
                         </div>
                     </div>
@@ -210,7 +215,7 @@
             <div class=" bg-white w-full rounded-xl">
                 <div class="bg-[#930027] p-2 text-white rounded-t-xl">
                     <div class=" flex justify-between gap-10">
-                        <h3 class=" text-lg font-medium">Schedules</h3>
+                        <h3 class=" text-lg font-semibold">Schedules</h3>
                     </div>
                 </div>
                 <div class=" p-2">
@@ -218,18 +223,18 @@
                         <table class="w-full text-sm text-left ">
                             <thead class="text-xs text-white uppercase bg-[#930027]">
                                 <tr>
-                                @if (session('user_details')['user_role'] == 'scheduler')
-                                    <th scope="col" class="px-6 py-3">
-                                        Start Date
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        End Date
-                                    </th>
+                                    @if (session('user_details')['user_role'] == 'scheduler')
+                                        <th scope="col" class="px-6 py-3">
+                                            Start Date
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            End Date
+                                        </th>
                                     @else
-                                    <th scope="col" class="px-6 py-3">
-                                        Date
-                                    </th>
-                                @endif
+                                        <th scope="col" class="px-6 py-3">
+                                            Date
+                                        </th>
+                                    @endif
                                     <th scope="col" class="px-6 py-3">
                                         Name/Number
                                     </th>
@@ -242,89 +247,107 @@
                                 </tr>
                             </thead>
                             <tbody class=" text-center">
-                            @foreach ($schedules[0] as $index => $schedule)
-                                @php
-                                    $estimate = $schedules[1][$index];
-                                    $scheduler = \App\Models\User::find($schedule->estimate_complete_assigned_to);
-                                @endphp
+                                @if (count($schedules[0]) > 0)
+                                @foreach ($schedules[0] as $index => $schedule)
+                                    @php
+                                        $estimate = $schedules[1][$index];
+                                        $scheduler = \App\Models\User::find($schedule->estimate_complete_assigned_to);
+                                    @endphp
 
-                                @if (session('user_details')['user_role'] == 'scheduler')
-                                    @if($estimate->estimate_schedule_assigned_to == session('user_details')['id'])
-                                    <tr>
-                                        <td>{{ date('d, F Y', strtotime($estimate->scheduled_start_date)) }}</td>
-                                        <td>{{ date('d, F Y', strtotime($estimate->scheduled_end_date)) }}</td>
-                                        <td>
-                                            <h3 class="text-lg font-medium">{{ $estimate->customer_name }}</h3>
-                                        </td>
-                                        <td>
-                                            <a href="https://maps.google.com/?q={{ $estimate->customer_address }}" target="_blank" class="pl-3">
-                                                <p class="text-[#323C47] hover:border-b">{{ $estimate->customer_address }}</p>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <h3 class="text-lg font-medium">{{ $scheduler->name }}</h3>
-                                            <p class="text-[#198CF6]">{{ $scheduler->phone }}</p>
-                                        </td>
-                                    </tr>
+                                    @if (session('user_details')['user_role'] == 'scheduler')
+                                        @if ($estimate->estimate_schedule_assigned_to == session('user_details')['id'])
+                                            <tr>
+                                                <td>{{ date('d, F Y', strtotime($estimate->scheduled_start_date)) }}
+                                                </td>
+                                                <td>{{ date('d, F Y', strtotime($estimate->scheduled_end_date)) }}
+                                                </td>
+                                                <td>
+                                                    <h3 class="text-lg font-medium">{{ $estimate->customer_name }}
+                                                    </h3>
+                                                </td>
+                                                <td>
+                                                    <a href="https://maps.google.com/?q={{ $estimate->customer_address }}"
+                                                        target="_blank" class="pl-3">
+                                                        <p class="text-[#323C47] hover:border-b">
+                                                            {{ $estimate->customer_address }}</p>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <h3 class="text-lg font-medium">{{ $scheduler->name }}</h3>
+                                                    <p class="text-[#198CF6]">{{ $scheduler->phone }}</p>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @else
+                                        <tr>
+                                            <td>{{ date('d, F Y', strtotime($estimate->created_at)) }}</td>
+                                            <td>
+                                                <h3 class="text-lg font-medium">{{ $estimate->customer_name }}
+                                                </h3>
+                                            </td>
+                                            <td>
+                                                <a href="https://maps.google.com/?q={{ $estimate->customer_address }}"
+                                                    target="_blank" class="pl-3">
+                                                    <p class="text-[#323C47] hover:border-b">
+                                                        {{ $estimate->customer_address }}</p>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <h3 class="text-lg font-medium">{{ $scheduler->name }}</h3>
+                                                <p class="text-[#198CF6]">{{ $scheduler->phone }}</p>
+                                            </td>
+                                        </tr>
                                     @endif
-                                @else
+                                @endforeach
+                                    @else
                                     <tr>
-                                        <td>{{ date('d, F Y', strtotime($estimate->created_at)) }}</td>
-                                        <td>
-                                            <h3 class="text-lg font-medium">{{ $estimate->customer_name }}</h3>
-                                        </td>
-                                        <td>
-                                            <a href="https://maps.google.com/?q={{ $estimate->customer_address }}" target="_blank" class="pl-3">
-                                                <p class="text-[#323C47] hover:border-b">{{ $estimate->customer_address }}</p>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <h3 class="text-lg font-medium">{{ $scheduler->name }}</h3>
-                                            <p class="text-[#198CF6]">{{ $scheduler->phone }}</p>
-                                        </td>
+                                        <td colspan="4" class="pt-4 border-b-2">No Schedules </td>
                                     </tr>
                                 @endif
-                            @endforeach
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
             <div class=" bg-white w-full rounded-xl">
-                    <div class=" border-b-2 p-2 bg-[#930027] rounded-t-xl">
-                        <h3 class=" text-lg font-medium text-white">To do List</h3>
-                    </div>
-                    <div>
-                        <div class=" py-4 px-2 my-2">
-                            <form action="/addUserToDo" method="post">
-                                @csrf
-                                <div class=" flex justify-between">
-                                    <input type="text" name="to_do_title" id="to_do_title" placeholder="Add New"
-                                        autocomplete="given-name"
-                                        class=" inline-block mb-2 w-full rounded-md border-0 text-gray-400 p-2 ring-0 border-b-2 focus:border-0 border-[#f5f5f5] placeholder:text-gray-400 outline-none focus:ring-0 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                    <button class=" rounded-lg bg-[#930027] px-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]">
-                                        <img src="{{asset('assets/icons/plus-icon.svg')}}" alt="">
-                                    </button>
-                                </div>
-                            </form>
-                            @foreach($Todos as $todo)
+                <div class=" border-b-2 p-2 bg-[#930027] rounded-t-xl">
+                    <h3 class=" text-lg font-semibold text-white ">To do List</h3>
+                </div>
+                <div>
+                    <div class=" py-4 px-2 my-2">
+                        <form action="/addUserToDo" method="post">
+                            @csrf
+                            <div class=" flex justify-between">
+                                <input type="text" name="to_do_title" id="to_do_title" placeholder="Add New"
+                                    autocomplete="given-name"
+                                    class=" inline-block mb-2 w-full rounded-md border-0 text-gray-400 p-2 ring-0 border-b-2 focus:border-0 border-[#f5f5f5] placeholder:text-gray-400 outline-none focus:ring-1  focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <button
+                                    class="rounded-lg h-10 flex justify-center items-center w-10 bg-[#930027] px-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]">
+                                    <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="">
+                                </button>
+                            </div>
+                        </form>
+                        @foreach ($Todos as $todo)
                             <div class=" flex justify-between px-3">
                                 <div>
                                     <div class=" inline-block">
-                                        <form action="/completeUserToDo/{{$todo->to_do_id}}" method="post">
+                                        <form action="/completeUserToDo/{{ $todo->to_do_id }}" method="post">
                                             @csrf
                                             <button>
-                                            <input type="checkbox" name="completed" id="completedToDo_{{$todo->to_do_id}}" value="completed" {{ $todo->to_do_status == 'completed' ? 'checked' : '' }}>
-                                                <label for="completedToDo_{{$todo->to_do_id}}" class=" text-gray-500"></label>
+                                                <input type="checkbox" name="completed"
+                                                    id="completedToDo_{{ $todo->to_do_id }}" value="completed"
+                                                    {{ $todo->to_do_status == 'completed' ? 'checked' : '' }}>
+                                                <label for="completedToDo_{{ $todo->to_do_id }}"
+                                                    class=" text-gray-500"></label>
                                             </button>
                                         </form>
                                     </div>
                                     <div class=" inline-block font-semibold">
-                                        <p>{{$todo->to_do_title}}</p>
+                                        <p>{{ $todo->to_do_title }}</p>
                                     </div>
                                 </div>
                                 <div>
-                                    <form action="/deleteUserToDo/{{$todo->to_do_id}}" method="post">
+                                    <form action="/deleteUserToDo/{{ $todo->to_do_id }}" method="post">
                                         @csrf
                                         <button>
                                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
@@ -333,10 +356,10 @@
                                 </div>
                             </div>
                             <hr>
-                            @endforeach
-                        </div>
+                        @endforeach
                     </div>
                 </div>
+            </div>
         @endif
     </div>
 </div>
@@ -400,8 +423,7 @@
             labels: ['pending', 'complete', 'cancel'],
             datasets: [{
                 data: [pendingCount, completeCount, cancelCount],
-                backgroundColor: ['#FFB946', '#2ED47A', '#F7685B'],
-                borderColor: '#930027'
+                backgroundColor: ['#FFB946', '#2ED47A', '#F7685B']
             }]
         };
 

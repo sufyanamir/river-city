@@ -529,7 +529,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                                 Estimate
                                             </button>
                                         </li>
-                                    </a>    
+                                    </a>
                                     <hr>
                                     <a href="/viewEstimateMaterials/{{$estimate->estimate_id}}" target="_blank">
                                         <li>
@@ -4869,7 +4869,7 @@ $userPrivileges->estimate->expenses === 'on')
                         itemPrice.val(itemData.item_price);
                         itemId.val(itemData.item_id);
                         console.log(itemData.item_units);
-                        
+
                         // assemblyName.val(assemblyItemData.assembly_name);
                         // assByItem.val(assemblyItemData.item_unit_by_ass_unit);
                         // itemByAss.val(assemblyItemData.ass_unit_by_item_unit);
@@ -5614,7 +5614,7 @@ $('[id^="editEstimate-item"]').click(function() {
 
                         templateItemDiv.append(demoInput);
 
-                        $('#template_item_name_' + i).text(correspondingItemData.item_name + 
+                        $('#template_item_name_' + i).text(correspondingItemData.item_name +
                         (correspondingItemData.item_description ? ' ' + correspondingItemData.item_description : ''));
                         $('#template_item_id_' + i).val(correspondingItemData.item_id);
                         $('#template_item_qty_' + i).val(currentItem.item_qty);

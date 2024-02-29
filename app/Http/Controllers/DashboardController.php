@@ -61,20 +61,20 @@ class DashboardController extends Controller
             $confirmedOrders = Estimate::where('estimate_status', '<>', 'cancel')->get();
             $totalRevenue = Estimate::where('estimate_status', '<>', 'cancel')->sum('estimate_total');
             $schedules = EstimateSchedule::get();
-            
+
             // Initialize $estimates as an empty array
             $estimates = [];
-    
+
             foreach ($schedules as $schedule) {
                 $estimate = Estimate::where('estimate_id', $schedule->estimate_id)->first();
                 $estimates[] = $estimate;
             }
-    
+
             $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->get();
             $completeEstimates = Estimate::where('estimate_status', 'complete')->count();
             $pendingEstimates = Estimate::where('estimate_status', 'pending')->count();
             $cancelEstimates = Estimate::where('estimate_status', 'cancel')->count();
-    
+
             return view('dashboard', [
                 'customers' => $customers,
                 'staff' => $staff,
