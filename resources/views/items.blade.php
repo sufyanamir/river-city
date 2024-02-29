@@ -60,8 +60,8 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <td>{{ $item->item_name }}</td>
                             <td>{{ $item->item_type }}</td>
                             <td>{{ $item->item_units }}</td>
-                            <td>{{ $item->item_cost }}</td>
-                            <td>{{ $item->item_price }}</td>
+                            <td>{{ number_format($item->item_cost, 2) }}</td>
+                            <td>{{ number_format($item->item_price, 2) }}</td>
                             <td class=" w-[100px]">{{ $item->item_description }}</td>
                             <td>
                                 @if (session('user_details')['user_role'] == 'admin')

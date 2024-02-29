@@ -619,10 +619,10 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <tr>
                                 <td class="font-semibold text-xl">Estimated</td>
                                 <td class="">{{$profitHours}}</td>
-                                <td class="">${{$profitCost}}</td>
-                                <td>${{$expenseTotal}}</td>
-                                <td class="">${{$mainProfit}}</td>
-                                <td class="">{{$profitMargin}}%</td>
+                                <td class="">${{ number_format($profitCost, 2) }}</td>
+                                <td>${{ number_format($expenseTotal, 2)}}</td>
+                                <td class="">${{ number_format($mainProfit, 2)}}</td>
+                                <td class="">{{ number_format($profitMargin, 2)}}%</td>
                             </tr>
                         </tbody>
                     </table>
@@ -656,11 +656,11 @@ $userPrivileges = session('user_details')['user_privileges'];
                         <tbody class=" text-center">
                             <tr>
                                 <td class="font-semibold text-xl">Estimated</td>
-                                <td class="">${{$budgetLabour}}</td>
-                                <td class="">${{$budgetMaterial}}</td>
-                                <td>${{$expenseTotal}}</td>
-                                <td class="">${{$budgetProfit}}</td>
-                                <td class="">{{$budgetMargin}}%</td>
+                                <td class="">${{number_format($budgetLabour, 2)}}</td>
+                                <td class="">${{number_format($budgetMaterial, 2)}}</td>
+                                <td>${{number_format($expenseTotal, 2)}}</td>
+                                <td class="">${{number_format($budgetProfit, 2)}}</td>
+                                <td class="">{{number_format($budgetMargin, 2)}}%</td>
                             </tr>
                         </tbody>
                     </table>
