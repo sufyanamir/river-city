@@ -5066,78 +5066,66 @@ $('[id^="editEstimate-item"]').click(function() {
     });
 
 
-        function applyInputEventListenerForAssUnit() {
+    function applyInputEventListenerForAssUnit() {
     $('[id^="item_unit_by_ass_unit_"]').on('input', function() {
-        // Get the ID of the item_unit_by_ass_unit input
-        var itemId = $(this).attr('id').replace('item_unit_by_ass_unit_', '');
+        // Initialize variables to store total expenses for labour and material items
+        var totalLabourExpense = 0;
+        var totalMaterialExpense = 0;
 
-        // Retrieve the selected option from the corresponding select element
-        var selectedOption = $('#assembly_id_' + itemId + ' option:selected');
+        // Iterate over each row
+        $('[id^="item_unit_by_ass_unit_"]').each(function() {
+            // Get the ID of the item_unit_by_ass_unit input for the current row
+            var itemId = $(this).attr('id').replace('item_unit_by_ass_unit_', '');
 
-        
-        
-        // Retrieve data from the selected option
-        var itemType = selectedOption.data('item-type');
-        var labourExpense = selectedOption.data('labour-expense');
-        var materialExpense = selectedOption.data('material-expense');
-        var itemPrice = selectedOption.data('item-price');
-        var itemUnit = selectedOption.data('unit');
+            // Retrieve the selected option from the corresponding select element for the current row
+            var selectedOption = $('#assembly_id_' + itemId + ' option:selected');
 
-        var addItemUnit = $('#addedItemUnit' + itemId);
-        
-        console.log(itemType);
-        console.log(labourExpense);
-        console.log(materialExpense);
-        console.log(itemPrice);
-        console.log('itemId: ' + itemId);
-        console.log(itemUnit);
-        addItemUnit.text(itemUnit);
+            // Retrieve data from the selected option for the current row
+            var itemType = selectedOption.data('item-type');
+            var labourExpense = selectedOption.data('labour-expense');
+            var materialExpense = selectedOption.data('material-expense');
+            var itemPrice = selectedOption.data('item-price');
 
-        // Get the value entered in the item_unit_by_ass_unit input
-        var itemUnitValue = parseFloat($(this).val());
+            // Get the value entered in the item_unit_by_ass_unit input for the current row
+            var itemUnitValue = parseFloat($(this).val());
 
-        // Perform calculations based on item type
-        if (itemType === 'labour') {
-            if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                var calculatedValue = (itemPrice / labourExpense) / itemUnitValue;
+            // Perform calculations based on item type for the current row
+            if (itemType === 'labour') {
+                if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
+                    var calculatedValue = (itemPrice / labourExpense) / itemUnitValue;
 
-                // Set the calculated value for ass_unit_by_item_unit input
-                $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(4)); // Assuming you want the result rounded to 4 decimal places
-
-                var labourExpenseEndValue = calculatedValue * 1 * itemPrice;
-
-                $('#labour_expense').val(labourExpenseEndValue.toFixed(2));
-                addItemUnit.text(itemUnit);
-            } else {
-                // If itemUnitValue is not a valid number or is 0, set the value of ass_unit_by_item_unit to empty
-                $('#ass_unit_by_item_unit_' + itemId).val('');
+                    // Update total labour expense for the current row
+                    totalLabourExpense += calculatedValue * 1 * itemPrice;
+                }else{
                 $('#labour_expense').val('');
-            }
-        } else if (itemType === 'material') {
-            if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                var calculatedValue = (itemPrice / materialExpense) / itemUnitValue;
-
-                // Set the calculated value for ass_unit_by_item_unit input
-                $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(4)); // Assuming you want the result rounded to 4 decimal places
-            
-                var materialExpenseEndValue = calculatedValue * 1 * itemPrice;
-
-                $('#material_expense').val(materialExpenseEndValue.toFixed(2));
-                addItemUnit.text(itemUnit);
-
-            } else {
-                // If itemUnitValue is not a valid number or is 0, set the value of ass_unit_by_item_unit to empty
                 $('#ass_unit_by_item_unit_' + itemId).val('');
-                $('#material_expense').val('');
             }
-        }
-        // Calculate the sum of labour expense and material expense
-        var totalExpense = parseFloat($('#labour_expense').val() || 0) + parseFloat($('#material_expense').val() || 0);
+            } else if (itemType === 'material') {
+                if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
+                    var calculatedValue = (itemPrice / materialExpense) / itemUnitValue;
 
-        var assItemCost = totalExpense / 2;
-        // Set the sum in the item price input
+                    // Update total material expense for the current row
+                    totalMaterialExpense += calculatedValue * 1 * itemPrice;
+                }else{
+                $('#material_expense').val('');
+                $('#ass_unit_by_item_unit_' + itemId).val('');
+            }
+            }
+        });
+
+        // Set the total labour and material expenses in their respective inputs
+        $('#labour_expense').val(totalLabourExpense.toFixed(2));
+        $('#material_expense').val(totalMaterialExpense.toFixed(2));
+
+        // Calculate the sum of labour expense and material expense
+        var totalExpense = totalLabourExpense + totalMaterialExpense;
+
+        // Calculate the item cost as half of the total expense
+        var itemCost = totalExpense / 2;
+
+        // Set the total expense and item cost in their respective inputs
         $('#item_price').val(totalExpense.toFixed(2));
-        $('#item_cost').val(assItemCost.toFixed(2));
+        $('#item_cost').val(itemCost.toFixed(2));
     });
 }
 
