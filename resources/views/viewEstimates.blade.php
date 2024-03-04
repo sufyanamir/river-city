@@ -205,7 +205,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                                             </div>
                                                             <div class="" id="">
                                                                 <label for="" class=" block">Phone:</label>
-                                                                <input value="{{ $contacts->contact_phone }}" type="tel" name="phone" id="phone" placeholder="XXX-XXX-XXXX"pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}" title="Phone number must be in the format XXX-XXX-XXXX/XXXXXXXXXX" required autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                <input value="{{ $contacts->contact_phone }}" type="tel" name="phone" id="phone" placeholder="XXX-XXX-XXXX" pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}" title="Phone number must be in the format XXX-XXX-XXXX/XXXXXXXXXX" required autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                                             </div>
                                                         </div>
                                                         <div class=" border-t">
@@ -357,7 +357,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                                             </div>
                                                             <div class="" id="">
                                                                 <label for="" class=" block">Phone:</label>
-                                                                <input value="{{ $contacts->contact_phone }}" type="tel" name="phone" id="phone" placeholder="XXX-XXX-XXXX"pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}" title="Phone number must be in the format XXX-XXX-XXXX/XXXXXXXXXX" required autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                <input value="{{ $contacts->contact_phone }}" type="tel" name="phone" id="phone" placeholder="XXX-XXX-XXXX" pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}" title="Phone number must be in the format XXX-XXX-XXXX/XXXXXXXXXX" required autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                                             </div>
                                                         </div>
                                                         <div class=" border-t">
@@ -706,213 +706,25 @@ $userPrivileges = session('user_details')['user_privileges'];
             </div>
             @php
             $totalPrice = 0; // Initialize total price variable
+
+            $groupedItems = [];
+            foreach ($estimate_items as $groupItems) {
+            $groupName = $groupItems->group->group_name ?? 'Other'; // Use 'Other' if no group is associated
+            $groupedItems[$groupName][] = $groupItems;
+            }
             @endphp
             <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
                 @if ($estimate_items->count() > 0)
-                <div class="relative overflow-x-auto mb-8">
-                    <div class="itemDiv">
-                        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">
-
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Item Name
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Item Description
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Item Status (excluded/included)
-                                    </th>
-                                    <th scope="col" class="text-center">
-                                        Item Cost
-                                    </th>
-                                    <th scope="col" class="text-center">
-                                        Item Qty
-                                    </th>
-                                    <th scope="col" class="text-center">
-                                        Total
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($estimate_items as $item)
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                        <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
-                                            <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                                        </button>
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
-                                    </td>
-                                    <td class="px-6 py-4 w-[30%]">
-                                        <p class="text-[16px]/[18px] text-[#323C47] font">
-                                            @if ($item->item_description)
-                                        <p class="font-medium">Description:</p>
-                                        {{ $item->item_description }}
-                                        @endif
-                                        @if ($item->item_note)
-                                        <p class="font-medium">Note:</p>
-                                        {{ $item->item_note }}
-                                        @endif
-                                        </p>
-                                    </td>
-                                    <td class="text-center">
-                                        @if($item->item_status == 'included')
-                                        <span class="inline-flex my-auto items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $item->item_status }}</span>
-                                        @elseif($item->item_status == 'excluded')
-                                        <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">{{ $item->item_status }}</span>
-                                        @endif
-                                        <button type="button" id="exclude-include-menuBtn{{$item->estimate_item_id}}" class="inline p-2">
-                                            <i class="fa-solid fa-square-caret-down text-[#930027] text-lg"></i>
-                                        </button>
-                                        <!-- Dropdown menu -->
-                                        <div class="absolute z-10">
-                                            <div id="exclude-include-menu{{$item->estimate_item_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                                                    <li>
-                                                        <form action="/includeexcludeEstimateItem" method="post">
-                                                            @csrf
-                                                            <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                            <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
-                                                            <input type="hidden" name="item_status" value="included">
-                                                            <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                                Include
-                                                            </button>
-                                                        </form>
-                                                    </li>
-                                                    <hr>
-                                                    <li>
-                                                        <form action="/includeexcludeEstimateItem" method="post">
-                                                            @csrf
-                                                            <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                            <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
-                                                            <input type="hidden" name="item_status" value="excluded">
-                                                            <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                                Exclude
-                                                            </button>
-                                                        </form>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <script>
-                                            document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}").addEventListener("click", function(e) {
-                                                e.stopPropagation(); // Prevents the click event from reaching the document body
-                                                var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
-                                                dropdownMenu.classList.toggle("topbar-menuEntring");
-                                                dropdownMenu.classList.toggle("topbar-manuLeaving");
-                                            });
-
-                                            document.addEventListener('click', function(e) {
-                                                var btn = document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}");
-                                                var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
-
-                                                if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                                                    // Click occurred outside the button and dropdown, hide the dropdown
-                                                    dropdownMenu.classList.add("topbar-manuLeaving");
-                                                    dropdownMenu.classList.remove("topbar-menuEntring");
-                                                }
-                                            });
-                                        </script>
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $item->item_cost }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $item->item_qty }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $item->item_total }}
-                                    </td>
-                                </tr>
-                                @php
-                                $totalPrice += $item->item_total; // Add item price to total
-                                @endphp
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                @endif
-                @foreach ($estimate_assembly_items as $item)
+                @foreach ($groupedItems as $groupName => $itemss)
                 <div class="mb-2 bg-white shadow-xl">
                     <div class=" p-1 bg-[#930027] text-white w-full rounded-t-lg">
                         <div class="inline-block">
                             <div class="flex gap-3">
-                            <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline my-auto">
-                                <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                            </button>
-                            <h1 class=" font-medium my-auto">{{ $item->item_name }}</h1>
-                            @if($item->item_status == 'included')
-                            <span class="inline-flex my-auto items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $item->item_status }}</span>
-                            @elseif($item->item_status == 'excluded')
-                            <span class="bg-red-100 text-red-800 my-auto inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">{{ $item->item_status }}</span>
-                            @endif
-                            <button type="button" id="exclude-include-menuBtn{{$item->item_status}}" class="inline p-2">
-                                <i class="fa-solid fa-square-caret-down  text-lg"></i>
-                            </button>
-                            <!-- Dropdown menu -->
-                            <div class="absolute z-50">
-                                <div id="exclude-include-menu{{$item->item_status}}" class=" bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 topbar-manuLeaving">
-                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                                        <li>
-                                            <form action="/includeexcludeEstimateItem" method="post">
-                                                @csrf
-                                                <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
-                                                <input type="hidden" name="item_status" value="included">
-                                                <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                    Include
-                                                </button>
-                                            </form>
-                                        </li>
-                                        <hr>
-                                        <li>
-                                            <form action="/includeexcludeEstimateItem" method="post">
-                                                @csrf
-                                                <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
-                                                <input type="hidden" name="item_status" value="excluded">
-                                                <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                    Exclude
-                                                </button>
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <h1 class=" font-medium my-auto p-2">{{$groupName}}</h1>
                             </div>
-                            <script>
-                                document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}").addEventListener("click", function(e) {
-                                    e.stopPropagation(); // Prevents the click event from reaching the document body
-                                    var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
-                                    dropdownMenu.classList.toggle("topbar-menuEntring");
-                                    dropdownMenu.classList.toggle("topbar-manuLeaving");
-                                });
-
-                                document.addEventListener('click', function(e) {
-                                    var btn = document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}");
-                                    var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
-
-                                    if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                                        // Click occurred outside the button and dropdown, hide the dropdown
-                                        dropdownMenu.classList.add("topbar-manuLeaving");
-                                        dropdownMenu.classList.remove("topbar-menuEntring");
-                                    }
-                                });
-                            </script>
-                            </div>
-                        </div>
-                        <div class=" m-4 inline-block float-right">
-                            <p>
-                               Total: ${{$item->item_total}}
-                            </p>
                         </div>
                     </div>
-                    <div class="relative overflow-x-auto">
+                    <div class="relative overflow-x-auto mb-8">
                         <div class="itemDiv">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -923,42 +735,198 @@ $userPrivileges = session('user_details')['user_privileges'];
                                         <th scope="col" class="px-6 py-3">
                                             Item Name
                                         </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Description
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Item Status (excluded/included)
+                                        </th>
                                         <th scope="col" class="text-center">
                                             Item Cost
                                         </th>
                                         <th scope="col" class="text-center">
                                             Item Qty
                                         </th>
+                                        <th scope="col" class="text-center">
+                                            Total
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($item['assemblies'] as $assembly)
+                                    @foreach ($itemss as $item)
                                     <tr class="bg-white border-b">
                                         <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                            <!-- <button type="button" id="editEstimate-item{{ $assembly['estimate_item_assembly_id'] }}" class="inline">
+                                            <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                                                 <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                                            </button> -->
+                                            </button>
                                         </th>
                                         <td class="px-6 py-4">
-                                            <label class="text-lg font-semibold text-[#323C47]" for="">{{ $assembly['est_ass_item_name'] }}</label>
+                                            <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
+                                        </td>
+                                        <td class="px-6 py-4 w-[30%]">
+                                            <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                @if ($item->item_description)
+                                            <p class="font-medium">Description:</p>
+                                            {{ $item->item_description }}
+                                            @endif
+                                            @if ($item->item_note)
+                                            <p class="font-medium">Note:</p>
+                                            {{ $item->item_note }}
+                                            @endif
+                                            </p>
                                         </td>
                                         <td class="text-center">
-                                            {{ number_format($assembly['ass_unit_by_item_unit'], 2) }}
+                                            @if($item->item_status == 'included')
+                                            <span class="inline-flex my-auto items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $item->item_status }}</span>
+                                            @elseif($item->item_status == 'excluded')
+                                            <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">{{ $item->item_status }}</span>
+                                            @endif
+                                            <button type="button" id="exclude-include-menuBtn{{$item->estimate_item_id}}" class="inline p-2">
+                                                <i class="fa-solid fa-square-caret-down text-[#930027] text-lg"></i>
+                                            </button>
+                                            <!-- Dropdown menu -->
+                                            <div class="absolute z-10">
+                                                <div id="exclude-include-menu{{$item->estimate_item_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                                                        <li>
+                                                            <form action="/includeexcludeEstimateItem" method="post">
+                                                                @csrf
+                                                                <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                                <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
+                                                                <input type="hidden" name="item_status" value="included">
+                                                                <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                                    Include
+                                                                </button>
+                                                            </form>
+                                                        </li>
+                                                        <hr>
+                                                        <li>
+                                                            <form action="/includeexcludeEstimateItem" method="post">
+                                                                @csrf
+                                                                <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                                <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
+                                                                <input type="hidden" name="item_status" value="excluded">
+                                                                <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                                    Exclude
+                                                                </button>
+                                                            </form>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <script>
+                                                document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}").addEventListener("click", function(e) {
+                                                    e.stopPropagation(); // Prevents the click event from reaching the document body
+                                                    var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
+                                                    dropdownMenu.classList.toggle("topbar-menuEntring");
+                                                    dropdownMenu.classList.toggle("topbar-manuLeaving");
+                                                });
+
+                                                document.addEventListener('click', function(e) {
+                                                    var btn = document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}");
+                                                    var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
+
+                                                    if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                                                        // Click occurred outside the button and dropdown, hide the dropdown
+                                                        dropdownMenu.classList.add("topbar-manuLeaving");
+                                                        dropdownMenu.classList.remove("topbar-menuEntring");
+                                                    }
+                                                });
+                                            </script>
                                         </td>
                                         <td class="text-center">
-                                            {{ number_format($assembly['item_unit_by_ass_unit'], 2) }}
+                                            {{ $item->item_cost }}
                                         </td>
+                                        <td class="text-center">
+                                            {{ $item->item_qty }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $item->item_total }}
+                                        </td>
+                                        @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
+                                    <tr>
+                                        <td colspan="7">
+                                            <div class="">
+                                                <div id="accordion-collapse{{$item->estimate_item_id}}" class="accordion-collapse mb-2" data-accordion="collapse">
+                                                    <h2 id="accordion-collapse-heading-1" class="border-b-2">
+                                                        <button type="button" class="flex items-center bg-[#F5F5F5] justify-between w-full p-2  text-left rounded-t-lg  focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-1" aria-expanded="true" aria-controls="accordion-collapse-body-1">
+                                                            <span></span>
+                                                            <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
+                                                            </svg>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="accordion-collapse-body{{$item->estimate_item_id}}" class="accordion-collapse-body bg-[#F5F5F5] hidden" aria-labelledby="accordion-collapse-heading-1">
+                                                        <div class="p-2">
+                                                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                                                    <tr>
+                                                                        <th scope="col" class="px-6 py-3"></th>
+                                                                        <th scope="col" class="px-6 py-3">
+                                                                            Item Name
+                                                                        </th>
+                                                                        <th scope="col" class="px-6 py-3">
+                                                                            Item Description
+                                                                        </th>
+                                                                        <th scope="col" class="text-center">
+                                                                            Item Cost
+                                                                        </th>
+                                                                        <th scope="col" class="text-center">
+                                                                            Item Qty
+                                                                        </th>
+                                                                        <th scope="col" class="text-center">
+                                                                            Total
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach($item->assemblies as $assembly)
+                                                                    <tr class="bg-white border-b">
+                                                                        <td class="px-6 py-4"></td>
+                                                                        <td class="px-6 py-4">
+                                                                            {{$assembly->est_ass_item_name}}
+                                                                        </td>
+                                                                        <td class="px-6 py-4 w-[30%]">
+                                                                            {{$assembly->ass_item_description}}
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            {{$assembly->ass_item_price}}
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            {{$assembly->ass_item_qty}}
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            {{$assembly->ass_item_total}}
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <script>
+                                            document.getElementById("accordion-collapse{{$item->estimate_item_id}}").addEventListener("click", function() {
+                                                var accordionBody = document.getElementById("accordion-collapse-body{{$item->estimate_item_id}}");
+                                                accordionBody.classList.toggle("hidden");
+                                            });
+                                        </script>
                                     </tr>
+                                    @endif
+                                    </tr>
+                                    @php
+                                    $totalPrice += $item->item_total; // Add item price to total
+                                    @endphp
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    @php
-                    $totalPrice += $item->item_total; // Add item price to total
-                    @endphp
+                    @endforeach
                 </div>
-                @endforeach
+                @endif
                 @foreach ($estimateItemTemplates as $estItemTemplate)
                 <div class="mb-2 bg-white shadow-xl">
                     <div class=" flex gap-3 p-1 bg-[#930027] text-white w-full rounded-t-lg">
@@ -1094,13 +1062,13 @@ $userPrivileges = session('user_details')['user_privileges'];
                     </div>
                 </div>
                 @endforeach
-        </div>
-        <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
-            <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Grand Total</span>
-            <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
+            </div>
+            <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
+                <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Grand Total</span>
+                <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
+            </div>
         </div>
     </div>
-</div>
 </div>
 @elseif(isset($userPrivileges->estimate) &&
 isset($userPrivileges->estimate->items) &&
@@ -2715,7 +2683,7 @@ $userPrivileges->estimate->emails === 'on')
                         @foreach ($estimate_emails as $email)
                         <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            {{ date('d, F Y', strtotime($email->created_at)) }}
+                                {{ date('d, F Y', strtotime($email->created_at)) }}
                             </th>
                             <td class="px-6 py-4">
                                 {{ $email->email_name }}
@@ -4592,6 +4560,11 @@ $userPrivileges->estimate->expenses === 'on')
                             <textarea name="item_note" id="item_note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
                             <button type="button" id="items-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'item_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
+                        <div class="my-0 col-span-4" id="">
+                            <label for="" class="block text-left text-sm mb-1">Group</label>
+                            <input type="text" step="any" name="group_name" id="group_name" readonly autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <input type="hidden" name="group_id" id="group_id">
+                        </div>
                     </div>
                     <div class="">
                         <button class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
@@ -4839,6 +4812,8 @@ $userPrivileges->estimate->expenses === 'on')
         var assByItem = $('#assembly_unit_by_item_unit');
         var itemByAss = $('#item_unit_by_assembly_unit');
         var isUpgrade = $('#is_upgrade');
+        var groupNameInput = $('#group_name');
+        var groupIdInput = $('#group_id');
 
         // Add a change event listener to the selected_item dropdown
         selectedItemDropdown.on('change', function() {
@@ -4868,7 +4843,16 @@ $userPrivileges->estimate->expenses === 'on')
                         itemCost.val(itemData.item_cost);
                         itemPrice.val(itemData.item_price);
                         itemId.val(itemData.item_id);
-                        console.log(itemData.item_units);
+                        if (itemData.group && itemData.group.group_name != null) {
+                            groupNameInput.val(itemData.group.group_name);
+                            groupIdInput.val(itemData.group.group_id);
+                        } else {
+                            groupNameInput.val('');
+                            groupIdInput.val('');
+                        }
+                        // groupNameInput.val(itemData.group.group_name);
+                        // console.log(itemData);
+                        // console.log(itemData.item_units);
 
                         // assemblyName.val(assemblyItemData.assembly_name);
                         // assByItem.val(assemblyItemData.item_unit_by_ass_unit);
@@ -4879,11 +4863,12 @@ $userPrivileges->estimate->expenses === 'on')
                         mulitple_input.html('');
                         $.each(assemblyItemData, function(index, itemData) {
                             let id = Math.floor(Math.random() * 999 + 1);
-                            console.log(itemData.assembly_name);
+                            console.log(assemblyItemData);
                             let newele = $('<div class="mt-5" id="ele' + id + '"></div>');
                             let delbtn = $('<span></span>');
                             // ============
                             newele.html(`
+                            <input type="hidden" name="ass_item_id[]" id="ass_item_id_${index}" value="${itemData.ass_item_id}">
                                 <select name="assembly_name[]" id="assembly_id_${index}" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
                                     <option selected value="${itemData.assembly_name}" data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ isset($item) ? $item->item_units : '' }}">${itemData.assembly_name}</option>
@@ -4891,23 +4876,26 @@ $userPrivileges->estimate->expenses === 'on')
                                     <option id="option_id{{$item->item_id}}" value="{{ $item->item_name }}" data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
                                     @endforeach
                                 </select>
-                                <div class=" grid grid-cols-2 gap-3 mt-2 inline-block">
+                                <div class=" grid grid-cols-3 gap-3 mt-2 inline-block">
                                     <div>
                                         <input value="${itemData.item_unit_by_ass_unit}" type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_ass_unit_${index}" placeholder="00.0" autocomplete="given-name"
                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                         <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
                                     </div>
+                                    <div>
+                                        <input  value="${itemData.ass_unit_by_item_unit}"  type="text" name="assembly_unit_by_item_unit[]" id="ass_unit_by_item_unit_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                    </div>
                                     <div class="flex ">
-                    <div class="w-[80%]  ">
-                    <input  value="${itemData.ass_unit_by_item_unit}"  type="number" name="assembly_unit_by_item_unit[]" id="ass_unit_by_item_unit_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
-                  </div>
-                   <div class="mt-1" >
-                    <button   type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                                        <div class="w-[80%]  ">
+                                        <input type="number" step="any" name="item_total_qty[]" id="total_qty_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="">Total</span>
+                                        </div>
+                                        <div class="mt-1" >
+                                            <button   type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
                                                 <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
-                            </button>
-                    </div>
-                </div>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             `);
                             $(document).on('click', `#ele${id} button`, function() {
@@ -4958,176 +4946,200 @@ $userPrivileges->estimate->expenses === 'on')
         });
 
 
-// Add a click event listener to the edit buttons
-$('[id^="editEstimate-item"]').click(function() {
-        var itemId = this.id.replace('editEstimate-item', ''); // Extract item ID from button ID
+        // Add a click event listener to the edit buttons
+        $('[id^="editEstimate-item"]').click(function() {
+            var itemId = this.id.replace('editEstimate-item', ''); // Extract item ID from button ID
 
-        // Make an AJAX request to get item details
-        $.ajax({
-            url: '/getEstimateItem' + itemId,
-            method: 'GET',
-            success: function(response) {
-                if (response.success) {
-                    // Populate the modal with the retrieved data
-                    var itemDetail = response.item_detail;
-                    var assemblyItemData = response.assembly_items;
-                    console.log(assemblyItemData)
-                    $('#deleteItem-btn').removeClass('hidden');
-                    $('#deleteEstimateItem').attr('action', '/deleteEstimateItem/' + itemDetail.estimate_item_id);
-                    // Update modal content with item details
-                    $('#type').val(itemDetail.item_type);
-                    $('#itemName').val(itemDetail.item_name);
-                    $('#item_units').val(itemDetail.item_unit);
-                    $('#labour_expense').val(itemDetail.labour_expense);
-                    $('#material_expense').val(itemDetail.material_expense);
-                    $('#item_cost').val(itemDetail.item_cost);
-                    $('#item_price').val(itemDetail.item_price);
-                    $('#item_qty').val(itemDetail.item_qty);
-                    $('#item_total').val(itemDetail.item_total);
-                    $('#item_description').val(itemDetail.item_description);
-                    $('#note').val(itemDetail.item_note);
-                    // Add other fields as needed
-                    if (itemDetail.item_type == 'upgrades' || itemDetail.item_type == 'assemblies') {
-                        $('#type').trigger('change');
+            // Make an AJAX request to get item details
+            $.ajax({
+                url: '/getEstimateItem' + itemId,
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        // Populate the modal with the retrieved data
+                        var itemDetail = response.item_detail;
+                        var assemblyItemData = response.assembly_items;
+                        console.log(assemblyItemData)
+                        $('#deleteItem-btn').removeClass('hidden');
+                        $('#deleteEstimateItem').attr('action', '/deleteEstimateItem/' + itemDetail.estimate_item_id);
+                        // Update modal content with item details
+                        $('#type').val(itemDetail.item_type);
+                        $('#itemName').val(itemDetail.item_name);
+                        $('#item_units').val(itemDetail.item_unit);
+                        $('#labour_expense').val(itemDetail.labour_expense);
+                        $('#material_expense').val(itemDetail.material_expense);
+                        $('#item_cost').val(itemDetail.item_cost);
+                        $('#item_price').val(itemDetail.item_price);
+                        $('#item_qty').val(itemDetail.item_qty);
+                        $('#item_total').val(itemDetail.item_total);
+                        $('#item_description').val(itemDetail.item_description);
+                        $('#note').val(itemDetail.item_note);
+                        if (itemDetail.group && itemDetail.group.group_name != null) {
+                            $('#group_name').val(itemDetail.group.group_name);
+                            $('#group_id').val(itemDetail.group.group_id);
+                        } else {
+                            $('#group_name').val('');
+                            $('#group_id').val('');
+                        }
+                        // Add other fields as needed
+                        if (itemDetail.item_type == 'upgrades' || itemDetail.item_type == 'assemblies') {
+                            $('#type').trigger('change');
 
-                        let mulitple_input = $('#mulitple_input');
-                        mulitple_input.html('');
-                        $.each(assemblyItemData, function(index, itemData) {
-                            let id = Math.floor(Math.random() * 999 + 1);
-                            // console.log(assemblyItemData.est_ass_item_name);
-                            let newele = $('<div class="mt-5" id="ele' + id + '"></div>');
-                            let delbtn = $('<span></span>');
-                            // ============
-                            newele.html(`
-                            <input type="hidden" name="assembly_id[]" id="assembly_id" value="${itemData.estimate_item_assembly_id}">
-                            <select name="assembly_name[]" id="assembly_id_${index}" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            let mulitple_input = $('#mulitple_input');
+                            mulitple_input.html('');
+                            $.each(assemblyItemData, function(index, itemData) {
+                                let id = Math.floor(Math.random() * 999 + 1);
+                                // console.log(assemblyItemData.est_ass_item_name);
+                                let newele = $('<div class="mt-5" id="ele' + id + '"></div>');
+                                let delbtn = $('<span></span>');
+                                // ============
+                                newele.html(`
+                                <input type="hidden" name="ass_item_id[]" id="ass_item_id_${index}" value="${itemData.ass_item_id}">
+                                <select name="assembly_name[]" id="assembly_id_${index}" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
                                     <option selected value="${itemData.est_ass_item_name}" data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ isset($item) ? $item->item_units : '' }}">${itemData.est_ass_item_name}</option>
                                     @foreach ($itemsForAssemblies as $item)
                                     <option id="option_id{{$item->item_id}}" value="{{ $item->item_name }}" data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
                                     @endforeach
                                 </select>
-                                <div class=" grid grid-cols-2 gap-3 mt-2 inline-block">
+                                <div class=" grid grid-cols-3 gap-3 mt-2 inline-block">
                                     <div>
-                                    <input value="${itemData.item_unit_by_ass_unit}" type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_ass_unit_${index}" placeholder="00.0" autocomplete="given-name"
+                                        <input value="${itemData.item_unit_by_ass_unit}" type="text" name="item_unit_by_assembly_unit[]" id="item_unit_by_ass_unit_${index}" placeholder="00.0" autocomplete="given-name"
                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                         <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
                                     </div>
+                                    <div>
+                                        <input  value="${itemData.ass_unit_by_item_unit}"  type="number" name="assembly_unit_by_item_unit[]" id="ass_unit_by_item_unit_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                    </div>
                                     <div class="flex ">
-                    <div class="w-[80%]  ">
-                    <input  value="${itemData.ass_unit_by_item_unit}"  type="number" name="assembly_unit_by_item_unit[]" id="ass_unit_by_item_unit_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
-                  </div>
-                   <div class="mt-1" >
-                    <button   type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                                        <div class="w-[80%]  ">
+                                        <input type="number" step="any" name="item_total_qty[]" id="total_qty_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="${itemData.ass_item_qty}">
+                                        <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="">Total</span>
+                                        </div>
+                                        <div class="mt-1" >
+                                            <button   type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
                                                 <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
-                            </button>
-                    </div>
-                </div>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             `);
-                            $(document).on('click', `#ele${id} button`, function() {
-                                reminputs(`#ele${id}`);
+                                $(document).on('click', `#ele${id} button`, function() {
+                                    reminputs(`#ele${id}`);
+                                });
+
+
+                                mulitple_input.append(newele);
+                                newele.append(delbtn);
+                                delbtn.on('click', function() {
+                                    newele.remove();
+                                });
+                                // ============
+
                             });
 
-
-                            mulitple_input.append(newele);
-                            newele.append(delbtn);
-                            delbtn.on('click', function() {
-                                newele.remove();
-                            });
-                            // ============
-
-                        });
-
-                        function reminputs(e) {
-                            let ele = document.querySelector(e);
-                            if (ele) {
-                                ele.remove();
+                            function reminputs(e) {
+                                let ele = document.querySelector(e);
+                                if (ele) {
+                                    ele.remove();
+                                }
                             }
                         }
+                        applyInputEventListenerForAssUnit();
+                        // Set the item ID in the hidden input field
+                        $('#item_id').val(itemDetail.estimate_item_id);
+                        var formUrl = $('#itemsForm').attr('action', '/updateEstimateItem');
+                        // Open the modal
+                        $('#addItems-modal').removeClass('hidden');
+                    } else {
+                        // Handle error response
+                        console.error('Error fetching item details.');
+                        $('#deleteItem-btn').addClass('hidden');
                     }
-                    applyInputEventListenerForAssUnit();
-                    // Set the item ID in the hidden input field
-                    $('#item_id').val(itemDetail.estimate_item_id);
-                    var formUrl = $('#itemsForm').attr('action', '/updateEstimateItem');
-                    // Open the modal
-                    $('#addItems-modal').removeClass('hidden');
-                } else {
-                    // Handle error response
-                    console.error('Error fetching item details.');
-                    $('#deleteItem-btn').addClass('hidden');
+                },
+                error: function(error) {
+                    console.error('AJAX request failed:', error);
                 }
-            },
-            error: function(error) {
-                console.error('AJAX request failed:', error);
-            }
-        });
-    });
-
-
-    function applyInputEventListenerForAssUnit() {
-    $('[id^="item_unit_by_ass_unit_"]').on('input', function() {
-        // Initialize variables to store total expenses for labour and material items
-        var totalLabourExpense = 0;
-        var totalMaterialExpense = 0;
-
-        // Iterate over each row
-        $('[id^="item_unit_by_ass_unit_"]').each(function() {
-            // Get the ID of the item_unit_by_ass_unit input for the current row
-            var itemId = $(this).attr('id').replace('item_unit_by_ass_unit_', '');
-
-            // Retrieve the selected option from the corresponding select element for the current row
-            var selectedOption = $('#assembly_id_' + itemId + ' option:selected');
-
-            // Retrieve data from the selected option for the current row
-            var itemType = selectedOption.data('item-type');
-            var labourExpense = selectedOption.data('labour-expense');
-            var materialExpense = selectedOption.data('material-expense');
-            var itemPrice = selectedOption.data('item-price');
-
-            // Get the value entered in the item_unit_by_ass_unit input for the current row
-            var itemUnitValue = parseFloat($(this).val());
-
-            // Perform calculations based on item type for the current row
-            if (itemType === 'labour') {
-                if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                    var calculatedValue = (itemPrice / labourExpense) / itemUnitValue;
-
-                    // Update total labour expense for the current row
-                    totalLabourExpense += calculatedValue * 1 * itemPrice;
-                }else{
-                $('#labour_expense').val('');
-                $('#ass_unit_by_item_unit_' + itemId).val('');
-            }
-            } else if (itemType === 'material') {
-                if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                    var calculatedValue = (itemPrice / materialExpense) / itemUnitValue;
-
-                    // Update total material expense for the current row
-                    totalMaterialExpense += calculatedValue * 1 * itemPrice;
-                }else{
-                $('#material_expense').val('');
-                $('#ass_unit_by_item_unit_' + itemId).val('');
-            }
-            }
+            });
         });
 
-        // Set the total labour and material expenses in their respective inputs
-        $('#labour_expense').val(totalLabourExpense.toFixed(2));
-        $('#material_expense').val(totalMaterialExpense.toFixed(2));
 
-        // Calculate the sum of labour expense and material expense
-        var totalExpense = totalLabourExpense + totalMaterialExpense;
+        function applyInputEventListenerForAssUnit() {
+            $('[id^="item_unit_by_ass_unit_"]').on('input', function() {
+                // Initialize variables to store total expenses for labour and material items
+                var totalLabourExpense = 0;
+                var totalMaterialExpense = 0;
 
-        // Calculate the item cost as half of the total expense
-        var itemCost = totalExpense / 2;
+                // Iterate over each row
+                $('[id^="item_unit_by_ass_unit_"]').each(function() {
+                    // Get the ID of the item_unit_by_ass_unit input for the current row
+                    var itemId = $(this).attr('id').replace('item_unit_by_ass_unit_', '');
 
-        // Set the total expense and item cost in their respective inputs
-        $('#item_price').val(totalExpense.toFixed(2));
-        $('#item_cost').val(itemCost.toFixed(2));
-    });
-}
+                    // Retrieve the selected option from the corresponding select element for the current row
+                    var selectedOption = $('#assembly_id_' + itemId + ' option:selected');
+
+                    // Retrieve data from the selected option for the current row
+                    var itemType = selectedOption.data('item-type');
+                    var labourExpense = selectedOption.data('labour-expense');
+                    var materialExpense = selectedOption.data('material-expense');
+                    var itemPrice = selectedOption.data('item-price');
+                    var assitemIds = selectedOption.data('item-id');
+                    var EstItemQty = $('#item_qty').val();
+
+                    $('#ass_item_id_' + itemId).val(assitemIds);
+
+                    // Get the value entered in the item_unit_by_ass_unit input for the current row
+                    var itemUnitValue = parseFloat($(this).val());
+
+                    // Perform calculations based on item type for the current row
+                    if (itemType === 'labour') {
+                        if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
+                            var calculatedValue = (itemPrice / labourExpense) / itemUnitValue;
+
+                            // Update total labour expense for the current row
+                            totalLabourExpense += calculatedValue * 1 * itemPrice;
+
+                            var assTotalQty = EstItemQty * calculatedValue;
+                            $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
+
+                        } else {
+                            $('#labour_expense').val('');
+                            $('#ass_unit_by_item_unit_' + itemId).val('');
+                            $('#total_qty' + itemid).val('');
+                        }
+                    } else if (itemType === 'material') {
+                        if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
+                            var calculatedValue = (itemPrice / materialExpense) / itemUnitValue;
+
+                            // Update total material expense for the current row
+                            totalMaterialExpense += calculatedValue * 1 * itemPrice;
+
+                            var assTotalQty = EstItemQty * calculatedValue;
+                            $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
+
+                        } else {
+                            $('#material_expense').val('');
+                            $('#ass_unit_by_item_unit_' + itemId).val('');
+                            $('#total_qty' + itemId).val('');
+                        }
+                    }
+                });
+
+                // Set the total labour and material expenses in their respective inputs
+                $('#labour_expense').val(totalLabourExpense.toFixed(2));
+                $('#material_expense').val(totalMaterialExpense.toFixed(2));
+
+                // Calculate the sum of labour expense and material expense
+                var totalExpense = totalLabourExpense + totalMaterialExpense;
+
+                // Calculate the item cost as half of the total expense
+                var itemCost = totalExpense / 2;
+
+                // Set the total expense and item cost in their respective inputs
+                $('#item_price').val(totalExpense.toFixed(2));
+                $('#item_cost').val(itemCost.toFixed(2));
+            });
+        }
 
         type.on('change', function() {
             var typeDropdown = $('#type');
@@ -5345,37 +5357,37 @@ $('[id^="editEstimate-item"]').click(function() {
 </script>
 <script>
     $(document).ready(function() {
-    $('[id^="editEstimate-template"]').click(function() {
-        var itemId = this.id.replace('editEstimate-template', '');
-        $.ajax({
-            url: '/getEstItemTemplateToEdit/' + itemId,
-            method: 'GET',
-            success: function(response) {
-                if (response.success) {
-                    var itemTemplate = response.data.estimate_template;
-                    var itemTemplateItems = response.data.estimate_item_template_items;
-                    var itemsData = response.data.item_data;
+        $('[id^="editEstimate-template"]').click(function() {
+            var itemId = this.id.replace('editEstimate-template', '');
+            $.ajax({
+                url: '/getEstItemTemplateToEdit/' + itemId,
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        var itemTemplate = response.data.estimate_template;
+                        var itemTemplateItems = response.data.estimate_item_template_items;
+                        var itemsData = response.data.item_data;
 
-                    for (var i = 0; i < itemTemplateItems.length; i++) {
-                        var currentItem = itemTemplateItems[i];
+                        for (var i = 0; i < itemTemplateItems.length; i++) {
+                            var currentItem = itemTemplateItems[i];
 
-                        // Find the corresponding item data based on item_id
-                        var correspondingItemData = itemsData.find(item => item.item_id ===
-                            currentItem.item_id);
+                            // Find the corresponding item data based on item_id
+                            var correspondingItemData = itemsData.find(item => item.item_id ===
+                                currentItem.item_id);
 
-                        // Assuming currentItem has properties 'name' and 'quantity'
-                        var itemNameInput = $('#template_item_name');
-                        // var itemQtyInput = $('#template_item_qty');
-                        var itemTemplateTitle = $('#itemTemplate-title');
-                        itemTemplateTitle.text(itemTemplate.item_template_name)
-                        $('#estimate_template_description').val(itemTemplate.description);
-                        $('#estimate_template_note').val(itemTemplate.note);
-                        // Update input values with currentItem and item data
-                        var estimateTemplateId = $('#estimate_template_id');
-                        var estimateTemplateName = $('#estimate_template_name');
-                        estimateTemplateId.val(itemTemplate.est_template_id);
-                        estimateTemplateName.val(itemTemplate.item_template_name);
-                        var demoInput = $('<div>').html(`
+                            // Assuming currentItem has properties 'name' and 'quantity'
+                            var itemNameInput = $('#template_item_name');
+                            // var itemQtyInput = $('#template_item_qty');
+                            var itemTemplateTitle = $('#itemTemplate-title');
+                            itemTemplateTitle.text(itemTemplate.item_template_name)
+                            $('#estimate_template_description').val(itemTemplate.description);
+                            $('#estimate_template_note').val(itemTemplate.note);
+                            // Update input values with currentItem and item data
+                            var estimateTemplateId = $('#estimate_template_id');
+                            var estimateTemplateName = $('#estimate_template_name');
+                            estimateTemplateId.val(itemTemplate.est_template_id);
+                            estimateTemplateName.val(itemTemplate.item_template_name);
+                            var demoInput = $('<div>').html(`
                             <input type="hidden" name="est_template_item_id[]" id="est_template_item_id" placeholder="Item Name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             <div class="my-0 flex items-center gap-2 text-left">
                                 <div class="relative text-left my-1">
@@ -5454,75 +5466,75 @@ $('[id^="editEstimate-item"]').click(function() {
                                 <p id="template_item_name" class=" font-medium overflow-hidden whitespace-nowrap items-center bg-[#EBEAEB] py-1 px-2 rounded-lg w-[75%]"></p>
                             </div>
                             `);
-                        var itemNameInput = demoInput.find('#template_item_name');
-                        var itemQtyInput = demoInput.find('#template_item_qty');
-                        var itemIdInput = demoInput.find('#est_template_item_id');
+                            var itemNameInput = demoInput.find('#template_item_name');
+                            var itemQtyInput = demoInput.find('#template_item_qty');
+                            var itemIdInput = demoInput.find('#est_template_item_id');
 
-                        itemNameInput.attr('id', 'template_item_name_' + i);
-                        itemQtyInput.attr('id', 'template_item_qty_' + i);
-                        itemIdInput.attr('id', 'est_template_item_id_' + i);
-                        var templateItemDiv = $('#template-items');
+                            itemNameInput.attr('id', 'template_item_name_' + i);
+                            itemQtyInput.attr('id', 'template_item_qty_' + i);
+                            itemIdInput.attr('id', 'est_template_item_id_' + i);
+                            var templateItemDiv = $('#template-items');
 
-                        // demoInput.addClass('flex justify-start');
+                            // demoInput.addClass('flex justify-start');
 
-                        templateItemDiv.append(demoInput);
+                            templateItemDiv.append(demoInput);
 
-                        $('#template_item_name_' + i).text(correspondingItemData.item_name + ' ' +
-                            correspondingItemData.item_description);
-                        $('#est_template_item_id_' + i).val(currentItem.est_template_item_id);
-                        itemQtyInput.val(currentItem.item_qty);
-                        $('#itemTemplatesForm').attr('action', '/updateEstimateItemTemplate');
-                        // console.log(itemTemplateItems.length)
+                            $('#template_item_name_' + i).text(correspondingItemData.item_name + ' ' +
+                                correspondingItemData.item_description);
+                            $('#est_template_item_id_' + i).val(currentItem.est_template_item_id);
+                            itemQtyInput.val(currentItem.item_qty);
+                            $('#itemTemplatesForm').attr('action', '/updateEstimateItemTemplate');
+                            // console.log(itemTemplateItems.length)
 
-                        $('#addTemplate-modal').removeClass('hidden');
+                            $('#addTemplate-modal').removeClass('hidden');
 
 
-                        $('#deleteTemplate-btn').removeClass('hidden');
-                        $('#deleteEstimateTemplate').attr('action', '/deleteEstimateTemplate/' + itemTemplate.est_template_id);
+                            $('#deleteTemplate-btn').removeClass('hidden');
+                            $('#deleteEstimateTemplate').attr('action', '/deleteEstimateTemplate/' + itemTemplate.est_template_id);
+                        }
                     }
+                },
+                error: function(error) {
+                    console.error('AJAX request failed:', error);
                 }
-            },
-            error: function(error) {
-                console.error('AJAX request failed:', error);
-            }
+            });
         });
     });
-});
 </script>
 <script>
     $(document).ready(function() {
         $('[id^="addTemplate"]').click(function() {
-        // Your existing code inside the click event handler
-        var itemId = this.id.replace('addTemplate', '');
-        $.ajax({
-            url: '/getItemTemplateItems/' + itemId,
-            method: 'GET',
-            success: function(response) {
-                if (response.success) {
-                    var itemTemplate = response.data.item_template;
-                    var itemTemplateItems = response.data.item_template_items;
-                    var itemsData = response.data.items_data;
+            // Your existing code inside the click event handler
+            var itemId = this.id.replace('addTemplate', '');
+            $.ajax({
+                url: '/getItemTemplateItems/' + itemId,
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        var itemTemplate = response.data.item_template;
+                        var itemTemplateItems = response.data.item_template_items;
+                        var itemsData = response.data.items_data;
 
-                    for (var i = 0; i < itemTemplateItems.length; i++) {
-                        var currentItem = itemTemplateItems[i];
+                        for (var i = 0; i < itemTemplateItems.length; i++) {
+                            var currentItem = itemTemplateItems[i];
 
-                        // Find the corresponding item data based on item_id
-                        var correspondingItemData = itemsData.find(item => item.item_id ===
-                            currentItem.item_id);
+                            // Find the corresponding item data based on item_id
+                            var correspondingItemData = itemsData.find(item => item.item_id ===
+                                currentItem.item_id);
 
-                        // Assuming currentItem has properties 'name' and 'quantity'
-                        var itemNameInput = $('#template_item_name');
-                        // var itemQtyInput = $('#template_item_qty');
-                        var itemTemplateTitle = $('#itemTemplate-title');
-                        itemTemplateTitle.text(itemTemplate.item_template_name)
-                        // Update input values with currentItem and item data
-                        var estimateTemplateId = $('#estimate_template_id');
-                        var estimateTemplateName = $('#estimate_template_name');
-                        $('#estimate_template_description').val(itemTemplate.description);
-                        $('#estimate_template_note').val(itemTemplate.note);
-                        estimateTemplateId.val(itemTemplate.item_template_id);
-                        estimateTemplateName.val(itemTemplate.item_template_name);
-                        var demoInput = $('<div>').html(`
+                            // Assuming currentItem has properties 'name' and 'quantity'
+                            var itemNameInput = $('#template_item_name');
+                            // var itemQtyInput = $('#template_item_qty');
+                            var itemTemplateTitle = $('#itemTemplate-title');
+                            itemTemplateTitle.text(itemTemplate.item_template_name)
+                            // Update input values with currentItem and item data
+                            var estimateTemplateId = $('#estimate_template_id');
+                            var estimateTemplateName = $('#estimate_template_name');
+                            $('#estimate_template_description').val(itemTemplate.description);
+                            $('#estimate_template_note').val(itemTemplate.note);
+                            estimateTemplateId.val(itemTemplate.item_template_id);
+                            estimateTemplateName.val(itemTemplate.item_template_name);
+                            var demoInput = $('<div>').html(`
                             <input type="hidden" name="template_item_id[]" id="template_item_id" placeholder="Item Name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             <div class="my-0 flex items-center gap-2 text-left">
                                 <div class="relative text-left my-1">
@@ -5601,135 +5613,135 @@ $('[id^="editEstimate-item"]').click(function() {
                                 <p id="template_item_name" class=" font-medium overflow-hidden whitespace-nowrap items-center bg-[#EBEAEB] py-1 px-2 rounded-lg w-[75%]"></p>
                             </div>
                             `);
-                        var itemNameInput = demoInput.find('#template_item_name');
-                        var itemQtyInput = demoInput.find('#template_item_qty');
-                        var itemIdInput = demoInput.find('#template_item_id');
+                            var itemNameInput = demoInput.find('#template_item_name');
+                            var itemQtyInput = demoInput.find('#template_item_qty');
+                            var itemIdInput = demoInput.find('#template_item_id');
 
-                        itemNameInput.attr('id', 'template_item_name_' + i);
-                        itemQtyInput.attr('id', 'template_item_qty_' + i);
-                        itemIdInput.attr('id', 'template_item_id_' + i);
-                        var templateItemDiv = $('#template-items');
+                            itemNameInput.attr('id', 'template_item_name_' + i);
+                            itemQtyInput.attr('id', 'template_item_qty_' + i);
+                            itemIdInput.attr('id', 'template_item_id_' + i);
+                            var templateItemDiv = $('#template-items');
 
-                        // demoInput.addClass('flex justify-between');
+                            // demoInput.addClass('flex justify-between');
 
-                        templateItemDiv.append(demoInput);
+                            templateItemDiv.append(demoInput);
 
-                        $('#template_item_name_' + i).text(correspondingItemData.item_name +
-                        (correspondingItemData.item_description ? ' ' + correspondingItemData.item_description : ''));
-                        $('#template_item_id_' + i).val(correspondingItemData.item_id);
-                        $('#template_item_qty_' + i).val(currentItem.item_qty);
-                        // console.log(itemTemplateItems.length)
-                        // itemQtyInput.val(currentItem.quantity);
+                            $('#template_item_name_' + i).text(correspondingItemData.item_name +
+                                (correspondingItemData.item_description ? ' ' + correspondingItemData.item_description : ''));
+                            $('#template_item_id_' + i).val(correspondingItemData.item_id);
+                            $('#template_item_qty_' + i).val(currentItem.item_qty);
+                            // console.log(itemTemplateItems.length)
+                            // itemQtyInput.val(currentItem.quantity);
 
-                        $('#addTemplate-modal').removeClass('hidden');
+                            $('#addTemplate-modal').removeClass('hidden');
+                        }
                     }
+                },
+                error: function(error) {
+                    console.error('AJAX request failed:', error);
                 }
-            },
-            error: function(error) {
-                console.error('AJAX request failed:', error);
-            }
+            });
         });
     });
-});
 </script>
 <script>
     $(document).ready(function() {
-    $('[id^="editExpense-btn"]').click(function() {
-        var itemId = this.id.replace('editExpense-btn', ''); // Extract item ID from button ID
+        $('[id^="editExpense-btn"]').click(function() {
+            var itemId = this.id.replace('editExpense-btn', ''); // Extract item ID from button ID
 
-        // Make an AJAX request to get item details
-        $.ajax({
-            url: '/getExpenseDataToEdit' + itemId,
-            method: 'GET',
-            success: function(response) {
-                if (response.success) {
-                    // Populate the modal with the retrieved data
-                    var expenseDetail = response.expense_detail;
-                    console.log(expenseDetail);
-                    // Update modal content with item details
-                    $('#date').val(formatDate(expenseDetail.expense_date));
-                    $('#item_type').val(expenseDetail.expense_item_type);
-                    $('#vendor').val(expenseDetail.expense_vendor);
-                    $('#hours').val(expenseDetail.labour_hours);
-                    $('#subtotal').val(expenseDetail.expense_subtotal);
-                    $('#tax').val(expenseDetail.expense_tax);
-                    $('#total').val(expenseDetail.expense_total);
-                    if (response.expense_paid === 'paid') {
-                        $('#paid').prop('checked', true);
+            // Make an AJAX request to get item details
+            $.ajax({
+                url: '/getExpenseDataToEdit' + itemId,
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        // Populate the modal with the retrieved data
+                        var expenseDetail = response.expense_detail;
+                        console.log(expenseDetail);
+                        // Update modal content with item details
+                        $('#date').val(formatDate(expenseDetail.expense_date));
+                        $('#item_type').val(expenseDetail.expense_item_type);
+                        $('#vendor').val(expenseDetail.expense_vendor);
+                        $('#hours').val(expenseDetail.labour_hours);
+                        $('#subtotal').val(expenseDetail.expense_subtotal);
+                        $('#tax').val(expenseDetail.expense_tax);
+                        $('#total').val(expenseDetail.expense_total);
+                        if (response.expense_paid === 'paid') {
+                            $('#paid').prop('checked', true);
+                        } else {
+                            $('#paid').prop('checked', false);
+                        }
+                        $('#description').val(expenseDetail.expense_description);
+                        // Add other fields as needed
+
+                        // Set the item ID in the hidden input field
+                        $('#estimate_expense_id').val(expenseDetail.estimate_expense_id);
+                        var formUrl = $('#expenses-btn-form').attr('action', '/updateEstimateExpense');
+                        // Open the modal
+                        $('#expenses-btn-modal').removeClass('hidden');
                     } else {
-                        $('#paid').prop('checked', false);
+                        // Handle error response
+                        console.error('Error fetching item details.');
                     }
-                    $('#description').val(expenseDetail.expense_description);
-                    // Add other fields as needed
-
-                    // Set the item ID in the hidden input field
-                    $('#estimate_expense_id').val(expenseDetail.estimate_expense_id);
-                    var formUrl = $('#expenses-btn-form').attr('action', '/updateEstimateExpense');
-                    // Open the modal
-                    $('#expenses-btn-modal').removeClass('hidden');
-                } else {
-                    // Handle error response
-                    console.error('Error fetching item details.');
+                },
+                error: function(error) {
+                    console.error('AJAX request failed:', error);
                 }
-            },
-            error: function(error) {
-                console.error('AJAX request failed:', error);
-            }
+            });
         });
-    });
 
-    function formatDate(dateString) {
-        // Assuming dateString is in the format "DD/MM/YYYY"
-        var parts = dateString.split('/');
-        if (parts.length === 3) {
-            return parts[2] + '-' + parts[1] + '-' + parts[0];
+        function formatDate(dateString) {
+            // Assuming dateString is in the format "DD/MM/YYYY"
+            var parts = dateString.split('/');
+            if (parts.length === 3) {
+                return parts[2] + '-' + parts[1] + '-' + parts[0];
+            }
+            return dateString; // return as is if already in "YYYY-MM-DD" format
         }
-        return dateString; // return as is if already in "YYYY-MM-DD" format
-    }
 
-    $('[id^="editEstimateTemplate-item"]').click(function() {
-        var itemId = this.id.replace('editEstimateTemplate-item', ''); // Extract item ID from button ID
+        $('[id^="editEstimateTemplate-item"]').click(function() {
+            var itemId = this.id.replace('editEstimateTemplate-item', ''); // Extract item ID from button ID
 
-        // Make an AJAX request to get item details
-        $.ajax({
-            url: '/getEstimateTemplateItem' + itemId,
-            method: 'GET',
-            success: function(response) {
-                if (response.success) {
-                    // Populate the modal with the retrieved data
-                    var itemDetail = response.data.item_detail;
-                    var templateItem = response.data.template_item;
+            // Make an AJAX request to get item details
+            $.ajax({
+                url: '/getEstimateTemplateItem' + itemId,
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        // Populate the modal with the retrieved data
+                        var itemDetail = response.data.item_detail;
+                        var templateItem = response.data.template_item;
 
-                    // Update modal content with item details
-                    $('#type').val(itemDetail.item_type);
-                    $('#itemName').val(itemDetail.item_name);
-                    $('#item_units').val(itemDetail.item_units);
-                    $('#labour_expense').val(templateItem.labour_expense);
-                    $('#material_expense').val(templateItem.material_expense);
-                    $('#item_cost').val(templateItem.item_cost);
-                    $('#item_price').val(templateItem.item_price);
-                    $('#item_qty').val(templateItem.item_qty);
-                    $('#item_total').val(templateItem.item_total);
-                    $('#item_description').val(templateItem.item_description);
-                    $('#item_note').val(templateItem.item_note);
-                    // Add other fields as needed
+                        // Update modal content with item details
+                        $('#type').val(itemDetail.item_type);
+                        $('#itemName').val(itemDetail.item_name);
+                        $('#item_units').val(itemDetail.item_units);
+                        $('#labour_expense').val(templateItem.labour_expense);
+                        $('#material_expense').val(templateItem.material_expense);
+                        $('#item_cost').val(templateItem.item_cost);
+                        $('#item_price').val(templateItem.item_price);
+                        $('#item_qty').val(templateItem.item_qty);
+                        $('#item_total').val(templateItem.item_total);
+                        $('#item_description').val(templateItem.item_description);
+                        $('#item_note').val(templateItem.item_note);
+                        // Add other fields as needed
 
-                    // Set the item ID in the hidden input field
-                    $('#item_id').val(templateItem.est_template_item_id);
-                    var formUrl = $('#itemsForm').attr('action', '/updateEstimateTemplateItem');
-                    // Open the modal
-                    $('#addItems-modal').removeClass('hidden');
-                } else {
-                    // Handle error response
-                    console.error('Error fetching item details.');
+                        // Set the item ID in the hidden input field
+                        $('#item_id').val(templateItem.est_template_item_id);
+                        var formUrl = $('#itemsForm').attr('action', '/updateEstimateTemplateItem');
+                        // Open the modal
+                        $('#addItems-modal').removeClass('hidden');
+                    } else {
+                        // Handle error response
+                        console.error('Error fetching item details.');
+                    }
+                },
+                error: function(error) {
+                    console.error('AJAX request failed:', error);
                 }
-            },
-            error: function(error) {
-                console.error('AJAX request failed:', error);
-            }
+            });
         });
     });
-});
 </script>
 <script>
     $("#calculater-modal").click(function(e) {
@@ -5782,25 +5794,32 @@ $('[id^="editEstimate-item"]').click(function() {
         let selectId = 'assembly_id_' + id;
         let itemUnitById = 'item_unit_by_ass_unit_' + id; // Dynamic ID for item_unit_by_ass_unit input
         let assUnitById = 'ass_unit_by_item_unit_' + id; // Dynamic ID for ass_unit_by_item_unit input
+        let assItemId = 'ass_item_id_' + id;
+        let itemTotalQty = 'total_qty_' + id;
         let rembtn = $('<span></span>');
 
         newele.html(`
+        <input type="hidden" name="ass_item_id[]" id="${assItemId}">
             <select name="assembly_name[]" id="${selectId}" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                 <option value="">Select Item</option>
                 @foreach ($itemsForAssemblies as $item)
                 <option value="{{ $item->item_name }}"data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
                 @endforeach
             </select>
-            <div class=" grid grid-cols-2 gap-3 mt-2 inline-block">
+            <div class=" grid grid-cols-3 gap-3 mt-2 inline-block">
                 <div>
                     <input type="number" step="any" name="item_unit_by_assembly_unit[]" id="${itemUnitById}" placeholder="00.0" autocomplete="given-name"
                         class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
                 </div>
+                <div>
+                        <input type="text" step="any" name="assembly_unit_by_item_unit[]" id="${assUnitById}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
+                </div>
                 <div class="flex ">
                     <div class="w-[80%]  ">
-                    <input type="number" step="any" name="assembly_unit_by_item_unit[]" id="${assUnitById}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
+                    <input type="number" step="any" name="item_total_qty[]" id="${itemTotalQty}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="">Total</span>
                 </div>
                 <div class="mt-1" >
                     <button onclick="remveinputs('#rendid${id}')"  type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
@@ -5824,66 +5843,78 @@ $('[id^="editEstimate-item"]').click(function() {
         }
     }
     $(document).on('input', '[id^="item_unit_by_ass_unit_"]', function() {
-    // Initialize variables to store total expenses for labour and material items
-    var totalLabourExpense = 0;
-    var totalMaterialExpense = 0;
+        // Initialize variables to store total expenses for labour and material items
+        var totalLabourExpense = 0;
+        var totalMaterialExpense = 0;
 
-    // Iterate over each row
-    $('[id^="item_unit_by_ass_unit_"]').each(function() {
-        // Get the ID of the item_unit_by_ass_unit input for the current row
-        var itemId = $(this).attr('id').replace('item_unit_by_ass_unit_', '');
+        // Iterate over each row
+        $('[id^="item_unit_by_ass_unit_"]').each(function() {
+            // Get the ID of the item_unit_by_ass_unit input for the current row
+            var itemId = $(this).attr('id').replace('item_unit_by_ass_unit_', '');
 
-        // Retrieve the selected option from the corresponding select element for the current row
-        var selectedOption = $('#assembly_id_' + itemId + ' option:selected');
+            // Retrieve the selected option from the corresponding select element for the current row
+            var selectedOption = $('#assembly_id_' + itemId + ' option:selected');
 
-        // Retrieve data from the selected option for the current row
-        var itemType = selectedOption.data('item-type');
-        var labourExpense = selectedOption.data('labour-expense');
-        var materialExpense = selectedOption.data('material-expense');
-        var itemPrice = selectedOption.data('item-price');
+            // Retrieve data from the selected option for the current row
+            var itemType = selectedOption.data('item-type');
+            var labourExpense = selectedOption.data('labour-expense');
+            var materialExpense = selectedOption.data('material-expense');
+            var itemPrice = selectedOption.data('item-price');
+            var assitemIds = selectedOption.data('item-id');
 
-        // Get the value entered in the item_unit_by_ass_unit input for the current row
-        var itemUnitValue = parseFloat($(this).val());
+            var EstItemQty = $('#item_qty').val();
 
-        // Perform calculations based on item type for the current row
-        if (itemType === 'labour') {
-            if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                var calculatedValue = (itemPrice / labourExpense) / itemUnitValue;
+            $('#ass_item_id_' + itemId).val(assitemIds);
+            // Get the value entered in the item_unit_by_ass_unit input for the current row
+            var itemUnitValue = parseFloat($(this).val());
 
-                $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(4));
-                // Update total labour expense for the current row
-                totalLabourExpense += calculatedValue * 1 * itemPrice;
-            }else{
-                $('#labour_expense').val('');
-                $('#ass_unit_by_item_unit_' + itemId).val('');
+            // Perform calculations based on item type for the current row
+            if (itemType === 'labour') {
+                if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
+                    var calculatedValue = (itemPrice / labourExpense) / itemUnitValue;
+
+                    $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(2));
+                    // Update total labour expense for the current row
+                    totalLabourExpense += calculatedValue * 1 * itemPrice;
+
+                    var assTotalQty = EstItemQty * calculatedValue;
+                    $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
+                } else {
+                    $('#labour_expense').val('');
+                    $('#ass_unit_by_item_unit_' + itemId).val('');
+                    $('#total_qty_' + itemId).val('');
+                }
+            } else if (itemType === 'material') {
+                if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
+                    var calculatedValue = (itemPrice / materialExpense) / itemUnitValue;
+                    $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(2));
+                    // Update total material expense for the current row
+                    totalMaterialExpense += calculatedValue * 1 * itemPrice;
+
+                    var assTotalQty = EstItemQty * calculatedValue;
+                    $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
+                } else {
+                    $('#material_expense').val('');
+                    $('#ass_unit_by_item_unit_' + itemId).val('');
+                    $('#total_qty_' + itemId).val('');
+                }
             }
-        } else if (itemType === 'material') {
-            if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                var calculatedValue = (itemPrice / materialExpense) / itemUnitValue;
-                $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(4));
-                // Update total material expense for the current row
-                totalMaterialExpense += calculatedValue * 1 * itemPrice;
-            }else{
-                $('#material_expense').val('');
-                $('#ass_unit_by_item_unit_' + itemId).val('');
-            }
-        }
+        });
+
+        // Set the total labour and material expenses in their respective inputs
+        $('#labour_expense').val(totalLabourExpense.toFixed(2));
+        $('#material_expense').val(totalMaterialExpense.toFixed(2));
+
+        // Calculate the sum of labour expense and material expense
+        var totalExpense = totalLabourExpense + totalMaterialExpense;
+
+        // Calculate the item cost as half of the total expense
+        var itemCost = totalExpense / 2;
+
+        // Set the total expense and item cost in their respective inputs
+        $('#item_price').val(totalExpense.toFixed(2));
+        $('#item_cost').val(itemCost.toFixed(2));
     });
-
-    // Set the total labour and material expenses in their respective inputs
-    $('#labour_expense').val(totalLabourExpense.toFixed(2));
-    $('#material_expense').val(totalMaterialExpense.toFixed(2));
-
-    // Calculate the sum of labour expense and material expense
-    var totalExpense = totalLabourExpense + totalMaterialExpense;
-
-    // Calculate the item cost as half of the total expense
-    var itemCost = totalExpense / 2;
-
-    // Set the total expense and item cost in their respective inputs
-    $('#item_price').val(totalExpense.toFixed(2));
-    $('#item_cost').val(itemCost.toFixed(2));
-});
 
     $("#cal-menubutton").click(function(e) {
         e.stopPropagation(); // Prevents the click event from reaching the document body

@@ -9,6 +9,11 @@ class EstimateItem extends Model
 {
     use HasFactory;
 
+    public function group()
+    {
+        return $this->belongsTo(Groups::class, 'group_id');
+    }
+
     public function assemblies()
     {
         return $this->hasMany(EstimateItemAssembly::class, 'estimate_item_id');
@@ -36,6 +41,7 @@ class EstimateItem extends Model
         'is_upgrade',
         'upgrade_status',
         'item_status',
+        'group_id',
     ];
 
     public $timestamps = true;
