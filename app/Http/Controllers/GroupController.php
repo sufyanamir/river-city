@@ -84,19 +84,19 @@ class GroupController extends Controller
 
             $group = Groups::create([
                 'group_name' => $validatedData['group_name'],
-                'total_items' => $validatedData['total_items'],
+                // 'total_items' => $validatedData['total_items'],
                 'group_type' => $validatedData['group_type'],
-                'group_items' => json_encode($validatedData['group_item_ids']),
+                // 'group_items' => json_encode($validatedData['group_item_ids']),
                 'group_description' => $validatedData['group_description'],
             ]);
 
-            foreach ($validatedData['group_item_ids'] as $key => $itemIds) {
-                $items = Items::where('item_id', $itemIds)->first();
+            // foreach ($validatedData['group_item_ids'] as $key => $itemIds) {
+            //     $items = Items::where('item_id', $itemIds)->first();
 
-                $items->group_ids = $group->group_id;
+            //     $items->group_ids = $group->group_id;
 
-                $items->save();
-            }
+            //     $items->save();
+            // }
 
             return response()->json(['success' => true, 'message' => 'group created successfully!'], 200);
         } catch (\Exception $e) {
