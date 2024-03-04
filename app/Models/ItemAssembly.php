@@ -23,6 +23,7 @@ class ItemAssembly extends Model
         'assembly_name',
         'item_unit_by_ass_unit',
         'ass_unit_by_item_unit',
+        'ass_item_id',
     ];
 
     public $timestamps = true;

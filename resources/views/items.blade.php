@@ -252,10 +252,12 @@ $userPrivileges = session('user_details')['user_privileges'];
         let selectId = 'assembly_id_' + id;
         let itemUnitById = 'item_unit_by_ass_unit_' + id; // Dynamic ID for item_unit_by_ass_unit input
         let assUnitById = 'ass_unit_by_item_unit_' + id; // Dynamic ID for ass_unit_by_item_unit input
+        let assItemId = 'ass_item_id_' + id;
         let rembtn = $('<span></span>');
         let addedItemUnit = 'addedItemUnit' + id;
 
         newele.html(`
+        <input type="hidden" name="ass_item_id[]" id="${assItemId}" >
         <select name="assembly_name[]" id="${selectId}" placeholder="Item Name" autocomplete="given-name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
             <option value="">Select Item</option>
             @foreach ($itemsForAssemblies as $item)
@@ -309,6 +311,9 @@ $userPrivileges = session('user_details')['user_privileges'];
             var materialExpense = selectedOption.data('material-expense');
             var itemPrice = selectedOption.data('item-price');
             var itemUnit = selectedOption.data('unit');
+            var assitemIds = selectedOption.data('item-id');
+
+            $('#ass_item_id_' + itemId).val(assitemIds);
 
             $('.addedItemUnit' + itemId).text(itemUnit);
 
@@ -404,6 +409,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                             var newAssemblyDiv = $('<div class="mt-5"></div>');
                             newAssemblyDiv.html(`
                             <div class="flex justify-between">
+                            <input type="hidden" name="ass_item_id[]" id="ass_item_id_${index}" value="${assembly.ass_item_id}">
                                 <select name="assembly_name[]" id="assembly_id_${index}" placeholder="Item Name" autocomplete="given-name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
                                     @foreach ($itemsForAssemblies as $item)
@@ -463,7 +469,9 @@ $userPrivileges = session('user_details')['user_privileges'];
                 var labourExpense = selectedOption.data('labour-expense');
                 var materialExpense = selectedOption.data('material-expense');
                 var itemPrice = selectedOption.data('item-price');
+                var assitemIds = selectedOption.data('item-id');
 
+                $('#ass_item_id_' + itemId).val(assitemIds);
                 // Get the value entered in the item_unit_by_ass_unit input for the current row
                 var itemUnitValue = parseFloat($(this).val());
 

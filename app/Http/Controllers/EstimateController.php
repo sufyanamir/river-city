@@ -26,6 +26,7 @@ use App\Models\EstimatePayments;
 use App\Models\EstimateProposal;
 use App\Models\EstimateSchedule;
 use App\Models\EstimateToDos;
+use App\Models\Groups;
 use App\Models\ItemAssembly;
 use App\Models\Items;
 use App\Models\ItemTemplateItems;
@@ -133,7 +134,7 @@ class EstimateController extends Controller
         $itemTemplates = EstimateItemTemplates::with('templateItems')->where('estimate_id', $id)->get();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
 
-        return view('viewEstimateMaterials', ['items' => $materialItems,'assemblies' => $estimateAssemblyItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
+        return view('viewEstimateMaterials', ['items' => $materialItems, 'assemblies' => $estimateAssemblyItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
     }
     // view Estimate Materials
 
@@ -1580,6 +1581,7 @@ class EstimateController extends Controller
                 'item_note' => 'nullable',
                 'assembly_id' => 'nullable|array',
                 'assembly_name' => 'nullable|array',
+                'ass_item_id' => 'nullable|array',
                 'assembly_unit_by_item_unit' => 'nullable|array',
                 'item_unit_by_assembly_unit' => 'nullable|array',
                 // 'selected_items' => 'required|array',
@@ -1606,17 +1608,33 @@ class EstimateController extends Controller
             foreach ($estItemAssembly as $assembly) {
                 $assembly->delete();
             }
-            
+
             // Update or insert EstimateItemAssembly data
             foreach ($validatedData['assembly_name'] as $key => $assemblyName) {
                 if ($assemblyName != null) {
+                    $itemUnitByAssUnitSum = $validatedData['item_unit_by_assembly_unit'][$key];
+                    $assUnitByItemUnitSum = $validatedData['assembly_unit_by_item_unit'][$key];
+                    $assItems = Items::where('item_id', $validatedData['ass_item_id'][$key])->first();
+                    $assItemQty = $validatedData['item_qty'] * $assUnitByItemUnitSum;
+                    $assItemPrice = $assItems->item_price * $assItemQty;
+
                     $assemblyData = [
                         'added_user_id' => $userDetails['id'],
                         'estimate_id' => $validatedData['estimate_id'],
                         'estimate_item_id' => $validatedData['item_id'],
                         'est_ass_item_name' => $validatedData['assembly_name'][$key],
-                        'item_unit_by_ass_unit' => $validatedData['assembly_unit_by_item_unit'][$key],
-                        'ass_unit_by_item_unit' => $validatedData['item_unit_by_assembly_unit'][$key],
+                        'item_unit_by_ass_unit' => $itemUnitByAssUnitSum,
+                        'ass_unit_by_item_unit' => $assUnitByItemUnitSum,
+                        'item_id' => $assItems->item_id,
+                        'ass_item_cost' => $assItems->item_cost,
+                        'ass_item_price' => $assItems->item_price,
+                        'ass_item_qty' => $assItemQty,
+                        'ass_item_total' => $assItemPrice,
+                        'ass_item_unit' => $assItems->item_units,
+                        'ass_item_description' => $assItems->item_description,
+                        'ass_item_type' => $assItems->item_type,
+                        'ass_labour_expense' => $assItems->labour_expense,
+                        'ass_material_expense' => $assItems->material_expense,
                     ];
                     EstimateItemAssembly::create($assemblyData);
                 }
@@ -1632,7 +1650,7 @@ class EstimateController extends Controller
     // get estimate item details for edit
     public function getEstimateItem($id)
     {
-        $estimateItem = EstimateItem::where('estimate_item_id', $id)->first();
+        $estimateItem = EstimateItem::with('group')->where('estimate_item_id', $id)->first();
         $estimateItemAssembly = EstimateItemAssembly::where('estimate_item_id', $estimateItem->estimate_item_id)->get();
 
         return response()->json(['success' => true, 'item_detail' => $estimateItem, 'assembly_items' => $estimateItemAssembly], 200);
@@ -1650,7 +1668,7 @@ class EstimateController extends Controller
                 'item_id' => 'nullable',
                 'item_type' => 'required|string',
                 'item_name' => 'required',
-                'item_units' => 'required',
+                'item_units' => 'nullable',
                 'labour_expense' => 'nullable',
                 'material_expense' => 'nullable',
                 'item_cost' => 'required',
@@ -1660,12 +1678,14 @@ class EstimateController extends Controller
                 'item_description' => 'nullable',
                 'item_note' => 'nullable',
                 'assembly_name' => 'nullable|array',
+                'ass_item_id' => 'nullable|array',
                 'assembly_unit_by_item_unit' => 'nullable|array',
                 'item_unit_by_assembly_unit' => 'nullable|array',
                 'is_upgrade' => 'nullable',
+                'group_id' => 'nullable',
                 // 'selected_items' => 'required|array',
             ]);
-// dd($validatedData);
+            // dd($validatedData);
             // Fetch the selected items from the database
             // $selectedItems = Items::whereIn('item_id', $validatedData['selected_items'])->get();
 
@@ -1697,16 +1717,19 @@ class EstimateController extends Controller
                 'item_Description' => $validatedData['item_description'],
                 'item_note' => $validatedData['item_note'],
                 'is_upgrade' => $validatedData['is_upgrade'],
+                'group_id' => $validatedData['group_id'],
             ]);
 
             if (isset($validatedData['assembly_name'])) {
                 // Iterate through each assembly name
                 foreach ($validatedData['assembly_name'] as $key => $assemblyName) {
                     if ($assemblyName != null) {
+                        $assItems = Items::where('item_id', $validatedData['ass_item_id'][$key])->first();
                         // Calculate the sum for 'assembly_unit_by_item_unit' and 'item_unit_by_assembly_unit'
                         $itemUnitByAssUnitSum = $validatedData['item_unit_by_assembly_unit'][$key];
                         $assUnitByItemUnitSum = $validatedData['assembly_unit_by_item_unit'][$key];
-
+                        $assItemQty = $validatedData['item_qty'] * $assUnitByItemUnitSum;
+                        $assItemPrice = $assItems->item_price * $assItemQty;
                         // Create a new ItemAssembly for each assembly name
                         EstimateItemAssembly::create([
                             'added_user_id' => $userDetails['id'],
@@ -1715,6 +1738,16 @@ class EstimateController extends Controller
                             'est_ass_item_name' => $assemblyName,
                             'item_unit_by_ass_unit' => $itemUnitByAssUnitSum,
                             'ass_unit_by_item_unit' => $assUnitByItemUnitSum,
+                            'item_id' => $assItems->item_id,
+                            'ass_item_cost' => $assItems->item_cost,
+                            'ass_item_price' => $assItems->item_price,
+                            'ass_item_qty' => $assItemQty,
+                            'ass_item_total' => $assItemPrice,
+                            'ass_item_unit' => $assItems->item_units,
+                            'ass_item_description' => $assItems->item_description,
+                            'ass_item_type' => $assItems->item_type,
+                            'ass_labour_expense' => $assItems->labour_expense,
+                            'ass_material_expense' => $assItems->material_expense,
                         ]);
                     }
                 }
@@ -1898,9 +1931,10 @@ class EstimateController extends Controller
 
 
             $additionalContacts = EstimateContact::where('estimate_id', $estimate->estimate_id)->get();
-            $estimateItems = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', 'labour')->orwhere('item_type', 'material')->get();
+            $estimateItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'labour')->orwhere('item_type', 'material')->orwhere('item_type', 'assemblies')->get();
             $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->get();
             $items = Items::get();
+            $groups = Groups::get();
             $itemsForAssemblies = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
             $labourItems = Items::where('item_type', 'labour')->get();
             $materialItems = Items::where('item_type', 'material')->get();
@@ -2003,7 +2037,7 @@ class EstimateController extends Controller
             $sumEstimateItems = EstimateItem::where('estimate_id', $id)->get();
             $profitFromEstimateItems = $sumEstimateItems->sum('item_total');
             $profitHours = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->sum('item_qty');
-            
+
             $profitCostEstimateItems = $sumEstimateItems->sum(function ($itemm) {
                 return $itemm->item_cost * $itemm->item_qty;
             });
@@ -2019,7 +2053,7 @@ class EstimateController extends Controller
 
             $budgetMaterial = $budgetMaterialFromEstimateItems + $budgetMaterialFromTemplateItems;
             $budgetMaterial = $budgetMaterial * 15 / 100;
-            
+
             $budgetProfit = $budgetLabour + $budgetMaterial;
             $budgetProfit = $profitItems - $budgetProfit;
 

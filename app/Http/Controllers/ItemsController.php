@@ -18,7 +18,7 @@ class ItemsController extends Controller
     // get item date
     public function getItemData($id)
     {
-        $item = Items::find($id);
+        $item = Items::with('group')->find($id);
         if ($item->item_type == 'assemblies') {
             $assemblyItem = ItemAssembly::where('item_id', $item->item_id)->get();
             return response()->json(['success' => true, 'item' => $item, 'assembly_items' => $assemblyItem], 200);
@@ -87,6 +87,7 @@ class ItemsController extends Controller
                 'material_expense' => 'nullable|numeric',
                 'item_description' => 'nullable|string',
                 'assembly_name' => 'nullable|array',
+                'ass_item_id' => 'nullable|array',
                 'item_unit_by_ass_unit' => 'nullable|array',
                 'ass_unit_by_item_unit' => 'nullable|array',
                 'item_group' => 'nullable',
@@ -111,6 +112,7 @@ class ItemsController extends Controller
             if (!empty($validatedData['assembly_name'])) {
                 foreach ($validatedData['assembly_name'] as $key => $assemblyName) {
                     if (!empty($assemblyName)) {
+                        $assItemIds = $validatedData['ass_item_id'][$key];
                         $itemUnitByAssUnitSum = $validatedData['item_unit_by_ass_unit'][$key];
                         $assUnitByItemUnitSum = $validatedData['ass_unit_by_item_unit'][$key];
     
@@ -120,6 +122,7 @@ class ItemsController extends Controller
                             'assembly_name' => $assemblyName,
                             'item_unit_by_ass_unit' => $itemUnitByAssUnitSum,
                             'ass_unit_by_item_unit' => $assUnitByItemUnitSum,
+                            'ass_item_id' => $assItemIds,
                         ]);
                     }
                 }
@@ -160,6 +163,7 @@ class ItemsController extends Controller
                 'material_expense' => 'nullable|numeric',
                 'item_description' => 'nullable|string',
                 'assembly_name' => 'nullable|array',
+                'ass_item_id' => 'nullable|array',
                 'item_unit_by_ass_unit' => 'nullable|array',
                 'ass_unit_by_item_unit' => 'nullable|array',
                 'item_group' => 'nullable',
@@ -182,7 +186,7 @@ class ItemsController extends Controller
                 foreach ($validatedData['assembly_name'] as $key => $assemblyName) {
                     // Calculate the sum for 'item_unit_by_ass_unit' and 'ass_unit_by_item_unit'
                     if (!empty($assemblyName)) {
-                        
+                        $assItemIds = $validatedData['ass_item_id'][$key];
                         $itemUnitByAssUnitSum = $validatedData['item_unit_by_ass_unit'][$key];
                         $assUnitByItemUnitSum = $validatedData['ass_unit_by_item_unit'][$key];
     
@@ -192,6 +196,7 @@ class ItemsController extends Controller
                             'assembly_name' => $assemblyName,
                             'item_unit_by_ass_unit' => $itemUnitByAssUnitSum,
                             'ass_unit_by_item_unit' => $assUnitByItemUnitSum,
+                            'ass_item_id' => $assItemIds,
                         ]);
 
                     }
