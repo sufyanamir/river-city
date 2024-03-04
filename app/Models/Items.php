@@ -9,6 +9,11 @@ class Items extends Model
 {
     use HasFactory;
 
+    public function group()
+    {
+        return $this->belongsTo(Groups::class, 'group_ids');
+    }
+
     public function assemblies()
     {
         return $this->hasMany(ItemAssembly::class, 'item_id', 'item_id');
@@ -27,6 +32,7 @@ class Items extends Model
         'labour_expense',
         'material_expense',
         'item_description',
+        'group_ids',
     ];
 
     public $timestamps = true;

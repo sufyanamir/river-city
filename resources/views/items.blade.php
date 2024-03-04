@@ -51,18 +51,20 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <th>Cost</th>
                             <th>Price</th>
                             <th style="width:300px !important">Description</th>
+                            <th>Group</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="universalTableBody" class=" text-sm">
                         @foreach ($items as $item)
                         <tr>
-                            <td>{{ ucwords($item->item_name) }}</td>
+                            <td class="w-[100px]">{{ ucwords($item->item_name) }}</td>
                             <td>{{ ucwords($item->item_type) }}</td>
                             <td>{{ ucwords($item->item_units) }}</td>
                             <td>{{ number_format($item->item_cost, 2) }}</td>
                             <td>{{ number_format($item->item_price, 2) }}</td>
                             <td class=" w-[100px]">{{ ucfirst($item->item_description) }}</td>
+                            <td>{{ucfirst(isset($item->group->group_name) ? $item->group->group_name : 'No Group')}}</td>
                             <td>
                                 @if (session('user_details')['user_role'] == 'admin')
                                 <button id="editItem{{$item->item_id}}">
@@ -188,6 +190,15 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <label for="" class="block text-left mb-1"> Item Description </label>
                             <textarea name="item_description" id="item_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
                             <button type="button" id="items-mic" class=" absolute mt-8 right-4" onclick="voice('items-mic', 'item_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                        </div>
+                        <div class="  my-2">
+                            <label for="" class="block text-left mb-1"> Group Name <span class="text-xs">(Optional)</span></label>
+                            <select id="item_group" name="item_group" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                                <option value="">Select Group</option>
+                                @foreach($groups as $group)
+                                <option value="{{$group->group_id}}">{{$group->group_name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="">
@@ -370,6 +381,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                     $('#item_cost').val(item.item_cost);
                     $('#item_price').val(item.item_price);
                     $('#item_description').val(item.item_description);
+                    $('#item_group').val(item.group_ids)
                     var unitLabel = $('.unit');
                     var priceMargin = $('#price_margin');
                     unitLabel.text(item.item_units);
