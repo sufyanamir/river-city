@@ -4871,7 +4871,16 @@ $userPrivileges->estimate->expenses === 'on')
                             <input type="hidden" name="ass_item_id[]" id="ass_item_id_${index}" value="${itemData.ass_item_id}">
                                 <select name="assembly_name[]" id="assembly_id_${index}" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
-                                    <option selected value="${itemData.assembly_name}" data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ isset($item) ? $item->item_units : '' }}">${itemData.assembly_name}</option>
+                                    <option selected value="${itemData.assembly_name}" 
+                                        data-item-price="{{ isset($item) ? $item->item_price : '' }}" 
+                                        data-item-id="{{ isset($item) ? $item->item_id : '' }}" 
+                                        data-item-type="{{ isset($item) ? $item->item_type : '' }}" 
+                                        data-labour-expense="{{ isset($item) ? $item->labour_expense : '' }}" 
+                                        data-material-expense="{{ isset($item) ? $item->material_expense : '' }}" 
+                                        data-unit="{{ isset($item) ? $item->item_units : '' }}">
+                                        ${itemData.assembly_name}
+                                    </option>
+
                                     @foreach ($itemsForAssemblies as $item)
                                     <option id="option_id{{$item->item_id}}" value="{{ $item->item_name }}" data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
                                     @endforeach
@@ -4997,7 +5006,15 @@ $userPrivileges->estimate->expenses === 'on')
                                 <input type="hidden" name="ass_item_id[]" id="ass_item_id_${index}" value="${itemData.ass_item_id}">
                                 <select name="assembly_name[]" id="assembly_id_${index}" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
-                                    <option selected value="${itemData.est_ass_item_name}" data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ isset($item) ? $item->item_units : '' }}">${itemData.est_ass_item_name}</option>
+                                    <option selected value="${itemData.est_ass_item_name}" 
+                                        data-item-price="{{ isset($item) ? $item->item_price : '' }}" 
+                                        data-item-id="{{ isset($item) ? $item->item_id : '' }}" 
+                                        data-item-type="{{ isset($item) ? $item->item_type : '' }}" 
+                                        data-labour-expense="{{ isset($item) ? $item->labour_expense : '' }}" 
+                                        data-material-expense="{{ isset($item) ? $item->material_expense : '' }}" 
+                                        data-unit="{{ isset($item) ? $item->item_units : '' }}">
+                                        ${itemData.est_ass_item_name}
+                                    </option>
                                     @foreach ($itemsForAssemblies as $item)
                                     <option id="option_id{{$item->item_id}}" value="{{ $item->item_name }}" data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
                                     @endforeach
