@@ -9,6 +9,11 @@ class Groups extends Model
 {
     use HasFactory;
 
+    public function items()
+    {
+        return $this->hasMany(Items::class, 'group_ids');
+    }
+
     protected $table = 'groups';
 
     protected $primaryKey = 'group_id';

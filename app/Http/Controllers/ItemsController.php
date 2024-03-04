@@ -50,13 +50,15 @@ class ItemsController extends Controller
     {
         $userDetails = session('user_details');
         if ($type === 'material' || $type === 'labour' || $type === 'assemblies') {
-            $items = Items::where('item_type', $type)->get();
+            $items = Items::with('group')->where('item_type', $type)->get();
             $itemsForAssemblis = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
         }else{
-            $items = Items::get();
+            $items = Items::with('group')->get();
             $itemsForAssemblis = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
         }
-        return view('items', ['items' => $items, 'user_details' => $userDetails, 'itemsForAssemblies' => $itemsForAssemblis]);
+        $groups = Groups::get();
+
+        return view('items', ['items' => $items, 'groups' => $groups, 'user_details' => $userDetails, 'itemsForAssemblies' => $itemsForAssemblis]);
     }
     public function getGroupsWithItems()
     {
@@ -87,6 +89,7 @@ class ItemsController extends Controller
                 'assembly_name' => 'nullable|array',
                 'item_unit_by_ass_unit' => 'nullable|array',
                 'ass_unit_by_item_unit' => 'nullable|array',
+                'item_group' => 'nullable',
             ]);
 
             $item = Items::with('assemblies')->where('item_id', $validatedData['item_id'])->first();
@@ -99,6 +102,7 @@ class ItemsController extends Controller
             $item->labour_expense = $validatedData['labour_expense'];
             $item->material_expense = $validatedData['material_expense'];
             $item->item_description = $validatedData['item_description'];
+            $item->group_ids = $validatedData['item_group'];
 
             $item->save();
 
@@ -158,6 +162,7 @@ class ItemsController extends Controller
                 'assembly_name' => 'nullable|array',
                 'item_unit_by_ass_unit' => 'nullable|array',
                 'ass_unit_by_item_unit' => 'nullable|array',
+                'item_group' => 'nullable',
             ]);
 
             $item = Items::create([
@@ -169,6 +174,7 @@ class ItemsController extends Controller
                 'labour_expense' => $validatedData['labour_expense'],
                 'material_expense' => $validatedData['material_expense'],
                 'item_description' => $validatedData['item_description'],
+                'group_ids' => $validatedData['item_group'],
             ]);
 
             if (isset($validatedData['assembly_name'])) {

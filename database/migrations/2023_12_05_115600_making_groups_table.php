@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('groups', function(Blueprint $table){
             $table->id('group_id');
             $table->string('group_name');
-            $table->text('group_items');
-            $table->integer('total_items');
+            $table->text('group_items')->nullable();
+            $table->integer('total_items')->nullable();
             $table->string('group_type');
             $table->text('group_description')->nullable();
             $table->timestamp('created_at')->useCurrent();
