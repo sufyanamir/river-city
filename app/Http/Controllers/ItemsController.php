@@ -142,9 +142,14 @@ class ItemsController extends Controller
     {
         $userDetails = session('user_details');
 
-        $item = Items::with('assemblies')->where('item_id', $id)->first();
+        $item = Items::with('group', 'assemblies')->find($id);
+    
+    foreach ($item->assemblies as $assembly) {
+        $assemblyItem = Items::where('item_id', $assembly->ass_item_id)->first();
+        $assembly->assemblyItemData = $assemblyItem;
+    }
 
-        return response()->json(['success' => true, 'data' => ['item' => $item]], 200);
+    return response()->json(['success' => true, 'data' => ['item' => $item]], 200);
     }
     // get item to edit
 
