@@ -128,13 +128,13 @@ class EstimateController extends Controller
 
         $userDetails = session('user_details');
         $estimate = Estimate::where('estimate_id', $id)->first();
-        $materialItems = EstimateItem::where('estimate_id', $id)->where('item_type', '<>', 'upgrades')->orwhere('item_type', '<>', 'assemblies')->get();
+        $materialItems = EstimateItem::where('estimate_id', $id)->where('item_type', '<>', 'upgrades')->get();
         $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->get();
         $upgrades = EstimateItem::with('assemblies')->where('estimate_id', $id)->where('item_type', 'upgrades')->where('upgrade_status', 'accepted')->get();
         $itemTemplates = EstimateItemTemplates::with('templateItems')->where('estimate_id', $id)->get();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
 
-        return view('viewEstimateMaterials', ['items' => $materialItems, 'assemblies' => $estimateAssemblyItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
+        return view('viewEstimateMaterials', ['estimate_items' => $materialItems, 'assemblies' => $estimateAssemblyItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
     }
     // view Estimate Materials
 
@@ -1307,9 +1307,9 @@ class EstimateController extends Controller
             return view('accept-proposal', [
                 'estimate' => $estimate,
                 'customer' => $customer,
-                'items' => $items,
+                'estimate_items' => $items,
                 'upgrades' => $upgrades,
-                'estimateItemTemplates' => $estimateItemTemplates,
+                'templates' => $estimateItemTemplates,
             ]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -1370,7 +1370,7 @@ class EstimateController extends Controller
             $estimate = Estimate::where('estimate_id', $id)->first();
             $customer = Customer::where('customer_id', $estimate->customer_id)->first();
             $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', '<>', 'upgrades')->where('item_status', 'included')->get();
-            $upgrades = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', 'upgrades')->where('item_status', 'included')->get();
+            $upgrades = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'upgrades')->where('item_status', 'included')->get();
             $existingProposals = EstimateProposal::where('estimate_id', $id)->get();
             $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->where('template_status', 'included')->get();
             $estimateItemTemplateItems = [];
@@ -1417,10 +1417,10 @@ class EstimateController extends Controller
                 'user_details' => $userDetails,
                 'estimate' => $estimate,
                 'customer' => $customer,
-                'items' => $items,
+                'estimate_items' => $items,
                 'existing_proposals' => $existingProposals,
                 'upgrades' => $upgrades,
-                'estimateItemTemplates' => $estimateItemTemplates
+                'templates' => $estimateItemTemplates
             ]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -1931,7 +1931,7 @@ class EstimateController extends Controller
 
 
             $additionalContacts = EstimateContact::where('estimate_id', $estimate->estimate_id)->get();
-            $estimateItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'labour')->orwhere('item_type', 'material')->orwhere('item_type', 'assemblies')->get();
+            $estimateItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->get();
             $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->get();
             $items = Items::get();
             $groups = Groups::get();

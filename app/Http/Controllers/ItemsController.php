@@ -17,16 +17,18 @@ class ItemsController extends Controller
 
     // get item date
     public function getItemData($id)
-    {
-        $item = Items::with('group')->find($id);
-        if ($item->item_type == 'assemblies') {
-            $assemblyItem = ItemAssembly::where('item_id', $item->item_id)->get();
-            return response()->json(['success' => true, 'item' => $item, 'assembly_items' => $assemblyItem], 200);
-        } else {
-
-            return response()->json(['success' => true, 'item' => $item], 200);
-        }
+{
+    $item = Items::with('group', 'assemblies')->find($id);
+    
+    foreach ($item->assemblies as $assembly) {
+        $assemblyItem = Items::where('item_id', $assembly->ass_item_id)->first();
+        $assembly->assemblyItemData = $assemblyItem;
     }
+
+    return response()->json(['success' => true, 'item' => $item], 200);
+}
+
+
     // get item date
 
     // delete item
@@ -52,7 +54,7 @@ class ItemsController extends Controller
         if ($type === 'material' || $type === 'labour' || $type === 'assemblies') {
             $items = Items::with('group')->where('item_type', $type)->get();
             $itemsForAssemblis = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
-        }else{
+        } else {
             $items = Items::with('group')->get();
             $itemsForAssemblis = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
         }
@@ -115,7 +117,7 @@ class ItemsController extends Controller
                         $assItemIds = $validatedData['ass_item_id'][$key];
                         $itemUnitByAssUnitSum = $validatedData['item_unit_by_ass_unit'][$key];
                         $assUnitByItemUnitSum = $validatedData['ass_unit_by_item_unit'][$key];
-    
+
                         // Create a new ItemAssembly for each assembly name
                         ItemAssembly::create([
                             'item_id' => $item->item_id,
@@ -129,7 +131,6 @@ class ItemsController extends Controller
             }
 
             return response()->json(['success' => true, 'message' => 'Item Updated!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -144,7 +145,6 @@ class ItemsController extends Controller
         $item = Items::with('assemblies')->where('item_id', $id)->first();
 
         return response()->json(['success' => true, 'data' => ['item' => $item]], 200);
-
     }
     // get item to edit
 
@@ -189,7 +189,7 @@ class ItemsController extends Controller
                         $assItemIds = $validatedData['ass_item_id'][$key];
                         $itemUnitByAssUnitSum = $validatedData['item_unit_by_ass_unit'][$key];
                         $assUnitByItemUnitSum = $validatedData['ass_unit_by_item_unit'][$key];
-    
+
                         // Create a new ItemAssembly for each assembly name
                         ItemAssembly::create([
                             'item_id' => $item->item_id,
@@ -198,7 +198,6 @@ class ItemsController extends Controller
                             'ass_unit_by_item_unit' => $assUnitByItemUnitSum,
                             'ass_item_id' => $assItemIds,
                         ]);
-
                     }
                 }
             }

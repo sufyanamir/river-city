@@ -1873,77 +1873,129 @@ $userPrivileges->estimate->items === 'on')
             Upgrade
         </p>
     </div>
-    <div class=" itemDiv  m-2">
-        @php
-        $totalUpgradePrice = 0; // Initialize total labor price variable
-        @endphp
-        @foreach ($estimate_items as $item)
-        @if ($item->item_type === 'upgrades')
-        <div class="mb-2 bg-white shadow-xl">
-            <div class=" flex p-1 bg-[#930027] text-white w-full rounded-t-lg">
-                <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
-                    <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                </button>
-                <h1 class=" font-medium my-auto">{{ $item->item_name }} ({{ $item->upgrade_status }})</h1>
-            </div>
-            <div class="relative overflow-x-auto">
-                <div class="itemDiv">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Item Name
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                            $assemblies = $item->assemblies; // Fetch related EstimateItemAssembly items
-                            @endphp
-                            @foreach ($assemblies as $assembly)
-                            <tr class="bg-white border-b">
-                                <td class="px-6 py-4">
-                                    <label class="text-lg font-semibold text-[#323C47]" for="">{{ $assembly['est_ass_item_name'] }}</label>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        @php
-        $totalUpgradePrice += $item->item_total; // Add labor item price to total
-        @endphp
-        @endif
-        @endforeach
-        <div class="text-right mr-4 py-6">
-            <span>${{ number_format($totalUpgradePrice, 2) }}</span> {{-- Display the formatted total labor price --}}
-        </div>
-        {{-- @foreach ($estimate_items as $item)
-                        @if ($item->item_type === 'labour')
-                            <div
-                                class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
-                                <div class="flex">
-                                    <button type="button" class="inline">
-                                        <img class="h-[50px] w-[50px] "
-                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-        </button>
-        <div>
-            <label class="text-lg font-semibold text-[#323C47]" for="groupName">{{ $item->item_name }}</label>
-            <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
-        </div>
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Item Name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Item Description
+                </th>
+                <th scope="col" class="text-center">
+                    Item Cost
+                </th>
+                <th scope="col" class="text-center">
+                    Item Qty
+                </th>
+                <th scope="col" class="text-center">
+                    Total
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @php
+            $totalUpgradePrice = 0; // Initialize total labor price variable
+            @endphp
+            @foreach ($estimate_items as $item)
+            @if ($item->item_type === 'upgrades')
+
+            <tr>
+                <td>
+                    <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
+                        <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                    </button>
+                </td>
+                <td>{{$item->item_name}} ({{$item->upgrade_status}})</td>
+                <td>{{$item->item_description}}</td>
+                <td class="text-center">{{$item->item_price}}</td>
+                <td class="text-center">{{$item->item_qty}}</td>
+                <td class="text-center">{{$item->item_total}}</td>
+            <tr>
+                <td colspan="7">
+                    <div class="">
+                        <div id="accordion-collapse{{$item->estimate_item_id}}" class="accordion-collapse mb-2" data-accordion="collapse">
+                            <h2 id="accordion-collapse-heading-1" class="border-b-2">
+                                <button type="button" class="flex items-center bg-[#F5F5F5] justify-between w-full p-2  text-left rounded-t-lg  focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-1" aria-expanded="true" aria-controls="accordion-collapse-body-1">
+                                    <span></span>
+                                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
+                                    </svg>
+                                </button>
+                            </h2>
+                            <div id="accordion-collapse-body{{$item->estimate_item_id}}" class="accordion-collapse-body bg-[#F5F5F5] hidden" aria-labelledby="accordion-collapse-heading-1">
+                                <div class="p-2">
+                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3"></th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Item Name
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Item Description
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Item Cost
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Item Qty
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Total
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($item->assemblies as $assembly)
+                                            <tr class="bg-white border-b">
+                                                <td class="px-6 py-4"></td>
+                                                <td class="px-6 py-4">
+                                                    {{$assembly->est_ass_item_name}}
+                                                </td>
+                                                <td class="px-6 py-4 w-[30%]">
+                                                    {{$assembly->ass_item_description}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{$assembly->ass_item_price}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{$assembly->ass_item_qty}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{$assembly->ass_item_total}}
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <script>
+                    document.getElementById("accordion-collapse{{$item->estimate_item_id}}").addEventListener("click", function() {
+                        var accordionBody = document.getElementById("accordion-collapse-body{{$item->estimate_item_id}}");
+                        accordionBody.classList.toggle("hidden");
+                    });
+                </script>
+            </tr>
+            </tr>
+
+            @php
+            $totalUpgradePrice += $item->item_total; // Add labor item price to total
+            @endphp
+            @endif
+            @endforeach
+        </tbody>
+    </table>
+    <div class="text-right mr-4 py-6">
+        <span>${{ number_format($totalUpgradePrice, 2) }}</span> {{-- Display the formatted total labor price --}}
     </div>
-    <div>
-        <span>${{ $item->item_price }}</span>
-        @php
-        $totalUpgradePrice += $item->item_price; // Add labor item price to total
-        @endphp
-    </div>
-</div>
-@endif
-@endforeach --}}
-</div>
 </div>
 @elseif(isset($userPrivileges->estimate) &&
 isset($userPrivileges->estimate->items) &&
@@ -4832,7 +4884,7 @@ $userPrivileges->estimate->expenses === 'on')
                     type: 'GET',
                     success: function(data) {
                         var itemData = data.item;
-                        var assemblyItemData = data.assembly_items;
+                        var assemblies = data.item.assemblies;
 
                         // Update the other input fields based on the item data
                         typeDropdown.val(itemData.item_type);
@@ -4850,6 +4902,7 @@ $userPrivileges->estimate->expenses === 'on')
                             groupNameInput.val('');
                             groupIdInput.val('');
                         }
+                        console.log(itemData);
                         // groupNameInput.val(itemData.group.group_name);
                         // console.log(itemData);
                         // console.log(itemData.item_units);
@@ -4861,24 +4914,24 @@ $userPrivileges->estimate->expenses === 'on')
 
                         let mulitple_input = $('#mulitple_input');
                         mulitple_input.html('');
-                        $.each(assemblyItemData, function(index, itemData) {
+                        $.each(assemblies, function(index, assembly) {
                             let id = Math.floor(Math.random() * 999 + 1);
-                            console.log(assemblyItemData);
                             let newele = $('<div class="mt-5" id="ele' + id + '"></div>');
                             let delbtn = $('<span></span>');
                             // ============
                             newele.html(`
-                            <input type="hidden" name="ass_item_id[]" id="ass_item_id_${index}" value="${itemData.ass_item_id}">
+                            <input type="hidden" name="ass_item_id[]" id="ass_item_id_${index}" value="${assembly.ass_item_id}">
                                 <select name="assembly_name[]" id="assembly_id_${index}" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
-                                    <option selected value="${itemData.assembly_name}" 
-                                        data-item-price="{{ isset($item) ? $item->item_price : '' }}" 
-                                        data-item-id="{{ isset($item) ? $item->item_id : '' }}" 
-                                        data-item-type="{{ isset($item) ? $item->item_type : '' }}" 
-                                        data-labour-expense="{{ isset($item) ? $item->labour_expense : '' }}" 
-                                        data-material-expense="{{ isset($item) ? $item->material_expense : '' }}" 
-                                        data-unit="{{ isset($item) ? $item->item_units : '' }}">
-                                        ${itemData.assembly_name}
+                                    <option selected value="${assembly.assembly_name}" 
+                                        data-item-cost="${assembly.assemblyItemData.item_cost}" 
+                                        data-item-price="${assembly.assemblyItemData.item_price}" 
+                                        data-item-id="${assembly.assemblyItemData.item_id}" 
+                                        data-item-type="${assembly.assemblyItemData.item_type}" 
+                                        data-labour-expense="${assembly.assemblyItemData.labour_expense}" 
+                                        data-material-expense="${assembly.assemblyItemData.material_expense}" 
+                                        data-unit="${assembly.assemblyItemData.item_units}">
+                                        ${assembly.assembly_name}
                                     </option>
 
                                     @foreach ($itemsForAssemblies as $item)
@@ -4887,12 +4940,12 @@ $userPrivileges->estimate->expenses === 'on')
                                 </select>
                                 <div class=" grid grid-cols-3 gap-3 mt-2 inline-block">
                                     <div>
-                                        <input value="${itemData.item_unit_by_ass_unit}" type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_ass_unit_${index}" placeholder="00.0" autocomplete="given-name"
+                                        <input value="${assembly.item_unit_by_ass_unit}" type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_ass_unit_${index}" placeholder="00.0" autocomplete="given-name"
                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                         <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
                                     </div>
                                     <div>
-                                        <input  value="${itemData.ass_unit_by_item_unit}"  type="text" name="assembly_unit_by_item_unit[]" id="ass_unit_by_item_unit_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <input  value="${assembly.ass_unit_by_item_unit}"  type="text" name="assembly_unit_by_item_unit[]" id="ass_unit_by_item_unit_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class="flex ">
                                         <div class="w-[80%]  ">
@@ -4927,7 +4980,7 @@ $userPrivileges->estimate->expenses === 'on')
                                 ele.remove();
                             }
                         }
-                        applyInputEventListenerForAssUnit();
+                        // applyInputEventListenerForAssUnit();
 
                         // Show/hide expense fields based on the selected item type
                         // if (itemData.type === 'labour') {
@@ -5007,12 +5060,13 @@ $userPrivileges->estimate->expenses === 'on')
                                 <select name="assembly_name[]" id="assembly_id_${index}" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
                                     <option selected value="${itemData.est_ass_item_name}" 
-                                        data-item-price="{{ isset($item) ? $item->item_price : '' }}" 
-                                        data-item-id="{{ isset($item) ? $item->item_id : '' }}" 
-                                        data-item-type="{{ isset($item) ? $item->item_type : '' }}" 
-                                        data-labour-expense="{{ isset($item) ? $item->labour_expense : '' }}" 
-                                        data-material-expense="{{ isset($item) ? $item->material_expense : '' }}" 
-                                        data-unit="{{ isset($item) ? $item->item_units : '' }}">
+                                        data-item-price="${itemData.ass_item_price}" 
+                                        data-item-cost="${itemData.ass_item_cost}" 
+                                        data-item-id="${itemData.item_id}" 
+                                        data-item-type="${itemData.ass_item_type}" 
+                                        data-labour-expense="${itemData.ass_labour_expense}" 
+                                        data-material-expense="${itemData.ass_material_expense}" 
+                                        data-unit="${itemData.ass_item_unit}">
                                         ${itemData.est_ass_item_name}
                                     </option>
                                     @foreach ($itemsForAssemblies as $item)
@@ -5062,7 +5116,7 @@ $userPrivileges->estimate->expenses === 'on')
                                 }
                             }
                         }
-                        applyInputEventListenerForAssUnit();
+                        // applyInputEventListenerForAssUnit();
                         // Set the item ID in the hidden input field
                         $('#item_id').val(itemDetail.estimate_item_id);
                         var formUrl = $('#itemsForm').attr('action', '/updateEstimateItem');
@@ -5081,82 +5135,82 @@ $userPrivileges->estimate->expenses === 'on')
         });
 
 
-        function applyInputEventListenerForAssUnit() {
-            $('[id^="item_unit_by_ass_unit_"]').on('input', function() {
-                // Initialize variables to store total expenses for labour and material items
-                var totalLabourExpense = 0;
-                var totalMaterialExpense = 0;
+        // function applyInputEventListenerForAssUnit() {
+        //     $(document).on('input', '[id^="item_unit_by_ass_unit_"]', function() {
+        //         // Initialize variables to store total expenses for labour and material items
+        //         var totalLabourExpense = 0;
+        //         var totalMaterialExpense = 0;
 
-                // Iterate over each row
-                $('[id^="item_unit_by_ass_unit_"]').each(function() {
-                    // Get the ID of the item_unit_by_ass_unit input for the current row
-                    var itemId = $(this).attr('id').replace('item_unit_by_ass_unit_', '');
+        //         // Iterate over each row
+        //         $('[id^="item_unit_by_ass_unit_"]').each(function() {
+        //             // Get the ID of the item_unit_by_ass_unit input for the current row
+        //             var itemId = $(this).attr('id').replace('item_unit_by_ass_unit_', '');
 
-                    // Retrieve the selected option from the corresponding select element for the current row
-                    var selectedOption = $('#assembly_id_' + itemId + ' option:selected');
+        //             // Retrieve the selected option from the corresponding select element for the current row
+        //             var selectedOption = $('#assembly_id_' + itemId + ' option:selected');
 
-                    // Retrieve data from the selected option for the current row
-                    var itemType = selectedOption.data('item-type');
-                    var labourExpense = selectedOption.data('labour-expense');
-                    var materialExpense = selectedOption.data('material-expense');
-                    var itemPrice = selectedOption.data('item-price');
-                    var assitemIds = selectedOption.data('item-id');
-                    var EstItemQty = $('#item_qty').val();
+        //             // Retrieve data from the selected option for the current row
+        //             var itemType = selectedOption.data('item-type');
+        //             var labourExpense = selectedOption.data('labour-expense');
+        //             var materialExpense = selectedOption.data('material-expense');
+        //             var itemCost = selectedOption.data('item-cost');
+        //             var itemPrice = selectedOption.data('item-price');
+        //             var assitemIds = selectedOption.data('item-id');
 
-                    $('#ass_item_id_' + itemId).val(assitemIds);
+        //             var EstItemQty = $('#item_qty').val();
 
-                    // Get the value entered in the item_unit_by_ass_unit input for the current row
-                    var itemUnitValue = parseFloat($(this).val());
+        //             $('#ass_item_id_' + itemId).val(assitemIds);
+        //             // Get the value entered in the item_unit_by_ass_unit input for the current row
+        //             var itemUnitValue = parseFloat($(this).val());
 
-                    // Perform calculations based on item type for the current row
-                    if (itemType === 'labour') {
-                        if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                            var calculatedValue = (itemPrice / labourExpense) / itemUnitValue;
+        //             // Perform calculations based on item type for the current row
+        //             if (itemType === 'labour') {
+        //                 if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
+        //                     var calculatedValue = 1 / itemUnitValue;
 
-                            // Update total labour expense for the current row
-                            totalLabourExpense += calculatedValue * 1 * itemPrice;
+        //                     $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(2));
+        //                     // Update total labour expense for the current row
+        //                     totalLabourExpense += labourExpense / itemUnitValue;
 
-                            var assTotalQty = EstItemQty * calculatedValue;
-                            $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
+        //                     var assTotalQty = EstItemQty * calculatedValue;
+        //                     $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
+        //                 } else {
+        //                     $('#labour_expense').val('');
+        //                     $('#ass_unit_by_item_unit_' + itemId).val('');
+        //                     $('#total_qty_' + itemId).val('');
+        //                 }
+        //             } else if (itemType === 'material') {
+        //                 if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
+        //                     var calculatedValue = 1 / itemUnitValue;
+        //                     $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(2));
+        //                     // Update total material expense for the current row
+        //                     totalMaterialExpense += calculatedValue * 1 * itemCost;
 
-                        } else {
-                            $('#labour_expense').val('');
-                            $('#ass_unit_by_item_unit_' + itemId).val('');
-                            $('#total_qty' + itemid).val('');
-                        }
-                    } else if (itemType === 'material') {
-                        if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                            var calculatedValue = (itemPrice / materialExpense) / itemUnitValue;
+        //                     var assTotalQty = EstItemQty * calculatedValue;
+        //                     $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
+        //                 } else {
+        //                     $('#material_expense').val('');
+        //                     $('#ass_unit_by_item_unit_' + itemId).val('');
+        //                     $('#total_qty_' + itemId).val('');
+        //                 }
+        //             }
+        //         });
 
-                            // Update total material expense for the current row
-                            totalMaterialExpense += calculatedValue * 1 * itemPrice;
+        //         // Set the total labour and material expenses in their respective inputs
+        //         $('#labour_expense').val(totalLabourExpense.toFixed(2));
+        //         $('#material_expense').val(totalMaterialExpense.toFixed(2));
 
-                            var assTotalQty = EstItemQty * calculatedValue;
-                            $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
+        //         // Calculate the sum of labour expense and material expense
+        //         var totalExpense = totalLabourExpense + totalMaterialExpense;
 
-                        } else {
-                            $('#material_expense').val('');
-                            $('#ass_unit_by_item_unit_' + itemId).val('');
-                            $('#total_qty' + itemId).val('');
-                        }
-                    }
-                });
+        //         // Calculate the item cost as half of the total expense
+        //         var itemCost = totalExpense / 2;
 
-                // Set the total labour and material expenses in their respective inputs
-                $('#labour_expense').val(totalLabourExpense.toFixed(2));
-                $('#material_expense').val(totalMaterialExpense.toFixed(2));
-
-                // Calculate the sum of labour expense and material expense
-                var totalExpense = totalLabourExpense + totalMaterialExpense;
-
-                // Calculate the item cost as half of the total expense
-                var itemCost = totalExpense / 2;
-
-                // Set the total expense and item cost in their respective inputs
-                $('#item_price').val(totalExpense.toFixed(2));
-                $('#item_cost').val(itemCost.toFixed(2));
-            });
-        }
+        //         // Set the total expense and item cost in their respective inputs
+        //         $('#item_price').val(totalExpense.toFixed(2));
+        //         $('#item_cost').val(itemCost.toFixed(2));
+        //     });
+        // }
 
         type.on('change', function() {
             var typeDropdown = $('#type');
@@ -5820,7 +5874,7 @@ $userPrivileges->estimate->expenses === 'on')
             <select name="assembly_name[]" id="${selectId}" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                 <option value="">Select Item</option>
                 @foreach ($itemsForAssemblies as $item)
-                <option value="{{ $item->item_name }}"data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
+                <option value="{{ $item->item_name }}" data-item-cost="{{$item->item_cost}}" data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
                 @endforeach
             </select>
             <div class=" grid grid-cols-3 gap-3 mt-2 inline-block">
@@ -5877,22 +5931,28 @@ $userPrivileges->estimate->expenses === 'on')
             var labourExpense = selectedOption.data('labour-expense');
             var materialExpense = selectedOption.data('material-expense');
             var itemPrice = selectedOption.data('item-price');
+            var itemCost = selectedOption.data('item-cost');
+            var itemUnit = selectedOption.data('unit');
             var assitemIds = selectedOption.data('item-id');
-
             var EstItemQty = $('#item_qty').val();
 
             $('#ass_item_id_' + itemId).val(assitemIds);
+
+            $('.addedItemUnit' + itemId).text(itemUnit);
+
+
+
             // Get the value entered in the item_unit_by_ass_unit input for the current row
             var itemUnitValue = parseFloat($(this).val());
 
             // Perform calculations based on item type for the current row
             if (itemType === 'labour') {
                 if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                    var calculatedValue = (itemPrice / labourExpense) / itemUnitValue;
+                    var calculatedValue = 1 / itemUnitValue;
 
-                    $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(2));
+                    $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
                     // Update total labour expense for the current row
-                    totalLabourExpense += calculatedValue * 1 * itemPrice;
+                    totalLabourExpense += labourExpense / itemUnitValue;
 
                     var assTotalQty = EstItemQty * calculatedValue;
                     $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
@@ -5903,10 +5963,10 @@ $userPrivileges->estimate->expenses === 'on')
                 }
             } else if (itemType === 'material') {
                 if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                    var calculatedValue = (itemPrice / materialExpense) / itemUnitValue;
-                    $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(2));
+                    var calculatedValue = 1 / itemUnitValue;
+                    $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
                     // Update total material expense for the current row
-                    totalMaterialExpense += calculatedValue * 1 * itemPrice;
+                    totalMaterialExpense += calculatedValue * 1 * itemCost;
 
                     var assTotalQty = EstItemQty * calculatedValue;
                     $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
@@ -5919,8 +5979,8 @@ $userPrivileges->estimate->expenses === 'on')
         });
 
         // Set the total labour and material expenses in their respective inputs
-        $('#labour_expense').val(totalLabourExpense.toFixed(2));
-        $('#material_expense').val(totalMaterialExpense.toFixed(2));
+        $('#labour_expense').val(totalLabourExpense);
+        $('#material_expense').val(totalMaterialExpense);
 
         // Calculate the sum of labour expense and material expense
         var totalExpense = totalLabourExpense + totalMaterialExpense;
@@ -5931,6 +5991,11 @@ $userPrivileges->estimate->expenses === 'on')
         // Set the total expense and item cost in their respective inputs
         $('#item_price').val(totalExpense.toFixed(2));
         $('#item_cost').val(itemCost.toFixed(2));
+
+        var priceMinusCost = $('#item_price').val() - $('#item_cost').val();
+        var priceMinusCostbyitemPrice = priceMinusCost / $('#item_price').val();
+        var finalMargin = priceMinusCostbyitemPrice * 100;
+        $('#price_margin').text(finalMargin.toFixed(2));
     });
 
     $("#cal-menubutton").click(function(e) {
