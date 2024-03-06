@@ -5056,7 +5056,7 @@ $userPrivileges->estimate->expenses === 'on')
                                 let delbtn = $('<span></span>');
                                 // ============
                                 newele.html(`
-                                <input type="hidden" name="ass_item_id[]" id="ass_item_id_${index}" value="${itemData.ass_item_id}">
+                                <input type="hidden" name="ass_item_id[]" id="ass_item_id_${index}" value="${itemData.item_id}">
                                 <select name="assembly_name[]" id="assembly_id_${index}" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
                                     <option selected value="${itemData.est_ass_item_name}" 
