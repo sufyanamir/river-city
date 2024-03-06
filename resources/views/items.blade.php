@@ -261,7 +261,7 @@ $userPrivileges = session('user_details')['user_privileges'];
         <select name="assembly_name[]" id="${selectId}" placeholder="Item Name" autocomplete="given-name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
             <option value="">Select Item</option>
             @foreach ($itemsForAssemblies as $item)
-            <option id="option_id{{$item->item_id}}" value="{{ $item->item_name }}" data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
+            <option id="option_id{{$item->item_id}}" value="{{ $item->item_name }}" data-item-cost="{{$item->item_cost}}" data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
             @endforeach
         </select>
         <div class="grid grid-cols-2 gap-3 mt-2 inline-block">
@@ -310,6 +310,7 @@ $userPrivileges = session('user_details')['user_privileges'];
             var labourExpense = selectedOption.data('labour-expense');
             var materialExpense = selectedOption.data('material-expense');
             var itemPrice = selectedOption.data('item-price');
+            var itemCost = selectedOption.data('item-cost');
             var itemUnit = selectedOption.data('unit');
             var assitemIds = selectedOption.data('item-id');
 
@@ -325,21 +326,21 @@ $userPrivileges = session('user_details')['user_privileges'];
             // Perform calculations based on item type for the current row
             if (itemType === 'labour') {
                 if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                    var calculatedValue = (itemPrice / labourExpense) / itemUnitValue;
+                    var calculatedValue = 1 / itemUnitValue;
 
-                    $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(4));
+                    $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
                     // Update total labour expense for the current row
-                    totalLabourExpense += calculatedValue * 1 * itemPrice;
+                    totalLabourExpense += labourExpense / itemUnitValue;
                 } else {
                     $('#labour_expense').val('');
                     $('#ass_unit_by_item_unit_' + itemId).val('');
                 }
             } else if (itemType === 'material') {
                 if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                    var calculatedValue = (itemPrice / materialExpense) / itemUnitValue;
-                    $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(4));
+                    var calculatedValue = 1 / itemUnitValue;
+                    $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
                     // Update total material expense for the current row
-                    totalMaterialExpense += calculatedValue * 1 * itemPrice;
+                    totalMaterialExpense += calculatedValue * 1 * itemCost;
                 } else {
                     $('#material_expense').val('');
                     $('#ass_unit_by_item_unit_' + itemId).val('');
@@ -348,8 +349,8 @@ $userPrivileges = session('user_details')['user_privileges'];
         });
 
         // Set the total labour and material expenses in their respective inputs
-        $('#labour_expense').val(totalLabourExpense.toFixed(2));
-        $('#material_expense').val(totalMaterialExpense.toFixed(2));
+        $('#labour_expense').val(totalLabourExpense);
+        $('#material_expense').val(totalMaterialExpense);
 
         // Calculate the sum of labour expense and material expense
         var totalExpense = totalLabourExpense + totalMaterialExpense;
@@ -360,6 +361,11 @@ $userPrivileges = session('user_details')['user_privileges'];
         // Set the total expense and item cost in their respective inputs
         $('#item_price').val(totalExpense.toFixed(2));
         $('#item_cost').val(itemCost.toFixed(2));
+
+        var priceMinusCost = $('#item_price').val() - $('#item_cost').val();
+        var priceMinusCostbyitemPrice = priceMinusCost / $('#item_price').val();
+        var finalMargin = priceMinusCostbyitemPrice * 100;
+        $('#price_margin').text(finalMargin.toFixed(2));
     });
 </script>
 <script>
@@ -451,7 +457,7 @@ $userPrivileges = session('user_details')['user_privileges'];
     });
 
     function applyInputEventListenerForAssUnit() {
-        $('[id^="item_unit_by_ass_unit_"]').on('input', function() {
+        $(document).on('input', '[id^="item_unit_by_ass_unit_"]', function() {
             // Initialize variables to store total expenses for labour and material items
             var totalLabourExpense = 0;
             var totalMaterialExpense = 0;
@@ -469,29 +475,37 @@ $userPrivileges = session('user_details')['user_privileges'];
                 var labourExpense = selectedOption.data('labour-expense');
                 var materialExpense = selectedOption.data('material-expense');
                 var itemPrice = selectedOption.data('item-price');
+                var itemCost = selectedOption.data('item-cost');
+                var itemUnit = selectedOption.data('unit');
                 var assitemIds = selectedOption.data('item-id');
 
                 $('#ass_item_id_' + itemId).val(assitemIds);
+
+                $('.addedItemUnit' + itemId).text(itemUnit);
+
+
+
                 // Get the value entered in the item_unit_by_ass_unit input for the current row
                 var itemUnitValue = parseFloat($(this).val());
 
                 // Perform calculations based on item type for the current row
                 if (itemType === 'labour') {
                     if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                        var calculatedValue = (itemPrice / labourExpense) / itemUnitValue;
+                        var calculatedValue = 1 / itemUnitValue;
 
+                        $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
                         // Update total labour expense for the current row
-                        totalLabourExpense += calculatedValue * 1 * itemPrice;
+                        totalLabourExpense += labourExpense / itemUnitValue;
                     } else {
                         $('#labour_expense').val('');
                         $('#ass_unit_by_item_unit_' + itemId).val('');
                     }
                 } else if (itemType === 'material') {
                     if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                        var calculatedValue = (itemPrice / materialExpense) / itemUnitValue;
-
+                        var calculatedValue = 1 / itemUnitValue;
+                        $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
                         // Update total material expense for the current row
-                        totalMaterialExpense += calculatedValue * 1 * itemPrice;
+                        totalMaterialExpense += calculatedValue * 1 * itemCost;
                     } else {
                         $('#material_expense').val('');
                         $('#ass_unit_by_item_unit_' + itemId).val('');
@@ -500,8 +514,8 @@ $userPrivileges = session('user_details')['user_privileges'];
             });
 
             // Set the total labour and material expenses in their respective inputs
-            $('#labour_expense').val(totalLabourExpense.toFixed(2));
-            $('#material_expense').val(totalMaterialExpense.toFixed(2));
+            $('#labour_expense').val(totalLabourExpense);
+            $('#material_expense').val(totalMaterialExpense);
 
             // Calculate the sum of labour expense and material expense
             var totalExpense = totalLabourExpense + totalMaterialExpense;
@@ -512,6 +526,11 @@ $userPrivileges = session('user_details')['user_privileges'];
             // Set the total expense and item cost in their respective inputs
             $('#item_price').val(totalExpense.toFixed(2));
             $('#item_cost').val(itemCost.toFixed(2));
+
+            var priceMinusCost = $('#item_price').val() - $('#item_cost').val();
+            var priceMinusCostbyitemPrice = priceMinusCost / $('#item_price').val();
+            var finalMargin = priceMinusCostbyitemPrice * 100;
+            $('#price_margin').text(finalMargin.toFixed(2));
         });
     }
 </script>
