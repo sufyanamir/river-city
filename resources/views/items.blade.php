@@ -396,6 +396,8 @@ $userPrivileges = session('user_details')['user_privileges'];
         // Initialize variables to store total expenses for labour and material items
         var totalLabourExpense = 0;
         var totalMaterialExpense = 0;
+        var labourPrice = 0;
+        var materialPrice = 0;
 
         // Iterate over each row
         $('[id^="item_unit_by_ass_unit_"]').each(function() {
@@ -431,6 +433,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                     $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
                     // Update total labour expense for the current row
                     totalLabourExpense += labourExpense / itemUnitValue;
+                    labourPrice =  itemPrice / itemUnitValue;
                 } else {
                     $('#labour_expense').val('');
                     $('#ass_unit_by_item_unit_' + itemId).val('');
@@ -441,6 +444,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                     $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
                     // Update total material expense for the current row
                     totalMaterialExpense += calculatedValue * 1 * itemCost;
+                    materialPrice =  itemPrice / itemUnitValue;
                 } else {
                     $('#material_expense').val('');
                     $('#ass_unit_by_item_unit_' + itemId).val('');
@@ -453,7 +457,7 @@ $userPrivileges = session('user_details')['user_privileges'];
         $('#material_expense').val(totalMaterialExpense);
 
         // Calculate the sum of labour expense and material expense
-        var totalExpense = totalLabourExpense + totalMaterialExpense;
+        var totalExpense = labourPrice + materialPrice;
 
         // Calculate the item cost as half of the total expense
         var itemCost = totalExpense / 2;
