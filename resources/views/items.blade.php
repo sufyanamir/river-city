@@ -398,6 +398,7 @@ $userPrivileges = session('user_details')['user_privileges'];
         var totalMaterialExpense = 0;
         var labourPrice = 0;
         var materialPrice = 0;
+        var findingCostLabour = 0;
 
         // Iterate over each row
         $('[id^="item_unit_by_ass_unit_"]').each(function() {
@@ -434,6 +435,8 @@ $userPrivileges = session('user_details')['user_privileges'];
                     // Update total labour expense for the current row
                     totalLabourExpense += labourExpense / itemUnitValue;
                     labourPrice =  itemPrice / itemUnitValue;
+
+                    findingCostLabour = totalLabourExpense * itemCost / labourExpense;
                 } else {
                     $('#labour_expense').val('');
                     $('#ass_unit_by_item_unit_' + itemId).val('');
@@ -460,7 +463,7 @@ $userPrivileges = session('user_details')['user_privileges'];
         var totalExpense = labourPrice + materialPrice;
 
         // Calculate the item cost as half of the total expense
-        var itemCost = totalExpense / 2;
+        var itemCost = findingCostLabour + totalMaterialExpense;
 
         // Set the total expense and item cost in their respective inputs
         $('#item_price').val(totalExpense.toFixed(2));

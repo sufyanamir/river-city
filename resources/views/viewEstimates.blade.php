@@ -835,7 +835,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                             </script>
                                         </td>
                                         <td class="text-center">
-                                            {{ $item->item_cost }}
+                                            {{ $item->item_price }}
                                         </td>
                                         <td class="text-center">
                                             {{ $item->item_qty }}
@@ -5919,6 +5919,7 @@ $userPrivileges->estimate->expenses === 'on')
         var totalMaterialExpense = 0;
         var labourPrice = 0;
         var materialPrice = 0;
+        var findingCostLabour = 0;
 
         // Iterate over each row
         $('[id^="item_unit_by_ass_unit_"]').each(function() {
@@ -5957,6 +5958,7 @@ $userPrivileges->estimate->expenses === 'on')
                     totalLabourExpense += labourExpense / itemUnitValue;
                     labourPrice =  itemPrice / itemUnitValue;
 
+                    findingCostLabour = totalLabourExpense * itemCost / labourExpense;
                     var assTotalQty = EstItemQty * calculatedValue;
                     $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
                 } else {
@@ -5990,7 +5992,7 @@ $userPrivileges->estimate->expenses === 'on')
         var totalExpense = labourPrice + materialPrice;
 
         // Calculate the item cost as half of the total expense
-        var itemCost = totalExpense / 2;
+        var itemCost = findingCostLabour + totalMaterialExpense;
 
         // Set the total expense and item cost in their respective inputs
         $('#item_price').val(totalExpense.toFixed(2));
