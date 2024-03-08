@@ -4576,7 +4576,7 @@ $userPrivileges->estimate->expenses === 'on')
                         <div class=" my-0 col-span-12 hidden" id="multiAdd-items">
                             <div id="mulitple_input">
                                 <label for="" class="block text-left text-sm mb-1"> Assembly Name </label>
-                                <div id="item_main">
+                                <!-- <div id="item_main">
                                     <select name="assembly_name[]" id="assembly_name" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                         <option value="">Select Item</option>
                                         @foreach ($itemsForAssemblies as $item)
@@ -4594,7 +4594,7 @@ $userPrivileges->estimate->expenses === 'on')
                                             <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <div class=" text-right mt-2">
                                 <button type="button" class=" gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="addbtn" aria-expanded="true" aria-haspopup="true">
