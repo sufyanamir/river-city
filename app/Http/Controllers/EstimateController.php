@@ -2074,9 +2074,9 @@ class EstimateController extends Controller
             $budgetMaterial = $budgetMaterial * 15 / 100;
 
             $budgetProfit = $budgetLabour + $budgetMaterial;
-            $budgetProfit = $profitItems - $budgetProfit;
+            $budgetProfit = $profitItems - $budgetProfit - $expenseTotal;
 
-            $mainProfit = $profitItems - $profitCost;
+            $mainProfit = $profitItems - $profitCost - $expenseTotal;
             if ($profitItems) {
                 $budgetMargin = $budgetProfit / $profitItems * 100;
                 $profitMargin = $mainProfit / $profitItems * 100;
