@@ -741,13 +741,13 @@ $userPrivileges = session('user_details')['user_privileges'];
                                         <th scope="col" class="px-6 py-3">
                                             Item Status (excluded/included)
                                         </th>
-                                        <th scope="col" class="text-center">
+                                        <th scope="col" class="text-center px-6 py-3">
                                             Item Cost
                                         </th>
-                                        <th scope="col" class="text-center">
+                                        <th scope="col" class="text-center px-6 py-3">
                                             Item Qty
                                         </th>
-                                        <th scope="col" class="text-center">
+                                        <th scope="col" class="text-center px-6 py-3">
                                             Total
                                         </th>
                                     </tr>
@@ -868,13 +868,13 @@ $userPrivileges = session('user_details')['user_privileges'];
                                                                         <th scope="col" class="px-6 py-3">
                                                                             Item Description
                                                                         </th>
-                                                                        <th scope="col" class="text-center">
+                                                                        <th scope="col" class="text-center px-6 py-3">
                                                                             Item Cost
                                                                         </th>
-                                                                        <th scope="col" class="text-center">
+                                                                        <th scope="col" class="text-center px-6 py-3">
                                                                             Item Qty
                                                                         </th>
-                                                                        <th scope="col" class="text-center">
+                                                                        <th scope="col" class="text-center px-6 py-3">
                                                                             Total
                                                                         </th>
                                                                     </tr>
@@ -1008,13 +1008,13 @@ $userPrivileges = session('user_details')['user_privileges'];
                                         <th scope="col" class="px-6 py-3">
                                             Item Description
                                         </th>
-                                        <th scope="col" class="text-center">
+                                        <th scope="col" class="text-center px-6 py-3">
                                             Item Price
                                         </th>
-                                        <th scope="col" class="text-center">
+                                        <th scope="col" class="text-center px-6 py-3">
                                             Item Qty
                                         </th>
-                                        <th scope="col" class="text-center">
+                                        <th scope="col" class="text-center px-6 py-3">
                                             Total
                                         </th>
                                     </tr>
@@ -1145,13 +1145,13 @@ $userPrivileges->estimate->items === 'on')
                                 <th scope="col" class="px-6 py-3">
                                     Item Status (excluded/included)
                                 </th>
-                                <th scope="col" class="text-center">
+                                <th scope="col" class="text-center px-6 py-3">
                                     Item Cost
                                 </th>
-                                <th scope="col" class="text-center">
+                                <th scope="col" class="text-center px-6 py-3">
                                     Item Qty
                                 </th>
-                                <th scope="col" class="text-center">
+                                <th scope="col" class="text-center px-6 py-3">
                                     Total
                                 </th>
                             </tr>
@@ -1272,13 +1272,13 @@ $userPrivileges->estimate->items === 'on')
                                                                 <th scope="col" class="px-6 py-3">
                                                                     Item Description
                                                                 </th>
-                                                                <th scope="col" class="text-center">
+                                                                <th scope="col" class="text-center px-6 py-3">
                                                                     Item Cost
                                                                 </th>
-                                                                <th scope="col" class="text-center">
+                                                                <th scope="col" class="text-center px-6 py-3">
                                                                     Item Qty
                                                                 </th>
-                                                                <th scope="col" class="text-center">
+                                                                <th scope="col" class="text-center px-6 py-3">
                                                                     Total
                                                                 </th>
                                                             </tr>
@@ -1412,13 +1412,13 @@ $userPrivileges->estimate->items === 'on')
                                 <th scope="col" class="px-6 py-3">
                                     Item Description
                                 </th>
-                                <th scope="col" class="text-center">
+                                <th scope="col" class="text-center px-6 py-3">
                                     Item Price
                                 </th>
-                                <th scope="col" class="text-center">
+                                <th scope="col" class="text-center px-6 py-3">
                                     Item Qty
                                 </th>
-                                <th scope="col" class="text-center">
+                                <th scope="col" class="text-center px-6 py-3">
                                     Total
                                 </th>
                             </tr>
@@ -1498,13 +1498,13 @@ $userPrivileges->estimate->items === 'on')
                             <th scope="col" class="px-6 py-3">
                                 Item Description
                             </th>
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center px-6 py-3">
                                 Item Cost
                             </th>
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center px-6 py-3">
                                 Item Qty
                             </th>
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center px-6 py-3">
                                 Total
                             </th>
                         </tr>
@@ -1647,13 +1647,13 @@ $userPrivileges->estimate->items === 'on')
                             <th scope="col" class="px-6 py-3">
                                 Item Description
                             </th>
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center px-6 py-3">
                                 Item Cost
                             </th>
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center px-6 py-3">
                                 Item Qty
                             </th>
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center px-6 py-3">
                                 Total
                             </th>
                         </tr>
@@ -1795,13 +1795,13 @@ $userPrivileges->estimate->items === 'on')
                             <th scope="col" class="px-6 py-3">
                                 Item Description
                             </th>
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center px-6 py-3">
                                 Item Cost
                             </th>
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center px-6 py-3">
                                 Item Qty
                             </th>
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center px-6 py-3">
                                 Total
                             </th>
                         </tr>
@@ -1945,13 +1945,13 @@ $userPrivileges->estimate->items === 'on')
                             <th scope="col" class="px-6 py-3">
                                 Item Description
                             </th>
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center px-6 py-3">
                                 Item Cost
                             </th>
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center px-6 py-3">
                                 Item Qty
                             </th>
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center px-6 py-3">
                                 Total
                             </th>
                         </tr>
@@ -2088,13 +2088,13 @@ $userPrivileges->estimate->items === 'on')
                 <th scope="col" class="px-6 py-3">
                     Item Description
                 </th>
-                <th scope="col" class="text-center">
+                <th scope="col" class="text-center px-6 py-3">
                     Item Cost
                 </th>
-                <th scope="col" class="text-center">
+                <th scope="col" class="text-center px-6 py-3">
                     Item Qty
                 </th>
-                <th scope="col" class="text-center">
+                <th scope="col" class="text-center px-6 py-3">
                     Total
                 </th>
             </tr>
@@ -2141,13 +2141,13 @@ $userPrivileges->estimate->items === 'on')
                                                 <th scope="col" class="px-6 py-3">
                                                     Item Description
                                                 </th>
-                                                <th scope="col" class="text-center">
+                                                <th scope="col" class="text-center px-6 py-3">
                                                     Item Cost
                                                 </th>
-                                                <th scope="col" class="text-center">
+                                                <th scope="col" class="text-center px-6 py-3">
                                                     Item Qty
                                                 </th>
-                                                <th scope="col" class="text-center">
+                                                <th scope="col" class="text-center px-6 py-3">
                                                     Total
                                                 </th>
                                             </tr>
@@ -2221,13 +2221,13 @@ $userPrivileges->estimate->items === 'on')
                 <th scope="col" class="px-6 py-3">
                     Item Description
                 </th>
-                <th scope="col" class="text-center">
+                <th scope="col" class="text-center px-6 py-3">
                     Item Cost
                 </th>
-                <th scope="col" class="text-center">
+                <th scope="col" class="text-center px-6 py-3">
                     Item Qty
                 </th>
-                <th scope="col" class="text-center">
+                <th scope="col" class="text-center px-6 py-3">
                     Total
                 </th>
             </tr>
@@ -2244,7 +2244,7 @@ $userPrivileges->estimate->items === 'on')
                     <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                         <img class="" style="height: 70px; width:70px;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                     </button>
-                </td>
+                </td> 
                 <td>{{$item->item_name}} ({{$item->upgrade_status}})</td>
                 <td class="w-[30%]">{{$item->item_description}}</td>
                 <td class="text-center">{{number_format($item->item_price, 2)}}</td>
@@ -2274,13 +2274,13 @@ $userPrivileges->estimate->items === 'on')
                                                 <th scope="col" class="px-6 py-3">
                                                     Item Description
                                                 </th>
-                                                <th scope="col" class="text-center">
+                                                <th scope="col" class="text-center px-6 py-3">
                                                     Item Cost
                                                 </th>
-                                                <th scope="col" class="text-center">
+                                                <th scope="col" class="text-center px-6 py-3">
                                                     Item Qty
                                                 </th>
-                                                <th scope="col" class="text-center">
+                                                <th scope="col" class="text-center px-6 py-3">
                                                     Total
                                                 </th>
                                             </tr>
