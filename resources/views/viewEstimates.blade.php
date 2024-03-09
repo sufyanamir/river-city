@@ -760,8 +760,8 @@ $userPrivileges = session('user_details')['user_privileges'];
                                                 <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                             </button>
                                         </th>
-                                        <td class="px-6 py-4">
-                                            <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
+                                        <td class="px-6 py-4 w-[30%]">
+                                            {{ $item->item_name }}
                                         </td>
                                         <td class="px-6 py-4 w-[30%]">
                                             <p class="text-[16px]/[18px] text-[#323C47] font">
@@ -1027,8 +1027,8 @@ $userPrivileges = session('user_details')['user_privileges'];
                                                 <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                             </button>
                                         </th>
-                                        <td class="px-6 py-4">
-                                            <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_name'] }}</label>
+                                        <td class="px-6 py-4 w-[30%]">
+                                            {{ $item['item_name'] }}
                                         </td>
                                         <td class="px-6 py-4 w-[40%]">
                                             <p class="text-[16px]/[18px] text-[#323C47] font">
@@ -1164,8 +1164,8 @@ $userPrivileges->estimate->items === 'on')
                                         <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                     </button>
                                 </th>
-                                <td class="px-6 py-4">
-                                    <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
+                                <td class="px-6 py-4 w-[30%]">
+                                    {{ $item->item_name }}
                                 </td>
                                 <td class="px-6 py-4 w-[30%]">
                                     <p class="text-[16px]/[18px] text-[#323C47] font">
@@ -1431,10 +1431,10 @@ $userPrivileges->estimate->items === 'on')
                                         <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                     </button>
                                 </th>
-                                <td class="px-6 py-4">
-                                    <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_name'] }}</label>
+                                <td class="px-6 py-4 w-[30%]">
+                                    {{ $item['item_name'] }}
                                 </td>
-                                <td class="px-6 py-4 w-[40%]">
+                                <td class="px-6 py-4 w-[30%]">
                                     <p class="text-[16px]/[18px] text-[#323C47] font">
                                         @if ($item['item_description'])
                                     <p class="font-medium">Description:</p>
@@ -1518,10 +1518,10 @@ $userPrivileges->estimate->items === 'on')
                                     <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                 </button>
                             </th> -->
-                            <td class="px-6 py-4">
-                                <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
+                            <td class="px-6 py-4 w-[30%]">
+                                {{ $item->item_name }}
                             </td>
-                            <td class="px-6 py-4 w-[50%]">
+                            <td class="px-6 py-4 w-[30%]">
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item->item_description)
                                 <p class="font-medium">Description:</p>
@@ -1554,10 +1554,10 @@ $userPrivileges->estimate->items === 'on')
                         @foreach ($item->assemblies as $assemblyItem)
                         @if ($assemblyItem->ass_item_type === 'labour')
                         <tr class="bg-white border-b">
-                            <td class="px-6 py-4">
-                                <label class="text-lg font-semibold text-[#323C47]" for="">{{ $assemblyItem->est_ass_item_name }}</label>
+                            <td class="px-6 py-4 w-[30%]">
+                                {{ $assemblyItem->est_ass_item_name }}
                             </td>
-                            <td class="px-6 py-4 w-[50%]">
+                            <td class="px-6 py-4 w-[30%]">
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($assemblyItem->ass_item_description)
                                 <p class="font-medium">Description:</p>
@@ -1575,7 +1575,7 @@ $userPrivileges->estimate->items === 'on')
                             </td>
                         </tr>
                         @php
-                        $totalLaborPrice += $assemblyItem->ass_item_qty * $assemblyItem->ass_item_cost; // Add assembly labour item price to total
+                        $totalLaborPrice += $assemblyItem->ass_item_qty * $assemblyItem->ass_item_price; // Add assembly labour item price to total
                         @endphp
                         @endif
                         @endforeach
@@ -1637,10 +1637,10 @@ $userPrivileges->estimate->items === 'on')
                                     <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                 </button>
                             </th> -->
-                            <td class="px-6 py-4">
-                                <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
+                            <td class="px-6 py-4 w-[30%]">
+                                {{ $item->item_name }}
                             </td>
-                            <td class="px-6 py-4 w-[50%]">
+                            <td class="px-6 py-4 w-[30%]">
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item->item_description)
                                 <p class="font-medium">Description:</p>
@@ -1673,10 +1673,10 @@ $userPrivileges->estimate->items === 'on')
                         @foreach ($item->assemblies as $assemblyItem)
                         @if ($assemblyItem->ass_item_type === 'labour')
                         <tr class="bg-white border-b">
-                            <td class="px-6 py-4">
-                                <label class="text-lg font-semibold text-[#323C47]" for="">{{ $assemblyItem->est_ass_item_name }}</label>
+                            <td class="px-6 py-4 w-[30%]">
+                                {{ $assemblyItem->est_ass_item_name }}
                             </td>
-                            <td class="px-6 py-4 w-[50%]">
+                            <td class="px-6 py-4 w-[30%]">
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($assemblyItem->ass_item_description)
                                 <p class="font-medium">Description:</p>
@@ -1694,7 +1694,7 @@ $userPrivileges->estimate->items === 'on')
                             </td>
                         </tr>
                         @php
-                        $totalLaborPrice += $assemblyItem->ass_item_qty * $assemblyItem->ass_item_cost; // Add assembly labour item price to total
+                        $totalLaborPrice += $assemblyItem->ass_item_qty * $assemblyItem->ass_item_price; // Add assembly labour item price to total
                         @endphp
                         @endif
                         @endforeach
@@ -1755,10 +1755,10 @@ $userPrivileges->estimate->items === 'on')
                                     <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                 </button>
                             </th> -->
-                            <td class="px-6 py-4">
-                                <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
+                            <td class="px-6 py-4 w-[30%]">
+                                {{ $item->item_name }}
                             </td>
-                            <td class="px-6 py-4 w-[50%]">
+                            <td class="px-6 py-4 w-[30%]">
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item->item_description)
                                 <p class="font-medium">Description:</p>
@@ -1791,10 +1791,10 @@ $userPrivileges->estimate->items === 'on')
                         @foreach ($item->assemblies as $assemblyItem)
                         @if ($assemblyItem->ass_item_type === 'material')
                         <tr class="bg-white border-b">
-                            <td class="px-6 py-4">
-                                <label class="text-lg font-semibold text-[#323C47]" for="">{{ $assemblyItem->est_ass_item_name }}</label>
+                            <td class="px-6 py-4 w-[30%]">
+                                {{ $assemblyItem->est_ass_item_name }}
                             </td>
-                            <td class="px-6 py-4 w-[50%]">
+                            <td class="px-6 py-4 w-[30%]">
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($assemblyItem->ass_item_description)
                                 <p class="font-medium">Description:</p>
@@ -1812,7 +1812,7 @@ $userPrivileges->estimate->items === 'on')
                             </td>
                         </tr>
                         @php
-                        $totalMaterialPrice += $assemblyItem->ass_item_qty * $assemblyItem->ass_item_cost; // Add assembly labour item price to total
+                        $totalMaterialPrice += $assemblyItem->ass_item_qty * $assemblyItem->ass_item_price; // Add assembly labour item price to total
                         @endphp
                         @endif
                         @endforeach
@@ -1877,7 +1877,7 @@ $userPrivileges->estimate->items === 'on')
                             <td class="px-6 py-4">
                                 <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
                             </td>
-                            <td class="px-6 py-4 w-[50%]">
+                            <td class="px-6 py-4 w-[30%]">
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item->item_description)
                                 <p class="font-medium">Description:</p>
@@ -1913,7 +1913,7 @@ $userPrivileges->estimate->items === 'on')
                             <td class="px-6 py-4">
                                 <label class="text-lg font-semibold text-[#323C47]" for="">{{ $assemblyItem->est_ass_item_name }}</label>
                             </td>
-                            <td class="px-6 py-4 w-[50%]">
+                            <td class="px-6 py-4 w-[30%]">
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($assemblyItem->ass_item_description)
                                 <p class="font-medium">Description:</p>
@@ -1931,7 +1931,7 @@ $userPrivileges->estimate->items === 'on')
                             </td>
                         </tr>
                         @php
-                        $totalMaterialPrice += $assemblyItem->ass_item_qty * $assemblyItem->ass_item_cost; // Add assembly labour item price to total
+                        $totalMaterialPrice += $assemblyItem->ass_item_qty * $assemblyItem->ass_item_price; // Add assembly labour item price to total
                         @endphp
                         @endif
                         @endforeach
@@ -1991,7 +1991,7 @@ $userPrivileges->estimate->items === 'on')
                     </button>
                 </td>
                 <td>{{$item->item_name}} ({{$item->upgrade_status}})</td>
-                <td>{{$item->item_description}}</td>
+                <td class="w-[30%]">{{$item->item_description}}</td>
                 <td class="text-center">{{number_format($item->item_price, 2)}}</td>
                 <td class="text-center">{{number_format($item->item_qty, 2)}}</td>
                 <td class="text-center">{{number_format($item->item_total, 2)}}</td>
@@ -2124,7 +2124,7 @@ $userPrivileges->estimate->items === 'on')
                     </button>
                 </td>
                 <td>{{$item->item_name}} ({{$item->upgrade_status}})</td>
-                <td>{{$item->item_description}}</td>
+                <td class="w-[30%]">{{$item->item_description}}</td>
                 <td class="text-center">{{number_format($item->item_price, 2)}}</td>
                 <td class="text-center">{{number_format($item->item_qty, 2)}}</td>
                 <td class="text-center">{{number_format($item->item_total, 2)}}</td>
