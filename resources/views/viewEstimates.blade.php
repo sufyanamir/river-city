@@ -757,7 +757,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     <tr class="bg-white border-b">
                                         <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                             <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
-                                                <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                                <img class="" style="height: 100%; width:100%;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                             </button>
                                         </th>
                                         <td class="px-6 py-4 w-[30%]">
@@ -931,7 +931,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                 <div class="mb-2 bg-white shadow-xl">
                     <div class=" flex gap-3 p-1 bg-[#930027] text-white w-full rounded-t-lg">
                         <button type="button" id="editEstimate-template{{ $estItemTemplate['est_template_id'] }}" class="inline my-auto">
-                            <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                            <img class="" style="height: 100%; width:100%;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                         </button>
                         <h1 class=" font-medium my-auto">{{ $estItemTemplate['item_template_name'] }}</h1>
                         @if($estItemTemplate['template_status'] == 'included')
@@ -1024,7 +1024,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     <tr class="bg-white border-b">
                                         <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                             <button type="button" id="editEstimateTemplate-item{{ $item['est_template_item_id'] }}" class="inline">
-                                                <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                                <img class="" style="height: 100%; width:100%;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                             </button>
                                         </th>
                                         <td class="px-6 py-4 w-[30%]">
@@ -1161,7 +1161,7 @@ $userPrivileges->estimate->items === 'on')
                             <tr class="bg-white border-b">
                                 <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                     <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
-                                        <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                        <img class="" style="height: 100%; width:100%;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                     </button>
                                 </th>
                                 <td class="px-6 py-4 w-[30%]">
@@ -1335,7 +1335,7 @@ $userPrivileges->estimate->items === 'on')
         <div class="mb-2 bg-white shadow-xl">
             <div class=" flex gap-3 p-1 bg-[#930027] text-white w-full rounded-t-lg">
                 <button type="button" id="editEstimate-template{{ $estItemTemplate['est_template_id'] }}" class="inline my-auto">
-                    <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                    <img class="" style="height: 100%; width:100%;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                 </button>
                 <h1 class=" font-medium my-auto">{{ $estItemTemplate['item_template_name'] }}</h1>
                 @if($estItemTemplate['template_status'] == 'included')
@@ -1428,7 +1428,7 @@ $userPrivileges->estimate->items === 'on')
                             <tr class="bg-white border-b">
                                 <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                     <button type="button" id="editEstimateTemplate-item{{ $item['est_template_item_id'] }}" class="inline">
-                                        <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                        <img class="" style="height: 100%; width:100%;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                     </button>
                                 </th>
                                 <td class="px-6 py-4 w-[30%]">
@@ -2109,7 +2109,7 @@ $userPrivileges->estimate->items === 'on')
             <tr>
                 <td>
                     <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
-                        <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                        <img class="" style="height: 100%; width:100%;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                     </button>
                 </td>
                 <td>{{$item->item_name}} ({{$item->upgrade_status}})</td>
@@ -2242,7 +2242,7 @@ $userPrivileges->estimate->items === 'on')
             <tr>
                 <td>
                     <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
-                        <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                        <img class="" style="height: 100%; width:100%;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                     </button>
                 </td>
                 <td>{{$item->item_name}} ({{$item->upgrade_status}})</td>
