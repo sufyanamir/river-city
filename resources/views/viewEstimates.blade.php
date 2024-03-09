@@ -618,7 +618,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                         <tbody class=" text-center">
                             <tr>
                                 <td class="font-semibold text-xl">Estimated</td>
-                                <td class="">{{$profitHours}}</td>
+                                <td class="">{{number_format($profitHours, 2)}}</td>
                                 <td class="">${{ number_format($profitCost, 2) }}</td>
                                 <td>${{ number_format($expenseTotal, 2)}}</td>
                                 <td class="">${{ number_format($mainProfit, 2)}}</td>
@@ -835,13 +835,13 @@ $userPrivileges = session('user_details')['user_privileges'];
                                             </script>
                                         </td>
                                         <td class="text-center">
-                                            {{ $item->item_price }}
+                                            {{ number_format($item->item_price, 2) }}
                                         </td>
                                         <td class="text-center">
-                                            {{ $item->item_qty }}
+                                            {{ number_format($item->item_qty, 2) }}
                                         </td>
                                         <td class="text-center">
-                                            {{ $item->item_total }}
+                                            {{ number_format($item->item_total, 2) }}
                                         </td>
                                         @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
                                     <tr>
@@ -890,13 +890,13 @@ $userPrivileges = session('user_details')['user_privileges'];
                                                                             {{$assembly->ass_item_description}}
                                                                         </td>
                                                                         <td class="text-center">
-                                                                            {{$assembly->ass_item_price}}
+                                                                            {{number_format($assembly->ass_item_price, 2)}}
                                                                         </td>
                                                                         <td class="text-center">
-                                                                            {{$assembly->ass_item_qty}}
+                                                                            {{number_format($assembly->ass_item_qty, 2)}}
                                                                         </td>
                                                                         <td class="text-center">
-                                                                            {{$assembly->ass_item_total}}
+                                                                            {{number_format($assembly->ass_item_total, 2)}}
                                                                         </td>
                                                                     </tr>
                                                                     @endforeach
@@ -1043,13 +1043,13 @@ $userPrivileges = session('user_details')['user_privileges'];
                                             </p>
                                         </td>
                                         <td class="text-center">
-                                            {{ $item['item_price'] }}
+                                            {{ number_format($item['item_price'], 2) }}
                                         </td>
                                         <td class="text-center">
-                                            {{ $item['item_qty'] }}
+                                            {{ number_format($item['item_qty'], 2) }}
                                         </td>
                                         <td class="text-center">
-                                            {{ $item['item_total'] }}
+                                            {{ number_format($item['item_total'], 2) }}
                                         </td>
                                     </tr>
                                     @php
@@ -1110,136 +1110,225 @@ $userPrivileges->estimate->items === 'on')
     </div>
     @php
     $totalPrice = 0; // Initialize total price variable
+
+    $groupedItems = [];
+    foreach ($estimate_items as $groupItems) {
+    $groupName = $groupItems->group->group_name ?? 'Other'; // Use 'Other' if no group is associated
+    $groupedItems[$groupName][] = $groupItems;
+    }
     @endphp
     <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
         @if ($estimate_items->count() > 0)
-        <div class="relative overflow-x-auto mb-8">
-            <div class="itemDiv">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
+        @foreach ($groupedItems as $groupName => $itemss)
+        <div class="mb-2 bg-white shadow-xl">
+            <div class=" p-1 bg-[#930027] text-white w-full rounded-t-lg">
+                <div class="inline-block">
+                    <div class="flex gap-3">
+                        <h1 class=" font-medium my-auto p-2">{{$groupName}}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="relative overflow-x-auto mb-8">
+                <div class="itemDiv">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
 
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Item Name
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Item Description
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Item Status (excluded/included)
-                            </th>
-                            <th scope="col" class="text-center">
-                                Item Cost
-                            </th>
-                            <th scope="col" class="text-center">
-                                Item Qty
-                            </th>
-                            <th scope="col" class="text-center">
-                                Total
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($estimate_items as $item)
-                        <tr class="bg-white border-b">
-                            <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
-                                    <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                                </button>
-                            </th>
-                            <td class="px-6 py-4">
-                                <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
-                            </td>
-                            <td class="px-6 py-4 w-[30%]">
-                                <p class="text-[16px]/[18px] text-[#323C47] font">
-                                    @if ($item->item_description)
-                                <p class="font-medium">Description:</p>
-                                {{ $item->item_description }}
-                                @endif
-                                @if ($item->item_note)
-                                <p class="font-medium">Note:</p>
-                                {{ $item->item_note }}
-                                @endif
-                                </p>
-                            </td>
-                            <td class="text-center">
-                                @if($item->item_status == 'included')
-                                <span class="inline-flex my-auto items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $item->item_status }}</span>
-                                @elseif($item->item_status == 'excluded')
-                                <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">{{ $item->item_status }}</span>
-                                @endif
-                                <button type="button" id="exclude-include-menuBtn{{$item->estimate_item_id}}" class="inline p-2">
-                                    <i class="fa-solid fa-square-caret-down text-[#930027] text-lg"></i>
-                                </button>
-                                <!-- Dropdown menu -->
-                                <div class="absolute z-10">
-                                    <div id="exclude-include-menu{{$item->estimate_item_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                                            <li>
-                                                <form action="/includeexcludeEstimateItem" method="post">
-                                                    @csrf
-                                                    <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                    <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
-                                                    <input type="hidden" name="item_status" value="included">
-                                                    <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                        Include
-                                                    </button>
-                                                </form>
-                                            </li>
-                                            <hr>
-                                            <li>
-                                                <form action="/includeexcludeEstimateItem" method="post">
-                                                    @csrf
-                                                    <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                    <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
-                                                    <input type="hidden" name="item_status" value="excluded">
-                                                    <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                        Exclude
-                                                    </button>
-                                                </form>
-                                            </li>
-                                        </ul>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Item Name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Item Description
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Item Status (excluded/included)
+                                </th>
+                                <th scope="col" class="text-center">
+                                    Item Cost
+                                </th>
+                                <th scope="col" class="text-center">
+                                    Item Qty
+                                </th>
+                                <th scope="col" class="text-center">
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($itemss as $item)
+                            <tr class="bg-white border-b">
+                                <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                    <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
+                                        <img class="h-full w-full" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                    </button>
+                                </th>
+                                <td class="px-6 py-4">
+                                    <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
+                                </td>
+                                <td class="px-6 py-4 w-[30%]">
+                                    <p class="text-[16px]/[18px] text-[#323C47] font">
+                                        @if ($item->item_description)
+                                    <p class="font-medium">Description:</p>
+                                    {{ $item->item_description }}
+                                    @endif
+                                    @if ($item->item_note)
+                                    <p class="font-medium">Note:</p>
+                                    {{ $item->item_note }}
+                                    @endif
+                                    </p>
+                                </td>
+                                <td class="text-center">
+                                    @if($item->item_status == 'included')
+                                    <span class="inline-flex my-auto items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $item->item_status }}</span>
+                                    @elseif($item->item_status == 'excluded')
+                                    <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">{{ $item->item_status }}</span>
+                                    @endif
+                                    <button type="button" id="exclude-include-menuBtn{{$item->estimate_item_id}}" class="inline p-2">
+                                        <i class="fa-solid fa-square-caret-down text-[#930027] text-lg"></i>
+                                    </button>
+                                    <!-- Dropdown menu -->
+                                    <div class="absolute z-10">
+                                        <div id="exclude-include-menu{{$item->estimate_item_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                                                <li>
+                                                    <form action="/includeexcludeEstimateItem" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                        <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
+                                                        <input type="hidden" name="item_status" value="included">
+                                                        <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                            Include
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                                <hr>
+                                                <li>
+                                                    <form action="/includeexcludeEstimateItem" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                        <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
+                                                        <input type="hidden" name="item_status" value="excluded">
+                                                        <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                            Exclude
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                </div>
+                                    <script>
+                                        document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}").addEventListener("click", function(e) {
+                                            e.stopPropagation(); // Prevents the click event from reaching the document body
+                                            var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
+                                            dropdownMenu.classList.toggle("topbar-menuEntring");
+                                            dropdownMenu.classList.toggle("topbar-manuLeaving");
+                                        });
+
+                                        document.addEventListener('click', function(e) {
+                                            var btn = document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}");
+                                            var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
+
+                                            if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                                                // Click occurred outside the button and dropdown, hide the dropdown
+                                                dropdownMenu.classList.add("topbar-manuLeaving");
+                                                dropdownMenu.classList.remove("topbar-menuEntring");
+                                            }
+                                        });
+                                    </script>
+                                </td>
+                                <td class="text-center">
+                                    {{ number_format($item->item_price, 2) }}
+                                </td>
+                                <td class="text-center">
+                                    {{ number_format($item->item_qty, 2) }}
+                                </td>
+                                <td class="text-center">
+                                    {{ number_format($item->item_total, 2) }}
+                                </td>
+                                @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
+                            <tr>
+                                <td colspan="7">
+                                    <div class="">
+                                        <div id="accordion-collapse{{$item->estimate_item_id}}" class="accordion-collapse mb-2" data-accordion="collapse">
+                                            <h2 id="accordion-collapse-heading-1" class="border-b-2">
+                                                <button type="button" class="flex items-center bg-[#F5F5F5] justify-between w-full p-2  text-left rounded-t-lg  focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-1" aria-expanded="true" aria-controls="accordion-collapse-body-1">
+                                                    <span></span>
+                                                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
+                                                    </svg>
+                                                </button>
+                                            </h2>
+                                            <div id="accordion-collapse-body{{$item->estimate_item_id}}" class="accordion-collapse-body bg-[#F5F5F5] hidden" aria-labelledby="accordion-collapse-heading-1">
+                                                <div class="p-2">
+                                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                                            <tr>
+                                                                <th scope="col" class="px-6 py-3"></th>
+                                                                <th scope="col" class="px-6 py-3">
+                                                                    Item Name
+                                                                </th>
+                                                                <th scope="col" class="px-6 py-3">
+                                                                    Item Description
+                                                                </th>
+                                                                <th scope="col" class="text-center">
+                                                                    Item Cost
+                                                                </th>
+                                                                <th scope="col" class="text-center">
+                                                                    Item Qty
+                                                                </th>
+                                                                <th scope="col" class="text-center">
+                                                                    Total
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach($item->assemblies as $assembly)
+                                                            <tr class="bg-white border-b">
+                                                                <td class="px-6 py-4"></td>
+                                                                <td class="px-6 py-4">
+                                                                    {{$assembly->est_ass_item_name}}
+                                                                </td>
+                                                                <td class="px-6 py-4 w-[30%]">
+                                                                    {{$assembly->ass_item_description}}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    {{number_format($assembly->ass_item_price, 2)}}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    {{number_format($assembly->ass_item_qty, 2)}}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    {{number_format($assembly->ass_item_total, 2)}}
+                                                                </td>
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
                                 <script>
-                                    document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}").addEventListener("click", function(e) {
-                                        e.stopPropagation(); // Prevents the click event from reaching the document body
-                                        var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
-                                        dropdownMenu.classList.toggle("topbar-menuEntring");
-                                        dropdownMenu.classList.toggle("topbar-manuLeaving");
-                                    });
-
-                                    document.addEventListener('click', function(e) {
-                                        var btn = document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}");
-                                        var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
-
-                                        if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                                            // Click occurred outside the button and dropdown, hide the dropdown
-                                            dropdownMenu.classList.add("topbar-manuLeaving");
-                                            dropdownMenu.classList.remove("topbar-menuEntring");
-                                        }
+                                    document.getElementById("accordion-collapse{{$item->estimate_item_id}}").addEventListener("click", function() {
+                                        var accordionBody = document.getElementById("accordion-collapse-body{{$item->estimate_item_id}}");
+                                        accordionBody.classList.toggle("hidden");
                                     });
                                 </script>
-                            </td>
-                            <td class="text-center">
-                                {{ $item->item_cost }}
-                            </td>
-                            <td class="text-center">
-                                {{ $item->item_qty }}
-                            </td>
-                            <td class="text-center">
-                                {{ $item->item_total }}
-                            </td>
-                        </tr>
-                        @php
-                        $totalPrice += $item->item_total; // Add item price to total
-                        @endphp
-                        @endforeach
-                    </tbody>
-                </table>
+                            </tr>
+                            @endif
+                            </tr>
+                            @php
+                            $totalPrice += $item->item_total; // Add item price to total
+                            @endphp
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            @endforeach
         </div>
         @endif
         @foreach ($estimateItemTemplates as $estItemTemplate)
@@ -1358,13 +1447,13 @@ $userPrivileges->estimate->items === 'on')
                                     </p>
                                 </td>
                                 <td class="text-center">
-                                    {{ $item['item_price'] }}
+                                    {{ number_format($item['item_price'], 2) }}
                                 </td>
                                 <td class="text-center">
-                                    {{ $item['item_qty'] }}
+                                    {{ number_format($item['item_qty'], 2) }}
                                 </td>
                                 <td class="text-center">
-                                    {{ $item['item_total'] }}
+                                    {{ number_format($item['item_total'], 2) }}
                                 </td>
                             </tr>
                             @php
@@ -1377,59 +1466,11 @@ $userPrivileges->estimate->items === 'on')
             </div>
         </div>
         @endforeach
-        {{-- @foreach ($estimate_items as $item)
-                        <div class=" border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
-                            <div class="flex justify-between">
-                                <div class="flex items-center">
-                                    <button type="button" id="editEstimate-item{{$item->item_id}}" class="inline">
-        <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-        </button>
-        <div>
-
-
-        </div>
     </div>
-    <div class="float-right pt-2">
-        <div class="flex flex-col gap-3">
-            <div>
-
-            </div>
-            <p class=""><strong>Qty:</strong> {{ $item->item_qty ?: 0 }}</p>
-            <p class=""><strong> Total:</strong> ${{ $item->item_total }}</p>
-        </div>
+    <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
+        <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Grand Total</span>
+        <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
     </div>
-</div>
-<div class="pl-3 pb-">
-
-
-
-    @if ($item->item_type === 'assemblies')
-    @php
-    $associatedItems = \App\Models\ItemAssembly::where('item_id', $item->item_id)->get();
-    @endphp
-
-    @foreach ($associatedItems as $associatedItem)
-    <div class="">
-        @php
-        $actualItem = \App\Models\Items::where('item_id', $associatedItem->assembly_name)->first();
-        @endphp
-
-        <label class="text-lg font-semibold text-[#323C47]" for="">{{ $actualItem->item_name }}</label>
-        <p class="text-[16px]/[18px] text-[#323C47] font">
-            {{ $actualItem->item_type }}
-        </p>
-    </div>
-    <hr class="my-3 px-[100px] border-gray-900">
-    @endforeach
-    @endif
-</div>
-</div>
-@endforeach --}}
-<div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
-    <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Grand Total</span>
-    <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
-</div>
-</div>
 </div>
 @endif
 @if (session('user_details')['user_role'] == 'admin')
@@ -1448,9 +1489,9 @@ $userPrivileges->estimate->items === 'on')
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3">
+                            <!-- <th scope="col" class="px-6 py-3">
 
-                            </th>
+                            </th> -->
                             <th scope="col" class="px-6 py-3">
                                 Item Name
                             </th>
@@ -1472,11 +1513,11 @@ $userPrivileges->estimate->items === 'on')
                         @foreach ($estimate_items as $item)
                         @if ($item->item_type === 'labour')
                         <tr class="bg-white border-b">
-                            <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                            <!-- <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                 <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                                     <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                 </button>
-                            </th>
+                            </th> -->
                             <td class="px-6 py-4">
                                 <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
                             </td>
@@ -1493,18 +1534,51 @@ $userPrivileges->estimate->items === 'on')
                                 </p>
                             </td>
                             <td class="text-center">
-                                {{ $item->item_cost }}
+                                {{ number_format($item->item_price, 2) }}
                             </td>
                             <td class="text-center">
-                                {{ $item->item_qty }}
+                                {{ number_format($item->item_qty, 2) }}
                             </td>
                             <td class="text-center">
-                                {{ $item->item_total }}
+                                {{ number_format($item->item_total, 2) }}
                             </td>
                         </tr>
                         @php
                         $totalLaborPrice += $item->item_total; // Add labor item price to total
                         @endphp
+                        @endif
+                        @endforeach
+
+                        @foreach ($estimate_items as $item)
+                        @if ($item->item_type === 'assemblies')
+                        @foreach ($item->assemblies as $assemblyItem)
+                        @if ($assemblyItem->ass_item_type === 'labour')
+                        <tr class="bg-white border-b">
+                            <td class="px-6 py-4">
+                                <label class="text-lg font-semibold text-[#323C47]" for="">{{ $assemblyItem->est_ass_item_name }}</label>
+                            </td>
+                            <td class="px-6 py-4 w-[50%]">
+                                <p class="text-[16px]/[18px] text-[#323C47] font">
+                                    @if ($assemblyItem->ass_item_description)
+                                <p class="font-medium">Description:</p>
+                                {{ $assemblyItem->ass_item_description }}
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($assemblyItem->ass_item_price, 2) }}
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($assemblyItem->ass_item_qty, 2) }}
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($assemblyItem->ass_item_total, 2) }}
+                            </td>
+                        </tr>
+                        @php
+                        $totalLaborPrice += $assemblyItem->ass_item_qty * $assemblyItem->ass_item_cost; // Add assembly labour item price to total
+                        @endphp
+                        @endif
+                        @endforeach
                         @endif
                         @endforeach
                     </tbody>
@@ -1514,30 +1588,7 @@ $userPrivileges->estimate->items === 'on')
         <div class="text-right mr-4 py-6">
             <span>${{ number_format($totalLaborPrice, 2) }}</span> {{-- Display the formatted total labor price --}}
         </div>
-        {{-- @foreach ($estimate_items as $item)
-                        @if ($item->item_type === 'labour')
-                            <div
-                                class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
-                                <div class="flex">
-                                    <button type="button" class="inline">
-                                        <img class="h-[50px] w-[50px] "
-                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-        </button>
-        <div>
-            <label class="text-lg font-semibold text-[#323C47]" for="groupName">{{ $item->item_name }}</label>
-            <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
-        </div>
     </div>
-    <div>
-        <span>${{ $item->item_price }}</span>
-        @php
-        $totalLaborPrice += $item->item_price; // Add labor item price to total
-        @endphp
-    </div>
-</div>
-@endif
-@endforeach --}}
-</div>
 </div>
 @elseif(isset($userPrivileges->estimate) &&
 isset($userPrivileges->estimate->items) &&
@@ -1557,9 +1608,9 @@ $userPrivileges->estimate->items === 'on')
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3">
+                            <!-- <th scope="col" class="px-6 py-3">
 
-                            </th>
+                            </th> -->
                             <th scope="col" class="px-6 py-3">
                                 Item Name
                             </th>
@@ -1581,11 +1632,11 @@ $userPrivileges->estimate->items === 'on')
                         @foreach ($estimate_items as $item)
                         @if ($item->item_type === 'labour')
                         <tr class="bg-white border-b">
-                            <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                            <!-- <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                 <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                                     <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                 </button>
-                            </th>
+                            </th> -->
                             <td class="px-6 py-4">
                                 <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
                             </td>
@@ -1602,18 +1653,51 @@ $userPrivileges->estimate->items === 'on')
                                 </p>
                             </td>
                             <td class="text-center">
-                                {{ $item->item_cost }}
+                                {{ number_format($item->item_price, 2) }}
                             </td>
                             <td class="text-center">
-                                {{ $item->item_qty }}
+                                {{ number_format($item->item_qty, 2) }}
                             </td>
                             <td class="text-center">
-                                {{ $item->item_total }}
+                                {{ number_format($item->item_total, 2) }}
                             </td>
                         </tr>
                         @php
                         $totalLaborPrice += $item->item_total; // Add labor item price to total
                         @endphp
+                        @endif
+                        @endforeach
+
+                        @foreach ($estimate_items as $item)
+                        @if ($item->item_type === 'assemblies')
+                        @foreach ($item->assemblies as $assemblyItem)
+                        @if ($assemblyItem->ass_item_type === 'labour')
+                        <tr class="bg-white border-b">
+                            <td class="px-6 py-4">
+                                <label class="text-lg font-semibold text-[#323C47]" for="">{{ $assemblyItem->est_ass_item_name }}</label>
+                            </td>
+                            <td class="px-6 py-4 w-[50%]">
+                                <p class="text-[16px]/[18px] text-[#323C47] font">
+                                    @if ($assemblyItem->ass_item_description)
+                                <p class="font-medium">Description:</p>
+                                {{ $assemblyItem->ass_item_description }}
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($assemblyItem->ass_item_price, 2) }}
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($assemblyItem->ass_item_qty, 2) }}
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($assemblyItem->ass_item_total, 2) }}
+                            </td>
+                        </tr>
+                        @php
+                        $totalLaborPrice += $assemblyItem->ass_item_qty * $assemblyItem->ass_item_cost; // Add assembly labour item price to total
+                        @endphp
+                        @endif
+                        @endforeach
                         @endif
                         @endforeach
                     </tbody>
@@ -1623,30 +1707,7 @@ $userPrivileges->estimate->items === 'on')
         <div class="text-right mr-4 py-6">
             <span>${{ number_format($totalLaborPrice, 2) }}</span> {{-- Display the formatted total labor price --}}
         </div>
-        {{-- @foreach ($estimate_items as $item)
-                        @if ($item->item_type === 'labour')
-                            <div
-                                class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
-                                <div class="flex">
-                                    <button type="button" class="inline">
-                                        <img class="h-[50px] w-[50px] "
-                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-        </button>
-        <div>
-            <label class="text-lg font-semibold text-[#323C47]" for="groupName">{{ $item->item_name }}</label>
-            <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
-        </div>
     </div>
-    <div>
-        <span>${{ $item->item_price }}</span>
-        @php
-        $totalLaborPrice += $item->item_price; // Add labor item price to total
-        @endphp
-    </div>
-</div>
-@endif
-@endforeach --}}
-</div>
 </div>
 @endif
 @if (session('user_details')['user_role'] == 'admin')
@@ -1665,9 +1726,9 @@ $userPrivileges->estimate->items === 'on')
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3">
+                            <!-- <th scope="col" class="px-6 py-3">
 
-                            </th>
+                            </th> -->
                             <th scope="col" class="px-6 py-3">
                                 Item Name
                             </th>
@@ -1689,11 +1750,11 @@ $userPrivileges->estimate->items === 'on')
                         @foreach ($estimate_items as $item)
                         @if ($item->item_type === 'material')
                         <tr class="bg-white border-b">
-                            <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                            <!-- <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                 <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                                     <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                 </button>
-                            </th>
+                            </th> -->
                             <td class="px-6 py-4">
                                 <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
                             </td>
@@ -1724,6 +1785,39 @@ $userPrivileges->estimate->items === 'on')
                         @endphp
                         @endif
                         @endforeach
+
+                        @foreach ($estimate_items as $item)
+                        @if ($item->item_type === 'assemblies')
+                        @foreach ($item->assemblies as $assemblyItem)
+                        @if ($assemblyItem->ass_item_type === 'material')
+                        <tr class="bg-white border-b">
+                            <td class="px-6 py-4">
+                                <label class="text-lg font-semibold text-[#323C47]" for="">{{ $assemblyItem->est_ass_item_name }}</label>
+                            </td>
+                            <td class="px-6 py-4 w-[50%]">
+                                <p class="text-[16px]/[18px] text-[#323C47] font">
+                                    @if ($assemblyItem->ass_item_description)
+                                <p class="font-medium">Description:</p>
+                                {{ $assemblyItem->ass_item_description }}
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($assemblyItem->ass_item_price, 2) }}
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($assemblyItem->ass_item_qty, 2) }}
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($assemblyItem->ass_item_total, 2) }}
+                            </td>
+                        </tr>
+                        @php
+                        $totalMaterialPrice += $assemblyItem->ass_item_qty * $assemblyItem->ass_item_cost; // Add assembly labour item price to total
+                        @endphp
+                        @endif
+                        @endforeach
+                        @endif
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -1731,30 +1825,7 @@ $userPrivileges->estimate->items === 'on')
         <div class="pt-4 px-4 pl-2 flex justify-end  py-7">
             <span>${{ number_format($totalMaterialPrice, 2) }}</span> {{-- Display the formatted total material price --}}
         </div>
-        {{-- @foreach ($estimate_items as $item)
-                        @if ($item->item_type === 'material')
-                            <div
-                                class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center">
-                                <div class="flex">
-                                    <button type="button" class="inline">
-                                        <img class="h-[50px] w-[50px] "
-                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-        </button>
-        <div>
-            <label class="text-lg font-semibold text-[#323C47]" for="groupName">{{ $item->item_name }}</label>
-            <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
-        </div>
     </div>
-    <div class="text-right">
-        <span>${{ $item->item_price }}</span>
-        @php
-        $totalMaterialPrice += $item->item_price; // Add material item price to total
-        @endphp
-    </div>
-</div>
-@endif
-@endforeach --}}
-</div>
 </div>
 @elseif(isset($userPrivileges->estimate) &&
 isset($userPrivileges->estimate->items) &&
@@ -1774,9 +1845,9 @@ $userPrivileges->estimate->items === 'on')
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3">
+                            <!-- <th scope="col" class="px-6 py-3">
 
-                            </th>
+                            </th> -->
                             <th scope="col" class="px-6 py-3">
                                 Item Name
                             </th>
@@ -1798,11 +1869,11 @@ $userPrivileges->estimate->items === 'on')
                         @foreach ($estimate_items as $item)
                         @if ($item->item_type === 'material')
                         <tr class="bg-white border-b">
-                            <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                            <!-- <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                 <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                                     <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                 </button>
-                            </th>
+                            </th> -->
                             <td class="px-6 py-4">
                                 <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
                             </td>
@@ -1833,6 +1904,39 @@ $userPrivileges->estimate->items === 'on')
                         @endphp
                         @endif
                         @endforeach
+
+                        @foreach ($estimate_items as $item)
+                        @if ($item->item_type === 'assemblies')
+                        @foreach ($item->assemblies as $assemblyItem)
+                        @if ($assemblyItem->ass_item_type === 'material')
+                        <tr class="bg-white border-b">
+                            <td class="px-6 py-4">
+                                <label class="text-lg font-semibold text-[#323C47]" for="">{{ $assemblyItem->est_ass_item_name }}</label>
+                            </td>
+                            <td class="px-6 py-4 w-[50%]">
+                                <p class="text-[16px]/[18px] text-[#323C47] font">
+                                    @if ($assemblyItem->ass_item_description)
+                                <p class="font-medium">Description:</p>
+                                {{ $assemblyItem->ass_item_description }}
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($assemblyItem->ass_item_price, 2) }}
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($assemblyItem->ass_item_qty, 2) }}
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($assemblyItem->ass_item_total, 2) }}
+                            </td>
+                        </tr>
+                        @php
+                        $totalMaterialPrice += $assemblyItem->ass_item_qty * $assemblyItem->ass_item_cost; // Add assembly labour item price to total
+                        @endphp
+                        @endif
+                        @endforeach
+                        @endif
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -1840,30 +1944,7 @@ $userPrivileges->estimate->items === 'on')
         <div class="pt-4 px-4 pl-2 flex justify-end  py-7">
             <span>${{ number_format($totalMaterialPrice, 2) }}</span> {{-- Display the formatted total material price --}}
         </div>
-        {{-- @foreach ($estimate_items as $item)
-                        @if ($item->item_type === 'material')
-                            <div
-                                class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center">
-                                <div class="flex">
-                                    <button type="button" class="inline">
-                                        <img class="h-[50px] w-[50px] "
-                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-        </button>
-        <div>
-            <label class="text-lg font-semibold text-[#323C47]" for="groupName">{{ $item->item_name }}</label>
-            <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
-        </div>
     </div>
-    <div class="text-right">
-        <span>${{ $item->item_price }}</span>
-        @php
-        $totalMaterialPrice += $item->item_price; // Add material item price to total
-        @endphp
-    </div>
-</div>
-@endif
-@endforeach --}}
-</div>
 </div>
 @endif
 @if (session('user_details')['user_role'] == 'admin')
@@ -1911,9 +1992,9 @@ $userPrivileges->estimate->items === 'on')
                 </td>
                 <td>{{$item->item_name}} ({{$item->upgrade_status}})</td>
                 <td>{{$item->item_description}}</td>
-                <td class="text-center">{{$item->item_price}}</td>
-                <td class="text-center">{{$item->item_qty}}</td>
-                <td class="text-center">{{$item->item_total}}</td>
+                <td class="text-center">{{number_format($item->item_price, 2)}}</td>
+                <td class="text-center">{{number_format($item->item_qty, 2)}}</td>
+                <td class="text-center">{{number_format($item->item_total, 2)}}</td>
             <tr>
                 <td colspan="7">
                     <div class="">
@@ -1960,13 +2041,13 @@ $userPrivileges->estimate->items === 'on')
                                                     {{$assembly->ass_item_description}}
                                                 </td>
                                                 <td class="text-center">
-                                                    {{$assembly->ass_item_price}}
+                                                    {{number_format($assembly->ass_item_price, 2)}}
                                                 </td>
                                                 <td class="text-center">
-                                                    {{$assembly->ass_item_qty}}
+                                                    {{number_format($assembly->ass_item_qty, 2)}}
                                                 </td>
                                                 <td class="text-center">
-                                                    {{$assembly->ass_item_total}}
+                                                    {{number_format($assembly->ass_item_total, 2)}}
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -2006,105 +2087,129 @@ $userPrivileges->estimate->items === 'on')
             Upgrade
         </p>
     </div>
-    <div class=" itemDiv ">
-        @php
-        $totalUpgradePrice = 0; // Initialize total labor price variable
-        @endphp
-        <div class="relative overflow-x-auto">
-            <div class="itemDiv">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3">
 
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Item Name
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Item Description
-                            </th>
-                            <th scope="col" class="text-center">
-                                Item Cost
-                            </th>
-                            <th scope="col" class="text-center">
-                                Item Qty
-                            </th>
-                            <th scope="col" class="text-center">
-                                Total
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($estimate_items as $item)
-                        @if ($item->item_type === 'upgrades')
-                        <tr class="bg-white border-b">
-                            <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
-                                    <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Item Name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Item Description
+                </th>
+                <th scope="col" class="text-center">
+                    Item Cost
+                </th>
+                <th scope="col" class="text-center">
+                    Item Qty
+                </th>
+                <th scope="col" class="text-center">
+                    Total
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @php
+            $totalUpgradePrice = 0; // Initialize total labor price variable
+            @endphp
+            @foreach ($estimate_items as $item)
+            @if ($item->item_type === 'upgrades')
+
+            <tr>
+                <td>
+                    <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
+                        <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                    </button>
+                </td>
+                <td>{{$item->item_name}} ({{$item->upgrade_status}})</td>
+                <td>{{$item->item_description}}</td>
+                <td class="text-center">{{number_format($item->item_price, 2)}}</td>
+                <td class="text-center">{{number_format($item->item_qty, 2)}}</td>
+                <td class="text-center">{{number_format($item->item_total, 2)}}</td>
+            <tr>
+                <td colspan="7">
+                    <div class="">
+                        <div id="accordion-collapse{{$item->estimate_item_id}}" class="accordion-collapse mb-2" data-accordion="collapse">
+                            <h2 id="accordion-collapse-heading-1" class="border-b-2">
+                                <button type="button" class="flex items-center bg-[#F5F5F5] justify-between w-full p-2  text-left rounded-t-lg  focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-1" aria-expanded="true" aria-controls="accordion-collapse-body-1">
+                                    <span></span>
+                                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
+                                    </svg>
                                 </button>
-                            </th>
-                            <td class="px-6 py-4">
-                                <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
-                            </td>
-                            <td class="px-6 py-4 w-[50%]">
-                                <p class="text-[16px]/[18px] text-[#323C47] font">
-                                    @if ($item->item_description)
-                                <p class="font-medium">Description:</p>
-                                {{ $item->item_description }}
-                                @endif
-                                @if ($item->item_note)
-                                <p class="font-medium">Note:</p>
-                                {{ $item->item_note }}
-                                @endif
-                                </p>
-                            </td>
-                            <td class="text-center">
-                                {{ $item->item_cost }}
-                            </td>
-                            <td class="text-center">
-                                {{ $item->item_qty }}
-                            </td>
-                            <td class="text-center">
-                                {{ $item->item_total }}
-                            </td>
-                        </tr>
-                        @php
-                        $totalUpgradePrice += $item->item_total; // Add labor item price to total
-                        @endphp
-                        @endif
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="text-right mr-4 py-6">
-            <span>${{ number_format($totalUpgradePrice, 2) }}</span> {{-- Display the formatted total labor price --}}
-        </div>
-        {{-- @foreach ($estimate_items as $item)
-                        @if ($item->item_type === 'labour')
-                            <div
-                                class="flex border-b border-[#0000001A] w-full px-4 pl-0 justify-between items-center mb-4">
-                                <div class="flex">
-                                    <button type="button" class="inline">
-                                        <img class="h-[50px] w-[50px] "
-                                            src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-        </button>
-        <div>
-            <label class="text-lg font-semibold text-[#323C47]" for="groupName">{{ $item->item_name }}</label>
-            <p class="text-[16px]/[18px] text-[#323C47] font">{{ $item->item_type }}</p>
-        </div>
+                            </h2>
+                            <div id="accordion-collapse-body{{$item->estimate_item_id}}" class="accordion-collapse-body bg-[#F5F5F5] hidden" aria-labelledby="accordion-collapse-heading-1">
+                                <div class="p-2">
+                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3"></th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Item Name
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Item Description
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Item Cost
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Item Qty
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Total
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($item->assemblies as $assembly)
+                                            <tr class="bg-white border-b">
+                                                <td class="px-6 py-4"></td>
+                                                <td class="px-6 py-4">
+                                                    {{$assembly->est_ass_item_name}}
+                                                </td>
+                                                <td class="px-6 py-4 w-[30%]">
+                                                    {{$assembly->ass_item_description}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{number_format($assembly->ass_item_price, 2)}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{number_format($assembly->ass_item_qty, 2)}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{number_format($assembly->ass_item_total, 2)}}
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <script>
+                    document.getElementById("accordion-collapse{{$item->estimate_item_id}}").addEventListener("click", function() {
+                        var accordionBody = document.getElementById("accordion-collapse-body{{$item->estimate_item_id}}");
+                        accordionBody.classList.toggle("hidden");
+                    });
+                </script>
+            </tr>
+            </tr>
+
+            @php
+            $totalUpgradePrice += $item->item_total; // Add labor item price to total
+            @endphp
+            @endif
+            @endforeach
+        </tbody>
+    </table>
+    <div class="text-right mr-4 py-6">
+        <span>${{ number_format($totalUpgradePrice, 2) }}</span> {{-- Display the formatted total labor price --}}
     </div>
-    <div>
-        <span>${{ $item->item_price }}</span>
-        @php
-        $totalUpgradePrice += $item->item_price; // Add labor item price to total
-        @endphp
-    </div>
-</div>
-@endif
-@endforeach --}}
-</div>
 </div>
 @endif
 @if (session('user_details')['user_role'] == 'admin')
@@ -5956,7 +6061,7 @@ $userPrivileges->estimate->expenses === 'on')
                     $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
                     // Update total labour expense for the current row
                     totalLabourExpense += labourExpense / itemUnitValue;
-                    labourPrice =  itemPrice / itemUnitValue;
+                    labourPrice = itemPrice / itemUnitValue;
 
                     findingCostLabour = totalLabourExpense * itemCost / labourExpense;
                     var assTotalQty = EstItemQty * calculatedValue;
@@ -5972,7 +6077,7 @@ $userPrivileges->estimate->expenses === 'on')
                     $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
                     // Update total material expense for the current row
                     totalMaterialExpense += calculatedValue * 1 * itemCost;
-                    materialPrice =  itemPrice / itemUnitValue;
+                    materialPrice = itemPrice / itemUnitValue;
 
                     var assTotalQty = EstItemQty * calculatedValue;
                     $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));

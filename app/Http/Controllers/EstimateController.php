@@ -1932,7 +1932,27 @@ class EstimateController extends Controller
 
             $additionalContacts = EstimateContact::where('estimate_id', $estimate->estimate_id)->get();
             $estimateItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->get();
+
+            $profitHours = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->sum('item_qty');
             $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->get();
+
+            $assemblyLabourTotalHours = 0;
+            $assemblyLabourTotal = 0;
+            $assemblyMaterialTotal = 0;
+            foreach ($estimateAssemblyItems as $estimateAssemblyItem) {
+                $labourAssemblyItems = $estimateAssemblyItem->assemblies->filter(function($assembly){
+                    return $assembly->ass_item_type === 'labour';
+                });
+                $MaterialAssemblyItems = $estimateAssemblyItem->assemblies->filter(function($assembly){
+                    return $assembly->ass_item_type === 'material';
+                });
+                $assemblyLabourTotalHours += $labourAssemblyItems->sum('ass_item_qty');
+                $assemblyLabourTotal += $labourAssemblyItems->sum('ass_item_total');
+                $assemblyMaterialTotal += $MaterialAssemblyItems->sum('ass_item_total');
+            }
+
+            $profitHours += $assemblyLabourTotalHours;
+
             $items = Items::get();
             $groups = Groups::get();
             $itemsForAssemblies = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
@@ -2036,7 +2056,6 @@ class EstimateController extends Controller
             }
             $sumEstimateItems = EstimateItem::where('estimate_id', $id)->get();
             $profitFromEstimateItems = $sumEstimateItems->sum('item_total');
-            $profitHours = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->sum('item_qty');
 
             $profitCostEstimateItems = $sumEstimateItems->sum(function ($itemm) {
                 return $itemm->item_cost * $itemm->item_qty;
@@ -2048,10 +2067,10 @@ class EstimateController extends Controller
             $budgetLabourFromEstimateItems  = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->sum('item_total');
             $budgetMaterialFromEstimateItems = EstimateItem::where('item_type', 'Material')->where('estimate_id', $id)->sum('item_total');
 
-            $budgetLabour = $budgetLabourFromEstimateItems + $budgetLabourFromTemplateItems;
+            $budgetLabour = $budgetLabourFromEstimateItems + $budgetLabourFromTemplateItems + $assemblyLabourTotal;
             $budgetLabour = $budgetLabour * 38 / 100;
 
-            $budgetMaterial = $budgetMaterialFromEstimateItems + $budgetMaterialFromTemplateItems;
+            $budgetMaterial = $budgetMaterialFromEstimateItems + $budgetMaterialFromTemplateItems + $assemblyMaterialTotal;
             $budgetMaterial = $budgetMaterial * 15 / 100;
 
             $budgetProfit = $budgetLabour + $budgetMaterial;
