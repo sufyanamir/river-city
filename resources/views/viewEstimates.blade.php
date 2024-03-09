@@ -756,7 +756,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     @foreach ($itemss as $item)
                                     <tr class="bg-white border-b">
                                         <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                            <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
+                                            <button type="button" style="height: 70px; width:70px;" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                                                 <img class="" style="height: 70px; width:70px;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                             </button>
                                         </th>
@@ -1160,7 +1160,7 @@ $userPrivileges->estimate->items === 'on')
                             @foreach ($itemss as $item)
                             <tr class="bg-white border-b">
                                 <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                    <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
+                                    <button type="button" style="height: 70px; width:70px;" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                                         <img class="" style="height: 70px; width:70px;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                     </button>
                                 </th>
@@ -2108,7 +2108,7 @@ $userPrivileges->estimate->items === 'on')
 
             <tr>
                 <td>
-                    <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
+                    <button type="button" style="height: 70px; width:70px;" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                         <img class="" style="height: 70px; width:70px;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                     </button>
                 </td>
@@ -2241,7 +2241,7 @@ $userPrivileges->estimate->items === 'on')
 
             <tr>
                 <td>
-                    <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
+                    <button type="button" style="height: 70px; width:70px;" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                         <img class="" style="height: 70px; width:70px;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                     </button>
                 </td> 
