@@ -1023,7 +1023,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     @foreach ($estItemTemplate['estimateItemTemplateItems'] as $item)
                                     <tr class="bg-white border-b">
                                         <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                            <button type="button" id="editEstimateTemplate-item{{ $item['est_template_item_id'] }}" class="inline">
+                                            <button type="button" style="height: 70px; width:70px;" id="editEstimateTemplate-item{{ $item['est_template_item_id'] }}" class="inline">
                                                 <img class="" style="height: 70px; width:70px;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                             </button>
                                         </th>
