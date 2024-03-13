@@ -69,6 +69,7 @@ class Estimate extends Model
         'building_type',
         'project_type',
         'project_owner',
+        'customer_signature',
     ];
 
     public $timestamps = true;

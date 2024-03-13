@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\AddUserMail;
+use App\Models\Company;
 use App\Models\Email;
 use App\Models\User;
 use App\Models\UserRole;
@@ -24,6 +25,32 @@ class UserController extends Controller
         $this->userDetails = Session::get('user_details');
     }
     // ================================================== settings =====================================================================
+
+    public function updateCompany(Request $request)
+    {
+        try {
+            
+            $validatedData = $request->validate([
+                'company_id' => 'required',
+                'labor_cost' => 'nullable',
+                'labor_budget' => 'nullable',
+                'material_budget' => 'nullable',
+            ]);
+
+            $company = Company::where('company_row_id', $validatedData['company_id'])->first();
+
+            $company->company_labor_cost = $validatedData['labor_cost'];
+            $company->company_labor_budget = $validatedData['labor_budget'];
+            $company->company_material_budget = $validatedData['material_budget'];
+
+            $company->save();
+
+            return response()->json(['success' => true, 'message' => 'Company Updated'], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
 
     // update UserDetails
     public function updateSettings(Request $request)
@@ -75,8 +102,9 @@ class UserController extends Controller
         $userDetails = session('user_details');
 
         $user = User::find($userDetails['id']);
+        $company = Company::first();
 
-        return view('settings', ['user_details' => $user]);
+        return view('settings', ['user_details' => $user, 'company' => $company]);
     }
     // get user on setting
 
