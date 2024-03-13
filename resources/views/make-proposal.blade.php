@@ -275,6 +275,9 @@
                                                     <th scope="col" class="px-6 py-3">
                                                         Item Price
                                                     </th>
+                                                    <th scope="col" class="px-6 py-3">
+                                                        Total
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -302,9 +305,12 @@
                                                     <td class="px-6 py-4">
                                                         <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_price'] }}</label>
                                                     </td>
+                                                    <td class="px-6 py-4">
+                                                        <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_total'] }}</label>
+                                                    </td>
                                                 </tr>
                                                 @php
-                                                $subTotal += $item['item_price']; // Add item price to total
+                                                $subTotal += $item['item_total']; // Add item price to total
                                                 @endphp
                                                 @endforeach
                                             </tbody>

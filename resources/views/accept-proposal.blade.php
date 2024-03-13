@@ -229,6 +229,9 @@
                                                 <th scope="col" class="px-6 py-3">
                                                     Item Price
                                                 </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Total
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -256,9 +259,12 @@
                                                 <td class="px-6 py-4">
                                                     <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_price'] }}</label>
                                                 </td>
+                                                <td class="px-6 py-4">
+                                                    <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_total'] }}</label>
+                                                </td>
                                             </tr>
                                             @php
-                                            $subTotal += $item['item_price']; // Add item price to total
+                                            $subTotal += $item['item_total']; // Add item price to total
                                             @endphp
                                             @endforeach
                                         </tbody>
@@ -466,14 +472,72 @@
             <div class="col-span-12 p-4 flex justify-end mt-10">
                 @if(!session()->has('user_details'))
                 @if($estimate->estimate_total == null )
-                <button class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 ">I Agree to Pay</button>
+                <button type="button" id="addSign" class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 ">I Agree to Pay</button>
                 @else
-                <span class="bg-[#930027] text-white p-2 rounded-md">Proposal Accepted</span>
+                <div>
+                    <div>
+                        <img src="{{$estimate->customer_signature}}" alt="Customer Signature">
+                    </div>
+                    <hr>
+                    <div class=" text-center">
+                        <p class="text-[#930027]">Proposal Accepted</p>
+                    </div>
+                </div>
+                <!-- <span class="bg-[#930027] text-white p-2 rounded-md">Proposal Accepted</span> -->
                 @endif
                 @endif
             </div>
         </div>
     </div>
+    <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addSign-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div
+            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class=" flex justify-between border-b-2">
+                        <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Please Add Your Signature!</h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div class=" text-center grid grid-cols-1 gap-2">
+                        <div class=" my-2 mx-auto">
+                            <canvas id="signatureCanvas" class="border"></canvas>
+                        </div>
+                    </div>
+                    <div class="">
+                        <button id=""
+                            class=" save-btn mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
+                            <div class=" text-center hidden spinner" id="spinner">
+                                <svg aria-hidden="true"
+                                    class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]"
+                                    viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                        fill="currentColor" />
+                                    <path
+                                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                        fill="currentFill" />
+                                </svg>
+                            </div>
+                            <div class="text" id="text">
+                                Save
+                            </div>
+                        </button>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="drawingData" name="customer_signature">
 </form>
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
 <script src="{{ asset('assets/js/custom.js') }}"></script>
@@ -483,6 +547,55 @@
 <script src="{{ asset('assets/js/fancybox.min.js') }}"></script>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Signature Canvas
+    var canvas = document.getElementById('signatureCanvas');
+    var ctx = canvas.getContext('2d');
+    var drawing = false;
+    var lastX, lastY;
+
+    canvas.addEventListener('mousedown', function(e) {
+        drawing = true;
+        lastX = e.offsetX;
+        lastY = e.offsetY;
+    });
+
+    canvas.addEventListener('mousemove', function(e) {
+        if (drawing === true) {
+            drawLine(ctx, lastX, lastY, e.offsetX, e.offsetY);
+            lastX = e.offsetX;
+            lastY = e.offsetY;
+        }
+    });
+
+    canvas.addEventListener('mouseup', function() {
+        drawing = false;
+    });
+
+    function drawLine(context, x1, y1, x2, y2) {
+        context.beginPath();
+        context.strokeStyle = '#000';
+        context.lineWidth = 2;
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+        context.stroke();
+        context.closePath();
+    }
+
+    // Function to update the hidden input field with the latest drawing data
+function updateDrawingData() {
+    // Convert canvas to data URL
+    var dataURL = canvas.toDataURL();
+    // Set the data URL as the value of the hidden input field
+    $('#drawingData').val(dataURL);
+}
+
+// Event listeners to update drawing data on canvas drawing events
+canvas.addEventListener('mousemove', updateDrawingData);
+canvas.addEventListener('touchmove', updateDrawingData);
+});
+</script>
 <script>
     $(document).ready(function() {
         var upgradeAcceptRadio = $('#upgrade_accept');
@@ -512,3 +625,15 @@
         upgradeRejectRadio.on('change', updateTotal);
     });
 </script>
+<script>
+    $("#addSign").click(function(e) {
+        e.preventDefault();
+        $("#addSign-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#addSign-modal").addClass('hidden');
+        $("#formData")[0].reset()
+    });
+</script> 

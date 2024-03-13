@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Email;
 use App\Models\Groups;
 use App\Models\ItemAssembly;
@@ -59,8 +60,9 @@ class ItemsController extends Controller
             $itemsForAssemblis = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
         }
         $groups = Groups::get();
+        $company = Company::first();
 
-        return view('items', ['items' => $items, 'groups' => $groups, 'user_details' => $userDetails, 'itemsForAssemblies' => $itemsForAssemblis]);
+        return view('items', ['items' => $items, 'company' => $company, 'groups' => $groups, 'user_details' => $userDetails, 'itemsForAssemblies' => $itemsForAssemblis]);
     }
     public function getGroupsWithItems()
     {

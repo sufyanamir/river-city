@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\ProposalMail;
 use App\Mail\sendMailToClient;
 use App\Models\AssignPayment;
+use App\Models\Company;
 use App\Models\CompleteEstimate;
 use App\Models\CompleteEstimateInvoiceWork;
 use App\Models\Customer;
@@ -1232,6 +1233,7 @@ class EstimateController extends Controller
             $validatedData = $request->validate([
                 'estimate_total' => 'required',
                 'upgrade_accept_reject' => 'nullable',
+                'customer_signature' => 'required',
             ]);
             $estimate = Estimate::find($id);
             $upgrade = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('is_upgrade', 'yes')->first();
@@ -1244,6 +1246,7 @@ class EstimateController extends Controller
             $proposal->proposal_status = 'accepted';
             $proposal->proposal_accepted = $validatedData['estimate_total'];
             $estimate->estimate_total = $validatedData['estimate_total'];
+            $estimate->customer_signature = $validatedData['customer_signature'];
 
             $estimate->save();
             $proposal->save();
@@ -1920,6 +1923,7 @@ class EstimateController extends Controller
         try {
             $userDetails = session('user_details');
             $estimate = Estimate::where('estimate_id', $id)->first();
+            $company = Company::first();
 
             if (!$estimate) {
                 // Handle the case where the estimate is not found
@@ -2068,10 +2072,10 @@ class EstimateController extends Controller
             $budgetMaterialFromEstimateItems = EstimateItem::where('item_type', 'Material')->where('estimate_id', $id)->sum('item_total');
 
             $budgetLabour = $budgetLabourFromEstimateItems + $budgetLabourFromTemplateItems + $assemblyLabourTotal;
-            $budgetLabour = $budgetLabour * 38 / 100;
+            $budgetLabour = $budgetLabour * $company->company_labor_budget / 100;
 
             $budgetMaterial = $budgetMaterialFromEstimateItems + $budgetMaterialFromTemplateItems + $assemblyMaterialTotal;
-            $budgetMaterial = $budgetMaterial * 15 / 100;
+            $budgetMaterial = $budgetMaterial * $company->company_material_budget / 100;
 
             $budgetProfit = $budgetLabour + $budgetMaterial;
             $budgetProfit = $profitItems - $budgetProfit - $expenseTotal;

@@ -4239,7 +4239,7 @@ $userPrivileges->estimate->expenses === 'on')
                     </div>
                     <div class=" flex justify-start gap-3 mb-2">
                         <label>End date:</label>
-                        <input type="date" name="end_date" id="end_date" autocomplete="given-name" class=" se_date  w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        <input type="date" name="end_date" id="end_date" autocomplete="given-name" class=" en_date  w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     </div>
                     <textarea placeholder="Note " class=" w-[100%] outline-none rounded-md p-2 border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6" name="note" id="note"></textarea>
                     <!-- You can customize this part according to your needs -->
@@ -4329,7 +4329,7 @@ $userPrivileges->estimate->expenses === 'on')
                     </div>
                     <div class=" flex justify-start gap-3 mb-2">
                         <label>End date:</label>
-                        <input type="date" name="end_date" id="end_date" autocomplete="given-name" class=" se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        <input type="date" name="end_date" id="end_date" autocomplete="given-name" class=" en_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     </div>
                     <div class="my-2 col-span-2 relative">
                         <label for="" class="block text-left mb-1"> Note: </label>
@@ -4417,7 +4417,7 @@ $userPrivileges->estimate->expenses === 'on')
                     </div>
                     <div class=" flex justify-start gap-3 mb-2">
                         <label>End date:</label>
-                        <input type="date" name="end_date" id="end_date" autocomplete="given-name" class=" se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        <input type="date" name="end_date" id="end_date" autocomplete="given-name" class=" en_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     </div>
                     <div class="my-2 col-span-2 relative">
                         <label for="" class="block text-left mb-1"> Note: </label>
@@ -4497,7 +4497,7 @@ $userPrivileges->estimate->expenses === 'on')
                     </div>
                     <div class=" flex justify-start gap-3 mb-2">
                         <label>End date:</label>
-                        <input type="date" name="end_date" id="end_date" autocomplete="given-name" class=" se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        <input type="date" name="end_date" id="end_date" autocomplete="given-name" class=" en_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     </div>
                     <div class="my-2 col-span-2 relative">
                         <label for="" class="block text-left mb-1"> Note: </label>
@@ -4653,7 +4653,7 @@ $userPrivileges->estimate->expenses === 'on')
                     </div>
                     <div class=" flex justify-start gap-3 mb-2">
                         <label>End date:</label>
-                        <input type="date" name="end_date" id="end_date" autocomplete="given-name" class=" se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        <input type="date" name="end_date" id="end_date" autocomplete="given-name" class=" en_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     </div>
                     <div class="my-2 col-span-2 relative">
                         <label for="" class="block text-left mb-1"> Note: </label>
@@ -6267,5 +6267,17 @@ $userPrivileges->estimate->expenses === 'on')
     });
     clearbtn.addEventListener('click', () => {
         display.value = '';
+    });
+    $(document).ready(function() {
+        var currentDate = new Date().toISOString().slice(0,10);
+    $('.se_date').val(currentDate);
+
+    var currentDate = new Date();
+    // Calculate the next date by adding one day
+    currentDate.setDate(currentDate.getDate() + 1);
+    // Format the next date to YYYY-MM-DD
+    var nextDate = currentDate.toISOString().slice(0,10);
+    // Set the value of the input field to the next date
+    $('.en_date').val(nextDate);
     });
 </script>

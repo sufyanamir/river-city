@@ -152,7 +152,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                         <div class="my-2" id="labourExpense">
                             <label for="" class="block text-left text-xs mb-1"> Labour Cost (min/<span class="unit">unit</span>)</label>
                             <input type="number" step="any" name="labour_expense" id="labour_expense" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                            <span class=" m-0 p-0 text-xs float-left text-gray-400">Labour Cost: $23.50/hr</span>
+                            <span class=" m-0 p-0 text-xs float-left text-gray-400">Labour Cost: ${{$company->company_labor_cost}}/hr</span>
                         </div>
                         <div class="my-2" id="materialExpense">
                             <label for="" class="block text-left text-xs mb-1"> Material Cost ($/<span class="unit">unit</span>)</label>
@@ -609,7 +609,7 @@ $userPrivileges = session('user_details')['user_privileges'];
         });
 
         labourCost.on('input', function() {
-            itemCost.val(23.50 / 60 * labourCost.val());
+            itemCost.val({{$company->company_labor_cost}} / 60 * labourCost.val());
         });
 
         materialCost.on('input', function() {
