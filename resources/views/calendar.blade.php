@@ -337,17 +337,31 @@
             }
         });
 
-        var estimateEvents = {!!json_encode($estimates) !!};
+        @if(isset($crewSchedule) && $crewSchedule === 1)
+            var estimateEvents = {!! json_encode($estimates) !!};
 
-        var events = estimateEvents.map(function(estimate) {
-            return {
-                title: [estimate.customer_name + ' ' + estimate.customer_last_name],
-                start: new Date(estimate.scheduled_start_date),
-                end: new Date(estimate.scheduled_end_date),
-                backgroundColor: '#your_color', // Choose a color or generate dynamically
-                borderColor: '#your_color' // Choose a color or generate dynamically
-            };
-        });
+            var events = estimateEvents.map(function(estimate) {
+                return {
+                    title: [estimate.estimate.customer_name + ' ' + estimate.estimate.customer_last_name],
+                    start: new Date(estimate.start_date),
+                    end: new Date(estimate.end_date),
+                    backgroundColor: '#your_color', // Choose a color or generate dynamically
+                    borderColor: '#your_color' // Choose a color or generate dynamically
+                };
+            });
+        @else
+        var estimateEvents = {!! json_encode($estimates) !!};
+
+            var events = estimateEvents.map(function(estimate) {
+                return {
+                    title: [estimate.customer_name + ' ' + estimate.customer_last_name],
+                    start: new Date(estimate.scheduled_start_date),
+                    end: new Date(estimate.scheduled_end_date),
+                    backgroundColor: '#your_color', // Choose a color or generate dynamically
+                    borderColor: '#your_color' // Choose a color or generate dynamically
+                };
+            });
+        @endif
 
         function formatDate(date) {
             var year = date.getFullYear();
@@ -400,11 +414,12 @@ var simpleDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minute
 
                 // alert(simpleDate);
                 $('#start_date').val(simpleDateTime);
+                $('#end_date').val(simpleDateTime);
 
                 // Set modal title and open modal
                 modalTitle.textContent = info.draggedEl.innerText;
                 // modalStartDateInput.value = formatDate(date);
-                modalEndDateInput.value = formatDate(date);
+                // modalEndDateInput.value = formatDate(date);
                 console.log(formatDate(date));
                 // alert(modalStartDateInput.value);
                 modal.classList.remove('hidden');
