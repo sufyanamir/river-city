@@ -9,6 +9,16 @@ class EstimateToDos extends Model
 {
     use HasFactory;
 
+    public function assigned_to()
+    {
+        return $this->belongsTo(User::class, 'to_do_assigned_to');
+    }
+    
+    public function assigned_by()
+    {
+        return $this->belongsTo(User::class, 'added_user_id');
+    }
+
     protected $table = 'estimate_to_dos';
 
     protected $primaryKey = 'to_do_id';

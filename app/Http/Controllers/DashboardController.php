@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Estimate;
 use App\Models\EstimateSchedule;
+use App\Models\EstimateToDos;
 use App\Models\ScheduleEstimate;
 use App\Models\User;
 use App\Models\UserToDo;
@@ -46,6 +47,7 @@ class DashboardController extends Controller
             $completeJobsCount = $scheduleEstimates->where('status', 'Complete')->count();
 
             $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->get();
+            $estimateToDos = EstimateToDos::where('to_do_assigned_to', $userDetails['id'])->get();
 
             return view('dashboard', [
                 'schedule_estimates_with_estimates' => $scheduleEstimatesWithEstimates,
@@ -54,6 +56,7 @@ class DashboardController extends Controller
                 'completeJobsCount' => $completeJobsCount,
                 'totalJobsCount' => $totalJobsCount,
                 'Todos' => $userToDos,
+                'estimateToDos' => $estimateToDos,
             ]);
         } else {
             $customers = Customer::get();
@@ -71,6 +74,7 @@ class DashboardController extends Controller
             }
 
             $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->get();
+            $estimateToDos = EstimateToDos::where('to_do_assigned_to', $userDetails['id'])->get();
             $completeEstimates = Estimate::where('estimate_status', 'complete')->count();
             $pendingEstimates = Estimate::where('estimate_status', 'pending')->count();
             $cancelEstimates = Estimate::where('estimate_status', 'cancel')->count();
@@ -80,6 +84,7 @@ class DashboardController extends Controller
                 'staff' => $staff,
                 'confirm_orders' => $confirmedOrders,
                 'Todos' => $userToDos,
+                'estimateToDos' => $estimateToDos,
                 'schedules' => [
                     $schedules,
                     $estimates,

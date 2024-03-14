@@ -206,6 +206,36 @@
                                 </div>
                                 <hr>
                             @endforeach
+                            @foreach ($estimateToDos as $todo)
+                                <div class=" flex justify-between px-3">
+                                    <div>
+                                        <div class=" inline-block">
+                                            <form action="/completeToDo{{ $todo->to_do_id }}" method="post">
+                                                @csrf
+                                                <button>
+                                                    <input type="checkbox" name="completed"
+                                                        id="completedToDo_{{ $todo->to_do_id }}" value="completed"
+                                                        {{ $todo->to_do_status == 'completed' ? 'checked' : '' }}>
+                                                    <label for="completedToDo_{{ $todo->to_do_id }}"
+                                                        class=" text-gray-500"></label>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class=" inline-block font-semibold">
+                                            <p>{{ $todo->to_do_title }}</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <form action="/deleteToDo{{ $todo->to_do_id }}" method="post">
+                                            @csrf
+                                            <button>
+                                                <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <hr>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -357,6 +387,36 @@
                             </div>
                             <hr>
                         @endforeach
+                        @foreach ($estimateToDos as $todo)
+                                <div class=" flex justify-between px-3">
+                                    <div>
+                                        <div class=" inline-block">
+                                            <form action="/completeToDo{{ $todo->to_do_id }}" method="post">
+                                                @csrf
+                                                <button>
+                                                    <input type="checkbox" name="completed"
+                                                        id="completedToDo_{{ $todo->to_do_id }}" value="completed"
+                                                        {{ $todo->to_do_status == 'completed' ? 'checked' : '' }}>
+                                                    <label for="completedToDo_{{ $todo->to_do_id }}"
+                                                        class=" text-gray-500"></label>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class=" inline-block font-semibold">
+                                            <p>{{ $todo->to_do_title }}</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <form action="/deleteToDo{{ $todo->to_do_id }}" method="post">
+                                            @csrf
+                                            <button>
+                                                <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <hr>
+                            @endforeach
                     </div>
                 </div>
             </div>

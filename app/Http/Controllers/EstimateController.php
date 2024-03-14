@@ -558,13 +558,14 @@ class EstimateController extends Controller
     public function getEstimateToSetScheduleWork($id)
     {
         $userDetails = session('user_details');
+        $crewSchedule = 1;
 
         $estimate = Estimate::where('estimate_id', $id)->first();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-        $estimates = Estimate::get();
+        $estimates = ScheduleEstimate::with(['estimate'])->get();
         $users = User::where('user_role', 'crew')->get();
 
-        return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users]);
+        return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'crewSchedule' => $crewSchedule]);
         // return response()->json(['success' => true, 'estimate' => $estimate]);
     }
     public function getEstimatesOnCalendar()
@@ -779,7 +780,7 @@ class EstimateController extends Controller
         try {
             $toDo = EstimateToDos::where('to_do_id', $id)->first();
 
-            $toDo->to_do_status = 'complete';
+            $toDo->to_do_status = 'completed';
 
             $toDo->save();
 
@@ -1974,7 +1975,7 @@ class EstimateController extends Controller
             $invoices = AssignPayment::where('estimate_id', $estimate->estimate_id)->get();
             $invoice = AssignPayment::where('estimate_id', $estimate->estimate_id)->first();
             $payments = EstimatePayments::where('estimate_id', $estimate->estimate_id)->get();
-            $toDos = EstimateToDos::where('estimate_id', $estimate->estimate_id)->get();
+            $toDos = EstimateToDos::with('assigned_to', 'assigned_by')->where('estimate_id', $estimate->estimate_id)->get();
             //$expenses = EstimateExpenses::where('estimate_id', $estimate->estimate_id)->get();
 
             $estimateId = $estimate->estimate_id;
@@ -2011,6 +2012,7 @@ class EstimateController extends Controller
             $profitFromTemplateItems = 0;
             $budgetLabourFromTemplateItems = 0;
             $budgetMaterialFromTemplateItems = 0;
+            $estimateItemTemplateItemsLabourQty = 0;
             foreach ($estimateItemTemplates as $key => $itemTemplate) {
                 $templateItems = EstimateItemTemplateItems::where('est_template_id', $itemTemplate->est_template_id)->get();
 
@@ -2020,6 +2022,7 @@ class EstimateController extends Controller
 
                 $labourTemplateItems = EstimateItemTemplateItems::where('est_template_id', $itemTemplate->est_template_id)->where('item_type', 'labour')->get();
                 $budgetLabourFromTemplateItems += $labourTemplateItems->sum('item_total');
+                $estimateItemTemplateItemsLabourQty += $labourTemplateItems->sum('item_qty');
 
                 $materialTemplateItems = EstimateItemTemplateItems::where('est_template_id', $itemTemplate->est_template_id)->where('item_type', 'material')->get();
                 $budgetMaterialFromTemplateItems += $materialTemplateItems->sum('item_total');
@@ -2058,6 +2061,7 @@ class EstimateController extends Controller
                 // Add the modified itemTemplate to the result array
                 $estimateItemTemplateItems[] = $itemTemplate;
             }
+            $profitHours += $estimateItemTemplateItemsLabourQty;
             $sumEstimateItems = EstimateItem::where('estimate_id', $id)->get();
             $profitFromEstimateItems = $sumEstimateItems->sum('item_total');
 
@@ -2071,11 +2075,11 @@ class EstimateController extends Controller
             $budgetLabourFromEstimateItems  = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->sum('item_total');
             $budgetMaterialFromEstimateItems = EstimateItem::where('item_type', 'Material')->where('estimate_id', $id)->sum('item_total');
 
-            $budgetLabour = $budgetLabourFromEstimateItems + $budgetLabourFromTemplateItems + $assemblyLabourTotal;
-            $budgetLabour = $budgetLabour * $company->company_labor_budget / 100;
+            $budgetLabour = $profitItems;
+            $budgetLabour = $budgetLabour * (1 - $company->company_labor_budget);
 
-            $budgetMaterial = $budgetMaterialFromEstimateItems + $budgetMaterialFromTemplateItems + $assemblyMaterialTotal;
-            $budgetMaterial = $budgetMaterial * $company->company_material_budget / 100;
+            $budgetMaterial = $profitItems;
+            $budgetMaterial = $budgetMaterial * (1 - $company->company_material_budget);
 
             $budgetProfit = $budgetLabour + $budgetMaterial;
             $budgetProfit = $profitItems - $budgetProfit - $expenseTotal;

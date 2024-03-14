@@ -1611,6 +1611,41 @@ $userPrivileges->estimate->items === 'on')
                         $totalLaborPrice += $itemData['total']; // Add labor item price to total
                         @endphp
                         @endforeach
+                        @foreach ($estimateItemTemplates as $template)
+                            @foreach ($template->estimateItemTemplateItems as $item)
+                                @if ($item['item_type'] === 'labour')
+                                    <tr class="bg-white border-b">
+                                        <td class="px-6 py-4 w-[30%]">
+                                            {{ $item['item_name'] }}
+                                        </td>
+                                        <td class="px-6 py-4 w-[30%]">
+                                            <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                @if ($item['item_description'])
+                                                    <p class="font-medium">Description:</p>
+                                                    {{ $item['item_description'] }}
+                                                @endif
+                                                @if ($item['item_note'])
+                                                    <p class="font-medium">Note:</p>
+                                                    {{ $item['item_note'] }}
+                                                @endif
+                                            </p>
+                                        </td>
+                                        <td class="text-center">
+                                            {{ number_format($item['item_price'], 2) }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ number_format($item['item_qty'], 2) }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ number_format($item['item_total'], 2) }}
+                                        </td>
+                                    </tr>
+                                    @php
+                                        $totalLaborPrice += $item['item_total']; // Add labor item price to total
+                                    @endphp
+                                @endif
+                            @endforeach
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -1760,6 +1795,41 @@ $userPrivileges->estimate->items === 'on')
                         $totalLaborPrice += $itemData['total']; // Add labor item price to total
                         @endphp
                         @endforeach
+                        @foreach ($estimateItemTemplates as $template)
+                            @foreach ($template->estimateItemTemplateItems as $item)
+                                @if ($item['item_type'] === 'labour')
+                                    <tr class="bg-white border-b">
+                                        <td class="px-6 py-4 w-[30%]">
+                                            {{ $item['item_name'] }}
+                                        </td>
+                                        <td class="px-6 py-4 w-[30%]">
+                                            <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                @if ($item['item_description'])
+                                                    <p class="font-medium">Description:</p>
+                                                    {{ $item['item_description'] }}
+                                                @endif
+                                                @if ($item['item_note'])
+                                                    <p class="font-medium">Note:</p>
+                                                    {{ $item['item_note'] }}
+                                                @endif
+                                            </p>
+                                        </td>
+                                        <td class="text-center">
+                                            {{ number_format($item['item_price'], 2) }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ number_format($item['item_qty'], 2) }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ number_format($item['item_total'], 2) }}
+                                        </td>
+                                    </tr>
+                                    @php
+                                        $totalLaborPrice += $item['item_total']; // Add labor item price to total
+                                    @endphp
+                                @endif
+                            @endforeach
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -1907,6 +1977,41 @@ $userPrivileges->estimate->items === 'on')
                         @php
                         $totalMaterialPrice += $itemData['total']; // Add material item price to total
                         @endphp
+                        @endforeach
+                        @foreach ($estimateItemTemplates as $template)
+                            @foreach ($template->estimateItemTemplateItems as $item)
+                                @if ($item['item_type'] === 'material')
+                                    <tr class="bg-white border-b">
+                                        <td class="px-6 py-4 w-[30%]">
+                                            {{ $item['item_name'] }}
+                                        </td>
+                                        <td class="px-6 py-4 w-[30%]">
+                                            <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                @if ($item['item_description'])
+                                                    <p class="font-medium">Description:</p>
+                                                    {{ $item['item_description'] }}
+                                                @endif
+                                                @if ($item['item_note'])
+                                                    <p class="font-medium">Note:</p>
+                                                    {{ $item['item_note'] }}
+                                                @endif
+                                            </p>
+                                        </td>
+                                        <td class="text-center">
+                                            {{ number_format($item['item_price'], 2) }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ number_format($item['item_qty'], 2) }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ number_format($item['item_total'], 2) }}
+                                        </td>
+                                    </tr>
+                                    @php
+                                        $totalMaterialPrice += $item['item_total']; // Add labor item price to total
+                                    @endphp
+                                @endif
+                            @endforeach
                         @endforeach
 
                     </tbody>
@@ -2057,6 +2162,41 @@ $userPrivileges->estimate->items === 'on')
                         @php
                         $totalMaterialPrice += $itemData['total']; // Add material item price to total
                         @endphp
+                        @endforeach
+                        @foreach ($estimateItemTemplates as $template)
+                            @foreach ($template->estimateItemTemplateItems as $item)
+                                @if ($item['item_type'] === 'material')
+                                    <tr class="bg-white border-b">
+                                        <td class="px-6 py-4 w-[30%]">
+                                            {{ $item['item_name'] }}
+                                        </td>
+                                        <td class="px-6 py-4 w-[30%]">
+                                            <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                @if ($item['item_description'])
+                                                    <p class="font-medium">Description:</p>
+                                                    {{ $item['item_description'] }}
+                                                @endif
+                                                @if ($item['item_note'])
+                                                    <p class="font-medium">Note:</p>
+                                                    {{ $item['item_note'] }}
+                                                @endif
+                                            </p>
+                                        </td>
+                                        <td class="text-center">
+                                            {{ number_format($item['item_price'], 2) }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ number_format($item['item_qty'], 2) }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ number_format($item['item_total'], 2) }}
+                                        </td>
+                                    </tr>
+                                    @php
+                                        $totalMaterialPrice += $item['item_total']; // Add labor item price to total
+                                    @endphp
+                                @endif
+                            @endforeach
                         @endforeach
 
                     </tbody>
@@ -2985,7 +3125,7 @@ $userPrivileges->estimate->emails === 'on')
     </div>
 </div>
 @endif
-@if (session('user_details')['user_role'] == 'admin')
+<!-- @if (session('user_details')['user_role'] == 'admin')
 <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
     <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
         <div class="flex items-center ">
@@ -3044,7 +3184,7 @@ $userPrivileges->estimates->timeentries === 'on')
         </p>
     </div>
 </div>
-@endif
+@endif -->
 @if (session('user_details')['user_role'] == 'admin')
 <div class="mb-5 shadow-lg bg-white  mt-7 rounded-3xl">
     <div class="flex items-center px-3  bg-[#930027] rounded-t-3xl">
@@ -3093,10 +3233,10 @@ $userPrivileges->estimates->timeentries === 'on')
                                 {{ $toDo->to_do_title }}
                             </th>
                             <td class="px-6 py-4">
-                                {{ $toDo->added_user_id }}
+                                {{ $toDo->assigned_by->name }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $toDo->to_do_assigned_to }}
+                                {{ $toDo->assigned_to->name }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ date('d, F Y', strtotime($toDo->start_date)) }}
@@ -3135,15 +3275,15 @@ $userPrivileges->estimates->timeentries === 'on')
 isset($userPrivileges->estimate->todos) &&
 $userPrivileges->estimate->todos === 'on')
 <div class="mb-5 shadow-lg bg-white  mt-7 rounded-3xl">
-    <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-        <p class="text-lg px-3 text-white  font-medium ">
-            To-Dos
-        </p>
+    <div class="flex items-center px-3  bg-[#930027] rounded-t-3xl">
         <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="to-do-button">
             <div class=" bg-[#930027] rounded-lg">
                 <i class="fa-solid fa-plus text-white p-2"></i>
             </div>
         </button>
+        <p class="text-lg px-3 text-white  font-medium ">
+            To-Dos
+        </p>
     </div>
     <div class="p-2">
         <div class="relative overflow-x-auto py-2">
@@ -3181,10 +3321,10 @@ $userPrivileges->estimate->todos === 'on')
                                 {{ $toDo->to_do_title }}
                             </th>
                             <td class="px-6 py-4">
-                                {{ $toDo->added_user_id }}
+                                {{ $toDo->assigned_by->name }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $toDo->to_do_assigned_to }}
+                                {{ $toDo->assigned_to->name }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ date('d, F Y', strtotime($toDo->start_date)) }}
@@ -3196,8 +3336,20 @@ $userPrivileges->estimate->todos === 'on')
                                 {{ $toDo->to_do_status }}
                             </td>
                             <td class="px-6 py-4">
-                                <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Complete
-                                </button>
+                                @if($toDo->to_do_status != 'complete')
+                                <form action="/completeToDo{{$toDo->to_do_id}}" method="post">
+                                    @csrf
+                                    <button type="submit" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
+                                        Complete
+                                    </button>
+                                </form>
+                                @endif
+                                <form action="/deleteToDo{{$toDo->to_do_id}}" method="post">
+                                    @csrf
+                                    <button>
+                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         @endforeach
