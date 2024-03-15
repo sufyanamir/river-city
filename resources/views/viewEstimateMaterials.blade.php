@@ -13,7 +13,7 @@
             </a>
         </div>
 
-        @if(count($estimate_items) > 0)
+        @if(count($estimate_items) > 0 || count($assemblies) > 0 || count($upgrades) > 0 || count($templates) > 0)
         <div class="py-1" id="printableArea">
             <div class="col-span-10  pl-2 ">
                 <div class="grid sm:grid-cols-10">

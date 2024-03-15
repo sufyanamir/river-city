@@ -54,8 +54,8 @@ a.paginate_button.current {
 /* Hide the default checkbox */
 .rate {
     height: 46px;
-    padding: 0 10px;
-    display: flex !important;
+    padding: 0 37px;
+    /* display: flex !important; */
     justify-content: center !important;
     width: 100%;
 }

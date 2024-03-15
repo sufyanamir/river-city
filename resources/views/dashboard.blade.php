@@ -425,15 +425,19 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    const orders = @json($confirm_orders);
+
+    const pendingEstimates = orders.filter(order => order.estimate_status === 'pending').length;
+    const CompletedEstimates = orders.filter(order => order.estimate_status === 'complete').length;
     // Get a reference to the canvas element
     const ctx1 = document.getElementById('myDoughnutChart1').getContext('2d');
-    var val = 75;
-    var newVal = 100 - val;
+    var val = CompletedEstimates;
+    var newVal = pendingEstimates - val;
     // Define your data
     const data1 = {
         // labels: ['#2ED47A', '#FFB946', '#F7685B'],
         datasets: [{
-            data: [val, newVal],
+            data: [newVal, val],
             backgroundColor: ['#930027', '#edf2f7'],
             borderColor: '#fff'
         }]

@@ -4941,7 +4941,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                         <div class="my-0 text-left col-span-4">
                             <label for="" class=" block text-left text-sm mb-1">Cost ($/<span class="unit">unit</span>)</label>
-                            <input type="number" step="any" name="item_cost" id="item_cost" placeholder="0.00" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <input type="number" step="any" name="item_cost" id="item_cost" placeholder="0.00" readonly autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 bg-gray-200 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class="my-0 col-span-4" id="labourExpense">
                             <label for="" class="block text-left text-sm mb-1"> Labour Cost (min/<span class="unit">unit</span>)</label>
@@ -5591,47 +5591,35 @@ $userPrivileges->estimate->expenses === 'on')
         //     });
         // }
 
-        type.on('change', function() {
-            var typeDropdown = $('#type');
-            var multiAddItemsDiv = $('#multiAdd-items');
-            var labourExpenseDiv = $('#labourExpense');
-            var materialExpenseDiv = $('#materialExpense');
-            var unitItemInput = $('#item_units');
-            var unitLabel = $('.unit');
-            var itemCost = $('#item_cost');
-            var labourCost = $('#labour_expense');
-            var materialCost = $('#material_expense');
-            var itemPrice = $('#item_price');
-            var itemqty = $('#item_qty');
-            var itemTotal = $('#item_total');
-            var priceMargin = $('#price_margin')
-            var item_main = $('#item_main')
-            if (type.val() === 'assemblies' || type.val() === 'upgrades') {
-                multiAddItemsDiv.removeClass('hidden');
-                item_main.addClass('hidden');
-                // labourExpenseDiv.addClass('hidden');
+        // typeDropdown.on('change', function() {
+        //     var selectedValue = typeDropdown.val();
 
-            } else {
-                multiAddItemsDiv.addClass('hidden');
-                // labourExpenseDiv.removeClass('hidden');
-            }
+        //     // Reset all fields
+        //     $('#labour_expense, #material_expense, #item_price').val('');
 
-            if (type.val() === 'material') {
-                // materialExpenseDiv.removeClass('hidden');
-                // labourExpenseDiv.addClass('hidden');
-            } else {
-                // materialExpenseDiv.addClass('hidden');
-                // labourExpenseDiv.removeClass('hidden');
-            }
-
-            if (type.val() === 'labour') {
-                unitItemInput.val('hour');
-                unitLabel.text('hour');
-            } else {
-                unitItemInput.val(null);
-                unitLabel.text('unit');
-            }
-        });
+        //     if (selectedValue === 'assemblies') {
+        //         multiAddItemsDiv.removeClass('hidden');
+        //         $('#labour_expense, #material_expense, #item_price').attr('readonly', true).addClass('bg-gray-200');
+        //     } else if (selectedValue === 'material') {
+        //         multiAddItemsDiv.addClass('hidden');
+        //         $('#labour_expense').attr('readonly', true).addClass('bg-gray-200');
+        //         $('#material_expense').removeClass('bg-gray-200').attr('readonly', false);
+        //         // $('#item_price').attr('readonly', true).addClass('bg-gray-200');
+        //     } else if (selectedValue === 'labour') {
+        //         multiAddItemsDiv.addClass('hidden');
+        //         unitItemInput.val('hour');
+        //         unitLabel.text('hour');
+        //         $('#material_expense').attr('readonly', true).addClass('bg-gray-200');
+        //         $('#labour_expense, #item_price').attr('readonly', false).removeClass('bg-gray-200');
+        //     } else {
+        //         // If none of the above, reset all fields
+        //         multiAddItemsDiv.addClass('hidden');
+        //         $('#labour_expense, #material_expense').attr('readonly', false).removeClass('bg-gray-200');
+        //         unitItemInput.val(null);
+        //         unitLabel.text('unit');
+        //         $('#item_price').attr('readonly', false).removeClass('bg-gray-200');
+        //     }
+        // });
     });
 </script>
 <script>
@@ -5658,30 +5646,33 @@ $userPrivileges->estimate->expenses === 'on')
 
         // Add change event handler to the select element
         typeDropdown.on('change', function() {
-            if (typeDropdown.val() === 'assemblies' || typeDropdown.val() === 'upgrades') {
+            var selectedValue = typeDropdown.val();
+
+            // Reset all fields
+            $('#labour_expense, #material_expense, #item_price').val('');
+
+            if (selectedValue === 'assemblies') {
                 multiAddItemsDiv.removeClass('hidden');
-                // labourExpenseDiv.addClass('hidden');
-            } else {
+                $('#labour_expense, #material_expense, #item_price').attr('readonly', true).addClass('bg-gray-200');
+            } else if (selectedValue === 'material') {
                 multiAddItemsDiv.addClass('hidden');
-                // labourExpenseDiv.removeClass('hidden');
-            }
-
-            if (typeDropdown.val() === 'material') {
-                // materialExpenseDiv.removeClass('hidden');
-                // labourExpenseDiv.addClass('hidden');
-            } else {
-                // materialExpenseDiv.addClass('hidden');
-                // labourExpenseDiv.removeClass('hidden');
-            }
-
-            if (typeDropdown.val() === 'labour') {
+                $('#labour_expense').attr('readonly', true).addClass('bg-gray-200');
+                $('#material_expense').removeClass('bg-gray-200').attr('readonly', false);
+                // $('#item_price').attr('readonly', true).addClass('bg-gray-200');
+            } else if (selectedValue === 'labour') {
+                multiAddItemsDiv.addClass('hidden');
                 unitItemInput.val('hour');
                 unitLabel.text('hour');
+                $('#material_expense').attr('readonly', true).addClass('bg-gray-200');
+                $('#labour_expense, #item_price').attr('readonly', false).removeClass('bg-gray-200');
             } else {
+                // If none of the above, reset all fields
+                multiAddItemsDiv.addClass('hidden');
+                $('#labour_expense, #material_expense').attr('readonly', false).removeClass('bg-gray-200');
                 unitItemInput.val(null);
                 unitLabel.text('unit');
+                $('#item_price').attr('readonly', false).removeClass('bg-gray-200');
             }
-
         });
 
         unitItemInput.on('input', function() {
