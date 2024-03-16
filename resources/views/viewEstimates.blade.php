@@ -1612,39 +1612,39 @@ $userPrivileges->estimate->items === 'on')
                         @endphp
                         @endforeach
                         @foreach ($estimateItemTemplates as $template)
-                            @foreach ($template->estimateItemTemplateItems as $item)
-                                @if ($item['item_type'] === 'labour')
-                                    <tr class="bg-white border-b">
-                                        <td class="px-6 py-4 w-[30%]">
-                                            {{ $item['item_name'] }}
-                                        </td>
-                                        <td class="px-6 py-4 w-[30%]">
-                                            <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                @if ($item['item_description'])
-                                                    <p class="font-medium">Description:</p>
-                                                    {{ $item['item_description'] }}
-                                                @endif
-                                                @if ($item['item_note'])
-                                                    <p class="font-medium">Note:</p>
-                                                    {{ $item['item_note'] }}
-                                                @endif
-                                            </p>
-                                        </td>
-                                        <td class="text-center">
-                                            {{ number_format($item['item_price'], 2) }}
-                                        </td>
-                                        <td class="text-center">
-                                            {{ number_format($item['item_qty'], 2) }}
-                                        </td>
-                                        <td class="text-center">
-                                            {{ number_format($item['item_total'], 2) }}
-                                        </td>
-                                    </tr>
-                                    @php
-                                        $totalLaborPrice += $item['item_total']; // Add labor item price to total
-                                    @endphp
+                        @foreach ($template->estimateItemTemplateItems as $item)
+                        @if ($item['item_type'] === 'labour')
+                        <tr class="bg-white border-b">
+                            <td class="px-6 py-4 w-[30%]">
+                                {{ $item['item_name'] }}
+                            </td>
+                            <td class="px-6 py-4 w-[30%]">
+                                <p class="text-[16px]/[18px] text-[#323C47] font">
+                                    @if ($item['item_description'])
+                                <p class="font-medium">Description:</p>
+                                {{ $item['item_description'] }}
                                 @endif
-                            @endforeach
+                                @if ($item['item_note'])
+                                <p class="font-medium">Note:</p>
+                                {{ $item['item_note'] }}
+                                @endif
+                                </p>
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($item['item_price'], 2) }}
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($item['item_qty'], 2) }}
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($item['item_total'], 2) }}
+                            </td>
+                        </tr>
+                        @php
+                        $totalLaborPrice += $item['item_total']; // Add labor item price to total
+                        @endphp
+                        @endif
+                        @endforeach
                         @endforeach
                     </tbody>
                 </table>
@@ -1796,39 +1796,39 @@ $userPrivileges->estimate->items === 'on')
                         @endphp
                         @endforeach
                         @foreach ($estimateItemTemplates as $template)
-                            @foreach ($template->estimateItemTemplateItems as $item)
-                                @if ($item['item_type'] === 'labour')
-                                    <tr class="bg-white border-b">
-                                        <td class="px-6 py-4 w-[30%]">
-                                            {{ $item['item_name'] }}
-                                        </td>
-                                        <td class="px-6 py-4 w-[30%]">
-                                            <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                @if ($item['item_description'])
-                                                    <p class="font-medium">Description:</p>
-                                                    {{ $item['item_description'] }}
-                                                @endif
-                                                @if ($item['item_note'])
-                                                    <p class="font-medium">Note:</p>
-                                                    {{ $item['item_note'] }}
-                                                @endif
-                                            </p>
-                                        </td>
-                                        <td class="text-center">
-                                            {{ number_format($item['item_price'], 2) }}
-                                        </td>
-                                        <td class="text-center">
-                                            {{ number_format($item['item_qty'], 2) }}
-                                        </td>
-                                        <td class="text-center">
-                                            {{ number_format($item['item_total'], 2) }}
-                                        </td>
-                                    </tr>
-                                    @php
-                                        $totalLaborPrice += $item['item_total']; // Add labor item price to total
-                                    @endphp
+                        @foreach ($template->estimateItemTemplateItems as $item)
+                        @if ($item['item_type'] === 'labour')
+                        <tr class="bg-white border-b">
+                            <td class="px-6 py-4 w-[30%]">
+                                {{ $item['item_name'] }}
+                            </td>
+                            <td class="px-6 py-4 w-[30%]">
+                                <p class="text-[16px]/[18px] text-[#323C47] font">
+                                    @if ($item['item_description'])
+                                <p class="font-medium">Description:</p>
+                                {{ $item['item_description'] }}
                                 @endif
-                            @endforeach
+                                @if ($item['item_note'])
+                                <p class="font-medium">Note:</p>
+                                {{ $item['item_note'] }}
+                                @endif
+                                </p>
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($item['item_price'], 2) }}
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($item['item_qty'], 2) }}
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($item['item_total'], 2) }}
+                            </td>
+                        </tr>
+                        @php
+                        $totalLaborPrice += $item['item_total']; // Add labor item price to total
+                        @endphp
+                        @endif
+                        @endforeach
                         @endforeach
                     </tbody>
                 </table>
@@ -1979,39 +1979,39 @@ $userPrivileges->estimate->items === 'on')
                         @endphp
                         @endforeach
                         @foreach ($estimateItemTemplates as $template)
-                            @foreach ($template->estimateItemTemplateItems as $item)
-                                @if ($item['item_type'] === 'material')
-                                    <tr class="bg-white border-b">
-                                        <td class="px-6 py-4 w-[30%]">
-                                            {{ $item['item_name'] }}
-                                        </td>
-                                        <td class="px-6 py-4 w-[30%]">
-                                            <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                @if ($item['item_description'])
-                                                    <p class="font-medium">Description:</p>
-                                                    {{ $item['item_description'] }}
-                                                @endif
-                                                @if ($item['item_note'])
-                                                    <p class="font-medium">Note:</p>
-                                                    {{ $item['item_note'] }}
-                                                @endif
-                                            </p>
-                                        </td>
-                                        <td class="text-center">
-                                            {{ number_format($item['item_price'], 2) }}
-                                        </td>
-                                        <td class="text-center">
-                                            {{ number_format($item['item_qty'], 2) }}
-                                        </td>
-                                        <td class="text-center">
-                                            {{ number_format($item['item_total'], 2) }}
-                                        </td>
-                                    </tr>
-                                    @php
-                                        $totalMaterialPrice += $item['item_total']; // Add labor item price to total
-                                    @endphp
+                        @foreach ($template->estimateItemTemplateItems as $item)
+                        @if ($item['item_type'] === 'material')
+                        <tr class="bg-white border-b">
+                            <td class="px-6 py-4 w-[30%]">
+                                {{ $item['item_name'] }}
+                            </td>
+                            <td class="px-6 py-4 w-[30%]">
+                                <p class="text-[16px]/[18px] text-[#323C47] font">
+                                    @if ($item['item_description'])
+                                <p class="font-medium">Description:</p>
+                                {{ $item['item_description'] }}
                                 @endif
-                            @endforeach
+                                @if ($item['item_note'])
+                                <p class="font-medium">Note:</p>
+                                {{ $item['item_note'] }}
+                                @endif
+                                </p>
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($item['item_price'], 2) }}
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($item['item_qty'], 2) }}
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($item['item_total'], 2) }}
+                            </td>
+                        </tr>
+                        @php
+                        $totalMaterialPrice += $item['item_total']; // Add labor item price to total
+                        @endphp
+                        @endif
+                        @endforeach
                         @endforeach
 
                     </tbody>
@@ -2164,39 +2164,39 @@ $userPrivileges->estimate->items === 'on')
                         @endphp
                         @endforeach
                         @foreach ($estimateItemTemplates as $template)
-                            @foreach ($template->estimateItemTemplateItems as $item)
-                                @if ($item['item_type'] === 'material')
-                                    <tr class="bg-white border-b">
-                                        <td class="px-6 py-4 w-[30%]">
-                                            {{ $item['item_name'] }}
-                                        </td>
-                                        <td class="px-6 py-4 w-[30%]">
-                                            <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                @if ($item['item_description'])
-                                                    <p class="font-medium">Description:</p>
-                                                    {{ $item['item_description'] }}
-                                                @endif
-                                                @if ($item['item_note'])
-                                                    <p class="font-medium">Note:</p>
-                                                    {{ $item['item_note'] }}
-                                                @endif
-                                            </p>
-                                        </td>
-                                        <td class="text-center">
-                                            {{ number_format($item['item_price'], 2) }}
-                                        </td>
-                                        <td class="text-center">
-                                            {{ number_format($item['item_qty'], 2) }}
-                                        </td>
-                                        <td class="text-center">
-                                            {{ number_format($item['item_total'], 2) }}
-                                        </td>
-                                    </tr>
-                                    @php
-                                        $totalMaterialPrice += $item['item_total']; // Add labor item price to total
-                                    @endphp
+                        @foreach ($template->estimateItemTemplateItems as $item)
+                        @if ($item['item_type'] === 'material')
+                        <tr class="bg-white border-b">
+                            <td class="px-6 py-4 w-[30%]">
+                                {{ $item['item_name'] }}
+                            </td>
+                            <td class="px-6 py-4 w-[30%]">
+                                <p class="text-[16px]/[18px] text-[#323C47] font">
+                                    @if ($item['item_description'])
+                                <p class="font-medium">Description:</p>
+                                {{ $item['item_description'] }}
                                 @endif
-                            @endforeach
+                                @if ($item['item_note'])
+                                <p class="font-medium">Note:</p>
+                                {{ $item['item_note'] }}
+                                @endif
+                                </p>
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($item['item_price'], 2) }}
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($item['item_qty'], 2) }}
+                            </td>
+                            <td class="text-center">
+                                {{ number_format($item['item_total'], 2) }}
+                            </td>
+                        </tr>
+                        @php
+                        $totalMaterialPrice += $item['item_total']; // Add labor item price to total
+                        @endphp
+                        @endif
+                        @endforeach
                         @endforeach
 
                     </tbody>
@@ -2384,7 +2384,7 @@ $userPrivileges->estimate->items === 'on')
                     <button type="button" style="height: 70px; width:70px;" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
                         <img class="" style="height: 70px; width:70px;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                     </button>
-                </td> 
+                </td>
                 <td>{{$item->item_name}} ({{$item->upgrade_status}})</td>
                 <td class="w-[30%]">{{$item->item_description}}</td>
                 <td class="text-center">{{number_format($item->item_price, 2)}}</td>
@@ -5960,9 +5960,8 @@ $userPrivileges->estimate->expenses === 'on')
                             var currentItem = itemTemplateItems[i];
 
                             // Find the corresponding item data based on item_id
-                            var correspondingItemData = itemsData.find(item => item.item_id ===
-                                currentItem.item_id);
-                                console.log(correspondingItemData);
+                            var correspondingItemData = itemsData.find(item => item.item_id === currentItem.item_id);
+                            console.log(correspondingItemData);
                             // Assuming currentItem has properties 'name' and 'quantity'
                             var itemNameInput = $('#template_item_name');
                             // var itemQtyInput = $('#template_item_qty');
@@ -6411,15 +6410,15 @@ $userPrivileges->estimate->expenses === 'on')
         display.value = '';
     });
     $(document).ready(function() {
-        var currentDate = new Date().toISOString().slice(0,10);
-    $('.se_date').val(currentDate);
+        var currentDate = new Date().toISOString().slice(0, 10);
+        $('.se_date').val(currentDate);
 
-    var currentDate = new Date();
-    // Calculate the next date by adding one day
-    currentDate.setDate(currentDate.getDate() + 1);
-    // Format the next date to YYYY-MM-DD
-    var nextDate = currentDate.toISOString().slice(0,10);
-    // Set the value of the input field to the next date
-    $('.en_date').val(nextDate);
+        var currentDate = new Date();
+        // Calculate the next date by adding one day
+        currentDate.setDate(currentDate.getDate() + 1);
+        // Format the next date to YYYY-MM-DD
+        var nextDate = currentDate.toISOString().slice(0, 10);
+        // Set the value of the input field to the next date
+        $('.en_date').val(nextDate);
     });
 </script>
