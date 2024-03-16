@@ -424,6 +424,8 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@if (session('user_details')['user_role'] == 'crew')
+@else
 <script>
     const orders = @json($confirm_orders);
 
@@ -458,6 +460,7 @@
         }
     });
 </script>
+@endif
 @if (session('user_details')['user_role'] == 'crew')
 @else
     <script>
