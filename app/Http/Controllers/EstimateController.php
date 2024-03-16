@@ -350,41 +350,89 @@ class EstimateController extends Controller
                 'estimate_template_note' => 'nullable',
             ]);
 
-            $estTemplate = EstimateItemTemplates::create([
-                'added_user_id' => $userDetails['id'],
-                'estimate_id' => $validatedData['estimate_id'],
-                'item_template_id' => $validatedData['est_template_id'],
-                'item_template_name' => $validatedData['est_template_name'],
-                'description' => $validatedData['estimate_template_description'],
-                'note' => $validatedData['estimate_template_note'],
-            ]);
+            // $estTemplate = EstimateItemTemplates::create([
+            //     'added_user_id' => $userDetails['id'],
+            //     'estimate_id' => $validatedData['estimate_id'],
+            //     'item_template_id' => $validatedData['est_template_id'],
+            //     'item_template_name' => $validatedData['est_template_name'],
+            //     'description' => $validatedData['estimate_template_description'],
+            //     'note' => $validatedData['estimate_template_note'],
+            // ]);
 
             if (isset($validatedData['template_item_id'])) {
                 foreach ($validatedData['template_item_id'] as $key => $itemId) {
                     $itemQty = $validatedData['template_item_qty'][$key];
                     if ($itemQty > 0) {
 
-                        $item = Items::find($itemId);
+                        $item = Items::with('assemblies')->find($itemId);
 
                         if ($item) {
                             $itemTotal = $itemQty * $item['item_price'];
                             // Create EstimateItemTemplateItems with item details
-                            EstimateItemTemplateItems::create([
+                            // EstimateItemTemplateItems::create([
+                            //     'added_user_id' => $userDetails['id'],
+                            //     'estimate_id' => $validatedData['estimate_id'],
+                            //     'est_template_id' => $estTemplate->est_template_id,
+                            //     'item_id' => $itemId,
+                            //     'item_qty' => $itemQty,
+                            //     'item_total' => $itemTotal,
+                            //     'labour_expense' => $item->labour_expense,
+                            //     'material_expense' => $item->material_expense,
+                            //     'item_cost' => $item->item_cost,
+                            //     'item_price' => $item->item_price,
+                            //     'item_description' => $item->item_description,
+                            //     'item_note' => $item->item_note,
+                            //     'item_type' => $item->item_type,
+                            //     // You can add other item details here if needed
+                            // ]);
+
+                            $estimateItem = EstimateItem::create([
                                 'added_user_id' => $userDetails['id'],
                                 'estimate_id' => $validatedData['estimate_id'],
-                                'est_template_id' => $estTemplate->est_template_id,
                                 'item_id' => $itemId,
-                                'item_qty' => $itemQty,
-                                'item_total' => $itemTotal,
-                                'labour_expense' => $item->labour_expense,
-                                'material_expense' => $item->material_expense,
+                                'item_name' => $item->item_name,
+                                'item_type' => $item->item_type,
+                                'item_unit' => $item->item_units,
                                 'item_cost' => $item->item_cost,
                                 'item_price' => $item->item_price,
-                                'item_description' => $item->item_description,
+                                'labour_expense' => $item->labour_expense,
+                                'material_expense' => $item->material_expense,
+                                'item_qty' => $itemQty,
+                                'item_total' => $itemTotal,
+                                'item_Description' => $item->item_description,
                                 'item_note' => $item->item_note,
-                                'item_type' => $item->item_type,
-                                // You can add other item details here if needed
+                                // 'is_upgrade' => $validatedData['is_upgrade'],
+                                'group_id' => $item->group_ids,
                             ]);
+
+                            if ($item->item_type == 'assemblies') {
+                                foreach ($item->assemblies as $key => $assItem) {
+
+                                    $actItem = Items::where('item_id', $assItem->ass_item_id)->first();
+                                    
+                                    $assItemQty = $itemQty * $assItem->ass_unit_by_item_unit;
+                                    // dd($actItem);
+                                    $assItemPrice = $actItem->item_price * $assItemQty;
+                                    EstimateItemAssembly::create([
+                                        'added_user_id' => $userDetails['id'],
+                                        'estimate_id' => $validatedData['estimate_id'],
+                                        'estimate_item_id' => $estimateItem->estimate_item_id,
+                                        'est_ass_item_name' => $assItem->assembly_name,
+                                        'item_unit_by_ass_unit' => $assItem->item_unit_by_ass_unit,
+                                        'ass_unit_by_item_unit' => $assItem->ass_unit_by_item_unit,
+                                        'item_id' => $assItem->ass_item_id,
+                                        'ass_item_cost' => $actItem->item_cost,
+                                        'ass_item_price' => $actItem->item_price,
+                                        'ass_item_qty' => $assItemQty,
+                                        'ass_item_total' => $assItemPrice,
+                                        'ass_item_unit' => $actItem->item_units,
+                                        'ass_item_description' => $actItem->item_description,
+                                        'ass_item_type' => $actItem->item_type,
+                                        'ass_labour_expense' => $actItem->labour_expense,
+                                        'ass_material_expense' => $actItem->material_expense,
+                                    ]);
+                                }
+                            }
                         } else {
                             // Handle the case where the item with the given item_id is not found
                             return response()->json(['success' => false, 'message' => 'Item not found for item_id ' . $itemId], 404);
@@ -1945,10 +1993,10 @@ class EstimateController extends Controller
             $assemblyLabourTotal = 0;
             $assemblyMaterialTotal = 0;
             foreach ($estimateAssemblyItems as $estimateAssemblyItem) {
-                $labourAssemblyItems = $estimateAssemblyItem->assemblies->filter(function($assembly){
+                $labourAssemblyItems = $estimateAssemblyItem->assemblies->filter(function ($assembly) {
                     return $assembly->ass_item_type === 'labour';
                 });
-                $MaterialAssemblyItems = $estimateAssemblyItem->assemblies->filter(function($assembly){
+                $MaterialAssemblyItems = $estimateAssemblyItem->assemblies->filter(function ($assembly) {
                     return $assembly->ass_item_type === 'material';
                 });
                 $assemblyLabourTotalHours += $labourAssemblyItems->sum('ass_item_qty');
