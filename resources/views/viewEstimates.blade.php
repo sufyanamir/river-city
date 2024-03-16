@@ -5943,6 +5943,248 @@ $userPrivileges->estimate->expenses === 'on')
     });
 </script>
 <script>
+    $(document).ready(function() {
+        $('[id^="addTemplate"]').click(function() {
+            // Your existing code inside the click event handler
+            var itemId = this.id.replace('addTemplate', '');
+            $.ajax({
+                url: '/getItemTemplateItems/' + itemId,
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        var itemTemplate = response.data.item_template;
+                        var itemTemplateItems = response.data.item_template_items;
+                        var itemsData = response.data.items_data;
+
+                        for (var i = 0; i < itemTemplateItems.length; i++) {
+                            var currentItem = itemTemplateItems[i];
+
+                            // Find the corresponding item data based on item_id
+                            var correspondingItemData = itemsData.find(item => item.item_id ===
+                                currentItem.item_id);
+                                console.log(correspondingItemData);
+                            // Assuming currentItem has properties 'name' and 'quantity'
+                            var itemNameInput = $('#template_item_name');
+                            // var itemQtyInput = $('#template_item_qty');
+                            var itemTemplateTitle = $('#itemTemplate-title');
+                            itemTemplateTitle.text(itemTemplate.item_template_name)
+                            // Update input values with currentItem and item data
+                            var estimateTemplateId = $('#estimate_template_id');
+                            var estimateTemplateName = $('#estimate_template_name');
+                            $('#estimate_template_description').val(itemTemplate.description);
+                            $('#estimate_template_note').val(itemTemplate.note);
+                            estimateTemplateId.val(itemTemplate.item_template_id);
+                            estimateTemplateName.val(itemTemplate.item_template_name);
+                            var demoInput = $('<div>').html(`
+                            <input type="hidden" name="template_item_id[]" id="template_item_id" placeholder="Item Name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <div class="my-0 flex items-center gap-2 text-left">
+                                <div class="relative text-left my-1">
+                                    <button type="button"
+                                        class="bg-[#930027] py-[6px] px-2 rounded-md text-white">
+                                        <div id="cal-menubutton" class=" cursor-pointer" aria-expanded="true"
+                                            aria-haspopup="true">
+                                            {{-- <img id="calculater-modal"  class="" src="{{ asset('assets/icons/calculator-icon.svg') }}"
+                                            alt="icon"> --}}
+                                            <i id="calculater-modal" class="fa-solid fa-calculator"></i>
+                                        </div>
+                                    </button>
+                                    {{-- ====================== --}}
+                                    <div class="absolute hidden  text-left h-[100%]  z-[999] " <div id="cal-menu"
+                                        style="background-color:#3a4655 !important;"
+                                        class=" topbar-manuLeaving   z-10 mt-2 w-56 origin-top-right rounded-md bg-[#3a4655] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                        role="menu" aria-orientation="vertical" aria-labelledby="menu-button"
+                                        tabindex="-1">
+                                        <div class="py-1 left-5" role="none">
+                                            <div class="relative  bg-[#3a4655]">
+                                                <input
+                                                    class="block mx-2 mt-2 border bg-[#3a4655] h-[30px] rounded text-white border-white "
+                                                    type="text" readonly id="cal_display">
+                                                <div class="grid text-white grid-cols-4 gap-y-3  p-2 mt-3">
+                                                    <button type="button"
+                                                        class="cal_btn border rounded text-center mx-1  h-[30px]">%</button>
+                                                    <button type="button"
+                                                        class="cal_btn border rounded text-center mx-1  h-[30px]">/</button>
+                                                    <button type="button"
+                                                        class="cal_btn border rounded text-center mx-1  h-[30px] ">
+                                                        << /button>
+                                                            <button id="clear_btn" type="button"
+                                                                class=" border rounded text-center mx-1  h-[30px] ">C</button>
+
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">7</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">8</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">9</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">*</button>
+
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">4</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">5</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">6</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">-</button>
+
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">1</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">2</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">3</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">+</button>
+
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">0</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">00</button>
+                                                            <button type="button"
+                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">.</button>
+                                                            <button id="equal_btn" type="button"
+                                                                class=" border rounded text-center mx-1  h-[30px] ">=</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="number" step="any" name="template_item_qty[]" id="template_item_qty" placeholder="" class=" w-[15%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <p id="template_item_name" class=" font-medium overflow-hidden whitespace-nowrap items-center bg-[#EBEAEB] py-1 px-2 rounded-lg w-[75%]"></p>
+                            </div>
+                            `);
+                            var itemNameInput = demoInput.find('#template_item_name');
+                            var itemQtyInput = demoInput.find('#template_item_qty');
+                            var itemIdInput = demoInput.find('#template_item_id');
+
+                            itemNameInput.attr('id', 'template_item_name_' + i);
+                            itemQtyInput.attr('id', 'template_item_qty_' + i);
+                            itemIdInput.attr('id', 'template_item_id_' + i);
+                            var templateItemDiv = $('#template-items');
+
+                            // demoInput.addClass('flex justify-between');
+
+                            templateItemDiv.append(demoInput);
+
+                            $('#template_item_name_' + i).text(correspondingItemData.item_name +
+                                (correspondingItemData.item_description ? ' ' + correspondingItemData.item_description : ''));
+                            $('#template_item_id_' + i).val(correspondingItemData.item_id);
+                            $('#template_item_qty_' + i).val(currentItem.item_qty);
+                            // console.log(itemTemplateItems.length)
+                            // itemQtyInput.val(currentItem.quantity);
+
+                            $('#addTemplate-modal').removeClass('hidden');
+                        }
+                    }
+                },
+                error: function(error) {
+                    console.error('AJAX request failed:', error);
+                }
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('[id^="editExpense-btn"]').click(function() {
+            var itemId = this.id.replace('editExpense-btn', ''); // Extract item ID from button ID
+
+            // Make an AJAX request to get item details
+            $.ajax({
+                url: '/getExpenseDataToEdit' + itemId,
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        // Populate the modal with the retrieved data
+                        var expenseDetail = response.expense_detail;
+                        console.log(expenseDetail);
+                        // Update modal content with item details
+                        $('#date').val(formatDate(expenseDetail.expense_date));
+                        $('#item_type').val(expenseDetail.expense_item_type);
+                        $('#vendor').val(expenseDetail.expense_vendor);
+                        $('#hours').val(expenseDetail.labour_hours);
+                        $('#subtotal').val(expenseDetail.expense_subtotal);
+                        $('#tax').val(expenseDetail.expense_tax);
+                        $('#total').val(expenseDetail.expense_total);
+                        if (response.expense_paid === 'paid') {
+                            $('#paid').prop('checked', true);
+                        } else {
+                            $('#paid').prop('checked', false);
+                        }
+                        $('#description').val(expenseDetail.expense_description);
+                        // Add other fields as needed
+
+                        // Set the item ID in the hidden input field
+                        $('#estimate_expense_id').val(expenseDetail.estimate_expense_id);
+                        var formUrl = $('#expenses-btn-form').attr('action', '/updateEstimateExpense');
+                        // Open the modal
+                        $('#expenses-btn-modal').removeClass('hidden');
+                    } else {
+                        // Handle error response
+                        console.error('Error fetching item details.');
+                    }
+                },
+                error: function(error) {
+                    console.error('AJAX request failed:', error);
+                }
+            });
+        });
+
+        function formatDate(dateString) {
+            // Assuming dateString is in the format "DD/MM/YYYY"
+            var parts = dateString.split('/');
+            if (parts.length === 3) {
+                return parts[2] + '-' + parts[1] + '-' + parts[0];
+            }
+            return dateString; // return as is if already in "YYYY-MM-DD" format
+        }
+
+        $('[id^="editEstimateTemplate-item"]').click(function() {
+            var itemId = this.id.replace('editEstimateTemplate-item', ''); // Extract item ID from button ID
+
+            // Make an AJAX request to get item details
+            $.ajax({
+                url: '/getEstimateTemplateItem' + itemId,
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        // Populate the modal with the retrieved data
+                        var itemDetail = response.data.item_detail;
+                        var templateItem = response.data.template_item;
+
+                        // Update modal content with item details
+                        $('#type').val(itemDetail.item_type);
+                        $('#itemName').val(itemDetail.item_name);
+                        $('#item_units').val(itemDetail.item_units);
+                        $('#labour_expense').val(templateItem.labour_expense);
+                        $('#material_expense').val(templateItem.material_expense);
+                        $('#item_cost').val(templateItem.item_cost);
+                        $('#item_price').val(templateItem.item_price);
+                        $('#item_qty').val(templateItem.item_qty);
+                        $('#item_total').val(templateItem.item_total);
+                        $('#item_description').val(templateItem.item_description);
+                        $('#item_note').val(templateItem.item_note);
+                        // Add other fields as needed
+
+                        // Set the item ID in the hidden input field
+                        $('#item_id').val(templateItem.est_template_item_id);
+                        var formUrl = $('#itemsForm').attr('action', '/updateEstimateTemplateItem');
+                        // Open the modal
+                        $('#addItems-modal').removeClass('hidden');
+                    } else {
+                        // Handle error response
+                        console.error('Error fetching item details.');
+                    }
+                },
+                error: function(error) {
+                    console.error('AJAX request failed:', error);
+                }
+            });
+        });
+    });
+</script>
+<script>
     $("#calculater-modal").click(function(e) {
         e.preventDefault();
         $("#cal-modal").removeClass('hidden');
@@ -6180,247 +6422,5 @@ $userPrivileges->estimate->expenses === 'on')
     var nextDate = currentDate.toISOString().slice(0,10);
     // Set the value of the input field to the next date
     $('.en_date').val(nextDate);
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        $('[id^="addTemplate"]').click(function() {
-            // Your existing code inside the click event handler
-            var itemId = this.id.replace('addTemplate', '');
-            $.ajax({
-                url: '/getItemTemplateItems/' + itemId,
-                method: 'GET',
-                success: function(response) {
-                    if (response.success) {
-                        var itemTemplate = response.data.item_template;
-                        var itemTemplateItems = response.data.item_template_items;
-                        var itemsData = response.data.items_data;
-
-                        for (var i = 0; i < itemTemplateItems.length; i++) {
-                            var currentItem = itemTemplateItems[i];
-
-                            // Find the corresponding item data based on item_id
-                            var correspondingItemData = itemsData.find(item => item.item_id ===
-                                currentItem.item_id);
-
-                            // Assuming currentItem has properties 'name' and 'quantity'
-                            var itemNameInput = $('#template_item_name');
-                            // var itemQtyInput = $('#template_item_qty');
-                            var itemTemplateTitle = $('#itemTemplate-title');
-                            itemTemplateTitle.text(itemTemplate.item_template_name)
-                            // Update input values with currentItem and item data
-                            var estimateTemplateId = $('#estimate_template_id');
-                            var estimateTemplateName = $('#estimate_template_name');
-                            $('#estimate_template_description').val(itemTemplate.description);
-                            $('#estimate_template_note').val(itemTemplate.note);
-                            estimateTemplateId.val(itemTemplate.item_template_id);
-                            estimateTemplateName.val(itemTemplate.item_template_name);
-                            var demoInput = $('<div>').html(`
-                            <input type="hidden" name="template_item_id[]" id="template_item_id" placeholder="Item Name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                            <div class="my-0 flex items-center gap-2 text-left">
-                                <div class="relative text-left my-1">
-                                    <button type="button"
-                                        class="bg-[#930027] py-[6px] px-2 rounded-md text-white">
-                                        <div id="cal-menubutton" class=" cursor-pointer" aria-expanded="true"
-                                            aria-haspopup="true">
-                                            {{-- <img id="calculater-modal"  class="" src="{{ asset('assets/icons/calculator-icon.svg') }}"
-                                            alt="icon"> --}}
-                                            <i id="calculater-modal" class="fa-solid fa-calculator"></i>
-                                        </div>
-                                    </button>
-                                    {{-- ====================== --}}
-                                    <div class="absolute hidden  text-left h-[100%]  z-[999] " <div id="cal-menu"
-                                        style="background-color:#3a4655 !important;"
-                                        class=" topbar-manuLeaving   z-10 mt-2 w-56 origin-top-right rounded-md bg-[#3a4655] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                                        role="menu" aria-orientation="vertical" aria-labelledby="menu-button"
-                                        tabindex="-1">
-                                        <div class="py-1 left-5" role="none">
-                                            <div class="relative  bg-[#3a4655]">
-                                                <input
-                                                    class="block mx-2 mt-2 border bg-[#3a4655] h-[30px] rounded text-white border-white "
-                                                    type="text" readonly id="cal_display">
-                                                <div class="grid text-white grid-cols-4 gap-y-3  p-2 mt-3">
-                                                    <button type="button"
-                                                        class="cal_btn border rounded text-center mx-1  h-[30px]">%</button>
-                                                    <button type="button"
-                                                        class="cal_btn border rounded text-center mx-1  h-[30px]">/</button>
-                                                    <button type="button"
-                                                        class="cal_btn border rounded text-center mx-1  h-[30px] ">
-                                                        << /button>
-                                                            <button id="clear_btn" type="button"
-                                                                class=" border rounded text-center mx-1  h-[30px] ">C</button>
-
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">7</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">8</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">9</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">*</button>
-
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">4</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">5</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">6</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">-</button>
-
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">1</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">2</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">3</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">+</button>
-
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">0</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">00</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">.</button>
-                                                            <button id="equal_btn" type="button"
-                                                                class=" border rounded text-center mx-1  h-[30px] ">=</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <input type="number" step="any" name="template_item_qty[]" id="template_item_qty" placeholder="" class=" w-[15%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                <p id="template_item_name" class=" font-medium overflow-hidden whitespace-nowrap items-center bg-[#EBEAEB] py-1 px-2 rounded-lg w-[75%]"></p>
-                            </div>
-                            `);
-                            var itemNameInput = demoInput.find('#template_item_name');
-                            var itemQtyInput = demoInput.find('#template_item_qty');
-                            var itemIdInput = demoInput.find('#template_item_id');
-
-                            itemNameInput.attr('id', 'template_item_name_' + i);
-                            itemQtyInput.attr('id', 'template_item_qty_' + i);
-                            itemIdInput.attr('id', 'template_item_id_' + i);
-                            var templateItemDiv = $('#template-items');
-
-                            // demoInput.addClass('flex justify-between');
-
-                            templateItemDiv.append(demoInput);
-
-                            $('#template_item_name_' + i).text(correspondingItemData.item_name +
-                                (correspondingItemData.item_description ? ' ' + correspondingItemData.item_description : ''));
-                            $('#template_item_id_' + i).val(correspondingItemData.item_id);
-                            $('#template_item_qty_' + i).val(currentItem.item_qty);
-                            // console.log(itemTemplateItems.length)
-                            // itemQtyInput.val(currentItem.quantity);
-
-                            $('#addTemplate-modal').removeClass('hidden');
-                        }
-                    }
-                },
-                error: function(error) {
-                    console.error('AJAX request failed:', error);
-                }
-            });
-        });
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        $('[id^="editExpense-btn"]').click(function() {
-            var itemId = this.id.replace('editExpense-btn', ''); // Extract item ID from button ID
-
-            // Make an AJAX request to get item details
-            $.ajax({
-                url: '/getExpenseDataToEdit' + itemId,
-                method: 'GET',
-                success: function(response) {
-                    if (response.success) {
-                        // Populate the modal with the retrieved data
-                        var expenseDetail = response.expense_detail;
-                        console.log(expenseDetail);
-                        // Update modal content with item details
-                        $('#date').val(formatDate(expenseDetail.expense_date));
-                        $('#item_type').val(expenseDetail.expense_item_type);
-                        $('#vendor').val(expenseDetail.expense_vendor);
-                        $('#hours').val(expenseDetail.labour_hours);
-                        $('#subtotal').val(expenseDetail.expense_subtotal);
-                        $('#tax').val(expenseDetail.expense_tax);
-                        $('#total').val(expenseDetail.expense_total);
-                        if (response.expense_paid === 'paid') {
-                            $('#paid').prop('checked', true);
-                        } else {
-                            $('#paid').prop('checked', false);
-                        }
-                        $('#description').val(expenseDetail.expense_description);
-                        // Add other fields as needed
-
-                        // Set the item ID in the hidden input field
-                        $('#estimate_expense_id').val(expenseDetail.estimate_expense_id);
-                        var formUrl = $('#expenses-btn-form').attr('action', '/updateEstimateExpense');
-                        // Open the modal
-                        $('#expenses-btn-modal').removeClass('hidden');
-                    } else {
-                        // Handle error response
-                        console.error('Error fetching item details.');
-                    }
-                },
-                error: function(error) {
-                    console.error('AJAX request failed:', error);
-                }
-            });
-        });
-
-        function formatDate(dateString) {
-            // Assuming dateString is in the format "DD/MM/YYYY"
-            var parts = dateString.split('/');
-            if (parts.length === 3) {
-                return parts[2] + '-' + parts[1] + '-' + parts[0];
-            }
-            return dateString; // return as is if already in "YYYY-MM-DD" format
-        }
-
-        $('[id^="editEstimateTemplate-item"]').click(function() {
-            var itemId = this.id.replace('editEstimateTemplate-item', ''); // Extract item ID from button ID
-
-            // Make an AJAX request to get item details
-            $.ajax({
-                url: '/getEstimateTemplateItem' + itemId,
-                method: 'GET',
-                success: function(response) {
-                    if (response.success) {
-                        // Populate the modal with the retrieved data
-                        var itemDetail = response.data.item_detail;
-                        var templateItem = response.data.template_item;
-
-                        // Update modal content with item details
-                        $('#type').val(itemDetail.item_type);
-                        $('#itemName').val(itemDetail.item_name);
-                        $('#item_units').val(itemDetail.item_units);
-                        $('#labour_expense').val(templateItem.labour_expense);
-                        $('#material_expense').val(templateItem.material_expense);
-                        $('#item_cost').val(templateItem.item_cost);
-                        $('#item_price').val(templateItem.item_price);
-                        $('#item_qty').val(templateItem.item_qty);
-                        $('#item_total').val(templateItem.item_total);
-                        $('#item_description').val(templateItem.item_description);
-                        $('#item_note').val(templateItem.item_note);
-                        // Add other fields as needed
-
-                        // Set the item ID in the hidden input field
-                        $('#item_id').val(templateItem.est_template_item_id);
-                        var formUrl = $('#itemsForm').attr('action', '/updateEstimateTemplateItem');
-                        // Open the modal
-                        $('#addItems-modal').removeClass('hidden');
-                    } else {
-                        // Handle error response
-                        console.error('Error fetching item details.');
-                    }
-                },
-                error: function(error) {
-                    console.error('AJAX request failed:', error);
-                }
-            });
-        });
     });
 </script>
