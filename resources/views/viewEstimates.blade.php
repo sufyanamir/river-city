@@ -5959,6 +5959,8 @@ $userPrivileges->estimate->expenses === 'on')
 
                         for (var i = 0; i < itemTemplateItems.length; i++) {
                             var currentItem = itemTemplateItems[i];
+                            console.log("Current item:", currentItem);
+                            console.log("Items data:", itemsData);
 
                             // Find the corresponding item data based on item_id
                             var correspondingItemData = itemsData.find(item => item.item_id === currentItem.item_id);
