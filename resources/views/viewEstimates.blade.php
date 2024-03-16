@@ -6067,8 +6067,7 @@ $userPrivileges->estimate->expenses === 'on')
 
                             templateItemDiv.append(demoInput);
 
-                            $('#template_item_name_' + i).text(correspondingItemData.item_name +
-                                (correspondingItemData.item_description ? ' ' + correspondingItemData.item_description : ''));
+                            $('#template_item_name_' + i).text(correspondingItemData.item_name + (correspondingItemData.item_description ? ' ' + correspondingItemData.item_description : ''));
                             $('#template_item_id_' + i).val(correspondingItemData.item_id);
                             $('#template_item_qty_' + i).val(currentItem.item_qty);
                             // console.log(itemTemplateItems.length)
