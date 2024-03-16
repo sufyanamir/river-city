@@ -5943,6 +5943,246 @@ $userPrivileges->estimate->expenses === 'on')
     });
 </script>
 <script>
+    $("#calculater-modal").click(function(e) {
+        e.preventDefault();
+        $("#cal-modal").removeClass('hidden');
+    });
+
+
+    $(".addItems").click(function(e) {
+        e.preventDefault();
+        $("#addItems-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#addItems-modal").addClass('hidden');
+        $("#itemsForm")[0].reset()
+        $('#itemsForm').attr('action', '/addEstimateItems');
+        $('#deleteItem-btn').addClass('hidden')
+        $('#mulitple_input').empty();
+        $('#multiAdd-items').addClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#addTemplate-modal").addClass('hidden');
+        // $("#itemTemplatesForm")[0].reset()
+        $('#template-items').empty();
+    });
+    $('#mulitple_input').on('change', 'select[name="assembly_name[]"]', function() {
+        // Get the selected option
+        var selectedOption = $(this).find(':selected');
+
+        // Get the item_unit from the data-unit attribute
+        var itemUnit = selectedOption.data('unit');
+
+        // Update the elements based on the item_unit only within the current row
+        var unitLabel = $(this).closest('.grid').find('.addedItemUnit');
+        unitLabel.text(itemUnit);
+
+        // You can add more logic here to update other elements based on the item_unit
+    });
+
+    let mulitple_input = $('#mulitple_input');
+    let button = $('#addbtn');
+
+    button.on('click', function() {
+        let id = Math.floor(Math.random() * 999 + 1);
+        let newele = $('<div class="mt-5" id="rendid' + id + '" ></div>');
+        let selectId = 'assembly_id_' + id;
+        let itemUnitById = 'item_unit_by_ass_unit_' + id; // Dynamic ID for item_unit_by_ass_unit input
+        let assUnitById = 'ass_unit_by_item_unit_' + id; // Dynamic ID for ass_unit_by_item_unit input
+        let assItemId = 'ass_item_id_' + id;
+        let itemTotalQty = 'total_qty_' + id;
+        let rembtn = $('<span></span>');
+
+        newele.html(`
+        <input type="hidden" name="ass_item_id[]" id="${assItemId}">
+            <select name="assembly_name[]" id="${selectId}" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                <option value="">Select Item</option>
+                @foreach ($itemsForAssemblies as $item)
+                <option value="{{ $item->item_name }}" data-item-cost="{{$item->item_cost}}" data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
+                @endforeach
+            </select>
+            <div class=" grid grid-cols-3 gap-3 mt-2 inline-block">
+                <div>
+                    <input type="number" step="any" name="item_unit_by_assembly_unit[]" id="${itemUnitById}" placeholder="00.0" autocomplete="given-name"
+                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
+                </div>
+                <div>
+                        <input type="text" step="any" name="assembly_unit_by_item_unit[]" id="${assUnitById}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
+                </div>
+                <div class="flex ">
+                    <div class="w-[80%]  ">
+                    <input type="number" step="any" name="item_total_qty[]" id="${itemTotalQty}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="">Total</span>
+                </div>
+                <div class="mt-1" >
+                    <button onclick="remveinputs('#rendid${id}')"  type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
+                        <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
+                    </button>
+                </div>
+                </div>
+            </div>
+        `);
+
+        mulitple_input.append(newele);
+        newele.append(rembtn);
+
+
+    });
+
+    function remveinputs(e) {
+        let ele = document.querySelector(e);
+        if (ele) {
+            ele.remove();
+        }
+    }
+    $(document).on('input', '[id^="item_unit_by_ass_unit_"]', function() {
+        // Initialize variables to store total expenses for labour and material items
+        var totalLabourExpense = 0;
+        var totalMaterialExpense = 0;
+        var labourPrice = 0;
+        var materialPrice = 0;
+        var findingCostLabour = 0;
+
+        // Iterate over each row
+        $('[id^="item_unit_by_ass_unit_"]').each(function() {
+            // Get the ID of the item_unit_by_ass_unit input for the current row
+            var itemId = $(this).attr('id').replace('item_unit_by_ass_unit_', '');
+
+            // Retrieve the selected option from the corresponding select element for the current row
+            var selectedOption = $('#assembly_id_' + itemId + ' option:selected');
+
+            // Retrieve data from the selected option for the current row
+            var itemType = selectedOption.data('item-type');
+            var labourExpense = selectedOption.data('labour-expense');
+            var materialExpense = selectedOption.data('material-expense');
+            var itemPrice = selectedOption.data('item-price');
+            var itemCost = selectedOption.data('item-cost');
+            var itemUnit = selectedOption.data('unit');
+            var assitemIds = selectedOption.data('item-id');
+            var EstItemQty = $('#item_qty').val();
+
+            $('#ass_item_id_' + itemId).val(assitemIds);
+
+            $('.addedItemUnit' + itemId).text(itemUnit);
+
+
+
+            // Get the value entered in the item_unit_by_ass_unit input for the current row
+            var itemUnitValue = parseFloat($(this).val());
+
+            // Perform calculations based on item type for the current row
+            if (itemType === 'labour') {
+                if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
+                    var calculatedValue = 1 / itemUnitValue;
+
+                    $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
+                    // Update total labour expense for the current row
+                    totalLabourExpense += labourExpense / itemUnitValue;
+                    labourPrice = itemPrice / itemUnitValue;
+
+                    findingCostLabour = totalLabourExpense * itemCost / labourExpense;
+                    var assTotalQty = EstItemQty * calculatedValue;
+                    $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
+                } else {
+                    $('#labour_expense').val('');
+                    $('#ass_unit_by_item_unit_' + itemId).val('');
+                    $('#total_qty_' + itemId).val('');
+                }
+            } else if (itemType === 'material') {
+                if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
+                    var calculatedValue = 1 / itemUnitValue;
+                    $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
+                    // Update total material expense for the current row
+                    totalMaterialExpense += calculatedValue * 1 * itemCost;
+                    materialPrice = itemPrice / itemUnitValue;
+
+                    var assTotalQty = EstItemQty * calculatedValue;
+                    $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
+                } else {
+                    $('#material_expense').val('');
+                    $('#ass_unit_by_item_unit_' + itemId).val('');
+                    $('#total_qty_' + itemId).val('');
+                }
+            }
+        });
+
+        // Set the total labour and material expenses in their respective inputs
+        $('#labour_expense').val(totalLabourExpense);
+        $('#material_expense').val(totalMaterialExpense);
+
+        // Calculate the sum of labour expense and material expense
+        var totalExpense = labourPrice + materialPrice;
+
+        // Calculate the item cost as half of the total expense
+        var itemCost = findingCostLabour + totalMaterialExpense;
+
+        // Set the total expense and item cost in their respective inputs
+        $('#item_price').val(totalExpense.toFixed(2));
+        $('#item_cost').val(itemCost.toFixed(2));
+
+        var priceMinusCost = $('#item_price').val() - $('#item_cost').val();
+        var priceMinusCostbyitemPrice = priceMinusCost / $('#item_price').val();
+        var finalMargin = priceMinusCostbyitemPrice * 100;
+        $('#price_margin').text(finalMargin.toFixed(2));
+    });
+
+    $("#cal-menubutton").click(function(e) {
+        e.stopPropagation(); // Prevents the click event from reaching the document body
+        $('#cal-menu').toggleClass("topbar-menuEntring topbar-manuLeaving");
+    });
+
+    $(document).on('click', function(e) {
+        if (!$("#cal-menubutton").is(e.target) && !$('#cal-menu').has(e.target).length) {
+            // Click occurred outside the button and dropdown, hide the dropdown
+            $('#cal-menu').addClass("topbar-manuLeaving").removeClass("topbar-menuEntring");
+        }
+    });
+
+    let cbuttons = document.querySelectorAll('.cal_btn');
+    let display = document.querySelector('#cal_display');
+    let equalButton = document.querySelector('#equal_btn');
+    let clearbtn = document.querySelector('#clear_btn');
+
+    cbuttons.forEach(button => {
+        button.addEventListener('click', () => {
+            display.value += button.innerHTML;
+        });
+    });
+
+    equalButton.addEventListener('click', () => {
+        try {
+            display.value = eval(display.value);
+            item_qty.value = display.value;
+            var inputEvent = new Event('input');
+            item_qty.dispatchEvent(inputEvent);
+
+        } catch (error) {
+            display.value = 'Error';
+        }
+    });
+    clearbtn.addEventListener('click', () => {
+        display.value = '';
+    });
+    $(document).ready(function() {
+        var currentDate = new Date().toISOString().slice(0,10);
+    $('.se_date').val(currentDate);
+
+    var currentDate = new Date();
+    // Calculate the next date by adding one day
+    currentDate.setDate(currentDate.getDate() + 1);
+    // Format the next date to YYYY-MM-DD
+    var nextDate = currentDate.toISOString().slice(0,10);
+    // Set the value of the input field to the next date
+    $('.en_date').val(nextDate);
+    });
+</script>
+<script>
     $(document).ready(function() {
         $('[id^="addTemplate"]').click(function() {
             // Your existing code inside the click event handler
@@ -6182,245 +6422,5 @@ $userPrivileges->estimate->expenses === 'on')
                 }
             });
         });
-    });
-</script>
-<script>
-    $("#calculater-modal").click(function(e) {
-        e.preventDefault();
-        $("#cal-modal").removeClass('hidden');
-    });
-
-
-    $(".addItems").click(function(e) {
-        e.preventDefault();
-        $("#addItems-modal").removeClass('hidden');
-    });
-
-    $(".modal-close").click(function(e) {
-        e.preventDefault();
-        $("#addItems-modal").addClass('hidden');
-        $("#itemsForm")[0].reset()
-        $('#itemsForm').attr('action', '/addEstimateItems');
-        $('#deleteItem-btn').addClass('hidden')
-        $('#mulitple_input').empty();
-        $('#multiAdd-items').addClass('hidden');
-    });
-
-    $(".modal-close").click(function(e) {
-        e.preventDefault();
-        $("#addTemplate-modal").addClass('hidden');
-        // $("#itemTemplatesForm")[0].reset()
-        $('#template-items').empty();
-    });
-    $('#mulitple_input').on('change', 'select[name="assembly_name[]"]', function() {
-        // Get the selected option
-        var selectedOption = $(this).find(':selected');
-
-        // Get the item_unit from the data-unit attribute
-        var itemUnit = selectedOption.data('unit');
-
-        // Update the elements based on the item_unit only within the current row
-        var unitLabel = $(this).closest('.grid').find('.addedItemUnit');
-        unitLabel.text(itemUnit);
-
-        // You can add more logic here to update other elements based on the item_unit
-    });
-
-    let mulitple_input = $('#mulitple_input');
-    let button = $('#addbtn');
-
-    button.on('click', function() {
-        let id = Math.floor(Math.random() * 999 + 1);
-        let newele = $('<div class="mt-5" id="rendid' + id + '" ></div>');
-        let selectId = 'assembly_id_' + id;
-        let itemUnitById = 'item_unit_by_ass_unit_' + id; // Dynamic ID for item_unit_by_ass_unit input
-        let assUnitById = 'ass_unit_by_item_unit_' + id; // Dynamic ID for ass_unit_by_item_unit input
-        let assItemId = 'ass_item_id_' + id;
-        let itemTotalQty = 'total_qty_' + id;
-        let rembtn = $('<span></span>');
-
-        newele.html(`
-        <input type="hidden" name="ass_item_id[]" id="${assItemId}">
-            <select name="assembly_name[]" id="${selectId}" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                <option value="">Select Item</option>
-                @foreach ($itemsForAssemblies as $item)
-                <option value="{{ $item->item_name }}" data-item-cost="{{$item->item_cost}}" data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
-                @endforeach
-            </select>
-            <div class=" grid grid-cols-3 gap-3 mt-2 inline-block">
-                <div>
-                    <input type="number" step="any" name="item_unit_by_assembly_unit[]" id="${itemUnitById}" placeholder="00.0" autocomplete="given-name"
-                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
-                </div>
-                <div>
-                        <input type="text" step="any" name="assembly_unit_by_item_unit[]" id="${assUnitById}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                        <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
-                </div>
-                <div class="flex ">
-                    <div class="w-[80%]  ">
-                    <input type="number" step="any" name="item_total_qty[]" id="${itemTotalQty}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="">Total</span>
-                </div>
-                <div class="mt-1" >
-                    <button onclick="remveinputs('#rendid${id}')"  type="button" class="inline-flex justify-center border gap-x-1.5 rounded-lg bg-[#DADADA80] ml-1 px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#DADADA80]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                        <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
-                    </button>
-                </div>
-                </div>
-            </div>
-        `);
-
-        mulitple_input.append(newele);
-        newele.append(rembtn);
-
-
-    });
-
-    function remveinputs(e) {
-        let ele = document.querySelector(e);
-        if (ele) {
-            ele.remove();
-        }
-    }
-    $(document).on('input', '[id^="item_unit_by_ass_unit_"]', function() {
-        // Initialize variables to store total expenses for labour and material items
-        var totalLabourExpense = 0;
-        var totalMaterialExpense = 0;
-        var labourPrice = 0;
-        var materialPrice = 0;
-        var findingCostLabour = 0;
-
-        // Iterate over each row
-        $('[id^="item_unit_by_ass_unit_"]').each(function() {
-            // Get the ID of the item_unit_by_ass_unit input for the current row
-            var itemId = $(this).attr('id').replace('item_unit_by_ass_unit_', '');
-
-            // Retrieve the selected option from the corresponding select element for the current row
-            var selectedOption = $('#assembly_id_' + itemId + ' option:selected');
-
-            // Retrieve data from the selected option for the current row
-            var itemType = selectedOption.data('item-type');
-            var labourExpense = selectedOption.data('labour-expense');
-            var materialExpense = selectedOption.data('material-expense');
-            var itemPrice = selectedOption.data('item-price');
-            var itemCost = selectedOption.data('item-cost');
-            var itemUnit = selectedOption.data('unit');
-            var assitemIds = selectedOption.data('item-id');
-            var EstItemQty = $('#item_qty').val();
-
-            $('#ass_item_id_' + itemId).val(assitemIds);
-
-            $('.addedItemUnit' + itemId).text(itemUnit);
-
-
-
-            // Get the value entered in the item_unit_by_ass_unit input for the current row
-            var itemUnitValue = parseFloat($(this).val());
-
-            // Perform calculations based on item type for the current row
-            if (itemType === 'labour') {
-                if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                    var calculatedValue = 1 / itemUnitValue;
-
-                    $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
-                    // Update total labour expense for the current row
-                    totalLabourExpense += labourExpense / itemUnitValue;
-                    labourPrice = itemPrice / itemUnitValue;
-
-                    findingCostLabour = totalLabourExpense * itemCost / labourExpense;
-                    var assTotalQty = EstItemQty * calculatedValue;
-                    $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
-                } else {
-                    $('#labour_expense').val('');
-                    $('#ass_unit_by_item_unit_' + itemId).val('');
-                    $('#total_qty_' + itemId).val('');
-                }
-            } else if (itemType === 'material') {
-                if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-                    var calculatedValue = 1 / itemUnitValue;
-                    $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
-                    // Update total material expense for the current row
-                    totalMaterialExpense += calculatedValue * 1 * itemCost;
-                    materialPrice = itemPrice / itemUnitValue;
-
-                    var assTotalQty = EstItemQty * calculatedValue;
-                    $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
-                } else {
-                    $('#material_expense').val('');
-                    $('#ass_unit_by_item_unit_' + itemId).val('');
-                    $('#total_qty_' + itemId).val('');
-                }
-            }
-        });
-
-        // Set the total labour and material expenses in their respective inputs
-        $('#labour_expense').val(totalLabourExpense);
-        $('#material_expense').val(totalMaterialExpense);
-
-        // Calculate the sum of labour expense and material expense
-        var totalExpense = labourPrice + materialPrice;
-
-        // Calculate the item cost as half of the total expense
-        var itemCost = findingCostLabour + totalMaterialExpense;
-
-        // Set the total expense and item cost in their respective inputs
-        $('#item_price').val(totalExpense.toFixed(2));
-        $('#item_cost').val(itemCost.toFixed(2));
-
-        var priceMinusCost = $('#item_price').val() - $('#item_cost').val();
-        var priceMinusCostbyitemPrice = priceMinusCost / $('#item_price').val();
-        var finalMargin = priceMinusCostbyitemPrice * 100;
-        $('#price_margin').text(finalMargin.toFixed(2));
-    });
-
-    $("#cal-menubutton").click(function(e) {
-        e.stopPropagation(); // Prevents the click event from reaching the document body
-        $('#cal-menu').toggleClass("topbar-menuEntring topbar-manuLeaving");
-    });
-
-    $(document).on('click', function(e) {
-        if (!$("#cal-menubutton").is(e.target) && !$('#cal-menu').has(e.target).length) {
-            // Click occurred outside the button and dropdown, hide the dropdown
-            $('#cal-menu').addClass("topbar-manuLeaving").removeClass("topbar-menuEntring");
-        }
-    });
-
-    let cbuttons = document.querySelectorAll('.cal_btn');
-    let display = document.querySelector('#cal_display');
-    let equalButton = document.querySelector('#equal_btn');
-    let clearbtn = document.querySelector('#clear_btn');
-
-    cbuttons.forEach(button => {
-        button.addEventListener('click', () => {
-            display.value += button.innerHTML;
-        });
-    });
-
-    equalButton.addEventListener('click', () => {
-        try {
-            display.value = eval(display.value);
-            item_qty.value = display.value;
-            var inputEvent = new Event('input');
-            item_qty.dispatchEvent(inputEvent);
-
-        } catch (error) {
-            display.value = 'Error';
-        }
-    });
-    clearbtn.addEventListener('click', () => {
-        display.value = '';
-    });
-    $(document).ready(function() {
-        var currentDate = new Date().toISOString().slice(0,10);
-    $('.se_date').val(currentDate);
-
-    var currentDate = new Date();
-    // Calculate the next date by adding one day
-    currentDate.setDate(currentDate.getDate() + 1);
-    // Format the next date to YYYY-MM-DD
-    var nextDate = currentDate.toISOString().slice(0,10);
-    // Set the value of the input field to the next date
-    $('.en_date').val(nextDate);
     });
 </script>
