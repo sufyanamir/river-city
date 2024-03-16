@@ -5963,7 +5963,7 @@ $userPrivileges->estimate->expenses === 'on')
                             console.log("Items data:", itemsData);
 
                             // Find the corresponding item data based on item_id
-                            var correspondingItemData = itemsData.find(item => item.item_id === currentItem.item_id);
+                            var correspondingItemData = itemsData.find(item => item.item_id == currentItem.item_id);
                             // console.log(correspondingItemData);
                             // Assuming currentItem has properties 'name' and 'quantity'
                             var itemNameInput = $('#template_item_name');
