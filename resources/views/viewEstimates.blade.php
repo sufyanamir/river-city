@@ -5955,13 +5955,14 @@ $userPrivileges->estimate->expenses === 'on')
                         var itemTemplate = response.data.item_template;
                         var itemTemplateItems = response.data.item_template_items;
                         var itemsData = response.data.items_data;
+                        console.log(itemsData);
 
                         for (var i = 0; i < itemTemplateItems.length; i++) {
                             var currentItem = itemTemplateItems[i];
 
                             // Find the corresponding item data based on item_id
                             var correspondingItemData = itemsData.find(item => item.item_id === currentItem.item_id);
-                            console.log(correspondingItemData);
+                            // console.log(correspondingItemData);
                             // Assuming currentItem has properties 'name' and 'quantity'
                             var itemNameInput = $('#template_item_name');
                             // var itemQtyInput = $('#template_item_qty');
