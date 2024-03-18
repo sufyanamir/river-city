@@ -4,6 +4,13 @@
 <script src="{{ asset('assets/js/fontawesome.js') }}" crossorigin="anonymous"></script>
 @vite('resources/css/app.css')
 <link rel="stylesheet" href="{{ asset('assets/css/fancybox.min.css') }}" />
+<style>
+    .photos {
+        /* width: 100%;
+        aspect-ratio: 3/2; */
+        height: 70%;
+    }
+</style>
 <form action="/acceptProposal/{{ $estimate->estimate_id }}" method="post">
     @csrf
     <div class="my-4">
@@ -58,6 +65,22 @@
                         </p>
                     </div>
                 </div>
+                <div class=" col-span-12 mx-auto">
+                    <div class=" flex gap-6">
+                        <div>
+                            <img src="{{asset('assets/images/PCA-Logo-RGB .png')}}" class=" photos" alt="image">
+                        </div>
+                        <div>
+                            <img src="{{asset('assets/images/2023BOW_GoldWInner.png')}}" class=" photos" alt="image">
+                        </div>
+                        <div>
+                            <img src="{{asset('assets/images/Lead-Safe-EPA-Certified-Firm .png')}}" class=" photos" alt="image">
+                        </div>
+                        <div>
+                            <img src="{{asset('assets/images/workmanship.png')}}" class=" photos" alt="image">
+                        </div>
+                    </div>
+                </div>
                 <div class="col-span-12 p-4">
                     <div class="heading bg-[#930027] ">
                         <p class="text-white  py-2 px-4">
@@ -94,9 +117,9 @@
                                         <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                                             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                                 <tr>
-                                                    <th scope="col" class="px-6 py-3">
+                                                    <!-- <th scope="col" class="px-6 py-3">
 
-                                                    </th>
+                                                    </th> -->
                                                     <th scope="col" class="px-6 py-3">
                                                         Item Name
                                                     </th>
@@ -114,10 +137,10 @@
                                             <tbody>
                                                 @foreach ($itemss as $item)
                                                 <tr class="bg-white border-b">
-                                                    <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                                    <!-- <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                         <input type="checkbox" disabled name="privileges[reports][view]" id="privilegeReportsView">
                                                         <label for="privilegeReportsView" class=" text-gray-500"></label>
-                                                    </th>
+                                                    </th> -->
                                                     <td class="px-6 py-4">
                                                         <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
                                                     </td>
@@ -216,7 +239,7 @@
                                     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                             <tr>
-                                                <th scope="col" class="px-6 py-3">Check</th>
+                                                <!-- <th scope="col" class="px-6 py-3">Check</th> -->
                                                 <th scope="col" class="px-6 py-3">
                                                     Item Name
                                                 </th>
@@ -243,10 +266,10 @@
                                             $itemName = App\Models\Items::where('item_id', $item->item_id)->first();
                                             @endphp
                                             <tr class="bg-white border-b">
-                                                <td class="px-6 py-4">
+                                                <!-- <td class="px-6 py-4">
                                                     <input type="checkbox" disabled name="privileges[reports][view]" id="privilegeReportsView">
                                                     <label for="privilegeReportsView" class=" text-gray-500"></label>
-                                                </td>
+                                                </td> -->
                                                 <td class="px-6 py-4">
                                                     <label class="text-lg font-semibold text-[#323C47]" for="">{{ $itemName->item_name }}</label>
                                                 </td>
@@ -287,9 +310,9 @@
                                     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                             <tr>
-                                                <th scope="col" class="px-6 py-3">
+                                                <!-- <th scope="col" class="px-6 py-3">
 
-                                                </th>
+                                                </th> -->
                                                 <th scope="col" class="px-6 py-3">
                                                     Item Name
                                                 </th>
@@ -310,10 +333,10 @@
                                         <tbody>
                                             @foreach($upgrades as $upgrade)
                                             <tr class="bg-white border-b">
-                                                <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                                <!-- <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                     <input type="checkbox" disabled name="privileges[reports][view]" id="privilegeReportsView">
                                                     <label for="privilegeReportsView" class=" text-gray-500"></label>
-                                                </th>
+                                                </th> -->
                                                 <td class="px-6 py-4">
                                                     <label class="text-lg font-semibold text-[#323C47]" for="">{{ $upgrade->item_name }}</label>
                                                 </td>
@@ -441,25 +464,70 @@
             <div class="col-span-12 p-4">
                 <div class=" mt-5">
                     <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
+                        Required Deposit
+                    </p>
+                    <p class="text-[#858585] pt-2 text-justify">
+                        A nonrefundable 1/3 deposit is required for all projects due at the time of scheduling to secure your spot on our schedule. The remaining balance will be due upon completion.
+                    </p>
+                    <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
+                        Final Walkthrough
+                    </p>
+                    <p class="text-[#858585] pt-2 text-justify">
+                        If final walkthrough is unable to be done within 3 days of project completion then customer will be sent final invoice for full amount and payment is due.
+                    </p>
+                    <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
+                        Color Policy
+                    </p>
+                    <p class="text-[#858585] pt-2 text-justify">
+                        Please list all color numbers and names with specified areas to be painted and email to <a class="text-blue-400" href="https://paintwichita.com/">info@paintwichita.com</a> no later than three days before your projected start date. You may also call (316) 262-3289 to list your colors. Prices may vary for multiple color schemes , deep colors, and accent walls that are not noted on your estimate.
+                    </p>
+                    <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
+                        Paint Samples
+                    </p>
+                    <p class="text-[#858585] pt-2 text-justify">
+                        Sample colors can be done at the request of customer when project starts but before full paint quantities have been purchased. If customer requests samples to be painted prior to work beginning then customer will be charged one additional labor hour rate of $48 per hour. If full paint quantities have been purchased and customer requests to make a color change, customer will be billed AT COST for purchase of paint as large paint orders cannot be returned.
+                    </p>
+                    <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
+                        Professional Standards
+                    </p>
+                    <p class="text-[#858585] pt-2 text-justify">
+                        Our company follows professional standards from guidelines of the “Painting Contractors of America” for all touch-ups and damage repair, please refer to PCA P1-92. Inspection of completed work will be done by the customer according to PCA Standards (Painting Contractors of America) which states: “In order to determine whether a surface has been “properly painted” it shall be examined without magnification at a distance of thirty-nine (39) inches or one (1) meter, or more, under finished lighting conditions and from a normal viewing position.”
+                    </p>
+                    <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
+                        Quality Standards
+                    </p>
+                    <p class="text-[#858585] pt-2 text-justify">
+                        We will only use the finest quality products as an investment in your property. NOTE: some degree of yellowing must be expected with the aging of all paints. Rework caused by others will be completed at an hourly rate of $95.00 per hour, with a minimum of two hours. Change Order: Any changes from original will need to be brought to the attention of Project Manager of River City Painting office so that a change order can be completed and approved by customer. We will not deviate from original work order unless all items and pricing have been approved.
+                    </p>
+                    <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
+                        Photographs
+                    </p>
+                    <p class="text-[#858585] pt-2 text-justify">
+                        River City Painting, Inc. assumes the right to take photographs of all work performed on your site to use in our advertising and marketing efforts.
+                    </p>
+                    <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
+                        General
+                    </p>
+                    <p class="text-[#858585] pt-2 text-justify">
+                        An area in the garage or a place to park the River City Painting trailer may be needed to store materials, tools, and equipment during the course of your project. River City Painting would like permission to set a yard sign during work. Any damage such as dry rot, termites, mold, etc. may not be apparent during initial inspection for a variety of reasons. Any damage or additional work required that was not on the original estimate will be discussed with the homeowner prior to any repairs being completed. The job site will be kept clean and debris will be hauled away upon completion. The customer shall not directly or indirectly interfere with River City Painting crew members in any way during the project. This stops the flow of the painter and disrupts the pattern and final outcome. Customer interference may result in additional labor and/or material charges. We cannot be held responsible for after-the-fact items, which could result in us having to stop in the middle of a project. We have an Office staff as well as a project manager staffed during business hours to assist you with anything you need, so feel free to give us a call. Customer agrees to allow access to project area of customers’ home between the hours of 8:30am - 5:00pm, Mon-Fri from the start of the project through completion. Hours/days spent at customer home can vary due to a number of variables. Employee and/or contractor may come and go during the above hours/days, according to what is most efficient each day to complete the job correctly. Sometimes there are circumstances that arise where we may ask to work outside of the above hours but we will always receive your permission before doing so. We do our best to keep you informed of the process but you are always welcome to check with your project manager or the office anytime you have questions. River City Painting, Inc. is a member of the Wichita Executives Association, Painting Contractors of America, and The Better Business Bureau. We are fully insured for your protection! ESTIMATES ARE FOR COMPLETING THE JOB AS DESCRIBED IN THE ESTIMATE. IT IS A SET PRICE PER JOB AND IS BASED UPON OUR EVALUATION. IT DOES NOT INCLUDE INCREASES FOR ADDITIONAL LABOR OR MATERIALS WHICH MAY BE REQUIRED SHOULD UNFORESEEN PROBLEMS ARISE. ALL WORKMANSHIP IS GUARANTEED FOR THREE YEARS WITH THE EXCEPTION OF DECK PAINTING/STAINING AND GENERAL STAINING WHICH IS NOT WARRANTIED. THE PRICES INCLUDED IN YOUR ESTIMATE ARE FOR COMPLETE JOB BOOKING. SHOULD YOU DECIDE ON ONLY A PORTION OF THE ESTIMATE, PRICING MAY VARY, AS WE GIVE PRICE BREAKS ON LARGER ESTIMATES. Any changes to the specifications above must be requested by the Client and approved by the Project Manager. Additional charges may apply and will be payable upon completion. All agreements are contingent based upon weather changes during and prior to your project that is outside of our control.
+                    </p>
+                    <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
                         Acceptance
                     </p>
-                    <p class="text-[#858585] pt-2">
-                        I acknowledge that I have read, understand and agree to what is included in the work described
-                        in this
-                        document and I agree to the price noted above and the terms and the contract conditions included
-                        below.
+                    <p class="text-[#858585] pt-2 text-justify">
+                        The above prices, specifications, and conditions are satisfactory and are hereby accepted. You are authorized to do the work as specified. Payment will be made as outlined above. Both parties agree to a three-day (3) right to cancel on all signed/dated contracts. "YOU THE BUYER, MAY CANCEL THIS TRANSACTION AT ANY TIME PRIOR TO MIDNIGHT OF THE THIRD BUSINESS DAY AFTER THE DATE OF THIS TRANSACTION. SEE THE ATTACHED NOTICE OF CANCELLATION FORM FOR AN EXPLANATION OF THIS RIGHT." For purposes of the required notices under this section, the term "buyer" shall have the same meaning as the term "consumer" Final Payment Terms The customer agrees to pay the entire remaining balance owed for their project on the day of completion/installation. Failure to do so will result in a 10% weekly late fee for the first six weeks and an 18% monthly interest fee from six weeks (added to the balance owed), until paid in full. The customer will also be responsible for all attorney/ legal/court/lien fees paid by the contractor to collect payment.
                     </p>
                     <p class="text-[25px]/[29.23px] mt-4 font-bold text-[#323C47]">
                         Compensation
                     </p>
-                    <p class="text-[#858585] pt-2">
+                    <p class="text-[#858585] pt-2 text-justify">
                         Client shall pay as set forth in this document. Price is subject to change, with customer’s
                         approval
                     </p>
                     <p class="text-[25px]/[29.23px] mt-4 font-bold text-[#323C47]">
                         Invocing & Payment
                     </p>
-                    <p class="text-[#858585] pt-2">
+                    <p class="text-[#858585] pt-2 text-justify">
                         Invoice will be issued to Client upon Completion of the work client shall pay
                         invoice within 10 days of client’s receipt of the invoice. Client shall also pay a late charge
                         of 1-1/2% per month
@@ -509,15 +577,15 @@
                         </button>
                     </div>
                     <!-- task details -->
-                    <div class=" text-center grid grid-cols-1 gap-2">
-                        <div class=" my-2 mx-auto">
+                    <div class=" text-center grid grid-cols-1 gap-2 bg-gray-200">
+                        <div class=" my-2 mx-auto bg-white">
                             <canvas id="signatureCanvas" class="border"></canvas>
                         </div>
                     </div>
                     <div>
                         <input type="checkbox" name="privileges[estimate][files]" id="Acknowledgement">
-                        <label for="Acknowledgement" class=" text-gray-500">
-                        I hereby acknowledge that I have reviewed and accepted the scope of work detailed in the estimate. I understand that any modifications to the project will constitute a 'Change Order' and could lead to adjustments in the total cost. Additionally, I acknowledge that deposits are non-refundable.
+                        <label for="Acknowledgement" class=" text-gray-500 text-justify">
+                            I hereby acknowledge that I have reviewed and accepted the scope of work detailed in the estimate. I understand that any modifications to the project will constitute a 'Change Order' and could lead to adjustments in the total cost. Additionally, I acknowledge that deposits are non-refundable.
                         </label>
                     </div>
                     <div class="">
