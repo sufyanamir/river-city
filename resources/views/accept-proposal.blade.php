@@ -139,7 +139,7 @@
                                                     <td class="text-center">
                                                         {{ $item->item_total }}
                                                     </td>
-                                                    @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
+                                                    <!-- @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
                                                 <tr>
                                                     <td colspan="7">
                                                         <div class="">
@@ -192,16 +192,16 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                @endif
+                                                @endif -->
                                                 </tr>
+                                                @php
+                                                $subTotal += $item->item_total; // Add item price to total
+                                                @endphp
                                                 @endforeach
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
-                                @php
-                                $subTotal += $item->item_total; // Add item price to total
-                                @endphp
                                 @endforeach
                             </div>
                             @endif
@@ -273,6 +273,7 @@
                             </div>
                         </div>
                         @endforeach
+                        @if(count($upgrades) > 0)
                         <div class="mb-2 bg-white shadow-xl">
                             <div class=" p-1 bg-[#930027] text-white w-full rounded-t-lg">
                                 <div class="inline-block">
@@ -404,6 +405,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                     </div>
                     <div class="mt-5 font-medium">
                         <div class="flex justify-end gap-6">
