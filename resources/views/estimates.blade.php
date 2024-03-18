@@ -34,7 +34,7 @@
                         @foreach ($estimates as $item)
                         <tr>
                             <td>{{$item->estimate_id}}</td>
-                            <td>{{ date('d, F Y', strtotime($item->created_at)) }}</td>
+                            <td>{{ date('m-d-Y', strtotime($item->created_at)) }}</td>
                             <td>
                                 <a href="/viewEstimate/{{ $item->estimate_id }}" class=" text-[#930027] hover:border-b hover:border-[#930027]">
                                     {{ ucwords($item->customer_name) }} {{ ucwords($item->customer_last_name) }} {{ isset($item->customer->customer_company_name) ? '('.$item->customer->customer_company_name.')' : '' }}
