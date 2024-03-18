@@ -82,13 +82,13 @@ $userPrivileges = session('user_details')['user_privileges'];
                             {{ date('d, F Y', strtotime($estimate->created_at)) }}
                         </p>
                         <p class="mt-1 text-red-900">
-                            Total: ${{ $estimate->estimate_total }}
+                            Total: ${{ number_format($estimate->estimate_total, 2) }}
                         </p>
                         <p class="flex justify-end text-blue-900">
-                            Invoiced: ${{ $estimate->invoiced_payment }}
+                            Invoiced: ${{ number_format($estimate->invoiced_payment, 2) }}
                         </p>
                         <p class="flex justify-end text-green-900">
-                            Paid: ${{ $estimate->invoice_paid_total }}
+                            Paid: ${{ number_format($estimate->invoice_paid_total, 2) }}
                         </p>
 
                     </div>
@@ -1067,6 +1067,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                 <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Grand Total</span>
                 <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
             </div>
+            <br>
         </div>
     </div>
 </div>

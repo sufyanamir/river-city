@@ -25,7 +25,7 @@
                 <x-dashboard-cards :title="'Total Customers'" :value="count($customers)" :img="'dashboard-graphs.svg'"></x-dashboard-cards>
                 <x-dashboard-cards :title="'Total Staff'" :value="count($staff)" :img="'dashboard-users.svg'"></x-dashboard-cards>
                 <x-dashboard-cards :title="'Confirm Orders'" :value="count($confirm_orders)" :img="'dashboard-orders.svg'"></x-dashboard-cards>
-                <x-dashboard-cards :title="'Total Revenue'" :value="$revenue" :img="'dashboard-dollar.svg'"></x-dashboard-cards>
+                <x-dashboard-cards :title="'Total Revenue'" :value="number_format($revenue, 2)" :img="'dashboard-dollar.svg'"></x-dashboard-cards>
             </div>
         @endif
     </div>
@@ -46,7 +46,7 @@
                     </div>
                     <div class=" p-2 my-auto text-center">
                         <div class=" my-2">
-                            <h2 class=" text-2xl font-semibold">${{ $revenue }}</h2>
+                            <h2 class=" text-2xl font-semibold">${{ number_format($revenue, 2) }}</h2>
                         </div>
                         <div class=" my-2">
                             <p class=" text-sm text-gray-300">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
@@ -54,8 +54,9 @@
                                 do</p>
                         </div>
                         <div class=" mt-7">
-                            <button class=" text-[#930027a8] bg-[#FFE0AE] p-4 font-semibold rounded-full">See
-                                More</button>
+                            <a href="/estimates">
+                                <button class=" text-[#930027a8] bg-[#FFE0AE] p-4 font-semibold rounded-full">See More</button>
+                            </a>
                         </div>
                     </div>
                     <div class=" p-2 my-full">
@@ -122,11 +123,17 @@
                                     <tr>
                                         <td>{{ date('d, F Y', strtotime($item['estimate']->created_at)) }}</td>
                                         <td>
-                                            <h3 class="text-lg font-medium">{{ $item['estimate']->customer_name }}
-                                                {{ $item['estimate']->customer_last_name }}</h3>
+                                            <h3 class="text-lg font-medium">
+                                                <a href="/viewEstimate/{{$item['estimate']->estimate_id}}">
+                                                    {{ $item['estimate']->customer_name }}
+                                                    {{ $item['estimate']->customer_last_name }}
+                                                </a>
+                                            </h3>
                                         </td>
                                         <td>
-                                            <p class="text-[#323C47]">{{ $item['estimate']->customer_address }}</p>
+                                            <a href="https://maps.google.com/?q={{ $item['estimate']->customer_address }}">
+                                                <p class="text-[#323C47]">{{ $item['estimate']->customer_address }}</p>
+                                            </a>
                                         </td>
                                         <td class=" pl-8">
                                             <a href="/viewEstimateMaterials/{{ $item['schedule_estimate']->estimate_id }}"
@@ -222,7 +229,7 @@
                                             </form>
                                         </div>
                                         <div class=" inline-block font-semibold">
-                                            <p>{{ $todo->to_do_title }}</p>
+                                            <p>{{ $todo->to_do_title }} ({{$todo->start_date}})</p>
                                         </div>
                                     </div>
                                     <div>
@@ -292,8 +299,12 @@
                                                 <td>{{ date('d, F Y', strtotime($estimate->scheduled_end_date)) }}
                                                 </td>
                                                 <td>
-                                                    <h3 class="text-lg font-medium">{{ $estimate->customer_name }}
-                                                    </h3>
+                                                <h3 class="text-lg font-medium">
+                                                <a href="/viewEstimate/{{$estimate->estimate_id}}">
+                                                    {{ $estimate->customer_name }}
+                                                    {{ $estimate->customer_last_name }}
+                                                </a>
+                                            </h3>
                                                 </td>
                                                 <td>
                                                     <a href="https://maps.google.com/?q={{ $estimate->customer_address }}"
@@ -312,8 +323,12 @@
                                         <tr>
                                             <td>{{ date('d, F Y', strtotime($estimate->created_at)) }}</td>
                                             <td>
-                                                <h3 class="text-lg font-medium">{{ $estimate->customer_name }}
-                                                </h3>
+                                            <h3 class="text-lg font-medium">
+                                                <a href="/viewEstimate/{{$estimate->estimate_id}}">
+                                                    {{ $estimate->customer_name }}
+                                                    {{ $estimate->customer_last_name }}
+                                                </a>
+                                            </h3>
                                             </td>
                                             <td>
                                                 <a href="https://maps.google.com/?q={{ $estimate->customer_address }}"
@@ -403,7 +418,7 @@
                                             </form>
                                         </div>
                                         <div class=" inline-block font-semibold">
-                                            <p>{{ $todo->to_do_title }}</p>
+                                            <p>{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('d, F Y', strtotime($todo->start_date))}}) - End date:({{date('d, F Y', strtotime($todo->end_date))}})</span></p>
                                         </div>
                                     </div>
                                     <div>
