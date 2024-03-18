@@ -556,6 +556,19 @@
                 <!-- <span class="bg-[#930027] text-white p-2 rounded-md">Proposal Accepted</span> -->
                 @endif
                 @endif
+                @if(session()->has('user_details'))
+                @if($estimate->estimate_total != null)
+                <div>
+                    <div>
+                        <img src="{{$estimate->customer_signature}}" alt="Customer Signature">
+                    </div>
+                    <hr>
+                    <div class=" text-center">
+                        <p class="text-[#930027]">Proposal Accepted</p>
+                    </div>
+                </div>
+                @endif
+                @endif
             </div>
         </div>
     </div>
