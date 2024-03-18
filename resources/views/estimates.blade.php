@@ -20,13 +20,13 @@
                     <thead class="bg-[#930027] text-white text-sm">
                         <tr>
                             <th></th>
+                            <th>Date</th>
                             <th>Name</th>
                             <th>Phone Number/Address</th>
                             <th>Type</th>
                             <th>Schedular Assigned</th>
                             <th>Crew Leader</th>
                             <th>Status</th>
-                            <th>Date</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -34,6 +34,7 @@
                         @foreach ($estimates as $item)
                         <tr>
                             <td>{{$item->estimate_id}}</td>
+                            <td>{{ date('d, F Y', strtotime($item->created_at)) }}</td>
                             <td>
                                 <a href="/viewEstimate/{{ $item->estimate_id }}" class=" text-[#930027] hover:border-b hover:border-[#930027]">
                                     {{ ucwords($item->customer_name) }} {{ ucwords($item->customer_last_name) }} {{ isset($item->customer->customer_company_name) ? '('.$item->customer->customer_company_name.')' : '' }}
@@ -73,7 +74,6 @@
                                 <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">Canceled</span>
                             </td>
                             @endif
-                            <td>{{ date('d, F Y', strtotime($item->created_at)) }}</td>
                             <td>
                                 <div class=" flex justify-evenly gap-2">
                                     <div class=" my-auto">
