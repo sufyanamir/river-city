@@ -645,52 +645,93 @@
 
 <script>
     $(document).ready(function() {
-        // Signature Canvas
-        var canvas = document.getElementById('signatureCanvas');
-        var ctx = canvas.getContext('2d');
-        var drawing = false;
-        var lastX, lastY;
+    // Signature Canvas
+    var canvas = document.getElementById('signatureCanvas');
+    var ctx = canvas.getContext('2d');
+    var drawing = false;
+    var lastX, lastY;
 
-        canvas.addEventListener('mousedown', function(e) {
-            drawing = true;
-            lastX = e.offsetX;
-            lastY = e.offsetY;
-        });
+    // Function to get touch coordinates relative to canvas element
+    function getTouchPos(canvasDom, touchEvent) {
+        var rect = canvasDom.getBoundingClientRect();
+        return {
+            x: touchEvent.touches[0].clientX - rect.left,
+            y: touchEvent.touches[0].clientY - rect.top
+        };
+    }
 
-        canvas.addEventListener('mousemove', function(e) {
-            if (drawing === true) {
-                drawLine(ctx, lastX, lastY, e.offsetX, e.offsetY);
-                lastX = e.offsetX;
-                lastY = e.offsetY;
-            }
-        });
+    // Event listener for touchstart event
+    canvas.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        var touchPos = getTouchPos(canvas, e);
+        lastX = touchPos.x;
+        lastY = touchPos.y;
+        drawing = true;
+    }, false);
 
-        canvas.addEventListener('mouseup', function() {
-            drawing = false;
-        });
-
-        function drawLine(context, x1, y1, x2, y2) {
-            context.beginPath();
-            context.strokeStyle = '#000';
-            context.lineWidth = 2;
-            context.moveTo(x1, y1);
-            context.lineTo(x2, y2);
-            context.stroke();
-            context.closePath();
+    // Event listener for touchmove event
+    canvas.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+        if (drawing) {
+            var touchPos = getTouchPos(canvas, e);
+            drawLine(ctx, lastX, lastY, touchPos.x, touchPos.y);
+            lastX = touchPos.x;
+            lastY = touchPos.y;
         }
+    }, false);
 
-        // Function to update the hidden input field with the latest drawing data
-        function updateDrawingData() {
-            // Convert canvas to data URL
-            var dataURL = canvas.toDataURL();
-            // Set the data URL as the value of the hidden input field
-            $('#drawingData').val(dataURL);
-        }
+    // Event listener for touchend event
+    canvas.addEventListener('touchend', function() {
+        drawing = false;
+    }, false);
 
-        // Event listeners to update drawing data on canvas drawing events
-        canvas.addEventListener('mousemove', updateDrawingData);
-        canvas.addEventListener('touchmove', updateDrawingData);
+    // Event listener for mousedown event
+    canvas.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        drawing = true;
+        lastX = e.offsetX || e.clientX - canvas.getBoundingClientRect().left;
+        lastY = e.offsetY || e.clientY - canvas.getBoundingClientRect().top;
     });
+
+    // Event listener for mousemove event
+    canvas.addEventListener('mousemove', function(e) {
+        e.preventDefault();
+        if (drawing) {
+            var mouseX = e.offsetX || e.clientX - canvas.getBoundingClientRect().left;
+            var mouseY = e.offsetY || e.clientY - canvas.getBoundingClientRect().top;
+            drawLine(ctx, lastX, lastY, mouseX, mouseY);
+            lastX = mouseX;
+            lastY = mouseY;
+        }
+    });
+
+    // Event listener for mouseup event
+    canvas.addEventListener('mouseup', function() {
+        drawing = false;
+    });
+
+    // Function to draw a line on the canvas
+    function drawLine(context, x1, y1, x2, y2) {
+        context.beginPath();
+        context.strokeStyle = '#000';
+        context.lineWidth = 2;
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+        context.stroke();
+        context.closePath();
+    }
+
+    // Function to update the hidden input field with the latest drawing data
+    function updateDrawingData() {
+        var dataURL = canvas.toDataURL();
+        $('#drawingData').val(dataURL);
+    }
+
+    // Event listeners to update drawing data on canvas drawing events
+    canvas.addEventListener('mousemove', updateDrawingData);
+    canvas.addEventListener('touchmove', updateDrawingData);
+});
+
 </script>
 <script>
     $(document).ready(function() {
