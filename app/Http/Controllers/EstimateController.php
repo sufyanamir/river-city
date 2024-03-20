@@ -1489,53 +1489,56 @@ class EstimateController extends Controller
     }
 
     public function sendEmail(Request $request)
-    {
-        try {
-            $userDetails = session('user_details');
+{
+    try {
+        $userDetails = session('user_details');
 
-            $validatedData = $request->validate([
-                'estimate_id' => 'required',
-                'email_id' => 'required|integer',
-                'email_name' => 'required|string',
-                'email_to' => 'required|string',
-                'email_subject' => 'nullable|string',
-                'email_body' => 'required|string',
-            ]);
+        $validatedData = $request->validate([
+            'estimate_id' => 'required',
+            'email_id' => 'required|integer',
+            'email_name' => 'required|string',
+            'email_to' => 'required|string',
+            'email_subject' => 'nullable|string',
+            'email_body' => 'required|string',
+        ]);
 
-            $emailData = [
-                'estimate_id' => $validatedData['estimate_id'],
-                'email_id' => $validatedData['email_id'],
-                'email_name' => $validatedData['email_name'],
-                'email_to' => $validatedData['email_to'],
-                'email_subject' => $validatedData['email_subject'],
-                'email_body' => $validatedData['email_body'],
-            ];
 
-            // Create an instance of the Mailable class
-            $mail = new sendMailToClient($emailData);
 
-            // Send the email using the Mail facade
-            Mail::to($validatedData['email_to'])
-                ->send($mail);
+        $emailData = [
+            'estimate_id' => $validatedData['estimate_id'],
+            'email_id' => $validatedData['email_id'],
+            'email_name' => $validatedData['email_name'],
+            'email_to' => $validatedData['email_to'],
+            'email_subject' => $validatedData['email_subject'],
+            'email_body' => $validatedData['email_body'], // Use the modified email body
+        ];
 
-            // Assuming you want to save the email data in the database
-            $mail = EstimateEmail::create([
-                'added_user_id' => $userDetails['id'],
-                'estimate_id' => $validatedData['estimate_id'],
-                'email_id' => $validatedData['email_id'],
-                'email_name' => $validatedData['email_name'],
-                'email_to' => $validatedData['email_to'],
-                'email_subject' => $validatedData['email_subject'],
-                'email_body' => $validatedData['email_body'],
-            ]);
+        // Create an instance of the Mailable class
+        $mail = new sendMailToClient($emailData);
 
-            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Email Sent', "An Email has been sent to the Customer. The Subject of the email is " . $validatedData['email_subject'] . ".");
+        // Send the email using the Mail facade
+        Mail::to($validatedData['email_to'])
+            ->send($mail);
 
-            return response()->json(['success' => true, 'message' => 'Email sent to the client!'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
-        }
+        // Assuming you want to save the email data in the database
+        $mail = EstimateEmail::create([
+            'added_user_id' => $userDetails['id'],
+            'estimate_id' => $validatedData['estimate_id'],
+            'email_id' => $validatedData['email_id'],
+            'email_name' => $validatedData['email_name'],
+            'email_to' => $validatedData['email_to'],
+            'email_subject' => $validatedData['email_subject'],
+            'email_body' => $validatedData['email_body'], // Use the modified email body
+        ]);
+
+        $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Email Sent', "An Email has been sent to the Customer. The Subject of the email is " . $validatedData['email_subject'] . ".");
+
+        return response()->json(['success' => true, 'message' => 'Email sent to the client!'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
     }
+}
+
     // estimate emails
 
     // delete estimate note
