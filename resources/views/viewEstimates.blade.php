@@ -502,6 +502,14 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                         </svg>
                         </button> --}}
+                        @if($estimate->estimate_total != null)
+                        <button id="copyButton" class="flex h-[40px] w-[190px] ml-2 p-2 py-auto text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                            <div class="flex mx-auto">
+                                <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
+                                <span class="my-auto">Copy proposal Link</span>
+                            </div>
+                        </button>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -6425,4 +6433,33 @@ $userPrivileges->estimate->expenses === 'on')
         // Set the value of the input field to the next date
         $('.en_date').val(nextDate);
     });
+</script>
+<script>
+document.getElementById("copyButton").addEventListener("click", function() {
+    // Get the URL
+    var url = "soft.rivercitypainting.tech/viewProposal/{{$estimate->estimate_id}}";
+
+    // Create a temporary input element
+    var input = document.createElement('input');
+    input.setAttribute('value', url);
+    document.body.appendChild(input);
+
+    // Select the text in the input
+    input.select();
+    input.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the text to the clipboard
+    document.execCommand('copy');
+
+    // Remove the temporary input
+    document.body.removeChild(input);
+
+    // Optionally, provide some feedback to the user
+    // alert("URL copied to clipboard: " + url);
+    Swal.fire(
+      'Success!',
+      'URL copied to clipboard',
+      'success'
+    );
+});
 </script>
