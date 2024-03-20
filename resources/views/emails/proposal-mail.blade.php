@@ -13,6 +13,11 @@
             font-size: small;
             /* color: #f5f5f5; */
         }
+        @media(max-width:1016px){
+            .footerImage{
+                height: 50px !important;
+            }
+        }
     </style>
 </head>
 
@@ -25,10 +30,10 @@
         <p><b>Thank You!</b></p>
         <i>Team <a href="https://paintwichita.com/">River City</a></i>
         <div style="text-align: left !important;">
-            <img src="{{ $message->embed(public_path().'/assets/images/PCA-Logo-RGB .png') }}" style="height: 100px !important;" alt="Image">
-            <img src="{{ $message->embed(public_path().'/assets/images/2023BOW_GoldWInner.png') }}" style="height: 100px !important;" alt="Image">
-            <img src="{{ $message->embed(public_path().'/assets/images/Lead-Safe-EPA-Certified-Firm .png') }}" style="height: 100px !important;" alt="Image">
-            <img src="{{ $message->embed(public_path().'/assets/images/workmanship.png') }}" style="height: 100px !important;" alt="Image">
+            <img src="{{ $message->embed(public_path().'/assets/images/PCA-Logo-RGB .png') }}" class="footerImage" style="height: 100px;" alt="Image">
+            <img src="{{ $message->embed(public_path().'/assets/images/2023BOW_GoldWInner.png') }}" class="footerImage" style="height: 100px;" alt="Image">
+            <img src="{{ $message->embed(public_path().'/assets/images/Lead-Safe-EPA-Certified-Firm .png') }}" class="footerImage" style="height: 100px;" alt="Image">
+            <img src="{{ $message->embed(public_path().'/assets/images/workmanship.png') }}" class="footerImage" style="height: 100px;" alt="Image">
         </div>
     </div>
 </body>
