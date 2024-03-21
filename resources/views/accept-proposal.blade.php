@@ -160,7 +160,7 @@
                                                         {{ $item->item_qty }} <br> {{ $item->item_unit }}
                                                     </td>
                                                     <td class="text-center">
-                                                        {{ $item->item_total }}
+                                                        ${{ $item->item_total }}
                                                     </td>
                                                     <!-- @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
                                                 <tr>
@@ -280,10 +280,10 @@
                                                     <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_qty'] }}</label> <br> {{$itemName->item_units}}
                                                 </td>
                                                 <td class="px-6 py-4">
-                                                    <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_price'] }}</label>
+                                                    <label class="text-lg font-semibold text-[#323C47]" for="">${{ $item['item_price'] }}</label>
                                                 </td>
                                                 <td class="px-6 py-4">
-                                                    <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_total'] }}</label>
+                                                    <label class="text-lg font-semibold text-[#323C47]" for="">${{ $item['item_total'] }}</label>
                                                 </td>
                                             </tr>
                                             @php
@@ -356,7 +356,7 @@
                                                     {{ $upgrade->item_qty }} <br> {{ $upgrade->item_unit }}
                                                 </td>
                                                 <td class="text-center">
-                                                    {{ $upgrade->item_total }}
+                                                    ${{ $upgrade->item_total }}
                                                     <input type="hidden" id="upgrade_total" value="{{$upgrade->item_total}}">
                                                 </td>
                                                 <td>
@@ -452,7 +452,7 @@
                                 </p>
                                 <p class="text-[#858585]">
 
-                                    <span id="dynamic-total">{{ number_format($subTotal + ($subTotal * $customer->tax_rate) / 100, 2) }}</span>
+                                    <span id="dynamic-total">${{ number_format($subTotal + ($subTotal * $customer->tax_rate) / 100, 2) }}</span>
                                     <input type="hidden" id="dynamic_total_input" value="{{$subTotal + ($subTotal * $customer->tax_rate) / 100}}">
                                 </p>
                             </div>
@@ -525,7 +525,7 @@
                         approval
                     </p>
                     <p class="text-[25px]/[29.23px] mt-4 font-bold text-[#323C47]">
-                        Invocing & Payment
+                        Invoicing & Payment
                     </p>
                     <p class="text-[#858585] pt-2 text-justify">
                         Invoice will be issued to Client upon Completion of the work client shall pay

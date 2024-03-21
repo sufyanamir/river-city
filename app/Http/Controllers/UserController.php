@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\AddUserMail;
+use App\Mail\ForgotPasswordMail;
 use App\Models\Company;
 use App\Models\Email;
 use App\Models\User;
@@ -25,6 +26,68 @@ class UserController extends Controller
         $this->userDetails = Session::get('user_details');
     }
     // ================================================== settings =====================================================================
+
+    public function updatePassword(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'user_id' => 'required',
+                'new_password' => 'required',
+                'con_password' => 'required',
+            ]);
+
+            $user = User::where('id', $validatedData['user_id'])->first();
+            
+            if ($validatedData['new_password'] == $validatedData['con_password']) {
+                $user->password = md5($validatedData['new_password']);
+                
+                $user->save();
+
+                return response()->json(['success' => true, 'message' => 'Password Updated!'], 200);
+            }else {
+                return response()->json(['success' => true, 'message' => 'Password is not correct!'], 400);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function resetPassword($id)
+    {
+        $user = User::where('id', $id)->first();
+
+        return view('reset_password', ['userDetail' => $user]);
+
+    }    
+
+    public function forgotPasswordMail(Request $request){
+        try {
+            
+            $validatedData = $request->validate([
+                'email' => 'required',
+            ]);
+
+            $user = User::where('email', $validatedData['email'])->first();
+
+            if (!$user) {
+                return response()->json(['success' => false, 'message' => 'User not found!'], 404);
+            }
+
+            $emailData = [
+                'email' => $validatedData['email'],
+                'userId' => $user->id,
+            ];
+
+            $mail = new ForgotPasswordMail($emailData);
+            Mail::to($validatedData['email'])->send($mail);
+
+            return response()->json(['success' => true, 'message' => 'An email sent to your address. Please check your email.'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
 
     public function updateCompany(Request $request)
     {
@@ -439,6 +502,7 @@ class UserController extends Controller
             $password = rand();
 
             $emailData = [
+                'name' => $validatedData['firstName'] . ' ' . $validatedData['lastName'],
                 'email' => $validatedData['email'],
                 'password' => $password,
             ];
