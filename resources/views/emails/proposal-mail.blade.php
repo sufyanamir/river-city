@@ -34,7 +34,7 @@
             <img src="{{ $message->embed(public_path().'/assets/images/projectLogo.jpg') }}" alt="Hello">
         </div>
         <p><b>Hello {{ $emailData['email'] }}!</b> We have made a proposal for you of the estimate. You can view or accept the proposal through this link</p>
-        <a href="https://rivercity.thewebconcept.tech/viewProposal/{{ $emailData['estimate_id'] }}">View Proposal!</a>
+        <a href="https://soft.rivercitypainting.tech/viewProposal/{{ $emailData['estimate_id'] }}">View Proposal!</a>
         <br>
         <p><b>Thank You!</b></p>
         <i>Team <a style="color: #930027;" href="https://paintwichita.com/">River City Painting</a></i>
