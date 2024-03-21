@@ -34,7 +34,7 @@
             <img src="{{ $message->embed(public_path().'/assets/images/projectLogo.jpg') }}" alt="Hello">
         </div>
         <p><b>Hello {{ $emailData['email'] }}!</b> Please Click on the link below to reset your password.</p>
-        <a href="http://127.0.0.1:8007/resetPassword/{{ $emailData['userId'] }}">Reset Password!</a>
+        <a href="https://soft.rivercitypainting.tech/{{ $emailData['userId'] }}">Reset Password!</a>
         <br>
         <p><b>Thank You!</b></p>
         <i>Team <a style="color: #930027;" href="https://paintwichita.com/">River City Painting</a></i>
