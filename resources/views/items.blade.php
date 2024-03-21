@@ -61,8 +61,8 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <td class="w-[100px]">{{ ucwords($item->item_name) }}</td>
                             <td>{{ ucwords($item->item_type) }}</td>
                             <td>{{ ucwords($item->item_units) }}</td>
-                            <td>{{ number_format($item->item_cost, 2) }}</td>
-                            <td>{{ number_format($item->item_price, 2) }}</td>
+                            <td>${{ number_format($item->item_cost, 2) }}</td>
+                            <td>${{ number_format($item->item_price, 2) }}</td>
                             <td class=" w-[100px]">{{ ucfirst($item->item_description) }}</td>
                             <td>{{ucfirst(isset($item->group->group_name) ? $item->group->group_name : 'No Group')}}</td>
                             <td>
@@ -125,7 +125,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <label for="" class="block text-left mb-1"> Items Type</label>
                             <select id="type" name="item_type" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                                 <option value="">Select Type</option>
-                                <option value="labour">Labour</option>
+                                <option value="labour">Labor</option>
                                 <option value="material">Material</option>
                                 <option value="assemblies">Assemblies</option>
                             </select>
@@ -150,9 +150,9 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <input type="number" step="any" name="item_cost" id="item_cost" readonly placeholder="0.00" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 bg-gray-200 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class="my-2" id="labourExpense">
-                            <label for="" class="block text-left text-xs mb-1"> Labour Cost (min/<span class="unit">unit</span>)</label>
+                            <label for="" class="block text-left text-xs mb-1"> Labor Cost (min/<span class="unit">unit</span>)</label>
                             <input type="number" step="any" name="labour_expense" id="labour_expense" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                            <span class=" m-0 p-0 text-xs float-left text-gray-400">Labour Cost: ${{$company->company_labor_cost}}/hr</span>
+                            <span class=" m-0 p-0 text-xs float-left text-gray-400">Labor Cost: ${{$company->company_labor_cost}}/hr</span>
                         </div>
                         <div class="my-2" id="materialExpense">
                             <label for="" class="block text-left text-xs mb-1"> Material Cost ($/<span class="unit">unit</span>)</label>

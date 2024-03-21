@@ -35,7 +35,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                         <td>{{ $customer->customer_primary_address }}</td>
                         <td>{{ $customer->customer_phone }}</td>
                         <td>{{ $customer->customer_soource }}</td>
-                        <td>{{ $customer->addedBy->name }}</td>
+                        <td>{{ $customer->addedBy ? $customer->addedBy->name : '' }}</td>
                         <td>
                             @if(session('user_details')['user_role'] == 'admin')
                             <button id="editCustomer{{$customer->customer_id}}">

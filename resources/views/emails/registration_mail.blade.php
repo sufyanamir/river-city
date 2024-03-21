@@ -8,6 +8,8 @@
     <style>
         .container{
             text-align: center;
+            background-color: #f0f0f0;
+            border-radius: 10px;
         }
         i{
             font-size: small;
@@ -18,22 +20,29 @@
                 height: 50px !important;
             }
         }
+        .card-header{
+            background-color: #930027;
+            padding: 10px 0px 5px 0px;
+            border-radius: 10px;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <img src="{{ $message->embed(public_path().'/assets/images/projectLogo.jpg') }}" alt="Hello">
-        <p><b>Hello dear!</b> You are getting this email because you are just registered to the <b>River City</b>. You can login to your account through giving address {{ $emailData['email'] }} and the password is <b>{{ $emailData['password'] }}</b>.</p>
+        <div class="card-header">
+            <img src="{{ $message->embed(public_path().'/assets/images/projectLogo.jpg') }}" alt="Hello">
+        </div>
+        <p><b>Hello! {{$emailData['name']}}</b> You are getting this email because you are just registered to the <b>River City</b>. You can login to your account through giving address {{ $emailData['email'] }} and the password is <b>{{ $emailData['password'] }}</b>.</p>
         <br>
         <p><b>Thank You!</b></p>
-        <i>Team <a href="https://paintwichita.com/">River City</a></i>
-        <div style="text-align: left !important;">
-            <img src="{{ $message->embed(public_path().'/assets/images/PCA-Logo-RGB .png') }}" class="footerImage" style="height: 100px;" alt="Image">
-            <img src="{{ $message->embed(public_path().'/assets/images/2023BOW_GoldWInner.png') }}" class="footerImage" style="height: 100px;" alt="Image">
-            <img src="{{ $message->embed(public_path().'/assets/images/Lead-Safe-EPA-Certified-Firm .png') }}" class="footerImage" style="height: 100px;" alt="Image">
-            <img src="{{ $message->embed(public_path().'/assets/images/workmanship.png') }}" class="footerImage" style="height: 100px;" alt="Image">
-        </div>
+        <i>Team <a style="color: #930027;" href="https://paintwichita.com/">River City Painting</a></i>
+        <!-- <div style="text-align: left !important;">
+            <img src="{{ asset('assets/images/PCA-Logo-RGB .png') }}" class="footerImage" style="height: 80px;" alt="Image">
+            <img src="{{ asset('assets/images/2023BOW_GoldWInner.png') }}" class="footerImage" style="height: 80px;" alt="Image">
+            <img src="{{ asset('assets/images/Lead-Safe-EPA-Certified-Firm .png') }}" class="footerImage" style="height: 80px;" alt="Image">
+            <img src="{{ asset('assets/images/workmanship.png') }}" class="footerImage" style="height: 80px;" alt="Image">
+        </div> -->
     </div>
 </body>
 

@@ -199,9 +199,6 @@ Route::middleware('customauth')->group(function () {
     });
     Route::get('/notifications', [NotificationsController::class, 'index']);
     Route::post('/markNotifications', [NotificationsController::class, 'markNotifications']);
-    Route::get('/forgotPassword', function () {
-        return view('forgotPassword');
-    });
     Route::get('/privileges/{id}', [UserController::class, 'getUserOnPrivileges']);
     Route::post('/addUserPrivileges/{id}', [UserController::class, 'addUserPrivileges']);
     Route::get('/getprivileges/{id}', [UserController::class, 'getUserPrivileges']);
@@ -209,3 +206,9 @@ Route::middleware('customauth')->group(function () {
         return view('test');
     });
 });
+Route::get('/forgotPassword', function () {
+    return view('forgotPassword');
+});
+Route::post('/forgotPasswordMail', [UserController::class, 'forgotPasswordMail']);
+Route::get('/resetPassword/{id}', [UserController::class, 'resetPassword']);
+Route::post('/updatePassword', [UserController::class, 'updatePassword']);

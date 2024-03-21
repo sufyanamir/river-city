@@ -33,17 +33,17 @@
         <div class="card-header">
             <img src="{{ $message->embed(public_path().'/assets/images/projectLogo.jpg') }}" alt="Hello">
         </div>
-        <p><b>Hello {{ $emailData['email'] }}!</b> We have made a proposal for you of the estimate. You can view or accept the proposal through this link</p>
-        <a href="https://rivercity.thewebconcept.tech/viewProposal/{{ $emailData['estimate_id'] }}">View Proposal!</a>
+        <p><b>Hello {{ $emailData['email'] }}!</b> Please Click on the link below to reset your password.</p>
+        <a href="http://127.0.0.1:8007/resetPassword/{{ $emailData['userId'] }}">Reset Password!</a>
         <br>
         <p><b>Thank You!</b></p>
         <i>Team <a style="color: #930027;" href="https://paintwichita.com/">River City Painting</a></i>
-        <div style="text-align: left !important; padding: 10px">
+        <!-- <div style="text-align: left !important; padding: 10px">
             <img src="{{ $message->embed(public_path().'/assets/images/PCA-Logo-RGB .png') }}" class="footerImage" style="height: 80px;" alt="Image">
             <img src="{{ $message->embed(public_path().'/assets/images/2023BOW_GoldWInner.png') }}" class="footerImage" style="height: 80px;" alt="Image">
             <img src="{{ $message->embed(public_path().'/assets/images/Lead-Safe-EPA-Certified-Firm .png') }}" class="footerImage" style="height: 80px;" alt="Image">
             <img src="{{ $message->embed(public_path().'/assets/images/workmanship.png') }}" class="footerImage" style="height: 80px;" alt="Image">
-        </div>
+        </div> -->
     </div>
 </body>
 
