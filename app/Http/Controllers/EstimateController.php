@@ -551,7 +551,7 @@ class EstimateController extends Controller
         $estimate = Estimate::where('estimate_id', $id)->first();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
         $estimates = Estimate::get();
-        $users = User::where('added_user_id', $userDetails['id'])->where('user_role', 'scheduler')->get();
+        $users = User::where('user_role', 'scheduler')->get();
 
         return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users]);
         // return response()->json(['success' => true, 'estimate' => $estimate]);
