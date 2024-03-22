@@ -10,7 +10,7 @@
             text-align: center;
             background-color: #f0f0f0;
             border-radius: 10px;
-            width: 800px;
+            /* width: 800px; */
             margin: 0 auto;
         }
         i{
