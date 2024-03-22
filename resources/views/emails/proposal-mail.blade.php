@@ -10,6 +10,8 @@
             text-align: center;
             background-color: #f0f0f0;
             border-radius: 10px;
+            width: 800px;
+            margin: 0 auto;
         }
         i{
             font-size: small;
@@ -33,12 +35,17 @@
         <div class="card-header">
             <img src="{{ $message->embed(public_path().'/assets/images/projectLogo.jpg') }}" alt="Hello">
         </div>
-        <p><b>Hello {{ $emailData['email'] }}!</b> We have made a proposal for you of the estimate. You can view or accept the proposal through this link</p>
-        <a href="https://soft.rivercitypainting.tech/viewProposal/{{ $emailData['estimate_id'] }}">View Proposal!</a>
+        <p style="padding:20px 50px">Hello! <b style="color: #930027;">{{ $emailData['name'] }}</b>  <br/>
+        
+        We are pleased to present our proposal for your review. You may access the proposal via the following link</p>
+        <a href="https://soft.rivercitypainting.tech/viewProposal/" style="color: #930027;">You can see your proposal Here</a>
         <br>
+        <p>We eagerly await your feedback and hope to have the opportunity to further discuss and potentially <br/>move forward with this proposal.
+        <br/>
+            Thank you for considering our offering.</p>
         <p><b>Thank You!</b></p>
         <i>Team <a style="color: #930027;" href="https://paintwichita.com/">River City Painting</a></i>
-        <div style="text-align: left !important; padding: 10px">
+        <div style=" padding: 10px">
             <img src="{{ $message->embed(public_path().'/assets/images/PCA-Logo-RGB .png') }}" class="footerImage" style="height: 80px;" alt="Image">
             <img src="{{ $message->embed(public_path().'/assets/images/2023BOW_GoldWInner.png') }}" class="footerImage" style="height: 80px;" alt="Image">
             <img src="{{ $message->embed(public_path().'/assets/images/Lead-Safe-EPA-Certified-Firm .png') }}" class="footerImage" style="height: 80px;" alt="Image">

@@ -10,6 +10,8 @@
             text-align: center;
             background-color: #f0f0f0;
             border-radius: 10px;
+            width: 800px;
+            margin: 0 auto;
         }
         i{
             font-size: small;
@@ -33,8 +35,9 @@
         <div class="card-header">
             <img src="{{ $message->embed(public_path().'/assets/images/projectLogo.jpg') }}" alt="Hello">
         </div>
-        <p><b>Hello {{ $emailData['email'] }}!</b> Please Click on the link below to reset your password.</p>
-        <a href="https://soft.rivercitypainting.tech/resetPassword/{{ $emailData['userId'] }}">Reset Password!</a>
+        <p>Hello! <b style="color: #930027;">{{ $emailData['name'] }}</b> <br>
+         Please Click on the link below to reset your password.</p>
+        <a href="https://soft.rivercitypainting.tech/resetPassword/{{ $emailData['userId'] }}" style="color: #930027;">Reset Password!</a>
         <br>
         <p><b>Thank You!</b></p>
         <i>Team <a style="color: #930027;" href="https://paintwichita.com/">River City Painting</a></i>

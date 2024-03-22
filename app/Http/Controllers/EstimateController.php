@@ -687,7 +687,7 @@ class EstimateController extends Controller
         }
     }
 
-    public function index()
+    public function index($type = null)
     {
         $userDetails = session('user_details');
         if ($userDetails['user_role'] == 'admin') {
@@ -695,7 +695,11 @@ class EstimateController extends Controller
             $estimates = Estimate::with('scheduler', 'assigned_work', 'customer')->orderBy('created_at', 'desc')->get();
             $users = User::where('user_role', '<>', 'crew')->get();
         } elseif ($userDetails['user_role'] == 'scheduler') {
-            $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->orderBy('created_at', 'desc')->get();
+            if ($type == 'assigned') {
+                $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->orderBy('created_at', 'desc')->get();
+            }else {
+                $estimates = Estimate::with('scheduler', 'assigned_work', 'customer')->orderBy('created_at', 'desc')->get();
+            }
             $customers = Customer::get();
             $users = User::where('user_role', '<>', 'crew')->get();
         }
@@ -1381,11 +1385,12 @@ class EstimateController extends Controller
                 'estimate_total' => 'required',
             ]);
 
+            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
             $emailData = [
                 'estimate_id' => $validatedData['estimate_id'],
                 'email' => $validatedData['customer_email'],
+                'name' => $validatedData['customer_first_name'] . ' ' . $validatedData['customer_last_name'],
             ];
-            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
 
             $existingProposals = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->get();
             if (!$existingProposals->isEmpty()) {

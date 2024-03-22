@@ -124,7 +124,7 @@
                                         <td>{{ date('d, F Y', strtotime($item['estimate']->created_at)) }}</td>
                                         <td>
                                             <h3 class="text-lg font-medium">
-                                                <a href="/viewEstimate/{{$item['estimate']->estimate_id}}">
+                                                <a href="">
                                                     {{ $item['estimate']->customer_name }}
                                                     {{ $item['estimate']->customer_last_name }}
                                                 </a>
