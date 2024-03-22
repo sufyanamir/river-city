@@ -1389,7 +1389,7 @@ class EstimateController extends Controller
             $emailData = [
                 'estimate_id' => $validatedData['estimate_id'],
                 'email' => $validatedData['customer_email'],
-                'name' => $validatedData['customer_first_name'] . ' ' . $validatedData['customer_last_name'],
+                'name' => $validatedData['customer_name'] . ' ' . $validatedData['customer_last_name'],
             ];
 
             $existingProposals = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->get();
