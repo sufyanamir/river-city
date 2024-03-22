@@ -69,7 +69,7 @@ Route::middleware('customauth')->group(function () {
     //     return view('crew');
     // });
     Route::match(['get', 'post'], '/getEstimateWithImages', [EstimateController::class, 'getEstimateWithImages']);
-    Route::get('/estimates', [EstimateController::class, 'index']);
+    Route::get('/estimates/{type?}', [EstimateController::class, 'index'])->name('estimates');
     Route::post('/cancelEstimate/{id}', [EstimateController::class, 'cancelEstimate']);
     Route::post('/addEstimate', [EstimateController::class, 'addCustomerAndEstimate']);
     Route::get('/viewEstimate/{id}', [EstimateController::class, 'viewEstimate']);
@@ -202,8 +202,8 @@ Route::middleware('customauth')->group(function () {
     Route::get('/privileges/{id}', [UserController::class, 'getUserOnPrivileges']);
     Route::post('/addUserPrivileges/{id}', [UserController::class, 'addUserPrivileges']);
     Route::get('/getprivileges/{id}', [UserController::class, 'getUserPrivileges']);
-    Route::get('/test', function () {
-        return view('test');
+    Route::get('/mail', function () {
+        return view('emails.proposal-mail');
     });
 });
 Route::get('/forgotPassword', function () {

@@ -10,6 +10,8 @@
             text-align: center;
             background-color: #f0f0f0;
             border-radius: 10px;
+            width: 800px;
+            margin: 0 auto;
         }
 
         i {
@@ -59,12 +61,12 @@
         @endphp
         <p><b>Hello {{ $emailData['email_to'] }}!</b> {!! $emailBody !!}</p>
         @foreach($urls as $key => $url)
-        <a href="{{$url}}">{{$urlTitles[$key]}}</a><br>
+        <a href="{{$url}}" style="color: #930027;">{{$urlTitles[$key]}}</a><br>
         @endforeach
         <br>
         <p><b>Thank You!</b></p>
         <i>Team <a style="color: #930027;" href="https://paintwichita.com/">River City Painting</a></i>
-        <div style="text-align: left !important; padding:10px">
+        <div style="padding:10px">
             <img src="{{ $message->embed(public_path().'/assets/images/PCA-Logo-RGB .png') }}" class="footerImage" style="height: 80px;" alt="Image">
             <img src="{{ $message->embed(public_path().'/assets/images/2023BOW_GoldWInner.png') }}" class="footerImage" style="height: 80px;" alt="Image">
             <img src="{{ $message->embed(public_path().'/assets/images/Lead-Safe-EPA-Certified-Firm .png') }}" class="footerImage" style="height: 80px;" alt="Image">

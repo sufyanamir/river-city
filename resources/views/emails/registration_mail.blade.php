@@ -10,6 +10,8 @@
             text-align: center;
             background-color: #f0f0f0;
             border-radius: 10px;
+            width: 800px;
+            margin: 0 auto;
         }
         i{
             font-size: small;
@@ -33,7 +35,8 @@
         <div class="card-header">
             <img src="{{ $message->embed(public_path().'/assets/images/projectLogo.jpg') }}" alt="Hello">
         </div>
-        <p><b>Hello! {{$emailData['name']}}</b> You are getting this email because you are just registered to the <b>River City</b>. You can login to your account through giving address {{ $emailData['email'] }} and the password is <b>{{ $emailData['password'] }}</b>.</p>
+        <p>Hello! <b style="color: #930027;">{{$emailData['name']}}</b> 
+        You are getting this email because you are just registered to the <b>River City</b>. You can login to your account through giving address {{ $emailData['email'] }} and the password is <b>{{ $emailData['password'] }}</b>.</p>
         <br>
         <p><b>Thank You!</b></p>
         <i>Team <a style="color: #930027;" href="https://paintwichita.com/">River City Painting</a></i>

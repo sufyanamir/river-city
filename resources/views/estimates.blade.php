@@ -6,6 +6,10 @@
                 <h4>Estimates List</h4>
             </div>
             <div>
+                @if($user_details['user_role'] == 'scheduler')
+                <a href="/estimates"><x-add-button :title="'View All'" :class="''" :id="''"></x-add-button></a>
+                <a href="{{ route('estimates', ['type' => 'assigned']) }}"><x-add-button :title="'View Assigned'" :class="''" :id="''"></x-add-button></a>
+                @endif
                 @if ($user_details['user_role'] == 'admin')
                 <x-add-button :title="'+ Add Estimates'" :class="'addEstimate'" :id="''"></x-add-button>
                 @endif
