@@ -90,14 +90,9 @@
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                     <tr>
-                                        <th scope="col" class="px-6 py-3">
-
-                                        </th>
+                                        
                                         <th scope="col" class="px-6 py-3">
                                             Item Name
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Item Description
                                         </th>
                                         <th scope="col" class="text-center">
                                             Item Qty
@@ -107,14 +102,9 @@
                                 <tbody>
                                     @foreach ($itemss as $item)
                                     <tr class="bg-white border-b">
-                                        <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                            <input type="checkbox" disabled name="privileges[reports][view]" id="privilegeReportsView">
-                                            <label for="privilegeReportsView" class=" text-gray-500"></label>
-                                        </th>
-                                        <td class="px-6 py-4">
+                                        
+                                        <td class="px-6 py-4" style="width: 85% !important; text-align:justify">
                                             <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
-                                        </td>
-                                        <td class="px-6 py-4 w-[30%]">
                                             <p class="text-[16px]/[18px] text-[#323C47] font">
                                                 @if ($item->item_description)
                                             <p class="font-medium">Description:</p>
@@ -127,7 +117,7 @@
                                             </p>
                                         </td>
                                         <td class="text-center">
-                                            {{ $item->item_qty }} <br> {{ $item->item_unit }}
+                                            {{ number_format($item->item_qty, 2) }} <br> {{ $item->item_unit }}
                                         </td>
                                         @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
                                     <tr>
@@ -147,12 +137,8 @@
                                                             <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                                                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                                                     <tr>
-                                                                        <th scope="col" class="px-6 py-3"></th>
-                                                                        <th scope="col" class="px-6 py-3">
+                                                                        <th scope="col" style="" class="px-6 py-3">
                                                                             Item Name
-                                                                        </th>
-                                                                        <th scope="col" class="px-6 py-3">
-                                                                            Item Description
                                                                         </th>
                                                                         <th scope="col" class="text-center">
                                                                             Item Qty
@@ -162,15 +148,13 @@
                                                                 <tbody>
                                                                     @foreach($item->assemblies as $assembly)
                                                                     <tr class="bg-white border-b">
-                                                                        <td class="px-6 py-4"></td>
-                                                                        <td class="px-6 py-4">
+                                                                        <td class="px-6 py-4" style="width: 85% !important; text-align:justify">
                                                                             {{$assembly->est_ass_item_name}}
-                                                                        </td>
-                                                                        <td class="px-6 py-4 w-[30%]">
+                                                                            <br>
                                                                             {{$assembly->ass_item_description}}
                                                                         </td>
                                                                         <td class="text-center">
-                                                                            {{$assembly->ass_item_qty}} <br> {{$assembly->ass_item_unit}}
+                                                                            {{number_format($assembly->ass_item_qty, 2)}} <br> {{$assembly->ass_item_unit}}
                                                                         </td>
                                                                     </tr>
                                                                     @endforeach
