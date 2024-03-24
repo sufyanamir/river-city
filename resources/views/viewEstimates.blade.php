@@ -5438,7 +5438,7 @@ $userPrivileges->estimate->expenses === 'on')
                         // Populate the modal with the retrieved data
                         var itemDetail = response.item_detail;
                         var assemblyItemData = response.assembly_items;
-                        console.log(assemblyItemData)
+                        console.log(itemDetail)
                         $('#deleteItem-btn').removeClass('hidden');
                         $('#deleteEstimateItem').attr('action', '/deleteEstimateItem/' + itemDetail.estimate_item_id);
                         // Update modal content with item details
@@ -5448,7 +5448,7 @@ $userPrivileges->estimate->expenses === 'on')
                         $('#labour_expense').val(itemDetail.labour_expense);
                         $('#material_expense').val(itemDetail.material_expense);
                         $('#item_cost').val(itemDetail.item_cost);
-                        $('#item_price').val(itemDetail.item_price);
+                        $('#item_price').val(response.item_detail.item_price);
                         $('#item_qty').val(itemDetail.item_qty);
                         $('#item_total').val(itemDetail.item_total);
                         $('#item_description').val(itemDetail.item_description);
@@ -5687,7 +5687,7 @@ $userPrivileges->estimate->expenses === 'on')
             var selectedValue = typeDropdown.val();
 
             // Reset all fields
-            $('#labour_expense, #material_expense, #item_price').val('');
+            // $('#labour_expense, #material_expense, #item_price').val('');
 
             if (selectedValue === 'assemblies') {
                 multiAddItemsDiv.removeClass('hidden');
