@@ -177,7 +177,7 @@ Route::middleware('customauth')->group(function () {
     // Route::get('/calendar', function () {
     //     return view('calendar');
     // });
-    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/dashboard/{user?}', [DashboardController::class, 'index'])->name('dashboard');
     // Route::get('/dashboard', function () {
     //     return view('dashboard');
     // });

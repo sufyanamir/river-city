@@ -21,19 +21,20 @@ $userPrivileges = session('user_details')['user_privileges'];
                 <table id="universalTable" class="display" style="width:100%">
                     <thead class="bg-[#930027] text-white text-sm">
                         <tr>
-                            <th>Template Name</th>
-                            <th style="width:300px !important">Description</th>
+                            <th style="width: 90% !important;">Template Name</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="universalTableBody" class=" text-sm">
                         @foreach ($item_templates as $item)
                         <tr>
-                            <td>{{ $item->item_template_name }}</td>
-                            <td class=" w-[100px]">
-                                <p class=" font-medium">Description:</p>
+                            <td class=" text-justify">
+                                <p class=" font-medium">
+                                    {{ $item->item_template_name }}
+                                </p>
+                                <p>Description:</p>
                                 {{ $item->description }}
-                                <p class=" font-medium">Note:</p>
+                                <p>Note:</p>
                                 {{ $item->note }}
                             </td>
                             <td>
@@ -314,7 +315,8 @@ $userPrivileges = session('user_details')['user_privileges'];
             }
         });
     });
+
     function remitems(button) {
-    $(button).closest('.mt-5').remove(); // Remove the closest parent div with class mt-5
-}
+        $(button).closest('.mt-5').remove(); // Remove the closest parent div with class mt-5
+    }
 </script>

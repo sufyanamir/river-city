@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>proposal email</title>
+    <title>{{$emailData['title']}}</title>
     <style>
         .container{
             text-align: center;
@@ -35,13 +35,11 @@
         <div class="card-header">
             <img src="{{ $message->embed(public_path().'/assets/images/projectLogo.jpg') }}" alt="Hello">
         </div>
-        <p style="padding:20px 50px">Hello! <b style="color: #930027;">{{ $emailData['name'] }}</b>  <br/>
-        
-        We are pleased to present our proposal for your review. You may access the proposal via the following link</p>
+        <p style="padding:20px 50px">
+        {{$emailData['body']}}
+        <br>
         <a href="https://soft.rivercitypainting.tech/viewProposal/" style="color: #930027;">You can see your proposal Here</a>
         <br>
-        <p>We eagerly await your feedback and hope to have the opportunity to further discuss and potentially <br/>move forward with this proposal.
-        <br/>
             Thank you for considering our offering.</p>
         <p><b>Thank You!</b></p>
         <i>Team <a style="color: #930027;" href="https://paintwichita.com/">River City Painting</a></i>

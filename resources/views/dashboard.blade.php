@@ -1,8 +1,20 @@
 @include('layouts.header')
 <div class="my-2">
-    <h1 class=" text-2xl font-semibold">
-        Hello! {{ session('user_details')['name'] }}
-    </h1>
+    <div class=" flex gap-4">
+        <h1 class=" text-2xl font-semibold">
+            Hello! {{ $user_details['name'] }} <span class="text-xs">({{$user_details['user_role']}})</span>
+        </h1>
+        @if(session('user_details')['user_role'] == 'admin')
+        <div class="w-[10%]">
+            <select id="userSelect" name="" autocomplete="customer-name" class="p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                <option value="">Users</option>
+                @foreach($admins as $user)
+                <option value="{{$user->id}}" {{$user->id == request()->route('user') ? 'selected' : ''}}>{{$user->name}} {{$user->last_name}}</option>
+                @endforeach
+            </select>
+        </div>
+        @endif
+    </div>
     <div class=" flex justify-start gap-2 my-5">
         <div class="pt-3"><img src="{{ asset('assets/icons/borderbar.svg') }}" alt="img"></div>
         <div class=" text-gray-400">
@@ -13,14 +25,14 @@
         </div>
     </div>
     <div class="mb-4">
-        @if (session('user_details')['user_role'] == 'crew')
+        @if (session('user_details')['user_role'] == 'crew' || $user_details['user_role'] == 'crew')
             <div class="grid lg:grid-cols-4 sm:grid-cols-1 gap-6">
                 <x-dashboard-cards :title="'Today Jobs'" :value="$todayJobsCount" :img="'dashboard-graphs.svg'"></x-dashboard-cards>
                 <x-dashboard-cards :title="'Pending Jobs'" :value="$pendingJobsCount" :img="'dashboard-users.svg'"></x-dashboard-cards>
                 <x-dashboard-cards :title="'Complete Jobs'" :value="$completeJobsCount" :img="'dashboard-orders.svg'"></x-dashboard-cards>
                 <x-dashboard-cards :title="'Total Jobs'" :value="$totalJobsCount" :img="'dashboard-dollar.svg'"></x-dashboard-cards>
             </div>
-        @elseif(session('user_details')['user_role'] == 'admin')
+        @elseif(session('user_details')['user_role'] == 'admin' || $user_details['user_role'] == 'admin')
             <div class="grid lg:grid-cols-4 sm:grid-cols-1 gap-6">
                 <x-dashboard-cards :title="'Total Customers'" :value="count($customers)" :img="'dashboard-graphs.svg'"></x-dashboard-cards>
                 <x-dashboard-cards :title="'Total Staff'" :value="count($staff)" :img="'dashboard-users.svg'"></x-dashboard-cards>
@@ -29,8 +41,8 @@
             </div>
         @endif
     </div>
-    @if (session('user_details')['user_role'] == 'crew')
-    @elseif(session('user_details')['user_role'] == 'admin')
+    @if (session('user_details')['user_role'] == 'crew' || $user_details['user_role'] == 'crew')
+    @elseif(session('user_details')['user_role'] == 'admin' || $user_details['user_role'] == 'admin')
         <div
             class=" lg:flex lg:justify-between xl:flex xl:justify-between sm:grid sm:grid-cols-1 md:grid md:grid-cols-1 gap-4">
             <!-- order summary & schedules -->
@@ -91,7 +103,7 @@
     @endif
     <div
         class=" lg:flex lg:justify-between gap-2 xl:flex xl:justify-between sm:grid sm:grid-cols-1 md:grid md:grid-cols-1 my-2">
-        @if (session('user_details')['user_role'] == 'crew')
+        @if (session('user_details')['user_role'] == 'crew' || $user_details['user_role'] == 'crew')
             <div class=" bg-white w-full rounded-xl">
                 <div class="bg-[#930027] p-2 text-white rounded-t-xl">
                     <div class=" flex justify-between gap-10">
@@ -291,8 +303,8 @@
                                         $scheduler = \App\Models\User::find($schedule->estimate_complete_assigned_to);
                                     @endphp
 
-                                    @if (session('user_details')['user_role'] == 'scheduler')
-                                        @if ($estimate->estimate_schedule_assigned_to == session('user_details')['id'])
+                                    @if (session('user_details')['user_role'] == 'scheduler' || $user_details['user_role'] == 'scheduler')
+                                        @if ($estimate->estimate_schedule_assigned_to == session('user_details')['id'] || $estimate->estimate_schedule_assigned_to == $user_details['id'])
                                             <tr>
                                                 <td>{{ date('d, F Y', strtotime($estimate->scheduled_start_date)) }}
                                                 </td>
@@ -439,7 +451,7 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-@if (session('user_details')['user_role'] == 'crew')
+@if (session('user_details')['user_role'] == 'crew' || $user_details['user_role'] == 'crew')
 @else
 <script>
     const orders = @json($confirm_orders);
@@ -476,7 +488,7 @@
     });
 </script>
 @endif
-@if (session('user_details')['user_role'] == 'crew')
+@if (session('user_details')['user_role'] == 'crew' || $user_details['user_role'] == 'crew')
 @else
     <script>
         // Get a reference to the canvas element
@@ -527,3 +539,13 @@
     </script>
 @endif
 @include('layouts.footer')
+<script>
+    $(document).ready(function() {
+        $('#userSelect').change(function() {
+            var userId = $(this).val();
+            if (userId) {
+                window.location.href = '/dashboard/' + userId;
+            }
+        });
+    });
+</script>

@@ -1381,15 +1381,21 @@ class EstimateController extends Controller
 
             $validatedData = $request->validate([
                 'estimate_id' => 'required',
-                'customer_email' => 'required|string',
+                'email_to' => 'required|string',
                 'estimate_total' => 'required',
+                'email_title' => 'required',
+                'email_subject' => 'required',
+                'email_body' => 'required',
             ]);
 
             $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
             $emailData = [
                 'estimate_id' => $validatedData['estimate_id'],
-                'email' => $validatedData['customer_email'],
+                'email' => $validatedData['email_to'],
                 'name' => $estimate['customer_name'] . ' ' . $estimate['customer_last_name'],
+                'title' => $validatedData['email_title'],
+                'subject' => $validatedData['email_subject'],
+                'body' => $validatedData['email_body'],
             ];
 
             $existingProposals = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->get();
@@ -1401,7 +1407,7 @@ class EstimateController extends Controller
             }
 
             $mail = new ProposalMail($emailData);
-            Mail::to($validatedData['customer_email'])->send($mail);
+            Mail::to($validatedData['email_to'])->send($mail);
             $estimate->estimate_total = null;
             $estimate->save();
             $proposal = EstimateProposal::create([
@@ -2270,6 +2276,7 @@ class EstimateController extends Controller
 
             $estimate = Estimate::create([
                 'customer_id' => $customer->customer_id,
+                'added_user_id' => $userDetails['id'],
                 'customer_name' => $validatedData['first_name'],
                 'customer_phone' => $validatedData['phone'],
                 'customer_address' => $validatedData['first_address'],
