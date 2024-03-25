@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('estimates', function(Blueprint $table){
             $table->id('estimate_id');
             $table->integer('customer_id');
+            $table->integer('added_user_id');
             $table->string('customer_name');
             $table->text('customer_phone');
             $table->text('customer_address');

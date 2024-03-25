@@ -36,6 +36,7 @@ class Estimate extends Model
 
     protected $fillable = [
         'customer_id',
+        'added_user_id',
         'customer_name',
         'customer_phone',
         'customer_address',

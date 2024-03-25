@@ -11,32 +11,32 @@ $userPrivileges = session('user_details')['user_privileges'];
             <div class=" flex gap-5">
                 @if (session('user_details')['user_role'] == 'admin')
                 <a href="/items">
-                    <x-add-button :id="'all'" :title="'All'" :class="''"></x-add-button>
+                    <x-add-button :id="'all'" :title="'All'" :class="' w-24'"></x-add-button>
                 </a>
                 <a href="{{ route('items', ['type' => 'labour']) }}">
-                    <x-add-button :id="'Labor'" :title="'Labor'" :class="''"></x-add-button>
+                    <x-add-button :id="'Labor'" :title="'Labor'" :class="'w-24'"></x-add-button>
                 </a>
                 <a href="{{ route('items', ['type' => 'material']) }}">
-                    <x-add-button :id="'Material'" :title="'Material'" :class="''"></x-add-button>
+                    <x-add-button :id="'Material'" :title="'Material'" :class="'w-24'"></x-add-button>
                 </a>
                 <a href="{{ route('items', ['type' => 'assemblies']) }}">
-                    <x-add-button :id="'Assembly'" :title="'Assembly'" :class="''"></x-add-button>
+                    <x-add-button :id="'Assembly'" :title="'Assembly'" :class="'w-24'"></x-add-button>
                 </a>
-                <x-add-button :id="'addItem'" :title="'+Add Item'" :class="''"></x-add-button>
+                <x-add-button :id="'addItem'" :title="'+Add Item'" :class="'w-24'"></x-add-button>
                 @elseif(isset($userPrivileges->item) && isset($userPrivileges->item->add) && $userPrivileges->item->add === 'on')
                 <a href="/items">
-                    <x-add-button :id="'all'" :title="'all'" :class="''"></x-add-button>
+                    <x-add-button :id="'all'" :title="'all'" :class="'w-24'"></x-add-button>
                 </a>
                 <a href="{{ route('items', ['type' => 'labour']) }}">
-                    <x-add-button :id="'Labor'" :title="'Labor'" :class="''"></x-add-button>
+                    <x-add-button :id="'Labor'" :title="'Labor'" :class="'w-24'"></x-add-button>
                 </a>
                 <a href="{{ route('items', ['type' => 'material']) }}">
-                    <x-add-button :id="'Material'" :title="'Material'" :class="''"></x-add-button>
+                    <x-add-button :id="'Material'" :title="'Material'" :class="'w-24'"></x-add-button>
                 </a>
                 <a href="{{ route('items', ['type' => 'assemblies']) }}">
-                    <x-add-button :id="'Assembly'" :title="'Assembly'" :class="''"></x-add-button>
+                    <x-add-button :id="'Assembly'" :title="'Assembly'" :class="'w-24'"></x-add-button>
                 </a>
-                <x-add-button :id="'addItem'" :title="'+Add Item'" :class="''"></x-add-button>
+                <x-add-button :id="'addItem'" :title="'+Add Item'" :class="'w-24'"></x-add-button>
                 @endif
             </div>
         </div>

@@ -13,10 +13,15 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index($user = null)
     {
-        $userDetails = session('user_details');
-        if (session('user_details')['user_role'] == 'crew') {
+        if ($user != null) {
+            $userDetails = User::where('id', $user)->first();
+        }else{
+            $userDetails = session('user_details');
+        }
+
+        if (session('user_details')['user_role'] == 'crew' || $userDetails['user_role'] == 'crew') {
 
             $scheduleEstimatesWithEstimates = [];
 
@@ -48,7 +53,7 @@ class DashboardController extends Controller
 
             $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->orderBy('to_do_id', 'DESC')->get();
             $estimateToDos = EstimateToDos::where('to_do_assigned_to', $userDetails['id'])->orderBy('to_do_id', 'DESC')->get();
-
+            $admins = User::get();
             return view('dashboard', [
                 'schedule_estimates_with_estimates' => $scheduleEstimatesWithEstimates,
                 'todayJobsCount' => $todayJobsCount,
@@ -57,27 +62,55 @@ class DashboardController extends Controller
                 'totalJobsCount' => $totalJobsCount,
                 'Todos' => $userToDos,
                 'estimateToDos' => $estimateToDos,
+                'user_details' => $userDetails,
+                'admins' => $admins,
             ]);
         } else {
-            $customers = Customer::get();
-            $staff = User::where('user_role', '<>', 'admin')->get();
-            $confirmedOrders = Estimate::where('estimate_status', '<>', 'cancel')->get();
-            $totalRevenue = Estimate::where('estimate_status', '<>', 'cancel')->sum('estimate_total');
-            $schedules = EstimateSchedule::orderBy('estimate_schedule_id', 'DESC')->get();
+            if ($user != null) {
+                $userDetails = User::where('id', $user)->first();
+                $customers = Customer::where('added_user_id', $user)->get();
+                $staff = User::where('added_user_id', $user)->where('user_role', '<>', 'admin')->get();
+                $confirmedOrders = Estimate::where('added_user_id', $user)->where('estimate_status', '<>', 'cancel')->get();
+                $totalRevenue = Estimate::where('added_user_id', $user)->where('estimate_status', '<>', 'cancel')->sum('estimate_total');
+                $schedules = EstimateSchedule::where('added_user_id', $user)->orderBy('estimate_schedule_id', 'DESC')->get();
 
-            // Initialize $estimates as an empty array
-            $estimates = [];
+                // Initialize $estimates as an empty array
+                $estimates = [];
 
-            foreach ($schedules as $schedule) {
-                $estimate = Estimate::where('estimate_id', $schedule->estimate_id)->first();
-                $estimates[] = $estimate;
+                foreach ($schedules as $schedule) {
+                    $estimate = Estimate::where('added_user_id', $user)->where('estimate_id', $schedule->estimate_id)->first();
+                    $estimates[] = $estimate;
+                }
+
+                $userToDos = UserToDo::where('added_user_id', $user)->orderBy('to_do_id', 'DESC')->get();
+                $estimateToDos = EstimateToDos::where('to_do_assigned_to', $user)->orderBy('to_do_id', 'DESC')->get();
+                $completeEstimates = Estimate::where('added_user_id', $user)->where('estimate_status', 'complete')->count();
+                $pendingEstimates = Estimate::where('added_user_id', $user)->where('estimate_status', 'pending')->count();
+                $cancelEstimates = Estimate::where('added_user_id', $user)->where('estimate_status', 'cancel')->count();
+            } else {
+
+                $customers = Customer::where('added_user_id', $userDetails['id'])->get();
+                $staff = User::where('added_user_id', $userDetails['id'])->where('user_role', '<>', 'admin')->get();
+                $confirmedOrders = Estimate::where('added_user_id', $userDetails['id'])->where('estimate_status', '<>', 'cancel')->get();
+                $totalRevenue = Estimate::where('added_user_id', $userDetails['id'])->where('estimate_status', '<>', 'cancel')->sum('estimate_total');
+                $schedules = EstimateSchedule::where('added_user_id', $userDetails['id'])->orderBy('estimate_schedule_id', 'DESC')->get();
+
+                // Initialize $estimates as an empty array
+                $estimates = [];
+
+                foreach ($schedules as $schedule) {
+                    $estimate = Estimate::where('added_user_id', $userDetails['id'])->where('estimate_id', $schedule->estimate_id)->first();
+                    $estimates[] = $estimate;
+                }
+
+                $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->orderBy('to_do_id', 'DESC')->get();
+                $estimateToDos = EstimateToDos::where('to_do_assigned_to', $userDetails['id'])->orderBy('to_do_id', 'DESC')->get();
+                $completeEstimates = Estimate::where('added_user_id', $userDetails['id'])->where('estimate_status', 'complete')->count();
+                $pendingEstimates = Estimate::where('added_user_id', $userDetails['id'])->where('estimate_status', 'pending')->count();
+                $cancelEstimates = Estimate::where('added_user_id', $userDetails['id'])->where('estimate_status', 'cancel')->count();
             }
 
-            $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->orderBy('to_do_id', 'DESC')->get();
-            $estimateToDos = EstimateToDos::where('to_do_assigned_to', $userDetails['id'])->orderBy('to_do_id', 'DESC')->get();
-            $completeEstimates = Estimate::where('estimate_status', 'complete')->count();
-            $pendingEstimates = Estimate::where('estimate_status', 'pending')->count();
-            $cancelEstimates = Estimate::where('estimate_status', 'cancel')->count();
+            $admins = User::get();
 
             return view('dashboard', [
                 'customers' => $customers,
@@ -93,6 +126,8 @@ class DashboardController extends Controller
                 'pendingEstimates' => $pendingEstimates,
                 'cancelEstimates' => $cancelEstimates,
                 'revenue' => $totalRevenue,
+                'admins' => $admins,
+                'user_details' => $userDetails,
             ]);
         }
     }
