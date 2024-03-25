@@ -133,7 +133,7 @@
                             <tbody class=" text-center">
                                 @foreach ($schedule_estimates_with_estimates as $item)
                                     <tr>
-                                        <td>{{ date('d, F Y', strtotime($item['estimate']->created_at)) }}</td>
+                                        <td>{{ isset($item['estimate']->created_at) ? date('d, F Y', strtotime($item['estimate']->created_at)) : '' }}</td>
                                         <td>
                                             <h3 class="text-lg font-medium">
                                                 <a href="">
@@ -333,7 +333,9 @@
                                         @endif
                                     @else
                                         <tr>
-                                            <td>{{ date('d, F Y', strtotime($estimate->created_at)) }}</td>
+                                            <td>
+                                            {{ isset($estimate->created_at) ? date('d, F Y', strtotime($estimate->created_at)) : '' }}
+                                            </td>
                                             <td>
                                             <h3 class="text-lg font-medium">
                                                 <a href="/viewEstimate/{{$estimate->estimate_id}}">
