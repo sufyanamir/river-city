@@ -29,11 +29,17 @@ class ProposalMail extends Mailable
      *
      * @return \Illuminate\Mail\Mailables\Envelope
      */
-    public function envelope()
+    // public function envelope()
+    // {
+    //     return new Envelope(
+    //         subject: 'Proposal Mail',
+    //     );
+    // }
+    public function build()
     {
-        return new Envelope(
-            subject: 'Proposal Mail',
-        );
+        $this->subject($this->emailData['subject'] ?? 'estimate');
+
+        return $this->view('emails.proposal-mail');
     }
 
     /**
