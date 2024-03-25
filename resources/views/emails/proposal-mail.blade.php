@@ -35,10 +35,10 @@
         <div class="card-header">
             <img src="{{ $message->embed(public_path().'/assets/images/projectLogo.jpg') }}" alt="Hello">
         </div>
-        <p style="padding:20px 50px">
+        <p style="padding:20px 50px; font-size:large">
         {{$emailData['body']}}
         <br>
-        <a href="https://soft.rivercitypainting.tech/viewProposal/" style="color: #930027;">You can see your proposal Here</a>
+        <a href="https://soft.rivercitypainting.tech/viewProposal/{{$emailData['estimate_id']}}" style="color: #930027;">You can see your proposal Here</a>
         <br>
             Thank you for considering our offering.</p>
         <p><b>Thank You!</b></p>
