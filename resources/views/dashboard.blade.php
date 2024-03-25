@@ -338,23 +338,23 @@
                                             </td>
                                             <td>
                                             <h3 class="text-lg font-medium">
-                                                <a href="{{ isset($estimate->estimate_id) ? '/viewEstimate/' . $estimate->estimate_id : '' }}">
-                                                    {{ $estimate->customer_name }}
-                                                    {{ $estimate->customer_last_name }}
-                                                </a>
+                                            <a href="{{ isset($estimate->estimate_id) ? '/viewEstimate/' . $estimate->estimate_id : '' }}">
+            {{ isset($estimate->customer_name) ? $estimate->customer_name : '' }}
+            {{ isset($estimate->customer_last_name) ? $estimate->customer_last_name : '' }}
+        </a>
                                             </h3>
                                             </td>
                                             <td>
-                                                <a href="https://maps.google.com/?q={{ $estimate->customer_address }}"
-                                                    target="_blank" class="pl-3">
-                                                    <p class="text-[#323C47] hover:border-b">
-                                                        {{ $estimate->customer_address }}</p>
-                                                </a>
+                                            <a href="{{ isset($estimate->customer_address) ? 'https://maps.google.com/?q=' . $estimate->customer_address : '' }}" target="_blank" class="pl-3">
+        <p class="text-[#323C47] hover:border-b">
+            {{ isset($estimate->customer_address) ? $estimate->customer_address : '' }}
+        </p>
+    </a>
                                             </td>
                                             <td>
-                                                <h3 class="text-lg font-medium">{{ $scheduler->name }}</h3>
-                                                <p class="text-[#198CF6]">{{ $scheduler->phone }}</p>
-                                            </td>
+    <h3 class="text-lg font-medium">{{ isset($scheduler->name) ? $scheduler->name : '' }}</h3>
+    <p class="text-[#198CF6]">{{ isset($scheduler->phone) ? $scheduler->phone : '' }}</p>
+</td>
                                         </tr>
                                     @endif
                                 @endforeach
