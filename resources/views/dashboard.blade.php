@@ -338,7 +338,7 @@
                                             </td>
                                             <td>
                                             <h3 class="text-lg font-medium">
-                                                <a href="/viewEstimate/{{$estimate->estimate_id}}">
+                                                <a href="{{ isset($estimate->estimate_id) ? '/viewEstimate/' . $estimate->estimate_id : '' }}">
                                                     {{ $estimate->customer_name }}
                                                     {{ $estimate->customer_last_name }}
                                                 </a>
