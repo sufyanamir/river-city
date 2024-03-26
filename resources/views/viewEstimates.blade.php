@@ -6453,6 +6453,7 @@ $userPrivileges->estimate->expenses === 'on')
     $(document).ready(function() {
         var currentDate = new Date().toISOString().slice(0, 10);
         $('.se_date').val(currentDate);
+        $('#complete_invoice_date').val(currentDate);
 
         var currentDate = new Date();
         // Calculate the next date by adding one day
