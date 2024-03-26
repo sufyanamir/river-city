@@ -21,12 +21,12 @@
                         <img class="w-[288px] h-[73px]" src="{{ asset('assets/icons/tproject-logo.svg') }}" alt="">
                     </div>
                     <div class="mt-12 p-4">
-                        <p class="text-[22px]/[25.78px] font-bold text-[#323C47]">River City Painting Pro Demo</p>
+                        <p class="text-[22px]/[25.78px] font-bold text-[#323C47]">River City Painting, Inc</p>
                         <p class=" mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
-                            222 Merrimac ST <br>
-                            Newburyport, Massachusetts 01950 <br>
-                            Support@rivercitypainting.com <br>
-                            978-379-7979
+                        4425 W Walker St<br>
+                        Wichita Kansas 67209 <br>
+                        info@paintwichita.com <br>
+                        (316) 262-3289
                         </p>
                     </div>
                 </div>

@@ -175,6 +175,18 @@ $(document).ready(function () {
     }
   });
 
+  $("#addItem-menubutton1").click(function (e) {
+    e.stopPropagation(); // Prevents the click event from reaching the document body
+    $('#addItem-menu1').toggleClass("topbar-menuEntring topbar-manuLeaving");
+  });
+
+  $(document).on('click', function (e) {
+    if (!$("#addItem-menubutton1").is(e.target) && !$('#addItem-menu1').has(e.target).length) {
+      // Click occurred outside the button and dropdown, hide the dropdown
+      $('#addItem-menu1').addClass("topbar-manuLeaving").removeClass("topbar-menuEntring");
+    }
+  });
+
   $("#profile-btn").click(function (e) {
     e.stopPropagation(); // Prevents the click event from reaching the document body
     $('#profile-menu').toggleClass("topbar-menuEntring topbar-manuLeaving");

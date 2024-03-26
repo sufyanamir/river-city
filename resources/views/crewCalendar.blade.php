@@ -167,11 +167,16 @@
 
     function generateWeek(startDate, crewsData) {
         const tableBody = document.getElementById('table-body');
-        tableBody.innerHTML = '';
+    tableBody.innerHTML = '';
 
-        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        const headerCells = document.getElementsByTagName('th');
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const headerCells = document.getElementsByTagName('th');
 
+    // Extract month and year from the start date
+    const monthYearString = startDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+    // Set the month and year in the first header cell
+    headerCells[0].textContent = monthYearString;
         // Loop through each crew
         crewsData.forEach(crew => {
             // Create a single row for each crew
@@ -228,11 +233,12 @@
             // Loop through each day of the week
             for (let i = 0; i < 7; i++) {
                 const loopDate = new Date(startDate);
-                loopDate.setDate(startDate.getDate() + i);
-                const day = daysOfWeek[loopDate.getDay()];
-                const date = loopDate.getDate();
+            loopDate.setDate(startDate.getDate() + i);
+            const day = daysOfWeek[loopDate.getDay()];
+            const date = loopDate.getDate();
+            const month = loopDate.toLocaleString('default', { month: 'short' });
 
-                headerCells[i + 1].textContent = day + ' ' + date;
+            headerCells[i + 1].textContent = day + ' ' + date + ' ' + month;
 
                 // Check if any estimates fall within the current day and crew
                 const badges = [];

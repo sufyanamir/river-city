@@ -2,6 +2,35 @@
 @php
 $userPrivileges = session('user_details')['user_privileges'];
 @endphp
+<div class=" absolute bottom-10 right-10 z-30">
+    <button type="button" id="addItem-menubutton" class=" rounded-full flex bg-white p-1 m-2">
+        <div class=" bg-[#930027] rounded-full w-12 h-12">
+            <i class="fa-solid fa-plus text-white p-4"></i>
+        </div>
+    </button>
+    <div class="absolute right-16 bottom-0 z-10">
+        <div id="addItem-menu" class=" topbar-manuLeaving bg-white divide-y h-24 overflow-scroll divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                <li>
+                    <button id="" type="button" class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        Add Item
+                    </button>
+                </li>
+                <hr>
+                {{-- <li>
+                                    <button id="addTemplate" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Template Name</button>
+                                </li> --}}
+                @foreach ($item_templates as $template)
+                <li>
+                    <button id="addTemplate{{ $template->item_template_id }}" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}
+                    </button>
+                </li>
+                @endforeach
+            </ul>
+        </div>
+
+    </div>
+</div>
 <div class=" my-4">
     <h1 class=" text-2xl font-semibold mb-3">Estimates</h1>
     <div class=" bg-transparent w-full">
@@ -250,15 +279,15 @@ $userPrivileges = session('user_details')['user_privileges'];
         isset($userPrivileges->estimate->contacts) &&
         $userPrivileges->estimate->contacts === 'on')
         <div class=" border-2  shadow-lg mt-7   bg-white   rounded-3xl ">
-            <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-                <p class="text- lg py-3 px-3  font-medium text-white">
-                    Contacts
-                </p>
+            <div class="flex  items-center gap-2 px-3  bg-[#930027] rounded-t-3xl">
                 <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addContact">
                     <div class=" bg-[#930027] rounded-lg">
                         <i class="fa-solid fa-plus text-white p-2"></i>
                     </div>
                 </button>
+                <p class="text- lg py-3  font-medium text-white">
+                    Contacts
+                </p>
             </div>
             <div class="py-4     ">
                 <p class="text-lg py-3 my-auto  pl-9 text-[#707683] font-medium">
@@ -679,14 +708,14 @@ $userPrivileges = session('user_details')['user_privileges'];
         @if (session('user_details')['user_role'] == 'admin')
         <div class=" relative  border-2  shadow-lg mt-7  bg-white rounded-3xl">
             <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
-                <button type="button" id="addItem-menubutton" class="flex bg-white p-1 m-2 rounded-lg">
+                <button type="button" id="addItem-menubutton1" class="flex bg-white p-1 m-2 rounded-lg">
                     <div class=" bg-[#930027] rounded-lg">
                         <i class="fa-solid fa-plus text-white p-2"></i>
                     </div>
                 </button>
                 <!-- Dropdown menu -->
                 <div class="absolute top-14 z-10">
-                    <div id="addItem-menu" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                    <div id="addItem-menu1" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                             <li>
                                 <button id="" type="button" class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
@@ -793,7 +822,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                                 <i class="fa-solid fa-square-caret-down text-[#930027] text-lg"></i>
                                             </button>
                                             <!-- Dropdown menu -->
-                                            <div class="absolute z-10">
+                                            <div class=" z-10">
                                                 <div id="exclude-include-menu{{$item->estimate_item_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                                                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                                                         <li>
@@ -1083,406 +1112,406 @@ $userPrivileges = session('user_details')['user_privileges'];
 isset($userPrivileges->estimate->items) &&
 $userPrivileges->estimate->items === 'on')
 <div class=" relative  border-2  shadow-lg mt-7  bg-white rounded-3xl">
-            <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
-                <button type="button" id="addItem-menubutton" class="flex bg-white p-1 m-2 rounded-lg">
-                    <div class=" bg-[#930027] rounded-lg">
-                        <i class="fa-solid fa-plus text-white p-2"></i>
-                    </div>
-                </button>
-                <!-- Dropdown menu -->
-                <div class="absolute top-14 z-10">
-                    <div id="addItem-menu" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                            <li>
-                                <button id="" type="button" class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                    Add Item
-                                </button>
-                            </li>
-                            <hr>
-                            {{-- <li>
+    <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
+        <button type="button" id="addItem-menubutton1" class="flex bg-white p-1 m-2 rounded-lg">
+            <div class=" bg-[#930027] rounded-lg">
+                <i class="fa-solid fa-plus text-white p-2"></i>
+            </div>
+        </button>
+        <!-- Dropdown menu -->
+        <div class="absolute top-14 z-10">
+            <div id="addItem-menu1" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                    <li>
+                        <button id="" type="button" class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                            Add Item
+                        </button>
+                    </li>
+                    <hr>
+                    {{-- <li>
                                     <button id="addTemplate" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Template Name</button>
                                 </li> --}}
-                            @foreach ($item_templates as $template)
-                            <li>
-                                <button id="addTemplate{{ $template->item_template_id }}" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}
-                                </button>
-                            </li>
+                    @foreach ($item_templates as $template)
+                    <li>
+                        <button id="addTemplate{{ $template->item_template_id }}" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}
+                        </button>
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+
+        </div>
+
+        <p class="text-lg px-3 text-white font-medium">
+            Items
+        </p>
+    </div>
+    @php
+    $totalPrice = 0; // Initialize total price variable
+
+    $groupedItems = [];
+    foreach ($estimate_items as $groupItems) {
+    $groupName = $groupItems->group->group_name ?? 'Other'; // Use 'Other' if no group is associated
+    $groupedItems[$groupName][] = $groupItems;
+    }
+    @endphp
+    <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
+        @if ($estimate_items->count() > 0)
+        @foreach ($groupedItems as $groupName => $itemss)
+        <div class="mb-2 bg-white shadow-xl">
+            <div class=" p-1 bg-[#930027] text-white w-full rounded-t-lg">
+                <div class="inline-block">
+                    <div class="flex gap-3">
+                        <h1 class=" font-medium my-auto p-2">{{$groupName}}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="relative overflow-x-auto mb-8">
+                <div class="itemDiv">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Item Name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Item Description
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Item Status (excluded/included)
+                                </th>
+                                <th scope="col" class="text-center px-6 py-3">
+                                    Item Cost
+                                </th>
+                                <th scope="col" class="text-center px-6 py-3">
+                                    Item Qty
+                                </th>
+                                <th scope="col" class="text-center px-6 py-3">
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($itemss as $item)
+                            <tr class="bg-white border-b">
+                                <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                    <button type="button" style="height: 70px; width:70px;" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
+                                        <img class="" style="height: 70px; width:70px;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                    </button>
+                                </th>
+                                <td class="px-6 py-4 w-[30%]">
+                                    {{ $item->item_name }}
+                                </td>
+                                <td class="px-6 py-4 w-[30%]">
+                                    <p class="text-[16px]/[18px] text-[#323C47] font">
+                                        @if ($item->item_description)
+                                    <p class="font-medium">Description:</p>
+                                    {{ $item->item_description }}
+                                    @endif
+                                    @if ($item->item_note)
+                                    <p class="font-medium">Note:</p>
+                                    {{ $item->item_note }}
+                                    @endif
+                                    </p>
+                                </td>
+                                <td class="text-center">
+                                    @if($item->item_status == 'included')
+                                    <span class="inline-flex my-auto items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $item->item_status }}</span>
+                                    @elseif($item->item_status == 'excluded')
+                                    <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">{{ $item->item_status }}</span>
+                                    @endif
+                                    <button type="button" id="exclude-include-menuBtn{{$item->estimate_item_id}}" class="inline p-2">
+                                        <i class="fa-solid fa-square-caret-down text-[#930027] text-lg"></i>
+                                    </button>
+                                    <!-- Dropdown menu -->
+                                    <div class=" z-10">
+                                        <div id="exclude-include-menu{{$item->estimate_item_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                                                <li>
+                                                    <form action="/includeexcludeEstimateItem" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                        <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
+                                                        <input type="hidden" name="item_status" value="included">
+                                                        <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                            Include
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                                <hr>
+                                                <li>
+                                                    <form action="/includeexcludeEstimateItem" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                        <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
+                                                        <input type="hidden" name="item_status" value="excluded">
+                                                        <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                            Exclude
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}").addEventListener("click", function(e) {
+                                            e.stopPropagation(); // Prevents the click event from reaching the document body
+                                            var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
+                                            dropdownMenu.classList.toggle("topbar-menuEntring");
+                                            dropdownMenu.classList.toggle("topbar-manuLeaving");
+                                        });
+
+                                        document.addEventListener('click', function(e) {
+                                            var btn = document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}");
+                                            var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
+
+                                            if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                                                // Click occurred outside the button and dropdown, hide the dropdown
+                                                dropdownMenu.classList.add("topbar-manuLeaving");
+                                                dropdownMenu.classList.remove("topbar-menuEntring");
+                                            }
+                                        });
+                                    </script>
+                                </td>
+                                <td class="text-center mx-2">
+                                    ${{ number_format($item->item_price, 2) }}
+                                </td>
+                                <td class="text-center mx-2">
+                                    {{ number_format($item->item_qty, 2) }}
+                                </td>
+                                <td class="text-center mx-2">
+                                    ${{ number_format($item->item_total, 2) }}
+                                </td>
+                                @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
+                            <tr>
+                                <td colspan="7">
+                                    <div class="">
+                                        <div id="accordion-collapse{{$item->estimate_item_id}}" class="accordion-collapse mb-2" data-accordion="collapse">
+                                            <h2 id="accordion-collapse-heading-1" class="border-b-2">
+                                                <button type="button" class="flex items-center bg-[#F5F5F5] justify-between w-full p-2  text-left rounded-t-lg  focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-1" aria-expanded="true" aria-controls="accordion-collapse-body-1">
+                                                    <span></span>
+                                                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
+                                                    </svg>
+                                                </button>
+                                            </h2>
+                                            <div id="accordion-collapse-body{{$item->estimate_item_id}}" class="accordion-collapse-body bg-[#F5F5F5] hidden" aria-labelledby="accordion-collapse-heading-1">
+                                                <div class="p-2">
+                                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                                            <tr>
+                                                                <th scope="col" class="px-6 py-3"></th>
+                                                                <th scope="col" class="px-6 py-3">
+                                                                    Item Name
+                                                                </th>
+                                                                <th scope="col" class="px-6 py-3">
+                                                                    Item Description
+                                                                </th>
+                                                                <th scope="col" class="text-center px-6 py-3">
+                                                                    Item Cost
+                                                                </th>
+                                                                <th scope="col" class="text-center px-6 py-3">
+                                                                    Item Qty
+                                                                </th>
+                                                                <th scope="col" class="text-center px-6 py-3">
+                                                                    Total
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach($item->assemblies as $assembly)
+                                                            <tr class="bg-white border-b">
+                                                                <td class="px-6 py-4"></td>
+                                                                <td class="px-6 py-4">
+                                                                    {{$assembly->est_ass_item_name}}
+                                                                </td>
+                                                                <td class="px-6 py-4 w-[30%]">
+                                                                    {{$assembly->ass_item_description}}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    ${{number_format($assembly->ass_item_price, 2)}}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    {{number_format($assembly->ass_item_qty, 2)}}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    ${{number_format($assembly->ass_item_total, 2)}}
+                                                                </td>
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <script>
+                                    document.getElementById("accordion-collapse{{$item->estimate_item_id}}").addEventListener("click", function() {
+                                        var accordionBody = document.getElementById("accordion-collapse-body{{$item->estimate_item_id}}");
+                                        accordionBody.classList.toggle("hidden");
+                                    });
+                                </script>
+                            </tr>
+                            @endif
+                            </tr>
+                            @php
+                            $totalPrice += $item->item_total; // Add item price to total
+                            @endphp
                             @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        @endif
+        @foreach ($estimateItemTemplates as $estItemTemplate)
+        <div class="mb-2 bg-white shadow-xl">
+            <div class=" flex gap-3 p-1 bg-[#930027] text-white w-full rounded-t-lg">
+                <button type="button" id="editEstimate-template{{ $estItemTemplate['est_template_id'] }}" class="inline my-auto">
+                    <img class="" style="height: 70px; width:70px;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                </button>
+                <h1 class=" font-medium my-auto">{{ $estItemTemplate['item_template_name'] }}</h1>
+                @if($estItemTemplate['template_status'] == 'included')
+                <span class="inline-flex my-auto items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $estItemTemplate['template_status'] }}</span>
+                @elseif($estItemTemplate['template_status'] == 'excluded')
+                <span class="bg-red-100 text-red-800 my-auto inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">{{ $estItemTemplate['template_status'] }}</span>
+                @endif
+                <button type="button" id="exclude-include-menuBtn{{$estItemTemplate['est_template_id']}}" class="inline p-2">
+                    <i class="fa-solid fa-square-caret-down  text-lg"></i>
+                </button>
+                <!-- Dropdown menu -->
+                <div class="absolute z-50">
+                    <div id="exclude-include-menu{{$estItemTemplate['est_template_id']}}" class=" bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 topbar-manuLeaving">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                            <li>
+                                <form action="/includeexcludeEstimateItem" method="post">
+                                    @csrf
+                                    <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                    <input type="hidden" name="estimate_item_id" value="{{$estItemTemplate['est_template_id']}}">
+                                    <input type="hidden" name="template_status" value="1">
+                                    <input type="hidden" name="item_status" value="included">
+                                    <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        Include
+                                    </button>
+                                </form>
+                            </li>
+                            <hr>
+                            <li>
+                                <form action="/includeexcludeEstimateItem" method="post">
+                                    @csrf
+                                    <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                    <input type="hidden" name="estimate_item_id" value="{{$estItemTemplate['est_template_id']}}">
+                                    <input type="hidden" name="template_status" value="1">
+                                    <input type="hidden" name="item_status" value="excluded">
+                                    <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        Exclude
+                                    </button>
+                                </form>
+                            </li>
                         </ul>
                     </div>
-
                 </div>
+                <script>
+                    document.getElementById("exclude-include-menuBtn{{$estItemTemplate['est_template_id']}}").addEventListener("click", function(e) {
+                        e.stopPropagation(); // Prevents the click event from reaching the document body
+                        var dropdownMenu = document.getElementById("exclude-include-menu{{$estItemTemplate['est_template_id']}}");
+                        dropdownMenu.classList.toggle("topbar-menuEntring");
+                        dropdownMenu.classList.toggle("topbar-manuLeaving");
+                    });
 
-                <p class="text-lg px-3 text-white font-medium">
-                    Items
-                </p>
+                    document.addEventListener('click', function(e) {
+                        var btn = document.getElementById("exclude-include-menuBtn{{$estItemTemplate['est_template_id']}}");
+                        var dropdownMenu = document.getElementById("exclude-include-menu{{$estItemTemplate['est_template_id']}}");
+
+                        if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                            // Click occurred outside the button and dropdown, hide the dropdown
+                            dropdownMenu.classList.add("topbar-manuLeaving");
+                            dropdownMenu.classList.remove("topbar-menuEntring");
+                        }
+                    });
+                </script>
             </div>
-            @php
-            $totalPrice = 0; // Initialize total price variable
+            <div class="relative overflow-x-auto">
+                <div class="itemDiv">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
 
-            $groupedItems = [];
-            foreach ($estimate_items as $groupItems) {
-            $groupName = $groupItems->group->group_name ?? 'Other'; // Use 'Other' if no group is associated
-            $groupedItems[$groupName][] = $groupItems;
-            }
-            @endphp
-            <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
-                @if ($estimate_items->count() > 0)
-                @foreach ($groupedItems as $groupName => $itemss)
-                <div class="mb-2 bg-white shadow-xl">
-                    <div class=" p-1 bg-[#930027] text-white w-full rounded-t-lg">
-                        <div class="inline-block">
-                            <div class="flex gap-3">
-                                <h1 class=" font-medium my-auto p-2">{{$groupName}}</h1>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="relative overflow-x-auto mb-8">
-                        <div class="itemDiv">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3">
-
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Item Name
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Item Description
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Item Status (excluded/included)
-                                        </th>
-                                        <th scope="col" class="text-center px-6 py-3">
-                                            Item Cost
-                                        </th>
-                                        <th scope="col" class="text-center px-6 py-3">
-                                            Item Qty
-                                        </th>
-                                        <th scope="col" class="text-center px-6 py-3">
-                                            Total
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($itemss as $item)
-                                    <tr class="bg-white border-b">
-                                        <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                            <button type="button" style="height: 70px; width:70px;" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
-                                                <img class="" style="height: 70px; width:70px;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                                            </button>
-                                        </th>
-                                        <td class="px-6 py-4 w-[30%]">
-                                            {{ $item->item_name }}
-                                        </td>
-                                        <td class="px-6 py-4 w-[30%]">
-                                            <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                @if ($item->item_description)
-                                            <p class="font-medium">Description:</p>
-                                            {{ $item->item_description }}
-                                            @endif
-                                            @if ($item->item_note)
-                                            <p class="font-medium">Note:</p>
-                                            {{ $item->item_note }}
-                                            @endif
-                                            </p>
-                                        </td>
-                                        <td class="text-center">
-                                            @if($item->item_status == 'included')
-                                            <span class="inline-flex my-auto items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $item->item_status }}</span>
-                                            @elseif($item->item_status == 'excluded')
-                                            <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">{{ $item->item_status }}</span>
-                                            @endif
-                                            <button type="button" id="exclude-include-menuBtn{{$item->estimate_item_id}}" class="inline p-2">
-                                                <i class="fa-solid fa-square-caret-down text-[#930027] text-lg"></i>
-                                            </button>
-                                            <!-- Dropdown menu -->
-                                            <div class="absolute z-10">
-                                                <div id="exclude-include-menu{{$item->estimate_item_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                                                        <li>
-                                                            <form action="/includeexcludeEstimateItem" method="post">
-                                                                @csrf
-                                                                <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                                <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
-                                                                <input type="hidden" name="item_status" value="included">
-                                                                <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                                    Include
-                                                                </button>
-                                                            </form>
-                                                        </li>
-                                                        <hr>
-                                                        <li>
-                                                            <form action="/includeexcludeEstimateItem" method="post">
-                                                                @csrf
-                                                                <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                                <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
-                                                                <input type="hidden" name="item_status" value="excluded">
-                                                                <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                                    Exclude
-                                                                </button>
-                                                            </form>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <script>
-                                                document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}").addEventListener("click", function(e) {
-                                                    e.stopPropagation(); // Prevents the click event from reaching the document body
-                                                    var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
-                                                    dropdownMenu.classList.toggle("topbar-menuEntring");
-                                                    dropdownMenu.classList.toggle("topbar-manuLeaving");
-                                                });
-
-                                                document.addEventListener('click', function(e) {
-                                                    var btn = document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}");
-                                                    var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
-
-                                                    if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                                                        // Click occurred outside the button and dropdown, hide the dropdown
-                                                        dropdownMenu.classList.add("topbar-manuLeaving");
-                                                        dropdownMenu.classList.remove("topbar-menuEntring");
-                                                    }
-                                                });
-                                            </script>
-                                        </td>
-                                        <td class="text-center mx-2">
-                                            ${{ number_format($item->item_price, 2) }}
-                                        </td>
-                                        <td class="text-center mx-2">
-                                            {{ number_format($item->item_qty, 2) }}
-                                        </td>
-                                        <td class="text-center mx-2">
-                                            ${{ number_format($item->item_total, 2) }}
-                                        </td>
-                                        @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
-                                    <tr>
-                                        <td colspan="7">
-                                            <div class="">
-                                                <div id="accordion-collapse{{$item->estimate_item_id}}" class="accordion-collapse mb-2" data-accordion="collapse">
-                                                    <h2 id="accordion-collapse-heading-1" class="border-b-2">
-                                                        <button type="button" class="flex items-center bg-[#F5F5F5] justify-between w-full p-2  text-left rounded-t-lg  focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-1" aria-expanded="true" aria-controls="accordion-collapse-body-1">
-                                                            <span></span>
-                                                            <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
-                                                            </svg>
-                                                        </button>
-                                                    </h2>
-                                                    <div id="accordion-collapse-body{{$item->estimate_item_id}}" class="accordion-collapse-body bg-[#F5F5F5] hidden" aria-labelledby="accordion-collapse-heading-1">
-                                                        <div class="p-2">
-                                                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                                                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                                                    <tr>
-                                                                        <th scope="col" class="px-6 py-3"></th>
-                                                                        <th scope="col" class="px-6 py-3">
-                                                                            Item Name
-                                                                        </th>
-                                                                        <th scope="col" class="px-6 py-3">
-                                                                            Item Description
-                                                                        </th>
-                                                                        <th scope="col" class="text-center px-6 py-3">
-                                                                            Item Cost
-                                                                        </th>
-                                                                        <th scope="col" class="text-center px-6 py-3">
-                                                                            Item Qty
-                                                                        </th>
-                                                                        <th scope="col" class="text-center px-6 py-3">
-                                                                            Total
-                                                                        </th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    @foreach($item->assemblies as $assembly)
-                                                                    <tr class="bg-white border-b">
-                                                                        <td class="px-6 py-4"></td>
-                                                                        <td class="px-6 py-4">
-                                                                            {{$assembly->est_ass_item_name}}
-                                                                        </td>
-                                                                        <td class="px-6 py-4 w-[30%]">
-                                                                            {{$assembly->ass_item_description}}
-                                                                        </td>
-                                                                        <td class="text-center">
-                                                                            ${{number_format($assembly->ass_item_price, 2)}}
-                                                                        </td>
-                                                                        <td class="text-center">
-                                                                            {{number_format($assembly->ass_item_qty, 2)}}
-                                                                        </td>
-                                                                        <td class="text-center">
-                                                                            ${{number_format($assembly->ass_item_total, 2)}}
-                                                                        </td>
-                                                                    </tr>
-                                                                    @endforeach
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <script>
-                                            document.getElementById("accordion-collapse{{$item->estimate_item_id}}").addEventListener("click", function() {
-                                                var accordionBody = document.getElementById("accordion-collapse-body{{$item->estimate_item_id}}");
-                                                accordionBody.classList.toggle("hidden");
-                                            });
-                                        </script>
-                                    </tr>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Item Name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Item Description
+                                </th>
+                                <th scope="col" class="text-center px-6 py-3">
+                                    Item Price
+                                </th>
+                                <th scope="col" class="text-center px-6 py-3">
+                                    Item Qty
+                                </th>
+                                <th scope="col" class="text-center px-6 py-3">
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($estItemTemplate['estimateItemTemplateItems'] as $item)
+                            <tr class="bg-white border-b">
+                                <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                    <button type="button" style="height: 70px; width:70px;" id="editEstimateTemplate-item{{ $item['est_template_item_id'] }}" class="inline">
+                                        <img class="" style="height: 70px; width:70px;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                    </button>
+                                </th>
+                                <td class="px-6 py-4 w-[30%]">
+                                    {{ $item['item_name'] }}
+                                </td>
+                                <td class="px-6 py-4 w-[40%]">
+                                    <p class="text-[16px]/[18px] text-[#323C47] font">
+                                        @if ($item['item_description'])
+                                    <p class="font-medium">Description:</p>
+                                    {{ $item['item_description'] }}
                                     @endif
-                                    </tr>
-                                    @php
-                                    $totalPrice += $item->item_total; // Add item price to total
-                                    @endphp
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    @endforeach
+                                    @if ($item['item_note'])
+                                    <p class="font-medium">Note:</p>
+                                    {{ $item['item_note'] }}
+                                    @endif
+                                    </p>
+                                </td>
+                                <td class="text-center mx-2">
+                                    ${{ number_format($item['item_price'], 2) }}
+                                </td>
+                                <td class="text-center mx-2">
+                                    {{ number_format($item['item_qty'], 2) }}
+                                </td>
+                                <td class="text-center mx-2">
+                                    ${{ number_format($item['item_total'], 2) }}
+                                </td>
+                            </tr>
+                            @php
+                            $totalPrice += $item['item_total']; // Add item price to total
+                            @endphp
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-                @endif
-                @foreach ($estimateItemTemplates as $estItemTemplate)
-                <div class="mb-2 bg-white shadow-xl">
-                    <div class=" flex gap-3 p-1 bg-[#930027] text-white w-full rounded-t-lg">
-                        <button type="button" id="editEstimate-template{{ $estItemTemplate['est_template_id'] }}" class="inline my-auto">
-                            <img class="" style="height: 70px; width:70px;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                        </button>
-                        <h1 class=" font-medium my-auto">{{ $estItemTemplate['item_template_name'] }}</h1>
-                        @if($estItemTemplate['template_status'] == 'included')
-                        <span class="inline-flex my-auto items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $estItemTemplate['template_status'] }}</span>
-                        @elseif($estItemTemplate['template_status'] == 'excluded')
-                        <span class="bg-red-100 text-red-800 my-auto inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">{{ $estItemTemplate['template_status'] }}</span>
-                        @endif
-                        <button type="button" id="exclude-include-menuBtn{{$estItemTemplate['est_template_id']}}" class="inline p-2">
-                            <i class="fa-solid fa-square-caret-down  text-lg"></i>
-                        </button>
-                        <!-- Dropdown menu -->
-                        <div class="absolute z-50">
-                            <div id="exclude-include-menu{{$estItemTemplate['est_template_id']}}" class=" bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 topbar-manuLeaving">
-                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                                    <li>
-                                        <form action="/includeexcludeEstimateItem" method="post">
-                                            @csrf
-                                            <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                            <input type="hidden" name="estimate_item_id" value="{{$estItemTemplate['est_template_id']}}">
-                                            <input type="hidden" name="template_status" value="1">
-                                            <input type="hidden" name="item_status" value="included">
-                                            <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                Include
-                                            </button>
-                                        </form>
-                                    </li>
-                                    <hr>
-                                    <li>
-                                        <form action="/includeexcludeEstimateItem" method="post">
-                                            @csrf
-                                            <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                            <input type="hidden" name="estimate_item_id" value="{{$estItemTemplate['est_template_id']}}">
-                                            <input type="hidden" name="template_status" value="1">
-                                            <input type="hidden" name="item_status" value="excluded">
-                                            <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                Exclude
-                                            </button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <script>
-                            document.getElementById("exclude-include-menuBtn{{$estItemTemplate['est_template_id']}}").addEventListener("click", function(e) {
-                                e.stopPropagation(); // Prevents the click event from reaching the document body
-                                var dropdownMenu = document.getElementById("exclude-include-menu{{$estItemTemplate['est_template_id']}}");
-                                dropdownMenu.classList.toggle("topbar-menuEntring");
-                                dropdownMenu.classList.toggle("topbar-manuLeaving");
-                            });
-
-                            document.addEventListener('click', function(e) {
-                                var btn = document.getElementById("exclude-include-menuBtn{{$estItemTemplate['est_template_id']}}");
-                                var dropdownMenu = document.getElementById("exclude-include-menu{{$estItemTemplate['est_template_id']}}");
-
-                                if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                                    // Click occurred outside the button and dropdown, hide the dropdown
-                                    dropdownMenu.classList.add("topbar-manuLeaving");
-                                    dropdownMenu.classList.remove("topbar-menuEntring");
-                                }
-                            });
-                        </script>
-                    </div>
-                    <div class="relative overflow-x-auto">
-                        <div class="itemDiv">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3">
-
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Item Name
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Item Description
-                                        </th>
-                                        <th scope="col" class="text-center px-6 py-3">
-                                            Item Price
-                                        </th>
-                                        <th scope="col" class="text-center px-6 py-3">
-                                            Item Qty
-                                        </th>
-                                        <th scope="col" class="text-center px-6 py-3">
-                                            Total
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($estItemTemplate['estimateItemTemplateItems'] as $item)
-                                    <tr class="bg-white border-b">
-                                        <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                            <button type="button" style="height: 70px; width:70px;" id="editEstimateTemplate-item{{ $item['est_template_item_id'] }}" class="inline">
-                                                <img class="" style="height: 70px; width:70px;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                                            </button>
-                                        </th>
-                                        <td class="px-6 py-4 w-[30%]">
-                                            {{ $item['item_name'] }}
-                                        </td>
-                                        <td class="px-6 py-4 w-[40%]">
-                                            <p class="text-[16px]/[18px] text-[#323C47] font">
-                                                @if ($item['item_description'])
-                                            <p class="font-medium">Description:</p>
-                                            {{ $item['item_description'] }}
-                                            @endif
-                                            @if ($item['item_note'])
-                                            <p class="font-medium">Note:</p>
-                                            {{ $item['item_note'] }}
-                                            @endif
-                                            </p>
-                                        </td>
-                                        <td class="text-center mx-2">
-                                            ${{ number_format($item['item_price'], 2) }}
-                                        </td>
-                                        <td class="text-center mx-2">
-                                            {{ number_format($item['item_qty'], 2) }}
-                                        </td>
-                                        <td class="text-center mx-2">
-                                            ${{ number_format($item['item_total'], 2) }}
-                                        </td>
-                                    </tr>
-                                    @php
-                                    $totalPrice += $item['item_total']; // Add item price to total
-                                    @endphp
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
             </div>
-            <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
-                <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Grand Total</span>
-                <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
-            </div>
-            <br>
         </div>
+        @endforeach
     </div>
+    <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
+        <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Grand Total</span>
+        <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
+    </div>
+    <br>
+</div>
+</div>
 </div>
 @endif
 @if (session('user_details')['user_role'] == 'admin')
@@ -2617,22 +2646,24 @@ $userPrivileges->estimate->files === 'on')
 isset($userPrivileges->estimate->photos) &&
 $userPrivileges->estimate->photos === 'on')
 <div class="mb-5 shadow-lg bg-white  mt-7 rounded-3xl">
-    <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-        <p class="text-lg px-3 text-white  font-medium ">
-            Photos
-        </p>
+    <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
         <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addImage-btn">
             <div class=" bg-[#930027] rounded-lg">
                 <i class="fa-solid fa-plus text-white p-2"></i>
             </div>
         </button>
+        <p class="text-lg px-3 text-white  font-medium ">
+            Photos
+        </p>
     </div>
     <div class=" mx-auto  px-5 py-7">
         <div class="itemDiv">
             @foreach ($estimate_images as $image)
-            <div class=" inline-block p-2 mx-auto">
-                <img class=" w-16 h-16" src="{{ asset('storage/' . $image->estimate_image) }}" alt="Estimate Image">
-            </div>
+            <a href="/viewGallery{{ $image->estimate_id }}">
+                <div class=" inline-block p-2 mx-auto">
+                    <img class=" w-16 h-16 rounded-md hover:scale-105 duration-300" src="{{ asset('storage/' . $image->estimate_image) }}" alt="Estimate Image">
+                </div>
+            </a>
             @endforeach
         </div>
     </div>
@@ -3077,15 +3108,15 @@ $userPrivileges->estimate->notes === 'on')
 isset($userPrivileges->estimate->emails) &&
 $userPrivileges->estimate->emails === 'on')
 <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-    <div class="flex justify-between items-center px-3  bg-[#930027] rounded-t-3xl">
-        <p class="text-lg px-3 text-white  font-medium ">
-            Emails
-        </p>
+    <div class="flex items-center px-3  bg-[#930027] rounded-t-3xl">
         <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addEmail-btn">
             <div class=" bg-[#930027] rounded-lg">
                 <i class="fa-solid fa-plus text-white p-2"></i>
             </div>
         </button>
+        <p class="text-lg px-3 text-white  font-medium ">
+            Emails
+        </p>
     </div>
     <div class=" py-2">
         <div class="relative overflow-x-auto">
@@ -6465,31 +6496,31 @@ $userPrivileges->estimate->expenses === 'on')
     });
 </script>
 <script>
-document.getElementById("copyButton").addEventListener("click", function() {
-    // Get the URL
-    var url = "soft.rivercitypainting.tech/viewProposal/{{$estimate->estimate_id}}";
+    document.getElementById("copyButton").addEventListener("click", function() {
+        // Get the URL
+        var url = "soft.rivercitypainting.tech/viewProposal/{{$estimate->estimate_id}}";
 
-    // Create a temporary input element
-    var input = document.createElement('input');
-    input.setAttribute('value', url);
-    document.body.appendChild(input);
+        // Create a temporary input element
+        var input = document.createElement('input');
+        input.setAttribute('value', url);
+        document.body.appendChild(input);
 
-    // Select the text in the input
-    input.select();
-    input.setSelectionRange(0, 99999); // For mobile devices
+        // Select the text in the input
+        input.select();
+        input.setSelectionRange(0, 99999); // For mobile devices
 
-    // Copy the text to the clipboard
-    document.execCommand('copy');
+        // Copy the text to the clipboard
+        document.execCommand('copy');
 
-    // Remove the temporary input
-    document.body.removeChild(input);
+        // Remove the temporary input
+        document.body.removeChild(input);
 
-    // Optionally, provide some feedback to the user
-    // alert("URL copied to clipboard: " + url);
-    Swal.fire(
-      'Success!',
-      'URL copied to clipboard',
-      'success'
-    );
-});
+        // Optionally, provide some feedback to the user
+        // alert("URL copied to clipboard: " + url);
+        Swal.fire(
+            'Success!',
+            'URL copied to clipboard',
+            'success'
+        );
+    });
 </script>
