@@ -7,7 +7,7 @@
     <title>proposal email</title>
     <style>
         .container{
-            text-align: center;
+            text-align: justify;
             background-color: #f0f0f0;
             border-radius: 10px;
             /* width: 800px; */
@@ -32,7 +32,7 @@
 
 <body>
     <div class="container">
-        <div class="card-header">
+        <div class="card-header" style="text-align: center;">
             <img src="{{ $message->embed(public_path().'/assets/images/projectLogo.jpg') }}" alt="Hello">
         </div>
         <p>Hello! <b style="color: #930027;">{{ $emailData['name'] }}</b> <br>
