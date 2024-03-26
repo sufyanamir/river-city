@@ -59,7 +59,11 @@ $userPrivileges = session('user_details')['user_privileges'];
                         @foreach ($items as $item)
                         <tr>
                             <td class="w-[100px]">{{ ucwords($item->item_name) }}</td>
+                            @if($item->item_type == 'labour')
+                            <td>Labor</td>
+                            @else
                             <td>{{ ucwords($item->item_type) }}</td>
+                            @endif
                             <td>{{ ucwords($item->item_units) }}</td>
                             <td>${{ number_format($item->item_cost, 2) }}</td>
                             <td>${{ number_format($item->item_price, 2) }}</td>
