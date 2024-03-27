@@ -15,9 +15,9 @@
                     </tr>
                 </thead>
                 <tbody id="universalTableBody" class=" text-sm">
+                    @foreach ($estimates_with_images as $item)
                     <tr>
                         <td>
-                            @foreach ($estimates_with_images as $item)
                             <div class="grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
                                 <div class="col-span-5 p-2 flex justify-between">
                                     <a href="/viewGallery{{ $item['estimate']->estimate_id }}">
@@ -44,9 +44,9 @@
                                     @endforeach
                                 </div>
                             </div>
-                            @endforeach
                         </td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
