@@ -4049,6 +4049,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- Display email details here -->
                     <div class=" grid grid-cols-2 gap-4 my-2">
                         <input type="hidden" name="email_id" id="email_id">
+                        <input type="hidden" name="customer_id" value="{{$customer->customer_id}}">
                         <div>
                             <label for="email_title">Email title:</label>
                             <input type="text" name="email_name" id="email_name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">

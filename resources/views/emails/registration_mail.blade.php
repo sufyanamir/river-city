@@ -35,11 +35,11 @@
         <div class="card-header" style="text-align: center;">
             <img src="{{ $message->embed(public_path().'/assets/images/projectLogo.jpg') }}" alt="Hello">
         </div>
-        <p>Hello! <b style="color: #930027;">{{$emailData['name']}}</b> 
+        <p style="padding:20px 50px; font-size:large">Hello! <b style="color: #930027;">{{$emailData['name']}}</b> 
         You are getting this email because you are just registered to the <b>River City</b>. You can login to your account through giving address {{ $emailData['email'] }} and the password is <b>{{ $emailData['password'] }}</b>.</p>
         <br>
-        <p><b>Thank You!</b></p>
-        <i>Team <a style="color: #930027;" href="https://paintwichita.com/">River City Painting</a></i>
+        <p style="padding:20px 50px; font-size:large"><b>Thank You!</b></p>
+        <i style="padding:20px 50px; font-size:large">Team <a style="color: #930027;" href="https://paintwichita.com/">River City Painting</a></i>
         <!-- <div style="text-align: left !important;">
             <img src="{{ asset('assets/images/PCA-Logo-RGB .png') }}" class="footerImage" style="height: 80px;" alt="Image">
             <img src="{{ asset('assets/images/2023BOW_GoldWInner.png') }}" class="footerImage" style="height: 80px;" alt="Image">
