@@ -1511,9 +1511,10 @@ class EstimateController extends Controller
             'email_to' => 'required|string',
             'email_subject' => 'nullable|string',
             'email_body' => 'required|string',
+            'customer_id' => 'required',
         ]);
 
-
+        $customer = Customer::where('customer_id', $validatedData['customer_id'])->first();
 
         $emailData = [
             'estimate_id' => $validatedData['estimate_id'],
@@ -1522,6 +1523,7 @@ class EstimateController extends Controller
             'email_to' => $validatedData['email_to'],
             'email_subject' => $validatedData['email_subject'],
             'email_body' => $validatedData['email_body'], // Use the modified email body
+            'name' => $customer->customer_first_name . ' ' . $customer->customer_last_name,
         ];
 
         // Create an instance of the Mailable class
