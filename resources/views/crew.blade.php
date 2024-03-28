@@ -23,7 +23,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                         <tr>
                             <th></th>
                             <th>Name</th>
-                            <th>Depratement</th>
+                            <th>Department</th>
                             <th></th>
                             <th>Email</th>
                             <th>Phone Number</th>
@@ -114,9 +114,9 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <label for="" class="text-gray-700 block text-left mb-1 "> Phone No</label>
                             <input type="tel" name="phone" id="phone" placeholder="XXX-XXX-XXXX/XXXXXXXXXX" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}" title="Phone number must be in the format XXX-XXX-XXXX" required>
 
-                            <label for="" class="text-gray-700 block text-left mb-1 "> Departement</label>
+                            <label for="" class="text-gray-700 block text-left mb-1 "> Department</label>
                             <select id="departement" name="departement" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                                <option value="">Departement</option>
+                                <option value="">Department</option>
                                 @foreach($departements as $item)
                                 <option value="{{ $item->departement }}">{{ $item->departement }}</option>
                                 @endforeach

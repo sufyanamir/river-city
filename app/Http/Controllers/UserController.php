@@ -352,6 +352,7 @@ class UserController extends Controller
             $emailData = [
                 'email' => $validatedData['email'],
                 'password' => $password,
+                'name' => $validatedData['firstName'] . ' ' . $validatedData['lastName'],
             ];
 
             $mail = new AddUserMail($emailData);

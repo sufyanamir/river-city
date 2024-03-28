@@ -205,7 +205,8 @@ $userPrivileges = session('user_details')['user_privileges'];
                             </select>
                         </div>
                     </div>
-                    <div class="">
+                    <div class="mt-2">
+                    <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="updateEvent" class=" save-btn mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

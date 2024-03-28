@@ -238,6 +238,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                                             </div>
                                                         </div>
                                                         <div class=" border-t">
+                                                        <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                                                             <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                                                                 <div class=" text-center hidden spinner" id="spinner">
                                                                     <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -390,6 +391,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                                             </div>
                                                         </div>
                                                         <div class=" border-t">
+                                                        <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                                                             <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                                                                 <div class=" text-center hidden spinner" id="spinner">
                                                                     <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2884,6 +2886,7 @@ $userPrivileges->estimate->proposals === 'on')
                                                     </div>
                                                 </div>
                                                 <div class=" border-t">
+                                                <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                                                     <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                                                         <div class=" text-center hidden spinner" id="spinner">
                                                             <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -3003,6 +3006,7 @@ $userPrivileges->estimate->notes === 'on')
                                                     </div>
                                                 </div>
                                                 <div class=" border-t">
+                                                <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                                                     <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                                                         <div class=" text-center hidden spinner" id="spinner">
                                                             <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -3276,10 +3280,10 @@ $userPrivileges->estimates->timeentries === 'on')
                                 {{ $toDo->to_do_title }}
                             </th>
                             <td class="px-6 py-4">
-                                {{ $toDo->assigned_by->name }}
+                                {{ $toDo->assigned_by ? $toDo->assigned_by->name : '' }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $toDo->assigned_to->name }}
+                                {{ $toDo->assigned_to ? $toDo->assigned_to->name : '' }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ date('d, F Y', strtotime($toDo->start_date)) }}
@@ -3752,6 +3756,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                     </div>
                     <div class=" border-t">
+                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -3797,6 +3802,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                     </div>
                     <div class=" border-t">
+                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -3842,6 +3848,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                     </div>
                     <div class=" border-t">
+                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -3914,6 +3921,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                     </div>
                     <div class=" border-t">
+                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -3996,6 +4004,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                     </div>
                     <div class=" border-t">
+                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -4068,6 +4077,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                     </div>
                     <div class=" border-t">
+                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -4114,6 +4124,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                     </div>
                     <div class=" border-t">
+                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -4793,7 +4804,7 @@ $userPrivileges->estimate->expenses === 'on')
                         <button type="button" id="note-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                     </div>
                     <div class=" mt-2">
-                        <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
+                        <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="" class=" float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -5035,11 +5046,11 @@ $userPrivileges->estimate->expenses === 'on')
                                     </select>
                                     <div class=" grid grid-cols-2 gap-3 mt-2">
                                         <div>
-                                            <input type="number" step="any" name="assembly_unit_by_item_unit[]" id="assembly_unit_by_item_unit" placeholder="00.0" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                            <input type="text" step="any" name="assembly_unit_by_item_unit[]" id="assembly_unit_by_item_unit" placeholder="00.0" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                             <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
                                         </div>
                                         <div>
-                                            <input type="number" step="any" name="item_unit_by_assembly_unit[]" id="item_unit_by_assembly_unit" placeholder="00.0" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                            <input type="text" step="any" name="item_unit_by_assembly_unit[]" id="item_unit_by_assembly_unit" placeholder="00.0" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                             <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
                                         </div>
                                     </div>
@@ -5067,7 +5078,8 @@ $userPrivileges->estimate->expenses === 'on')
                             <input type="hidden" name="group_id" id="group_id">
                         </div>
                     </div>
-                    <div class="">
+                    <div class=" mt-2">
+                        <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -5128,7 +5140,8 @@ $userPrivileges->estimate->expenses === 'on')
                             <button type="button" id="items-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'estimate_template_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
                     </div>
-                    <div class="">
+                    <div class="mt-2">
+                    <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="updateEvent" class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -5389,7 +5402,7 @@ $userPrivileges->estimate->expenses === 'on')
                                 </select>
                                 <div class=" grid grid-cols-3 gap-3 mt-2 inline-block">
                                     <div>
-                                        <input value="${assembly.item_unit_by_ass_unit}" type="number" name="item_unit_by_assembly_unit[]" id="item_unit_by_ass_unit_${index}" placeholder="00.0" autocomplete="given-name"
+                                        <input value="${assembly.item_unit_by_ass_unit}" type="text" name="item_unit_by_assembly_unit[]" id="item_unit_by_ass_unit_${index}" placeholder="00.0" autocomplete="given-name"
                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                         <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
                                     </div>
@@ -5398,7 +5411,7 @@ $userPrivileges->estimate->expenses === 'on')
                                     </div>
                                     <div class="flex ">
                                         <div class="w-[80%]  ">
-                                        <input type="number" step="any" name="item_total_qty[]" id="total_qty_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <input type="text" step="any" name="item_total_qty[]" id="total_qty_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                         <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="">Total</span>
                                         </div>
                                         <div class="mt-1" >
@@ -5529,11 +5542,11 @@ $userPrivileges->estimate->expenses === 'on')
                                         <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
                                     </div>
                                     <div>
-                                        <input  value="${itemData.ass_unit_by_item_unit}"  type="number" name="assembly_unit_by_item_unit[]" id="ass_unit_by_item_unit_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <input  value="${itemData.ass_unit_by_item_unit}"  type="text" name="assembly_unit_by_item_unit[]" id="ass_unit_by_item_unit_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class="flex ">
                                         <div class="w-[80%]  ">
-                                        <input type="number" step="any" name="item_total_qty[]" id="total_qty_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="${itemData.ass_item_qty}">
+                                        <input type="text" step="any" name="item_total_qty[]" id="total_qty_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="${itemData.ass_item_qty}">
                                         <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="">Total</span>
                                         </div>
                                         <div class="mt-1" >
