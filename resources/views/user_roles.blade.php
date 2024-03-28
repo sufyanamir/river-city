@@ -15,7 +15,7 @@
                     <thead class="bg-[#930027] text-white text-sm">
                         <tr>
                             <th></th>
-                            <th>Departement</th>
+                            <th>Department</th>
                             <th>Role</th>
                             <th>Actions</th>
                         </tr>
@@ -68,9 +68,9 @@
                     <div class=" text-center grid grid-cols-1 gap-2">
                         <h3 class=" text-lg font-medium text-left">Details</h3>
                         <div class=" my-2">
-                            <label for="" class="text-gray-700 block text-left mb-1 ">Departement </label>
+                            <label for="" class="text-gray-700 block text-left mb-1 ">Department </label>
                             <input type="text" required name="departement" id="departement"
-                                placeholder="Enter Departement" autocomplete="given-name"
+                                placeholder="Enter Department" autocomplete="given-name"
                                 class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class=" my-2">
