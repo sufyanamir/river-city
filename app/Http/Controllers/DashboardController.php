@@ -52,7 +52,7 @@ class DashboardController extends Controller
             $completeJobsCount = $scheduleEstimates->where('status', 'Complete')->count();
 
             $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->orderBy('to_do_id', 'DESC')->get();
-            $estimateToDos = EstimateToDos::where('to_do_assigned_to', $userDetails['id'])->orderBy('to_do_id', 'DESC')->get();
+            $estimateToDos = EstimateToDos::with('assigned_by')->where('to_do_assigned_to', $userDetails['id'])->orderBy('to_do_id', 'DESC')->get();
             $admins = User::get();
             return view('dashboard', [
                 'schedule_estimates_with_estimates' => $scheduleEstimatesWithEstimates,
@@ -83,7 +83,7 @@ class DashboardController extends Controller
                 }
 
                 $userToDos = UserToDo::where('added_user_id', $user)->orderBy('to_do_id', 'DESC')->get();
-                $estimateToDos = EstimateToDos::where('to_do_assigned_to', $user)->orderBy('to_do_id', 'DESC')->get();
+                $estimateToDos = EstimateToDos::with('assigned_by')->where('to_do_assigned_to', $user)->orderBy('to_do_id', 'DESC')->get();
                 $completeEstimates = Estimate::where('added_user_id', $user)->where('estimate_status', 'complete')->count();
                 $pendingEstimates = Estimate::where('added_user_id', $user)->where('estimate_status', 'pending')->count();
                 $cancelEstimates = Estimate::where('added_user_id', $user)->where('estimate_status', 'cancel')->count();
@@ -104,7 +104,7 @@ class DashboardController extends Controller
                 }
 
                 $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->orderBy('to_do_id', 'DESC')->get();
-                $estimateToDos = EstimateToDos::where('to_do_assigned_to', $userDetails['id'])->orderBy('to_do_id', 'DESC')->get();
+                $estimateToDos = EstimateToDos::with('assigned_by')->where('to_do_assigned_to', $userDetails['id'])->orderBy('to_do_id', 'DESC')->get();
                 $completeEstimates = Estimate::where('added_user_id', $userDetails['id'])->where('estimate_status', 'complete')->count();
                 $pendingEstimates = Estimate::where('added_user_id', $userDetails['id'])->where('estimate_status', 'pending')->count();
                 $cancelEstimates = Estimate::where('added_user_id', $userDetails['id'])->where('estimate_status', 'cancel')->count();
