@@ -223,7 +223,7 @@
                             </div>
                             <div>
                                 <div class=" inline-block font-semibold">
-                                    <p>{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('d, F Y', strtotime($todo->start_date))}}) - End date:({{date('d, F Y', strtotime($todo->end_date))}})</span>
+                                    <p>{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('d, F Y', strtotime($todo->start_date))}}) - End date:({{date('d, F Y', strtotime($todo->end_date))}}), (Added by: {{ isset($todo->assigned_by) ? $todo->assigned_by->name . ' ' . $todo->assigned_by->last_name : 'Unknown' }})</span>
                                         <br>
                                         <span class=" text-sm">
                                             Note:
@@ -412,7 +412,7 @@
                         </div>
                         <div>
                             <div class=" inline-block font-semibold">
-                                <p>{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('d, F Y', strtotime($todo->start_date))}}) - End date:({{date('d, F Y', strtotime($todo->end_date))}})</span>
+                                <p>{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('d, F Y', strtotime($todo->start_date))}}) - End date:({{date('d, F Y', strtotime($todo->end_date))}}), (Added by: {{ isset($todo->assigned_by) ? $todo->assigned_by->name . ' ' . $todo->assigned_by->last_name : 'Unknown' }})</span>
                                     <br>
                                     <span class=" text-sm">
                                         Note:
@@ -422,7 +422,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div style="width: 89px;">
+                        <div style="width: 35%;">
                             <form class="text-right" action="/deleteToDo{{ $todo->to_do_id }}" method="post">
                                 @csrf
                                 <button>
