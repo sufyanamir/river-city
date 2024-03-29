@@ -98,7 +98,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <input type="text" name="item_template_name" id="item_template_name" placeholder="Template Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class=" my-2 col-span-2" id="multiAdd-items">
-                            <div class="grid grid-cols-2 gap-2" id="singleTemplateItem">
+                            <!-- <div class="grid grid-cols-2 gap-2" id="singleTemplateItem">
                                 <input type="hidden" name="it_item_id" id="it_item_id">
                                 <div>
                                     <label for="" class="block text-left mb-1"> Assembly Name </label>
@@ -115,7 +115,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     <label for="" class="block text-left mb-1"> Quantity(optional) </label>
                                     <input type="number" step="any" name="item_qty[]" id="item_qty" placeholder="00.0" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 </div>
-                            </div>
+                            </div> -->
                             <div id="mulitple_input">
                             </div>
                             <div class=" text-right mt-2">
@@ -204,15 +204,18 @@ $userPrivileges = session('user_details')['user_privileges'];
         newele.html(`
         <div class="grid grid-cols-2 gap-2">
                                     <div>
-                                        <label for="" class="block text-left mb-1"> Assembly Name </label>
-                                        <select name="item_id[]" id="" placeholder="Item Name"
-                                            autocomplete="given-name"
-                                            class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                            <option value="">Select Item</option>
-                                            @foreach ($items as $item)
-                                        <option value="{{ $item->item_id }}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
-                                        @endforeach
-                                        </select>
+                                    <i class="fa-solid fa-sort"></i>
+                                    <div class="inline-block w-[90%]">
+                                    <label for="" class="block text-left mb-1"> Assembly Name </label>
+                                    <select name="item_id[]" id="" placeholder="Item Name"
+                                        autocomplete="given-name"
+                                        class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <option value="">Select Item</option>
+                                        @foreach ($items as $item)
+                                    <option value="{{ $item->item_id }}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
+                                    @endforeach
+                                    </select>
+                                    </div>
                                     </div>
                                     <div>
                                         <div class=d-flex>
@@ -224,7 +227,8 @@ $userPrivileges = session('user_details')['user_privileges'];
                                                 <img class="" src="{{ asset('assets/icons/bin-icon.svg') }}" alt="icon">
                                                 </button>
                                                 </div>
-                                                </div></div>
+                                                </div>
+                                                </div>
         `);
 
         mulitple_input.append(newele);
@@ -264,8 +268,11 @@ $userPrivileges = session('user_details')['user_privileges'];
                         <div class="grid grid-cols-2 gap-2">
                             <input type="hidden" name="it_item_id[]" value="${item.it_item_id}">
                             <div>
-                                <label for="" class="block text-left mb-1"> Assembly Name </label>
-                                <select name="item_id[]" placeholder="Item Name" autocomplete="given-name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></select>
+                            <i class="fa-solid fa-sort"></i>
+                            <div class="inline-block w-[90%]">
+                            <label for="" class="block text-left mb-1"> Assembly Name </label>
+                            <select name="item_id[]" placeholder="Item Name" autocomplete="given-name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></select>
+                            </div>
                             </div>
                             <div>
                                 <div class=d-flex>
@@ -320,4 +327,23 @@ $userPrivileges = session('user_details')['user_privileges'];
     function remitems(button) {
         $(button).closest('.mt-5').remove(); // Remove the closest parent div with class mt-5
     }
+</script>
+<script>
+    $(document).ready(function() {
+        // Initialize sortable on the container of dynamically added rows
+        $("#mulitple_input").sortable({
+            // Set the axis option to 'y' to restrict dragging to the vertical axis only
+            axis: 'y',
+            // Set the cursor option to 'move' to indicate dragging
+            cursor: 'move',
+            // Update the order when a row is dragged and dropped
+            update: function(event, ui) {
+                // Get the new order of the rows
+                var newOrder = $(this).sortable("toArray");
+
+                // You can now perform further actions with the new order if needed
+                console.log(newOrder);
+            }
+        });
+    });
 </script>
