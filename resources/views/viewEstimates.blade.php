@@ -238,7 +238,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                                             </div>
                                                         </div>
                                                         <div class=" border-t">
-                                                        <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
+                                                            <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                                                             <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                                                                 <div class=" text-center hidden spinner" id="spinner">
                                                                     <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -391,7 +391,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                                             </div>
                                                         </div>
                                                         <div class=" border-t">
-                                                        <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
+                                                            <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                                                             <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                                                                 <div class=" text-center hidden spinner" id="spinner">
                                                                     <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2886,7 +2886,7 @@ $userPrivileges->estimate->proposals === 'on')
                                                     </div>
                                                 </div>
                                                 <div class=" border-t">
-                                                <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
+                                                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                                                     <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                                                         <div class=" text-center hidden spinner" id="spinner">
                                                             <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -3006,7 +3006,7 @@ $userPrivileges->estimate->notes === 'on')
                                                     </div>
                                                 </div>
                                                 <div class=" border-t">
-                                                <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
+                                                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                                                     <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                                                         <div class=" text-center hidden spinner" id="spinner">
                                                             <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -3756,7 +3756,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                     </div>
                     <div class=" border-t">
-                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
+                        <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -3802,7 +3802,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                     </div>
                     <div class=" border-t">
-                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
+                        <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -3848,7 +3848,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                     </div>
                     <div class=" border-t">
-                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
+                        <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -3921,7 +3921,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                     </div>
                     <div class=" border-t">
-                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
+                        <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -4004,7 +4004,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                     </div>
                     <div class=" border-t">
-                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
+                        <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -4077,7 +4077,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                     </div>
                     <div class=" border-t">
-                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
+                        <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -4124,7 +4124,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                     </div>
                     <div class=" border-t">
-                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
+                        <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -5101,7 +5101,7 @@ $userPrivileges->estimate->expenses === 'on')
         </div>
     </div>
 </div>
-<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addTemplate-modal">
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addItemTemplate-modal">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <!-- Background overlay -->
         <div class="fixed inset-0 transition-opacity" aria-hidden="true">
@@ -5141,7 +5141,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                     </div>
                     <div class="mt-2">
-                    <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
+                        <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
                         <button id="updateEvent" class=" mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             <div class=" text-center hidden spinner" id="spinner">
                                 <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -6010,7 +6010,7 @@ $userPrivileges->estimate->expenses === 'on')
                             $('#itemTemplatesForm').attr('action', '/updateEstimateItemTemplate');
                             // console.log(itemTemplateItems.length)
 
-                            $('#addTemplate-modal').removeClass('hidden');
+                            $('#addItemTemplate-modal').removeClass('hidden');
 
 
                             $('#deleteTemplate-btn').removeClass('hidden');
@@ -6074,9 +6074,9 @@ $userPrivileges->estimate->expenses === 'on')
                                         </div>
                                     </button>
                                     {{-- ====================== --}}
-                                    <div class="absolute hidden  text-left h-[100%]  z-[999] " <div id="cal-menu"
+                                    <div id="cal-menu" class="absolute hidden  text-left h-[100%]  z-[999] " <div 
                                         style="background-color:#3a4655 !important;"
-                                        class=" topbar-manuLeaving   z-10 mt-2 w-56 origin-top-right rounded-md bg-[#3a4655] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                        class="    z-10 mt-2 w-56 origin-top-right rounded-md bg-[#3a4655] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                         role="menu" aria-orientation="vertical" aria-labelledby="menu-button"
                                         tabindex="-1">
                                         <div class="py-1 left-5" role="none">
@@ -6149,6 +6149,13 @@ $userPrivileges->estimate->expenses === 'on')
                             var templateItemDiv = $('#template-items');
 
                             // demoInput.addClass('flex justify-between');
+                            // Dynamic IDs for calculator elements
+                            var calButtonId = 'cal-button-' + i;
+                            var calMenuId = 'cal-menu-' + i;
+
+                            // Find and update IDs in the HTML template
+                            demoInput.find('#cal-menubutton').attr('id', calButtonId);
+                            demoInput.find('#cal-menu').attr('id', calMenuId);
 
                             templateItemDiv.append(demoInput);
 
@@ -6158,7 +6165,8 @@ $userPrivileges->estimate->expenses === 'on')
                             // console.log(itemTemplateItems.length)
                             // itemQtyInput.val(currentItem.quantity);
 
-                            $('#addTemplate-modal').removeClass('hidden');
+                            $('#addItemTemplate-modal').removeClass('hidden');
+                            initializeCalculator(calButtonId, calMenuId, itemQtyInput);
                         }
                     }
                 },
@@ -6167,6 +6175,60 @@ $userPrivileges->estimate->expenses === 'on')
                 }
             });
         });
+
+        function initializeCalculator(calButtonId, calMenuId, itemQtyInput) {
+            $("#" + calButtonId).click(function(e) {
+                e.stopPropagation(); // Prevents the click event from reaching the document body
+                $("#" + calMenuId).toggleClass("hidden");
+            });
+
+            $(document).on('click', function(e) {
+                if (!$("#" + calButtonId).is(e.target) && !$('#' + calMenuId).has(e.target).length) {
+                    // Click occurred outside the button and dropdown, hide the dropdown
+                    $('#' + calMenuId).addClass("hidden");
+                }
+            });
+
+            // Get calculator buttons, display, and clear button
+            let cbuttons = $("#" + calMenuId).find('.cal_btn');
+            let display = $("#" + calMenuId).find('#cal_display');
+            let equalButton = $("#" + calMenuId).find('#equal_btn');
+            let clearbtn = $("#" + calMenuId).find('#clear_btn');
+
+            // Add click event listeners to calculator buttons
+            cbuttons.each(function() {
+                $(this).click(function() {
+                    display.val(display.val() + $(this).text());
+                });
+            });
+
+            // Add click event listener to equal button
+            equalButton.click(function() {
+                try {
+                    // Evaluate the expression
+                    var result = eval(display.val());
+                    if (!isNaN(result)) {
+                        // Display the result
+                        display.val(result);
+                        // Update the corresponding item quantity field
+                        $(itemQtyInput).val(result);
+                        // Trigger input event
+                        $(itemQtyInput).trigger('input');
+                    } else {
+                        // If result is not a number, display an error message
+                        display.val('Error: Invalid expression');
+                    }
+                } catch (error) {
+                    // If an error occurs during evaluation, display an error message
+                    display.val('Error: ' + error.message);
+                }
+            });
+
+            // Add click event listener to clear button
+            clearbtn.click(function() {
+                display.val('');
+            });
+        }
     });
 </script>
 <script>
@@ -6292,7 +6354,7 @@ $userPrivileges->estimate->expenses === 'on')
 
     $(".modal-close").click(function(e) {
         e.preventDefault();
-        $("#addTemplate-modal").addClass('hidden');
+        $("#addItemTemplate-modal").addClass('hidden');
         // $("#itemTemplatesForm")[0].reset()
         $('#template-items').empty();
     });
