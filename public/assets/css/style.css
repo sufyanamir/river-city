@@ -260,3 +260,6 @@ input[type=checkbox]:checked+label:before {
 .shadow-med {
     box-shadow: 0px 0px 11px 0px rgba(0, 0, 0, 0.07);
 }
+.desktop-closed-message-avatar{
+    padding: 10px;
+}

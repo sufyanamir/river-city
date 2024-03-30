@@ -10,6 +10,19 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+    var botmanWidget = {
+        aboutText: 'River City Painting',
+        introMessage: "Please write 'hi' to start a conversation!",
+        bubbleAvatarUrl: "{{asset('assets/icons/chatbot.png')}}",
+        mainColor: "#930027",
+        bubbleBackground: "#930027",
+        title: "River City Pinting (customer care)",
+    };
+</script>
+<script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>
+
+
+<script>
     $(document).ready(function() {
         $('select').select2({
             width: '100%'
@@ -38,7 +51,7 @@
     }
 
     .select2-container--default .select2-selection--single:focus {
-        border:2px solid #0095E5;
+        border: 2px solid #0095E5;
     }
 
     .select2-container--default .select2-selection--single .select2-selection__arrow {

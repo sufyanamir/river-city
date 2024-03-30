@@ -13,6 +13,7 @@ use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserToDoController;
+use App\Http\Controllers\BotManController;
 use App\Models\Estimate;
 use App\Models\EstimateChat;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,8 @@ Route::get('/viewProposal/{id}', [EstimateController::class, 'viewProposal']);
 Route::post('/acceptProposal/{id}', [EstimateController::class, 'acceptProposal']);
 
 Route::middleware('customauth')->group(function () {
+
+    Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
 
     Route::post('/sendInvoiceToQB', [EstimateController::class, 'sendInvoiceToQB']);
 
