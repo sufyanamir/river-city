@@ -9,6 +9,12 @@
 <script src="{{ asset('assets/js/fancybox.min.js') }}"></script>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<style>
+    /* Style the title element */
+    #botmanWidgetRoot div:first-child {
+        color: #ffff !important; /* Change this to your desired color */
+    }
+</style>
 <script>
     var botmanWidget = {
         aboutText: 'River City Painting',
