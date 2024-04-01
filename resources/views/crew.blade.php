@@ -28,6 +28,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <th>Email</th>
                             <th>Phone Number</th>
                             <th>Address</th>
+                            <th></th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -42,6 +43,15 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <td>{{ $item->email }}</td>
                             <td>{{ $item->phone }}</td>
                             <td>{{ $item->address }}</td>
+                            @if($item->sts == 'active')
+                            <td>
+                            <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Active</span>
+                            </td>
+                            @elseif($item->sts == 'deleted')
+                            <td>
+                                <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">Deleted</span>
+                            </td>
+                            @endif
                             <td>
                                 @if (session('user_details')['user_role'] == 'admin')
                                 <button id="editCrew{{$item->id}}">

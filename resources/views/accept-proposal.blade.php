@@ -23,10 +23,10 @@
                     <div class="mt-12 p-4">
                         <p class="text-[22px]/[25.78px] font-bold text-[#323C47]">River City Painting, Inc</p>
                         <p class=" mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
-                            @if($customer->customer_city == 'wichita')
+                            @if($customer->branch == 'wichita')
                             4425 W Walker St<br>
                             Wichita Kansas 67209 <br>
-                            @elseif($customer->customer_city == 'kansas')
+                            @elseif($customer->branch == 'kansas')
                             12022 Blue Valley Pkwy<br>
                             Overland Park, Ks 66213 <br>
                             @endif

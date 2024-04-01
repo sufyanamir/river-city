@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('user_role')->nullable();
             $table->text('address')->nullable();
             $table->text('user_image')->nullable();
+            $table->text('sts')->default('active');
         });
     }
 
