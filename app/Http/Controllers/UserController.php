@@ -77,7 +77,7 @@ class UserController extends Controller
             $emailData = [
                 'email' => $validatedData['email'],
                 'userId' => $user->id,
-                'name' => $validatedData['name'] . ' ' . $validatedData['last_name'],
+                'name' => $user->name . ' ' . $user->last_name,
             ];
 
             $mail = new ForgotPasswordMail($emailData);
