@@ -551,7 +551,7 @@ class EstimateController extends Controller
         $estimate = Estimate::where('estimate_id', $id)->first();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
         $estimates = Estimate::get();
-        $users = User::where('user_role', 'scheduler')->get();
+        $users = User::where('user_role', 'scheduler')->where('sts', 'active')->get();
 
         return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users]);
         // return response()->json(['success' => true, 'estimate' => $estimate]);
@@ -611,7 +611,7 @@ class EstimateController extends Controller
         $estimate = Estimate::where('estimate_id', $id)->first();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
         $estimates = ScheduleEstimate::with(['estimate'])->get();
-        $users = User::where('user_role', 'crew')->get();
+        $users = User::where('user_role', 'crew')->where('sts', 'active')->get();
 
         return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'crewSchedule' => $crewSchedule]);
         // return response()->json(['success' => true, 'estimate' => $estimate]);
@@ -693,7 +693,7 @@ class EstimateController extends Controller
         if ($userDetails['user_role'] == 'admin') {
             $customers = Customer::get();
             $estimates = Estimate::with('scheduler', 'assigned_work', 'customer')->orderBy('created_at', 'desc')->get();
-            $users = User::where('user_role', '<>', 'crew')->get();
+            $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
         } elseif ($userDetails['user_role'] == 'scheduler') {
             if ($type == 'assigned') {
                 $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->orderBy('created_at', 'desc')->get();
@@ -701,7 +701,7 @@ class EstimateController extends Controller
                 $estimates = Estimate::with('scheduler', 'assigned_work', 'customer')->orderBy('created_at', 'desc')->get();
             }
             $customers = Customer::get();
-            $users = User::where('user_role', '<>', 'crew')->get();
+            $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
         }
 
         // Access related data for each estimate
@@ -2028,7 +2028,7 @@ class EstimateController extends Controller
             $labourItems = Items::where('item_type', 'labour')->get();
             $materialItems = Items::where('item_type', 'material')->get();
             $assemblyItems = Items::where('item_type', 'assemblies')->get();
-            $users = User::get();
+            $users = User::where('sts', 'active')->get();
             $estimateNotes = EstimateNote::where('estimate_id', $estimate->estimate_id)->get();
             $emailTemplates = Email::get();
             $estimateEmails = EstimateEmail::where('estimate_id', $estimate->estimate_id)->get();
@@ -2250,6 +2250,7 @@ class EstimateController extends Controller
                 'internal_note' => 'nullable|string',
                 'source' => 'nullable|string',
                 'owner' => 'nullable|string',
+                'branch' => 'required',
                 'project_type' => 'nullable|string',
                 'building_type' => 'nullable|string',
             ]);
@@ -2273,6 +2274,7 @@ class EstimateController extends Controller
                     'potential_value' => $validatedData['potential_value'],
                     'company_internal_note' => $validatedData['internal_note'],
                     'source' => $validatedData['source'],
+                    'branch' => $validatedData['branch'],
                 ]);
             }
 

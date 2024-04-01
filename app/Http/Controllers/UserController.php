@@ -68,7 +68,7 @@ class UserController extends Controller
                 'email' => 'required',
             ]);
 
-            $user = User::where('email', $validatedData['email'])->first();
+            $user = User::where('email', $validatedData['email'])->where('sts', 'active')->first();
 
             if (!$user) {
                 return response()->json(['success' => false, 'message' => 'User not found!'], 404);
@@ -243,7 +243,8 @@ class UserController extends Controller
                 return response()->json(['success' => false, 'message'  => 'no Crew found'], 404);
             }
 
-            $user->delete();
+            $user->sts = 'deleted';
+            $user->save();
 
             return response()->json(['success' => true, 'message' => 'Crew deleted  successfully!'], 200);
         } catch (\Exception $e) {
@@ -403,10 +404,13 @@ class UserController extends Controller
             $user = User::where('id', $id)->first();
             if (!$user) {
                 return response(['success' => false, 'message' => 'User not found!'], 404);
-            } elseif ($user == 'admin') {
+            }
+            
+            if ($user->user_role == 'admin') {
                 return response(['success' => false, 'message' => 'User cannot be deleted!'], 400);
             } else {
-                $user->delete();
+                $user->sts = 'deleted';
+                $user->save();
                 return response(['success' => true, 'message' => 'User deleted!'], 200);
             }
         } catch (\Exception $e) {
@@ -611,7 +615,7 @@ class UserController extends Controller
         $email = $request->input('email');
         $token = Str::random(60);
         $password = $request->input('password');
-        $user = User::where('email', $email)->first();
+        $user = User::where('email', $email)->where('sts', 'active')->first();
 
         if ($user && md5($password) === $user->password) {
             // Check if the user role is 0 or 1

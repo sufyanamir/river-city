@@ -27,6 +27,7 @@
                             <th>Date</th>
                             <th>Name</th>
                             <th>Phone Number/Address</th>
+                            <th>Branch</th>
                             <th>Type</th>
                             <th>Schedular Assigned</th>
                             <th>Crew Leader</th>
@@ -50,6 +51,9 @@
                                 <a href="https://maps.google.com/?q={{ $item->customer_address }}" target="_blank" class=" text-[#930027]">
                                     {{ $item->customer_address }}
                                 </a>
+                            </td>
+                            <td style=" width:50px;">
+                                {{ $item->customer->branch }}
                             </td>
                             <td>
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
@@ -397,11 +401,7 @@
                         </div>
                         <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">City</h5>
-                            <select name="city" id="city" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                <option value="">Select City</option>
-                                <option value="wichita">Wichita</option>
-                                <option value="kansas">Kansas City</option>
-                            </select>
+                            <input type="text" name="city" id="city" placeholder="City" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">State/Province</h5>
@@ -410,6 +410,14 @@
                         <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Zip/Postal Code</h5>
                             <input type="number" step="any" name="zip_code" id="zip_code" placeholder="Zip/Postal Code" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div>
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Branch</h5>
+                            <select name="branch" id="branch" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <option value="">Select Branch</option>
+                                <option value="wichita">Wichita</option>
+                                <option value="kansas">Kansas City</option>
+                            </select>
                         </div>
                         <div class=" col-span-2">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Tax</h5>

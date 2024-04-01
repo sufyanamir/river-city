@@ -32,6 +32,7 @@ return new class extends Migration
             $table->text('potential_value')->nullable();
             $table->text('company_internal_note')->nullable();
             $table->text('source')->nullable();
+            $table->text('branch')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrent();
         });

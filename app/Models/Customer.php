@@ -42,6 +42,7 @@ class Customer extends Model
         'potential_value',
         'internal_note',
         'source',
+        'branch',
     ];
 
     public $timestamps = true;
