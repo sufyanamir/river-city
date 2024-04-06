@@ -149,6 +149,14 @@ $userPrivileges = session('user_details')['user_privileges'];
                                 autocomplete="given-name"
                                 class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
+                        <div>
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Branch</h5>
+                            <select name="branch" id="branch" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <option value="">Select Branch</option>
+                                <option value="wichita">Wichita</option>
+                                <option value="kansas">Kansas City</option>
+                            </select>
+                        </div>
                         <div class=" col-span-2">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Tax</h5>
                             <input type="number" step="any" name="tax_rate" id="tax_rate" placeholder="Tax Rate (Optional)"
@@ -242,6 +250,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                     $('#internal_note').val(customerDetail.company_internal_note);
                     $('#source').val(customerDetail.source);
                     $('#owner').val(customerDetail.owner);
+                    $('#branch').val(customerDetail.branch).trigger('change');
                     // Set the item ID in the hidden input field
                     $('#customer_id').val(customerDetail.customer_id);
                     var formUrl = $('#addEstimate-form').attr('action', '/updateCustomer');
