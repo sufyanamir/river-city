@@ -617,6 +617,7 @@
                             <div>
                                 <label for="email_to">Email to:</label>
                                 <input type="text" name="email_to" id="email_to" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $customer->customer_email }}">
+                                <p class="text-[#930027] text-xs">Please use "," to send mail to multiple persons.</p>
                             </div>
                             <div class=" col-span-2">
                                 <label for="email_subject">Email Subject:</label>
