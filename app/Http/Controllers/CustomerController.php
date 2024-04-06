@@ -58,6 +58,7 @@ class CustomerController extends Controller
                 'internal_note' => 'nullable|string',
                 'source' => 'nullable|string',
                 'owner' => 'nullable',
+                'branch' => 'nullable'
             ]);
 
             $customer = Customer::where('customer_id', $validatedData['customer_id'])->first();
@@ -76,6 +77,7 @@ class CustomerController extends Controller
             $customer->potential_value = $validatedData['potential_value'];
             $customer->company_internal_note = $validatedData['internal_note'];
             $customer->source = $validatedData['source'];
+            $customer->branch = $validatedData['branch'];
             if (isset($validatedData['owner']) != null) {
                 $customer->owner = $validatedData['owner'];
             }
