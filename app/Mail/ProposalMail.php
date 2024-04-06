@@ -37,9 +37,9 @@ class ProposalMail extends Mailable
     // }
     public function build()
     {
-        $this->subject($this->emailData['subject'] ?? 'estimate');
-
-        return $this->view('emails.proposal-mail');
+        return $this->subject($this->emailData['subject'] ?? 'Estimate')
+                    ->replyTo(session('user_details')['email']) // Set the reply-to address to the logged in user's email
+                    ->view('emails.proposal-mail');
     }
 
     /**

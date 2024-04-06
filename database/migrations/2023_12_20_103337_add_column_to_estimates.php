@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('schedule_assigned')->default(0);
             $table->integer('schedule_assigned_to')->nullable();
             $table->integer('work_completed_by')->nullable();
+            $table->integer('work_completed')->nullable();
             $table->timestamp('complete_work_date')->useCurrent();
             $table->integer('invoice_assigned')->default(0);
             $table->integer('invoice_assigned_to')->nullable();

@@ -39,8 +39,8 @@
          Please Click on the link below to reset your password.</p>
         <a href="https://soft.rivercitypainting.tech/resetPassword/{{ $emailData['userId'] }}" style="padding:20px 50px; font-size:large; color:#930027;">Reset Password!</a>
         <br>
-        <p style="padding:20px 50px; font-size:large"><b>Thank You!</b></p>
-        <i style="padding:20px 50px; font-size:large">Team <a style="color: #930027;" href="https://paintwichita.com/">River City Painting</a></i>
+        <br>
+        <p style="padding:20px 50px; font-size:large"><a style="color: #930027;" href="https://paintwichita.com/">Visit our site!</a></p>
         <!-- <div style="text-align: left !important; padding: 10px">
             <img src="{{ $message->embed(public_path().'/assets/images/PCA-Logo-RGB .png') }}" class="footerImage" style="height: 80px;" alt="Image">
             <img src="{{ $message->embed(public_path().'/assets/images/2023BOW_GoldWInner.png') }}" class="footerImage" style="height: 80px;" alt="Image">

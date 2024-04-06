@@ -37,9 +37,9 @@ class sendMailToClient extends Mailable
     // }
     public function build()
     {
-        $this->subject($this->emailData['email_subject'] ?? 'Default Subject');
-
-        return $this->view('emails.estimate_mail_to_client');
+        return $this->subject($this->emailData['email_subject'] ?? 'Default Subject')
+                    ->replyTo(session('user_details')['email']) // Set the reply-to address to the logged in user's email
+                    ->view('emails.estimate_mail_to_client');
     }
     /**
      * Get the message content definition.

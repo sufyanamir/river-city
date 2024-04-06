@@ -47,7 +47,7 @@
                                                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                                     <!-- Modal content here -->
                                                     <div class=" flex justify-between">
-                                                        <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Group</h2>
+                                                        <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Edit Group</h2>
                                                         <button class="modal-close" type="button">
                                                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
                                                         </button>
@@ -71,6 +71,22 @@
                                                                 <option value="material">Material</option>
                                                                 <option value="assemblies">Assemblies</option>
                                                             </select>
+                                                        </div>
+                                                        <div class="col-span-2">
+                                                            <div class="flex justify-around my-2">
+                                                                <div>
+                                                                    <input type="checkbox" name="show_unit_price" id="show_unit_price{{$group->group_id}}" value="1" {{ $group->show_unit_price == 1 ? 'checked' : '' }}>
+                                                                    <label for="show_unit_price{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Unit Prices</label>
+                                                                </div>
+                                                                <div>
+                                                                    <input type="checkbox" name="show_quantity" id="show_quantity{{$group->group_id}}" value="1" {{ $group->show_quantity == 1 ? 'checked' : '' }}>
+                                                                    <label for="show_quantity{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Quantities</label>
+                                                                </div>
+                                                                <div>
+                                                                    <input type="checkbox" name="show_total" id="show_total{{$group->group_id}}" value="1" {{ $group->show_total == 1 ? 'checked' : '' }}>
+                                                                    <label for="show_total{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Totals</label>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <!-- <div class=" text-left col-span-2">
                             <h3 class=" font-medium text-lg">Items:</h3>
@@ -115,19 +131,19 @@
                                     </div>
                                 </div>
                                 <script>
-    document.getElementById("editGroup{{$group->group_id}}").addEventListener("click", function(e) {
-        e.preventDefault();
-        document.getElementById("editGroup-modal{{$group->group_id}}").classList.remove('hidden');
-    });
+                                    document.getElementById("editGroup{{$group->group_id}}").addEventListener("click", function(e) {
+                                        e.preventDefault();
+                                        document.getElementById("editGroup-modal{{$group->group_id}}").classList.remove('hidden');
+                                    });
 
-    document.querySelectorAll(".modal-close").forEach(function(closeBtn) {
-        closeBtn.addEventListener("click", function(e) {
-            e.preventDefault();
-            document.getElementById("editGroup-modal{{$group->group_id}}").classList.add('hidden');
-            document.getElementById("formData{{$group->group_id}}").reset();
-        });
-    });
-</script>
+                                    document.querySelectorAll(".modal-close").forEach(function(closeBtn) {
+                                        closeBtn.addEventListener("click", function(e) {
+                                            e.preventDefault();
+                                            document.getElementById("editGroup-modal{{$group->group_id}}").classList.add('hidden');
+                                            document.getElementById("formData{{$group->group_id}}").reset();
+                                        });
+                                    });
+                                </script>
 
                                 <form class=" inline-block" action="/delete/group/{{ $group->group_id }}" method="post">
                                     @csrf
@@ -182,6 +198,22 @@
                                 <option value="material">Material</option>
                                 <option value="assemblies">Assemblies</option>
                             </select>
+                        </div>
+                        <div class="col-span-2">
+                            <div class=" flex justify-around my-2">
+                                <div>
+                                    <input type="checkbox" name="show_unit_price" id="show_unit_price" value="1">
+                                    <label for="show_unit_price" class=" text-gray-500 text-xs">Show Line Item Unit Prices</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="show_quantity" id="show_quantity" value="1">
+                                    <label for="show_quantity" class=" text-gray-500 text-xs">Show Line Item Quantities</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="show_total" id="show_total" value="1">
+                                    <label for="show_total" class=" text-gray-500 text-xs">Show Line Item Totals</label>
+                                </div>
+                            </div>
                         </div>
                         <!-- <div class=" text-left col-span-2">
                             <h3 class=" font-medium text-lg">Items:</h3>

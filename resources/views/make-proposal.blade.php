@@ -21,12 +21,13 @@
                             @if($customer->branch == 'wichita')
                             4425 W Walker St<br>
                             Wichita Kansas 67209 <br>
+                            info@paintwichita.com <br>
                             @elseif($customer->branch == 'kansas')
                             12022 Blue Valley Pkwy<br>
                             Overland Park, Ks 66213 <br>
                             @endif
-                        info@paintwichita.com <br>
-                        (316) 262-3289
+                            office@rivercitypaintinginc.com <br>
+                            (316) 262-3289
                         </p>
                     </div>
                 </div>
@@ -208,10 +209,14 @@
                                                             </p>
                                                         </td>
                                                         <td class="text-center">
+                                                            @if($item->group->show_quantity == 1)
                                                             {{ $item->item_qty }} <br> {{ $item->item_unit }}
+                                                            @endif
                                                         </td>
                                                         <td class="text-center">
+                                                            @if($item->group->show_total == 1)
                                                             ${{ $item->item_total }}
+                                                            @endif
                                                         </td>
                                                         <!-- @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
                                                     <tr>
