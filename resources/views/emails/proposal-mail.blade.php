@@ -44,7 +44,7 @@
         <br>
         @if($emailData['branch'] == 'kansas')
         <p style="padding:20px 50px; font-size:large"><a style="color: #930027;" href="https://rivercitypaintinginc.com/">Visit our site!</a></p>
-        @elseif($emailData['branch'] == 'wichita')
+        @else
         <p style="padding:20px 50px; font-size:large"><a style="color: #930027;" href="https://paintwichita.com/">Visit our site!</a></p>
         @endif
         <div style=" padding:20px 50px;">
