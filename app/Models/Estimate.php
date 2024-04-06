@@ -57,6 +57,7 @@ class Estimate extends Model
         'schedule_assigned',
         'schedule_assigned_to',
         'work_completed_by',
+        'work_completed',
         'complete_work_date',
         'invoice_assigned',
         'invoice_assigned_to',

@@ -17,8 +17,8 @@ class GroupController extends Controller
     // edit group
     public function editGroup(Request $request)
     {
-        try{
-            
+        try {
+
             $validatedData = $request->validate([
                 'group_id' => 'required',
                 'group_name' => 'required|string',
@@ -26,6 +26,12 @@ class GroupController extends Controller
                 'group_type' => 'required|string',
                 // 'group_item_ids' => 'required|array',
                 'group_description' => 'nullable|string',
+                'show_unit_price' => 'nullable',
+                'show_quantity' => 'nullable',
+                'show_total' => 'nullable',
+                'show_unit_price' => 'nullable|boolean', // Validate as boolean
+                'show_quantity' => 'nullable|boolean', // Validate as boolean
+                'show_total' => 'nullable|boolean', // Validate as boolean
             ]);
 
             $group = Groups::where('group_id', $validatedData['group_id'])->first();
@@ -33,17 +39,20 @@ class GroupController extends Controller
             $group->group_name = $validatedData['group_name'];
             $group->group_type = $validatedData['group_type'];
             $group->group_description = $validatedData['group_description'];
+            // Set the values of checkboxes to 1 if checked, otherwise set to 0
+            $group->show_unit_price = $request->has('show_unit_price') ? 1 : 0;
+            $group->show_quantity = $request->has('show_quantity') ? 1 : 0;
+            $group->show_total = $request->has('show_total') ? 1 : 0;
 
             $group->save();
 
             return response()->json(['success' => true, 'message' => 'Group Updated!'], 200);
-
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     // edit group
- 
+
     // delete group
     public function deleteGroup($id)
     {
@@ -80,6 +89,9 @@ class GroupController extends Controller
                 'group_type' => 'required|string',
                 // 'group_item_ids' => 'required|array',
                 'group_description' => 'nullable|string',
+                'show_unit_price' => 'nullable',
+                'show_quantity' => 'nullable',
+                'show_total' => 'nullable',
             ]);
 
             $group = Groups::create([
@@ -88,6 +100,9 @@ class GroupController extends Controller
                 'group_type' => $validatedData['group_type'],
                 // 'group_items' => json_encode($validatedData['group_item_ids']),
                 'group_description' => $validatedData['group_description'],
+                'show_unit_price' => $validatedData['show_unit_price'],
+                'show_quantity' => $validatedData['show_quantity'],
+                'show_total' => $validatedData['show_total'],
             ]);
 
             // foreach ($validatedData['group_item_ids'] as $key => $itemIds) {

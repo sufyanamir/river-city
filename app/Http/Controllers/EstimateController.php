@@ -1117,7 +1117,8 @@ class EstimateController extends Controller
             $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
 
             $estimate->work_completed_by = $userDetails['id'];
-            $estimate->invoice_assigned = $validatedData['complete_work_date'];
+            $estimate->work_completed = 1;
+            $estimate->complete_work_date = $validatedData['complete_work_date'];
             $estimate->invoice_assigned = 1;
             $estimate->invoice_assigned_to = $validatedData['assign_invoice'];
 
@@ -1387,8 +1388,9 @@ class EstimateController extends Controller
                 'email_subject' => 'required',
                 'email_body' => 'required',
             ]);
+            $emailTo = explode(',', $validatedData['email_to']);
 
-            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
+            $estimate = Estimate::with('customer')->where('estimate_id', $validatedData['estimate_id'])->first();
             $emailData = [
                 'estimate_id' => $validatedData['estimate_id'],
                 'email' => $validatedData['email_to'],
@@ -1396,6 +1398,7 @@ class EstimateController extends Controller
                 'title' => $validatedData['email_title'],
                 'subject' => $validatedData['email_subject'],
                 'body' => $validatedData['email_body'],
+                'branch' => $estimate->customer->branch,
             ];
 
             $existingProposals = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->get();
@@ -1406,8 +1409,15 @@ class EstimateController extends Controller
                 });
             }
 
-            $mail = new ProposalMail($emailData);
-            Mail::to($validatedData['email_to'])->send($mail);
+            foreach ($emailTo as $email) {
+                $emailData['email'] = $email;
+    
+                // Your existing code for sending email goes here...
+                $mail = new ProposalMail($emailData);
+                Mail::to(trim($email))->send($mail); // Use trim() to remove extra spaces
+    
+                // Rest of your code...
+            }
             $estimate->estimate_total = null;
             $estimate->save();
             $proposal = EstimateProposal::create([
@@ -1524,6 +1534,7 @@ class EstimateController extends Controller
             'email_subject' => $validatedData['email_subject'],
             'email_body' => $validatedData['email_body'], // Use the modified email body
             'name' => $customer->customer_first_name . ' ' . $customer->customer_last_name,
+            'branch' => $customer->branch,
         ];
 
         // Create an instance of the Mailable class

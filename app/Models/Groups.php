@@ -24,6 +24,9 @@ class Groups extends Model
         'total_items',
         'group_type',
         'group_description',
+        'show_unit_price',
+        'show_quantity',
+        'show_total',
     ];
 
     public $timestamps = true;

@@ -64,8 +64,12 @@
         <a href="{{$url}}" style="padding:20px 50px; font-size:large; color:#930027;">{{$urlTitles[$key]}}</a><br>
         @endforeach
         <br>
-        <p style="padding:20px 50px; font-size:large"><b>Thank You!</b></p>
-        <i style="padding:20px 50px; font-size:large">Team <a style="color: #930027;" href="https://paintwichita.com/">River City Painting</a></i>
+        <br>
+        @if($emailData['branch'] == 'kansas')
+        <p style="padding:20px 50px; font-size:large"><a style="color: #930027;" href="https://rivercitypaintinginc.com/">Visit our site!</a></p>
+        @elseif($emailData['branch'] == 'wichita')
+        <p style="padding:20px 50px; font-size:large"><a style="color: #930027;" href="https://paintwichita.com/">Visit our site!</a></p>
+        @endif
         <div style="padding:20px 50px;">
             <img src="{{ $message->embed(public_path().'/assets/images/PCA-Logo-RGB .png') }}" class="footerImage" style="height: 80px;" alt="Image">
             <img src="{{ $message->embed(public_path().'/assets/images/2023BOW_GoldWInner.png') }}" class="footerImage" style="height: 80px;" alt="Image">
