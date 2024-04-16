@@ -19,10 +19,10 @@ $userPrivileges = session('user_details')['user_privileges'];
                         <th>Name</th>
                         <th>Email</th>
                         <th>Date</th>
-                        <th>Address</th>
-                        <th>Phone Number</th>
+                        <th>Phone Number/Address</th>
                         <th>Source</th>
                         <th>Added By</th>
+                        <th>Branch</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -32,10 +32,10 @@ $userPrivileges = session('user_details')['user_privileges'];
                         <td>{{ $customer->customer_first_name }} {{ $customer->customer_last_name }}</td>
                         <td>{{ $customer->customer_email }}</td>
                         <td>{{ date('d, F Y', strtotime($customer->created_at)) }}</td>
-                        <td>{{ $customer->customer_primary_address }}</td>
-                        <td>{{ $customer->customer_phone }}</td>
+                        <td>{{ $customer->customer_phone }} <br> {{ $customer->customer_primary_address }}</td>
                         <td>{{ $customer->customer_soource }}</td>
                         <td>{{ $customer->addedBy ? $customer->addedBy->name : '' }}</td>
+                        <td>{{ $customer->branch }}</td>
                         <td>
                             @if(session('user_details')['user_role'] == 'admin')
                             <button id="editCustomer{{$customer->customer_id}}">

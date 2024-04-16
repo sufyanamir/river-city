@@ -62,7 +62,7 @@
                 </div>
             </div>
             <div class="grid grid-cols-3 gab-4">
-                <div class="card px-3">
+                <div class="card px-3 mt-3">
                     <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
                         <h3>Sales By Source</h3>
                     </div>
@@ -109,7 +109,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="card px-3">
+                <div class="card px-3 mt-3">
                     <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
                         <h3>Completed Estimates</h3>
                     </div>
@@ -155,7 +155,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="card px-3">
+                <div class="card px-3 mt-3">
                     <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
                         <h3>Pending Estimates</h3>
                     </div>
@@ -185,6 +185,144 @@
                                     @php
                                     $pending_estimates_total += $data['total_estimates'];
                                     $pending_estimate_total += $data['estimate_total'];
+                                    @endphp
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <table class=" w-full text-sm">
+                            <tfoot>
+                                <tr>
+                                    <th class=" text-left pl-1 py-2"> Grand Total</th>
+                                    <td class=" text-center">{{$pending_estimates_total}}</td>
+                                    <td class=" text-right pr-1 py-2">${{$pending_estimate_total}}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="card px-3 mt-3">
+                    <div class="rounded-t-lg p-2 card-header border bg-gray-100">
+                        <h3>Completed Work Orders</h3>
+                    </div>
+                    <div class="relative overflow-auto border rounded-b-lg">
+                        <table class="w-full text-sm">
+                            <thead class="border-b-2">
+                                <tr>
+                                    <th class="text-left pl-1 py-2">Supervisor</th>
+                                    <th>#</th>
+                                    <th class="text-right pr-1 py-2">Total</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div style="height: 100px !important; overflow-y:scroll !important;">
+                            <table class="w-full text-sm">
+                                @php
+                                $completed_work_orders_total = 0;
+                                $completed_work_order_total = 0;
+                                @endphp
+                                <tbody class="">
+                                    @foreach($completed_work_orders as $estimators => $data)
+                                    <tr class="border-b">
+                                        <td class="text-left pl-1 py-2">{{$estimators}}</td>
+                                        <td class="text-center">{{$data['total_work_orders']}}</td>
+                                        <td class="text-right pr-1 py-2">${{$data['work_order_total']}}</td>
+                                    </tr>
+                                    @php
+                                    $completed_work_orders_total += $data['total_work_orders'];
+                                    $completed_work_order_total += $data['work_order_total'];
+                                    @endphp
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <table class="w-full text-sm">
+                            <tfoot>
+                                <tr>
+                                    <th class="text-left pl-1 py-2"> Grand Total</th>
+                                    <td class="text-center">{{$completed_work_orders_total}}</td>
+                                    <td class="text-right pr-1 py-2">${{$completed_work_order_total}}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="card px-3 mt-3">
+                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
+                        <h3>Accepted Estimates</h3>
+                    </div>
+                    <div class=" relative overflow-auto border rounded-b-lg">
+                        <table class=" w-full text-sm">
+                            <thead class=" border-b-2">
+                                <tr>
+                                    <th class=" text-left pl-1 py-2">Estimator</th>
+                                    <th>#</th>
+                                    <th class=" text-right pr-1 py-2">Total</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div style="height: 100px !important; overflow-y:scroll !important;">
+                            <table class=" w-full text-sm">
+                                @php
+                                $accepted_estimates_total = 0;
+                                $accepted_estimate_total = 0;
+                                @endphp
+                                <tbody class="">
+                                    @foreach($accepted_estimates as $estimators => $data)
+                                    <tr class=" border-b">
+                                        <td class=" text-left pl-1 py-2">{{$estimators}}</td>
+                                        <td class=" text-center">{{$data['total_estimates']}}</td>
+                                        <td class=" text-right pr-1 py-2">${{$data['estimate_total']}}</td>
+                                    </tr>
+                                    @php
+                                    $accepted_estimates_total += $data['total_estimates'];
+                                    $accepted_estimate_total += $data['estimate_total'];
+                                    @endphp
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <table class=" w-full text-sm">
+                            <tfoot>
+                                <tr>
+                                    <th class=" text-left pl-1 py-2"> Grand Total</th>
+                                    <td class=" text-center">{{$pending_estimates_total}}</td>
+                                    <td class=" text-right pr-1 py-2">${{$pending_estimate_total}}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="card px-3 mt-3">
+                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
+                        <h3>Sales By Estimates</h3>
+                    </div>
+                    <div class=" relative overflow-auto border rounded-b-lg">
+                        <table class=" w-full text-sm">
+                            <thead class=" border-b-2">
+                                <tr>
+                                    <th class=" text-left pl-1 py-2">Estimator</th>
+                                    <th>#</th>
+                                    <th class=" text-right pr-1 py-2">Total</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div style="height: 100px !important; overflow-y:scroll !important;">
+                            <table class=" w-full text-sm">
+                                @php
+                                $sales_by_estimator_total = 0;
+                                $sales_total = 0;
+                                @endphp
+                                <tbody class="">
+                                    @foreach($sales_by_estimator as $estimators => $data)
+                                    <tr class=" border-b">
+                                        <td class=" text-left pl-1 py-2">{{$estimators}}</td>
+                                        <td class=" text-center">{{$data['total_estimates']}}</td>
+                                        <td class=" text-right pr-1 py-2">${{$data['estimate_total']}}</td>
+                                    </tr>
+                                    @php
+                                    $sales_by_estimator_total += $data['total_estimates'];
+                                    $sales_total += $data['estimate_total'];
                                     @endphp
                                     @endforeach
                                 </tbody>
