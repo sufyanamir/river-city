@@ -18,6 +18,9 @@ class ReportsController extends Controller
         $sources = [];
         $completedEstimators = [];
         $pendingEstimators = [];
+        $completedWorkOrders = [];
+        $acceptedEstimates = [];
+        $salesbyEsimator = [];
 
         foreach ($customers as $customer) {
             $sourceName = $customer->source;
@@ -36,7 +39,7 @@ class ReportsController extends Controller
             // Check if estimate_status is completed before adding to completedEstimators
             foreach ($customer->estimates as $estimate) {
                 if ($estimate->estimate_status === 'complete') {
-                    $ownerName = $customer->owner;
+                    $ownerName = $estimate->project_owner;
 
                     if (!isset($completedEstimators[$ownerName]['total_estimates'])) {
                         $completedEstimators[$ownerName]['total_estimates'] = 0;
@@ -52,7 +55,7 @@ class ReportsController extends Controller
             }
             foreach ($customer->estimates as $estimate) {
                 if ($estimate->estimate_status === 'pending') {
-                    $ownerName = $customer->owner;
+                    $ownerName = $estimate->project_owner;
 
                     if (!isset($pendingEstimators[$ownerName]['total_estimates'])) {
                         $pendingEstimators[$ownerName]['total_estimates'] = 0;
@@ -65,10 +68,62 @@ class ReportsController extends Controller
                     $pendingEstimators[$ownerName]['total_estimates'] += 1;
                     $pendingEstimators[$ownerName]['estimate_total'] += $estimate->estimate_total;
                 }
+
+                if ($estimate->work_completed === 1) {
+                    $ownerName = $estimate->project_owner;
+    
+                    if (!isset($completedWorkOrders[$ownerName]['total_work_orders'])) {
+                        $completedWorkOrders[$ownerName]['total_work_orders'] = 0;
+                    }
+    
+                    if (!isset($completedWorkOrders[$ownerName]['work_order_total'])) {
+                        $completedWorkOrders[$ownerName]['work_order_total'] = 0;
+                    }
+    
+                    $completedWorkOrders[$ownerName]['total_work_orders'] += 1;
+                    $completedWorkOrders[$ownerName]['work_order_total'] += $estimate->estimate_total;
+                }
+                
+                if ($estimate->estimate_total != null) {
+                    $ownerName = $estimate->project_owner;
+
+                    if (!isset($acceptedEstimates[$ownerName]['total_estimates'])) {
+                        $acceptedEstimates[$ownerName]['total_estimates'] = 0;
+                    }
+
+                    if (!isset($acceptedEstimates[$ownerName]['estimate_total'])) {
+                        $acceptedEstimates[$ownerName]['estimate_total'] = 0;
+                    }
+
+                    $acceptedEstimates[$ownerName]['total_estimates'] += 1;
+                    $acceptedEstimates[$ownerName]['estimate_total'] += $estimate->estimate_total;
+                }
+
+                if ($estimate) {
+                    $ownerName = $estimate->project_owner;
+
+                    if (!isset($salesbyEsimator[$ownerName]['total_estimates'])) {
+                        $salesbyEsimator[$ownerName]['total_estimates'] = 0;
+                    }
+
+                    if (!isset($salesbyEsimator[$ownerName]['estimate_total'])) {
+                        $salesbyEsimator[$ownerName]['estimate_total'] = 0;
+                    }
+
+                    $salesbyEsimator[$ownerName]['total_estimates'] += 1;
+                    $salesbyEsimator[$ownerName]['estimate_total'] += $estimate->estimate_total;
+                }
             }
         }
 
         // return response()->json(['sources' => $sources, 'completed_estimators' => $completedEstimators]);
-        return view('reports', ['sources' => $sources, 'completed_estimators' => $completedEstimators, 'pending_estimators' => $pendingEstimators]);
+        return view('reports', [
+            'sources' => $sources,
+            'completed_estimators' => $completedEstimators,
+            'pending_estimators' => $pendingEstimators,
+            'completed_work_orders' => $completedWorkOrders,
+            'accepted_estimates' => $acceptedEstimates,
+            'sales_by_estimator' => $salesbyEsimator,
+        ]);
     }
 }
