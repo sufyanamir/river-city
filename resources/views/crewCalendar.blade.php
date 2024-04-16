@@ -163,161 +163,121 @@
         }
     </style>
 
-    <script>
-        let currentDate = new Date();
-
-        function generateWeek(currentDate, crewsData) {
-            const tableBody = document.getElementById('table-body');
-            tableBody.innerHTML = '';
-
-            const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            const headerCells = document.getElementsByTagName('th');
-
-            // Calculate the start date of the week (Monday)
-            const startDate = new Date(currentDate);
-            const diff = startDate.getDay() - 1; // Get the difference in days from Monday
-            startDate.setDate(startDate.getDate() - diff); // Set the start date to Monday
-
-            // Extract month and year from the start date
-            const monthYearString = startDate.toLocaleString('default', {
-                month: 'long',
-                year: 'numeric'
-            });
-
-            // Set the month and year in the first header cell
-            headerCells[0].textContent = monthYearString;
-
-            // Loop through each crew
-            crewsData.forEach(crew => {
-                // Create a single row for each crew
-                const row = document.createElement('tr');
-
-                // Create a crew cell for crew name and image
-                const crewCell = document.createElement('td');
-
-                // Create a container for crew image and name
-                const crewContainer = document.createElement('div');
-                crewContainer.classList.add('crew-container');
-
-                // Create image element for the crew
-                const crewImage = document.createElement('img');
-                // Check if crew has an image, if not, set default image path
-                crewImage.src = crew.image ? "{{ asset('') }}" + crew.image : "{{ asset('assets/images/demo-user.svg') }}";
-                crewImage.alt = crew.name;
-                crewImage.classList.add('crew-image');
-
-                // Create a span for crew name
-                const crewNameSpan = document.createElement('span');
-                crewNameSpan.textContent = crew.name + ' ';
-                crewNameSpan.classList.add('crew-name');
-
-                // Append image and name elements to the container
-                crewContainer.appendChild(crewImage);
-                crewContainer.appendChild(crewNameSpan);
-
-                // Append the container to the crew cell
-                crewCell.appendChild(crewContainer);
-
-                // Append the crew cell to the row
-                row.appendChild(crewCell);
-
-                // Create a container for crew rating stars
-                const crewRatingContainer = document.createElement('div');
-                crewRatingContainer.classList.add('crew-rating-container');
-
-                // Check if crew has a rating
-                if (crew.rating) {
-                    // Create rating star images based on the crew's rating
-                    for (let i = 0; i < crew.rating; i++) {
-                        const ratingStar = document.createElement('img');
-                        ratingStar.src = "{{ asset('assets/icons/rating-star.svg') }}"; // Path to rating star image
-                        ratingStar.alt = 'rating-star';
-                        ratingStar.classList.add('rating-star');
-                        crewRatingContainer.appendChild(ratingStar);
-                    }
+<script>
+    let currentDate = new Date();
+    function generateWeek(startDate, crewsData) {
+        const tableBody = document.getElementById('table-body');
+    tableBody.innerHTML = '';
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const headerCells = document.getElementsByTagName('th');
+    // Extract month and year from the start date
+    const monthYearString = startDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+    // Set the month and year in the first header cell
+    headerCells[0].textContent = monthYearString;
+        // Loop through each crew
+        crewsData.forEach(crew => {
+            // Create a single row for each crew
+            const row = document.createElement('tr');
+            // Create a crew cell for crew name and image
+            const crewCell = document.createElement('td');
+            // Create a container for crew image and name
+            const crewContainer = document.createElement('div');
+            crewContainer.classList.add('crew-container');
+            // Create image element for the crew
+            const crewImage = document.createElement('img');
+            // Check if crew has an image, if not, set default image path
+            crewImage.src = crew.image ? "{{ asset('') }}" + crew.image : "{{ asset('assets/images/demo-user.svg') }}";
+            crewImage.alt = crew.name;
+            crewImage.classList.add('crew-image');
+            // Create a span for crew name
+            const crewNameSpan = document.createElement('span');
+            crewNameSpan.textContent = crew.name + ' ';
+            crewNameSpan.classList.add('crew-name');
+            // Append image and name elements to the container
+            crewContainer.appendChild(crewImage);
+            crewContainer.appendChild(crewNameSpan);
+            // Append the container to the crew cell
+            crewCell.appendChild(crewContainer);
+            // Append the crew cell to the row
+            row.appendChild(crewCell);
+            // Create a container for crew rating stars
+            const crewRatingContainer = document.createElement('div');
+            crewRatingContainer.classList.add('crew-rating-container');
+            // Check if crew has a rating
+            if (crew.rating) {
+                // Create rating star images based on the crew's rating
+                for (let i = 0; i < crew.rating; i++) {
+                    const ratingStar = document.createElement('img');
+                    ratingStar.src = "{{ asset('assets/icons/rating-star.svg') }}"; // Path to rating star image
+                    ratingStar.alt = 'rating-star';
+                    ratingStar.classList.add('rating-star');
+                    crewRatingContainer.appendChild(ratingStar);
                 }
-
-                // Append the rating stars container to the crew container
-                crewContainer.appendChild(crewRatingContainer);
-
-                // Loop through each day of the week
-                for (let i = 0; i < 7; i++) {
-                    const loopDate = new Date(startDate);
-                    loopDate.setDate(startDate.getDate() + i);
-                    const day = daysOfWeek[loopDate.getDay()];
-                    const date = loopDate.getDate();
-                    const month = loopDate.toLocaleString('default', {
-                        month: 'short'
-                    });
-
-                    headerCells[i + 1].textContent = day + ' ' + date + ' ' + month;
-
-                    // Check if any estimates fall within the current day and crew
-                    const badges = [];
-
-                    crew.estimates.forEach(estimate => {
-                        const estimateStartDate = new Date(estimate.start_date);
-                        const estimateEndDate = new Date(estimate.end_date);
-
-                        if (
-                            loopDate.getTime() >= estimateStartDate.getTime() &&
-                            loopDate.getTime() <= estimateEndDate.getTime() + (24 * 60 * 60 * 1000) // Add one day to include the end date
-                        ) {
-                            // Create a clickable badge
-                            const badge = document.createElement('button');
-                            badge.className = 'badge';
-                            badge.textContent = estimate.estimate.customer_name + (estimate.estimate.project_name ? ' (' + estimate.estimate.project_name + ')' : '');
-                            // badge.href = '/viewEstimate/' + estimate.estimate_id; // Set the URL here
-                            badge.id = 'viewEstimate' + estimate.estimate_id;
-                            badges.push(badge);
-                        }
-                    });
-
-                    // Create a cell for each day
-                    const cell = document.createElement('td');
-
-                    // If badges exist for the current day, append them to the cell
-                    if (badges.length > 0) {
-                        badges.forEach(badge => {
-                            cell.appendChild(badge);
-                        });
+            }
+            // Append the rating stars container to the crew container
+            crewContainer.appendChild(crewRatingContainer);
+            // Loop through each day of the week
+            for (let i = 0; i < 7; i++) {
+                const loopDate = new Date(startDate);
+            loopDate.setDate(startDate.getDate() + i);
+            const day = daysOfWeek[loopDate.getDay()];
+            const date = loopDate.getDate();
+            const month = loopDate.toLocaleString('default', { month: 'short' });
+            headerCells[i + 1].textContent = day + ' ' + date + ' ' + month;
+                // Check if any estimates fall within the current day and crew
+                const badges = [];
+                crew.estimates.forEach(estimate => {
+                    const estimateStartDate = new Date(estimate.start_date);
+                    const estimateEndDate = new Date(estimate.end_date);
+                    if (
+                        loopDate.getTime() >= estimateStartDate.getTime() &&
+                        loopDate.getTime() <= estimateEndDate.getTime() + (24 * 60 * 60 * 1000) // Add one day to include the end date
+                    ) {
+                        // Create a clickable badge
+                        const badge = document.createElement('button');
+                        badge.className = 'badge';
+                        badge.textContent = estimate.estimate.customer_name + (estimate.estimate.project_name ? ' (' + estimate.estimate.project_name + ')' : '');
+                        // badge.href = '/viewEstimate/' + estimate.estimate_id; // Set the URL here
+                        badge.id = 'viewEstimate' + estimate.estimate_id;
+                        badges.push(badge);
                     }
-
-                    // Append the cell to the row
-                    row.appendChild(cell);
+                });
+                // Create a cell for each day
+                const cell = document.createElement('td');
+                // If badges exist for the current day, append them to the cell
+                if (badges.length > 0) {
+                    badges.forEach(badge => {
+                        cell.appendChild(badge);
+                    });
                 }
-
-                // Append the row to the table body
-                tableBody.appendChild(row);
-            });
-        }
-
-
-        // Data retrieved from the Laravel backend
-        const estimates = {!!json_encode($estimates) !!};
-        const crewData = {!!json_encode($crew) !!};
-
-        // Transform data to match the structure expected by generateWeek function
-        const crewsData = crewData.map(crew => ({
-            name: crew.name + ' ' + crew.last_name,
-            image: crew.user_image,
-            rating: crew.rating,
-            estimates: estimates.filter(estimate => estimate.work_assign_id === crew.id)
-        }));
-
-        // Usage:
+                // Append the cell to the row
+                row.appendChild(cell);
+            }
+            // Append the row to the table body
+            tableBody.appendChild(row);
+        });
+    }
+    // Data retrieved from the Laravel backend
+    const estimates = {!! json_encode($estimates) !!};
+    const crewData = {!! json_encode($crew) !!};
+    // Transform data to match the structure expected by generateWeek function
+    const crewsData = crewData.map(crew => ({
+        name: crew.name + ' ' + crew.last_name,
+        image: crew.user_image,
+        rating: crew.rating,
+        estimates: estimates.filter(estimate => estimate.work_assign_id === crew.id)
+    }));
+    // Usage:
+    generateWeek(currentDate, crewsData);
+    document.getElementById('nextBtn').addEventListener('click', function() {
+        currentDate.setDate(currentDate.getDate() + 7);
         generateWeek(currentDate, crewsData);
-
-        document.getElementById('nextBtn').addEventListener('click', function() {
-            currentDate.setDate(currentDate.getDate() + 7);
-            generateWeek(currentDate, crewsData);
-        });
-
-        document.getElementById('prevBtn').addEventListener('click', function() {
-            currentDate.setDate(currentDate.getDate() - 7);
-            generateWeek(currentDate, crewsData);
-        });
-    </script>
+    });
+    document.getElementById('prevBtn').addEventListener('click', function() {
+        currentDate.setDate(currentDate.getDate() - 7);
+        generateWeek(currentDate, crewsData);
+    });
+</script>
     @include('layouts.footer')
     <script>
         $(".modal-close").click(function(e) {
