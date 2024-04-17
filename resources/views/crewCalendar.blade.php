@@ -296,7 +296,7 @@
             name: crew.name + ' ' + crew.last_name,
             image: crew.user_image,
             rating: crew.rating,
-            estimates: estimates.filter(estimate => estimate.work_assign_id === crew.id)
+            estimates: estimates.filter(estimate => estimate.work_assign_id == crew.id)
         }));
 
         // Usage:
