@@ -1724,67 +1724,68 @@ $userPrivileges->estimate->items === 'on')
                         @endforeach
 
                         @php
-                        $uniqueItems = []; // Array to store unique item IDs
-                        @endphp
+                    $uniqueItems = []; // Array to store unique item details
+                    @endphp
 
-                        @foreach ($estimate_items as $item)
-                        @if ($item->item_type === 'assemblies')
-                        @foreach ($item->assemblies as $assemblyItem)
-                        @if ($assemblyItem->ass_item_type === 'labour')
-                        @php
-                        $itemId = $assemblyItem->est_ass_item_id;
-                        $itemQty = $assemblyItem->ass_item_qty;
-                        $itemTotal = $assemblyItem->ass_item_total;
-                        $itemPrice = $assemblyItem->ass_item_price;
+                    @foreach ($estimate_items as $item)
+                    @if ($item->item_type === 'assemblies')
+                    @foreach ($item->assemblies as $assemblyItem)
+                    @if ($assemblyItem->ass_item_type === 'labour')
+                    @php
+                    $itemId = $assemblyItem->est_ass_item_id;
+                    $itemQty = $assemblyItem->ass_item_qty;
+                    $itemTotal = $assemblyItem->ass_item_total;
+                    $itemPrice = $assemblyItem->ass_item_price;
+                    $itemKey = $itemId . '_' . $assemblyItem->est_ass_item_name . '_' . $assemblyItem->ass_item_description;
 
-                        // Check if item ID is already encountered
-                        if (isset($uniqueItems[$itemId])) {
-                        // Increment quantity and total if the item ID already exists
-                        $uniqueItems[$itemId]['qty'] += $itemQty;
-                        $uniqueItems[$itemId]['total'] += $itemTotal;
-                        } else {
+                    // Check if item details are already encountered
+                    if (isset($uniqueItems[$itemKey])) {
+                        // Increment quantity and total if the item details already exist
+                        $uniqueItems[$itemKey]['qty'] += $itemQty;
+                        $uniqueItems[$itemKey]['total'] += $itemTotal;
+                    } else {
                         // Add new entry for the unique item
-                        $uniqueItems[$itemId] = [
-                        'name' => $assemblyItem->est_ass_item_name,
-                        'description' => $assemblyItem->ass_item_description,
-                        'price' => $itemPrice,
-                        'qty' => $itemQty,
-                        'total' => $itemTotal
+                        $uniqueItems[$itemKey] = [
+                            'name' => $assemblyItem->est_ass_item_name,
+                            'description' => $assemblyItem->ass_item_description,
+                            'price' => $itemPrice,
+                            'qty' => $itemQty,
+                            'total' => $itemTotal
                         ];
-                        }
-                        @endphp
-                        @endif
-                        @endforeach
-                        @endif
-                        @endforeach
+                    }
+                    @endphp
+                    @endif
+                    @endforeach
+                    @endif
+                    @endforeach
 
-                        @foreach ($uniqueItems as $itemId => $itemData)
-                        <tr class="bg-white border-b">
-                            <td class="px-6 py-4 w-[30%]">
-                                {{ $itemData['name'] }}
-                            </td>
-                            <td class="px-6 py-4 w-[30%]">
-                                <p class="text-[16px]/[18px] text-[#323C47] font">
-                                    @if ($itemData['description'])
-                                <p class="font-medium">Description:</p>
-                                {{ $itemData['description'] }}
+                    @foreach ($uniqueItems as $itemData)
+                    <tr class="bg-white border-b">
+                        <td class="px-6 py-4 w-[30%]">
+                            {{ $itemData['name'] }}
+                        </td>
+                        <td class="px-6 py-4 w-[30%]">
+                            <p class="text-[16px]/[18px] text-[#323C47] font">
+                                @if ($itemData['description'])
+                                    <p class="font-medium">Description:</p>
+                                    {{ $itemData['description'] }}
                                 @endif
-                                </p>
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($itemData['price'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                {{ number_format($itemData['qty'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($itemData['total'], 2) }}
-                            </td>
-                        </tr>
-                        @php
-                        $totalLaborPrice += $itemData['total']; // Add labor item price to total
-                        @endphp
-                        @endforeach
+                            </p>
+                        </td>
+                        <td class="text-center">
+                            ${{ number_format($itemData['price'], 2) }}
+                        </td>
+                        <td class="text-center">
+                            {{ number_format($itemData['qty'], 2) }}
+                        </td>
+                        <td class="text-center">
+                            ${{ number_format($itemData['total'], 2) }}
+                        </td>
+                    </tr>
+                    @php
+                    $totalLaborPrice += $itemData['total']; // Add labor item price to total
+                    @endphp
+                    @endforeach
                         @foreach ($estimateItemTemplates as $template)
                         @foreach ($template->estimateItemTemplateItems as $item)
                         @if ($item['item_type'] === 'labour')
@@ -1908,67 +1909,68 @@ $userPrivileges->estimate->items === 'on')
                         @endforeach
 
                         @php
-                        $uniqueItems = []; // Array to store unique item IDs
-                        @endphp
+                    $uniqueItems = []; // Array to store unique item details
+                    @endphp
 
-                        @foreach ($estimate_items as $item)
-                        @if ($item->item_type === 'assemblies')
-                        @foreach ($item->assemblies as $assemblyItem)
-                        @if ($assemblyItem->ass_item_type === 'labour')
-                        @php
-                        $itemId = $assemblyItem->est_ass_item_id;
-                        $itemQty = $assemblyItem->ass_item_qty;
-                        $itemTotal = $assemblyItem->ass_item_total;
-                        $itemPrice = $assemblyItem->ass_item_price;
+                    @foreach ($estimate_items as $item)
+                    @if ($item->item_type === 'assemblies')
+                    @foreach ($item->assemblies as $assemblyItem)
+                    @if ($assemblyItem->ass_item_type === 'labour')
+                    @php
+                    $itemId = $assemblyItem->est_ass_item_id;
+                    $itemQty = $assemblyItem->ass_item_qty;
+                    $itemTotal = $assemblyItem->ass_item_total;
+                    $itemPrice = $assemblyItem->ass_item_price;
+                    $itemKey = $itemId . '_' . $assemblyItem->est_ass_item_name . '_' . $assemblyItem->ass_item_description;
 
-                        // Check if item ID is already encountered
-                        if (isset($uniqueItems[$itemId])) {
-                        // Increment quantity and total if the item ID already exists
-                        $uniqueItems[$itemId]['qty'] += $itemQty;
-                        $uniqueItems[$itemId]['total'] += $itemTotal;
-                        } else {
+                    // Check if item details are already encountered
+                    if (isset($uniqueItems[$itemKey])) {
+                        // Increment quantity and total if the item details already exist
+                        $uniqueItems[$itemKey]['qty'] += $itemQty;
+                        $uniqueItems[$itemKey]['total'] += $itemTotal;
+                    } else {
                         // Add new entry for the unique item
-                        $uniqueItems[$itemId] = [
-                        'name' => $assemblyItem->est_ass_item_name,
-                        'description' => $assemblyItem->ass_item_description,
-                        'price' => $itemPrice,
-                        'qty' => $itemQty,
-                        'total' => $itemTotal
+                        $uniqueItems[$itemKey] = [
+                            'name' => $assemblyItem->est_ass_item_name,
+                            'description' => $assemblyItem->ass_item_description,
+                            'price' => $itemPrice,
+                            'qty' => $itemQty,
+                            'total' => $itemTotal
                         ];
-                        }
-                        @endphp
-                        @endif
-                        @endforeach
-                        @endif
-                        @endforeach
+                    }
+                    @endphp
+                    @endif
+                    @endforeach
+                    @endif
+                    @endforeach
 
-                        @foreach ($uniqueItems as $itemId => $itemData)
-                        <tr class="bg-white border-b">
-                            <td class="px-6 py-4 w-[30%]">
-                                {{ $itemData['name'] }}
-                            </td>
-                            <td class="px-6 py-4 w-[30%]">
-                                <p class="text-[16px]/[18px] text-[#323C47] font">
-                                    @if ($itemData['description'])
-                                <p class="font-medium">Description:</p>
-                                {{ $itemData['description'] }}
+                    @foreach ($uniqueItems as $itemData)
+                    <tr class="bg-white border-b">
+                        <td class="px-6 py-4 w-[30%]">
+                            {{ $itemData['name'] }}
+                        </td>
+                        <td class="px-6 py-4 w-[30%]">
+                            <p class="text-[16px]/[18px] text-[#323C47] font">
+                                @if ($itemData['description'])
+                                    <p class="font-medium">Description:</p>
+                                    {{ $itemData['description'] }}
                                 @endif
-                                </p>
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($itemData['price'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                {{ number_format($itemData['qty'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($itemData['total'], 2) }}
-                            </td>
-                        </tr>
-                        @php
-                        $totalLaborPrice += $itemData['total']; // Add labor item price to total
-                        @endphp
-                        @endforeach
+                            </p>
+                        </td>
+                        <td class="text-center">
+                            ${{ number_format($itemData['price'], 2) }}
+                        </td>
+                        <td class="text-center">
+                            {{ number_format($itemData['qty'], 2) }}
+                        </td>
+                        <td class="text-center">
+                            ${{ number_format($itemData['total'], 2) }}
+                        </td>
+                    </tr>
+                    @php
+                    $totalLaborPrice += $itemData['total']; // Add labor item price to total
+                    @endphp
+                    @endforeach
                         @foreach ($estimateItemTemplates as $template)
                         @foreach ($template->estimateItemTemplateItems as $item)
                         @if ($item['item_type'] === 'labour')
@@ -2103,15 +2105,16 @@ $userPrivileges->estimate->items === 'on')
                         $itemQty = $assemblyItem->ass_item_qty;
                         $itemTotal = $assemblyItem->ass_item_total;
                         $itemPrice = $assemblyItem->ass_item_price;
+                        $itemKey = $itemId . '_' . $assemblyItem->est_ass_item_name . '_' . $assemblyItem->ass_item_description;
 
                         // Check if item ID is already encountered
-                        if (isset($uniqueMaterialItems[$itemId])) {
+                        if (isset($uniqueMaterialItems[$itemKey])) {
                         // Increment quantity and total if the item ID already exists
-                        $uniqueMaterialItems[$itemId]['qty'] += $itemQty;
-                        $uniqueMaterialItems[$itemId]['total'] += $itemTotal;
+                        $uniqueMaterialItems[$itemKey]['qty'] += $itemQty;
+                        $uniqueMaterialItems[$itemKey]['total'] += $itemTotal;
                         } else {
                         // Add new entry for the unique item
-                        $uniqueMaterialItems[$itemId] = [
+                        $uniqueMaterialItems[$itemKey] = [
                         'name' => $assemblyItem->est_ass_item_name,
                         'description' => $assemblyItem->ass_item_description,
                         'price' => $itemPrice,
@@ -5867,7 +5870,7 @@ $userPrivileges->estimate->expenses === 'on')
 
             if (selectedValue === 'assemblies') {
                 multiAddItemsDiv.removeClass('hidden');
-                $('#labour_expense, #material_expense, #item_price').attr('readonly', true).addClass('bg-gray-200');
+                $('#labour_expense, #material_expense').attr('readonly', true).addClass('bg-gray-200');
             } else if (selectedValue === 'material') {
                 multiAddItemsDiv.addClass('hidden');
                 $('#labour_expense').attr('readonly', true).addClass('bg-gray-200');
@@ -5878,14 +5881,14 @@ $userPrivileges->estimate->expenses === 'on')
                 unitItemInput.val('hour');
                 unitLabel.text('hour');
                 $('#material_expense').attr('readonly', true).addClass('bg-gray-200');
-                $('#labour_expense, #item_price').attr('readonly', false).removeClass('bg-gray-200');
+                $('#labour_expense').attr('readonly', false).removeClass('bg-gray-200');
             } else {
                 // If none of the above, reset all fields
                 multiAddItemsDiv.addClass('hidden');
                 $('#labour_expense, #material_expense').attr('readonly', false).removeClass('bg-gray-200');
                 unitItemInput.val(null);
                 unitLabel.text('unit');
-                $('#item_price').attr('readonly', false).removeClass('bg-gray-200');
+                // $('#item_price').attr('readonly', false).removeClass('bg-gray-200');
             }
         });
 
