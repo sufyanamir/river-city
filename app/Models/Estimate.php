@@ -30,6 +30,11 @@ class Estimate extends Model
         return $this->belongsTo(ScheduleEstimate::class, 'estimate_id');
     }
 
+    public function crew()
+    {
+        return $this->belongsTo(User::class, 'work_assigned_to');
+    }
+
     protected $table = 'estimates';
 
     protected $primaryKey = 'estimate_id';
@@ -72,6 +77,7 @@ class Estimate extends Model
         'project_type',
         'project_owner',
         'customer_signature',
+        'work_assigned_to',
     ];
 
     public $timestamps = true;
