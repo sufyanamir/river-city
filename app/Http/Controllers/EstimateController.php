@@ -692,13 +692,13 @@ class EstimateController extends Controller
         $userDetails = session('user_details');
         if ($userDetails['user_role'] == 'admin') {
             $customers = Customer::get();
-            $estimates = Estimate::with('scheduler', 'assigned_work', 'customer')->orderBy('created_at', 'desc')->get();
+            $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->orderBy('created_at', 'desc')->get();
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
         } elseif ($userDetails['user_role'] == 'scheduler') {
             if ($type == 'assigned') {
                 $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->orderBy('created_at', 'desc')->get();
             }else {
-                $estimates = Estimate::with('scheduler', 'assigned_work', 'customer')->orderBy('created_at', 'desc')->get();
+                $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->orderBy('created_at', 'desc')->get();
             }
             $customers = Customer::get();
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
@@ -1191,6 +1191,7 @@ class EstimateController extends Controller
             $estimate->scheduled_start_date = $validatedData['start_date'];
             $estimate->scheduled_end_date = $validatedData['end_date'];
             $estimate->work_assigned  = 1;
+            $estimate->work_assigned_to = $validatedData['assign_work'];
 
             $estimate->save();
 
