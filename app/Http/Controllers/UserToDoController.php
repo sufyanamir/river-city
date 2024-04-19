@@ -47,11 +47,18 @@ class UserToDoController extends Controller
 
             $validatedData = $request->validate([
                 'to_do_title' => 'required',
+                'assign_work' => 'nullable',
+                'start_date' => 'nullable',
+                'end_date' => 'nullable',
+                'note' => 'nullable',
             ]);
 
             $toDo = UserToDo::create([
-                'added_user_id' => $userDetails['id'],
+                'added_user_id' => isset($request->assign_work) ? $request->assign_work : $userDetails['id'],
                 'to_do_title' => $validatedData['to_do_title'],
+                'start_date' => $validatedData['start_date'],
+                'end_date' => $validatedData['end_date'],
+                'note' => $validatedData['note'],
             ]);
 
             return response()->json(['success' => true, 'message' => 'To Do added!'], 200);

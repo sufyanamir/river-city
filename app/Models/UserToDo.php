@@ -17,6 +17,9 @@ class UserToDo extends Model
         'added_user_id',
         'to_do_title',
         'to_do_status',
+        'note',
+        'start_date',
+        'end_date',
     ];
 
     public $timestamps = true;

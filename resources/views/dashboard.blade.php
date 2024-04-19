@@ -196,7 +196,14 @@
                                     </form>
                                 </div>
                                 <div class=" inline-block font-semibold">
-                                    <p>{{ $todo->to_do_title }}</p>
+                                <p>{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('d, F Y', strtotime($todo->start_date))}}) - End date:({{date('d, F Y', strtotime($todo->end_date))}}), (Added by: {{ isset($todo->assigned_by) ? $todo->assigned_by->name . ' ' . $todo->assigned_by->last_name : 'Unknown' }})</span>
+                                        <br>
+                                        <span class=" text-sm">
+                                            Note:
+                                            <br>
+                                            {{$todo->note}}
+                                        </span>
+                                    </p>
                                 </div>
                             </div>
                             <div>
@@ -362,7 +369,7 @@
                 <h3 class=" text-lg font-semibold text-white ">To do List</h3>
             </div>
             <div>
-                <div class=" py-4 px-2 my-2">
+                <div class=" py-4 px-2 my-2 h-64 overflow-scroll">
                     <form action="/addUserToDo" method="post">
                         @csrf
                         <div class=" flex justify-between">
@@ -385,7 +392,14 @@
                                 </form>
                             </div>
                             <div class=" inline-block font-semibold">
-                                <p>{{ $todo->to_do_title }}</p>
+                            <p style="width: 70%;">{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('d, F Y', strtotime($todo->start_date))}}) - End date:({{date('d, F Y', strtotime($todo->end_date))}}), (Added by: {{ isset($todo->assigned_by) ? $todo->assigned_by->name . ' ' . $todo->assigned_by->last_name : 'Unknown' }})</span>
+                                        <br>
+                                        <span class=" text-sm">
+                                            Note:
+                                            <br>
+                                            {{$todo->note}}
+                                        </span>
+                                    </p>
                             </div>
                         </div>
                         <div>
