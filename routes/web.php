@@ -206,7 +206,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/addUserPrivileges/{id}', [UserController::class, 'addUserPrivileges']);
     Route::get('/getprivileges/{id}', [UserController::class, 'getUserPrivileges']);
     Route::get('/mail', function () {
-        return view('emails.proposal-mail');
+        return view('emails.proposal_accepted_mail');
     });
 });
 Route::get('/forgotPassword', function () {

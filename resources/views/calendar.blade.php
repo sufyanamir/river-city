@@ -262,6 +262,63 @@
 </div>
 @endif
 @endif
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="assignment-work-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="/addUserToDo" id="assignment-work-form">
+                @csrf
+                <input type="hidden" name="estimate_id" id="estimate_id" value="">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class=" flex justify-between">
+                        <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">New Assignment</h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div class="flex justify-start gap-3 my-2">
+                        <label for="task_desc">Task:</label>
+                        <input type="text" name="to_do_title" id="task_desc" autocomplete="given-name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" placeholder="Task Description">
+                    </div>
+                    <div class="flex justify-start gap-3 my-2">
+                        <label for="">Who:</label>
+                        <select name="assign_work" id="assign_work" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <option value="">Select User</option>
+                                @foreach($allEmployees as $employee)
+                                <option value="">{{$employee->name}} {{$employee->last_name}}</option>
+                                @endforeach
+                            </select>
+                    </div>
+                    <div>
+                        <p class=" font-medium inline-block items-center">When should it be completed?</p>
+                    </div>
+                    <div class="flex justify-start gap-3 mb-2">
+                        <label for="start_date">Start date:</label>
+                        <input type="datetime-local" name="start_date" id="assignment_start_date" autocomplete="given-name" class="se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    </div>
+                    <div class="flex justify-start gap-3 mb-2">
+                        <label for="end_date">End date:</label>
+                        <input type="datetime-local" name="end_date" id="assignment_end_date" autocomplete="given-name" class="se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    </div>
+                    <textarea placeholder="Note " class=" w-[100%] outline-none rounded-md p-2 border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6" name="note" id="note"></textarea>
+                    <!-- You can customize this part according to your needs -->
+                    <div>
+                        <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
+                        <button id="" class=" float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Set Schedule
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js" integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY=" crossorigin="anonymous"></script>
@@ -323,6 +380,9 @@
         var containerEl = document.getElementById('external-events');
         var checkbox = document.getElementById('drop-remove');
         var calendarEl = document.getElementById('calendar');
+        var assignmentModal = document.getElementById('assignment-work-modal');
+        var assignmentStartDateInput = document.getElementById('assignment_start_date');
+        var assignmentEndDateInput = document.getElementById('assignment_end_date');
         var scheduleAssigned = calendarEl.getAttribute('data-schedule-assigned') === 'true';
 
         new Draggable(containerEl, {
@@ -432,7 +492,26 @@ var simpleDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minute
                 modalTitle.textContent = info.event.title;
                 modalDescription.textContent = info.event.description;
                 modal.classList.remove('hidden');
-            }
+            },
+            dateClick: function(info) {
+            // Get the clicked date
+            var clickedDate = info.date;
+
+            var timezoneOffset = clickedDate.getTimezoneOffset();
+
+            // Adjust the date to local timezone
+            clickedDate = new Date(clickedDate.getTime() - timezoneOffset * 60000);
+
+            // Format the adjusted date for input value
+            var formattedDate = clickedDate.toISOString().slice(0, 16);
+
+            // Set the start and end date input values to the clicked date
+            assignmentStartDateInput.value = formattedDate;
+            assignmentEndDateInput.value = formattedDate;
+
+            // Open the modal
+            assignmentModal.classList.remove('hidden');
+        }
         });
 
         // var modalClose = document.querySelector('.modal-close');
@@ -495,6 +574,11 @@ var simpleDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minute
     $(".modal-close").click(function(e) {
         e.preventDefault();
         $("#schedule-estimate-modal").addClass('hidden');
+        // $("#schedule-estimate-form")[0].reset()
+    });
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#assignment-work-modal").addClass('hidden');
         // $("#schedule-estimate-form")[0].reset()
     });
 </script>

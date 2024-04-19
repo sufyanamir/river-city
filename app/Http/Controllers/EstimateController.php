@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ProposalAcceptedMail;
 use App\Mail\ProposalMail;
 use App\Mail\sendMailToClient;
 use App\Models\AssignPayment;
@@ -552,8 +553,10 @@ class EstimateController extends Controller
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
         $estimates = Estimate::get();
         $users = User::where('user_role', 'scheduler')->where('sts', 'active')->get();
+        $allEmployees = User::where('sts', 'active')->get();
+        $allEmployees = User::where('sts', 'active')->get();
 
-        return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users]);
+        return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'allEmployees' => $allEmployees]);
         // return response()->json(['success' => true, 'estimate' => $estimate]);
     }
     // get schedule estimate
@@ -612,8 +615,9 @@ class EstimateController extends Controller
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
         $estimates = ScheduleEstimate::with(['estimate'])->get();
         $users = User::where('user_role', 'crew')->where('sts', 'active')->get();
+        $allEmployees = User::where('sts', 'active')->get();
 
-        return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'crewSchedule' => $crewSchedule]);
+        return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'crewSchedule' => $crewSchedule, 'allEmployees' => $allEmployees]);
         // return response()->json(['success' => true, 'estimate' => $estimate]);
     }
     public function getEstimatesOnCalendar()
@@ -634,8 +638,8 @@ class EstimateController extends Controller
         } else {
             $estimates = Estimate::get();
         }
-
-        return view('calendar', ['estimates' => $estimates]);
+        $allEmployees = User::where('sts', 'active')->get();
+        return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees]);
     }
 
     public function viewDataOnCrewCalendar($id)
@@ -1296,6 +1300,19 @@ class EstimateController extends Controller
                 $upgrade->upgrade_status = $validatedData['upgrade_accept_reject'];
                 $upgrade->save();
             }
+            $emailData = [
+                'customer_name' => $estimate->customer_name . ' ' . $estimate->customer_last_name,
+                'estimate_id' => $id,
+            ];
+            try {
+                $mail = new ProposalAcceptedMail($emailData);
+
+                Mail::to('Office@rivercitypaintcompanyinc.com')->send($mail);
+                
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+            }
+
             $proposal = EstimateProposal::where('estimate_id', $id)->where('proposal_status', 'pending')->first();
 
             $proposal->proposal_status = 'accepted';
