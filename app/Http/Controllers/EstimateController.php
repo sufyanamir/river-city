@@ -39,6 +39,7 @@ use App\Models\ScheduleWork;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
+use App\Models\UserToDo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
@@ -640,6 +641,22 @@ class EstimateController extends Controller
         }
         $allEmployees = User::where('sts', 'active')->get();
         return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees]);
+    }
+
+    public function getSchedulesOnScheduleCalendar($user = null)
+    {
+        if ($user != null) {
+            $userDetails = User::where('id', $user)->first();
+        }else{
+            $userDetails = session('user_details');
+        }
+
+        $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->get();
+        $estimateToDos = EstimateToDos::where('to_do_assigned_to', $userDetails['id'])->get();
+
+        $allEmployees = User::where('sts', 'active')->get();
+
+        return view('schedulesCalendar', ['userToDos' => $userToDos, 'estimateToDos' => $estimateToDos, 'allEmployees' => $allEmployees]);
     }
 
     public function viewDataOnCrewCalendar($id)

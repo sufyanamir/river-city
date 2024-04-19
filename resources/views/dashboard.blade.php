@@ -185,7 +185,6 @@
                         </form>
                         @foreach ($Todos as $todo)
                         <div class=" flex justify-between px-3">
-                            <div>
                                 <div class=" inline-block">
                                     <form action="/completeUserToDo/{{ $todo->to_do_id }}" method="post">
                                         @csrf
@@ -195,7 +194,7 @@
                                         </button>
                                     </form>
                                 </div>
-                                <div class=" inline-block font-semibold">
+                                <div class=" inline-block font-semibold" style="width: 90%;">
                                 <p>{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('d, F Y', strtotime($todo->start_date))}}) - End date:({{date('d, F Y', strtotime($todo->end_date))}}), (Added by: {{ isset($todo->assigned_by) ? $todo->assigned_by->name . ' ' . $todo->assigned_by->last_name : 'Unknown' }})</span>
                                         <br>
                                         <span class=" text-sm">
@@ -205,7 +204,6 @@
                                         </span>
                                     </p>
                                 </div>
-                            </div>
                             <div>
                                 <form action="/deleteUserToDo/{{ $todo->to_do_id }}" method="post">
                                     @csrf
@@ -381,7 +379,6 @@
                     </form>
                     @foreach ($Todos as $todo)
                     <div class=" flex justify-between px-3">
-                        <div>
                             <div class=" inline-block">
                                 <form action="/completeUserToDo/{{ $todo->to_do_id }}" method="post">
                                     @csrf
@@ -391,17 +388,16 @@
                                     </button>
                                 </form>
                             </div>
-                            <div class=" inline-block font-semibold">
-                            <p style="width: 70%;">{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('d, F Y', strtotime($todo->start_date))}}) - End date:({{date('d, F Y', strtotime($todo->end_date))}}), (Added by: {{ isset($todo->assigned_by) ? $todo->assigned_by->name . ' ' . $todo->assigned_by->last_name : 'Unknown' }})</span>
+                            <div class=" inline-block font-semibold" style="width: 90%;">
+                                <p>{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('d, F Y', strtotime($todo->start_date))}}) - End date:({{date('d, F Y', strtotime($todo->end_date))}}), (Added by: {{ isset($todo->assigned_by) ? $todo->assigned_by->name . ' ' . $todo->assigned_by->last_name : 'Unknown' }})</span>
+                                    <br>
+                                    <span class=" text-sm">
+                                        Note:
                                         <br>
-                                        <span class=" text-sm">
-                                            Note:
-                                            <br>
-                                            {{$todo->note}}
-                                        </span>
-                                    </p>
+                                        {{$todo->note}}
+                                    </span>
+                                </p>
                             </div>
-                        </div>
                         <div>
                             <form action="/deleteUserToDo/{{ $todo->to_do_id }}" method="post">
                                 @csrf

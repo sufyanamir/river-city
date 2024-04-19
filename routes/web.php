@@ -135,9 +135,7 @@ Route::middleware('customauth')->group(function () {
     Route::get('/getItemToEdit/{id}', [ItemsController::class, 'getItemToEdit']);
     Route::post('/updateItem', [ItemsController::class, 'updateItem']);
     Route::match(['get', 'post'], '/delete/item/{id}', [ItemsController::class, 'deleteItem']);
-    // Route::get('/group', function () {
-    //     return view('group');
-    // });
+
     Route::get('/group', [GroupController::class, 'getGroups']);
     Route::post('/editGroup', [GroupController::class, 'editGroup']);
     Route::post('/addGroup', [GroupController::class, 'addGroup']);
@@ -173,6 +171,7 @@ Route::middleware('customauth')->group(function () {
     // Route::get('/deleteEstimateImage', [EstimageImagesController::class, 'deleteEstimateImage']);
     Route::match(['post', 'get'], 'deleteEstimateImage{id}', [EstimageImagesController::class, 'deleteEstimateImage']);
 
+    Route::get('/schedulesCalendar/{user?}', [EstimateController::class, 'getSchedulesOnScheduleCalendar'])->name('schedulesCalendar');
     Route::get('/calendar', [EstimateController::class, 'getEstimatesOnCalendar']);
     Route::get('/getEstimateToSetScheduleWork{id}', [EstimateController::class, 'getEstimateToSetScheduleWork']);
     Route::get('/getEstimateToSetSchedule{id}', [EstimateController::class, 'getEstimateToSetSchedule']);
