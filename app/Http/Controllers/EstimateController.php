@@ -1707,35 +1707,38 @@ class EstimateController extends Controller
             }
 
             // Update or insert EstimateItemAssembly data
-            foreach ($validatedData['assembly_name'] as $key => $assemblyName) {
-                if ($assemblyName != null) {
-                    $itemUnitByAssUnitSum = $validatedData['item_unit_by_assembly_unit'][$key];
-                    $assUnitByItemUnitSum = $validatedData['assembly_unit_by_item_unit'][$key];
-                    $assItems = Items::where('item_id', $validatedData['ass_item_id'][$key])->first();
-                    $assItemQty = $validatedData['item_qty'] * $assUnitByItemUnitSum;
-                    $assItemPrice = $assItems->item_price * $assItemQty;
-
-                    $assemblyData = [
-                        'added_user_id' => $userDetails['id'],
-                        'estimate_id' => $validatedData['estimate_id'],
-                        'estimate_item_id' => $validatedData['item_id'],
-                        'est_ass_item_name' => $validatedData['assembly_name'][$key],
-                        'item_unit_by_ass_unit' => $itemUnitByAssUnitSum,
-                        'ass_unit_by_item_unit' => $assUnitByItemUnitSum,
-                        'item_id' => $assItems->item_id,
-                        'ass_item_cost' => $assItems->item_cost,
-                        'ass_item_price' => $assItems->item_price,
-                        'ass_item_qty' => $assItemQty,
-                        'ass_item_total' => $assItemPrice,
-                        'ass_item_unit' => $assItems->item_units,
-                        'ass_item_description' => $assItems->item_description,
-                        'ass_item_type' => $assItems->item_type,
-                        'ass_labour_expense' => $assItems->labour_expense,
-                        'ass_material_expense' => $assItems->material_expense,
-                    ];
-                    EstimateItemAssembly::create($assemblyData);
+            if (isset($validatedData['assembly_name'])) {
+                
+                foreach ($validatedData['assembly_name'] as $key => $assemblyName) {
+                    if ($assemblyName != null) {
+                        $itemUnitByAssUnitSum = $validatedData['item_unit_by_assembly_unit'][$key];
+                        $assUnitByItemUnitSum = $validatedData['assembly_unit_by_item_unit'][$key];
+                        $assItems = Items::where('item_id', $validatedData['ass_item_id'][$key])->first();
+                        $assItemQty = $validatedData['item_qty'] * $assUnitByItemUnitSum;
+                        $assItemPrice = $assItems->item_price * $assItemQty;
+    
+                        $assemblyData = [
+                            'added_user_id' => $userDetails['id'],
+                            'estimate_id' => $validatedData['estimate_id'],
+                            'estimate_item_id' => $validatedData['item_id'],
+                            'est_ass_item_name' => $validatedData['assembly_name'][$key],
+                            'item_unit_by_ass_unit' => $itemUnitByAssUnitSum,
+                            'ass_unit_by_item_unit' => $assUnitByItemUnitSum,
+                            'item_id' => $assItems->item_id,
+                            'ass_item_cost' => $assItems->item_cost,
+                            'ass_item_price' => $assItems->item_price,
+                            'ass_item_qty' => $assItemQty,
+                            'ass_item_total' => $assItemPrice,
+                            'ass_item_unit' => $assItems->item_units,
+                            'ass_item_description' => $assItems->item_description,
+                            'ass_item_type' => $assItems->item_type,
+                            'ass_labour_expense' => $assItems->labour_expense,
+                            'ass_material_expense' => $assItems->material_expense,
+                        ];
+                        EstimateItemAssembly::create($assemblyData);
+                    }
+                    // Insert new record
                 }
-                // Insert new record
             }
             return response()->json(['success' => true, 'message' => 'Item updated successfully!'], 200);
         } catch (\Exception $e) {
