@@ -71,7 +71,7 @@
     }
 </style>
 <div class=" my-4  rounded-lg shadow-lg">
-    <h1 class=" text-2xl font-semibold bg-[#930027] text-white py-3 px-4 rounded-t-xl">Calendar</h1>
+    <h1 class=" text-2xl font-semibold bg-[#930027] text-white py-3 px-4 rounded-t-xl">Schedules</h1>
     <div class=" bg-white w-full">
         <div class=" border-b-2 py-3 px-10">
             <div class="flex justify-between">
@@ -80,10 +80,20 @@
                     <span class="bg-[#DAEFD5] text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Complete</span>
                     <span class="bg-[#CFBFE8] text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Pending</span>
                     <span class="bg-[#FDD5D7] text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Cancel</span>
+                    <!-- @if(session('user_details')['user_role'] == 'admin')
+                    <div class="inline-block w-[50%]">
+                        <select id="userSelect" name="" autocomplete="customer-name" class="p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <option value="">Users</option>
+                            @foreach($allEmployees as $user)
+                            <option value="{{$user->id}}" {{$user->id == request()->route('user') ? 'selected' : ''}}>{{$user->name}} {{$user->last_name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endif -->
                 </div>
                 <div>
-                    <a href="/schedulesCalendar">
-                        <button id="" class=" float-right bg-[#930027] text-white py-2 px-7 rounded-md hover:bg-red-900 ">Other Schedules
+                    <a href="/calendar">
+                        <button id="" class=" float-right bg-[#930027] text-white py-2 px-7 rounded-md hover:bg-red-900 ">Calendar
                         </button>
                     </a>
                 </div>
@@ -91,187 +101,17 @@
         </div>
         <div class="p-4 flex justify-between gap-10">
             <!-- THE CALENDAR -->
-            <div class=" w-[85%]">
+            <div class=" w-[100%]">
                 <div id="calendar" data-schedule-assigned="{{ isset($estimate) && $estimate->schedule_assigned == 1 ? 'true' : 'false' }}"></div>
             </div>
-            <div id="external-events" class="w-[15%]">
-                @if (session('user_details')['user_role'] != 'crew')
-                <div class="">
-                    <div class=" bg-white rounded-lg mt-[100px] shadow-lg">
-                        <div class=" bg-[#930027] rounded-t-lg">
-                            <p class="p-2 text-center text-white font-medium">Pending List</p>
-                        </div>
-                        <div class=" pt-3 pb-2 flex flex-col items-center">
-                            @if(isset($estimate))
-                            @if ($estimate->schedule_assigned == 1)
-                            <div class="external-event bg-[#B7E4FF] text-xs font-medium px-2 py-2 rounded-lg w-32 mb-2 cursor-pointer" id="schedule-work">{{ $estimate->customer_name }} {{$estimate->customer_last_name}}</div>
-                            @else
-                            <div class="external-event bg-[#B7E4FF] text-xs font-medium px-2 py-2 rounded-lg w-32 mb-2 cursor-pointer" id="schedule-estimate">{{ $estimate->customer_name }} {{$estimate->customer_last_name}}</div>
-                            @endif
-                            @endif
-                        </div>
-                    </div>
-                </div>
-                @endif
+            <div id="external-events" class="w-[0%]">
+                
             </div>
         </div>
         <!-- /.card-body -->
     </div>
 
 </div>
-@if(isset($estimate))
-@if ($estimate->schedule_assigned == 1)
-<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="schedule-work-modal">
-    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <!-- Background overlay -->
-        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
-        </div>
-
-        <!-- Modal panel -->
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="/setScheduleWork" id="schedule-work-form">
-                @csrf
-                <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <!-- Modal content here -->
-                    <div class=" flex justify-between">
-                        <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">{{ $customer->customer_first_name }} {{ $customer->customer_last_name }}</h2>
-                        <button class="modal-close" type="button">
-                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-                        </button>
-                    </div>
-                    <!-- task details -->
-                    <div>
-                        <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{$customer->customer_primary_address}}, {{$customer->customer_city}}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</p>
-                    </div>
-                    <div>
-                        <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_email }}</p>
-                    </div>
-                    <div>
-                        <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_phone }}</p>
-                    </div>
-                    <div>
-                        <div id="estimators" class="">
-                            <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                            <p class=" font-medium inline-block items-center">Estimator: {{ $user_details['name'] }}</p>
-                        </div>
-                        <div id="dropdown-div" class="">
-                            <p class=" font-medium items-center">Who will complete work?</p>
-                            <select name="assign_work" id="assign_work" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                <option value="">Select User</option>
-                                @foreach($employees as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}}</option>
-                                @endforeach
-                            </select>
-                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                                        <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                                    </button> -->
-                        </div>
-                    </div>
-                    <div>
-                        <p class=" font-medium inline-block items-center">When should it be completed?</p>
-                    </div>
-                    <div class="flex justify-start gap-3 mb-2">
-                        <label for="start_date">Start date:</label>
-                        <input type="datetime-local" name="start_date" id="start_date" autocomplete="given-name" class="se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    </div>
-                    <div class="flex justify-start gap-3 mb-2">
-                        <label for="end_date">End date:</label>
-                        <input type="datetime-local" name="end_date" id="end_date" autocomplete="given-name" class="se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    </div>
-                    <textarea placeholder="Note " class=" w-[100%] outline-none rounded-md p-2 border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6" name="note" id="note"></textarea>
-                    <!-- You can customize this part according to your needs -->
-                    <div>
-                        <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
-                        <button id="" class=" float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Set Schedule
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-@else
-<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="schedule-estimate-modal">
-    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <!-- Background overlay -->
-        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
-        </div>
-
-        <!-- Modal panel -->
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="/setScheduleEstimate" id="schedule-estimate-form">
-                @csrf
-                <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <!-- Modal content here -->
-                    <div class=" flex justify-between">
-                        <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">{{ $customer->customer_first_name }} {{ $customer->customer_last_name }}</h2>
-                        <button class="modal-close" type="button">
-                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-                        </button>
-                    </div>
-                    <!-- task details -->
-                    <div>
-                        <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{$customer->customer_primary_address}}, {{$customer->customer_city}}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</p>
-                    </div>
-                    <div>
-                        <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_email }}</p>
-                    </div>
-                    <div>
-                        <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_phone }}</p>
-                    </div>
-                    <div>
-                        <div id="estimators" class="">
-                            <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                            <p class=" font-medium inline-block items-center">Estimator: {{ $user_details['name'] }}</p>
-                        </div>
-                        <div id="dropdown-div" class="">
-                            <p class=" font-medium items-center">Who will complete Estimate?</p>
-                            <select name="assign_estimate_completion" id="assign_estimate_completion" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                <option value="">Select User</option>
-                                @foreach($employees as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}}</option>
-                                @endforeach
-                            </select>
-                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                                    <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                                </button> -->
-                        </div>
-                    </div>
-                    <div>
-                        <p class=" font-medium inline-block items-center">When should it be completed?</p>
-                    </div>
-                    <div class=" flex justify-start gap-3 mb-2">
-                        <label>Start date:</label>
-                        <input type="datetime-local" name="start_date" id="start_date" autocomplete="given-name" class=" se_date  w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    </div>
-                    <div class=" flex justify-start gap-3 mb-2">
-                        <label>End date:</label>
-                        <input type="datetime-local" name="end_date" id="end_date" autocomplete="given-name" class=" se_date  w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    </div>
-                    <textarea placeholder="Note " class=" w-[100%] outline-none rounded-md p-2 border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6" name="note" id="note"></textarea>
-                    <!-- You can customize this part according to your needs -->
-                    <div>
-                        <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
-                        <button id="" class=" float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Set Schedule
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-@endif
-@endif
 <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="assignment-work-modal">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <!-- Background overlay -->
@@ -329,11 +169,19 @@
         </div>
     </div>
 </div>
+@include('layouts.footer')
 
-<script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js" integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY=" crossorigin="anonymous"></script>
 <script src="assets/plugins/fullcalendar/main.js"></script>
-
+<script>
+    $(document).ready(function() {
+        $('#userSelect').change(function() {
+            var userId = $(this).val();
+            if (userId) {
+                window.location.href = '/schedulesCalendar/' + userId;
+            }
+        });
+    });
+</script>
 <script>
     $("#editEvent").click(function(e) {
         e.preventDefault();
@@ -407,32 +255,31 @@
             }
         });
 
-        @if(isset($crewSchedule) && $crewSchedule === 1)
-            var estimateEvents = {!! json_encode($estimates) !!};
+        var userToDos = {!! json_encode($userToDos) !!};
+        var estimateToDos = {!! json_encode($estimateToDos) !!};
 
-            var events = estimateEvents.map(function(estimate) {
-                return {
-                    title: [estimate.estimate.customer_name + ' ' + estimate.estimate.customer_last_name],
-                    start: new Date(estimate.start_date),
-                    end: new Date(estimate.end_date),
-                    backgroundColor: '#your_color', // Choose a color or generate dynamically
-                    borderColor: '#your_color' // Choose a color or generate dynamically
-                };
-            });
-        @else
-        var estimateEvents = {!! json_encode($estimates) !!};
+        // Convert user todos to events
+var userEvents = userToDos.map(function(todo) {
+    return {
+        title: todo.to_do_title,
+        start: new Date(todo.start_date), // Adjust the field according to your data
+        end: new Date(todo.end_date), // Adjust the field according to your data
+        backgroundColor: '#your_color', // Choose a color or generate dynamically
+        borderColor: '#your_color' // Choose a color or generate dynamically
+    };
+});
 
-            var events = estimateEvents.map(function(estimate) {
-                return {
-                    title: [estimate.customer_name + ' ' + estimate.customer_last_name],
-                    start: new Date(estimate.scheduled_start_date),
-                    end: new Date(estimate.scheduled_end_date),
-                    backgroundColor: '#your_color', // Choose a color or generate dynamically
-                    borderColor: '#your_color' // Choose a color or generate dynamically
-                };
-            });
-        @endif
-
+// Convert estimate todos to events
+var estimateEvents = estimateToDos.map(function(todo) {
+    return {
+        title: todo.to_do_title,
+        start: new Date(todo.start_date), // Adjust the field according to your data
+        end: new Date(todo.end_date), // Adjust the field according to your data
+        backgroundColor: '#your_color', // Choose a color or generate dynamically
+        borderColor: '#your_color' // Choose a color or generate dynamically
+    };
+});
+var allEvents = userEvents.concat(estimateEvents);
         function formatDate(date) {
             var year = date.getFullYear();
             var month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -447,7 +294,7 @@
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
             themeSystem: 'bootstrap',
-            events: events,
+            events: allEvents,
             editable: true,
             droppable: true,
             drop: function(info) {
@@ -562,30 +409,7 @@ var simpleDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minute
         })
     });
 </script>
-@include('layouts.footer')
 <script>
-    $("#schedule-work").click(function(e) {
-        e.preventDefault();
-        $("#schedule-work-modal").removeClass('hidden');
-    });
-
-    $(".modal-close").click(function(e) {
-        e.preventDefault();
-        $("#schedule-work-modal").addClass('hidden');
-        // $("#schedule-work-form")[0].reset()
-    });
-</script>
-<script>
-    $("#schedule-estimate").click(function(e) {
-        e.preventDefault();
-        $("#schedule-estimate-modal").removeClass('hidden');
-    });
-
-    $(".modal-close").click(function(e) {
-        e.preventDefault();
-        $("#schedule-estimate-modal").addClass('hidden');
-        // $("#schedule-estimate-form")[0].reset()
-    });
     $(".modal-close").click(function(e) {
         e.preventDefault();
         $("#assignment-work-modal").addClass('hidden');
