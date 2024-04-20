@@ -22,12 +22,14 @@
                             4425 W Walker St<br>
                             Wichita Kansas 67209 <br>
                             info@paintwichita.com <br>
+                            (316) 262-3289
                             @elseif($customer->branch == 'kansas')
                             12022 Blue Valley Pkwy<br>
                             Overland Park, Ks 66213 <br>
-                            @endif
+                            913-660-9099
+                            <br>
                             office@rivercitypaintinginc.com <br>
-                            (316) 262-3289
+                            @endif
                         </p>
                     </div>
                 </div>
@@ -159,9 +161,11 @@
                                 <div class="mb-2 bg-white shadow-xl">
                                     <div class=" p-1 bg-[#930027] text-white w-full rounded-t-lg">
                                         <div class="inline-block">
+                                        @if($groupName)
                                             <div class="flex gap-3">
                                                 <h1 class=" font-medium my-auto p-2">{{$groupName}}</h1>
                                             </div>
+                                        @endif
                                         </div>
                                     </div>
                                     <div class="relative overflow-x-auto mb-8">
@@ -208,16 +212,20 @@
                                                             @endif
                                                             </p>
                                                         </td>
+                                                        @if($item->group)
                                                         <td class="text-center">
                                                             @if($item->group->show_quantity == 1)
                                                             {{ $item->item_qty }} <br> {{ $item->item_unit }}
                                                             @endif
                                                         </td>
+                                                        @endif
+                                                        @if($item->group)
                                                         <td class="text-center">
                                                             @if($item->group->show_total == 1)
                                                             ${{ $item->item_total }}
                                                             @endif
                                                         </td>
+                                                        @endif
                                                         <!-- @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
                                                     <tr>
                                                         <td colspan="7">

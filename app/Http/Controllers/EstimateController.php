@@ -1324,7 +1324,7 @@ class EstimateController extends Controller
             try {
                 $mail = new ProposalAcceptedMail($emailData);
 
-                Mail::to('Office@rivercitypaintcompanyinc.com')->send($mail);
+                Mail::to('office@rivercitypaintinginc.com')->send($mail);
                 
             } catch (\Exception $e) {
                 return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
