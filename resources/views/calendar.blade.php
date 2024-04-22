@@ -163,8 +163,8 @@
                             <p class=" font-medium items-center">Who will complete work?</p>
                             <select name="assign_work" id="assign_work" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 <option value="">Select User</option>
-                                @foreach($employees as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}}</option>
+                                @foreach($allEmployees as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}} <sub>({{$user->user_role}})</sub> </option>
                                 @endforeach
                             </select>
                             <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
@@ -238,8 +238,8 @@
                             <p class=" font-medium items-center">Who will complete Estimate?</p>
                             <select name="assign_estimate_completion" id="assign_estimate_completion" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 <option value="">Select User</option>
-                                @foreach($employees as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}}</option>
+                                @foreach($allEmployees as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}} <sub>({{$user->user_role}})</sub> </option>
                                 @endforeach
                             </select>
                             <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
