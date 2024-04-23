@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('estimates', function (Blueprint $table) {
-            $table->timestamp('scheduled_start_date')->useCurrent();
-            $table->timestamp('scheduled_end_date')->useCurrent();
+            $table->timestamp('scheduled_start_date')->nullable();
+            $table->timestamp('scheduled_end_date')->nullable();
         });
     }
 
