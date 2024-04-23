@@ -1,4 +1,7 @@
 @include('layouts.header')
+@php
+$userPrivileges = session('user_details')['user_privileges'];
+@endphp
 <div class=" my-4">
     <div class=" bg-white w-full rounded-2xl shadow-lg">
         <div class=" flex justify-between items-center p-3 bg-[#930027] text-white rounded-t-2xl">
@@ -13,7 +16,7 @@
                 @if ($user_details['user_role'] == 'admin')
                 <x-add-button :title="'+ Add Estimates'" :class="'addEstimate'" :id="''"></x-add-button>
                 @endif
-                @if (isset($userPrivileges->estimate) && $userPrivileges->estimate->add === 'on')
+                @if (isset($userPrivileges->estimate) && isset($userPrivileges->estimate->add) && $userPrivileges->estimate->add === 'on')
                 <x-add-button :title="'+ Add Estimates'" :class="'addEstimate'" :id="''"></x-add-button>
                 @endif
             </div>
