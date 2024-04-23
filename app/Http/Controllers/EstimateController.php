@@ -717,24 +717,28 @@ class EstimateController extends Controller
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
         } elseif ($userDetails['user_role'] == 'scheduler') {
             if ($type == 'assigned') {
-                $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->orderBy('created_at', 'desc')->get();
+                $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->where('estimate_schedule_assigned_to', $userDetails['id'])->orderBy('created_at', 'desc')->get();
             }else {
                 $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->orderBy('created_at', 'desc')->get();
             }
             $customers = Customer::get();
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
+        }else {
+            $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->orderBy('created_at', 'desc')->get();
+            $customers = Customer::get();
+            $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
         }
 
         // Access related data for each estimate
-        foreach ($estimates as $estimate) {
-            if ($estimate->assigned_work) {
-                $crew = User::find($estimate->assigned_work->work_assign_id);
-                $estimate->crew = $crew;
-            } else {
-                // Handle the case where assigned_work is null
-                $estimate->crew = null;
-            }
-        }
+        // foreach ($estimates as $estimate) {
+        //     if ($estimate->assigned_work) {
+        //         $crew = User::find($estimate->assigned_work->work_assign_id);
+        //         $estimate->crew = $crew;
+        //     } else {
+        //         // Handle the case where assigned_work is null
+        //         $estimate->crew = null;
+        //     }
+        // }
 
         // dd($estimates);
 
