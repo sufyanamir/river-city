@@ -95,6 +95,21 @@
                 <div id="calendar" data-schedule-assigned="{{ isset($estimate) && $estimate->schedule_assigned == 1 ? 'true' : 'false' }}"></div>
             </div>
             <div id="external-events" class="w-[15%]">
+                <div class="">
+                    <div class=" bg-white rounded-lg mt-[100px] shadow-lg">
+                        <div class=" bg-[#930027] rounded-t-lg">
+                            <p class="p-2 text-center text-white font-medium">Users</p>
+                        </div>
+                        <div class=" pt-3 pb-2 text-center items-center">
+                        @foreach($allEmployees as $employee)
+                        <div class=" flex gap-3 mx-3">
+                            <div class=" my-auto " style="width: 10px; height: 10px; background-color: {{$employee->user_color}};"></div>
+                            <div class="">{{$employee->name}} {{$employee->last_name}}</div>
+                        </div>
+                        @endforeach
+                        </div>
+                    </div>
+                </div>
                 @if (session('user_details')['user_role'] != 'crew')
                 <div class="">
                     <div class=" bg-white rounded-lg mt-[100px] shadow-lg">
@@ -415,22 +430,33 @@
                     title: [estimate.estimate.customer_name + ' ' + estimate.estimate.customer_last_name],
                     start: new Date(estimate.start_date),
                     end: new Date(estimate.end_date),
-                    backgroundColor: '#your_color', // Choose a color or generate dynamically
-                    borderColor: '#your_color' // Choose a color or generate dynamically
+                    backgroundColor: estimate.assigned_user ? estimate.assigned_user.user_color : '',
+                    borderColor: estimate.assigned_user ? estimate.assigned_user.user_color : ''
                 };
             });
         @else
         var estimateEvents = {!! json_encode($estimates) !!};
 
-            var events = estimateEvents.map(function(estimate) {
-                return {
-                    title: [estimate.customer_name + ' ' + estimate.customer_last_name],
-                    start: new Date(estimate.scheduled_start_date),
-                    end: new Date(estimate.scheduled_end_date),
-                    backgroundColor: '#your_color', // Choose a color or generate dynamically
-                    borderColor: '#your_color' // Choose a color or generate dynamically
-                };
-            });
+        var events = estimateEvents.map(function(estimate) {
+    var eventObj = {
+        title: [estimate.customer_name + ' ' + estimate.customer_last_name],
+        start: new Date(estimate.scheduled_start_date),
+        end: new Date(estimate.scheduled_end_date),
+    };
+
+    if (estimate.scheduler != null) {
+        eventObj.backgroundColor = estimate.scheduler.user_color ? estimate.scheduler.user_color : ''; // Choose a color or generate dynamically
+        eventObj.borderColor = estimate.scheduler.user_color ? estimate.scheduler.user_color : ''; // Choose a color or generate dynamically
+    } else if (estimate.crew != null) {
+        eventObj.backgroundColor = estimate.crew.user_color ? estimate.crew.user_color : ''; // Choose a color or generate dynamically
+        eventObj.borderColor = estimate.crew.user_color ? estimate.crew.user_color : ''; // Choose a color or generate dynamically
+    } else{
+        eventObj.backgroundColor = ''; // Choose a color or generate dynamically
+        eventObj.borderColor = ''; // Choose a color or generate dynamically
+    }
+
+    return eventObj;
+});
         @endif
 
         function formatDate(date) {

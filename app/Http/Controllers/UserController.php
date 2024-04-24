@@ -37,17 +37,16 @@ class UserController extends Controller
             ]);
 
             $user = User::where('id', $validatedData['user_id'])->first();
-            
+
             if ($validatedData['new_password'] == $validatedData['con_password']) {
                 $user->password = md5($validatedData['new_password']);
-                
+
                 $user->save();
 
                 return response()->json(['success' => true, 'message' => 'Password Updated!'], 200);
-            }else {
+            } else {
                 return response()->json(['success' => true, 'message' => 'Password is not correct!'], 400);
             }
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -58,12 +57,12 @@ class UserController extends Controller
         $user = User::where('id', $id)->first();
 
         return view('reset_password', ['userDetail' => $user]);
+    }
 
-    }    
-
-    public function forgotPasswordMail(Request $request){
+    public function forgotPasswordMail(Request $request)
+    {
         try {
-            
+
             $validatedData = $request->validate([
                 'email' => 'required',
             ]);
@@ -84,7 +83,6 @@ class UserController extends Controller
             Mail::to($validatedData['email'])->send($mail);
 
             return response()->json(['success' => true, 'message' => 'An email sent to your address. Please check your email.'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -93,7 +91,7 @@ class UserController extends Controller
     public function updateCompany(Request $request)
     {
         try {
-            
+
             $validatedData = $request->validate([
                 'company_id' => 'required',
                 'labor_cost' => 'nullable',
@@ -110,7 +108,6 @@ class UserController extends Controller
             $company->save();
 
             return response()->json(['success' => true, 'message' => 'Company Updated'], 200);
-            
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -212,6 +209,7 @@ class UserController extends Controller
     public function getUserOnPrivileges($id)
     {
         try {
+            $userDetails = session('user_details');
             $user = User::where('id', $id)->first();
 
             if (!$user) {
@@ -222,7 +220,7 @@ class UserController extends Controller
 
                 $user->user_privileges = json_decode($user->user_privileges, true);
 
-                return view('privileges', ['user' => $user, 'user_details' => $this->userDetails]);
+                return view('privileges', ['user' => $user, 'user_details' => $userDetails]);
             }
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -349,6 +347,13 @@ class UserController extends Controller
                 'address' => 'required|string',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
             ]);
+            // Generate random values for red, green, and blue components
+            $red = rand(0, 255);
+            $green = rand(0, 255);
+            $blue = rand(0, 255);
+
+            // Create the color in hexadecimal format
+            $userColor = sprintf("#%02x%02x%02x", $red, $green, $blue);
             $password = rand();
             $emailData = [
                 'email' => $validatedData['email'],
@@ -370,6 +375,7 @@ class UserController extends Controller
                 'rating' => $validatedData['rate'],
                 'team_number' => $validatedData['teamNumber'],
                 'added_user_id' => $userDetails['id'],
+                'user_color' => $userColor,
             ]);
 
             $notificationMessage = "A new Crew member " . $users['name'] . " " . $users['last_name'] . " has been added in the Crews.";
@@ -405,7 +411,7 @@ class UserController extends Controller
             if (!$user) {
                 return response(['success' => false, 'message' => 'User not found!'], 404);
             }
-            
+
             if ($user->user_role == 'admin') {
                 return response(['success' => false, 'message' => 'User cannot be deleted!'], 400);
             } else {
@@ -504,6 +510,13 @@ class UserController extends Controller
                 'address' => 'required|string',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
             ]);
+            // Generate random values for red, green, and blue components
+            $red = rand(0, 255);
+            $green = rand(0, 255);
+            $blue = rand(0, 255);
+
+            // Create the color in hexadecimal format
+            $userColor = sprintf("#%02x%02x%02x", $red, $green, $blue);
 
             $password = rand();
 
@@ -525,6 +538,7 @@ class UserController extends Controller
                 'address' => $validatedData['address'],
                 'password' => md5($password),
                 'added_user_id' => $userDetails['id'],
+                'user_color' => $userColor,
             ]);
 
             $notificationMessage = "A new user " . $users['name'] . " " . $users['last_name'] . " has been added with the user role " . $users['user_role'] . ".";

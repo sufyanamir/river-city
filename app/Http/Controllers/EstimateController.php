@@ -552,7 +552,7 @@ class EstimateController extends Controller
 
         $estimate = Estimate::where('estimate_id', $id)->first();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-        $estimates = Estimate::get();
+        $estimates = Estimate::with(['scheduler', 'crew'])->get();
         $users = User::where('user_role', 'scheduler')->where('sts', 'active')->get();
         $allEmployees = User::where('sts', 'active')->get();
         $allEmployees = User::where('sts', 'active')->get();
@@ -614,7 +614,7 @@ class EstimateController extends Controller
 
         $estimate = Estimate::where('estimate_id', $id)->first();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-        $estimates = ScheduleEstimate::with(['estimate'])->get();
+        $estimates = ScheduleEstimate::with(['estimate', 'assigenedUser'])->get();
         $users = User::where('user_role', 'crew')->where('sts', 'active')->get();
         $allEmployees = User::where('sts', 'active')->get();
 
@@ -629,15 +629,15 @@ class EstimateController extends Controller
             $scheduleEstimates = ScheduleEstimate::where('work_assign_id', $userDetails['id'])->get();
             $estimates = [];
             foreach ($scheduleEstimates as $scheduleEstimate) {
-                $estimate = Estimate::where('estimate_id', $scheduleEstimate->estimate_id)->first();
+                $estimate = Estimate::with(['scheduler', 'crew'])->where('estimate_id', $scheduleEstimate->estimate_id)->first();
                 $estimates[] = $estimate;
             }
-
-            return view('calendar', ['estimates' => $estimates]);
+            $allEmployees = User::where('sts', 'active')->get();
+            return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees]);
         } elseif ($userDetails['user_role'] == 'scheduler') {
-            $estimates = Estimate::where('estimate_schedule_assigned_to', $userDetails['id'])->get();
+            $estimates = Estimate::with(['scheduler', 'crew'])->where('estimate_schedule_assigned_to', $userDetails['id'])->get();
         } else {
-            $estimates = Estimate::get();
+            $estimates = Estimate::with(['scheduler', 'crew'])->get();
         }
         $allEmployees = User::where('sts', 'active')->get();
         return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees]);
