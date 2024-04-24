@@ -617,8 +617,9 @@ class EstimateController extends Controller
         $estimates = ScheduleEstimate::with(['estimate', 'assigenedUser'])->get();
         $users = User::where('user_role', 'crew')->where('sts', 'active')->get();
         $allEmployees = User::where('sts', 'active')->get();
+        $crew = User::where('user_role', 'crew')->get();
 
-        return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'crewSchedule' => $crewSchedule, 'allEmployees' => $allEmployees]);
+        return view('crewCalendar', ['estimates' => $estimates, 'crew' => $crew, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'crewSchedule' => $crewSchedule, 'allEmployees' => $allEmployees]);
         // return response()->json(['success' => true, 'estimate' => $estimate]);
     }
     public function getEstimatesOnCalendar()
