@@ -100,7 +100,7 @@
                         <div class=" bg-[#930027] rounded-t-lg">
                             <p class="p-2 text-center text-white font-medium">Users</p>
                         </div>
-                        <div class=" pt-3 pb-2 text-center items-center">
+                        <div class=" pt-3 pb-2 text-center items-center h-32 overflow-auto">
                         @foreach($allEmployees as $employee)
                         <div class=" flex gap-3 mx-3">
                             <div class=" my-auto " style="width: 10px; height: 10px; background-color: {{$employee->user_color}};"></div>
