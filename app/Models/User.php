@@ -34,6 +34,7 @@ class User extends Authenticatable
         'team_number',
         'user_privileges',
         'added_user_id',
+        'user_color',
     ];
 
     /**
