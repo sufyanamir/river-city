@@ -98,6 +98,9 @@
                             <div class=" bg-[#930027] rounded-t-lg">
                                 <p class="p-2 text-center text-white font-medium">Pending List</p>
                             </div>
+                            <div>
+                                <p class=" text-[#930027] text-xs text-center">* Please click on the label to schedule work.</p>
+                            </div>
                             <div class=" pt-3 pb-2 flex flex-col items-center">
                                 @if ($estimate->schedule_assigned == 1)
                                 <div class="external-event bg-[#B7E4FF] text-xs font-medium px-2 py-2 rounded-lg w-32 mb-2 cursor-pointer" id="schedule-work">{{ $estimate->customer_name }} {{$estimate->customer_last_name}}</div>

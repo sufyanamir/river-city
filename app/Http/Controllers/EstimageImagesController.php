@@ -77,26 +77,23 @@ class EstimageImagesController extends Controller
             // Validate the form data
             $request->validate([
                 'estimate_id' => 'required',
-                'upload_image.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust validation rules as needed
+                'file.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust validation rules as needed
             ]);
 
             // Process the form data and handle the file uploads
             $estimateId = $request->input('estimate_id');
-            $images = $request->file('upload_image');
+            $image = $request->file('file');
+            
+            $path = $image->store('estimate_images', 'public');
 
-            foreach ($images as $image) {
-                // Save each file to a specific location
-                $path = $image->store('estimate_images', 'public');
+            // Create a new record in the database for each file
+            $estimateImage = new EstimateImages([
+                'added_user_id' =>  $userDetails['id'],
+                'estimate_id' => $estimateId,
+                'estimate_image' => $path,
+            ]);
 
-                // Create a new record in the database for each file
-                $estimateImage = new EstimateImages([
-                    'added_user_id' =>  $userDetails['id'],
-                    'estimate_id' => $estimateId,
-                    'estimate_image' => $path,
-                ]);
-
-                $estimateImage->save();
-            }
+            $estimateImage->save();
 
             $this->addEstimateActivity($userDetails, $estimateId, 'Image Uploaded', "New Images has been uploaded in Photos Section");
 
