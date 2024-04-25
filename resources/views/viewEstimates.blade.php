@@ -2701,11 +2701,13 @@ $userPrivileges->estimate->files === 'on')
 @if (session('user_details')['user_role'] == 'admin')
 <div class="mb-5 shadow-lg bg-white  mt-7 rounded-3xl">
     <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
-        <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addImage-btn">
-            <div class=" bg-[#930027] rounded-lg">
-                <i class="fa-solid fa-plus text-white p-2"></i>
-            </div>
-        </button>
+        <a href="/viewGallery{{$estimate->estimate_id}}">
+            <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="">
+                <div class=" bg-[#930027] rounded-lg">
+                    <i class="fa-solid fa-plus text-white p-2"></i>
+                </div>
+            </button>
+        </a>
         <p class="text-lg px-3 text-white  font-medium ">
             Photos
         </p>
@@ -2727,11 +2729,13 @@ isset($userPrivileges->estimate->photos) &&
 $userPrivileges->estimate->photos === 'on')
 <div class="mb-5 shadow-lg bg-white  mt-7 rounded-3xl">
     <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
-        <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addImage-btn">
-            <div class=" bg-[#930027] rounded-lg">
-                <i class="fa-solid fa-plus text-white p-2"></i>
-            </div>
-        </button>
+        <a href="/viewGallery{{$estimate->estimate_id}}">
+            <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="">
+                <div class=" bg-[#930027] rounded-lg">
+                    <i class="fa-solid fa-plus text-white p-2"></i>
+                </div>
+            </button>
+        </a>
         <p class="text-lg px-3 text-white  font-medium ">
             Photos
         </p>
