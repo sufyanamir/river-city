@@ -1266,6 +1266,57 @@ class EstimateController extends Controller
     }
     // Schedule estimate
 
+    // get completed Estimate
+    public function getCompletedEstimate($id)
+    {
+        $completedEstimate = CompleteEstimate::where('estimate_id', $id)->first();
+
+        return response()->json(['success' => true, 'estimateDetails' => $completedEstimate], 200);
+
+    }
+    // get completed Estimate
+
+    // Reassign Complete Estimate
+    public function reassignCompleteEstimate(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'estimator_id' => 'required|numeric',
+                'assign_estimate' => 'required|numeric',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'note' => 'nullable|string',
+            ]);
+
+            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
+
+            $estimate->estimated_completed_by = $validatedData['estimator_id'];
+            $estimate->estimate_assigned_to = $validatedData['assign_estimate'];
+            $estimate->estimate_assigned = 1;
+
+            $estimate->save();
+
+            $completedEstimate = CompleteEstimate::where('estimate_id', $validatedData['estimate_id'])->first();
+
+            $completedEstimate->estimate_completed_by = $validatedData['estimator_id'];
+            $completedEstimate->estimate_assigned_to_accept = $validatedData['assign_estimate'];
+            $completedEstimate->acceptence_start_date = $validatedData['start_date'];
+            $completedEstimate->acceptence_end_date = $validatedData['end_date'];
+            $completedEstimate->note = $validatedData['note'];
+
+            $completedEstimate->save();
+
+            return response()->json(['success' => true, 'message' => 'Estimate Reassigned Successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // Complete Estimate
+
     // Complete Estimate
     public function completeEstimate(Request $request)
     {

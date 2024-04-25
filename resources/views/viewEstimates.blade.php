@@ -486,7 +486,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                 <span class=" my-auto">Accept Work</span>
                             </div>
                         </button>
-                        <button type="button" class=" complete-estimate flex h-[40px] w-[190px] ml-2 px-auto px-8 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#F4AC50]">
+                        <button type="button" class=" flex h-[40px] w-[190px] ml-2 px-auto px-8 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#F4AC50]" id="reassign-estimate-button{{$estimate->estimate_id}}">
                             <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/userRole-icon.svg') }}" alt="">
                             <span class=" my-auto">Reassign</span>
                         </button>
@@ -4644,7 +4644,7 @@ $userPrivileges->estimate->expenses === 'on')
                     </div>
                     <div class="my-2 col-span-2 relative">
                         <label for="" class="block text-left mb-1"> Note: </label>
-                        <textarea name="note" id="note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                        <textarea name="note" id="complete_estimate_note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
                         <button type="button" id="note-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                     </div>
                     <div class=" mt-2">
@@ -5547,6 +5547,30 @@ $userPrivileges->estimate->expenses === 'on')
             // }
         });
 
+        $('[id^="reassign-estimate-button"]').click(function(){
+            var estimateId = this.id.replace('reassign-estimate-button', '');
+
+            $.ajax({
+                url: '/getCompletedEstimate' + estimateId,
+                method: 'GET',
+                success:function(response){
+                    if(response.success){
+                        var estimateDetails = response.estimateDetails;
+                        $('#assign_estimate').val(estimateDetails.estimate_assigned_to_accept).trigger('change');
+                        $('#complete_estimate_note').val(estimateDetails.note);
+
+                        $('#complete-estimate-modal').removeClass('hidden');
+                        $('#complete-estimate-form').attr('action', '/reassignCompleteEstimate');
+                    } else {
+                        // Handle error response
+                        console.error('Error fetching details.');
+                    }
+                },
+                error: function(error) {
+                    console.error('AJAX request failed:', error);
+                }
+            })
+        })
 
         // Add a click event listener to the edit buttons
         $('[id^="editEstimate-item"]').click(function() {
