@@ -67,7 +67,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <td>{{ ucwords($item->item_units) }}</td>
                             <td>${{ number_format($item->item_cost, 2) }}</td>
                             <td>${{ number_format($item->item_price, 2) }}</td>
-                            <td class=" w-[100px]">{{ ucfirst($item->item_description) }}</td>
+                            <td class="description-cell w-[100px]">{{ ucfirst($item->item_description) }}</td>
                             <td>{{ucfirst(isset($item->group->group_name) ? $item->group->group_name : 'No Group')}}</td>
                             <td>
                                 @if (session('user_details')['user_role'] == 'admin')
@@ -82,14 +82,14 @@ $userPrivileges = session('user_details')['user_privileges'];
                                 @if (session('user_details')['user_role'] == 'admin')
                                 <form action="/delete/item/{{ $item->item_id }}" class=" inline-block" method="post">
                                     @csrf
-                                    <button>
+                                    <button disabled>
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
                                     </button>
                                 </form>
                                 @elseif(isset($userPrivileges->item) && isset($userPrivileges->item->delete) && $userPrivileges->item->delete === 'on')
                                 <form action="/delete/item/{{ $item->item_id }}" class=" inline-block" method="post">
                                     @csrf
-                                    <button>
+                                    <button disabled>
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
                                     </button>
                                 </form>
@@ -627,6 +627,18 @@ $userPrivileges = session('user_details')['user_privileges'];
             var priceMinusCostbyitemPrice = priceMinusCost / itemPrice.val();
             var finalMargin = priceMinusCostbyitemPrice * 100;
             priceMargin.text(finalMargin.toFixed(2));
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $(".description-cell").each(function() {
+            var fullText = $(this).text().trim();
+            var words = fullText.split(" ");
+            if (words.length > 50) {
+                var truncatedText = words.slice(0, 50).join(" ");
+                $(this).text(truncatedText + '...');
+            }
         });
     });
 </script>

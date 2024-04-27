@@ -39,6 +39,12 @@
         You are getting this email because you are just registered to the <b>River City</b>. You can login to your account through giving address {{ $emailData['email'] }} and the password is <b>{{ $emailData['password'] }}</b>.</p>
         <br>
         <br>
+        <div style=" margin-top: 8px; text-align: center;">
+            <a href="https://thewebconcept.com/" style="color: #930027;">
+                <span style="font-size: smaller; color:#930027; margin:auto;">Powered by : The Web Concept™.
+                </span>
+            </a>
+        </div>
         <p style="padding:20px 50px; font-size:large"><a style="color: #930027;" href="https://paintwichita.com/">Visit our site!</a></p>
         <!-- <div style="text-align: left !important;">
             <img src="{{ asset('assets/images/PCA-Logo-RGB .png') }}" class="footerImage" style="height: 80px;" alt="Image">

@@ -39,13 +39,22 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <td>{{ $item->name }} {{ $item->last_name }}</td>
                             <td>{{ $item->departement }}</td>
                             <td>
+                            @php
+                            $rating = $item->rating;
+                            @endphp
+                            <div class="rate">
+                            @for ($i = 1; $i <= $rating; $i++)
+                                <input type="radio" id="star1" name="rate" value="1" />
+                                <label for="star1" style="color: #930027" title="1 star">1 star</label>
+                            @endfor
+                            </div>
                             </td>
                             <td>{{ $item->email }}</td>
                             <td>{{ $item->phone }}</td>
                             <td>{{ $item->address }}</td>
                             @if($item->sts == 'active')
                             <td>
-                            <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Active</span>
+                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Active</span>
                             </td>
                             @elseif($item->sts == 'deleted')
                             <td>
@@ -211,6 +220,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                     $('#firstName').val(crewDetail.name);
                     $('#lastName').val(crewDetail.last_name);
                     $('#email').val(crewDetail.email);
+                    $('input[name="rate"][value="' + crewDetail.rating + '"]').prop('checked', true);
                     $('#phone').val(crewDetail.phone);
                     $('#departement').val(crewDetail.departement);
                     $('#teamNumber').val(crewDetail.team_number);
