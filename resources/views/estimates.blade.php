@@ -438,16 +438,16 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Source (Optional)</h5>
                             <input type="text" list="sources" name="source" id="source" placeholder="Source (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             <datalist id="sources">
-                                <option value="Google">Google</option>                                
-                                <option value="Website">Website</option>                                
-                                <option value="Referral">Referral</option>                                
-                                <option value="Returning Customer">Returning Customer</option>                                
-                                <option value="Google LSA">Google LSA</option>                                
-                                <option value="WEA">WEA</option>                                
-                                <option value="Rhoden Roofing">Rhoden Roofing</option>                                
-                                <option value="Steamatic">Steamatic</option>                                
-                                <option value="Billboard">Billboard</option>                                
-                                <option value="Radio">Radio</option>                                
+                                <option value="Google">Google</option>
+                                <option value="Website">Website</option>
+                                <option value="Referral">Referral</option>
+                                <option value="Returning Customer">Returning Customer</option>
+                                <option value="Google LSA">Google LSA</option>
+                                <option value="WEA">WEA</option>
+                                <option value="Rhoden Roofing">Rhoden Roofing</option>
+                                <option value="Steamatic">Steamatic</option>
+                                <option value="Billboard">Billboard</option>
+                                <option value="Radio">Radio</option>
                                 <option value="Television">Television</option>
                             </datalist>
                         </div>

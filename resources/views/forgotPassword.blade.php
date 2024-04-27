@@ -50,7 +50,7 @@
                     <button class="bg-[#930027] rounded-full text-white py-2 hover:scale-105 duration-300">Send</button>
                 </form>
                 <div class=" mt-3 text-center">
-                    <a href="https://thewebconcept.com/" class="text-[#930027] hover:underline">
+                    <a target="_blank" href="https://thewebconcept.com/" class="text-[#930027] hover:underline">
                         <span class="text-sm text-[#930027] sm:text-center my-auto dark:text-gray-400">Powered by : The Web Concept™.
                         </span>
                     </a>
