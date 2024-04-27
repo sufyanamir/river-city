@@ -42,7 +42,12 @@
         <a href="https://soft.rivercitypainting.tech/viewProposal/{{$emailData['estimate_id']}}" style="color: #930027;">Click Here to see the proposal.</a>
         <br>
         <br>
-        
+        <div style=" margin-top: 8px; text-align: center;">
+            <a href="https://thewebconcept.com/" style="color: #930027;">
+                <span style="font-size: smaller; color:#930027; margin:auto;">Powered by : The Web Concept™.
+                </span>
+            </a>
+        </div>
     </div>
 </body>
 

@@ -76,16 +76,16 @@
         <div class=" border-b-2 py-3 px-10">
             <div class="flex justify-between">
                 <div>
-                    <span class="bg-[#B7E4FF] text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">New</span>
+                    <!-- <span class="bg-[#B7E4FF] text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">New</span>
                     <span class="bg-[#DAEFD5] text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Complete</span>
                     <span class="bg-[#CFBFE8] text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Pending</span>
-                    <span class="bg-[#FDD5D7] text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Cancel</span>
+                    <span class="bg-[#FDD5D7] text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Cancel</span> -->
                 </div>
                 <div>
-                    <a href="/schedulesCalendar">
+                    <!-- <a href="/schedulesCalendar">
                         <button id="" class=" float-right bg-[#930027] text-white py-2 px-7 rounded-md hover:bg-red-900 ">Other Schedules
                         </button>
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </div>
@@ -438,27 +438,51 @@
         var estimateEvents = {!! json_encode($estimates) !!};
 
         var events = estimateEvents.map(function(estimate) {
-    var eventObj = {
-        title: [estimate.customer_name + ' ' + estimate.customer_last_name],
-        start: new Date(estimate.scheduled_start_date),
-        end: new Date(estimate.scheduled_end_date),
-    };
+            var eventObj = {
+                title: [estimate.customer_name + ' ' + estimate.customer_last_name],
+                start: new Date(estimate.scheduled_start_date),
+                end: new Date(estimate.scheduled_end_date),
+            };
 
-    if (estimate.scheduler != null) {
-        eventObj.backgroundColor = estimate.scheduler.user_color ? estimate.scheduler.user_color : ''; // Choose a color or generate dynamically
-        eventObj.borderColor = estimate.scheduler.user_color ? estimate.scheduler.user_color : ''; // Choose a color or generate dynamically
-    } else if (estimate.crew != null) {
-        eventObj.backgroundColor = estimate.crew.user_color ? estimate.crew.user_color : ''; // Choose a color or generate dynamically
-        eventObj.borderColor = estimate.crew.user_color ? estimate.crew.user_color : ''; // Choose a color or generate dynamically
-    } else{
-        eventObj.backgroundColor = ''; // Choose a color or generate dynamically
-        eventObj.borderColor = ''; // Choose a color or generate dynamically
-    }
+            if (estimate.scheduler != null) {
+                eventObj.backgroundColor = estimate.scheduler.user_color ? estimate.scheduler.user_color : ''; // Choose a color or generate dynamically
+                eventObj.borderColor = estimate.scheduler.user_color ? estimate.scheduler.user_color : ''; // Choose a color or generate dynamically
+            } else if (estimate.crew != null) {
+                eventObj.backgroundColor = estimate.crew.user_color ? estimate.crew.user_color : ''; // Choose a color or generate dynamically
+                eventObj.borderColor = estimate.crew.user_color ? estimate.crew.user_color : ''; // Choose a color or generate dynamically
+            } else{
+                eventObj.backgroundColor = ''; // Choose a color or generate dynamically
+                eventObj.borderColor = ''; // Choose a color or generate dynamically
+            }
 
-    return eventObj;
-});
+            return eventObj;
+        });
         @endif
 
+        var userToDos = {!! json_encode($userToDos) !!};
+        var estimateToDos = {!! json_encode($estimateToDos) !!};
+        
+        var userEvents = userToDos.map(function(todo) {
+            return {
+                title: todo.to_do_title,
+                start: new Date(todo.start_date), // Adjust the field according to your data
+                end: new Date(todo.end_date), // Adjust the field according to your data
+                backgroundColor: '#your_color', // Choose a color or generate dynamically
+                borderColor: '#your_color' // Choose a color or generate dynamically
+            };
+        });
+
+        // Convert estimate todos to events
+        var estimateEvents = estimateToDos.map(function(todo) {
+            return {
+                title: todo.to_do_title,
+                start: new Date(todo.start_date), // Adjust the field according to your data
+                end: new Date(todo.end_date), // Adjust the field according to your data
+                backgroundColor: '#your_color', // Choose a color or generate dynamically
+                borderColor: '#your_color' // Choose a color or generate dynamically
+            };
+        });
+        var allEvents = events.concat(userEvents, estimateEvents);
         function formatDate(date) {
             var year = date.getFullYear();
             var month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -473,7 +497,7 @@
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
             themeSystem: 'bootstrap',
-            events: events,
+            events: allEvents,
             editable: true,
             droppable: true,
             drop: function(info) {

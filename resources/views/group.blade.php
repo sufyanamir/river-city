@@ -147,7 +147,7 @@
 
                                 <form class=" inline-block" action="/delete/group/{{ $group->group_id }}" method="post">
                                     @csrf
-                                    <button>
+                                    <button disabled>
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
                                     </button>
                                 </form>

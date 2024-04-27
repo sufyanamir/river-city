@@ -47,11 +47,11 @@ $userPrivileges = session('user_details')['user_privileges'];
                             </button>
                             @endif
                             @if (session('user_details')['user_role'] == 'admin')
-                            <button>
+                            <button disabled>
                                 <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
                             </button>
                             @elseif(isset($userPrivileges->customers) && isset($userPrivileges->customers->edit) && $userPrivileges->customers->delete === "on")
-                            <button>
+                            <button disabled>
                                 <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
                             </button>
                             @endif

@@ -1,3 +1,12 @@
+
+
+<footer class="bg-white rounded-lg shadow m-4 dark:bg-gray-800">
+    <div class="w-full mx-auto max-w-screen-xl p-4 text-center">
+      <span class="text-sm text-[#930027] sm:text-center dark:text-gray-400"><a href="https://flowbite.com/" class="hover:underline">Powered by : The Web Concept™.</a>
+    </span>
+    </div>
+</footer>
+
 </div>
 </div>
 <!-- <script src="{{asset('assets/js/jquery.min.js')}}"></script> -->

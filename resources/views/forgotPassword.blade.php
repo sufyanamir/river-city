@@ -13,7 +13,7 @@
 <body>
     <section class=" min-h-screen flex items-center justify-center">
         <!-- login container -->
-        <div class= "flex rounded-2xl shadow-2xl  p-5 max-w-4xl items-center">
+        <div class="flex rounded-2xl shadow-2xl  p-5 max-w-4xl items-center">
             <!-- form -->
 
             <div class="md:w-1/2 px-8  sm:px-16 ">
@@ -28,11 +28,11 @@
                 <form action="/forgotPasswordMail" method="post" id="forgot_form" class="flex flex-col gap-4">
                     @csrf
                     <div class="relative mt-16">
-                    <label for="" class="">Email</label>
-                    <input class="p-2 pl-5 relative focus:outline-none focus:border-transparent outline-none border-b-2 w-full" type="email" name="email" placeholder="Email">
+                        <label for="" class="">Email</label>
+                        <input class="p-2 pl-5 relative focus:outline-none focus:border-transparent outline-none border-b-2 w-full" type="email" name="email" placeholder="Email">
                         <svg class="absolute top-[60%] " width="17" height="12" viewBox="0 0 17 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M1.49414 0H15.5059C16.3297 0 17 0.670272 17 1.49414V10.1529C17 10.9768 16.3297 11.6471 15.5059 11.6471H1.49414C0.670271 11.6471 0 10.9768 0 10.1529V1.49414C0 0.670272 0.670271 0 1.49414 0ZM1.68914 0.996094L1.88856 1.16214L7.90719 6.17386C8.25071 6.45987 8.74936 6.45987 9.09281 6.17386L15.1114 1.16214L15.3109 0.996094H1.68914ZM16.0039 1.71521L11.1001 5.79863L16.0039 9.06226V1.71521ZM1.49414 10.651H15.5059C15.7465 10.651 15.9478 10.4794 15.9939 10.2522L10.3014 6.46365L9.73018 6.93932C9.37377 7.23609 8.93685 7.38447 8.49997 7.38447C8.06308 7.38447 7.62619 7.23609 7.26976 6.93932L6.69853 6.46365L1.00605 10.2521C1.05221 10.4794 1.25348 10.651 1.49414 10.651ZM0.996094 9.06226L5.89993 5.79866L0.996094 1.71521V9.06226Z" fill="#000842"/>
-                          </svg>
+                            <path d="M1.49414 0H15.5059C16.3297 0 17 0.670272 17 1.49414V10.1529C17 10.9768 16.3297 11.6471 15.5059 11.6471H1.49414C0.670271 11.6471 0 10.9768 0 10.1529V1.49414C0 0.670272 0.670271 0 1.49414 0ZM1.68914 0.996094L1.88856 1.16214L7.90719 6.17386C8.25071 6.45987 8.74936 6.45987 9.09281 6.17386L15.1114 1.16214L15.3109 0.996094H1.68914ZM16.0039 1.71521L11.1001 5.79863L16.0039 9.06226V1.71521ZM1.49414 10.651H15.5059C15.7465 10.651 15.9478 10.4794 15.9939 10.2522L10.3014 6.46365L9.73018 6.93932C9.37377 7.23609 8.93685 7.38447 8.49997 7.38447C8.06308 7.38447 7.62619 7.23609 7.26976 6.93932L6.69853 6.46365L1.00605 10.2521C1.05221 10.4794 1.25348 10.651 1.49414 10.651ZM0.996094 9.06226L5.89993 5.79866L0.996094 1.71521V9.06226Z" fill="#000842" />
+                        </svg>
                     </div>
                     {{-- <div class="relative">
                     <label for="">Password</label>
@@ -46,10 +46,15 @@
                             fill="#000842" />
                     </svg>
                   </div> --}}
-                  {{-- <a href="" class="text-[#FF0000] text-[12px]/[18px] text-end m-0 	">forget your password</a> --}}
-                    <button
-                        class="bg-[#930027] rounded-full text-white py-2 hover:scale-105 duration-300">Send</button>
+                    {{-- <a href="" class="text-[#FF0000] text-[12px]/[18px] text-end m-0 	">forget your password</a> --}}
+                    <button class="bg-[#930027] rounded-full text-white py-2 hover:scale-105 duration-300">Send</button>
                 </form>
+                <div class=" mt-3 text-center">
+                    <a href="https://thewebconcept.com/" class="text-[#930027] hover:underline">
+                        <span class="text-sm text-[#930027] sm:text-center my-auto dark:text-gray-400">Powered by : The Web Concept™.
+                        </span>
+                    </a>
+                </div>
             </div>
 
             <!-- image -->
@@ -60,67 +65,67 @@
     </section>
 </body>
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        $(document).ready(function() {
-            $("#forgot_form").submit(function(event) {
-                // Prevent the default form submission
-                event.preventDefault();
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function() {
+        $("#forgot_form").submit(function(event) {
+            // Prevent the default form submission
+            event.preventDefault();
 
-                // Serialize the form data into a JSON object
-                var formData = $(this).serialize();
+            // Serialize the form data into a JSON object
+            var formData = $(this).serialize();
 
-                // Send the AJAX request
-                $.ajax({
-                    type: "POST", // Use POST method
-                    url: "/forgotPasswordMail", // Replace with the actual URL to your login endpoint
-                    data: formData, // Send the form data
-                    dataType: "json", // Expect JSON response
-                    beforeSend: function() {
-                        $('#spinner').removeClass('hidden');
-                        $('#text').addClass('hidden');
-                        $('#loginBtn').attr('disabled', true);
-                    },
-                    success: function(response) {
-                        // Handle the success response here
-                        if (response.success == true) {
-                            // Redirect to the dashboard or do something else
-                            $('#text').removeClass('hidden');
-                            $('#spinner').addClass('hidden');
-                            // window.location.href = "/dashboard";
-                            Swal.fire(
-                                'Success!',
-                                response.message,
-                                'success'
-                            )
-                        } else if (response.success == false) {
-                            Swal.fire(
-                                'Warning!',
-                                response.message,
-                                'warning'
-                            )
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        // Log the error response to the console
-                        console.error("AJAX Error: " + textStatus, errorThrown);
-
-                        // Log the response content for further investigation
-                        console.log("Response:", jqXHR.responseText);
-                        let response = JSON.parse(jqXHR.responseText);
+            // Send the AJAX request
+            $.ajax({
+                type: "POST", // Use POST method
+                url: "/forgotPasswordMail", // Replace with the actual URL to your login endpoint
+                data: formData, // Send the form data
+                dataType: "json", // Expect JSON response
+                beforeSend: function() {
+                    $('#spinner').removeClass('hidden');
+                    $('#text').addClass('hidden');
+                    $('#loginBtn').attr('disabled', true);
+                },
+                success: function(response) {
+                    // Handle the success response here
+                    if (response.success == true) {
+                        // Redirect to the dashboard or do something else
+                        $('#text').removeClass('hidden');
+                        $('#spinner').addClass('hidden');
+                        // window.location.href = "/dashboard";
+                        Swal.fire(
+                            'Success!',
+                            response.message,
+                            'success'
+                        )
+                    } else if (response.success == false) {
                         Swal.fire(
                             'Warning!',
                             response.message,
                             'warning'
                         )
-                        // Handle the error here
-                        $('#text').removeClass('hidden');
-                        $('#spinner').addClass('hidden');
-                        $('#loginBtn').attr('disabled', false);
                     }
-                });
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Log the error response to the console
+                    console.error("AJAX Error: " + textStatus, errorThrown);
+
+                    // Log the response content for further investigation
+                    console.log("Response:", jqXHR.responseText);
+                    let response = JSON.parse(jqXHR.responseText);
+                    Swal.fire(
+                        'Warning!',
+                        response.message,
+                        'warning'
+                    )
+                    // Handle the error here
+                    $('#text').removeClass('hidden');
+                    $('#spinner').addClass('hidden');
+                    $('#loginBtn').attr('disabled', false);
+                }
             });
         });
-    </script>
+    });
+</script>
 
 </html>

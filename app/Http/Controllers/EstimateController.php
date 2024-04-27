@@ -557,7 +557,10 @@ class EstimateController extends Controller
         $allEmployees = User::where('sts', 'active')->get();
         $allEmployees = User::where('sts', 'active')->get();
 
-        return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'allEmployees' => $allEmployees]);
+        $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->get();
+        $estimateToDos = EstimateToDos::where('to_do_assigned_to', $userDetails['id'])->get();
+
+        return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
         // return response()->json(['success' => true, 'estimate' => $estimate]);
     }
     // get schedule estimate
@@ -633,15 +636,22 @@ class EstimateController extends Controller
                 $estimate = Estimate::with(['scheduler', 'crew'])->where('estimate_id', $scheduleEstimate->estimate_id)->first();
                 $estimates[] = $estimate;
             }
+    
+            $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->get();
+            $estimateToDos = EstimateToDos::where('to_do_assigned_to', $userDetails['id'])->get();
             $allEmployees = User::where('sts', 'active')->get();
-            return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees]);
+            return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
         } elseif ($userDetails['user_role'] == 'scheduler') {
             $estimates = Estimate::with(['scheduler', 'crew'])->where('estimate_schedule_assigned_to', $userDetails['id'])->get();
         } else {
             $estimates = Estimate::with(['scheduler', 'crew'])->get();
         }
+
+        $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->get();
+        $estimateToDos = EstimateToDos::where('to_do_assigned_to', $userDetails['id'])->get();
+
         $allEmployees = User::where('sts', 'active')->get();
-        return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees]);
+        return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
     }
 
     public function getSchedulesOnScheduleCalendar($user = null)
@@ -1509,6 +1519,9 @@ class EstimateController extends Controller
     
                 // Rest of your code...
             }
+            $companyProposalMail = new ProposalMail($emailData);
+            Mail::to('office@rivercitypaintinginc.com')->send($companyProposalMail);
+
             $estimate->estimate_total = null;
             $estimate->save();
             $proposal = EstimateProposal::create([
