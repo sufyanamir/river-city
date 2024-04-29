@@ -56,7 +56,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/dataTables.min.css') }}">
     <script src="{{ asset('assets/js/fontawesome.js') }}" crossorigin="anonymous"></script>
-    @vite('resources/css/app.css')
+    @vite(['resources/css/app.css','resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('assets/css/fancybox.min.css') }}" />
 </head>
 <!-- Debug: Display decoded user_privileges -->
