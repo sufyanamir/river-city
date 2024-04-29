@@ -70,12 +70,12 @@
         @else
         <p style="padding:20px 50px; font-size:large"><a style="color: #930027;" href="https://paintwichita.com/">Visit our site!</a></p>
         @endif
-        <div style=" margin-top: 8px; text-align: center;">
+        <!-- <div style=" margin-top: 8px; text-align: center;">
             <a href="https://thewebconcept.com/" style="color: #930027;">
                 <span style="font-size: smaller; color:#930027; margin:auto;">Powered by : The Web Concept™.
                 </span>
             </a>
-        </div>
+        </div> -->
         <div style="padding:20px 50px;">
             <img src="{{ $message->embed(public_path().'/assets/images/PCA-Logo-RGB .png') }}" class="footerImage" style="height: 80px;" alt="Image">
             <img src="{{ $message->embed(public_path().'/assets/images/2023BOW_GoldWInner.png') }}" class="footerImage" style="height: 80px;" alt="Image">

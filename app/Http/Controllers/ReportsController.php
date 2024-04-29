@@ -5,15 +5,46 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Estimate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class ReportsController extends Controller
 {
-    public function index()
+    public function index($range = null, $date = null)
     {
         $userDetails = session('user_details');
+        if ($range !== null && $date !== null) {
+            $startDate = null;
+            $endDate = null;
 
-        // Fetch customers with estimates relationship
-        $customers = Customer::with('estimates')->get();
+            // Determine start and end dates based on selected range
+            switch ($range) {
+                case 'day':
+                    $startDate = Carbon::parse($date)->startOfDay();
+                    $endDate = Carbon::parse($date)->endOfDay();
+                    break;
+                case 'week':
+                    $startDate = Carbon::parse($date)->startOfWeek();
+                    $endDate = Carbon::parse($date)->endOfWeek();
+                    break;
+                case 'month':
+                    $startDate = Carbon::parse($date)->startOfMonth();
+                    $endDate = Carbon::parse($date)->endOfMonth();
+                    break;
+                default:
+                    // Handle invalid range, maybe redirect to default range
+                    break;
+            }
+
+            // Fetch data based on date range
+            $customers = Customer::with('estimates')
+                ->whereHas('estimates', function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                })
+                ->get();
+        } else {
+            // Fetch data without applying date range filter
+            $customers = Customer::with('estimates')->get();
+        }
 
         $sources = [];
         $completedEstimators = [];
@@ -71,19 +102,19 @@ class ReportsController extends Controller
 
                 if ($estimate->work_completed === 1) {
                     $ownerName = $estimate->project_owner;
-    
+
                     if (!isset($completedWorkOrders[$ownerName]['total_work_orders'])) {
                         $completedWorkOrders[$ownerName]['total_work_orders'] = 0;
                     }
-    
+
                     if (!isset($completedWorkOrders[$ownerName]['work_order_total'])) {
                         $completedWorkOrders[$ownerName]['work_order_total'] = 0;
                     }
-    
+
                     $completedWorkOrders[$ownerName]['total_work_orders'] += 1;
                     $completedWorkOrders[$ownerName]['work_order_total'] += $estimate->estimate_total;
                 }
-                
+
                 if ($estimate->estimate_total != null) {
                     $ownerName = $estimate->project_owner;
 
@@ -118,6 +149,7 @@ class ReportsController extends Controller
 
         // return response()->json(['sources' => $sources, 'completed_estimators' => $completedEstimators]);
         return view('reports', [
+            'date' => $date,
             'sources' => $sources,
             'completed_estimators' => $completedEstimators,
             'pending_estimators' => $pendingEstimators,
