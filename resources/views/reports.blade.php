@@ -21,7 +21,15 @@
             </div>
             <div class="text-right">
                 <div class="inline-flex rounded-md shadow-sm" role="group">
-                    <button id="selectformatDate" data-dropdown-toggle="selectformatDateDropDown" class=" inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700" type="button">Month <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <button id="selectformatDate" data-dropdown-toggle="selectformatDateDropDown" class=" inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700" type="button">
+                        @if($range == 'day')
+                        Day
+                        @elseif($range == 'week')
+                        Week
+                        @else
+                        Month 
+                        @endif
+                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
                         </svg>
                     </button>
@@ -386,41 +394,41 @@
     });
 </script>
 <script>
-  $(document).ready(function() {
-    // Get the current date
-    var currentDate = new Date();
+//   $(document).ready(function() {
+//     // Get the current date
+//     var currentDate = new Date();
 
-    // Get the year and month in the format YYYY-MM
-    var currentYearMonth = currentDate.toISOString().slice(0, 7);
+//     // Get the year and month in the format YYYY-MM
+//     var currentYearMonth = currentDate.toISOString().slice(0, 7);
 
-    // Set the value of the month_input to the current year and month
-    $("#month_input").val(currentYearMonth);
+//     // Set the value of the month_input to the current year and month
+//     $("#month_input").val(currentYearMonth);
 
-    // Set the value of the day_input to the current date in YYYY-MM-DD format
-    var currentDay = currentDate.toISOString().slice(0, 10);
-    $("#day_input").val(currentDay);
+//     // Set the value of the day_input to the current date in YYYY-MM-DD format
+//     var currentDay = currentDate.toISOString().slice(0, 10);
+//     $("#day_input").val(currentDay);
 
-    // Set the value of the week_input to the current week in YYYY-Www format
-    var currentWeek = getISOWeek(currentDate);
-    var currentYear = currentDate.getFullYear();
-    $("#week_input").val(currentYear + '-W' + currentWeek);
+//     // Set the value of the week_input to the current week in YYYY-Www format
+//     var currentWeek = getISOWeek(currentDate);
+//     var currentYear = currentDate.getFullYear();
+//     $("#week_input").val(currentYear + '-W' + currentWeek);
 
-    // Get the value of the 'date' parameter from the URL
-    var urlParams = new URLSearchParams(window.location.search);
-    var dateParam = urlParams.get('date');
+//     // Get the value of the 'date' parameter from the URL
+//     var urlParams = new URLSearchParams(window.location.search);
+//     var dateParam = urlParams.get('date');
 
-    // Determine which input field to update based on the 'date' parameter
-    if (dateParam) {
-        var formattedDate = formatDate(dateParam);
-        if (dateParam.length === 7) {
-            $("#month_input").val(dateParam);
-        } else if (dateParam.length === 10) {
-            $("#day_input").val(dateParam);
-        } else if (dateParam.length >= 8 && dateParam.includes('-W')) {
-            $("#week_input").val(dateParam);
-        }
-    }
-});
+//     // Determine which input field to update based on the 'date' parameter
+//     if (dateParam) {
+//         var formattedDate = formatDate(dateParam);
+//         if (dateParam.length === 7) {
+//             $("#month_input").val(dateParam);
+//         } else if (dateParam.length === 10) {
+//             $("#day_input").val(dateParam);
+//         } else if (dateParam.length >= 8 && dateParam.includes('-W')) {
+//             $("#week_input").val(dateParam);
+//         }
+//     }
+// });
 
 // Function to format the date
 function formatDate(date) {

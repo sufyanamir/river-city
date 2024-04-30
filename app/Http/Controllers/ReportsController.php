@@ -36,11 +36,11 @@ class ReportsController extends Controller
             }
 
             // Fetch data based on date range
-            $customers = Customer::with('estimates')
-                ->whereHas('estimates', function ($query) use ($startDate, $endDate) {
-                    $query->whereBetween('created_at', [$startDate, $endDate]);
-                })
-                ->get();
+            $customers = Customer::get();
+            foreach ($customers as $customer) {
+                $customerEstimates = Estimate::where('customer_id', $customer->customer_id)->whereBetween('created_at', [$startDate, $endDate])->get();
+                $customer->estimates = $customerEstimates;
+            }
         } else {
             // Fetch data without applying date range filter
             $customers = Customer::with('estimates')->get();
@@ -150,6 +150,7 @@ class ReportsController extends Controller
         // return response()->json(['sources' => $sources, 'completed_estimators' => $completedEstimators]);
         return view('reports', [
             'date' => $date,
+            'range' => $range,
             'sources' => $sources,
             'completed_estimators' => $completedEstimators,
             'pending_estimators' => $pendingEstimators,
