@@ -633,8 +633,7 @@
                             </div>
                             <div class=" col-span-2">
                                 <label for="email_body">Email body:</label>
-                                <textarea name="email_body" id="email_body" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" rows="10">Hello! {{$customer->customer_first_name}} {{$customer->customer_last_name}} We are pleased to present our proposal for your review. You may access the proposal via the following link. We eagerly await your feedback and hope to have the opportunity to further discuss and potentially move forward with this proposal.
-                                </textarea>
+                                <textarea name="email_body" id="email_body" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" rows="10">Hi there! {{$customer->customer_first_name}} {{$customer->customer_last_name}} With great pleasure, we submit our proposal for your consideration. The proposal can be viewed by clicking on the following link. We look forward to hearing from you so that we may explore this plan in more detail and possibly proceed with it.</textarea>
                             </div>
                         </div>
                         <div class="">
