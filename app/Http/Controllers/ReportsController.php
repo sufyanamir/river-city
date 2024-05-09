@@ -9,10 +9,16 @@ use Illuminate\Support\Carbon;
 
 class ReportsController extends Controller
 {
-    public function index($range = null, $date = null)
+    public function index($range = null, $date = null, $keyword = null)
     {
         $userDetails = session('user_details');
-        if ($range !== null && $date !== null) {
+        if ($keyword != null) {
+            // Filter customers based on the search keyword
+            $customers = Customer::where('name', 'like', '%' . $keyword . '%')->with('estimates')->get();
+        }else{
+            $customers = Customer::with('estimates')->get();
+        }
+        if ($range != null && $date != null) {
             $startDate = null;
             $endDate = null;
 
@@ -35,15 +41,17 @@ class ReportsController extends Controller
                     break;
             }
 
-            // Fetch data based on date range
-            $customers = Customer::get();
             foreach ($customers as $customer) {
                 $customerEstimates = Estimate::where('customer_id', $customer->customer_id)->whereBetween('created_at', [$startDate, $endDate])->get();
                 $customer->estimates = $customerEstimates;
             }
         } else {
-            // Fetch data without applying date range filter
-            $customers = Customer::with('estimates')->get();
+            if ($keyword != null) {
+                // Filter customers based on the search keyword
+                $customers = Customer::where('name', 'like', '%' . $keyword . '%')->with('estimates')->get();
+            }else{
+                $customers = Customer::with('estimates')->get();
+            }
         }
 
         $sources = [];
@@ -151,6 +159,7 @@ class ReportsController extends Controller
         return view('reports', [
             'date' => $date,
             'range' => $range,
+            'keyword' => $keyword,
             'sources' => $sources,
             'completed_estimators' => $completedEstimators,
             'pending_estimators' => $pendingEstimators,

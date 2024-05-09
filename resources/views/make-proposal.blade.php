@@ -161,11 +161,11 @@
                                 <div class="mb-2 bg-white shadow-xl">
                                     <div class=" p-1 bg-[#930027] text-white w-full rounded-t-lg">
                                         <div class="inline-block">
-                                        @if($groupName)
+                                            @if($groupName)
                                             <div class="flex gap-3">
                                                 <h1 class=" font-medium my-auto p-2">{{$groupName}}</h1>
                                             </div>
-                                        @endif
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="relative overflow-x-auto mb-8">
@@ -215,15 +215,20 @@
                                                         @if($item->group)
                                                         <td class="text-center">
                                                             @if($item->group->show_quantity == 1)
-                                                            {{ $item->item_qty }} <br> {{ $item->item_unit }}
+                                                            {{ number_format($item->item_qty, 2) }} <br> {{ $item->item_unit }}
                                                             @endif
                                                         </td>
-                                                        @endif
-                                                        @if($item->group)
                                                         <td class="text-center">
                                                             @if($item->group->show_total == 1)
-                                                            ${{ $item->item_total }}
+                                                            ${{ number_format($item->item_total, 2) }}
                                                             @endif
+                                                        </td>
+                                                        @else
+                                                        <td class="text-center">
+                                                            {{ number_format($item->item_qty, 2) }} <br> {{ $item->item_unit }}
+                                                        </td>
+                                                        <td class="text-center">
+                                                            ${{ number_format($item->item_total, 2) }}
                                                         </td>
                                                         @endif
                                                         <!-- @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
