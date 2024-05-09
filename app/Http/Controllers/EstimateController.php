@@ -442,7 +442,7 @@ class EstimateController extends Controller
                     }
                 }
             }
-
+            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Line Items Added', "New Line items has been added from the template.");
             return response()->json(['success' => true, 'message' => 'Item Added!'], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
