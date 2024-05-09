@@ -9,7 +9,7 @@
                 @csrf
                 <input type="hidden" name="user_id" value="{{ session('user_details')['id'] }}">
                 <div class="text-center mb-2">
-                    <div id="dropzone" class="dropzone" style="padding: 0 !important">
+                    <div id="dropzone" class="profile-dropzone" style="padding: 0 !important">
                         <img id="profileImage" src="{{ (isset($user_details->user_image)) ? asset($user_details->user_image) : 'assets/images/demo-user.svg'}}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;" alt="text">
                         <div class="file-input-container">
                             <input class="file-input" type="file" name="upload_image" id="fileInput1">
