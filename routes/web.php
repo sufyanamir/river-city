@@ -96,6 +96,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/completeWorkAndAssignInvoice', [EstimateController::class, 'completeWorkAndAssignInvoice']);
     Route::post('/completeInvoiceAndAssignPayment', [EstimateController::class, 'completeInvoiceAndAssignPayment']);
     Route::post('/addPayment', [EstimateController::class, 'addPayment']);
+    Route::post('/advancePayment', [EstimateController::class, 'advancePayment']);
     Route::post('/completeProject', [EstimateController::class, 'completeProject']);
     Route::post('/addToDos', [EstimateController::class, 'addToDos']);
     Route::post('/addEstimateExpense', [EstimateController::class, 'addEstimateExpense']);

@@ -80,6 +80,10 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <td>
                                 <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Complete</span>
                             </td>
+                            @elseif($item->estimate_status == 'paid')
+                            <td>
+                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Paid</span>
+                            </td>
                             @elseif($item->estimate_status == 'cancel')
                             <td>
                                 <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">Canceled</span>

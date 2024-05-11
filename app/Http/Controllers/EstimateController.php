@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\ProposalAcceptedMail;
 use App\Mail\ProposalMail;
 use App\Mail\sendMailToClient;
+use App\Models\AdvancePayment;
 use App\Models\AssignPayment;
 use App\Models\Company;
 use App\Models\CompleteEstimate;
@@ -1035,6 +1036,35 @@ class EstimateController extends Controller
     }
     // complete project
 
+    // add advance payment
+    public function advancePayment(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'estimate_total_amount' => 'required',
+                'advance_payment' => 'required',
+                'note' => 'nullable',
+            ]);
+
+            $advancePayment = AdvancePayment::create([
+                'added_user_id' => $userDetails['id'],
+                'estimate_id' => $validatedData['estimate_id'],
+                'estimate_total' => $validatedData['estimate_total_amount'],
+                'advance_payment' => $validatedData['advance_payment'],
+                'note' => $validatedData['note'],
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Advance payment has been added!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // add advance payment
+
     // add payment
     public function addPayment(Request $request)
     {
@@ -1098,6 +1128,12 @@ class EstimateController extends Controller
             ]);
 
             $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
+            $advancePayment = AdvancePayment::where('estimate_id', $validatedData['estimate_id'])->first();
+            if ($advancePayment) {
+                $invoiceDue = $estimate->estimate_total - $advancePayment->advance_payment;
+            }else{
+                $invoiceDue = $estimate->estimate_total;
+            }
             $estimate->payment_assigned = 1;
             $estimate->payment_assigned_to = $validatedData['assign_payment'];
             $estimate->invoiced_payment = $estimate->estimate_total;
@@ -1113,7 +1149,7 @@ class EstimateController extends Controller
                 'invoice_name' => 'final invoice',
                 'tax_rate' => $estimate->tax_rate,
                 'invoice_total' => $estimate->estimate_total,
-                'invoice_due' => $estimate->estimate_total,
+                'invoice_due' => $invoiceDue,
             ]);
 
             $estimate->save();
@@ -2158,6 +2194,7 @@ class EstimateController extends Controller
             $invoice = AssignPayment::where('estimate_id', $estimate->estimate_id)->first();
             $payments = EstimatePayments::where('estimate_id', $estimate->estimate_id)->get();
             $toDos = EstimateToDos::with('assigned_to', 'assigned_by')->where('estimate_id', $estimate->estimate_id)->get();
+            $advancePayment = AdvancePayment::where('estimate_id', $id)->first();
             //$expenses = EstimateExpenses::where('estimate_id', $estimate->estimate_id)->get();
 
             $estimateId = $estimate->estimate_id;
@@ -2318,6 +2355,7 @@ class EstimateController extends Controller
                 'budgetMargin' => $budgetMargin,
                 'expenseTotal' => $expenseTotal,
                 'vendorTotals' => $vendorTotals,
+                'advancePayment' => $advancePayment,
             ]);
         } catch (\Exception $e) {
             // Handle the exception
