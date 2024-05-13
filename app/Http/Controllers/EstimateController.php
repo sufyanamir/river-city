@@ -42,6 +42,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\User;
 use App\Models\UserToDo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -365,7 +366,7 @@ class EstimateController extends Controller
             if (isset($validatedData['template_item_id'])) {
                 foreach ($validatedData['template_item_id'] as $key => $itemId) {
                     $itemQty = $validatedData['template_item_qty'][$key];
-                    if ($itemQty > 0) {
+                    if ($itemQty != 0) {
 
                         $item = Items::with('assemblies')->find($itemId);
 
@@ -412,7 +413,7 @@ class EstimateController extends Controller
                                 foreach ($item->assemblies as $key => $assItem) {
 
                                     $actItem = Items::where('item_id', $assItem->ass_item_id)->first();
-                                    
+
                                     $assItemQty = $itemQty * $assItem->ass_unit_by_item_unit;
                                     // dd($actItem);
                                     $assItemPrice = $actItem->item_price * $assItemQty;
@@ -637,7 +638,7 @@ class EstimateController extends Controller
                 $estimate = Estimate::with(['scheduler', 'crew'])->where('estimate_id', $scheduleEstimate->estimate_id)->first();
                 $estimates[] = $estimate;
             }
-    
+
             $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->get();
             $estimateToDos = EstimateToDos::where('to_do_assigned_to', $userDetails['id'])->get();
             $allEmployees = User::where('sts', 'active')->get();
@@ -659,7 +660,7 @@ class EstimateController extends Controller
     {
         if ($user != null) {
             $userDetails = User::where('id', $user)->first();
-        }else{
+        } else {
             $userDetails = session('user_details');
         }
 
@@ -730,12 +731,12 @@ class EstimateController extends Controller
         } elseif ($userDetails['user_role'] == 'scheduler') {
             if ($type == 'assigned') {
                 $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->where('estimate_schedule_assigned_to', $userDetails['id'])->orderBy('created_at', 'desc')->get();
-            }else {
+            } else {
                 $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->orderBy('created_at', 'desc')->get();
             }
             $customers = Customer::get();
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
-        }else {
+        } else {
             $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->orderBy('created_at', 'desc')->get();
             $customers = Customer::get();
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
@@ -1058,7 +1059,6 @@ class EstimateController extends Controller
             ]);
 
             return response()->json(['success' => true, 'message' => 'Advance payment has been added!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -1131,7 +1131,7 @@ class EstimateController extends Controller
             $advancePayment = AdvancePayment::where('estimate_id', $validatedData['estimate_id'])->first();
             if ($advancePayment) {
                 $invoiceDue = $estimate->estimate_total - $advancePayment->advance_payment;
-            }else{
+            } else {
                 $invoiceDue = $estimate->estimate_total;
             }
             $estimate->payment_assigned = 1;
@@ -1318,7 +1318,6 @@ class EstimateController extends Controller
         $completedEstimate = CompleteEstimate::where('estimate_id', $id)->first();
 
         return response()->json(['success' => true, 'estimateDetails' => $completedEstimate], 200);
-
     }
     // get completed Estimate
 
@@ -1427,7 +1426,6 @@ class EstimateController extends Controller
                 $mail = new ProposalAcceptedMail($emailData);
 
                 Mail::to('office@rivercitypaintinginc.com')->send($mail);
-                
             } catch (\Exception $e) {
                 return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
             }
@@ -1528,6 +1526,7 @@ class EstimateController extends Controller
             $emailTo = explode(',', $validatedData['email_to']);
 
             $estimate = Estimate::with('customer')->where('estimate_id', $validatedData['estimate_id'])->first();
+            $estimateFiles = EstimateFile::where('estimate_id', $validatedData['estimate_id'])->get();
             $emailData = [
                 'estimate_id' => $validatedData['estimate_id'],
                 'email' => $validatedData['email_to'],
@@ -1548,11 +1547,23 @@ class EstimateController extends Controller
 
             foreach ($emailTo as $email) {
                 $emailData['email'] = $email;
-    
+
                 // Your existing code for sending email goes here...
                 $mail = new ProposalMail($emailData);
+                // Attach estimate files to the email
+                if ($estimateFiles) {
+                    foreach ($estimateFiles as $file) {
+                        $filePath = storage_path('app/public/' . $file->estimate_file);
+                        if (File::exists($filePath)) {
+                            $mail->attach($filePath, [
+                                'as' => $file->estimate_file_name, // Rename the file if needed
+                            ]);
+                        }
+                    }
+                }
+
                 Mail::to(trim($email))->send($mail); // Use trim() to remove extra spaces
-    
+
                 // Rest of your code...
             }
             $companyProposalMail = new ProposalMail($emailData);
@@ -1650,58 +1661,58 @@ class EstimateController extends Controller
     }
 
     public function sendEmail(Request $request)
-{
-    try {
-        $userDetails = session('user_details');
+    {
+        try {
+            $userDetails = session('user_details');
 
-        $validatedData = $request->validate([
-            'estimate_id' => 'required',
-            'email_id' => 'required|integer',
-            'email_name' => 'required|string',
-            'email_to' => 'required|string',
-            'email_subject' => 'nullable|string',
-            'email_body' => 'required|string',
-            'customer_id' => 'required',
-        ]);
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'email_id' => 'required|integer',
+                'email_name' => 'required|string',
+                'email_to' => 'required|string',
+                'email_subject' => 'nullable|string',
+                'email_body' => 'required|string',
+                'customer_id' => 'required',
+            ]);
 
-        $customer = Customer::where('customer_id', $validatedData['customer_id'])->first();
+            $customer = Customer::where('customer_id', $validatedData['customer_id'])->first();
 
-        $emailData = [
-            'estimate_id' => $validatedData['estimate_id'],
-            'email_id' => $validatedData['email_id'],
-            'email_name' => $validatedData['email_name'],
-            'email_to' => $validatedData['email_to'],
-            'email_subject' => $validatedData['email_subject'],
-            'email_body' => $validatedData['email_body'], // Use the modified email body
-            'name' => $customer->customer_first_name . ' ' . $customer->customer_last_name,
-            'branch' => $customer->branch,
-        ];
+            $emailData = [
+                'estimate_id' => $validatedData['estimate_id'],
+                'email_id' => $validatedData['email_id'],
+                'email_name' => $validatedData['email_name'],
+                'email_to' => $validatedData['email_to'],
+                'email_subject' => $validatedData['email_subject'],
+                'email_body' => $validatedData['email_body'], // Use the modified email body
+                'name' => $customer->customer_first_name . ' ' . $customer->customer_last_name,
+                'branch' => $customer->branch,
+            ];
 
-        // Create an instance of the Mailable class
-        $mail = new sendMailToClient($emailData);
+            // Create an instance of the Mailable class
+            $mail = new sendMailToClient($emailData);
 
-        // Send the email using the Mail facade
-        Mail::to($validatedData['email_to'])
-            ->send($mail);
+            // Send the email using the Mail facade
+            Mail::to($validatedData['email_to'])
+                ->send($mail);
 
-        // Assuming you want to save the email data in the database
-        $mail = EstimateEmail::create([
-            'added_user_id' => $userDetails['id'],
-            'estimate_id' => $validatedData['estimate_id'],
-            'email_id' => $validatedData['email_id'],
-            'email_name' => $validatedData['email_name'],
-            'email_to' => $validatedData['email_to'],
-            'email_subject' => $validatedData['email_subject'],
-            'email_body' => $validatedData['email_body'], // Use the modified email body
-        ]);
+            // Assuming you want to save the email data in the database
+            $mail = EstimateEmail::create([
+                'added_user_id' => $userDetails['id'],
+                'estimate_id' => $validatedData['estimate_id'],
+                'email_id' => $validatedData['email_id'],
+                'email_name' => $validatedData['email_name'],
+                'email_to' => $validatedData['email_to'],
+                'email_subject' => $validatedData['email_subject'],
+                'email_body' => $validatedData['email_body'], // Use the modified email body
+            ]);
 
-        $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Email Sent', "An Email has been sent to the Customer. The Subject of the email is " . $validatedData['email_subject'] . ".");
+            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Email Sent', "An Email has been sent to the Customer. The Subject of the email is " . $validatedData['email_subject'] . ".");
 
-        return response()->json(['success' => true, 'message' => 'Email sent to the client!'], 200);
-    } catch (\Exception $e) {
-        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+            return response()->json(['success' => true, 'message' => 'Email sent to the client!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
     }
-}
 
     // estimate emails
 
@@ -1830,7 +1841,7 @@ class EstimateController extends Controller
 
             // Update or insert EstimateItemAssembly data
             if (isset($validatedData['assembly_name'])) {
-                
+
                 foreach ($validatedData['assembly_name'] as $key => $assemblyName) {
                     if ($assemblyName != null) {
                         $itemUnitByAssUnitSum = $validatedData['item_unit_by_assembly_unit'][$key];
@@ -1838,7 +1849,7 @@ class EstimateController extends Controller
                         $assItems = Items::where('item_id', $validatedData['ass_item_id'][$key])->first();
                         $assItemQty = $validatedData['item_qty'] * $assUnitByItemUnitSum;
                         $assItemPrice = $assItems->item_price * $assItemQty;
-    
+
                         $assemblyData = [
                             'added_user_id' => $userDetails['id'],
                             'estimate_id' => $validatedData['estimate_id'],
