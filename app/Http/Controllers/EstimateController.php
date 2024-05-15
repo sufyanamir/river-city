@@ -133,13 +133,13 @@ class EstimateController extends Controller
 
         $userDetails = session('user_details');
         $estimate = Estimate::where('estimate_id', $id)->first();
-        $materialItems = EstimateItem::where('estimate_id', $id)->where('item_type', '<>', 'upgrades')->get();
-        $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->get();
-        $upgrades = EstimateItem::with('assemblies')->where('estimate_id', $id)->where('item_type', 'upgrades')->where('upgrade_status', 'accepted')->get();
+        $materialItems = EstimateItem::where('estimate_id', $id)->where('item_type', '<>', 'upgrades')->where('additional_item', '<>', 'yes')->get();
+        $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->where('additional_item', '<>', 'yes')->get();
+        $upgrades = EstimateItem::with('assemblies')->where('estimate_id', $id)->where('item_type', 'upgrades')->where('upgrade_status', 'accepted')->where('additional_item', '<>', 'yes')->get();
         $itemTemplates = EstimateItemTemplates::with('templateItems')->where('estimate_id', $id)->get();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-
-        return view('viewEstimateMaterials', ['estimate_items' => $materialItems, 'assemblies' => $estimateAssemblyItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
+        $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item' , 'yes')->get();
+        return view('viewEstimateMaterials', ['estimate_items' => $materialItems, 'estimateAdditionalItems' => $estimateAdditionalItems, 'assemblies' => $estimateAssemblyItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
     }
     // view Estimate Materials
 
@@ -1916,6 +1916,7 @@ class EstimateController extends Controller
                 'item_unit_by_assembly_unit' => 'nullable|array',
                 'is_upgrade' => 'nullable',
                 'group_id' => 'nullable',
+                'additional_item' => 'nullable',
                 // 'selected_items' => 'required|array',
             ]);
             // dd($validatedData);
@@ -1951,6 +1952,7 @@ class EstimateController extends Controller
                 'item_note' => $validatedData['item_note'],
                 'is_upgrade' => $validatedData['is_upgrade'],
                 'group_id' => $validatedData['group_id'],
+                'additional_item' => $validatedData['additional_item'],
             ]);
 
             if (isset($validatedData['assembly_name'])) {
@@ -2165,10 +2167,12 @@ class EstimateController extends Controller
 
 
             $additionalContacts = EstimateContact::where('estimate_id', $estimate->estimate_id)->get();
-            $estimateItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->get();
+            $estimateItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', '<>', 'yes')->get();
 
-            $profitHours = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->sum('item_qty');
-            $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->get();
+            $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item' , 'yes')->get();
+
+            $profitHours = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->where('additional_item', '<>', 'yes')->sum('item_qty');
+            $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->where('additional_item', '<>', 'yes')->get();
 
             $assemblyLabourTotalHours = 0;
             $assemblyLabourTotal = 0;
@@ -2292,7 +2296,7 @@ class EstimateController extends Controller
                 $estimateItemTemplateItems[] = $itemTemplate;
             }
             $profitHours += $estimateItemTemplateItemsLabourQty;
-            $sumEstimateItems = EstimateItem::where('estimate_id', $id)->get();
+            $sumEstimateItems = EstimateItem::where('estimate_id', $id)->where('additional_item', '<>', 'yes')->get();
             $profitFromEstimateItems = $sumEstimateItems->sum('item_total');
 
             $profitCostEstimateItems = $sumEstimateItems->sum(function ($itemm) {
@@ -2302,8 +2306,8 @@ class EstimateController extends Controller
             $profitCost = $profitCostEstimateItems + $profitCostTemplateItems;
             $profitItems = $profitFromEstimateItems + $profitFromTemplateItems;
 
-            $budgetLabourFromEstimateItems  = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->sum('item_total');
-            $budgetMaterialFromEstimateItems = EstimateItem::where('item_type', 'Material')->where('estimate_id', $id)->sum('item_total');
+            $budgetLabourFromEstimateItems  = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->where('additional_item', '<>', 'yes')->sum('item_total');
+            $budgetMaterialFromEstimateItems = EstimateItem::where('item_type', 'Material')->where('estimate_id', $id)->where('additional_item', '<>', 'yes')->sum('item_total');
 
             $budgetLabour = $profitItems;
             $budgetLabour = $budgetLabour * (1 - $company->company_labor_budget);
@@ -2367,6 +2371,7 @@ class EstimateController extends Controller
                 'expenseTotal' => $expenseTotal,
                 'vendorTotals' => $vendorTotals,
                 'advancePayment' => $advancePayment,
+                'estimateAdditionalItems' => $estimateAdditionalItems,
             ]);
         } catch (\Exception $e) {
             // Handle the exception

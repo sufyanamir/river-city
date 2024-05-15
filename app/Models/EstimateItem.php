@@ -42,6 +42,7 @@ class EstimateItem extends Model
         'upgrade_status',
         'item_status',
         'group_id',
+        'additional_item',
     ];
 
     public $timestamps = true;
