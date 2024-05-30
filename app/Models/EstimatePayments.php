@@ -9,11 +9,6 @@ class EstimatePayments extends Model
 {
     use HasFactory;
 
-    public function invoice()
-    {
-        return $this->belongsTo(AssignPayment::class, 'estimate_complete_invoice_id');
-    }
-
     protected $table = 'estimate_payments';
 
     protected $primaryKey = 'estimate_payment_id';
