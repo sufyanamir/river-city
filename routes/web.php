@@ -95,7 +95,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/addEstimateImage', [EstimageImagesController::class, 'uploadImage']);
     Route::post('/completeWorkAndAssignInvoice', [EstimateController::class, 'completeWorkAndAssignInvoice']);
     Route::post('/completeInvoiceAndAssignPayment', [EstimateController::class, 'completeInvoiceAndAssignPayment']);
-    Route::post('/addPayment', [EstimateController::class, 'addPayment']);
+    Route::get('/getInvoiceDetails{id}', [EstimateController::class, 'getInvoiceDetails']);
     Route::post('/advancePayment', [EstimateController::class, 'advancePayment']);
     Route::post('/completeProject', [EstimateController::class, 'completeProject']);
     Route::post('/addToDos', [EstimateController::class, 'addToDos']);
@@ -214,6 +214,7 @@ Route::middleware('customauth')->group(function () {
 Route::get('/forgotPassword', function () {
     return view('forgotPassword');
 });
+Route::match(['get', 'post'], 'addPayment', [EstimateController::class, 'addPayment']);
 Route::post('/forgotPasswordMail', [UserController::class, 'forgotPasswordMail']);
 Route::get('/resetPassword/{id}', [UserController::class, 'resetPassword']);
 Route::post('/updatePassword', [UserController::class, 'updatePassword']);

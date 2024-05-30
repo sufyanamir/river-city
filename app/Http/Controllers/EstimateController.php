@@ -47,6 +47,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Contracts\Service\Attribute\Required;
+use PDF;
 
 class EstimateController extends Controller
 {
@@ -63,6 +64,19 @@ class EstimateController extends Controller
     }
     // estimate activity
 
+    // get invoice details on estimates
+    public function getInvoiceDetails($id)
+    {
+        $userDetails = session('user_details');
+
+        $estimate = Estimate::with('invoices')->where('estimate_id', $id)->first();
+
+        return response()->json(['success' => true, 'estimateDetails' => $estimate], 200);
+
+    }
+    // get invoice details on estimates
+
+    // send invoice to QB
     public function sendInvoiceToQB(Request $request)
     {
 
@@ -90,6 +104,7 @@ class EstimateController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
+    // send invoice to QB
 
     // update item status
     public function includeexcludeEstimateItem(Request $request)
@@ -138,7 +153,7 @@ class EstimateController extends Controller
         $upgrades = EstimateItem::with('assemblies')->where('estimate_id', $id)->where('item_type', 'upgrades')->where('upgrade_status', 'accepted')->where('additional_item', '<>', 'yes')->get();
         $itemTemplates = EstimateItemTemplates::with('templateItems')->where('estimate_id', $id)->get();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-        $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item' , 'yes')->get();
+        $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
         return view('viewEstimateMaterials', ['estimate_items' => $materialItems, 'estimateAdditionalItems' => $estimateAdditionalItems, 'assemblies' => $estimateAssemblyItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
     }
     // view Estimate Materials
@@ -1072,23 +1087,24 @@ class EstimateController extends Controller
             $userDetails = session('user_details');
 
             $validatedData = $request->validate([
-                'estimate_id' => 'required',
-                'invoice_id' => 'required',
-                'invoice_date' => 'required',
-                'invoice_amount' => 'nullable',
+                'estimate_id' => 'nullable',
+                'invoice_id' => 'nullable',
+                'invoice_date' => 'nullable',
+                'invoice_amount' => 'required',
                 'note' => 'nullable',
+                'po_number' => 'required',
 
             ]);
 
-            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
+            $estimate = Estimate::where('po_number', $validatedData['po_number'])->first();
 
-            $estimate->invoice_paid = 1;
-            $estimate->invoice_paid_total = $validatedData['invoice_amount'];
-            $estimate->estimate_status = 'paid';
+            // $estimate->invoice_paid = 1;
+            $estimate->invoice_paid_total = $estimate->invoice_paid_total + $validatedData['invoice_amount'];
+            // $estimate->estimate_status = 'paid';
 
             $estimate->save();
 
-            $estimateCompleteInvoices = AssignPayment::where('estimate_id', $validatedData['estimate_id'])->first();
+            $estimateCompleteInvoices = AssignPayment::where('estimate_id', $estimate->estimate_id)->where('invoice_status', 'unpaid')->first();
 
             $estimateCompleteInvoices->invoice_status = 'paid';
 
@@ -1096,8 +1112,8 @@ class EstimateController extends Controller
 
             $estimatePayment = EstimatePayments::create([
                 'added_user_id' => $userDetails['id'],
-                'estimate_id' => $validatedData['estimate_id'],
-                'estimate_complete_invoice_id' => $validatedData['invoice_id'],
+                'estimate_id' => $estimate->estimate_id,
+                'estimate_complete_invoice_id' => $$estimateCompleteInvoices->estimate_complete_invoice_id,
                 'complete_invoice_date' => $validatedData['invoice_date'],
                 'invoice_total'  => $validatedData['invoice_amount'],
                 'note' => $validatedData['note'],
@@ -1121,35 +1137,41 @@ class EstimateController extends Controller
             $validatedData = $request->validate([
                 'estimate_id' => 'required',
                 'complete_invoice_date' => 'required',
-                'assign_payment' => 'required',
-                'start_date' => 'required',
-                'end_date' => 'required',
+                'assign_payment' => 'nullable',
+                'invoice_name' => 'required',
+                'subtotal_input' => 'required',
+                'tax_input' => 'nullable',
+                'total_input' => 'required',
                 'note' => 'nullable',
             ]);
 
-            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
-            $advancePayment = AdvancePayment::where('estimate_id', $validatedData['estimate_id'])->first();
-            if ($advancePayment) {
-                $invoiceDue = $estimate->estimate_total - $advancePayment->advance_payment;
-            } else {
-                $invoiceDue = $estimate->estimate_total;
-            }
-            $estimate->payment_assigned = 1;
-            $estimate->payment_assigned_to = $validatedData['assign_payment'];
-            $estimate->invoiced_payment = $estimate->estimate_total;
+            $estimate = Estimate::with('customer')->where('estimate_id', $validatedData['estimate_id'])->first();
+
+            // $estimate->payment_assigned = 1;
+            // $estimate->payment_assigned_to = $validatedData['assign_payment'];
+            $estimate->invoiced_payment = $estimate->invoiced_payment + $validatedData['total_input'];
 
             $assignPayment = AssignPayment::create([
                 'added_user_id' => $userDetails['id'],
                 'estimate_id' => $validatedData['estimate_id'],
-                'payment_assigned_to' => $validatedData['assign_payment'],
-                'start_date' =>   $validatedData['start_date'],
-                'end_date' => $validatedData['end_date'],
+                'payment_assigned_to' => isset($validatedData['assign_payment']) ? $validatedData['assign_payment'] : $userDetails['id'],
+                // 'start_date' =>   $validatedData['start_date'],
+                // 'end_date' => $validatedData['end_date'],
                 'note' => $validatedData['note'],
                 'complete_invoice_date' => $validatedData['complete_invoice_date'],
-                'invoice_name' => 'final invoice',
-                'tax_rate' => $estimate->tax_rate,
-                'invoice_total' => $estimate->estimate_total,
-                'invoice_due' => $invoiceDue,
+                'invoice_name' => $validatedData['invoice_name'],
+                'tax_rate' => $validatedData['tax_input'],
+                'invoice_total' => $validatedData['total_input'],
+                'invoice_due' => $validatedData['total_input'],
+                'invoice_subtotal' => $validatedData['subtotal_input'],
+            ]);
+
+            $estimateSending = Http::post('https://hooks.zapier.com/hooks/catch/7921384/3vr65z8/', [
+                'amount' => $validatedData['total_input'],
+                'first_name' => $estimate->customer_name,
+                'last_name' => $estimate->customer_last_name,
+                'customer_email' => $estimate->customer->customer_email,
+                'po_number' => $estimate->po_number,
             ]);
 
             $estimate->save();
@@ -2169,7 +2191,7 @@ class EstimateController extends Controller
             $additionalContacts = EstimateContact::where('estimate_id', $estimate->estimate_id)->get();
             $estimateItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', '<>', 'yes')->get();
 
-            $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item' , 'yes')->get();
+            $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
 
             $profitHours = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->where('additional_item', '<>', 'yes')->sum('item_qty');
             $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->where('additional_item', '<>', 'yes')->get();
@@ -2206,8 +2228,8 @@ class EstimateController extends Controller
             $schedule = ScheduleWork::where('estimate_id', $estimate->estimate_id)->get();
             $work = ScheduleEstimate::where('estimate_id', $estimate->estimate_id)->get();
             $invoices = AssignPayment::where('estimate_id', $estimate->estimate_id)->get();
-            $invoice = AssignPayment::where('estimate_id', $estimate->estimate_id)->first();
-            $payments = EstimatePayments::where('estimate_id', $estimate->estimate_id)->get();
+            $invoice = AssignPayment::where('estimate_id', $estimate->estimate_id)->where('invoice_status', 'unpaid')->first();
+            $payments = EstimatePayments::with('invoice')->where('estimate_id', $estimate->estimate_id)->get();
             $toDos = EstimateToDos::with('assigned_to', 'assigned_by')->where('estimate_id', $estimate->estimate_id)->get();
             $advancePayment = AdvancePayment::where('estimate_id', $id)->first();
             //$expenses = EstimateExpenses::where('estimate_id', $estimate->estimate_id)->get();
@@ -2403,6 +2425,8 @@ class EstimateController extends Controller
 
             // dd($userDetails);
 
+            $po_number = mt_rand(10000000, 99999999);
+
             $validatedData = $request->validate([
                 'customer_id' => 'nullable',
                 'first_name' => 'required|string',
@@ -2463,6 +2487,7 @@ class EstimateController extends Controller
                 'project_type' => $validatedData['project_type'],
                 'building_type' => $validatedData['building_type'],
                 'project_owner' => $validatedData['owner'],
+                'po_number' => $po_number,
             ]);
 
             if ($validatedData['customer_id']) {

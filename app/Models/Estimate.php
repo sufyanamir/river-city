@@ -35,6 +35,11 @@ class Estimate extends Model
         return $this->belongsTo(User::class, 'work_assigned_to');
     }
 
+    public function invoices()
+    {
+        return $this->hasMany(AssignPayment::class, 'estimate_id');
+    }
+
     protected $table = 'estimates';
 
     protected $primaryKey = 'estimate_id';
@@ -78,6 +83,7 @@ class Estimate extends Model
         'project_owner',
         'customer_signature',
         'work_assigned_to',
+        'po_number',
     ];
 
     public $timestamps = true;

@@ -26,6 +26,7 @@ class AssignPayment extends Model
         'invoice_total',
         'invoice_due',
         'invoice_status',
+        'invoice_subtotal',
     ];
 
     public $timestamps = true;
