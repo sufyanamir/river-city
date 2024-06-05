@@ -5815,7 +5815,7 @@ $userPrivileges = session('user_details')['user_privileges'];
     $(".modal-close").click(function(e) {
         e.preventDefault();
         $("#add-payment-modal").addClass('hidden');
-        $("#add-payment-form")[0].reset()
+        // $("#add-payment-form")[0].reset()
     });
 </script>
 <script>
