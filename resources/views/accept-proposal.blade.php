@@ -502,8 +502,20 @@
                         Color Policy
                     </p>
                     <p class="text-[#858585] pt-2 text-justify">
-                        Please list all color numbers and names with specified areas to be painted and email to <a class="text-blue-400" href="https://paintwichita.com/">info@paintwichita.com</a> no later than three days before your projected start date. You may also call (316) 262-3289 to list your colors. Prices may vary for multiple color schemes , deep colors, and accent walls that are not noted on your estimate.
-                    </p>
+                            Please list all color numbers and names with specified areas to be painted and email to
+                            @if($customer->branch == 'wichita')
+                            <a class="text-blue-400" href="https://paintwichita.com/">info@paintwichita.com</a>
+                            @elseif($customer->branch == 'kansas')
+                            <a class="text-blue-400" href="https://office@rivercitypaintinginc.com/">office@rivercitypaintinginc.com</a>
+                            @endif 
+                             no later than three days before your projected start date. You may also call 
+                             @if($customer->branch == 'wichita')
+                            (316) 262-3289
+                            @elseif($customer->branch == 'kansas')
+                            913-660-9099
+                            @endif
+                             to list your colors. Prices may vary for multiple color schemes , deep colors, and accent walls that are not noted on your estimate.
+                        </p>
                     <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
                         Paint Samples
                     </p>
