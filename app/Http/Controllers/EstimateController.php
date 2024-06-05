@@ -63,6 +63,19 @@ class EstimateController extends Controller
     }
     // estimate activity
 
+    // get invoice details on estimates
+    public function getInvoiceDetails($id)
+    {
+        $userDetails = session('user_details');
+
+        $estimate = Estimate::with('invoices')->where('estimate_id', $id)->first();
+
+        return response()->json(['success' => true, 'estimateDetails' => $estimate], 200);
+    }
+    // get invoice details on estimates
+
+    // send invoice to QB
+  
     public function sendInvoiceToQB(Request $request)
     {
 
@@ -1077,7 +1090,7 @@ class EstimateController extends Controller
                 'invoice_date' => 'required',
                 'invoice_amount' => 'nullable',
                 'note' => 'nullable',
-
+                'po_number' => 'required',
             ]);
 
             $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
@@ -1096,8 +1109,8 @@ class EstimateController extends Controller
 
             $estimatePayment = EstimatePayments::create([
                 'added_user_id' => $userDetails['id'],
-                'estimate_id' => $validatedData['estimate_id'],
-                'estimate_complete_invoice_id' => $validatedData['invoice_id'],
+                'estimate_id' => $estimate->estimate_id,
+                'estimate_complete_invoice_id' => $estimateCompleteInvoices->estimate_complete_invoice_id,
                 'complete_invoice_date' => $validatedData['invoice_date'],
                 'invoice_total'  => $validatedData['invoice_amount'],
                 'note' => $validatedData['note'],
@@ -1121,44 +1134,56 @@ class EstimateController extends Controller
             $validatedData = $request->validate([
                 'estimate_id' => 'required',
                 'complete_invoice_date' => 'required',
-                'assign_payment' => 'required',
-                'start_date' => 'required',
-                'end_date' => 'required',
+                'assign_payment' => 'nullable',
+                'invoice_name' => 'nullable',
+                'subtotal_input' => 'nullable',
+                'tax_input' => 'nullable',
+                'total_input' => 'nullable',
                 'note' => 'nullable',
             ]);
 
-            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
-            $advancePayment = AdvancePayment::where('estimate_id', $validatedData['estimate_id'])->first();
-            if ($advancePayment) {
-                $invoiceDue = $estimate->estimate_total - $advancePayment->advance_payment;
-            } else {
-                $invoiceDue = $estimate->estimate_total;
-            }
-            $estimate->payment_assigned = 1;
-            $estimate->payment_assigned_to = $validatedData['assign_payment'];
-            $estimate->invoiced_payment = $estimate->estimate_total;
+            // Fetch the estimate with its customer
+            $estimate = Estimate::with('customer')->where('estimate_id', $validatedData['estimate_id'])->first();
 
+            // Set default values if total_input or subtotal_input are not provided
+            $totalInput = $validatedData['total_input'] ?? $estimate->estimate_total;
+            $subtotalInput = $validatedData['subtotal_input'] ?? $estimate->estimate_total;
+
+            // Update invoiced_payment with the total input value
+            $estimate->invoiced_payment = $estimate->invoiced_payment + $totalInput;
+
+            // Create a new AssignPayment record
             $assignPayment = AssignPayment::create([
                 'added_user_id' => $userDetails['id'],
                 'estimate_id' => $validatedData['estimate_id'],
-                'payment_assigned_to' => $validatedData['assign_payment'],
-                'start_date' =>   $validatedData['start_date'],
-                'end_date' => $validatedData['end_date'],
+                'payment_assigned_to' => $validatedData['assign_payment'] ?? $userDetails['id'],
                 'note' => $validatedData['note'],
                 'complete_invoice_date' => $validatedData['complete_invoice_date'],
-                'invoice_name' => 'final invoice',
-                'tax_rate' => $estimate->tax_rate,
-                'invoice_total' => $estimate->estimate_total,
-                'invoice_due' => $invoiceDue,
+                'invoice_name' => $validatedData['invoice_name'] ?? 'Final Invoice',
+                'tax_rate' => $validatedData['tax_input'] ?? 0,
+                'invoice_total' => $totalInput,
+                'invoice_due' => $totalInput,
+                'invoice_subtotal' => $subtotalInput,
             ]);
 
+            // Send data to Zapier
+            $estimateSending = Http::post('https://hooks.zapier.com/hooks/catch/7921384/3vr65z8/', [
+                'amount' => $totalInput,
+                'first_name' => $estimate->customer_name,
+                'last_name' => $estimate->customer_last_name,
+                'customer_email' => $estimate->customer->customer_email,
+                'po_number' => $estimate->po_number,
+            ]);
+
+            // Save the estimate
             $estimate->save();
 
+            // Log the activity
             $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Invoice Created', "A new Invoice has been created for the customer, added in Invoices Section");
 
             return response()->json(['success' => true, 'message' => 'Invoice Completed and Payment assigned!'], 200);
         } catch (\Exception $e) {
-            return  response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     // complete invoice and assign payment

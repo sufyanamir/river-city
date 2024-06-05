@@ -64,7 +64,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                         </p>
                         <p class="mt-1 flex text-[#323C47]  font-medium">
                             <img src="{{ asset('assets/icons/tel-icon.svg') }}" alt="">
-                            <span class="pl-2">{{ $customer->customer_phone }}
+                            <span class="pl-2">{{ $estimate->customer_phone }}
                             </span>
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
@@ -5206,6 +5206,7 @@ $userPrivileges = session('user_details')['user_privileges'];
             <form action="/addPayment" method="post" id="add-payment-form">
                 @csrf
                 <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
+                <input type="hidden" name="po_number" id="po_number_id" value="{{ $estimate->po_number }}">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between">
