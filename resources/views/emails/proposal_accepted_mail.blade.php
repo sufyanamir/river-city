@@ -39,7 +39,7 @@
         <b>{{$emailData['customer_name']}}</b> just accepted the proposal of their estimate. Click on the link below to view proposal.
         <br>
         <br>
-        <a href="https://soft.rivercitypainting.tech/viewProposal/{{$emailData['estimate_id']}}" style="color: #930027;">Click Here to see the proposal.</a>
+        <a href="https://soft.rivercitypainting.tech/{{'viewProposal?estimateId=' . $emailData['estimate_id']}}" style="color: #930027;">Click Here to see the proposal.</a>
         <br>
         <br>
         <!-- <div style=" margin-top: 8px; text-align: center;">

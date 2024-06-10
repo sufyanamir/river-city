@@ -3138,11 +3138,24 @@ $userPrivileges = session('user_details')['user_privileges'];
         <div class=" mx-auto  px-5 py-7">
             <div class="itemDiv">
                 @foreach ($estimate_images as $image)
-                <a href="/viewGallery{{ $image->estimate_id }}">
-                    <div class=" inline-block p-2 mx-auto">
-                        <img class=" w-16 h-16 rounded-md hover:scale-105 duration-300" src="{{ asset('storage/' . $image->estimate_image) }}" alt="Estimate Image">
+                <div class=" relative inline-block">
+                    <div class="absolute z-50 right-1 top-1">
+                        <form method="post" action="/addAsAttachment">
+                            @csrf
+                            <input type="checkbox" name="attachment_checkbox" id="attachment_checkbox{{$image->estimate_image_id}}" {{ $image->attachment == 1 ? 'checked' : '' }}>
+                            <label for="attachment_checkbox{{$image->estimate_image_id}}" class=" text-gray-500"></label>
+                            <input type="hidden" name="add_not_add" id="add_not_add" value="{{ $image->attachment == 0 ? 1 : 0 }}">
+                            <input type="hidden" name="estimate_img_id" id="estimate_img_id" value="{{$image->estimate_image_id}}">
+                        </form>
                     </div>
-                </a>
+                    <div class=" inline-block">
+                        <a href="/viewGallery{{ $image->estimate_id }}">
+                            <div class=" inline-block p-2 mx-auto">
+                                <img class=" w-20 h-20 rounded-md hover:scale-105 duration-300" src="{{ asset('storage/' . $image->estimate_image) }}" alt="Estimate Image">
+                            </div>
+                        </a>
+                    </div>
+                </div>
                 @endforeach
             </div>
         </div>
@@ -3229,7 +3242,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     {{ $proposal->proposal_status }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <a href="/viewProposal/{{ $estimate->estimate_id }}">
+                                    <a href=" {{'/viewProposal?proposalId=' . $proposal->estimate_proposal_id}}">
                                         <button class=" px-2 py-2">
                                             <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
                                         </button>
@@ -3298,7 +3311,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     {{ $proposal->proposal_status }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <a href="/viewProposal/{{ $estimate->estimate_id }}">
+                                    <a href="{{'/viewProposal?proposalId=' . $proposal->estimate_proposal_id}}">
                                         <button class=" px-2 py-2">
                                             <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
                                         </button>
@@ -5689,6 +5702,11 @@ $userPrivileges = session('user_details')['user_privileges'];
 @include('layouts.footer')
 <script src="https://cdn.jsdelivr.net/npm/dropzone@5.9.2"></script>
 <script>
+   $(document).ready(function() {
+    $('input[type="checkbox"][name="attachment_checkbox"]').change(function() {
+        $(this).closest('form').submit();
+    });
+});
     // Initialize Dropzone
     Dropzone.options.myDropzone = {
         paramName: "file", // The name that will be used to transfer the file

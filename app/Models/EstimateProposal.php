@@ -18,6 +18,7 @@ class EstimateProposal extends Model
         'proposal_total',
         'proposal_accepted',
         'proposal_status',
+        'proposal_data',
     ];
 
     public $timestamps = true;

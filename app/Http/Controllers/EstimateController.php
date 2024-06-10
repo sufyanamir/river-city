@@ -75,7 +75,7 @@ class EstimateController extends Controller
     // get invoice details on estimates
 
     // send invoice to QB
-  
+
     public function sendInvoiceToQB(Request $request)
     {
 
@@ -151,7 +151,7 @@ class EstimateController extends Controller
         $upgrades = EstimateItem::with('assemblies')->where('estimate_id', $id)->where('item_type', 'upgrades')->where('upgrade_status', 'accepted')->where('additional_item', '<>', 'yes')->get();
         $itemTemplates = EstimateItemTemplates::with('templateItems')->where('estimate_id', $id)->get();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-        $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item' , 'yes')->get();
+        $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
         return view('viewEstimateMaterials', ['estimate_items' => $materialItems, 'estimateAdditionalItems' => $estimateAdditionalItems, 'assemblies' => $estimateAssemblyItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
     }
     // view Estimate Materials
@@ -1473,208 +1473,197 @@ class EstimateController extends Controller
     // accept proposal
 
     // view proposal
-    public function viewProposal($id)
-    {
-        try {
+    public function viewProposal(Request $request)
+{
+    try {
+        $estimateId = $request->query('estimateId');
+        $proposalId = $request->query('proposalId');
 
-            $estimate = Estimate::where('estimate_id', $id)->first();
-            $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-            $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', '<>', 'upgrades')->where('item_status', 'included')->get();
-            $upgrades = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', 'upgrades')->where('item_status', 'included')->get();
-            $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->where('template_status', 'included')->get();
-            $estimateItemTemplateItems = [];
-
-            foreach ($estimateItemTemplates as $key => $itemTemplate) {
-                $templateItems = EstimateItemTemplateItems::where('est_template_id', $itemTemplate->est_template_id)->get();
-
-                // Extract item_qty from the template items
-                $itemQuantities = $templateItems->pluck('item_qty')->toArray();
-                $itemTotals = $templateItems->pluck('item_total')->toArray();
-
-                // Fetch all data for Items
-                $itemss = Items::whereIn('item_id', $templateItems->pluck('item_id')->toArray())->get(); // Replace 'Item' with your actual model name
-
-                // Combine item_qty and Items data in a new array
-                $combinedItems = [];
-                foreach ($itemss as $index => $item) {
-                    $combinedItems[] = [
-                        'est_template_item_id' => $templateItems[$index]->est_template_item_id,
-                        'item_qty' => $itemQuantities[$index],
-                        'item_total' => $itemTotals[$index],
-                        'item_id' => $item->item_id,
-                        'item_name' => $item->item_name,
-                        'item_type' => $item->item_type,
-                        'item_units' => $item->item_units,
-                        'item_cost' => $templateItems[$index]->item_cost,
-                        'item_price' => $templateItems[$index]->item_price,
-                        'labour_expense' => $templateItems[$index]->labour_expense,
-                        'material_expense' => $templateItems[$index]->material_expense,
-                        'item_description' => $templateItems[$index]->item_description,
-                        'item_note' => $templateItems[$index]->item_note,
-                    ];
-                }
-
-                // Add the combinedItems to the template items
-                $itemTemplate->estimateItemTemplateItems = $combinedItems;
-
-                // Add the modified itemTemplate to the result array
-                $estimateItemTemplateItems[] = $itemTemplate;
+        if ($estimateId) {
+            $data = $this->prepareProposalData($estimateId);
+        } elseif ($proposalId) {
+            $proposal = EstimateProposal::where('estimate_proposal_id', $proposalId)->first();
+            if (!$proposal) {
+                return response()->json(['success' => false, 'message' => 'Proposal not found'], 404);
             }
-            // return response()->json(['success' => true, 'data' => ['user_details' => $userDetails, 'estimate' => $estimate, 'customer' => $customer, 'items' => $items]], 200);
-            return view('accept-proposal', [
-                'estimate' => $estimate,
-                'customer' => $customer,
-                'estimate_items' => $items,
-                'upgrades' => $upgrades,
-                'templates' => $estimateItemTemplates,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+            $data = json_decode($proposal->proposal_data, true);
+        } else {
+            return response()->json(['success' => false, 'message' => 'No valid ID provided'], 400);
         }
+
+        return view('accept-proposal', $data);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
     }
+}
     // view proposal
 
     // send proposal
     public function sendProposal(Request $request)
-    {
-        try {
-            $userDetails = session('user_details');
+{
+    try {
+        $userDetails = session('user_details');
 
-            $validatedData = $request->validate([
-                'estimate_id' => 'required',
-                'email_to' => 'required|string',
-                'estimate_total' => 'required',
-                'email_title' => 'required',
-                'email_subject' => 'required',
-                'email_body' => 'required',
-            ]);
-            $emailTo = explode(',', $validatedData['email_to']);
+        $validatedData = $request->validate([
+            'estimate_id' => 'required',
+            'email_to' => 'required|string',
+            'estimate_total' => 'required',
+            'email_title' => 'required',
+            'email_subject' => 'required',
+            'email_body' => 'required',
+        ]);
+        $emailTo = explode(',', $validatedData['email_to']);
 
-            $estimate = Estimate::with('customer')->where('estimate_id', $validatedData['estimate_id'])->first();
-            $estimateFiles = EstimateFile::where('estimate_id', $validatedData['estimate_id'])->get();
-            $emailData = [
-                'estimate_id' => $validatedData['estimate_id'],
-                'email' => $validatedData['email_to'],
-                'name' => $estimate['customer_name'] . ' ' . $estimate['customer_last_name'],
-                'title' => $validatedData['email_title'],
-                'subject' => $validatedData['email_subject'],
-                'body' => $validatedData['email_body'],
-                'branch' => $estimate->customer->branch,
-            ];
+        // Prepare the proposal data
+        $data = $this->prepareProposalData($validatedData['estimate_id']);
+        $jsonData = json_encode($data);
 
-            $existingProposals = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->get();
-            if (!$existingProposals->isEmpty()) {
-                $existingProposals->each(function ($proposal) {
-                    $proposal->proposal_status = 'canceled';
-                    $proposal->save();
-                });
-            }
+        $estimate = Estimate::with('customer')->where('estimate_id', $validatedData['estimate_id'])->first();
+        $estimateFiles = EstimateFile::where('estimate_id', $validatedData['estimate_id'])->get();
+        $estimateImages = EstimateImages::where('estimate_id', $validatedData['estimate_id'])->where('attachment', 1)->get();
+        $emailData = [
+            'estimate_id' => $validatedData['estimate_id'],
+            'email' => $validatedData['email_to'],
+            'name' => $estimate['customer_name'] . ' ' . $estimate['customer_last_name'],
+            'title' => $validatedData['email_title'],
+            'subject' => $validatedData['email_subject'],
+            'body' => $validatedData['email_body'],
+            'branch' => $estimate->customer->branch,
+        ];
 
-            foreach ($emailTo as $email) {
-                $emailData['email'] = $email;
+        $existingProposals = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->get();
+        if (!$existingProposals->isEmpty()) {
+            $existingProposals->each(function ($proposal) {
+                $proposal->proposal_status = 'canceled';
+                $proposal->save();
+            });
+        }
 
-                // Your existing code for sending email goes here...
-                $mail = new ProposalMail($emailData);
-                // Attach estimate files to the email
-                if ($estimateFiles) {
-                    foreach ($estimateFiles as $file) {
-                        $filePath = storage_path('app/public/' . $file->estimate_file);
-                        if (File::exists($filePath)) {
-                            $mail->attach($filePath, [
-                                'as' => $file->estimate_file_name, // Rename the file if needed
-                            ]);
-                        }
+        foreach ($emailTo as $email) {
+            $emailData['email'] = $email;
+
+            $mail = new ProposalMail($emailData);
+
+            // Attach estimate files to the email
+            if ($estimateFiles) {
+                foreach ($estimateFiles as $file) {
+                    $filePath = storage_path('app/public/' . $file->estimate_file);
+                    if (File::exists($filePath)) {
+                        $mail->attach($filePath, [
+                            'as' => $file->estimate_file_name, // Rename the file if needed
+                        ]);
                     }
                 }
-
-                Mail::to(trim($email))->send($mail); // Use trim() to remove extra spaces
-
-                // Rest of your code...
             }
-            $companyProposalMail = new ProposalMail($emailData);
-            Mail::to('office@rivercitypaintinginc.com')->send($companyProposalMail);
 
-            $estimate->estimate_total = null;
-            $estimate->save();
-            $proposal = EstimateProposal::create([
-                'estimate_id' => $validatedData['estimate_id'],
-                'proposal_total' => $validatedData['estimate_total'],
-            ]);
+            // Attach estimate images to the email
+            if ($estimateImages) {
+                foreach ($estimateImages as $image) {
+                    $imagePath = storage_path('app/public/' . $image->estimate_image);
+                    if (File::exists($imagePath)) {
+                        $mail->attach($imagePath, [
+                            'as' => basename($imagePath), // Use the base name of the image file
+                        ]);
+                    }
+                }
+            }
 
-            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Proposal Sent', "A Proposal has been created and sent to the Customer");
-
-            return response()->json(['success' => true, 'message' => 'Proposal Sent Successfully!', 'estimate_id' => $validatedData['estimate_id']], 200);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+            Mail::to(trim($email))->send($mail); // Use trim() to remove extra spaces
         }
+
+        $companyProposalMail = new ProposalMail($emailData);
+        Mail::to('office@rivercitypaintinginc.com')->send($companyProposalMail);
+
+        $estimate->estimate_total = null;
+        $estimate->save();
+        $proposal = EstimateProposal::create([
+            'estimate_id' => $validatedData['estimate_id'],
+            'proposal_total' => $validatedData['estimate_total'],
+            'proposal_data' => $jsonData,
+        ]);
+
+        $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Proposal Sent', "A Proposal has been created and sent to the Customer");
+
+        return response()->json(['success' => true, 'message' => 'Proposal Sent Successfully!', 'estimate_id' => $validatedData['estimate_id']], 200);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
     }
+}
+
     // send proposal
 
     // make proposal
     public function makeProposal($id)
     {
         try {
-            $userDetails = session('user_details');
+            $data = $this->prepareProposalData($id);
 
-            $estimate = Estimate::where('estimate_id', $id)->first();
-            $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-            $items = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('item_type', '<>', 'upgrades')->where('item_status', 'included')->get();
-            $upgrades = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'upgrades')->where('item_status', 'included')->get();
-            $existingProposals = EstimateProposal::where('estimate_id', $id)->get();
-            $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->where('template_status', 'included')->get();
-            $estimateItemTemplateItems = [];
-
-            foreach ($estimateItemTemplates as $key => $itemTemplate) {
-                $templateItems = EstimateItemTemplateItems::where('est_template_id', $itemTemplate->est_template_id)->get();
-
-                // Extract item_qty from the template items
-                $itemQuantities = $templateItems->pluck('item_qty')->toArray();
-                $itemTotals = $templateItems->pluck('item_total')->toArray();
-
-                // Fetch all data for Items
-                $itemss = Items::whereIn('item_id', $templateItems->pluck('item_id')->toArray())->get(); // Replace 'Item' with your actual model name
-
-                // Combine item_qty and Items data in a new array
-                $combinedItems = [];
-                foreach ($itemss as $index => $item) {
-                    $combinedItems[] = [
-                        'est_template_item_id' => $templateItems[$index]->est_template_item_id,
-                        'item_qty' => $itemQuantities[$index],
-                        'item_total' => $itemTotals[$index],
-                        'item_id' => $item->item_id,
-                        'item_name' => $item->item_name,
-                        'item_type' => $item->item_type,
-                        'item_units' => $item->item_units,
-                        'item_cost' => $templateItems[$index]->item_cost,
-                        'item_price' => $templateItems[$index]->item_price,
-                        'labour_expense' => $templateItems[$index]->labour_expense,
-                        'material_expense' => $templateItems[$index]->material_expense,
-                        'item_description' => $templateItems[$index]->item_description,
-                        'item_note' => $templateItems[$index]->item_note,
-                    ];
-                }
-
-                // Add the combinedItems to the template items
-                $itemTemplate->estimateItemTemplateItems = $combinedItems;
-
-                // Add the modified itemTemplate to the result array
-                $estimateItemTemplateItems[] = $itemTemplate;
-            }
-
-            // return response()->json(['success' => true, 'data' => ['user_details' => $userDetails, 'estimate' => $estimate, 'customer' => $customer, 'items' => $items]], 200);
-            return view('make-proposal', [
-                'user_details' => $userDetails,
-                'estimate' => $estimate,
-                'customer' => $customer,
-                'estimate_items' => $items,
-                'existing_proposals' => $existingProposals,
-                'upgrades' => $upgrades,
-                'templates' => $estimateItemTemplates
-            ]);
+            return view('make-proposal', $data);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
+
+    private function prepareProposalData($id)
+    {
+        $userDetails = session('user_details');
+
+        $estimate = Estimate::where('estimate_id', $id)->first();
+        $customer = Customer::where('customer_id', $estimate->customer_id)->first();
+        $items = EstimateItem::with('group')->where('estimate_id', $estimate->estimate_id)->where('item_type', '<>', 'upgrades')->where('item_status', 'included')->get();
+        $upgrades = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'upgrades')->where('item_status', 'included')->get();
+        $existingProposals = EstimateProposal::where('estimate_id', $id)->get();
+        $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->where('template_status', 'included')->get();
+        $estimateItemTemplateItems = [];
+
+        foreach ($estimateItemTemplates as $key => $itemTemplate) {
+            $templateItems = EstimateItemTemplateItems::where('est_template_id', $itemTemplate->est_template_id)->get();
+
+            // Extract item_qty from the template items
+            $itemQuantities = $templateItems->pluck('item_qty')->toArray();
+            $itemTotals = $templateItems->pluck('item_total')->toArray();
+
+            // Fetch all data for Items
+            $itemss = Items::whereIn('item_id', $templateItems->pluck('item_id')->toArray())->get(); // Replace 'Item' with your actual model name
+
+            // Combine item_qty and Items data in a new array
+            $combinedItems = [];
+            foreach ($itemss as $index => $item) {
+                $combinedItems[] = [
+                    'est_template_item_id' => $templateItems[$index]->est_template_item_id,
+                    'item_qty' => $itemQuantities[$index],
+                    'item_total' => $itemTotals[$index],
+                    'item_id' => $item->item_id,
+                    'item_name' => $item->item_name,
+                    'item_type' => $item->item_type,
+                    'item_units' => $item->item_units,
+                    'item_cost' => $templateItems[$index]->item_cost,
+                    'item_price' => $templateItems[$index]->item_price,
+                    'labour_expense' => $templateItems[$index]->labour_expense,
+                    'material_expense' => $templateItems[$index]->material_expense,
+                    'item_description' => $templateItems[$index]->item_description,
+                    'item_note' => $templateItems[$index]->item_note,
+                ];
+            }
+
+            // Add the combinedItems to the template items
+            $itemTemplate->estimateItemTemplateItems = $combinedItems;
+
+            // Add the modified itemTemplate to the result array
+            $estimateItemTemplateItems[] = $itemTemplate;
+        }
+
+        return [
+            'user_details' => $userDetails,
+            'estimate' => $estimate,
+            'customer' => $customer,
+            'estimate_items' => $items,
+            'existing_proposals' => $existingProposals,
+            'upgrades' => $upgrades,
+            'templates' => $estimateItemTemplates
+        ];
+    }
+
     // make proposal
 
     // estimate emails
@@ -2194,7 +2183,7 @@ class EstimateController extends Controller
             $additionalContacts = EstimateContact::where('estimate_id', $estimate->estimate_id)->get();
             $estimateItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', '<>', 'yes')->get();
 
-            $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item' , 'yes')->get();
+            $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
 
             $profitHours = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->where('additional_item', '<>', 'yes')->sum('item_qty');
             $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->where('additional_item', '<>', 'yes')->get();
