@@ -17,6 +17,7 @@ class EstimateImages extends Model
         'added_user_id',
         'estimate_id',
         'estimate_image',
+        'attachment',
     ];
 
     public  $timestamps = true;

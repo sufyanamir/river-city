@@ -103,4 +103,32 @@ class EstimageImagesController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()],  400);
         }
     }
+
+    public function addAsAttachment(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_img_id' => 'required',
+                'add_not_add' => 'required',
+            ]);
+
+            $image = EstimateImages::where('estimate_image_id', $validatedData['estimate_img_id'])->first();
+
+            if ($validatedData['add_not_add'] == 1) {
+                $image->attachment = 1;
+                $image->save();
+                return response()->json(['success' => true, 'message' => 'Image added as attachment'], 200);
+            }else{
+                $image->attachment = 0;
+                $image->save();
+                return response()->json(['success' => true, 'message' => 'Image removed from attachment'], 200);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
 }

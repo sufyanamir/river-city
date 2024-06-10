@@ -33,7 +33,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [UserController::class, 'index']);
 Route::post('/', [UserController::class, 'login']);
 Route::match(['get', 'post'], '/logout', [UserController::class, 'logout']);
-Route::get('/viewProposal/{id}', [EstimateController::class, 'viewProposal']);
+Route::get('/viewProposal', [EstimateController::class, 'viewProposal']);
 Route::post('/acceptProposal/{id}', [EstimateController::class, 'acceptProposal']);
 
 Route::middleware('customauth')->group(function () {
@@ -93,6 +93,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/setScheduleWork', [EstimateController::class, 'setScheduleWork']);
     Route::post('/updateScheuleWork', [EstimateController::class, 'updateScheuleWork']);
     Route::post('/addEstimateImage', [EstimageImagesController::class, 'uploadImage']);
+    Route::post('/addAsAttachment', [EstimageImagesController::class, 'addAsAttachment']);
     Route::post('/completeWorkAndAssignInvoice', [EstimateController::class, 'completeWorkAndAssignInvoice']);
     Route::post('/completeInvoiceAndAssignPayment', [EstimateController::class, 'completeInvoiceAndAssignPayment']);
     Route::post('/addPayment', [EstimateController::class, 'addPayment']);
