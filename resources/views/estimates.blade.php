@@ -124,7 +124,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                             </div>
                                             <div id="action-menu{{ $item->estimate_id }}" class=" topbar-manuLeaving absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                                 <div class="py-1" role="none">
-                                                    <a href="/viewEstimate/{{ $item->estimate_id }}" class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-view-icon.svg') }}" alt="icon"> View</a>
+                                                    <span id="viewEstimate-info{{$item->estimate_id}}" class=" px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-view-icon.svg') }}" alt="icon"> View</span>
                                                     <a href="/viewEstimate/{{ $item->estimate_id }}" class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-edit-icon.svg') }}" alt="icon"> Edit</a>
                                                     <a href="/viewEstimateMaterials/{{ $item->estimate_id }}" class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-report-icon.svg') }}" alt="icon"> Work Order</a>
                                                     <a href="/getEstimateActivity/{{ $item->estimate_id }}" class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-activity-icon.svg') }}" alt="icon"> Activity</a>
@@ -295,7 +295,7 @@ $userPrivileges = session('user_details')['user_privileges'];
 </div>
 <!-- chat  modal -->
 <!-- add estimate -->
-{{-- <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addEstimate-modal">
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="viewEstimate-info-modal">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <!-- Background overlay -->
         <div class="fixed inset-0 transition-opacity" aria-hidden="true">
@@ -304,22 +304,99 @@ $userPrivileges = session('user_details')['user_privileges'];
 
         <!-- Modal panel -->
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full lg:max-w-screen-md">
-            <form action="" id="addEstimate-form">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <!-- Modal content here -->
-                    <div class=" flex justify-between">
-                        <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">Add Estimate</h2>
-                        <button class="modal-close" type="button">
-                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-</button>
-</div>
-<!-- task details -->
-
-</div>
-</form>
-</div>
-</div>
-</div> --}}
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <!-- Modal content here -->
+                <div class=" flex justify-between">
+                    <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">Estimate Details</h2>
+                    <button class="modal-close" type="button">
+                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                    </button>
+                </div>
+                <!-- task details -->
+                <div class=" mb-5 bg-white text-white">
+                    <div class="col-span-10  pl-2 ">
+                        <div class="grid sm:grid-cols-10">
+                            <div class="col-span-8 p-3">
+                                <p id="invoiceCustomerName" class="text-[#F5222D] text-xl font-bold">
+                                    Customer Name
+                                </p>
+                                <p id="invoiceProjectName" class="text-[#323C47] text-lg font-semibold">
+                                    Project Name
+                                </p>
+                            </div>
+                            <div class=" col-span-2 p-3 text-right">
+                                <p class="text-lg font-bold text-[#323C47]">
+                                    Estimate
+                                </p>
+                                <p id="invoiceEstimateDate" class="text-[#323C47]">
+                                    Date
+                                </p>
+                            </div>
+                        </div>
+                        <div class=" flex justify-evenly gap-3">
+                        <p id="invoiceTotal" class="mt-1 text-red-900">
+                                    Total: $0.00
+                                </p>
+                                <p id="invoiceInvoiced" class="flex justify-end text-blue-900">
+                                    Invoiced: $0.00
+                                </p>
+                                <p id="invoicePaid" class="flex justify-end text-green-900">
+                                    Paid: $0.00
+                                </p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Date
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Tax
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Total
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Due
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Status
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoiceTableBody">
+                            <tr class="bg-white border-b">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    Date
+                                </th>
+                                <td class="px-6 py-4">
+                                    invoice name
+                                </td>
+                                <td class="px-6 py-4">
+                                    tax rate
+                                </td>
+                                <td class="px-6 py-4">
+                                    invoice total
+                                </td>
+                                <td class="px-6 py-4">
+                                    invoice due
+                                </td>
+                                <td class="px-6 py-4">
+                                    invoice status
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 <!-- add estimate -->
 <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addEstimate-modal">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -601,6 +678,51 @@ $userPrivileges = session('user_details')['user_privileges'];
             $(targetModalId).removeClass('hidden');
         });
     });
+</script>
+<script>
+$(document).ready(function() {
+    $('body').on('click', '[id^="viewEstimate-info"]', function() {
+        var estimateId = $(this).attr('id').split('viewEstimate-info')[1];
+        var url = '/getInvoiceDetails' + estimateId;
+        $.ajax({
+            url: url,
+            method: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    var details = response.estimateDetails;
+                    $('#invoiceCustomerName').text(details.customer_name);
+                    $('#invoiceProjectName').text(details.project_name);
+                    $('#invoiceEstimateDate').text(details.scheduled_start_date);
+                    $('#invoiceTotal').text('Total: $' + details.estimate_total);
+                    $('#invoiceInvoiced').text('Invoiced: $' + details.invoiced_payment);
+                    $('#invoicePaid').text('Paid: $' + details.invoice_paid_total);
+                    var invoices = details.invoices;
+                    var invoiceTableBody = '';
+                    invoices.forEach(function(invoice) {
+                        invoiceTableBody += '<tr class="bg-white border-b">' +
+                            '<th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">' + invoice.complete_invoice_date + '</th>' +
+                            '<td class="px-6 py-4">' + invoice.invoice_name + '</td>' +
+                            '<td class="px-6 py-4">' + (invoice.tax_rate ? invoice.tax_rate : 'N/A') + '</td>' +
+                            '<td class="px-6 py-4">' + invoice.invoice_total + '</td>' +
+                            '<td class="px-6 py-4">' + invoice.invoice_due + '</td>' +
+                            '<td class="px-6 py-4">' + invoice.invoice_status + '</td>' +
+                            '</tr>';
+                    });
+                    $('#invoiceTableBody').html(invoiceTableBody);
+                    $('#viewEstimate-info-modal').removeClass('hidden');
+                } else {
+                    alert('Failed to fetch the estimate details.');
+                }
+            },
+            error: function() {
+                alert('Error in AJAX request.');
+            }
+        });
+    });
+    $('.modal-close').click(function() {
+        $('#viewEstimate-info-modal').addClass('hidden');
+    });
+});
 </script>
 <script>
     function openFileMenu() {

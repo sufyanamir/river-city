@@ -96,6 +96,10 @@ Route::middleware('customauth')->group(function () {
     Route::post('/addAsAttachment', [EstimageImagesController::class, 'addAsAttachment']);
     Route::post('/completeWorkAndAssignInvoice', [EstimateController::class, 'completeWorkAndAssignInvoice']);
     Route::post('/completeInvoiceAndAssignPayment', [EstimateController::class, 'completeInvoiceAndAssignPayment']);
+    Route::get('/getInvoiceDetails{id}', [EstimateController::class, 'getInvoiceDetails']);
+    Route::post('/deleteInvoice/{id}', [EstimateController::class, 'deleteInvoice']);
+    Route::get('/getInvoiceToEdit/{id}', [EstimateController::class, 'getInvoice']);
+    Route::post('/updateInvoice', [EstimateController::class, 'updateInvoice']);
     Route::post('/addPayment', [EstimateController::class, 'addPayment']);
     Route::post('/advancePayment', [EstimateController::class, 'advancePayment']);
     Route::post('/completeProject', [EstimateController::class, 'completeProject']);
@@ -215,6 +219,7 @@ Route::middleware('customauth')->group(function () {
 Route::get('/forgotPassword', function () {
     return view('forgotPassword');
 });
+Route::match(['get', 'post'], 'addPayment', [EstimateController::class, 'addPayment']);
 Route::post('/forgotPasswordMail', [UserController::class, 'forgotPasswordMail']);
 Route::get('/resetPassword/{id}', [UserController::class, 'resetPassword']);
 Route::post('/updatePassword', [UserController::class, 'updatePassword']);
