@@ -1125,6 +1125,96 @@ class EstimateController extends Controller
     }
     // add payment
 
+    // update invoice
+    public function updateInvoice(Request $request)
+    {
+        try {
+            
+            $validatedData = $request->validate([
+                'invoice_id' => 'required',
+                'estimate_id' => 'required',
+                'complete_invoice_date' => 'required',
+                'assign_payment' => 'nullable',
+                'invoice_name' => 'nullable',
+                'subtotal_input' => 'nullable',
+                'tax_input' => 'nullable',
+                'total_input' => 'nullable',
+                'note' => 'nullable',
+            ]);
+
+            $invoice = AssignPayment::where('estimate_complete_invoice_id', $validatedData['invoice_id'])->first();
+            
+            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
+
+            $estimate->invoiced_payment = $estimate->invoiced_payment - $invoice->invoice_total;
+            
+            $invoice->complete_invoice_date = $validatedData['complete_invoice_date'];
+            $invoice->invoice_name = $validatedData['invoice_name'];
+            $invoice->invoice_subtotal = $validatedData['subtotal_input'];
+            $invoice->tax_rate = $validatedData['tax_input'];
+            $invoice->invoice_total = $validatedData['total_input'];
+            $invoice->invoice_due = $validatedData['total_input'];
+
+            $invoice->save();
+
+            $estimate->invoiced_payment = $estimate->invoiced_payment + $invoice->invoice_total;
+
+            $estimate->save();
+
+            return response()->json(['success' => true, 'message' => 'Invoice updated successfully!'], 200);
+
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // update invoice
+
+    // get invoice
+    public function getInvoice($id)
+    {
+        try {
+            
+            $invoice = AssignPayment::where('estimate_complete_invoice_id', $id)->first();
+
+            if (!$invoice) {
+                return response()->json(['success' => false, 'message' => 'Invoice not found!'], 404);
+            }
+
+            return response()->json(['success' => true, 'invoice' => $invoice], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // get invoice
+
+    // delete Invoice
+    public function deleteInvoice($id)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $invoice = AssignPayment::where('estimate_complete_invoice_id', $id)->first();
+            $estimate = Estimate::where('estimate_id', $invoice->estimate_id)->first();
+
+            if (!$invoice) {
+                return response()->json(['success' => false, 'message' => 'Invoice not found!'], 404);
+            }
+
+            $estimate->invoiced_payment = $estimate->invoiced_payment - $invoice->invoice_total;
+            $estimate->save();
+
+            $invoice->delete();
+
+            return response()->json(['success' => true, 'message' => 'Invoice deleted Successfully!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // delete Invoice
+
     // complete invoice and assign payment
     public function completeInvoiceAndAssignPayment(Request $request)
     {
@@ -2220,8 +2310,8 @@ class EstimateController extends Controller
             $schedule = ScheduleWork::where('estimate_id', $estimate->estimate_id)->get();
             $work = ScheduleEstimate::where('estimate_id', $estimate->estimate_id)->get();
             $invoices = AssignPayment::where('estimate_id', $estimate->estimate_id)->get();
-            $invoice = AssignPayment::where('estimate_id', $estimate->estimate_id)->first();
-            $payments = EstimatePayments::where('estimate_id', $estimate->estimate_id)->get();
+            $invoice = AssignPayment::where('estimate_id', $estimate->estimate_id)->where('invoice_status', 'unpaid')->first();
+            $payments = EstimatePayments::with('invoice')->where('estimate_id', $estimate->estimate_id)->get();
             $toDos = EstimateToDos::with('assigned_to', 'assigned_by')->where('estimate_id', $estimate->estimate_id)->get();
             $advancePayment = AdvancePayment::where('estimate_id', $id)->first();
             //$expenses = EstimateExpenses::where('estimate_id', $estimate->estimate_id)->get();
@@ -2416,6 +2506,8 @@ class EstimateController extends Controller
             $userDetails = session('user_details');
 
             // dd($userDetails);
+            $po_number = mt_rand(10000000, 99999999);
+
 
             $validatedData = $request->validate([
                 'customer_id' => 'nullable',
@@ -2477,6 +2569,7 @@ class EstimateController extends Controller
                 'project_type' => $validatedData['project_type'],
                 'building_type' => $validatedData['building_type'],
                 'project_owner' => $validatedData['owner'],
+                'po_number' => $po_number,
             ]);
 
             if ($validatedData['customer_id']) {
