@@ -1567,7 +1567,6 @@ $remainingEstimateTotal = $estimate->estimate_total - $estimate->invoice_paid_to
     </div>
     <br>
 </div>
-</div>
 
 @elseif(isset($userPrivileges->estimate) &&
 isset($userPrivileges->estimate->items) &&
@@ -4183,7 +4182,6 @@ $userPrivileges->estimate->expenses === 'on')
     </div>
 </div>
 @endif
-</div>
 <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addContact-modal">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <!-- Background overlay -->
