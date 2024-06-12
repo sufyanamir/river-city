@@ -3224,7 +3224,14 @@ $userPrivileges->estimate->photos === 'on')
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                        $totalProposals = count($proposals);
+                        $currentIndex = 0;
+                        @endphp
                         @foreach ($proposals as $proposal)
+                        @php
+                        $currentIndex++;
+                        @endphp
                         <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ date('d, F Y', strtotime($proposal->created_at)) }}
@@ -3239,8 +3246,8 @@ $userPrivileges->estimate->photos === 'on')
                                 {{ $proposal->proposal_status }}
                             </td>
                             <td class="px-6 py-4">
-                                <a href=" {{'/viewProposal?proposalId=' . $proposal->estimate_proposal_id}}">
-                                    <button class=" px-2 py-2">
+                                <a href="{{ $currentIndex === $totalProposals ? '/viewProposal?estimateId=' . $proposal->estimate_id : '/viewProposal?proposalId=' . $proposal->estimate_proposal_id }}">
+                                    <button class="px-2 py-2">
                                         <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
                                     </button>
                                 </a>
@@ -3248,6 +3255,7 @@ $userPrivileges->estimate->photos === 'on')
                         </tr>
                         @endforeach
                     </tbody>
+
                 </table>
             </div>
         </div>
@@ -3293,7 +3301,14 @@ $userPrivileges->estimate->proposals === 'on')
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                        $totalProposals = count($proposals);
+                        $currentIndex = 0;
+                        @endphp
                         @foreach ($proposals as $proposal)
+                        @php
+                        $currentIndex++;
+                        @endphp
                         <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ date('d, F Y', strtotime($proposal->created_at)) }}
@@ -3308,8 +3323,8 @@ $userPrivileges->estimate->proposals === 'on')
                                 {{ $proposal->proposal_status }}
                             </td>
                             <td class="px-6 py-4">
-                                <a href="{{'/viewProposal?proposalId=' . $proposal->estimate_proposal_id}}">
-                                    <button class=" px-2 py-2">
+                                <a href="{{ $currentIndex === $totalProposals ? '/viewProposal?estimateId=' . $proposal->estimate_id : '/viewProposal?proposalId=' . $proposal->estimate_proposal_id }}">
+                                    <button class="px-2 py-2">
                                         <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
                                     </button>
                                 </a>
@@ -3317,6 +3332,7 @@ $userPrivileges->estimate->proposals === 'on')
                         </tr>
                         @endforeach
                     </tbody>
+
                 </table>
             </div>
         </div>
@@ -6162,6 +6178,7 @@ $userPrivileges->estimate->expenses === 'on')
                         $('#item_total').val(itemDetail.item_total);
                         $('#item_description').val(itemDetail.item_description);
                         $('#note').val(itemDetail.item_note);
+                        $('#additional_item').val(itemDetail.additional_item).trigger('change');
                         if (itemDetail.group && itemDetail.group.group_name != null) {
                             $('#group_name').val(itemDetail.group.group_name);
                             $('#group_id').val(itemDetail.group.group_id);

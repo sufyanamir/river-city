@@ -19,6 +19,7 @@
 <script src="{{ asset('assets/js/fancybox.min.js') }}"></script>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
 <!-- <style>
     /* Style the title element */
     #botmanWidgetRoot div:first-child {
@@ -37,7 +38,13 @@
 </script>
 <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script> -->
 
-
+<script>
+        ClassicEditor
+            .create(document.querySelector('#editor'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 <script>
     $(document).ready(function() {
         $('select').select2({

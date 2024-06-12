@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('estimate_proposals', function (Blueprint $table) {
             $table->text('proposal_data')->nullable();
+            $table->text('proposal_terms_and_conditions')->nullable();
         });
     }
 

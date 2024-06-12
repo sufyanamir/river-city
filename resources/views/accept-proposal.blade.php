@@ -432,7 +432,10 @@
             </div>
             <div class="col-span-12 p-4">
                 <div class=" mt-5">
-                    <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
+                    @isset($terms_and_conditions)
+                    {!! $terms_and_conditions !!}
+                    @endisset
+                    <!-- <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
                         Required Deposit
                     </p>
                     <p class="text-[#858585] pt-2 text-justify">
@@ -513,7 +516,7 @@
                         invoice within 10 days of client’s receipt of the invoice. Client shall also pay a late charge
                         of 1-1/2% per month
                         on all balances unpaid 30 days after the invoice date.
-                    </p>
+                    </p> -->
                 </div>
 
             </div>
@@ -522,7 +525,7 @@
             <input type="hidden" name="estimate_total" value="{{ $subTotal + ($subTotal * $customer['tax_rate']) / 100 }}">
             <div class="col-span-12 p-4 flex justify-end mt-10">
                 @if(!session()->has('user_details'))
-                @if($estimate->estimate_total == null )
+                @if($estimate['estimate_total'] == null )
                 <button type="button" id="addSign" class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 ">I Agree to Pay</button>
                 @else
                 <div>

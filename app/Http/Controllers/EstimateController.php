@@ -1571,6 +1571,22 @@ class EstimateController extends Controller
 
         if ($estimateId) {
             $data = $this->prepareProposalData($estimateId);
+
+            // Fetch the latest proposal with priority to 'pending' status
+            $latestProposal = EstimateProposal::where('estimate_id', $data['estimate']['estimate_id'])
+                ->where(function ($query) {
+                    $query->where('proposal_status', 'pending')
+                        ->orWhere('proposal_status', 'accepted');
+                })
+                ->orderByRaw("FIELD(proposal_status, 'pending', 'accepted')")
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            if ($latestProposal) {
+                $data['terms_and_conditions'] = $latestProposal->proposal_terms_and_conditions;
+            } else {
+                return response()->json(['success' => false, 'message' => 'No valid proposal found'], 404);
+            }
         } elseif ($proposalId) {
             $proposal = EstimateProposal::where('estimate_proposal_id', $proposalId)->first();
             if (!$proposal) {
@@ -1601,11 +1617,13 @@ class EstimateController extends Controller
             'email_title' => 'required',
             'email_subject' => 'required',
             'email_body' => 'required',
+            'terms_and_conditions' => 'required',
         ]);
         $emailTo = explode(',', $validatedData['email_to']);
 
         // Prepare the proposal data
         $data = $this->prepareProposalData($validatedData['estimate_id']);
+        $data['terms_and_conditions'] = $validatedData['terms_and_conditions'];
         $jsonData = json_encode($data);
 
         $estimate = Estimate::with('customer')->where('estimate_id', $validatedData['estimate_id'])->first();
@@ -1670,6 +1688,7 @@ class EstimateController extends Controller
             'estimate_id' => $validatedData['estimate_id'],
             'proposal_total' => $validatedData['estimate_total'],
             'proposal_data' => $jsonData,
+            'proposal_terms_and_conditions' => $validatedData['terms_and_conditions'],
         ]);
 
         $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Proposal Sent', "A Proposal has been created and sent to the Customer");
