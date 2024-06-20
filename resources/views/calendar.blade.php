@@ -344,6 +344,41 @@
         </div>
     </div>
 </div>
+<!-- Event Details Modal -->
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="event-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <!-- Modal content here -->
+                <div class="flex justify-between">
+                    <h2 class="text-xl font-semibold mb-2 text-[#F5222D]" id="">View Details</h2>
+                    <button class="modal-close" type="button" onclick="clearModalAndClose();">
+                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                    </button>
+                </div>
+                <div>
+                    <span id="event-title" class="text-lg font-semibold mb-2"></span> (<span id="assigned_user"></span>)
+                    <h2 id="event-project-name" class="mb-2"></h2>
+                    <h2 id="event-project-name" class="mb-2"></h2>
+                    <h2 id="event-customer-address" class="mb-2"></h2>
+                    <p id="event-note" class="mb-2"></p>
+                    <p class="mb-2"><strong>Start:</strong> <span id="event-start"></span></p>
+                    <p class="mb-2"><strong>End:</strong> <span id="event-end"></span></p>
+                </div>
+                <div class="mt-4">
+                    <button type="button" class="modalClose-btn border border-black font-semibold py-1 px-7 rounded-lg" onclick="clearModalAndClose();">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js" integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY=" crossorigin="anonymous"></script>
@@ -360,6 +395,19 @@
         $("#updateEvent").removeClass('hidden');
         $(".modalClose-btn").text('Cancel');
     });
+    function clearModalAndClose() {
+        // Clear modal fields using jQuery
+        $('#event-title').text('');
+        $('#assigned_user').text('');
+        $('#event-project-name').text('');
+        $('#event-customer-address').text('');
+        $('#event-note').text('');
+        $('#event-start').text('');
+        $('#event-end').text('');
+        
+        // Hide the modal
+        $('#event-modal').addClass('hidden');
+    }
 </script>
 <script>
     $(document).ready(function() {
@@ -427,11 +475,15 @@
 
             var events = estimateEvents.map(function(estimate) {
                 return {
+                    id: estimate.estimate_id,
                     title: [estimate.estimate.customer_name + ' ' + estimate.estimate.customer_last_name],
                     start: new Date(estimate.start_date),
                     end: new Date(estimate.end_date),
                     backgroundColor: estimate.assigned_user ? estimate.assigned_user.user_color : '',
-                    borderColor: estimate.assigned_user ? estimate.assigned_user.user_color : ''
+                    borderColor: estimate.assigned_user ? estimate.assigned_user.user_color : '',
+                    extendedProps: {
+                        type: 'estimate'
+                    }
                 };
             });
         @else
@@ -439,9 +491,13 @@
 
         var events = estimateEvents.map(function(estimate) {
             var eventObj = {
+                id: estimate.estimate_id,
                 title: [estimate.customer_name + ' ' + estimate.customer_last_name],
                 start: new Date(estimate.scheduled_start_date),
                 end: new Date(estimate.scheduled_end_date),
+                extendedProps: {
+                        type: 'estimate'
+                    }
             };
 
             if (estimate.scheduler != null) {
@@ -464,22 +520,30 @@
         
         var userEvents = userToDos.map(function(todo) {
             return {
+                id: todo.to_do_id,
                 title: todo.to_do_title,
                 start: new Date(todo.start_date), // Adjust the field according to your data
                 end: new Date(todo.end_date), // Adjust the field according to your data
                 backgroundColor: '#your_color', // Choose a color or generate dynamically
-                borderColor: '#your_color' // Choose a color or generate dynamically
+                borderColor: '#your_color', // Choose a color or generate dynamically
+                extendedProps: {
+                        type: 'userToDo'
+                    }
             };
         });
 
         // Convert estimate todos to events
         var estimateEvents = estimateToDos.map(function(todo) {
             return {
+                id: todo.to_do_id,
                 title: todo.to_do_title,
                 start: new Date(todo.start_date), // Adjust the field according to your data
                 end: new Date(todo.end_date), // Adjust the field according to your data
                 backgroundColor: '#your_color', // Choose a color or generate dynamically
-                borderColor: '#your_color' // Choose a color or generate dynamically
+                borderColor: '#your_color', // Choose a color or generate dynamically
+                extendedProps: {
+                        type: 'estimateToDo'
+                    }
             };
         });
         var allEvents = events.concat(userEvents, estimateEvents);
@@ -530,7 +594,7 @@
 var minutes = droppedDate.getMinutes().toString().padStart(2, '0');
 var seconds = droppedDate.getSeconds().toString().padStart(2, '0');
 
-var simpleDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+var simpleDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
 
                 // alert(simpleDate);
                 $('#start_date').val(simpleDateTime);
@@ -552,6 +616,41 @@ var simpleDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minute
                 modalTitle.textContent = info.event.title;
                 modalDescription.textContent = info.event.description;
                 modal.classList.remove('hidden');
+            },
+            eventClick: function (info) {
+                var event = info.event;
+                var eventId = event.id; // Assuming your event object has an ID
+                var eventType = event.extendedProps.type;
+
+                // Fetch event details from your server or event object
+                $.ajax({
+                    url: '/getEventDetailOnCalendar',
+                    method: 'GET',
+                    data:{ id: eventId, type: eventType },
+                    success: function (response) {
+                        // Populate the modal with event details based on event type
+                        if (eventType === 'userToDo' || eventType === 'estimateToDo') {
+                            $('#event-title').text(response.to_do_title);
+                            $('#assigned_user').text(response.assigned_to.name);
+                            $('#event-note').text(response.note);
+                            $('#event-start').text(response.start_date);
+                            $('#event-end').text(response.end_date);
+                        } else if (eventType === 'estimate') {
+                            $('#event-title').text(response.customer_name + ' ' + response.customer_last_name);
+                            $('#event-note').text('');
+                            $('#event-start').text(response.scheduled_start_date);
+                            $('#event-end').text(response.scheduled_end_date);
+                            $('#event-project-name').text(response.project_name);
+                            $('#event-customer-address').text(response.customer_address);
+                        }
+
+                        // Show the modal
+                        $('#event-modal').removeClass('hidden');
+                    },
+                    error: function (xhr) {
+                        alert('Failed to fetch event details: ' + xhr.responseJSON.error);
+                    }
+                });
             },
             dateClick: function(info) {
             // Get the clicked date

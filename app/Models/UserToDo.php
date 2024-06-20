@@ -9,6 +9,11 @@ class UserToDo extends Model
 {
     use HasFactory;
 
+    public function assigned_to()
+    {
+        return $this->belongsTo(User::class, 'added_user_id');
+    }
+
     protected $table = 'user_to_do_list';
 
     protected $primaryKey = 'to_do_id';

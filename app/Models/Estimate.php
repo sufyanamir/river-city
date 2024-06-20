@@ -84,6 +84,9 @@ class Estimate extends Model
         'customer_signature',
         'work_assigned_to',
         'po_number',
+        'percentage_discount',
+        'price_discount',
+        'discounted_total',
     ];
 
     public $timestamps = true;
