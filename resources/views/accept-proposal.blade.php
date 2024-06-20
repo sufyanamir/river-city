@@ -411,6 +411,9 @@
                                 <p class="italic text-[#323C47]">
                                     Total
                                 </p>
+                                <p class="italic text-[#323C47]">
+                                    Discount
+                                </p>
                             </div>
                             <div>
                                 <p class="text-[#858585]">
@@ -423,6 +426,22 @@
 
                                     <span id="dynamic-total">${{ number_format($subTotal + ($subTotal * $customer['tax_rate']) / 100, 2) }}</span>
                                     <input type="hidden" id="dynamic_total_input" value="{{$subTotal + ($subTotal * $customer['tax_rate']) / 100}}">
+                                </p>
+                                @php
+                                $estimateTotal = $subTotal;
+                                $percentageDiscount = $estimate['percentage_discount'];
+                                $priceDiscount = $estimate['price_discount'];
+
+                                if ($percentageDiscount) {
+                                $discountedTotal = $estimateTotal - ($estimateTotal * ($percentageDiscount / 100));
+                                } elseif($priceDiscount) {
+                                $discountedTotal = $estimateTotal - $priceDiscount;
+                                }else{
+                                $discountedTotal = null;
+                                }
+                                @endphp
+                                <p class="text-[#858585]">
+                                    ${{ number_format($discountedTotal, 2) }}
                                 </p>
                             </div>
                         </div>

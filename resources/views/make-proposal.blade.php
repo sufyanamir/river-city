@@ -500,6 +500,9 @@
                                     <p class="italic text-[#323C47]">
                                         Total
                                     </p>
+                                    <p class="italic text-[#323C47]">
+                                        Discount
+                                    </p>
                                 </div>
                                 <div>
                                     <p class="text-[#858585]">
@@ -510,6 +513,22 @@
                                     </p>
                                     <p class="text-[#858585]">
                                         ${{ number_format($subTotal + ($subTotal * $customer->tax_rate) / 100, 2) }}
+                                    </p>
+                                    @php
+                                    $estimateTotal = $subTotal;
+                                    $percentageDiscount = $estimate->percentage_discount;
+                                    $priceDiscount = $estimate->price_discount;
+
+                                    if ($percentageDiscount) {
+                                    $discountedTotal = $estimateTotal - ($estimateTotal * ($percentageDiscount / 100));
+                                    } elseif($priceDiscount) {
+                                    $discountedTotal = $estimateTotal - $priceDiscount;
+                                    }else{
+                                    $discountedTotal = null;
+                                    }
+                                    @endphp
+                                    <p class="text-[#858585]">
+                                        ${{ number_format($discountedTotal, 2) }}
                                     </p>
                                 </div>
                             </div>
@@ -656,6 +675,7 @@
                 <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
                 <input type="hidden" name="customer_email" value="{{ $customer->customer_email }}">
                 <input type="hidden" name="estimate_total" value="{{ $subTotal + ($subTotal * $customer->tax_rate) / 100 }}">
+                <input type="hidden" name="discounted_total" value="{{ $discountedTotal }}">
                 <div class="col-span-12 p-4 flex justify-end mt-10">
                     <button class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 " id="sendProposal-btn">Send Proposal</button>
                 </div>

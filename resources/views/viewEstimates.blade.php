@@ -1,7 +1,20 @@
 @include('layouts.header')
 @php
 $userPrivileges = session('user_details')['user_privileges'];
-$remainingEstimateTotal = $estimate->estimate_total - $estimate->invoice_paid_total;
+$remainingEstimateTotal = $estimate->discounted_total != null ? $estimate->discounted_total - $estimate->invoice_paid_total : ($estimate->estimate_total - $estimate->invoice_paid_total);
+
+
+$estimateTotal = $estimate->estimate_total;
+$percentageDiscount = $estimate->percentage_discount;
+$priceDiscount = $estimate->price_discount;
+
+if ($percentageDiscount) {
+$discountedTotal = $estimateTotal - ($estimateTotal * ($percentageDiscount / 100));
+} elseif($priceDiscount) {
+$discountedTotal = $estimateTotal - $priceDiscount;
+}else{
+$discountedTotal = null;
+}
 @endphp
 
 <div class=" absolute bottom-10 right-10 z-30">
@@ -37,10 +50,10 @@ $remainingEstimateTotal = $estimate->estimate_total - $estimate->invoice_paid_to
     <h1 class=" text-2xl font-semibold mb-3">Estimates</h1>
     <div class=" bg-transparent w-full">
         <div class=" mb-5 shadow-lg bg-white text-white  rounded-3xl">
-            <div class="  flex gap-x-1 items-center px-3  bg-[#930027] rounded-t-3xl">
-                <button type="button" class="flex" id="btnStartAdvanced">
+            <div class="  flex gap-x-1 items-center p-3  bg-[#930027] rounded-t-3xl">
+                <!-- <button type="button" class="flex" id="btnStartAdvanced">
                     <img class="" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="icon">
-                </button>
+                </button> -->
                 <p class="text-lg  font-medium">
                     Project
                 </p>
@@ -115,6 +128,16 @@ $remainingEstimateTotal = $estimate->estimate_total - $estimate->invoice_paid_to
                         <p class="mt-1 text-red-900">
                             Total: ${{ number_format($estimate->estimate_total, 2) }}
                         </p>
+                        @if($estimate->estimate_total != null)
+                        @if($estimate->percentage_discount != null || $estimate->price_discount != null)
+                        <p class="mt-1 text-red-900">
+                            Discount: {{ $estimate->percentage_discount ? $estimate->percentage_discount . '%' : '$' . number_format($estimate->price_discount, 2) }}
+                        </p>
+                        <p class="mt-1 text-red-900">
+                            Discounted Total: {{ number_format($estimate->discounted_total, 2) }}
+                        </p>
+                        @endif
+                        @endif
                         <p class="flex justify-end text-blue-900">
                             Invoiced: ${{ number_format($estimate->invoiced_payment, 2) }}
                         </p>
@@ -551,6 +574,10 @@ $remainingEstimateTotal = $estimate->estimate_total - $estimate->invoice_paid_to
                         </button>
                         @endif
                         @endif
+                        <button type="button" id="apply-discount" class="  flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                            <!-- <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt=""> -->
+                            <span class=" my-auto">$ Apply Discount</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -572,7 +599,7 @@ $remainingEstimateTotal = $estimate->estimate_total - $estimate->invoice_paid_to
                         <div class="absolute top-14 z-10">
                             <div id="action-menu" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                                 <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                                    <a href="/viewProposal/{{$estimate->estimate_id}}" target="_blank">
+                                    <a href="{{'/viewProposal?estimateId=' . $estimate->estimate_id}}" target="_blank">
                                         <li>
                                             <button id="" type="button" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                                 Estimate
@@ -588,7 +615,7 @@ $remainingEstimateTotal = $estimate->estimate_total - $estimate->invoice_paid_to
                                         </li>
                                     </a>
                                     <hr>
-                                    <a href="/viewProposal/{{$estimate->estimate_id}}" target="_blank">
+                                    <a href="{{'/viewProposal?estimateId=' . $estimate->estimate_id}}" target="_blank">
                                         <li>
                                             <button id="" type="button" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                                 Invoice
@@ -5297,11 +5324,11 @@ $userPrivileges->estimate->expenses === 'on')
                                 </div>
                                 <div class="flex items-center mb-4">
                                     <input id="percent_of_total" type="radio" name="payment_option" value="percent" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="percent_of_total" class="block ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">% of Total (${{$estimate->estimate_total}})</label>
+                                    <label for="percent_of_total" class="block ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">% of Total (${{ $estimate->discounted_total != null ? $estimate->discounted_total : $estimate->estimate_total }})</label>
                                 </div>
                                 <div class="flex items-center mb-4">
                                     <input id="fixed_total" type="radio" name="payment_option" value="fixed" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="fixed_total" class="block ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Fixed Total (${{$estimate->estimate_total}})</label>
+                                    <label for="fixed_total" class="block ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Fixed Total (${{ $estimate->discounted_total != null ? $estimate->discounted_total : $estimate->estimate_total }})</label>
                                 </div>
                                 <div class="flex items-center mb-4">
                                     <input id="custom_amount" type="radio" name="payment_option" value="custom" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600">
@@ -5386,6 +5413,7 @@ $userPrivileges->estimate->expenses === 'on')
             <form action="/addPayment" method="post" id="add-payment-form">
                 @csrf
                 <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
+                <input type="hidden" name="po_number" id="po_number" value="{{ $estimate->po_number }}">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between">
@@ -5524,6 +5552,61 @@ $userPrivileges->estimate->expenses === 'on')
                         <button id="" class=" float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
                             Assign Schedule
                         </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="apply-discount-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="/applyDiscount" id="apply-discount-form">
+                @csrf
+                <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class="flex justify-between">
+                        <h2 class="text-xl font-semibold mb-2 text-[#F5222D]" id="modal-title">
+                            Apply Discount
+                        </h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="col-span-2">
+                            <label for="select_discount_type" class="block text-left text-sm mb-1">Select Type</label>
+                            <select id="select_discount_type" name="select_discount_type" autocomplete="customer-name" class="p-2 w-[100%] outline-none rounded-md text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                                <option value="">Select Type</option>
+                                <option value="percent">By Percentage (%)</option>
+                                <option value="price">By Price ($)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="percentage_input" class="block text-left text-sm mb-1">%</label>
+                            <input type="text" name="percentage" id="percentage_input" class="p-2 w-[100%] outline-none rounded-md text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6 bg-gray-200" readonly value="{{$estimate->percentage_discount}}">
+                        </div>
+                        <div>
+                            <label for="price_input" class="block text-left text-sm mb-1">$</label>
+                            <input type="text" name="price" id="price_input" class="p-2 w-[100%] outline-none rounded-md text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6 bg-gray-200" readonly value="{{$estimate->price_discount}}">
+                        </div>
+                        <div class="col-span-2">
+                            <label for="total" class="block text-left text-sm mb-1">Total</label>
+                            <input type="number" name="discounted_total" id="discounted_total" class="p-2 w-[100%] outline-none rounded-md text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6 bg-gray-200" readonly value="{{$estimate->discounted_total}}">
+                        </div>
+                    </div>
+
+                    <div class="mt-2">
+                        <button type="button" class="modalClose-btn border border-black font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
+                        <button id="" class="float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900">Save</button>
                     </div>
                 </div>
             </form>
@@ -5910,6 +5993,18 @@ $userPrivileges->estimate->expenses === 'on')
     });
 </script>
 <script>
+    $("#apply-discount").click(function(e) {
+        e.preventDefault();
+        $("#apply-discount-modal").removeClass('hidden');
+    });
+
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#apply-discount-modal").addClass('hidden');
+        $("#apply-discount-form")[0].reset()
+    });
+</script>
+<script>
     $("#complete-invoice").click(function(e) {
         e.preventDefault();
         $("#complete-invoice-modal").removeClass('hidden');
@@ -5961,6 +6056,39 @@ $userPrivileges->estimate->expenses === 'on')
         e.preventDefault();
         $("#accept-estimate-modal").addClass('hidden');
         $("#accept-estimate-form")[0].reset()
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        var estimateTotal = parseFloat("{{ $estimate->estimate_total }}");
+
+        $('#select_discount_type').change(function() {
+            var percentageInput = $('#percentage_input');
+            var priceInput = $('#price_input');
+
+            // Reset inputs
+            percentageInput.val('').prop('readonly', true).addClass('bg-gray-200');
+            priceInput.val('').prop('readonly', true).addClass('bg-gray-200');
+            $('#discounted_total').val(estimateTotal.toFixed(2));
+
+            if ($(this).val() === 'percent') {
+                percentageInput.prop('readonly', false).removeClass('bg-gray-200');
+            } else if ($(this).val() === 'price') {
+                priceInput.prop('readonly', false).removeClass('bg-gray-200');
+            }
+        });
+
+        $('#percentage_input').on('input', function() {
+            var percentage = parseFloat($(this).val()) || 0;
+            var discountedTotal = estimateTotal - (estimateTotal * (percentage / 100));
+            $('#discounted_total').val(discountedTotal.toFixed(2));
+        });
+
+        $('#price_input').on('input', function() {
+            var price = parseFloat($(this).val()) || 0;
+            var discountedTotal = estimateTotal - price;
+            $('#discounted_total').val(discountedTotal.toFixed(2));
+        });
     });
 </script>
 <script>
@@ -7326,7 +7454,8 @@ $userPrivileges->estimate->expenses === 'on')
 
     });
     $(document).ready(function() {
-        const estimateTotal = parseFloat("{{ $remainingEstimateTotal }}");
+        const estimateTotal = parseFloat("{{ $estimate->discounted_total != null ? $estimate->discounted_total : $estimate->estimate_total }}");
+        const remainingTotal = parseFloat("{{ $remainingEstimateTotal }}");
 
         function resetInputs() {
             $('#percent_input').addClass('bg-gray-200').attr('readonly', true).val('');
@@ -7347,8 +7476,8 @@ $userPrivileges->estimate->expenses === 'on')
                 $('#subtotal_input').removeClass('bg-gray-200').attr('readonly', false);
                 $('#tax_input').removeClass('bg-gray-200').attr('readonly', false);
             } else if ($('#remaining_amount').is(':checked')) {
-                $('#subtotal_input').val(estimateTotal.toFixed(2));
-                $('#total_input').val(estimateTotal.toFixed(2));
+                $('#subtotal_input').val(remainingTotal.toFixed(2));
+                $('#total_input').val(remainingTotal.toFixed(2));
             }
         }
 
