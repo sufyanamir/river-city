@@ -1192,7 +1192,7 @@ $discountedTotal = null;
         </p>
     </div>
     @php
-    $totalPrice = 0; // Initialize total price variable
+    $additionaltotalPrice = 0; // Initialize total price variable
 
     $groupedItems = [];
     foreach ($estimateAdditionalItems as $groupItems) {
@@ -1577,7 +1577,7 @@ $discountedTotal = null;
                             @endif
                             </tr>
                             @php
-                            $totalPrice += $item->item_total; // Add item price to total
+                            $additionaltotalPrice += $item->item_total; // Add item price to total
                             @endphp
                             @endforeach
                         </tbody>
@@ -1590,7 +1590,7 @@ $discountedTotal = null;
     </div>
     <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
         <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Grand Total</span>
-        <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
+        <span>${{ number_format($additionaltotalPrice, 2) }}</span> {{-- Display the formatted total --}}
     </div>
     <br>
 </div>
@@ -5600,7 +5600,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                         <div class="col-span-2">
                             <label for="total" class="block text-left text-sm mb-1">Total</label>
-                            <input type="number" name="discounted_total" id="discounted_total" class="p-2 w-[100%] outline-none rounded-md text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6 bg-gray-200" readonly value="{{$estimate->discounted_total}}">
+                            <input type="number" name="discounted_total" id="discounted_total" class="p-2 w-[100%] outline-none rounded-md text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6 bg-gray-200" readonly value="{{ is_null($estimate->discounted_total) ? number_format($totalPrice, 2) : number_format($estimate->discounted_total, 2) }}">
                         </div>
                     </div>
 
@@ -6061,6 +6061,8 @@ $userPrivileges->estimate->expenses === 'on')
 <script>
     $(document).ready(function() {
         var estimateTotal = parseFloat("{{ $estimate->estimate_total }}");
+        var totalPrice = parseFloat("{{ $totalPrice }}");
+        estimateTotal = isNaN(estimateTotal) ? totalPrice : estimateTotal;
 
         $('#select_discount_type').change(function() {
             var percentageInput = $('#percentage_input');
