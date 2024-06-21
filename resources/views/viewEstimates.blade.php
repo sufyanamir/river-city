@@ -485,7 +485,7 @@ $discountedTotal = null;
                         </button>
                         @endif
                         @if ($estimate->payment_assigned == 1 && $estimate->invoice_paid != 1)
-                        <button type="button" id="add-payment" class=" add-payment flex h-[40px] w-[190px] ml-2 p-2 py-auto text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                        <button type="button" id="add-payment" class=" complete-payment flex h-[40px] w-[190px] ml-2 p-2 py-auto text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                             <div class=" flex mx-auto">
                                 <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
                                 <span class=" my-auto">Add Payment</span>
@@ -3990,7 +3990,7 @@ $userPrivileges->estimate->todos === 'on')
 </div>
 <div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
     <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
-        <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="complete-payment">
+        <button type="button" class=" complete-payment flex bg-white p-1 m-2 rounded-lg" id="complete-payment">
             <div class=" bg-[#930027] rounded-lg">
                 <i class="fa-solid fa-plus text-white p-2"></i>
             </div>
@@ -6036,7 +6036,7 @@ $userPrivileges->estimate->expenses === 'on')
     });
 </script>
 <script>
-    $("#complete-payment").click(function(e) {
+    $(".complete-payment").click(function(e) {
         e.preventDefault();
         $("#complete-payment-modal").removeClass('hidden');
     });
