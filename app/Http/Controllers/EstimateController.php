@@ -1301,6 +1301,7 @@ class EstimateController extends Controller
 
             // Update invoiced_payment with the total input value
             $estimate->invoiced_payment = $estimate->invoiced_payment + $totalInput;
+            $estimate->payment_assigned = 1;
 
             // Create a new AssignPayment record
             $assignPayment = AssignPayment::create([

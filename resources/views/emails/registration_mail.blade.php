@@ -7,7 +7,7 @@
     <title>Account Activation</title>
     <style>
         .container{
-            text-align: justify;
+            /* text-align: justify; */
             background-color: #f0f0f0;
             border-radius: 10px;
             /* width: 800px; */
