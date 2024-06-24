@@ -6,7 +6,7 @@
         </div>
         <div class=" lg:flex justify-between p-3 grid sm:grid-cols-2 mx-auto">
 
-            <img class=" w-28 h-28 rounded-full" style="object-fit: cover;" src="{{ (isset($user->user_image)) ? asset($user->user_image) : asset('assets/images/demo-user.svg') }}" alt="image">
+            <img class=" w-28 h-28 rounded-full" style="object-fit: cover;" src="{{ (isset($user->user_image) && asset_exists($user->user_image)) ? asset($user->user_image) : asset('assets/images/demo-user.svg') }}" alt="image">
             <div class="ml-8 mt-7">
                 <h4 class=" text-xl font-semibold">{{ $user->name }} {{ $user->last_name }}</h4>
                 <p class="text-[#858585]">{{ $user->user_departement }} {{ $user->user_role }}</p>

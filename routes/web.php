@@ -30,8 +30,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/', [UserController::class, 'index']);
-Route::post('/', [UserController::class, 'login']);
+Route::get('/login', [UserController::class, 'index']);
+Route::post('/Login', [UserController::class, 'login']);
 Route::match(['get', 'post'], '/logout', [UserController::class, 'logout']);
 Route::get('/viewProposal', [EstimateController::class, 'viewProposal']);
 Route::post('/acceptProposal/{id}', [EstimateController::class, 'acceptProposal']);
@@ -189,6 +189,7 @@ Route::middleware('customauth')->group(function () {
     //     return view('calendar');
     // });
     Route::get('/dashboard/{user?}', [DashboardController::class, 'index'])->name('dashboard');
+    Route::match(['get', 'post'], '/', [DashboardController::class, 'index'])->name('dashboard');
     // Route::get('/dashboard', function () {
     //     return view('dashboard');
     // });

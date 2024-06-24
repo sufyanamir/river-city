@@ -1586,7 +1586,7 @@ class EstimateController extends Controller
             $validatedData = $request->validate([
                 'estimate_total' => 'required',
                 'upgrade_accept_reject' => 'nullable',
-                'customer_signature' => 'required',
+                'customer_signature' => 'nullable',
             ]);
             $estimate = Estimate::find($id);
             $upgrade = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('is_upgrade', 'yes')->first();
@@ -1611,7 +1611,9 @@ class EstimateController extends Controller
             $proposal->proposal_status = 'accepted';
             $proposal->proposal_accepted = $validatedData['estimate_total'];
             $estimate->estimate_total = $validatedData['estimate_total'];
-            $estimate->customer_signature = $validatedData['customer_signature'];
+            if (isset($validatedData['customer_signature'])) {
+                $estimate->customer_signature = $validatedData['customer_signature'];
+            }
 
             $estimate->save();
             $proposal->save();

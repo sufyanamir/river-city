@@ -558,7 +558,6 @@ $discountedTotal = null;
                             <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                         </svg>
                         </button> --}}
-                        @if($estimate->estimate_total != null)
                         <button id="copyButton" class="flex h-[40px] w-[190px] ml-2 p-2 py-auto text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                             <div class="flex mx-auto">
                                 <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
@@ -572,7 +571,6 @@ $discountedTotal = null;
                                 <span class="my-auto">$ Advance Payment</span>
                             </div>
                         </button>
-                        @endif
                         @endif
                         <button type="button" id="apply-discount" class="  flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                             <!-- <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt=""> -->
@@ -3273,16 +3271,26 @@ $userPrivileges->estimate->photos === 'on')
                                 {{ $proposal->proposal_status }}
                             </td>
                             <td class="px-6 py-4">
+                                @if(!empty($proposal->proposal_data))
                                 <a href="{{ $currentIndex === $totalProposals ? '/viewProposal?estimateId=' . $proposal->estimate_id : '/viewProposal?proposalId=' . $proposal->estimate_proposal_id }}">
                                     <button class="px-2 py-2">
                                         <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
                                     </button>
                                 </a>
+                                @endif
+                                @if($proposal->proposal_status == 'pending')
+                                <form action="/acceptProposal/{{ $estimate->estimate_id }}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="estimate_total" value="{{$totalPrice + ($totalPrice * $estimate->tax_rate) / 100}}">
+                                    <button class="px-2 py-2" title="Accept without signature">
+                                        <i class="fa-solid fa-clipboard-check" style="color: #930027; font-size: 25px;"></i>
+                                    </button>
+                                </form>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
-
                 </table>
             </div>
         </div>
@@ -7385,7 +7393,7 @@ $userPrivileges->estimate->expenses === 'on')
 <script>
     document.getElementById("copyButton").addEventListener("click", function() {
         // Get the URL
-        var url = "soft.rivercitypainting.tech/viewProposal/{{$estimate->estimate_id}}";
+        var url = "soft.rivercitypainting.tech{{'/viewProposal?estimateId=' . $estimate->estimate_id}}";
 
         // Create a temporary input element
         var input = document.createElement('input');

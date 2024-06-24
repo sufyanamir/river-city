@@ -16,6 +16,6 @@ class CustomAuthMiddleware
         }
 
         // User is not authenticated, redirect to the login page or perform any other action
-        return redirect('/');
+        return redirect('/login');
     }
 }
