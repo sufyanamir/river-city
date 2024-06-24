@@ -3271,22 +3271,24 @@ $userPrivileges->estimate->photos === 'on')
                                 {{ $proposal->proposal_status }}
                             </td>
                             <td class="px-6 py-4">
-                                @if(!empty($proposal->proposal_data))
-                                <a href="{{ $currentIndex === $totalProposals ? '/viewProposal?estimateId=' . $proposal->estimate_id : '/viewProposal?proposalId=' . $proposal->estimate_proposal_id }}">
-                                    <button class="px-2 py-2">
-                                        <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
-                                    </button>
-                                </a>
-                                @endif
-                                @if($proposal->proposal_status == 'pending')
-                                <form action="/acceptProposal/{{ $estimate->estimate_id }}" method="post">
-                                    @csrf
-                                    <input type="hidden" name="estimate_total" value="{{$totalPrice + ($totalPrice * $estimate->tax_rate) / 100}}">
-                                    <button class="px-2 py-2" title="Accept without signature">
-                                        <i class="fa-solid fa-clipboard-check" style="color: #930027; font-size: 25px;"></i>
-                                    </button>
-                                </form>
-                                @endif
+                                <div class="flex gap-3">
+                                    @if(!empty($proposal->proposal_data))
+                                    <a href="{{ $currentIndex === $totalProposals ? '/viewProposal?estimateId=' . $proposal->estimate_id : '/viewProposal?proposalId=' . $proposal->estimate_proposal_id }}">
+                                        <button class="px-2 py-2">
+                                            <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </a>
+                                    @endif
+                                    @if($proposal->proposal_status == 'pending')
+                                    <form action="/acceptProposal/{{ $estimate->estimate_id }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="estimate_total" value="{{$totalPrice + ($totalPrice * $estimate->tax_rate) / 100}}">
+                                        <button class="px-2 py-2" title="Accept without signature">
+                                            <i class="fa-solid fa-clipboard-check" style="color: #930027; font-size: 25px;"></i>
+                                        </button>
+                                    </form>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                         @endforeach
@@ -3358,16 +3360,28 @@ $userPrivileges->estimate->proposals === 'on')
                                 {{ $proposal->proposal_status }}
                             </td>
                             <td class="px-6 py-4">
-                                <a href="{{ $currentIndex === $totalProposals ? '/viewProposal?estimateId=' . $proposal->estimate_id : '/viewProposal?proposalId=' . $proposal->estimate_proposal_id }}">
-                                    <button class="px-2 py-2">
-                                        <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
-                                    </button>
-                                </a>
+                                <div class="flex gap-3">
+                                    @if(!empty($proposal->proposal_data))
+                                    <a href="{{ $currentIndex === $totalProposals ? '/viewProposal?estimateId=' . $proposal->estimate_id : '/viewProposal?proposalId=' . $proposal->estimate_proposal_id }}">
+                                        <button class="px-2 py-2">
+                                            <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </a>
+                                    @endif
+                                    @if($proposal->proposal_status == 'pending')
+                                    <form action="/acceptProposal/{{ $estimate->estimate_id }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="estimate_total" value="{{$totalPrice + ($totalPrice * $estimate->tax_rate) / 100}}">
+                                        <button class="px-2 py-2" title="Accept without signature">
+                                            <i class="fa-solid fa-clipboard-check" style="color: #930027; font-size: 25px;"></i>
+                                        </button>
+                                    </form>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
-
                 </table>
             </div>
         </div>
