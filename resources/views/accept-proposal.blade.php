@@ -420,12 +420,12 @@
                                     ${{ number_format($subTotal, 2) }}
                                 </p>
                                 <p class="text-[#858585]">
-                                    {{ number_format($customer['tax_rate'], 2) }}%
+                                    {{ number_format($estimate['tax_rate'], 2) }}%
                                 </p>
                                 <p class="text-[#858585]">
 
-                                    <span id="dynamic-total">${{ number_format($subTotal + ($subTotal * $customer['tax_rate']) / 100, 2) }}</span>
-                                    <input type="hidden" id="dynamic_total_input" value="{{$subTotal + ($subTotal * $customer['tax_rate']) / 100}}">
+                                    <span id="dynamic-total">${{ number_format($subTotal + ($subTotal * $estimate['tax_rate']) / 100, 2) }}</span>
+                                    <input type="hidden" id="dynamic_total_input" value="{{$subTotal + ($subTotal * $estimate['tax_rate']) / 100}}">
                                 </p>
                                 @php
                                 $estimateTotal = $subTotal;
@@ -541,7 +541,7 @@
             </div>
             <input type="hidden" name="estimate_id" value="{{ $estimate['estimate_id'] }}">
             <input type="hidden" name="customer_email" value="{{ $customer['customer_email'] }}">
-            <input type="hidden" name="estimate_total" value="{{ $subTotal + ($subTotal * $customer['tax_rate']) / 100 }}">
+            <input type="hidden" name="estimate_total" value="{{ $subTotal + ($subTotal * $estimate['tax_rate']) / 100 }}">
             <div class="col-span-12 p-4 flex justify-end mt-10">
                 @if(!session()->has('user_details'))
                 @if($estimate['estimate_total'] == null )

@@ -24,7 +24,7 @@
                     </div>
 
                     <h2 class="font-bold text-2xl mt-16 text-[#000000]">Log In</h2>
-                    <form action="/" id="login-form" method="post" class="flex flex-col gap-4">
+                    <form action="/Login" id="login-form" method="post" class="flex flex-col gap-4">
                         @csrf
                         <div class="relative mt-16 border-b border-black">
                             <label for="" class="">Email</label>
@@ -83,7 +83,7 @@
                 // Send the AJAX request
                 $.ajax({
                     type: "POST", // Use POST method
-                    url: "/", // Replace with the actual URL to your login endpoint
+                    url: "/Login", // Replace with the actual URL to your login endpoint
                     data: formData, // Send the form data
                     dataType: "json", // Expect JSON response
                     beforeSend: function() {

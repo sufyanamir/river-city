@@ -27,7 +27,7 @@
                     <tbody id="universalTableBody" class=" text-sm">
                         @foreach($users as $user)
                         <tr>
-                            <td><img class=" w-10 h-10 rounded-full" style="object-fit: cover;" src="{{ (isset($user->user_image)) ? asset($user->user_image) : 'assets/images/demo-user.svg'}}" alt="image"></td>
+                            <td><img class="w-10 h-10 rounded-full" style="object-fit: cover;" src="{{ (isset($user->user_image) && asset_exists($user->user_image)) ? asset($user->user_image) : asset('assets/images/demo-user.svg') }}" alt="image"></td>
                             <td>{{ $user->name }} {{ $user->last_name }}</td>
                             <td>{{ $user->user_role }}</td>
                             <td>{{ $user->email }}</td>

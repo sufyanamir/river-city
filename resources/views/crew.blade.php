@@ -35,7 +35,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                     <tbody id="universalTableBody" class=" text-sm">
                         @foreach($crew as $item)
                         <tr>
-                            <td><img class=" w-10 h-10 rounded-full" style="object-fit: cover;" src="{{ (isset($item->user_image)) ? asset($item->user_image) : 'assets/images/demo-user.svg'}}" alt="image"></td>
+                            <td><img class=" w-10 h-10 rounded-full" style="object-fit: cover;" src="{{ (isset($item->user_image) && asset_exists($item->user_image)) ? asset($item->user_image) : asset('assets/images/demo-user.svg') }}" alt="image"></td>
                             <td>{{ $item->name }} {{ $item->last_name }}</td>
                             <td>{{ $item->departement }}</td>
                             <td>
