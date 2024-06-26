@@ -15,7 +15,7 @@ class ReportsController extends Controller
         if ($keyword != null) {
             // Filter customers based on the search keyword
             $customers = Customer::where('name', 'like', '%' . $keyword . '%')->with('estimates')->get();
-        }else{
+        } else {
             $customers = Customer::with('estimates')->get();
         }
         if ($range != null && $date != null) {
@@ -49,7 +49,7 @@ class ReportsController extends Controller
             if ($keyword != null) {
                 // Filter customers based on the search keyword
                 $customers = Customer::where('name', 'like', '%' . $keyword . '%')->with('estimates')->get();
-            }else{
+            } else {
                 $customers = Customer::with('estimates')->get();
             }
         }
@@ -60,6 +60,9 @@ class ReportsController extends Controller
         $completedWorkOrders = [];
         $acceptedEstimates = [];
         $salesbyEsimator = [];
+        $newEstimatesByOwner = [];
+
+        $sevenDaysAgo = Carbon::now()->subDays(7);
 
         foreach ($customers as $customer) {
             $sourceName = $customer->source;
@@ -151,6 +154,22 @@ class ReportsController extends Controller
 
                     $salesbyEsimator[$ownerName]['total_estimates'] += 1;
                     $salesbyEsimator[$ownerName]['estimate_total'] += $estimate->estimate_total;
+
+                    // New logic for new estimates in the last 7 days
+                    if (Carbon::parse($estimate->created_at)->greaterThanOrEqualTo($sevenDaysAgo)) {
+                        $ownerName = $estimate->project_owner;
+
+                        if (!isset($newEstimatesByOwner[$ownerName]['total_estimates'])) {
+                            $newEstimatesByOwner[$ownerName]['total_estimates'] = 0;
+                        }
+
+                        if (!isset($newEstimatesByOwner[$ownerName]['estimate_total'])) {
+                            $newEstimatesByOwner[$ownerName]['estimate_total'] = 0;
+                        }
+
+                        $newEstimatesByOwner[$ownerName]['total_estimates'] += 1;
+                        $newEstimatesByOwner[$ownerName]['estimate_total'] += $estimate->estimate_total;
+                    }
                 }
             }
         }
@@ -166,6 +185,7 @@ class ReportsController extends Controller
             'completed_work_orders' => $completedWorkOrders,
             'accepted_estimates' => $acceptedEstimates,
             'sales_by_estimator' => $salesbyEsimator,
+            'new_estimates_by_owner' => $newEstimatesByOwner,
         ]);
     }
 }

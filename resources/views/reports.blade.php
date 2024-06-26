@@ -305,8 +305,8 @@
                             <tfoot>
                                 <tr>
                                     <th class=" text-left pl-1 py-2"> Grand Total</th>
-                                    <td class=" text-center">{{$pending_estimates_total}}</td>
-                                    <td class=" text-right pr-1 py-2">${{$pending_estimate_total}}</td>
+                                    <td class=" text-center">{{$accepted_estimates_total}}</td>
+                                    <td class=" text-right pr-1 py-2">${{$accepted_estimate_total}}</td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -351,8 +351,54 @@
                             <tfoot>
                                 <tr>
                                     <th class=" text-left pl-1 py-2"> Grand Total</th>
-                                    <td class=" text-center">{{$pending_estimates_total}}</td>
-                                    <td class=" text-right pr-1 py-2">${{$pending_estimate_total}}</td>
+                                    <td class=" text-center">{{$sales_by_estimator_total}}</td>
+                                    <td class=" text-right pr-1 py-2">${{$sales_total}}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="card px-3 mt-3">
+                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
+                        <h3>New Estimates by Owner</h3>
+                    </div>
+                    <div class=" relative overflow-auto border rounded-b-lg">
+                        <table class=" w-full text-sm">
+                            <thead class=" border-b-2">
+                                <tr>
+                                    <th class=" text-left pl-1 py-2">Estimator</th>
+                                    <th>#</th>
+                                    <th class=" text-right pr-1 py-2">Total</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div style="height: 100px !important; overflow-y:scroll !important;">
+                            <table class=" w-full text-sm">
+                                @php
+                                $new_estimate_by_owner_total = 0;
+                                $owner_total = 0;
+                                @endphp
+                                <tbody class="">
+                                    @foreach($new_estimates_by_owner as $estimators => $data)
+                                    <tr class=" border-b">
+                                        <td class=" text-left pl-1 py-2">{{$estimators}}</td>
+                                        <td class=" text-center">{{$data['total_estimates']}}</td>
+                                        <td class=" text-right pr-1 py-2">${{$data['estimate_total']}}</td>
+                                    </tr>
+                                    @php
+                                    $new_estimate_by_owner_total += $data['total_estimates'];
+                                    $owner_total += $data['estimate_total'];
+                                    @endphp
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <table class=" w-full text-sm">
+                            <tfoot>
+                                <tr>
+                                    <th class=" text-left pl-1 py-2"> Grand Total</th>
+                                    <td class=" text-center">{{$new_estimate_by_owner_total}}</td>
+                                    <td class=" text-right pr-1 py-2">${{$owner_total}}</td>
                                 </tr>
                             </tfoot>
                         </table>
