@@ -161,7 +161,7 @@ Route::middleware('customauth')->group(function () {
         return view('paymentTemplate');
     });
 
-    Route::get('/reports/{range?}/{date?}/{keyword?}', [ReportsController::class, 'index']);
+    Route::match(['post', 'get'], '/reports', [ReportsController::class, 'index']);
     
     Route::get('/jobs', [EstimateController::class, 'getEstimateOnJobs']);
     // Route::get('/jobs', function () {
