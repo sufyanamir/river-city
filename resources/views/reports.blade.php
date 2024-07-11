@@ -19,67 +19,69 @@
                     </button>
                 </div>
             </div>
-            <div class="text-right">
-                <div class="inline-flex rounded-md shadow-sm" role="group">
-                    <button id="selectformatDate" data-dropdown-toggle="selectformatDateDropDown" class=" inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700" type="button">
-                        @if($range == 'day')
-                        Day
-                        @elseif($range == 'week')
-                        Week
-                        @else
-                        Month 
-                        @endif
-                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-                        </svg>
-                    </button>
-                    <!-- Dropdown menu -->
-                    <div id="selectformatDateDropDown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                        <ul class="py-2 text-sm text-center text-gray-700 dark:text-gray-200" aria-labelledby="selectformatDate">
-                            <li>
-                                <a data-input-type="day" class="block px-4 py-2 select-format hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Day</a>
-                            </li>
-                            <li>
-                                <a data-input-type="week" class="block px-4 py-2 select-format hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Week</a>
-                            </li>
-                            <li>
-                                <a data-input-type="month" class="block px-4 py-2 select-format hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Month</a>
-                            </li>
-                        </ul>
+            <form action="/reports" method="post">
+                <div class="text-right">
+                    <div class="inline-flex rounded-md shadow-sm" role="group">
+                        <button id="selectformatDate" data-dropdown-toggle="selectformatDateDropDown" class=" inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700" type="button">
+                            @if($range == 'day')
+                            Day
+                            @elseif($range == 'week')
+                            Week
+                            @else
+                            Month
+                            @endif
+                            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                            </svg>
+                        </button>
+                        <!-- Dropdown menu -->
+                        <div id="selectformatDateDropDown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                            <ul class="py-2 text-sm text-center text-gray-700 dark:text-gray-200" aria-labelledby="selectformatDate">
+                                <li>
+                                    <a data-input-type="day" class="block px-4 py-2 select-format hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Day</a>
+                                </li>
+                                <li>
+                                    <a data-input-type="week" class="block px-4 py-2 select-format hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Week</a>
+                                </li>
+                                <li>
+                                    <a data-input-type="month" class="block px-4 py-2 select-format hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Month</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <button type="button" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ">
+                            <input type="date" id="day_input" value="{{$date}}" class=" {{ $range == 'day' ? '' : 'hidden' }} bg-gray-50 border border-gray-300 text-sm rounded-lg outline-none focus:ring-blue-500 focus:border-blue-500 w-full">
+                            <input type="week" id="week_input" value="{{$date}}" class="{{ $range == 'week' ? '' : 'hidden' }} bg-gray-50 border border-gray-300 text-sm rounded-lg outline-none focus:ring-blue-500 focus:border-blue-500 w-full">
+                            <input type="month" id="month_input" value="{{$date}}" class=" {{ $range == 'month' ? '' : 'hidden' }} bg-gray-50 border border-gray-300 text-sm rounded-lg outline-none focus:ring-blue-500 focus:border-blue-500 w-full">
+                        </button>
+                        <button type="button" id="prev-btn" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ">
+                            <svg data-accordion-icon class="w-2 h-2 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5 5 9" />
+                            </svg>
+                        </button>
+                        <button type="button" id="next-btn" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ">
+                            <svg data-accordion-icon class="w-2 h-2 rotate-90 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
+                            </svg>
+                        </button>
                     </div>
-                    <button type="button" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ">
-                        <input type="date" id="day_input" value="{{$date}}" class=" {{ $range == 'day' ? '' : 'hidden' }} bg-gray-50 border border-gray-300 text-sm rounded-lg outline-none focus:ring-blue-500 focus:border-blue-500 w-full">
-                        <input type="week" id="week_input" value="{{$date}}" class="{{ $range == 'week' ? '' : 'hidden' }} bg-gray-50 border border-gray-300 text-sm rounded-lg outline-none focus:ring-blue-500 focus:border-blue-500 w-full">
-                        <input type="month" id="month_input" value="{{$date}}" class=" {{ $range == 'month' ? '' : 'hidden' }} bg-gray-50 border border-gray-300 text-sm rounded-lg outline-none focus:ring-blue-500 focus:border-blue-500 w-full">
-                    </button>
-                    <button type="button" id="prev-btn" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ">
-                        <svg data-accordion-icon class="w-2 h-2 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5 5 9" />
-                        </svg>
-                    </button>
-                    <button type="button" id="next-btn" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ">
-                        <svg data-accordion-icon class="w-2 h-2 rotate-90 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
-                        </svg>
-                    </button>
                 </div>
-            </div>
-            <div class=" my-3">
-                <div class="inline-flex rounded-md shadow-sm w-full" role="group">
-                    <input type="text" id="search_input" class="bg-gray-50 border border-gray-300  text-sm rounded-l-lg outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" value="{{$keyword}}" required>
-                    <button type="button" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-1 focus:ring-blue-500 focus:text-blue-700 ">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                            <path fill="none" d="M0 0h24v24H0z" />
-                            <path d="M4 18h16v2H4zm1-4h7v2H5zm0-4h11v2H5zm0-4h11v2H5zm1-4h9v2H6z" />
-                        </svg>
-                    </button>
-                    <button type="button" id="search-btn" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-1 focus:ring-blue-500 focus:text-blue-700 ">
-                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                        </svg>
-                    </button>
+                <div class=" my-3">
+                    <div class="inline-flex rounded-md shadow-sm w-full" role="group">
+                        <input type="text" id="search_input" class="bg-gray-50 border border-gray-300  text-sm rounded-l-lg outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="" value="{{$keyword}}" required>
+                        <button type="button" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-1 focus:ring-blue-500 focus:text-blue-700 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="none" d="M0 0h24v24H0z" />
+                                <path d="M4 18h16v2H4zm1-4h7v2H5zm0-4h11v2H5zm0-4h11v2H5zm1-4h9v2H6z" />
+                            </svg>
+                        </button>
+                        <button type="button" id="search-btn" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-1 focus:ring-blue-500 focus:text-blue-700 ">
+                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </form>
             <div class="grid grid-cols-3 gab-4">
                 <div class="card px-3 mt-3">
                     <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
@@ -440,162 +442,124 @@
     });
 </script>
 <script>
-//   $(document).ready(function() {
-//     // Get the current date
-//     var currentDate = new Date();
+    // Function to format the date
+    $(document).ready(function() {
+        // Function to handle next and previous buttons for month, day, and week inputs
+        $("#prev-btn, #next-btn").click(function() {
+            // Get the value and type of the active input (day, week, or month)
+            var activeInput = $("input[type='date']:not(.hidden), input[type='week']:not(.hidden), input[type='month']:not(.hidden)");
+            var inputType = activeInput.attr("id").split("_")[0];
+            var currentValue = activeInput.val();
 
-//     // Get the year and month in the format YYYY-MM
-//     var currentYearMonth = currentDate.toISOString().slice(0, 7);
-
-//     // Set the value of the month_input to the current year and month
-//     $("#month_input").val(currentYearMonth);
-
-//     // Set the value of the day_input to the current date in YYYY-MM-DD format
-//     var currentDay = currentDate.toISOString().slice(0, 10);
-//     $("#day_input").val(currentDay);
-
-//     // Set the value of the week_input to the current week in YYYY-Www format
-//     var currentWeek = getISOWeek(currentDate);
-//     var currentYear = currentDate.getFullYear();
-//     $("#week_input").val(currentYear + '-W' + currentWeek);
-
-//     // Get the value of the 'date' parameter from the URL
-//     var urlParams = new URLSearchParams(window.location.search);
-//     var dateParam = urlParams.get('date');
-
-//     // Determine which input field to update based on the 'date' parameter
-//     if (dateParam) {
-//         var formattedDate = formatDate(dateParam);
-//         if (dateParam.length === 7) {
-//             $("#month_input").val(dateParam);
-//         } else if (dateParam.length === 10) {
-//             $("#day_input").val(dateParam);
-//         } else if (dateParam.length >= 8 && dateParam.includes('-W')) {
-//             $("#week_input").val(dateParam);
-//         }
-//     }
-// });
-
-// Function to format the date
-$(document).ready(function() {
-    // Function to handle next and previous buttons for month, day, and week inputs
-    $("#prev-btn, #next-btn").click(function() {
-        // Get the value and type of the active input (day, week, or month)
-        var activeInput = $("input[type='date']:not(.hidden), input[type='week']:not(.hidden), input[type='month']:not(.hidden)");
-        var inputType = activeInput.attr("id").split("_")[0];
-        var currentValue = activeInput.val();
-
-        // If the active input has a value, use it to calculate next or previous value
-        if (currentValue) {
-            var currentDate = new Date(currentValue);
-            if ($(this).attr("id") === "prev-btn") {
-                // Previous button clicked, decrement the date based on input type
-                if (inputType === "month") {
-                    currentDate.setMonth(currentDate.getMonth() - 1);
-                } else if (inputType === "day") {
-                    currentDate.setDate(currentDate.getDate() - 1);
-                } else if (inputType === "week") {
-                    currentDate.setDate(currentDate.getDate() - 7);
+            // If the active input has a value, use it to calculate next or previous value
+            if (currentValue) {
+                var currentDate = new Date(currentValue);
+                if ($(this).attr("id") === "prev-btn") {
+                    // Previous button clicked, decrement the date based on input type
+                    if (inputType === "month") {
+                        currentDate.setMonth(currentDate.getMonth() - 1);
+                    } else if (inputType === "day") {
+                        currentDate.setDate(currentDate.getDate() - 1);
+                    } else if (inputType === "week") {
+                        currentDate.setDate(currentDate.getDate() - 7);
+                    }
+                } else {
+                    // Next button clicked, increment the date based on input type
+                    if (inputType === "month") {
+                        currentDate.setMonth(currentDate.getMonth() + 1);
+                    } else if (inputType === "day") {
+                        currentDate.setDate(currentDate.getDate() + 1);
+                    } else if (inputType === "week") {
+                        currentDate.setDate(currentDate.getDate() + 7);
+                    }
                 }
+                // Set the value of the active input to the new value and trigger change event
+                activeInput.val(formatDate(currentDate, inputType)).trigger('change');
             } else {
-                // Next button clicked, increment the date based on input type
-                if (inputType === "month") {
-                    currentDate.setMonth(currentDate.getMonth() + 1);
-                } else if (inputType === "day") {
-                    currentDate.setDate(currentDate.getDate() + 1);
-                } else if (inputType === "week") {
-                    currentDate.setDate(currentDate.getDate() + 7);
+                // If the active input doesn't have a value, use the current date or week
+                var baseUrl = "/reports/";
+                var currentDate = new Date();
+                if ($(this).attr("id") === "prev-btn") {
+                    // Previous button clicked, decrement the date based on input type
+                    if (inputType === "month") {
+                        currentDate.setMonth(currentDate.getMonth() - 1);
+                    } else if (inputType === "day") {
+                        currentDate.setDate(currentDate.getDate() - 1);
+                    } else if (inputType === "week") {
+                        currentDate.setDate(currentDate.getDate() - 7);
+                    }
+                } else {
+                    // Next button clicked, increment the date based on input type
+                    if (inputType === "month") {
+                        currentDate.setMonth(currentDate.getMonth() + 1);
+                    } else if (inputType === "day") {
+                        currentDate.setDate(currentDate.getDate() + 1);
+                    } else if (inputType === "week") {
+                        currentDate.setDate(currentDate.getDate() + 7);
+                    }
                 }
+                // Format the date based on input type
+                var formattedDate;
+                if (inputType === "month") {
+                    formattedDate = currentDate.toISOString().slice(0, 7);
+                } else if (inputType === "day") {
+                    formattedDate = currentDate.toISOString().slice(0, 10);
+                } else if (inputType === "week") {
+                    formattedDate = getISOWeek(currentDate);
+                }
+                // Construct the URL and redirect
+                var url = baseUrl + inputType + "/" + formattedDate;
+                window.location.href = url;
             }
-            // Set the value of the active input to the new value and trigger change event
-            activeInput.val(formatDate(currentDate, inputType)).trigger('change');
-        } else {
-            // If the active input doesn't have a value, use the current date or week
+        });
+        $("#search-btn").click(function() {
+            var keyword = $("#search_input").val(); // Get the value of the search input
+
+            // Get the values of the active date range inputs
+            var range = $("input[type='month']:not(.hidden)").val();
+            var date = $("input[type='date']:not(.hidden)").val();
+            var week = $("input[type='week']:not(.hidden)").val();
+
+            // Construct the URL based on the search keyword and active date range inputs
             var baseUrl = "/reports/";
-            var currentDate = new Date();
-            if ($(this).attr("id") === "prev-btn") {
-                // Previous button clicked, decrement the date based on input type
-                if (inputType === "month") {
-                    currentDate.setMonth(currentDate.getMonth() - 1);
-                } else if (inputType === "day") {
-                    currentDate.setDate(currentDate.getDate() - 1);
-                } else if (inputType === "week") {
-                    currentDate.setDate(currentDate.getDate() - 7);
-                }
+            var url;
+            if (range) {
+                url = baseUrl + range + "/";
+            } else if (date) {
+                url = baseUrl + "day/" + date + "/";
+            } else if (week) {
+                url = baseUrl + "week/" + getISOWeek(new Date(week)) + "/";
             } else {
-                // Next button clicked, increment the date based on input type
-                if (inputType === "month") {
-                    currentDate.setMonth(currentDate.getMonth() + 1);
-                } else if (inputType === "day") {
-                    currentDate.setDate(currentDate.getDate() + 1);
-                } else if (inputType === "week") {
-                    currentDate.setDate(currentDate.getDate() + 7);
-                }
+                url = baseUrl;
             }
-            // Format the date based on input type
+            // Append the search keyword to the URL
+            url += keyword;
+
+            // Redirect to the generated URL
+            window.location.href = url;
+        });
+
+        // Function to format the date
+        function formatDate(date, inputType) {
             var formattedDate;
             if (inputType === "month") {
-                formattedDate = currentDate.toISOString().slice(0, 7);
+                formattedDate = date.toISOString().slice(0, 7);
             } else if (inputType === "day") {
-                formattedDate = currentDate.toISOString().slice(0, 10);
+                formattedDate = date.toISOString().slice(0, 10);
             } else if (inputType === "week") {
-                formattedDate = getISOWeek(currentDate);
+                formattedDate = getISOWeek(date);
             }
-            // Construct the URL and redirect
-            var url = baseUrl + inputType + "/" + formattedDate;
-            window.location.href = url;
+            return formattedDate;
+        }
+
+        // Function to get the ISO week of the given date
+        function getISOWeek(date) {
+            var d = new Date(date);
+            d.setHours(0, 0, 0, 0);
+            d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+            var yearStart = new Date(d.getFullYear(), 0, 1);
+            var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+            return yearStart.getFullYear() + '-W' + weekNo;
         }
     });
-    $("#search-btn").click(function() {
-        var keyword = $("#search_input").val(); // Get the value of the search input
-
-        // Get the values of the active date range inputs
-        var range = $("input[type='month']:not(.hidden)").val();
-        var date = $("input[type='date']:not(.hidden)").val();
-        var week = $("input[type='week']:not(.hidden)").val();
-
-        // Construct the URL based on the search keyword and active date range inputs
-        var baseUrl = "/reports/";
-        var url;
-        if (range) {
-            url = baseUrl + range + "/";
-        } else if (date) {
-            url = baseUrl + "day/" + date + "/";
-        } else if (week) {
-            url = baseUrl + "week/" + getISOWeek(new Date(week)) + "/";
-        } else {
-            url = baseUrl;
-        }
-        // Append the search keyword to the URL
-        url += keyword;
-
-        // Redirect to the generated URL
-        window.location.href = url;
-    });
-
-    // Function to format the date
-    function formatDate(date, inputType) {
-        var formattedDate;
-        if (inputType === "month") {
-            formattedDate = date.toISOString().slice(0, 7);
-        } else if (inputType === "day") {
-            formattedDate = date.toISOString().slice(0, 10);
-        } else if (inputType === "week") {
-            formattedDate = getISOWeek(date);
-        }
-        return formattedDate;
-    }
-
-    // Function to get the ISO week of the given date
-    function getISOWeek(date) {
-        var d = new Date(date);
-        d.setHours(0, 0, 0, 0);
-        d.setDate(d.getDate() + 4 - (d.getDay() || 7));
-        var yearStart = new Date(d.getFullYear(), 0, 1);
-        var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-        return yearStart.getFullYear() + '-W' + weekNo;
-    }
-});
-
-
 </script>

@@ -14,7 +14,7 @@ class ReportsController extends Controller
         $userDetails = session('user_details');
         if ($keyword != null) {
             // Filter customers based on the search keyword
-            $customers = Customer::where('name', 'like', '%' . $keyword . '%')->with('estimates')->get();
+            $customers = Customer::where('source', 'like', '%' . $keyword . '%')->with('estimates')->get();
         } else {
             $customers = Customer::with('estimates')->get();
         }
