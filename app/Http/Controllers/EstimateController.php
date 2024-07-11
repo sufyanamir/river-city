@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\ProposalAcceptedMail;
 use App\Mail\ProposalMail;
 use App\Mail\sendMailToClient;
+use App\Mail\SendPaymentReceiptMail;
 use App\Models\AdvancePayment;
 use App\Models\AssignPayment;
 use App\Models\Company;
@@ -62,6 +63,72 @@ class EstimateController extends Controller
         ]);
     }
     // estimate activity
+    
+    // update estimate detail
+    public function updateEstimateDetail(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'first_name' => 'nullable',
+                'last_name' => 'nullable',
+                // 'email' => 'nullable',
+                'phone' => 'nullable',
+                'project_name' => 'nullable',
+                'project_number' => 'nullable',
+                'project_type' => 'nullable',
+                'building_type' => 'nullable',
+                'first_address' => 'nullable',
+                'tax_rate' => 'nullable',
+                'owner' => 'nullable',
+            ]);
+
+            $estimate = Estimate::find($validatedData['estimate_id']);
+
+            if (!$estimate) {
+                return response()->json(['success' => false, 'message' => 'Estimate not found!'], 404);
+            }
+
+            $estimate->customer_name = $validatedData['first_name'];
+            $estimate->customer_last_name = $validatedData['last_name'];
+            // $estimate->customer_email = $validatedData['email'];
+            $estimate->customer_phone = $validatedData['phone'];
+            $estimate->project_name = $validatedData['project_name'];
+            $estimate->project_number = $validatedData['project_number'];
+            $estimate->project_type = $validatedData['project_type'];
+            $estimate->building_type = $validatedData['building_type'];
+            $estimate->customer_address = $validatedData['first_address'];
+            $estimate->tax_rate = $validatedData['tax_rate'];
+            $estimate->project_owner = $validatedData['owner'];
+
+            $estimate->save();
+
+            return response()->json(['success' => true, 'message' => 'Estimate details has been updated!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // update estimate detail
+
+    // get estimate detail
+    public function getEstimateDetail($id)
+    {
+        try {
+            
+            $estimate = Estimate::where('estimate_id', $id)->first();
+
+            if (!$estimate) {
+                return response()->json(['success' => false, 'message' => 'Estimate not found!'], 404);
+            }
+
+            return response()->json(['success' => true, 'estimate' => $estimate], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // get estimate detail
 
     // apply discount on estimates
     public function applyDiscount(Request $request)
@@ -1157,19 +1224,20 @@ class EstimateController extends Controller
                 'po_number' => 'required',
             ]);
 
-            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
-
-            $estimate->invoice_paid = 1;
-            $estimate->invoice_paid_total = $validatedData['invoice_amount'];
-            $estimate->estimate_status = 'paid';
-
-            $estimate->save();
-
-            $estimateCompleteInvoices = AssignPayment::where('estimate_id', $validatedData['estimate_id'])->first();
+            $estimateCompleteInvoices = AssignPayment::where('estimate_id', $validatedData['estimate_id'])->where('invoice_status', 'unpaid')->first();
 
             $estimateCompleteInvoices->invoice_status = 'paid';
 
             $estimateCompleteInvoices->save();
+
+            $estimate = Estimate::with('invoices')->where('estimate_id', $validatedData['estimate_id'])->first();
+            $customer = Customer::where('customer_id', $estimate->customer_id)->first();
+
+            $estimate->invoice_paid = 1;
+            $estimate->invoice_paid_total = $estimate->invoice_paid_total + $validatedData['invoice_amount'];
+            $estimate->estimate_status = 'paid';
+
+            $estimate->save();
 
             $estimatePayment = EstimatePayments::create([
                 'added_user_id' => $userDetails['id'],
@@ -1179,6 +1247,15 @@ class EstimateController extends Controller
                 'invoice_total'  => $validatedData['invoice_amount'],
                 'note' => $validatedData['note'],
             ]);
+
+            try {
+                $mail = new SendPaymentReceiptMail($estimate);
+
+                Mail::to($customer->customer_email)->send($mail);
+
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+            }
 
             $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Payment Completed', "Payment has been completed of the Estimate.");
 
@@ -1590,6 +1667,7 @@ class EstimateController extends Controller
             ]);
             $estimate = Estimate::find($id);
             $upgrade = EstimateItem::where('estimate_id', $estimate->estimate_id)->where('is_upgrade', 'yes')->first();
+            $estimator = User::where('id', $estimate->added_user_id)->first();
             if (isset($validatedData['upgrade_accept_reject'])) {
                 $upgrade->upgrade_status = $validatedData['upgrade_accept_reject'];
                 $upgrade->save();
@@ -1602,6 +1680,9 @@ class EstimateController extends Controller
                 $mail = new ProposalAcceptedMail($emailData);
 
                 Mail::to('office@rivercitypaintinginc.com')->send($mail);
+                if ($estimator) {
+                    Mail::to($estimator->email)->send($mail);
+                }
             } catch (\Exception $e) {
                 return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
             }
@@ -2103,7 +2184,7 @@ class EstimateController extends Controller
                 'assembly_unit_by_item_unit' => 'nullable|array',
                 'item_unit_by_assembly_unit' => 'nullable|array',
                 'is_upgrade' => 'nullable',
-                'group_id' => 'nullable',
+                'group_name' => 'nullable',
                 'additional_item' => 'nullable',
                 // 'selected_items' => 'required|array',
             ]);
@@ -2123,6 +2204,8 @@ class EstimateController extends Controller
             //     ];
             // }
 
+                $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
+
             $estimateItem = EstimateItem::create([
                 'added_user_id' => $userDetails['id'],
                 'estimate_id' => $validatedData['estimate_id'],
@@ -2139,7 +2222,7 @@ class EstimateController extends Controller
                 'item_Description' => $validatedData['item_description'],
                 'item_note' => $validatedData['item_note'],
                 'is_upgrade' => $validatedData['is_upgrade'],
-                'group_id' => $validatedData['group_id'],
+                'group_id' => $groupDetail->group_id,
                 'additional_item' => $validatedData['additional_item'],
             ]);
 
@@ -2531,6 +2614,7 @@ class EstimateController extends Controller
                 'user_details' => $userDetails,
                 'item_total' => $totalPrice, // Pass the total price to the view
                 'employees' => $users,
+                'groups' => $groups,
                 'estimate_notes' => $estimateNotes,
                 'email_templates' => $emailTemplates,
                 'estimate_emails' => $estimateEmails,

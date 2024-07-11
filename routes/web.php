@@ -83,6 +83,8 @@ Route::middleware('customauth')->group(function () {
     Route::post('/addItemInEstimateAndItems', [EstimateController::class, 'addItemInEstimateAndItems']);
     Route::post('/addEstimateNote', [EstimateController::class, 'addEstimateNote']);
     Route::post('/editEstimateNote', [EstimateController::class, 'editEstimateNote']);
+    Route::get('/getEstimateDetail{id}', [EstimateController::class, 'getEstimateDetail']);
+    Route::post('/updateEstimateDetail', [EstimateController::class, 'updateEstimateDetail']);
     Route::match(['post', 'get'], '/deleteEstimateNote{id}', [EstimateController::class, 'deleteEstimateNote']);
     Route::match(['get', 'post'], '/getemailDetails/{id}', [EstimateController::class, 'getEmailDetails']);
     Route::post('/sendEmail', [EstimateController::class, 'sendEmail']);
@@ -221,6 +223,7 @@ Route::middleware('customauth')->group(function () {
 Route::get('/forgotPassword', function () {
     return view('forgotPassword');
 });
+// Route::get('/paymentReceipt', [EstimateController::class, 'getInvoiceDetails']);
 Route::match(['get', 'post'], 'addPayment', [EstimateController::class, 'addPayment']);
 Route::post('/forgotPasswordMail', [UserController::class, 'forgotPasswordMail']);
 Route::get('/resetPassword/{id}', [UserController::class, 'resetPassword']);

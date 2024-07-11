@@ -580,25 +580,41 @@
 
                 // Continue with your existing logic for handling the drop
                 var date = info.date;
-                console.log(date);
-                var modalId = scheduleAssigned ? 'schedule-work-modal' : 'schedule-estimate-modal';
-                var modal = document.getElementById(modalId);
-                var modalTitle = document.getElementById('modal-title');
-                // var modalStartDateInput = document.getElementById('start_date');
-                var modalEndDateInput = document.getElementById('end_date');
+console.log(date);
+var modalId = scheduleAssigned ? 'schedule-work-modal' : 'schedule-estimate-modal';
+var modal = document.getElementById(modalId);
+var modalTitle = document.getElementById('modal-title');
+// var modalStartDateInput = document.getElementById('start_date');
+var modalEndDateInput = document.getElementById('end_date');
 
-                var year = droppedDate.getFullYear();
-                var month = (droppedDate.getMonth() + 1).toString().padStart(2, '0');
-                var day = droppedDate.getDate().toString().padStart(2, '0');
-                var hours = droppedDate.getHours().toString().padStart(2, '0');
+var year = droppedDate.getFullYear();
+var month = (droppedDate.getMonth() + 1).toString().padStart(2, '0');
+var day = droppedDate.getDate().toString().padStart(2, '0');
+var hours = droppedDate.getHours().toString().padStart(2, '0');
 var minutes = droppedDate.getMinutes().toString().padStart(2, '0');
 var seconds = droppedDate.getSeconds().toString().padStart(2, '0');
 
 var simpleDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
 
-                // alert(simpleDate);
-                $('#start_date').val(simpleDateTime);
-                $('#end_date').val(simpleDateTime);
+// Create a new Date object from droppedDate
+var endDate = new Date(droppedDate);
+
+// Add one hour to the Date object
+endDate.setHours(endDate.getHours() + 1);
+
+// Format the new date and time
+var endYear = endDate.getFullYear();
+var endMonth = (endDate.getMonth() + 1).toString().padStart(2, '0');
+var endDay = endDate.getDate().toString().padStart(2, '0');
+var endHours = endDate.getHours().toString().padStart(2, '0');
+var endMinutes = endDate.getMinutes().toString().padStart(2, '0');
+var endSeconds = endDate.getSeconds().toString().padStart(2, '0');
+
+var endDateTime = endYear + '-' + endMonth + '-' + endDay + ' ' + endHours + ':' + endMinutes + ':' + endSeconds;
+
+// alert(simpleDate);
+$('#start_date').val(simpleDateTime);
+$('#end_date').val(endDateTime);
 
                 // Set modal title and open modal
                 modalTitle.textContent = info.draggedEl.innerText;

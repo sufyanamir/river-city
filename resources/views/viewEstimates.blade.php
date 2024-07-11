@@ -50,10 +50,10 @@ $discountedTotal = null;
     <h1 class=" text-2xl font-semibold mb-3">Estimates</h1>
     <div class=" bg-transparent w-full">
         <div class=" mb-5 shadow-lg bg-white text-white  rounded-3xl">
-            <div class="  flex gap-x-1 items-center p-3  bg-[#930027] rounded-t-3xl">
-                <!-- <button type="button" class="flex" id="btnStartAdvanced">
+            <div class="  flex gap-x-1 items-center p-1  bg-[#930027] rounded-t-3xl">
+                <button type="button" class="flex" id="editEstimateButton{{$estimate->estimate_id}}">
                     <img class="" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="icon">
-                </button> -->
+                </button>
                 <p class="text-lg  font-medium">
                     Project
                 </p>
@@ -83,7 +83,7 @@ $discountedTotal = null;
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
-                            <span class="pl-2">Project Owner: {{ $customer->owner }}
+                            <span class="pl-2">Project Owner: {{ $estimate->project_owner }}
                             </span>
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
@@ -524,7 +524,7 @@ $discountedTotal = null;
                             </button>
                         </a>
                         @endif
-                        @if ($estimate->estimate_schedule_assigned_to != 1 && $estimate->estimate_assigned != 1)
+                        @if ($estimate->estimate_assigned != 1)
                         <button type="button" id="complete-estimate" class=" complete-estimate flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                             <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
                             <span class=" my-auto">Complete Estimate</span>
@@ -837,7 +837,12 @@ $discountedTotal = null;
                                                         <div class=" grid grid-cols-2 gap-2">
                                                             <div class=" my-2">
                                                                 <label for="group_name">Group Name:</label>
-                                                                <input type="text" name="group_name" id="group_name" value="{{$group->group_name}}" placeholder="Group Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                                <input type="text" name="group_name" value="{{$group->group_name}}" placeholder="Group Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" list="group_names">
+                                                                <datalist id="group_names">
+                                                                    @foreach($groups as $item)
+                                                                    <option value="{{ $item->group_name }}">{{ $item->group_name }}</option>
+                                                                    @endforeach
+                                                                </datalist>
                                                             </div>
                                                             <!-- <div class="my-2">
                                                                 <label for="total_items">Total Items:</label>
@@ -1246,10 +1251,15 @@ $discountedTotal = null;
                                                 </div>
                                                 <!-- task details -->
                                                 <div class=" grid grid-cols-2 gap-2">
-                                                    <div class=" my-2">
-                                                        <label for="group_name">Group Name:</label>
-                                                        <input type="text" name="group_name" id="group_name" value="{{$group->group_name}}" placeholder="Group Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                                    </div>
+                                                <div class=" my-2">
+                                                                <label for="group_name">Group Name:</label>
+                                                                <input type="text" name="group_name" value="{{$group->group_name}}" placeholder="Group Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" list="group_namess">
+                                                                <datalist id="group_namess">
+                                                                    @foreach($groups as $item)
+                                                                    <option value="{{ $item->group_name }}">{{ $item->group_name }}</option>
+                                                                    @endforeach
+                                                                </datalist>
+                                                            </div>
                                                     <!-- <div class="my-2">
                                                                 <label for="total_items">Total Items:</label>
                                                                 <input type="text" name="total_items" id="total_items" placeholder="Total Items" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
@@ -1690,7 +1700,7 @@ $userPrivileges->estimate->items === 'on')
                                                 <div class=" grid grid-cols-2 gap-2">
                                                     <div class=" my-2">
                                                         <label for="group_name">Group Name:</label>
-                                                        <input type="text" name="group_name" id="group_name" value="{{$group->group_name}}" placeholder="Group Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                        <input type="text" name="group_name" value="{{$group->group_name}}" placeholder="Group Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                                     </div>
                                                     <!-- <div class="my-2">
                                                                 <label for="total_items">Total Items:</label>
@@ -5812,8 +5822,13 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                         <div class="my-0 col-span-4" id="">
                             <label for="" class="block text-left text-sm mb-1">Group</label>
-                            <input type="text" step="any" name="group_name" id="group_name" readonly autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                            <input type="hidden" name="group_id" id="group_id">
+                            <input type="text" step="any" name="group_name" id="group_name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-ins.et focus:ring-[#0095E5] sm:text-sm" list="goup_names">
+                            <datalist id="goup_names">
+                                @foreach($groups as $item)
+                                <option value="{{ $item->group_name }}">{{ $item->group_name }}</option>
+                                @endforeach
+                            </datalist>
+                            <!-- <input type="hidden" name="group_id" id="group_id"> -->
                         </div>
                     </div>
                     <div class=" mt-2">
@@ -5901,6 +5916,97 @@ $userPrivileges->estimate->expenses === 'on')
         </div>
     </div>
 </div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="Estimate-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full lg:max-w-screen-lg">
+            <form action="/updateEstimateDetail" method="post" id="addEstimate-form">
+                @csrf
+                <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class=" flex justify-between border-b-2">
+                        <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Add Customer</h2>
+                        <button class="modal-close" type="button">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
+                    </div>
+                    <!-- task details -->
+                    <div class=" text-center grid grid-cols-4 gap-2">
+                        <div class=" flex justify-between border-b-2 mb-2 col-span-4 mt-4">
+                            <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Contact</h2>
+                        </div>
+                        <div class=" ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">First Name</h5>
+                            <input type="text" name="first_name" id="customer_first_name" placeholder="First Name" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Last Name</h5>
+                            <input type="text" name="last_name" id="customer_last_name" placeholder="Last Name" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Phone No.</h5>
+                            <input type="tel" name="phone" id="customer_phone" placeholder="XXX-XXX-XXXX/XXXXXXXXXX" autocomplete="given-name" class="mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" pattern="([0-9]{3}-?[0-9]{3}-?[0-9]{4})(/[0-9]{3}-?[0-9]{3}-?[0-9]{4})*" title="Phone number must be in the format XXX-XXX-XXXX or XXXXXXXXXX, separated by slashes" required>
+                            <span class=" text-[#930027]" style="font-size:12px;">Please use "/" to add more than one number.</span>
+                        </div> 
+                        <div class=" col-span-2 ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Project Name (Optional)</h5>
+                            <input type="text" name="project_name" id="customer_project_name" placeholder="Project Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2 ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Project Number (Optional)</h5>
+                            <input type="text" step="any" name="project_number" id="customer_project_number" placeholder="Project Number (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2 ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Project Type (Optional)</h5>
+                            <input type="text" step="any" name="project_type" id="customer_project_type" placeholder="Project Type (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2 ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Building Type (Optional)</h5>
+                            <select name="building_type" id="customer_building_type" placeholder="Building Type (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <option value="">Select Type</option>
+                                <option value="residential">Residential</option>
+                                <option value="commercial">Commercial</option>
+                            </select>
+                        </div>
+                        <div class=" flex justify-between border-b-2 mb-2 col-span-4  mt-1 mb-3">
+                            <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Billing</h2>
+                        </div>
+                        <div class=" col-span-4 ">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Address</h5>
+                            <input type="text" name="first_address" id="customer_first_address" placeholder="Address 1" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Tax</h5>
+                            <input type="number" step="any" name="tax_rate" id="customer_tax_rate" placeholder="Tax Rate (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        </div>
+                        <div class=" col-span-2">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Owner</h5>
+                            <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="owner" id="customer_owner">
+                                <option>Select User</option>
+                                @foreach($employees as $user)
+                                <option value="{{ $user->name }} {{ $user->last_name }}">
+                                    {{ $user->name }} {{ $user->last_name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" mt-2">
+                        <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
+                        <button id="" class=" save-btn mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Add
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @include('layouts.footer')
 <script src="https://cdn.jsdelivr.net/npm/dropzone@5.9.2"></script>
 <script>
@@ -5936,6 +6042,11 @@ $userPrivileges->estimate->expenses === 'on')
         $("#addContact-modal").removeClass('hidden');
     });
 
+    $(".modal-close").click(function(e) {
+        e.preventDefault();
+        $("#Estimate-modal").addClass('hidden');
+        $("#addEstimate-form")[0].reset()
+    });
     $(".modal-close").click(function(e) {
         e.preventDefault();
         $("#addContact-modal").addClass('hidden');
@@ -6302,6 +6413,40 @@ $userPrivileges->estimate->expenses === 'on')
             })
         })
 
+        $('[id^="editEstimateButton"]').click(function() {
+            var estimateId = this.id.replace('editEstimateButton', '');
+
+            $.ajax({
+                url: '/getEstimateDetail' + estimateId,
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        var estimateDetails = response.estimate;
+                        // console.log(estimateDetails);
+                        $('#customer_first_name').val(estimateDetails.customer_name);
+                        $('#customer_last_name').val(estimateDetails.customer_last_name);
+                        // $('#customer_email').val(estimateDetails.customer_email);
+                        $('#customer_phone').val(estimateDetails.customer_phone);
+                        $('#customer_project_name').val(estimateDetails.project_name);
+                        $('#customer_project_number').val(estimateDetails.project_number);
+                        $('#customer_project_type').val(estimateDetails.project_type);
+                        $('#customer_building_type').val(estimateDetails.building_type).trigger('change');
+                        $('#customer_first_address').val(estimateDetails.customer_address);
+                        $('#customer_tax_rate').val(estimateDetails.tax_rate);
+                        $('#customer_owner').val(estimateDetails.project_owner).trigger('change');
+
+                        $('#Estimate-modal').removeClass('hidden');
+                    } else {
+                        // Handle error response
+                        console.error('Error fetching details.');
+                    }
+                },
+                error: function(error) {
+                    console.error('AJAX request failed:', error);
+                }
+            })
+        })
+
         // Add a click event listener to the edit buttons
         $('[id^="editEstimate-item"]').click(function() {
             var itemId = this.id.replace('editEstimate-item', ''); // Extract item ID from button ID
@@ -6609,10 +6754,13 @@ $userPrivileges->estimate->expenses === 'on')
             var priceMinusCostbyitemPrice = priceMinusCost / itemPrice.val();
             var finalMargin = priceMinusCostbyitemPrice * 100;
             priceMargin.text(finalMargin.toFixed(2));
+            let finalTotal = itemPrice.val() * itemqty.val();
+            itemTotal.val(finalTotal);
         });
 
         itemqty.on('input', function() {
-            itemTotal.val(itemqty.val() * itemPrice.val());
+            let finalTotal = itemPrice.val() * itemqty.val();
+            itemTotal.val(finalTotal);
         });
     });
 </script>
