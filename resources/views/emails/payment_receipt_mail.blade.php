@@ -44,56 +44,86 @@
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <table style="width: 100%; font-size: 0.875rem; text-align: left; color: #6b7280;">
-                            <thead style="font-size: 0.75rem; color: #374151; text-transform: uppercase; background-color: #f9fafb;">
-                                <tr>
-                                    <th scope="col" style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
-                                        Date
-                                    </th>
-                                    <th scope="col" style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
-                                        Name
-                                    </th>
-                                    <th scope="col" style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
-                                        Tax
-                                    </th>
-                                    <th scope="col" style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
-                                        Total
-                                    </th>
-                                    <th scope="col" style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
-                                        Due
-                                    </th>
-                                    <th scope="col" style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
-                                        Status
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="invoiceTableBody">
-                                @foreach($estimate->invoices as $invoice)
-                                <tr style="background-color: white; border-bottom: 1px solid #e5e7eb;">
-                                    <th scope="row" style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem; font-weight: 500; color: #111827; white-space: nowrap;">
-                                        {{$invoice->complete_invoice_date}}
-                                    </th>
-                                    <td style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
-                                        {{$invoice->invoice_name}}
-                                    </td>
-                                    <td style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
-                                        {{$invoice->tax_rate ? $invoice->tax_rate : 'N/A'}}
-                                    </td>
-                                    <td style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
-                                        {{$invoice->invoice_total}}
-                                    </td>
-                                    <td style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
-                                        {{$invoice->invoice_due}}
-                                    </td>
-                                    <td style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
-                                        {{$invoice->invoice_status}}
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    <div style="overflow-x: auto;">
+    <table style="width: 100%; font-size: 0.875rem; text-align: left; color: #6b7280;">
+        <thead style="font-size: 0.75rem; color: #374151; text-transform: uppercase; background-color: #f9fafb;">
+            <tr>
+                <th scope="col" style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
+                    Date
+                </th>
+                <th scope="col" style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
+                    Name
+                </th>
+                <th scope="col" style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
+                    Tax
+                </th>
+                <th scope="col" style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
+                    Total
+                </th>
+                <th scope="col" style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
+                    Due
+                </th>
+                <th scope="col" style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
+                    Status
+                </th>
+            </tr>
+        </thead>
+        <tbody id="invoiceTableBody">
+            @foreach($estimate->invoices as $invoice)
+            <tr style="background-color: white; border-bottom: 1px solid #e5e7eb;">
+                <th scope="row" style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem; font-weight: 500; color: #111827; white-space: nowrap;">
+                    {{$invoice->complete_invoice_date}}
+                </th>
+                <td style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
+                    {{$invoice->invoice_name}}
+                </td>
+                <td style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
+                    {{$invoice->tax_rate ? $invoice->tax_rate : 'N/A'}}
+                </td>
+                <td style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
+                    {{$invoice->invoice_total}}
+                </td>
+                <td style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
+                    {{$invoice->invoice_due}}
+                </td>
+                <td style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 0.75rem; padding-bottom: 0.75rem;">
+                    {{$invoice->invoice_status}}
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+<style>
+    @media (max-width: 600px) {
+        table thead {
+            display: none;
+        }
+        table, table tbody, table tr, table td {
+            display: block;
+            width: 100%;
+        }
+        table tr {
+            margin-bottom: 1rem;
+        }
+        table td {
+            text-align: right;
+            padding-left: 50%;
+            position: relative;
+        }
+        table td::before {
+            content: attr(data-label);
+            position: absolute;
+            left: 0;
+            width: 50%;
+            padding-left: 1.5rem;
+            font-weight: bold;
+            text-align: left;
+        }
+    }
+</style>
+
                 </div>
             </div>
         </div>
