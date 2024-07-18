@@ -549,7 +549,9 @@
                 @else
                 <div>
                     <div>
+                        @if($estimate['customer_signature'] != null)
                         <img src="{{$estimate['customer_signature']}}" alt="Customer Signature">
+                        @endif
                     </div>
                     <hr>
                     <div class=" text-center">
@@ -563,7 +565,9 @@
                 @if($estimate['estimate_total'] != null)
                 <div>
                     <div>
+                        @if($estimate['customer_signature'] != null)
                         <img src="{{$estimate['customer_signature']}}" alt="Customer Signature">
+                        @endif
                     </div>
                     <hr>
                     <div class=" text-center">
