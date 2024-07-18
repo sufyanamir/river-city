@@ -63,7 +63,7 @@ class EstimateController extends Controller
         ]);
     }
     // estimate activity
-    
+
     // update estimate detail
     public function updateEstimateDetail(Request $request)
     {
@@ -104,7 +104,6 @@ class EstimateController extends Controller
             $estimate->save();
 
             return response()->json(['success' => true, 'message' => 'Estimate details has been updated!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -115,7 +114,7 @@ class EstimateController extends Controller
     public function getEstimateDetail($id)
     {
         try {
-            
+
             $estimate = Estimate::where('estimate_id', $id)->first();
 
             if (!$estimate) {
@@ -123,7 +122,6 @@ class EstimateController extends Controller
             }
 
             return response()->json(['success' => true, 'estimate' => $estimate], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -134,7 +132,7 @@ class EstimateController extends Controller
     public function applyDiscount(Request $request)
     {
         try {
-            
+
             $validatedData = $request->validate([
                 'estimate_id' => 'required',
                 'percentage' => 'nullable',
@@ -146,16 +144,15 @@ class EstimateController extends Controller
             $estimate->percentage_discount = $validatedData['percentage'];
             $estimate->price_discount = $validatedData['price'];
 
-            if($validatedData['percentage'] != null)
+            if ($validatedData['percentage'] != null)
                 $estimate->discounted_total = $estimate->estimate_total - ($estimate->estimate_total * ($validatedData['percentage'] / 100));
-            else{
+            else {
                 $estimate->discounted_total = $estimate->estimate_total - $validatedData['price'];
             }
 
             $estimate->save();
 
             return response()->json(['success' => true, 'message' => 'Discount applied on total'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -1209,6 +1206,79 @@ class EstimateController extends Controller
     }
     // add advance payment
 
+    // update payment
+    public function updatePayment(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'payment_id' => 'required',
+                'invoice_date' => 'nullable',
+                'invoice_amount' => 'nullable',
+                'note' => 'nullable',
+            ]);
+
+            $payment = EstimatePayments::with('invoice')->where('estimate_payment_id', $validatedData['payment_id'])->first();
+
+            $payment->complete_invoice_date = $validatedData['invoice_date'];
+            $payment->invoice_total = $validatedData['invoice_amount'];
+            $payment->note = $validatedData['note'];
+
+            $payment->invoice->invoice_status = 'paid';
+
+            $payment->save();
+            $payment->invoice->save();
+
+            return response()->json(['success' => true, 'message' => 'Payment updated!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // update payment
+
+    // get payment
+    public function getPayment($id)
+    {
+        try {
+            $payment = EstimatePayments::with('invoice')->where('estimate_payment_id', $id)->first();
+
+            if (!$payment) {
+                return response()->json(['success' => false, 'message' => 'Payment not found!'], 404);
+            }
+
+            return response()->json(['success' => true, 'payment' => $payment], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // get payment
+
+    // send payment
+    public function sendPayment(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+            ]);
+
+            $estimate = Estimate::with('invoices')->where('estimate_id', $validatedData['estimate_id'])->first();
+            $customer = Customer::where('customer_id', $estimate->customer_id)->first();
+
+            try {
+                $mail = new SendPaymentReceiptMail($estimate);
+
+                Mail::to($customer->customer_email)->send($mail);
+
+                return response()->json(['success' => true, 'message' => 'Payment receipt sent!'], 200);
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'messagae' => $e->getMessage()], 400);
+        }
+    }
+    // send payment
+
     // add payment
     public function addPayment(Request $request)
     {
@@ -1248,14 +1318,6 @@ class EstimateController extends Controller
                 'note' => $validatedData['note'],
             ]);
 
-            try {
-                $mail = new SendPaymentReceiptMail($estimate);
-
-                Mail::to($customer->customer_email)->send($mail);
-
-            } catch (\Exception $e) {
-                return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
-            }
 
             $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Payment Completed', "Payment has been completed of the Estimate.");
 
@@ -2204,7 +2266,7 @@ class EstimateController extends Controller
             //     ];
             // }
 
-                $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
+            $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
 
             $estimateItem = EstimateItem::create([
                 'added_user_id' => $userDetails['id'],

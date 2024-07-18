@@ -219,6 +219,11 @@ Route::middleware('customauth')->group(function () {
     Route::get('/mail', function () {
         return view('emails.proposal_accepted_mail');
     });
+
+    Route::post('/sendPayment', [EstimateController::class, 'sendPayment']);
+    Route::get('/getPayment/{id}', [EstimateController::class, 'getPayment']);
+    Route::post('/updatePayment', [EstimateController::class, 'updatePayment']);
+
 });
 Route::get('/forgotPassword', function () {
     return view('forgotPassword');
