@@ -594,6 +594,14 @@ $discountedTotal = null;
                                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                             </svg>
                         </button>
+                        <form action="/sendPayment" method="post">
+                            @csrf
+                            <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                            <button type="submit" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                                <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
+                                <span class=" my-auto">Send Receipt</span>
+                            </button>
+                        </form>
                         <div class="absolute top-14 z-10">
                             <div id="action-menu" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                                 <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
@@ -1251,15 +1259,15 @@ $discountedTotal = null;
                                                 </div>
                                                 <!-- task details -->
                                                 <div class=" grid grid-cols-2 gap-2">
-                                                <div class=" my-2">
-                                                                <label for="group_name">Group Name:</label>
-                                                                <input type="text" name="group_name" value="{{$group->group_name}}" placeholder="Group Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" list="group_namess">
-                                                                <datalist id="group_namess">
-                                                                    @foreach($groups as $item)
-                                                                    <option value="{{ $item->group_name }}">{{ $item->group_name }}</option>
-                                                                    @endforeach
-                                                                </datalist>
-                                                            </div>
+                                                    <div class=" my-2">
+                                                        <label for="group_name">Group Name:</label>
+                                                        <input type="text" name="group_name" value="{{$group->group_name}}" placeholder="Group Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" list="group_namess">
+                                                        <datalist id="group_namess">
+                                                            @foreach($groups as $item)
+                                                            <option value="{{ $item->group_name }}">{{ $item->group_name }}</option>
+                                                            @endforeach
+                                                        </datalist>
+                                                    </div>
                                                     <!-- <div class="my-2">
                                                                 <label for="total_items">Total Items:</label>
                                                                 <input type="text" name="total_items" id="total_items" placeholder="Total Items" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
@@ -4046,6 +4054,9 @@ $userPrivileges->estimate->todos === 'on')
                             <th scope="col" class="px-6 py-3">
                                 Total
                             </th>
+                            <th scope="col" class="px-6 py-3">
+                                Actions
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -4059,6 +4070,11 @@ $userPrivileges->estimate->todos === 'on')
                             </td>
                             <td class="px-6 py-4">
                                 {{ $payments->invoice_total }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <button id="edit-payment{{ $payments->estimate_payment_id }}">
+                                    <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
+                                </button>
                             </td>
                         </tr>
                         @endforeach
@@ -5442,10 +5458,11 @@ $userPrivileges->estimate->expenses === 'on')
         <!-- Modal panel -->
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             @if (isset($invoice->invoice_status) && $invoice->invoice_status == 'unpaid')
-            <form action="/addPayment" method="post" id="add-payment-form">
+            <form action="/addPayment" method="post" id="complete-payment-form">
                 @csrf
                 <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
                 <input type="hidden" name="po_number" id="po_number" value="{{ $estimate->po_number }}">
+                <input type="hidden" name="payment_id" id="payment_id">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between">
@@ -5485,7 +5502,7 @@ $userPrivileges->estimate->expenses === 'on')
                     </div>
                     <div class="my-2 col-span-2 relative">
                         <label for="" class="block text-left mb-1"> Note: </label>
-                        <textarea name="note" id="note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                        <textarea name="note" id="invoice_note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
                         <button type="button" id="note-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                     </div>
                     <div class=" mt-2">
@@ -5953,7 +5970,7 @@ $userPrivileges->estimate->expenses === 'on')
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Phone No.</h5>
                             <input type="tel" name="phone" id="customer_phone" placeholder="XXX-XXX-XXXX/XXXXXXXXXX" autocomplete="given-name" class="mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" pattern="([0-9]{3}-?[0-9]{3}-?[0-9]{4})(/[0-9]{3}-?[0-9]{3}-?[0-9]{4})*" title="Phone number must be in the format XXX-XXX-XXXX or XXXXXXXXXX, separated by slashes" required>
                             <span class=" text-[#930027]" style="font-size:12px;">Please use "/" to add more than one number.</span>
-                        </div> 
+                        </div>
                         <div class=" col-span-2 ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Project Name (Optional)</h5>
                             <input type="text" name="project_name" id="customer_project_name" placeholder="Project Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
@@ -6176,7 +6193,8 @@ $userPrivileges->estimate->expenses === 'on')
     $(".modal-close").click(function(e) {
         e.preventDefault();
         $("#complete-payment-modal").addClass('hidden');
-        // $("#add-payment-form")[0].reset()
+        $("#complete-payment-form")[0].reset()
+        $('#complete-payment-form').attr('action', '/addPayment');
     });
 </script>
 <script>
@@ -7616,6 +7634,35 @@ $userPrivileges->estimate->expenses === 'on')
                     $('#invoiceAmountDiv').addClass('hidden');
                     $('#add-payment-modal').removeClass('hidden');
                     $('#add-payment-form').attr('action', '/updateInvoice');
+                },
+                error: function(xhr, status, error) {
+                    // Handle any errors
+                    console.error(error);
+                }
+            });
+        });
+
+        $(document).on('click', '[id^=edit-payment]', function() {
+            // Extract the ID from the button's ID attribute
+            var id = $(this).attr('id').replace('edit-payment', '');
+
+            // Perform the AJAX request
+            $.ajax({
+                url: '/getPayment/' + id,
+                type: 'GET',
+                success: function(response) {
+                    // Process the response
+                    console.log(response);
+                    var data = response.payment;
+                    // You can update the UI with the response data here
+                    $('#invoice').val(data.invoice.invoice_name);
+                    $('#invoice_date').val(data.complete_invoice_date);
+                    $('#invoice_amount').val(data.invoice_total);
+                    $('#invoice_note').val(data.note);
+                    $('#payment_id').val(data.estimate_payment_id);
+                    
+                    $('#complete-payment-modal').removeClass('hidden');
+                    $('#complete-payment-form').attr('action', '/updatePayment');
                 },
                 error: function(xhr, status, error) {
                     // Handle any errors
