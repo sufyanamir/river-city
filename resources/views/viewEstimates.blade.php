@@ -4072,7 +4072,7 @@ $userPrivileges->estimate->todos === 'on')
                                 {{ $payments->invoice_total }}
                             </td>
                             <td class="px-6 py-4">
-                                <button id="edit-payment{{ $payments->estimate_payment_id }}">
+                                <button id="edit-payment{{ $payments->estimate_complete_invoice_id }}">
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
                                 </button>
                             </td>
@@ -7714,13 +7714,14 @@ $userPrivileges->estimate->expenses === 'on')
                 success: function(response) {
                     // Process the response
                     console.log(response);
-                    var data = response.payment;
+                    var payment = response.payment;
+                    var invoice = response.invoice;
                     // You can update the UI with the response data here
-                    $('#invoice').val(data.invoice.invoice_name);
-                    $('#invoice_date').val(data.complete_invoice_date);
-                    $('#invoice_amount').val(data.invoice_total);
-                    $('#invoice_note').val(data.note);
-                    $('#payment_id').val(data.estimate_payment_id);
+                    $('#invoice').val(invoice.invoice_name);
+                    $('#invoice_date').val(payment.complete_invoice_date);
+                    $('#invoice_amount').val(payment.invoice_total);
+                    $('#invoice_note').val(payment.note);
+                    $('#payment_id').val(payment.estimate_payment_id);
 
                     $('#complete-payment-modal').removeClass('hidden');
                     $('#complete-payment-form').attr('action', '/updatePayment');

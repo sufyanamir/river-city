@@ -1217,16 +1217,18 @@ class EstimateController extends Controller
                 'note' => 'nullable',
             ]);
 
-            $payment = EstimatePayments::with('invoice')->where('estimate_payment_id', $validatedData['payment_id'])->first();
-
+            $payment = EstimatePayments::where('estimate_payment_id', $validatedData['payment_id'])->first();
+            $invoice = AssignPayment::where('estimate_complete_invoice_id', $payment->estimate_complete_invoice_id)->first();
             $payment->complete_invoice_date = $validatedData['invoice_date'];
             $payment->invoice_total = $validatedData['invoice_amount'];
             $payment->note = $validatedData['note'];
 
-            $payment->invoice->invoice_status = 'paid';
+            if ($invoice->invoice_status == 'unpaid') {
+                $invoice->invoice_status = 'paid';
+                $invoice->save();
+            }
 
             $payment->save();
-            $payment->invoice->save();
 
             return response()->json(['success' => true, 'message' => 'Payment updated!'], 200);
 
@@ -1240,13 +1242,16 @@ class EstimateController extends Controller
     public function getPayment($id)
     {
         try {
-            $payment = EstimatePayments::with('invoice')->where('estimate_payment_id', $id)->first();
-
+            $invoice = AssignPayment::where('estimate_complete_invoice_id', $id)->first();
+            $payment = EstimatePayments::where('estimate_complete_invoice_id', $id)->first();
+            if (!$invoice) {
+                return response()->json(['success' => false, 'message' => 'Payment not found!'], 404);
+            }
             if (!$payment) {
                 return response()->json(['success' => false, 'message' => 'Payment not found!'], 404);
             }
 
-            return response()->json(['success' => true, 'payment' => $payment], 200);
+            return response()->json(['success' => true, 'payment' => $payment, 'invoice' => $invoice], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
