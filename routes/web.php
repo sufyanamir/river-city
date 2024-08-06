@@ -223,6 +223,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/sendPayment', [EstimateController::class, 'sendPayment']);
     Route::get('/getPayment/{id}', [EstimateController::class, 'getPayment']);
     Route::post('/updatePayment', [EstimateController::class, 'updatePayment']);
+    Route::match(['post', 'get'], '/deletePayment/{id}', [EstimateController::class, 'deletePayment']);
 
 });
 Route::get('/forgotPassword', function () {

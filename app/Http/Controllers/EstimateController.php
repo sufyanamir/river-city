@@ -1206,6 +1206,36 @@ class EstimateController extends Controller
     }
     // add advance payment
 
+    // delete payment
+    public function deletePayment($id)
+    {
+        try {
+            
+            $payment = EstimatePayments::where('estimate_payment_id', $id)->first();
+
+            if (!$payment) {
+                return response()->json(['success' => false, 'message' => 'Payment not found!'], 404);
+            }
+
+            $invoice = AssignPayment::where('estimate_complete_invoice_id', $payment->estimate_complete_invoice_id)->first();
+            $estimate = Estimate::where('estimate_id', $payment->estimate_id)->first();
+            
+            $invoice->invoice_status = 'unpaid';
+            $estimate->invoice_paid_total = $estimate->invoice_paid_total - $payment->invoice_total;
+
+            $invoice->save();
+            $estimate->save();
+
+            $payment->delete();
+            
+            return response()->json(['success' => true, 'message' => 'Payment deleted!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // delete payment
+
     // update payment
     public function updatePayment(Request $request)
     {
