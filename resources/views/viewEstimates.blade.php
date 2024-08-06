@@ -4075,6 +4075,12 @@ $userPrivileges->estimate->todos === 'on')
                                 <button id="edit-payment{{ $payments->estimate_complete_invoice_id }}">
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
                                 </button>
+                                    <form action="/deletePayment/{{ $payments->estimate_payment_id }}" class="inline-block" method="post">
+                                        @csrf
+                                        <button>
+                                            <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </form>
                             </td>
                         </tr>
                         @endforeach
