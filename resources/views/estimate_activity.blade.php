@@ -18,7 +18,7 @@
                                 <p>{{ $activity->activity_description }}</p>
                             </div>
                             <div>
-                                {{ date('d, F Y', strtotime($activity->created_at)) }}
+                                {{ date('d, F Y H:i:s', strtotime($activity->created_at)) }}
                             </div>
                         </div>
                     </div>
