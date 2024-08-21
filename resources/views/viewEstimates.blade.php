@@ -6558,8 +6558,8 @@ $userPrivileges->estimate->expenses === 'on')
                         $('#type').val(itemDetail.item_type);
                         $('#itemName').val(itemDetail.item_name);
                         $('#item_units').val(itemDetail.item_unit);
-                        $('#labour_expense').val(itemDetail.labour_expense.toFixed(2));
-                        $('#material_expense').val(itemDetail.material_expense.toFixed(2));
+                        $('#labour_expense').val(itemDetail.labour_expense);
+                        $('#material_expense').val(itemDetail.material_expense);
                         $('#item_cost').val(itemDetail.item_cost);
                         $('#item_price').val(response.item_detail.item_price);
                         $('#item_qty').val(itemDetail.item_qty);
