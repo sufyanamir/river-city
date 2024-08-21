@@ -16,7 +16,7 @@ $discountedTotal = $estimateTotal - $priceDiscount;
 $discountedTotal = null;
 }
 @endphp
-
+<input type="hidden" id="hasPendingProposal" value="{{ $proposals->where('proposal_status', 'pending')->isNotEmpty() }}">
 <div class=" absolute bottom-10 right-10 z-30">
     <button type="button" id="addItem-menubutton" class=" rounded-full flex bg-white p-1 m-2">
         <div class=" bg-[#930027] rounded-full w-12 h-12">
@@ -991,11 +991,11 @@ $discountedTotal = null;
                                             <p class="text-[16px]/[18px] text-[#323C47] font">
                                                 @if ($item->item_description)
                                             <p class="font-medium">Description:</p>
-                                            {{ $item->item_description }}
+                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
                                             @endif
                                             @if ($item->item_note)
                                             <p class="font-medium">Note:</p>
-                                            {{ $item->item_note }}
+                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
                                             @endif
                                             </p>
                                         </td>
@@ -1126,10 +1126,10 @@ $discountedTotal = null;
                                                                     <tr class="bg-white border-b">
                                                                         <td class="px-6 py-4"></td>
                                                                         <td class="px-6 py-4">
-                                                                            {{$assembly->est_ass_item_name}}
+                                                                        {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->est_ass_item_name) !!}
                                                                         </td>
                                                                         <td class="px-6 py-4 w-[30%]">
-                                                                            {{$assembly->ass_item_description}}
+                                                                        {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
                                                                         </td>
                                                                         @if($item->group)
                                                                         <td class="text-center">
@@ -1407,11 +1407,11 @@ $discountedTotal = null;
                                     <p class="text-[16px]/[18px] text-[#323C47] font">
                                         @if ($item->item_description)
                                     <p class="font-medium">Description:</p>
-                                    {{ $item->item_description }}
+                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
                                     @endif
                                     @if ($item->item_note)
                                     <p class="font-medium">Note:</p>
-                                    {{ $item->item_note }}
+                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
                                     @endif
                                     </p>
                                 </td>
@@ -1545,7 +1545,7 @@ $discountedTotal = null;
                                                                     {{$assembly->est_ass_item_name}}
                                                                 </td>
                                                                 <td class="px-6 py-4 w-[30%]">
-                                                                    {{$assembly->ass_item_description}}
+                                                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
                                                                 </td>
                                                                 @if($item->group)
                                                                 <td class="text-center">
@@ -3092,14 +3092,12 @@ $userPrivileges->estimate->items === 'on')
                             </a>
                         </td>
                         <td>
-                            <button>
-                                <form action="/deleteFile{{ $file->estimate_file_id }}" method="post">
+                                <form action="/deleteFile{{ $file->estimate_file_id }}" class="deleteForm" method="post">
                                     @csrf
-                                    <button>
+                                    <button type="button" class="deleteButton">
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                     </button>
                                 </form>
-                            </button>
                         </td>
                     </tr>
                     @endforeach
@@ -3144,14 +3142,12 @@ $userPrivileges->estimate->files === 'on')
                             </a>
                         </td>
                         <td>
-                            <button>
-                                <form action="/deleteFile{{ $file->estimate_file_id }}" method="post">
+                                <form action="/deleteFile{{ $file->estimate_file_id }}" class="deleteForm" method="post">
                                     @csrf
-                                    <button>
+                                    <button type="button" class="deleteButton">
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                     </button>
                                 </form>
-                            </button>
                         </td>
                     </tr>
                     @endforeach
@@ -3444,14 +3440,12 @@ $userPrivileges->estimate->proposals === 'on')
                                     <button id="edit-note-modal{{ $note->estimate_note_id }}">
                                         <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
                                     </button>
-                                    <button>
-                                        <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" method="post">
+                                        <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" class="deleteForm" method="post">
                                             @csrf
-                                            <button>
+                                            <button type="button" class="deleteButton">
                                                 <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                             </button>
                                         </form>
-                                    </button>
                                 </td>
                             </tr>
                             <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addNote-modal{{ $note->estimate_note_id }}">
@@ -3564,14 +3558,12 @@ $userPrivileges->estimate->notes === 'on')
                                     <button id="edit-note-modal{{ $note->estimate_note_id }}">
                                         <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
                                     </button>
-                                    <button>
-                                        <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" method="post">
+                                        <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" class="deleteForm" method="post">
                                             @csrf
-                                            <button>
+                                            <button type="button" class="deleteButton">
                                                 <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                             </button>
                                         </form>
-                                    </button>
                                 </td>
                             </tr>
                             <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addNote-modal{{ $note->estimate_note_id }}">
@@ -3842,9 +3834,9 @@ $userPrivileges->estimate->emails === 'on')
                                     </button>
                                 </form>
                                 @endif
-                                <form action="/deleteToDo{{$toDo->to_do_id}}" method="post">
+                                <form action="/deleteToDo{{$toDo->to_do_id}}" class="deleteForm" method="post">
                                     @csrf
-                                    <button>
+                                    <button type="button" class="deleteButton">
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                     </button>
                                 </form>
@@ -3930,9 +3922,9 @@ $userPrivileges->estimate->todos === 'on')
                                     </button>
                                 </form>
                                 @endif
-                                <form action="/deleteToDo{{$toDo->to_do_id}}" method="post">
+                                <form action="/deleteToDo{{$toDo->to_do_id}}" class="deleteForm" method="post">
                                     @csrf
-                                    <button>
+                                    <button type="button" class="deleteButton">
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                     </button>
                                 </form>
@@ -4012,9 +4004,9 @@ $userPrivileges->estimate->todos === 'on')
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
                                 </button>
                                 <button>
-                                    <form action="/deleteInvoice/{{ $invoices->estimate_complete_invoice_id }}" method="post">
+                                    <form action="/deleteInvoice/{{ $invoices->estimate_complete_invoice_id }}" class="deleteForm" method="post">
                                         @csrf
-                                        <button>
+                                        <button type="button" class="deleteButton">
                                             <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                         </button>
                                     </form>
@@ -4075,12 +4067,12 @@ $userPrivileges->estimate->todos === 'on')
                                 <button id="edit-payment{{ $payments->estimate_complete_invoice_id }}">
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
                                 </button>
-                                    <form action="/deletePayment/{{ $payments->estimate_payment_id }}" class="inline-block" method="post">
-                                        @csrf
-                                        <button>
-                                            <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
-                                        </button>
-                                    </form>
+                                <form action="/deletePayment/{{ $payments->estimate_payment_id }}" class="deleteForm" class="inline-block" method="post">
+                                    @csrf
+                                    <button type="button" class="deleteButton">
+                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         @endforeach
@@ -4157,9 +4149,9 @@ $userPrivileges->estimate->todos === 'on')
                                 ${{ $expense->expense_total }}
                             </td>
                             <td>
-                                <form action="/deleteEstimateExpense/{{$expense->estimate_expense_id}}" method="post">
+                                <form action="/deleteEstimateExpense/{{$expense->estimate_expense_id}}" class="deleteForm" method="post">
                                     @csrf
-                                    <button>
+                                    <button type="button" class="deleteButton">
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                     </button>
                                 </form>
@@ -4252,9 +4244,9 @@ $userPrivileges->estimate->expenses === 'on')
                                 ${{ $expense->expense_total }}
                             </td>
                             <td>
-                                <form action="/deleteEstimateExpense/{{$expense->estimate_expense_id}}" method="post">
+                                <form action="/deleteEstimateExpense/{{$expense->estimate_expense_id}}" class="deleteForm" method="post">
                                     @csrf
-                                    <button>
+                                    <button type="button" class="deleteButton">
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                     </button>
                                 </form>
@@ -5779,6 +5771,7 @@ $userPrivileges->estimate->expenses === 'on')
                                 <option value="no">No</option>
                                 <option value="yes">Yes</option>
                             </select>
+                            <label for="" class="block text-left text-xs text-[#930027]"> Change Order</label>
                         </div>
                         <div class=" my-0 col-span-6">
                             <label for="" class="block  text-left text-sm mb-1"> Item Name</label>
@@ -6278,6 +6271,14 @@ $userPrivileges->estimate->expenses === 'on')
 </script>
 <script>
     $(document).ready(function() {
+        
+        $('.deleteButton').click(function(event) {
+            if (confirm('Are you sure you want to delete?')) {
+                event.preventDefault();
+                $(this).closest('.deleteForm').submit();
+            }
+        });
+
         var estimateTotal = parseFloat("{{ $estimate->estimate_total }}");
         var totalPrice = parseFloat("{{ $totalPrice }}");
         estimateTotal = isNaN(estimateTotal) ? totalPrice : estimateTotal;
@@ -6356,7 +6357,7 @@ $userPrivileges->estimate->expenses === 'on')
                         typeDropdown.val(itemData.item_type);
                         itemNameInput.val(itemData.item_name);
                         itemUnitsInput.val(itemData.item_units);
-                        labourExpense.val(itemData.labour_expense);
+                        labourExpense.val(itemData.labour_expense.toFixed(2));
                         materialExpense.val(itemData.material_expense);
                         itemCost.val(itemData.item_cost);
                         itemPrice.val(itemData.item_price);
@@ -6437,6 +6438,11 @@ $userPrivileges->estimate->expenses === 'on')
                                 newele.remove();
                             });
                             // ============
+                            // Initialize Select2 for the newly added select element
+                            $(`#assembly_id_${index}`).select2({
+                                width: '100%',
+                                minimumResultsForSearch: Infinity
+                            });
 
                         });
 
@@ -6552,8 +6558,8 @@ $userPrivileges->estimate->expenses === 'on')
                         $('#type').val(itemDetail.item_type);
                         $('#itemName').val(itemDetail.item_name);
                         $('#item_units').val(itemDetail.item_unit);
-                        $('#labour_expense').val(itemDetail.labour_expense);
-                        $('#material_expense').val(itemDetail.material_expense);
+                        $('#labour_expense').val(itemDetail.labour_expense.toFixed(2));
+                        $('#material_expense').val(itemDetail.material_expense.toFixed(2));
                         $('#item_cost').val(itemDetail.item_cost);
                         $('#item_price').val(response.item_detail.item_price);
                         $('#item_qty').val(itemDetail.item_qty);
@@ -6631,6 +6637,11 @@ $userPrivileges->estimate->expenses === 'on')
                                     newele.remove();
                                 });
                                 // ============
+                                // Initialize Select2 for the newly added select element
+                                $(`#assembly_id_${index}`).select2({
+                                    width: '100%',
+                                    minimumResultsForSearch: Infinity
+                                });
 
                             });
 
@@ -7486,6 +7497,10 @@ $userPrivileges->estimate->expenses === 'on')
         mulitple_input.append(newele);
         newele.append(rembtn);
 
+        // Reinitialize Select2 for the newly added select element
+        $('#' + selectId).select2({
+            width: '100%'
+        });
 
     });
 
@@ -7502,7 +7517,7 @@ $userPrivileges->estimate->expenses === 'on')
         var labourPrice = 0;
         var materialPrice = 0;
         var findingCostLabour = 0;
-
+        var EstItemQty = $('#item_qty').val();
         // Iterate over each row
         $('[id^="item_unit_by_ass_unit_"]').each(function() {
             // Get the ID of the item_unit_by_ass_unit input for the current row
@@ -7519,7 +7534,6 @@ $userPrivileges->estimate->expenses === 'on')
             var itemCost = selectedOption.data('item-cost');
             var itemUnit = selectedOption.data('unit');
             var assitemIds = selectedOption.data('item-id');
-            var EstItemQty = $('#item_qty').val();
 
             $('#ass_item_id_' + itemId).val(assitemIds);
 
@@ -7567,8 +7581,8 @@ $userPrivileges->estimate->expenses === 'on')
         });
 
         // Set the total labour and material expenses in their respective inputs
-        $('#labour_expense').val(totalLabourExpense);
-        $('#material_expense').val(totalMaterialExpense);
+        $('#labour_expense').val(totalLabourExpense.toFixed(2));
+        $('#material_expense').val(totalMaterialExpense.toFixed(2));
 
         // Calculate the sum of labour expense and material expense
         var totalExpense = labourPrice + materialPrice;
@@ -7584,6 +7598,11 @@ $userPrivileges->estimate->expenses === 'on')
         var priceMinusCostbyitemPrice = priceMinusCost / $('#item_price').val();
         var finalMargin = priceMinusCostbyitemPrice * 100;
         $('#price_margin').text(finalMargin.toFixed(2));
+
+        var grandTotal = totalExpense * EstItemQty;
+
+        $('#item_total').val(grandTotal);
+
     });
 
     $("#cal-menubutton").click(function(e) {
@@ -7810,5 +7829,51 @@ $userPrivileges->estimate->expenses === 'on')
         $('#fixed_input').on('input', updateSubtotalAndTotalFromFixed);
         $('#subtotal_input, #tax_input').on('input', updateTotalFromSubtotalAndTax);
         handleRadioChange(); // Initialize the form with default settings
+
+        $('#itemsForm').on('submit', function(event) {
+    // Prevent the form from submitting immediately
+    event.preventDefault();
+
+    var hasPendingProposal = $('#hasPendingProposal').val() === '1';
+    var additionalItemsSelected = $('#additional_item').val() === 'yes';
+
+    if (hasPendingProposal && !additionalItemsSelected) {
+        var confirmSubmit = confirm('A pending proposal exists. If you submit, the proposal will be canceled. Do you want to continue?');
+
+        if (confirmSubmit) {
+            // If the user confirms, submit the form
+            this.submit();
+        } else {
+            // If the user cancels, do nothing (the form will not be submitted)
+            return false;
+        }
+    } else {
+        // If no pending proposal or additional items are selected, submit the form
+        this.submit();
+    }
+});
+$('#itemTemplatesForm').on('submit', function(event) {
+    // Prevent the form from submitting immediately
+    event.preventDefault();
+
+    var hasPendingProposal = $('#hasPendingProposal').val() === '1';
+    var additionalItemsSelected = $('#additional_item').val() === 'yes';
+
+    if (hasPendingProposal && !additionalItemsSelected) {
+        var confirmSubmit = confirm('A pending proposal exists. If you submit, the proposal will be canceled. Do you want to continue?');
+
+        if (confirmSubmit) {
+            // If the user confirms, submit the form
+            this.submit();
+        } else {
+            // If the user cancels, do nothing (the form will not be submitted)
+            return false;
+        }
+    } else {
+        // If no pending proposal or additional items are selected, submit the form
+        this.submit();
+    }
+});
+
     });
 </script>

@@ -285,7 +285,7 @@ class EstimateController extends Controller
     public function getEstimateActivity($id)
     {
         $userDetails = session('user_details');
-        $activities = EstimateActivity::with('user')->where('estimate_id', $id)->get();
+        $activities = EstimateActivity::with('user')->where('estimate_id', $id)->orderBy('estimate_activity_id', 'desc')->get();
 
         return view('estimate_activity', ['user_details' => $userDetails, 'activities' => $activities]);
     }
@@ -553,6 +553,16 @@ class EstimateController extends Controller
                     }
                 }
             }
+            
+                $pendingProposal = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->where('proposal_status', 'pending')->first();
+
+                if ($pendingProposal) {
+                    $pendingProposal->proposal_status = 'canceled';
+                    
+                    $pendingProposal->save();
+                }
+
+            
             $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Line Items Added', "New Line items has been added from the template.");
             return response()->json(['success' => true, 'message' => 'Item Added!'], 200);
         } catch (\Exception $e) {
@@ -1210,7 +1220,7 @@ class EstimateController extends Controller
     public function deletePayment($id)
     {
         try {
-            
+            $userDetails = session('user_details');
             $payment = EstimatePayments::where('estimate_payment_id', $id)->first();
 
             if (!$payment) {
@@ -1226,6 +1236,7 @@ class EstimateController extends Controller
             $invoice->save();
             $estimate->save();
 
+            $this->addEstimateActivity($userDetails, $payment->estimate_id, 'Payment Deleted', "A payment has been deleted.");
             $payment->delete();
             
             return response()->json(['success' => true, 'message' => 'Payment deleted!'], 200);
@@ -1240,6 +1251,7 @@ class EstimateController extends Controller
     public function updatePayment(Request $request)
     {
         try {
+            $userDetails = session('user_details');
             $validatedData = $request->validate([
                 'payment_id' => 'required',
                 'invoice_date' => 'nullable',
@@ -1259,7 +1271,7 @@ class EstimateController extends Controller
             }
 
             $payment->save();
-
+            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Payment Updated', "An existing payment has been updated.");
             return response()->json(['success' => true, 'message' => 'Payment updated!'], 200);
 
         } catch (\Exception $e) {
@@ -1367,7 +1379,7 @@ class EstimateController extends Controller
     public function updateInvoice(Request $request)
     {
         try {
-
+            $userDetails = session('user_details');
             $validatedData = $request->validate([
                 'invoice_id' => 'required',
                 'estimate_id' => 'required',
@@ -1399,6 +1411,7 @@ class EstimateController extends Controller
 
             $estimate->save();
 
+            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Invoice Updated', "The details of an existing invoice updated.");
             return response()->json(['success' => true, 'message' => 'Invoice updated successfully!'], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -1441,7 +1454,7 @@ class EstimateController extends Controller
             $estimate->save();
 
             $invoice->delete();
-
+            $this->addEstimateActivity($userDetails, $invoice->estimate_id, 'Invoice Deleted', "An Invoice has been deleted.");
             return response()->json(['success' => true, 'message' => 'Invoice deleted Successfully!'], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -2355,6 +2368,18 @@ class EstimateController extends Controller
                     }
                 }
             }
+
+            if ($validatedData['additional_item'] == 'no') {
+                $pendingProposal = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->where('proposal_status', 'pending')->first();
+
+                if ($pendingProposal) {
+                    $pendingProposal->proposal_status = 'canceled';
+                    
+                    $pendingProposal->save();
+                }
+
+            }
+            
             // foreach ($itemsData as $item) {
             //     EstimateItem::create([
             //         'added_user_id' => $userDetails['id'],
