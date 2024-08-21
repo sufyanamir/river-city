@@ -2105,11 +2105,11 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item->item_description)
                                 <p class="font-medium">Description:</p>
-                                {{ $item->item_description }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
                                 @endif
                                 @if ($item->item_note)
                                 <p class="font-medium">Note:</p>
-                                {{ $item->item_note }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
                                 @endif
                                 </p>
                             </td>
@@ -2203,11 +2203,11 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item['item_description'])
                                 <p class="font-medium">Description:</p>
-                                {{ $item['item_description'] }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}
                                 @endif
                                 @if ($item['item_note'])
                                 <p class="font-medium">Note:</p>
-                                {{ $item['item_note'] }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_note']) !!}
                                 @endif
                                 </p>
                             </td>
@@ -2290,11 +2290,11 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item->item_description)
                                 <p class="font-medium">Description:</p>
-                                {{ $item->item_description }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
                                 @endif
                                 @if ($item->item_note)
                                 <p class="font-medium">Note:</p>
-                                {{ $item->item_note }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
                                 @endif
                                 </p>
                             </td>
@@ -2358,8 +2358,8 @@ $userPrivileges->estimate->items === 'on')
                             <td class="px-6 py-4 w-[30%]">
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($itemData['description'])
-                                <p class="font-medium">Description:</p>
-                                {{ $itemData['description'] }}
+                                    <p class="font-medium">Description:</p>
+                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $itemData['item_description']) !!}
                                 @endif
                                 </p>
                             </td>
@@ -2388,11 +2388,11 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item['item_description'])
                                 <p class="font-medium">Description:</p>
-                                {{ $item['item_description'] }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}
                                 @endif
                                 @if ($item['item_note'])
                                 <p class="font-medium">Note:</p>
-                                {{ $item['item_note'] }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_note']) !!}
                                 @endif
                                 </p>
                             </td>
@@ -2474,11 +2474,11 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item->item_description)
                                 <p class="font-medium">Description:</p>
-                                {{ $item->item_description }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
                                 @endif
                                 @if ($item->item_note)
                                 <p class="font-medium">Note:</p>
-                                {{ $item->item_note }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
                                 @endif
                                 </p>
                             </td>
@@ -2543,7 +2543,7 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($itemData['description'])
                                 <p class="font-medium">Description:</p>
-                                {{ $itemData['description'] }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $itemData['item_description']) !!}
                                 @endif
                                 </p>
                             </td>
@@ -2572,11 +2572,11 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item['item_description'])
                                 <p class="font-medium">Description:</p>
-                                {{ $item['item_description'] }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}
                                 @endif
                                 @if ($item['item_note'])
                                 <p class="font-medium">Note:</p>
-                                {{ $item['item_note'] }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_note']) !!}
                                 @endif
                                 </p>
                             </td>
@@ -2660,11 +2660,11 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item->item_description)
                                 <p class="font-medium">Description:</p>
-                                {{ $item->item_description }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
                                 @endif
                                 @if ($item->item_note)
                                 <p class="font-medium">Note:</p>
-                                {{ $item->item_note }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
                                 @endif
                                 </p>
                             </td>
@@ -2729,7 +2729,7 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($itemData['description'])
                                 <p class="font-medium">Description:</p>
-                                {{ $itemData['description'] }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $itemData['item_description']) !!}
                                 @endif
                                 </p>
                             </td>
@@ -2758,11 +2758,11 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item['item_description'])
                                 <p class="font-medium">Description:</p>
-                                {{ $item['item_description'] }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}
                                 @endif
                                 @if ($item['item_note'])
                                 <p class="font-medium">Note:</p>
-                                {{ $item['item_note'] }}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_note']) !!}
                                 @endif
                                 </p>
                             </td>
