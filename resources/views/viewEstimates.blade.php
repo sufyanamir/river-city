@@ -2359,7 +2359,7 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($itemData['description'])
                                     <p class="font-medium">Description:</p>
-                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $itemData['item_description']) !!}
+                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $itemData['description']) !!}
                                 @endif
                                 </p>
                             </td>
@@ -2543,7 +2543,7 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($itemData['description'])
                                 <p class="font-medium">Description:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $itemData['item_description']) !!}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $itemData['description']) !!}
                                 @endif
                                 </p>
                             </td>
@@ -2729,7 +2729,7 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($itemData['description'])
                                 <p class="font-medium">Description:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $itemData['item_description']) !!}
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $itemData['description']) !!}
                                 @endif
                                 </p>
                             </td>
