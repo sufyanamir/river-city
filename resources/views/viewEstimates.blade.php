@@ -7849,7 +7849,7 @@ $userPrivileges->estimate->expenses === 'on')
         }
     } else {
         // If no pending proposal or additional items are selected, submit the form
-        this.submit();
+        return true;
     }
 });
 $('#itemTemplatesForm').on('submit', function(event) {
@@ -7871,7 +7871,7 @@ $('#itemTemplatesForm').on('submit', function(event) {
         }
     } else {
         // If no pending proposal or additional items are selected, submit the form
-        this.submit();
+        return true;
     }
 });
 
