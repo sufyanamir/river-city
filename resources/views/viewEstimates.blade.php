@@ -7834,8 +7834,8 @@ $userPrivileges->estimate->expenses === 'on')
     // Prevent the form from submitting immediately
     event.preventDefault();
 
-    var hasPendingProposal = $('#hasPendingProposal').val() === '1';
-    var additionalItemsSelected = $('#additional_item').val() === 'yes';
+    var hasPendingProposal = $('#hasPendingProposal').val() == '1';
+    var additionalItemsSelected = $('#additional_item').val() == 'yes';
 
     if (hasPendingProposal && !additionalItemsSelected) {
         var confirmSubmit = confirm('A pending proposal exists. If you submit, the proposal will be canceled. Do you want to continue?');
@@ -7856,8 +7856,8 @@ $('#itemTemplatesForm').on('submit', function(event) {
     // Prevent the form from submitting immediately
     event.preventDefault();
 
-    var hasPendingProposal = $('#hasPendingProposal').val() === '1';
-    var additionalItemsSelected = $('#additional_item').val() === 'yes';
+    var hasPendingProposal = $('#hasPendingProposal').val() == '1';
+    var additionalItemsSelected = $('#additional_item').val() == 'yes';
 
     if (hasPendingProposal && !additionalItemsSelected) {
         var confirmSubmit = confirm('A pending proposal exists. If you submit, the proposal will be canceled. Do you want to continue?');
