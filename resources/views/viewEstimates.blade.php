@@ -6357,7 +6357,7 @@ $userPrivileges->estimate->expenses === 'on')
                         typeDropdown.val(itemData.item_type);
                         itemNameInput.val(itemData.item_name);
                         itemUnitsInput.val(itemData.item_units);
-                        labourExpense.val(itemData.labour_expense.toFixed(2));
+                        labourExpense.val(itemData.labour_expense);
                         materialExpense.val(itemData.material_expense);
                         itemCost.val(itemData.item_cost);
                         itemPrice.val(itemData.item_price);
@@ -7581,8 +7581,8 @@ $userPrivileges->estimate->expenses === 'on')
         });
 
         // Set the total labour and material expenses in their respective inputs
-        $('#labour_expense').val(totalLabourExpense.toFixed(2));
-        $('#material_expense').val(totalMaterialExpense.toFixed(2));
+        $('#labour_expense').val(totalLabourExpense);
+        $('#material_expense').val(totalMaterialExpense);
 
         // Calculate the sum of labour expense and material expense
         var totalExpense = labourPrice + materialPrice;
