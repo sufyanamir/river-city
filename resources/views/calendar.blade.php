@@ -357,7 +357,10 @@
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <!-- Modal content here -->
                 <div class="flex justify-between">
-                    <h2 class="text-xl font-semibold mb-2 text-[#F5222D]" id="">View Details</h2>
+                    <div class=" flex justify-start gap-3">
+                        <a id="viewEstimateIcon" class="inline-block" href=""><img src="{{asset('assets/icons/view-icon.svg')}}" alt="view-icon"></a>
+                        <h2 class="text-xl font-semibold mb-2 text-[#F5222D]" id=""> View Details</h2>
+                    </div>
                     <button class="modal-close" type="button" onclick="clearModalAndClose();">
                         <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
                     </button>
@@ -404,7 +407,8 @@
         $('#event-note').text('');
         $('#event-start').text('');
         $('#event-end').text('');
-        
+        $('#viewEstimateIcon').removeClass('hidden');
+        $('#viewEstimateIcon').attr('href', '');
         // Hide the modal
         $('#event-modal').addClass('hidden');
     }
@@ -651,6 +655,7 @@ $('#end_date').val(endDateTime);
                             $('#event-note').text(response.note);
                             $('#event-start').text(response.start_date);
                             $('#event-end').text(response.end_date);
+                            $('#viewEstimateIcon').addClass('hidden');
                         } else if (eventType === 'estimate') {
                             $('#event-title').text(response.customer_name + ' ' + response.customer_last_name);
                             $('#event-note').text('');
@@ -658,6 +663,7 @@ $('#end_date').val(endDateTime);
                             $('#event-end').text(response.scheduled_end_date);
                             $('#event-project-name').text(response.project_name);
                             $('#event-customer-address').text(response.customer_address);
+                            $('#viewEstimateIcon').attr('href', '/viewEstimate/' + response.estimate_id);
                         }
 
                         // Show the modal

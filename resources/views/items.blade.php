@@ -586,7 +586,7 @@ $userPrivileges = session('user_details')['user_privileges'];
 
             if (selectedValue === 'assemblies') {
                 multiAddItemsDiv.removeClass('hidden');
-                $('#labour_expense, #material_expense, #item_price').attr('readonly', true).addClass('bg-gray-200');
+                $('#labour_expense, #material_expense').attr('readonly', true).addClass('bg-gray-200');
             } else if (selectedValue === 'material') {
                 multiAddItemsDiv.addClass('hidden');
                 $('#labour_expense').attr('readonly', true).addClass('bg-gray-200');
