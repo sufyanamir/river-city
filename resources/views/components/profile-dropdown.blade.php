@@ -7,7 +7,7 @@
             @endif
         </div>
         <button type="button" class="" id="profile-btn">
-            <img class="h-10 w-10 rounded-md" style="object-fit: contain;" src="{{ (isset(session('user_details')['user_image']) && asset_exists(session('user_details')['user_image'])) ? asset(session('user_details')['user_image']) : asset('assets/images/demo-user.svg') }}" alt="icon">
+            <img class="h-10 w-10 rounded-md" style="object-fit: cover;" src="{{ (isset(session('user_details')['user_image']) && asset_exists(session('user_details')['user_image'])) ? asset(session('user_details')['user_image']) : asset('assets/images/demo-user.svg') }}" alt="icon">
         </button>
     </div>
     <div id="profile-menu" class=" topbar-manuLeaving absolute right-1 z-10 mt-2 w-56 origin-top-right rounded-md bg-[#930027] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
@@ -21,7 +21,7 @@
                     <p class=" mx-auto">My Account</p>
                 </div>
             </a>
-            <a href="/" class=" sidebar-link text-white block px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200" role="menuitem" tabindex="-1" id="menu-item-1">
+            <a href="/logout" class=" sidebar-link text-white block px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200" role="menuitem" tabindex="-1" id="menu-item-1">
                 <div class="flex justify-start">
                     <img class=" plain-icon" src="{{ asset('assets/icons/logout2.svg') }}" alt="icon">
                     <img class=" hover-icon hidden" src="{{ asset('assets/icons/hover-logout2.svg') }}" alt="icon">
