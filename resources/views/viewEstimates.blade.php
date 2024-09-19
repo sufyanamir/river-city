@@ -3092,9 +3092,9 @@ $userPrivileges->estimate->items === 'on')
                             </a>
                         </td>
                         <td>
-                                <form action="/deleteFile{{ $file->estimate_file_id }}" class="deleteForm" method="post">
+                                <form action="/deleteFile{{ $file->estimate_file_id }}" class="" method="post">
                                     @csrf
-                                    <button type="button" class="deleteButton">
+                                    <button type="submit" class="">
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                     </button>
                                 </form>
@@ -3142,9 +3142,9 @@ $userPrivileges->estimate->files === 'on')
                             </a>
                         </td>
                         <td>
-                                <form action="/deleteFile{{ $file->estimate_file_id }}" class="deleteForm" method="post">
+                                <form action="/deleteFile{{ $file->estimate_file_id }}" class="" method="post">
                                     @csrf
-                                    <button type="button" class="deleteButton">
+                                    <button type="submit" class="">
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                     </button>
                                 </form>
@@ -3293,14 +3293,17 @@ $userPrivileges->estimate->photos === 'on')
                                         </button>
                                     </a>
                                     @endif
+                                    @php
+                                        $totalPrice = $estimate_items->where('item_status', 'included')->sum('item_total');
+                                    @endphp
                                     @if($proposal->proposal_status == 'pending')
-                                    <form action="/acceptProposal/{{ $estimate->estimate_id }}" method="post">
-                                        @csrf
-                                        <input type="hidden" name="estimate_total" value="{{$totalPrice + ($totalPrice * $estimate->tax_rate) / 100}}">
-                                        <button class="px-2 py-2" title="Accept without signature">
-                                            <i class="fa-solid fa-clipboard-check" style="color: #930027; font-size: 25px;"></i>
-                                        </button>
-                                    </form>
+                                        <form action="/acceptProposal/{{ $estimate->estimate_id }}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="estimate_total" value="{{ $totalPrice + ($totalPrice * $estimate->tax_rate) / 100 }}">
+                                            <button class="px-2 py-2" title="Accept without signature">
+                                                <i class="fa-solid fa-clipboard-check" style="color: #930027; font-size: 25px;"></i>
+                                            </button>
+                                        </form>
                                     @endif
                                 </div>
                             </td>
@@ -3440,9 +3443,9 @@ $userPrivileges->estimate->proposals === 'on')
                                     <button id="edit-note-modal{{ $note->estimate_note_id }}">
                                         <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
                                     </button>
-                                        <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" class="deleteForm" method="post">
+                                        <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" class="" method="post">
                                             @csrf
-                                            <button type="button" class="deleteButton">
+                                            <button type="submit" class="">
                                                 <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                             </button>
                                         </form>
@@ -3558,9 +3561,9 @@ $userPrivileges->estimate->notes === 'on')
                                     <button id="edit-note-modal{{ $note->estimate_note_id }}">
                                         <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
                                     </button>
-                                        <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" class="deleteForm" method="post">
+                                        <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" class="" method="post">
                                             @csrf
-                                            <button type="button" class="deleteButton">
+                                            <button type="submit" class="">
                                                 <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                             </button>
                                         </form>
@@ -3834,9 +3837,9 @@ $userPrivileges->estimate->emails === 'on')
                                     </button>
                                 </form>
                                 @endif
-                                <form action="/deleteToDo{{$toDo->to_do_id}}" class="deleteForm" method="post">
+                                <form action="/deleteToDo{{$toDo->to_do_id}}" class="" method="post">
                                     @csrf
-                                    <button type="button" class="deleteButton">
+                                    <button type="submit" class="">
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                     </button>
                                 </form>
@@ -3922,9 +3925,9 @@ $userPrivileges->estimate->todos === 'on')
                                     </button>
                                 </form>
                                 @endif
-                                <form action="/deleteToDo{{$toDo->to_do_id}}" class="deleteForm" method="post">
+                                <form action="/deleteToDo{{$toDo->to_do_id}}" class="" method="post">
                                     @csrf
-                                    <button type="button" class="deleteButton">
+                                    <button type="submit" class="">
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                     </button>
                                 </form>
@@ -4004,9 +4007,9 @@ $userPrivileges->estimate->todos === 'on')
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
                                 </button>
                                 <button>
-                                    <form action="/deleteInvoice/{{ $invoices->estimate_complete_invoice_id }}" class="deleteForm" method="post">
+                                    <form action="/deleteInvoice/{{ $invoices->estimate_complete_invoice_id }}" id="deleteForm" class="deleteForm" method="post">
                                         @csrf
-                                        <button type="button" class="deleteButton">
+                                        <button type="submit" id="deleteButton" class="deleteButton">
                                             <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                         </button>
                                     </form>
@@ -4067,9 +4070,9 @@ $userPrivileges->estimate->todos === 'on')
                                 <button id="edit-payment{{ $payments->estimate_complete_invoice_id }}">
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
                                 </button>
-                                <form action="/deletePayment/{{ $payments->estimate_payment_id }}" class="deleteForm" class="inline-block" method="post">
+                                <form action="/deletePayment/{{ $payments->estimate_payment_id }}" class="" class="inline-block" method="post">
                                     @csrf
-                                    <button type="button" class="deleteButton">
+                                    <button type="submit" class="">
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                     </button>
                                 </form>
@@ -4149,9 +4152,9 @@ $userPrivileges->estimate->todos === 'on')
                                 ${{ $expense->expense_total }}
                             </td>
                             <td>
-                                <form action="/deleteEstimateExpense/{{$expense->estimate_expense_id}}" class="deleteForm" method="post">
+                                <form action="/deleteEstimateExpense/{{$expense->estimate_expense_id}}" class="" method="post">
                                     @csrf
-                                    <button type="button" class="deleteButton">
+                                    <button type="submit" class="">
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                     </button>
                                 </form>
@@ -4244,9 +4247,9 @@ $userPrivileges->estimate->expenses === 'on')
                                 ${{ $expense->expense_total }}
                             </td>
                             <td>
-                                <form action="/deleteEstimateExpense/{{$expense->estimate_expense_id}}" class="deleteForm" method="post">
+                                <form action="/deleteEstimateExpense/{{$expense->estimate_expense_id}}" class="" method="post">
                                     @csrf
-                                    <button type="button" class="deleteButton">
+                                    <button type="submit" class="">
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                     </button>
                                 </form>
@@ -6272,12 +6275,12 @@ $userPrivileges->estimate->expenses === 'on')
 <script>
     $(document).ready(function() {
         
-        $('.deleteButton').click(function(event) {
-            if (confirm('Are you sure you want to delete?')) {
-                event.preventDefault();
-                $(this).closest('.deleteForm').submit();
-            }
-        });
+        // $('.deleteButton').click(function(event) {
+        //     if (confirm('Are you sure you want to delete?')) {
+        //         event.preventDefault();
+        //         $(this).closest('form').submit();
+        //     }
+        // });
 
         var estimateTotal = parseFloat("{{ $estimate->estimate_total }}");
         var totalPrice = parseFloat("{{ $totalPrice }}");
