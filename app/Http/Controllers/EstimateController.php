@@ -1230,10 +1230,11 @@ class EstimateController extends Controller
             $invoice = AssignPayment::where('estimate_complete_invoice_id', $payment->estimate_complete_invoice_id)->first();
             $estimate = Estimate::where('estimate_id', $payment->estimate_id)->first();
             
-            $invoice->invoice_status = 'unpaid';
+            if ($invoice) {
+                $invoice->invoice_status = 'unpaid';
+                $invoice->save();
+            }
             $estimate->invoice_paid_total = $estimate->invoice_paid_total - $payment->invoice_total;
-
-            $invoice->save();
             $estimate->save();
 
             $this->addEstimateActivity($userDetails, $payment->estimate_id, 'Payment Deleted', "A payment has been deleted.");
@@ -1265,13 +1266,18 @@ class EstimateController extends Controller
             $payment->invoice_total = $validatedData['invoice_amount'];
             $payment->note = $validatedData['note'];
 
+            $estimate = Estimate::where('estimate_id', $payment->estimate_id)->first();
+
+            $estimate->invoice_paid_total = $validatedData['invoice_amount'];
+
             if ($invoice->invoice_status == 'unpaid') {
                 $invoice->invoice_status = 'paid';
                 $invoice->save();
             }
 
             $payment->save();
-            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Payment Updated', "An existing payment has been updated.");
+            $estimate->save();
+            $this->addEstimateActivity($userDetails, $payment->estimate_id, 'Payment Updated', "An existing payment has been updated.");
             return response()->json(['success' => true, 'message' => 'Payment updated!'], 200);
 
         } catch (\Exception $e) {
