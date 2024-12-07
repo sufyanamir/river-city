@@ -209,19 +209,21 @@ class EstimateController extends Controller
 
             $validatedData = $request->validate([
                 'estimate_id' => 'required',
-                'estimate_item_id' => 'required',
+                'estimate_item_id' => 'nullable',
                 'item_status' => 'required',
-                'template_status' => 'nullable',
+                'group_id' => 'nullable',
             ]);
 
-            if (isset($validatedData['template_status']) == 1) {
+            if ($validatedData['group_id'] != null) {
+                
+                $estimateItems = EstimateItem::where('group_id', $validatedData['group_id'])->get();
 
-                $estimateItem = EstimateItemTemplates::where('est_template_id', $validatedData['estimate_item_id'])->first();
-                $estimateItem->template_status = $validatedData['item_status'];
-
-                $estimateItem->save();
-            } else {
-
+                foreach ($estimateItems as $item) {
+                    $item->item_status = $validatedData['item_status'];
+                    $item->save();
+                }
+                
+            }else{                
                 $estimateItem = EstimateItem::where('estimate_item_id', $validatedData['estimate_item_id'])->first();
                 $estimateItem->item_status = $validatedData['item_status'];
 
@@ -475,7 +477,7 @@ class EstimateController extends Controller
             if (isset($validatedData['template_item_id'])) {
                 foreach ($validatedData['template_item_id'] as $key => $itemId) {
                     $itemQty = $validatedData['template_item_qty'][$key];
-                    if ($itemQty != 0) {
+                    if ($itemQty != null) {
 
                         $item = Items::with('assemblies')->find($itemId);
 
