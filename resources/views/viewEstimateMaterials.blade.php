@@ -108,11 +108,11 @@
                                             <p class="text-[16px]/[18px] text-[#323C47] font">
                                                 @if ($item->item_description)
                                             <p class="font-medium">Description:</p>
-                                            {{ $item->item_description }}
+                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
                                             @endif
                                             @if ($item->item_note)
                                             <p class="font-medium">Note:</p>
-                                            {{ $item->item_note }}
+                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
                                             @endif
                                             </p>
                                         </td>
@@ -149,9 +149,9 @@
                                                                     @foreach($item->assemblies as $assembly)
                                                                     <tr class="bg-white border-b">
                                                                         <td class="px-6 py-4" style="width: 85% !important; text-align:justify">
-                                                                            {{$assembly->est_ass_item_name}}
+                                                                        {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->est_ass_item_name) !!}
                                                                             <br>
-                                                                            {{$assembly->ass_item_description}}
+                                                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
                                                                         </td>
                                                                         <td class="text-center">
                                                                             {{number_format($assembly->ass_item_qty, 2)}} <br> {{$assembly->ass_item_unit}}
@@ -225,11 +225,11 @@
                                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                                     @if ($item->item_description)
                                                 <p class="font-medium">Description:</p>
-                                                {{ $item->item_description }}
+                                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
                                                 @endif
                                                 @if ($item->item_note)
                                                 <p class="font-medium">Note:</p>
-                                                {{ $item->item_note }}
+                                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
                                                 @endif
                                                 </p>
                                             </td>
@@ -266,9 +266,9 @@
                                                                         @foreach($item->assemblies as $assembly)
                                                                         <tr class="bg-white border-b">
                                                                             <td class="px-6 py-4" style="width: 85% !important; text-align:justify">
-                                                                                {{$assembly->est_ass_item_name}}
+                                                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->est_ass_item_name) !!}
                                                                                 <br>
-                                                                                {{$assembly->ass_item_description}}
+                                                                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
                                                                             </td>
                                                                             <td class="text-center">
                                                                                 {{number_format($assembly->ass_item_qty, 2)}} <br> {{$assembly->ass_item_unit}}
@@ -337,7 +337,7 @@
                                         <label class="text-lg font-semibold text-[#323C47]" for="">{{ $itemName->item_name }}</label>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_description'] }}</label>
+                                        <label class="text-lg font-semibold text-[#323C47]" for="">{!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}</label>
                                     </td>
                                     <td class="px-6 py-4">
                                         <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_qty'] }}</label> <br> {{$itemName->item_units}}

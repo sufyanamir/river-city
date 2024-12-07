@@ -882,24 +882,6 @@ $discountedTotal = null;
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <!-- <div class=" text-left col-span-2">
-                                                                <h3 class=" font-medium text-lg">Items:</h3>
-                                                                {{-- <select id="customer" name="customer" autocomplete="customer-name" class=" p-2 w-[92%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                                                                    <option>Item name</option>
-                                                                    <option>Interior</option>
-                                                                    <option>Exterior</option>
-                                                                    <option>Labour</option>
-                                                                </select> --}}
-                                                                {{-- ======multiple item inputs===== --}}
-                                                                <div id="muliple_items">
-                                                                </div>
-
-                                                                <div class=" text-right mt-2">
-                                                                    <button type="button" class=" gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="selectItems" aria-expanded="true" aria-haspopup="true">
-                                                                        <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                                                                    </button>
-                                                                </div>
-                                                            </div> -->
                                                             <div class="my-2 col-span-2 relative">
                                                                 <label for="group_description">Description:</label>
                                                                 <textarea name="group_description" id="group_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">{{$group->group_description}}</textarea>
@@ -941,8 +923,61 @@ $discountedTotal = null;
                                 </div>
                                 @endif
                                 @endforeach
-                                <div>
-                                    <h1 class=" font-medium my-auto p-2">{{$groupName}}</h1>
+                                <div class=" relative">
+                                    <h1 class=" font-medium my-auto p-2 inline-block">{{$groupName}}</h1>
+                                    <div class=" z-10 inline-block absolute">
+                                        <button type="button" id="exclude-include-menuBtn{{$item->group_id}}" class="inline p-2">
+                                            <i class="fa-solid fa-square-caret-down text-[#fff] text-lg"></i>
+                                        </button>
+                                        <div id="exclude-include-menu{{$item->group_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                                                <li>
+                                                    <form action="/includeexcludeEstimateItem" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                        <input type="hidden" name="group_id" value="{{$item->group_id}}">
+                                                        <input type="hidden" name="item_status" value="included">
+                                                        <input type="hidden" name="estimate_item_id" value="">
+                                                        <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                            Include
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                                <hr>
+                                                <li>
+                                                    <form action="/includeexcludeEstimateItem" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                        <input type="hidden" name="group_id" value="{{$item->group_id}}">
+                                                        <input type="hidden" name="item_status" value="excluded">
+                                                        <input type="hidden" name="estimate_item_id" value="">
+                                                        <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                            Exclude
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        document.getElementById("exclude-include-menuBtn{{$item->group_id}}").addEventListener("click", function(e) {
+                                            e.stopPropagation(); // Prevents the click event from reaching the document body
+                                            var dropdownMenu = document.getElementById("exclude-include-menu{{$item->group_id}}");
+                                            dropdownMenu.classList.toggle("topbar-menuEntring");
+                                            dropdownMenu.classList.toggle("topbar-manuLeaving");
+                                        });
+
+                                        document.addEventListener('click', function(e) {
+                                            var btn = document.getElementById("exclude-include-menuBtn{{$item->group_id}}");
+                                            var dropdownMenu = document.getElementById("exclude-include-menu{{$item->group_id}}");
+
+                                            if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                                                // Click occurred outside the button and dropdown, hide the dropdown
+                                                dropdownMenu.classList.add("topbar-manuLeaving");
+                                                dropdownMenu.classList.remove("topbar-menuEntring");
+                                            }
+                                        });
+                                    </script>
                                 </div>
                             </div>
                             @endif
@@ -1126,10 +1161,10 @@ $discountedTotal = null;
                                                                     <tr class="bg-white border-b">
                                                                         <td class="px-6 py-4"></td>
                                                                         <td class="px-6 py-4">
-                                                                        {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->est_ass_item_name) !!}
+                                                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->est_ass_item_name) !!}
                                                                         </td>
                                                                         <td class="px-6 py-4 w-[30%]">
-                                                                        {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
+                                                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
                                                                         </td>
                                                                         @if($item->group)
                                                                         <td class="text-center">
@@ -1545,7 +1580,7 @@ $discountedTotal = null;
                                                                     {{$assembly->est_ass_item_name}}
                                                                 </td>
                                                                 <td class="px-6 py-4 w-[30%]">
-                                                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
+                                                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
                                                                 </td>
                                                                 @if($item->group)
                                                                 <td class="text-center">
@@ -2358,8 +2393,8 @@ $userPrivileges->estimate->items === 'on')
                             <td class="px-6 py-4 w-[30%]">
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($itemData['description'])
-                                    <p class="font-medium">Description:</p>
-                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $itemData['description']) !!}
+                                <p class="font-medium">Description:</p>
+                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $itemData['description']) !!}
                                 @endif
                                 </p>
                             </td>
@@ -3092,12 +3127,12 @@ $userPrivileges->estimate->items === 'on')
                             </a>
                         </td>
                         <td>
-                                <form action="/deleteFile{{ $file->estimate_file_id }}" class="" method="post">
-                                    @csrf
-                                    <button type="submit" class="">
-                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
-                                    </button>
-                                </form>
+                            <form action="/deleteFile{{ $file->estimate_file_id }}" class="" method="post">
+                                @csrf
+                                <button type="submit" class="">
+                                    <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                </button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach
@@ -3142,12 +3177,12 @@ $userPrivileges->estimate->files === 'on')
                             </a>
                         </td>
                         <td>
-                                <form action="/deleteFile{{ $file->estimate_file_id }}" class="" method="post">
-                                    @csrf
-                                    <button type="submit" class="">
-                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
-                                    </button>
-                                </form>
+                            <form action="/deleteFile{{ $file->estimate_file_id }}" class="" method="post">
+                                @csrf
+                                <button type="submit" class="">
+                                    <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                </button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach
@@ -3294,16 +3329,16 @@ $userPrivileges->estimate->photos === 'on')
                                     </a>
                                     @endif
                                     @php
-                                        $totalPrice = $estimate_items->where('item_status', 'included')->sum('item_total');
+                                    $totalPrice = $estimate_items->where('item_status', 'included')->sum('item_total');
                                     @endphp
                                     @if($proposal->proposal_status == 'pending')
-                                        <form action="/acceptProposal/{{ $estimate->estimate_id }}" method="post">
-                                            @csrf
-                                            <input type="hidden" name="estimate_total" value="{{ $totalPrice + ($totalPrice * $estimate->tax_rate) / 100 }}">
-                                            <button class="px-2 py-2" title="Accept without signature">
-                                                <i class="fa-solid fa-clipboard-check" style="color: #930027; font-size: 25px;"></i>
-                                            </button>
-                                        </form>
+                                    <form action="/acceptProposal/{{ $estimate->estimate_id }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="estimate_total" value="{{ $totalPrice + ($totalPrice * $estimate->tax_rate) / 100 }}">
+                                        <button class="px-2 py-2" title="Accept without signature">
+                                            <i class="fa-solid fa-clipboard-check" style="color: #930027; font-size: 25px;"></i>
+                                        </button>
+                                    </form>
                                     @endif
                                 </div>
                             </td>
@@ -3443,12 +3478,12 @@ $userPrivileges->estimate->proposals === 'on')
                                     <button id="edit-note-modal{{ $note->estimate_note_id }}">
                                         <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
                                     </button>
-                                        <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" class="" method="post">
-                                            @csrf
-                                            <button type="submit" class="">
-                                                <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
-                                            </button>
-                                        </form>
+                                    <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" class="" method="post">
+                                        @csrf
+                                        <button type="submit" class="">
+                                            <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                             <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addNote-modal{{ $note->estimate_note_id }}">
@@ -3561,12 +3596,12 @@ $userPrivileges->estimate->notes === 'on')
                                     <button id="edit-note-modal{{ $note->estimate_note_id }}">
                                         <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
                                     </button>
-                                        <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" class="" method="post">
-                                            @csrf
-                                            <button type="submit" class="">
-                                                <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
-                                            </button>
-                                        </form>
+                                    <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" class="" method="post">
+                                        @csrf
+                                        <button type="submit" class="">
+                                            <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                             <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addNote-modal{{ $note->estimate_note_id }}">
@@ -6274,7 +6309,7 @@ $userPrivileges->estimate->expenses === 'on')
 </script>
 <script>
     $(document).ready(function() {
-        
+
         // $('.deleteButton').click(function(event) {
         //     if (confirm('Are you sure you want to delete?')) {
         //         event.preventDefault();
@@ -7834,49 +7869,49 @@ $userPrivileges->estimate->expenses === 'on')
         handleRadioChange(); // Initialize the form with default settings
 
         $('#itemsForm').on('submit', function(event) {
-    // Prevent the form from submitting immediately
-    event.preventDefault();
+            // Prevent the form from submitting immediately
+            event.preventDefault();
 
-    var hasPendingProposal = $('#hasPendingProposal').val() == '1';
-    var additionalItemsSelected = $('#additional_item').val() == 'yes';
+            var hasPendingProposal = $('#hasPendingProposal').val() == '1';
+            var additionalItemsSelected = $('#additional_item').val() == 'yes';
 
-    if (hasPendingProposal && !additionalItemsSelected) {
-        var confirmSubmit = confirm('A pending proposal exists. If you submit, the proposal will be canceled. Do you want to continue?');
+            if (hasPendingProposal && !additionalItemsSelected) {
+                var confirmSubmit = confirm('A pending proposal exists. If you submit, the proposal will be canceled. Do you want to continue?');
 
-        if (confirmSubmit) {
-            // If the user confirms, submit the form
-            this.submit();
-        } else {
-            // If the user cancels, do nothing (the form will not be submitted)
-            return false;
-        }
-    } else {
-        // If no pending proposal or additional items are selected, submit the form
-        return true;
-    }
-});
-$('#itemTemplatesForm').on('submit', function(event) {
-    // Prevent the form from submitting immediately
-    event.preventDefault();
+                if (confirmSubmit) {
+                    // If the user confirms, submit the form
+                    this.submit();
+                } else {
+                    // If the user cancels, do nothing (the form will not be submitted)
+                    return false;
+                }
+            } else {
+                // If no pending proposal or additional items are selected, submit the form
+                return true;
+            }
+        });
+        $('#itemTemplatesForm').on('submit', function(event) {
+            // Prevent the form from submitting immediately
+            event.preventDefault();
 
-    var hasPendingProposal = $('#hasPendingProposal').val() == '1';
-    var additionalItemsSelected = $('#additional_item').val() == 'yes';
+            var hasPendingProposal = $('#hasPendingProposal').val() == '1';
+            var additionalItemsSelected = $('#additional_item').val() == 'yes';
 
-    if (hasPendingProposal && !additionalItemsSelected) {
-        var confirmSubmit = confirm('A pending proposal exists. If you submit, the proposal will be canceled. Do you want to continue?');
+            if (hasPendingProposal && !additionalItemsSelected) {
+                var confirmSubmit = confirm('A pending proposal exists. If you submit, the proposal will be canceled. Do you want to continue?');
 
-        if (confirmSubmit) {
-            // If the user confirms, submit the form
-            this.submit();
-        } else {
-            // If the user cancels, do nothing (the form will not be submitted)
-            return false;
-        }
-    } else {
-        // If no pending proposal or additional items are selected, submit the form
-        return true;
-    }
-});
+                if (confirmSubmit) {
+                    // If the user confirms, submit the form
+                    this.submit();
+                } else {
+                    // If the user cancels, do nothing (the form will not be submitted)
+                    return false;
+                }
+            } else {
+                // If no pending proposal or additional items are selected, submit the form
+                return true;
+            }
+        });
 
     });
-</script>
+</script>x

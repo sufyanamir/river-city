@@ -11,9 +11,16 @@
         height: 70%;
     }
 </style>
+<div class="text-right my-2">
+    <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
+        <button class=" bg-[#930027] p-2 text-white rounded-md">
+            Print
+        </button>
+    </a>
+</div>
 <form action="/acceptProposal/{{ $estimate['estimate_id'] }}" method="post">
     @csrf
-    <div class="my-4">
+    <div class="my-4" id="printableArea">
         <div class="bg-white w-full overflow-auto rounded-lg shadow-lg">
             <div class="grid grid-cols-12 p-5">
                 <div class="col-span-6 p-4 ">
@@ -779,4 +786,23 @@
         $("#addSign-modal").addClass('hidden');
         $("#formData")[0].reset()
     });
+    function printPageArea(areaID) {
+        var printContent = document.getElementById(areaID).innerHTML;
+        var originalContent = document.body.innerHTML;
+
+        // Create a style tag with the desired background color
+        var style = document.createElement('style');
+        style.innerHTML = 'body { background-color: white !important; }';
+
+        // Append the style tag to the head of the document
+        document.head.appendChild(style);
+
+        // Set the body content to the print content and print
+        document.body.innerHTML = printContent;
+        window.print();
+
+        // Restore the original content and remove the added style tag
+        document.body.innerHTML = originalContent;
+        document.head.removeChild(style);
+    }
 </script>
