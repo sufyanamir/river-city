@@ -40,6 +40,11 @@ class Estimate extends Model
         return $this->hasMany(AssignPayment::class, 'estimate_id');
     }
 
+    public function estimateSchedule()
+    {
+        return $this->hasOne(EstimateSchedule::class, 'estimate_id');
+    }
+
     protected $table = 'estimates';
 
     protected $primaryKey = 'estimate_id';

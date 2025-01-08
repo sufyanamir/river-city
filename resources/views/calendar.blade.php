@@ -354,30 +354,47 @@
 
         <!-- Modal panel -->
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <!-- Modal content here -->
-                <div class="flex justify-between">
-                    <div class=" flex justify-start gap-3">
-                        <a id="viewEstimateIcon" class="inline-block" href=""><img src="{{asset('assets/icons/view-icon.svg')}}" alt="view-icon"></a>
-                        <h2 class="text-xl font-semibold mb-2 text-[#F5222D]" id=""> View Details</h2>
+            <form action="" id="editEventForm" method="post">
+                @csrf
+                <input type="hidden" name="estimate_schedule_id" id="estimate_schedule_id" value="">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <!-- Modal content here -->
+                    <div class="flex justify-between">
+                        <div class=" flex justify-start gap-3">
+                            <a id="viewEstimateIcon" class="inline-block" href=""><img src="{{asset('assets/icons/view-icon.svg')}}" alt="view-icon"></a>
+                            <h2 class="text-xl font-semibold mb-2 text-[#F5222D]" id=""> View Details</h2>
+                        </div>
+                        <button class="modal-close" type="button" onclick="clearModalAndClose();">
+                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                        </button>
                     </div>
-                    <button class="modal-close" type="button" onclick="clearModalAndClose();">
-                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-                    </button>
+                    <div>
+                        <span id="event-title" class="text-lg font-semibold mb-2"></span> (<span id="assigned_user"></span>)
+                        <h2 id="event-project-name" class="mb-2"></h2>
+                        <h2 id="event-project-name" class="mb-2"></h2>
+                        <h2 id="event-customer-address" class="mb-2"></h2>
+                        <p id="event-note" class="mb-2"></p>
+                        <div id="event-dates" class="hidden">
+                            <div class=" flex justify-start gap-3 mb-2">
+                                <label>Start date:</label>
+                                <input type="datetime-local" name="start_date" id="start_date" autocomplete="given-name" class=" se_date  w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            </div>
+                            <div class=" flex justify-start gap-3 mb-2">
+                                <label>End date:</label>
+                                <input type="datetime-local" name="end_date" id="end_date" autocomplete="given-name" class=" se_date  w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            </div>
+                        </div>
+                        <div id="event-start-end" class="">
+                            <p class="mb-2"><strong>Start:</strong> <span id="event-start"></span></p>
+                            <p class="mb-2"><strong>End:</strong> <span id="event-end"></span></p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="button" class="modalClose-btn border border-black font-semibold py-1 px-7 rounded-lg" onclick="clearModalAndClose();">Close</button>
+                        <button type="button" id="editUpdateEvent" class="float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900">Edit</button>
+                    </div>
                 </div>
-                <div>
-                    <span id="event-title" class="text-lg font-semibold mb-2"></span> (<span id="assigned_user"></span>)
-                    <h2 id="event-project-name" class="mb-2"></h2>
-                    <h2 id="event-project-name" class="mb-2"></h2>
-                    <h2 id="event-customer-address" class="mb-2"></h2>
-                    <p id="event-note" class="mb-2"></p>
-                    <p class="mb-2"><strong>Start:</strong> <span id="event-start"></span></p>
-                    <p class="mb-2"><strong>End:</strong> <span id="event-end"></span></p>
-                </div>
-                <div class="mt-4">
-                    <button type="button" class="modalClose-btn border border-black font-semibold py-1 px-7 rounded-lg" onclick="clearModalAndClose();">Close</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -388,30 +405,35 @@
 <script src="assets/plugins/fullcalendar/main.js"></script>
 
 <script>
-    $("#editEvent").click(function(e) {
-        e.preventDefault();
-        $("#estimators").toggleClass('hidden');
-        $("#dropdown-div").toggleClass('hidden');
-        $(".se_date").toggleClass('hidden');
-        $("#noteText").removeAttr('disabled');
-        $("#editEvent").addClass('hidden');
-        $("#updateEvent").removeClass('hidden');
-        $(".modalClose-btn").text('Cancel');
-    });
-    function clearModalAndClose() {
-        // Clear modal fields using jQuery
-        $('#event-title').text('');
-        $('#assigned_user').text('');
-        $('#event-project-name').text('');
-        $('#event-customer-address').text('');
-        $('#event-note').text('');
-        $('#event-start').text('');
-        $('#event-end').text('');
-        $('#viewEstimateIcon').removeClass('hidden');
-        $('#viewEstimateIcon').attr('href', '');
-        // Hide the modal
-        $('#event-modal').addClass('hidden');
+    $("#editUpdateEvent").click(function(e) {
+    e.preventDefault();
+    if ($(this).text() === 'Edit') {
+        $('#event-dates').removeClass('hidden');
+        $('#event-start-end').addClass('hidden');
+        $(this).text('Update').attr('type', 'submit');
+    } else if ($(this).text() === 'Update') {
+        // Optionally set the form's action attribute if needed
+        // $('#editEventForm').attr('action', '/update-url');
+        
+        $('#editEventForm').submit(); // Submit the form
     }
+});
+
+function clearModalAndClose() {
+    $('#event-title').text('');
+    $('#assigned_user').text('');
+    $('#event-project-name').text('');
+    $('#event-customer-address').text('');
+    $('#event-note').text('');
+    $('#event-start').text('');
+    $('#event-end').text('');
+    $('#viewEstimateIcon').removeClass('hidden').attr('href', '');
+    $('#editUpdateEvent').text('Edit').attr('type', 'button');
+    $('#event-dates').addClass('hidden');
+    $('#event-start-end').removeClass('hidden');
+    $('#editEventForm').attr('action', '');
+    $('#event-modal').addClass('hidden');
+}
 </script>
 <script>
     $(document).ready(function() {
@@ -650,13 +672,24 @@ $('#end_date').val(endDateTime);
                     success: function (response) {
                         // Populate the modal with event details based on event type
                         if (eventType === 'userToDo' || eventType === 'estimateToDo') {
+                            console.log(response);
                             $('#event-title').text(response.to_do_title);
                             $('#assigned_user').text(response.assigned_to.name);
                             $('#event-note').text(response.note);
                             $('#event-start').text(response.start_date);
                             $('#event-end').text(response.end_date);
                             $('#viewEstimateIcon').addClass('hidden');
+
+                            // Check if 'estimate_id' exists in the response
+                            if (response.estimate_id) {
+                                $('#editEventForm').attr('action', '/addToDos');
+                                $('#estimate_schedule_id').val(response.to_do_id);
+                            } else {
+                                $('#editEventForm').attr('action', '/addUserToDo');
+                                $('#estimate_schedule_id').val(response.to_do_id);
+                            }
                         } else if (eventType === 'estimate') {
+                            console.log(response);
                             $('#event-title').text(response.customer_name + ' ' + response.customer_last_name);
                             $('#event-note').text('');
                             $('#event-start').text(response.scheduled_start_date);
@@ -664,6 +697,8 @@ $('#end_date').val(endDateTime);
                             $('#event-project-name').text(response.project_name);
                             $('#event-customer-address').text(response.customer_address);
                             $('#viewEstimateIcon').attr('href', '/viewEstimate/' + response.estimate_id);
+                            $('#editEventForm').attr('action', '/setScheduleEstimate');
+                            $('#estimate_schedule_id').val(response.estimate_schedule.estimate_schedule_id);
                         }
 
                         // Show the modal
