@@ -491,67 +491,6 @@
             currentDate.setDate(currentDate.getDate() - 7);
             generateWeek(currentDate, crewsData);
         });
-
-        $(".modal-close").click(function(e) {
-            e.preventDefault();
-            $("#view-customerDetails").addClass('hidden');
-            // $("#complete-estimate-form")[0].reset()
-            $('#start_date').toggleClass('hidden');
-            $('#end_date').toggleClass('hidden');
-            $('#startDate').toggleClass('hidden');
-            $('#fendDate').toggleClass('hidden');
-            $('#editEvent').toggleClass('hidden');
-            $('#updateEvent').toggleClass('hidden');
-        });
-
-        // Event delegation for dynamic elements
-        $('#table-body').on('click', '[id^="viewEstimate"]', function(event) {
-            var itemId = $(this).attr('id').replace('viewEstimate', ''); // Extract item ID from button ID
-            // Your AJAX request and modal manipulation code here...
-            // Make an AJAX request to get item details
-            $.ajax({
-                url: '/viewDataOnCrewCalendar' + itemId,
-                method: 'GET',
-                success: function(response) {
-                    if (response.success) {
-                        // Populate the modal with the retrieved data
-                        var estimate = response.estimate;
-                        var estimateSchedule = response.estimateSchedule;
-                        var crew = response.crew;
-                        console.log(estimate);
-                        // Update modal content with item details
-                        $('#modal-title').text(estimate.customer_name + ' ' + estimate.customer_last_name);
-                        $('#customer_address').text(estimate.customer_address);
-                        $('#customer_email').text(estimate.customer_email);
-                        $('#customer_phone').text(estimate.customer_phone);
-                        $('#start_date').text(estimateSchedule.start_date);
-                        $('#end_date').text(estimateSchedule.end_date);
-                        $('#note').text(estimateSchedule.note);
-                        $('#estimate_id').val(estimateSchedule.estimate_id);
-                        // $('#date').val(formatDate(expenseDetail.expense_date));
-
-                        // Open the modal
-                        $('#view-customerDetails').removeClass('hidden');
-                    } else {
-                        // Handle error response
-                        console.error('Error fetching item details.');
-                    }
-                },
-                error: function(error) {
-                    console.error('AJAX request failed:', error);
-                }
-            });
-        });
-
-        $("#editEvent").click(function(e) {
-            e.preventDefault();
-            $('#start_date').toggleClass('hidden');
-            $('#end_date').toggleClass('hidden');
-            $('#startDate').toggleClass('hidden');
-            $('#fendDate').toggleClass('hidden');
-            $('#editEvent').toggleClass('hidden');
-            $('#updateEvent').toggleClass('hidden');
-        });
     });
 </script>
     <script>

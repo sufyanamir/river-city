@@ -804,25 +804,25 @@ class EstimateController extends Controller
         $userDetails = session('user_details');
         if ($userDetails['user_role'] == 'crew') {
 
-            $scheduleEstimates = ScheduleEstimate::where('work_assign_id', $userDetails['id'])->get();
+            $scheduleEstimates = ScheduleEstimate::get();
             $estimates = [];
             foreach ($scheduleEstimates as $scheduleEstimate) {
                 $estimate = Estimate::with(['scheduler', 'crew'])->where('estimate_id', $scheduleEstimate->estimate_id)->first();
                 $estimates[] = $estimate;
             }
 
-            $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->get();
-            $estimateToDos = EstimateToDos::where('to_do_assigned_to', $userDetails['id'])->get();
+            $userToDos = UserToDo::get();
+            $estimateToDos = EstimateToDos::get();
             $allEmployees = User::where('sts', 'active')->get();
             return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
         } elseif ($userDetails['user_role'] == 'scheduler') {
-            $estimates = Estimate::with(['scheduler', 'crew'])->where('estimate_schedule_assigned_to', $userDetails['id'])->get();
+            $estimates = Estimate::with(['scheduler', 'crew'])->get();
         } else {
             $estimates = Estimate::with(['scheduler', 'crew'])->get();
         }
 
-        $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->get();
-        $estimateToDos = EstimateToDos::where('to_do_assigned_to', $userDetails['id'])->get();
+        $userToDos = UserToDo::get();
+        $estimateToDos = EstimateToDos::get();
 
         $allEmployees = User::where('sts', 'active')->get();
         return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
@@ -1877,16 +1877,19 @@ class EstimateController extends Controller
                 if ($latestProposal) {
                     $data['terms_and_conditions'] = $latestProposal->proposal_terms_and_conditions;
                 } else {
-                    return response()->json(['success' => false, 'message' => 'No valid proposal found'], 404);
+                    // return response()->json(['success' => false, 'message' => 'No valid proposal found'], 404);
+                    return view('accept-proposal', ['success' => false, 'message' => 'No valid Estimate found', 'sts' => 404]);
                 }
             } elseif ($proposalId) {
                 $proposal = EstimateProposal::where('estimate_proposal_id', $proposalId)->first();
                 if (!$proposal) {
-                    return response()->json(['success' => false, 'message' => 'Proposal not found'], 404);
+                    // return response()->json(['success' => false, 'message' => 'Proposal not found'], 404);
+                    return view('accept-proposal', ['success' => false, 'message' => 'Proposal not found', 'sts' => 404]);
                 }
                 $data = json_decode($proposal->proposal_data, true);
             } else {
-                return response()->json(['success' => false, 'message' => 'No valid ID provided'], 400);
+                // return response()->json(['success' => false, 'message' => 'No valid ID provided'], 400);
+                return view('accept-proposal', ['success' => false, 'message' => 'No valid ID provided', 'sts' => 400]);
             }
 
             return view('accept-proposal', $data);

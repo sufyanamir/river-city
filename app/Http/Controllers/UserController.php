@@ -253,7 +253,7 @@ class UserController extends Controller
     // get crew departement on crew
     public function getDepartementOnCrew()
     {
-        $crew = User::where('user_role', 'crew')->get();
+        $crew = User::where('user_role', 'crew')->where('sts', 'active')->get();
         $departement = UserRole::distinct()->select('departement')->get();
 
         return view('crew', ['departements' => $departement, 'crew' => $crew, 'user_details' => $this->userDetails]);

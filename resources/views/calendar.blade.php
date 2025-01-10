@@ -372,7 +372,7 @@
                         <span id="event-title" class="text-lg font-semibold mb-2"></span> (<span id="assigned_user"></span>)
                         <h2 id="event-project-name" class="mb-2"></h2>
                         <h2 id="event-project-name" class="mb-2"></h2>
-                        <h2 id="event-customer-address" class="mb-2"></h2>
+                        <a href="" id="address-link" target="_blank" class=" text-[#930027]"><h2 id="event-customer-address" class="mb-2"></h2></a>
                         <p id="event-note" class="mb-2"></p>
                         <div id="event-dates" class="hidden">
                             <div class=" flex justify-start gap-3 mb-2">
@@ -595,7 +595,7 @@ function clearModalAndClose() {
                 var droppedDate = info.date;
 
                 // Check if the dropped date is before the current date
-                if (droppedDate < currentDate) {
+                if (droppedDate < currentDate.setHours(0,0,0,0)) {
                     // Display an alert or perform any other action to notify the user
                     alert('Cannot schedule events on past dates.');
 
@@ -696,6 +696,7 @@ $('#end_date').val(endDateTime);
                             $('#event-end').text(response.scheduled_end_date);
                             $('#event-project-name').text(response.project_name);
                             $('#event-customer-address').text(response.customer_address);
+                            $('#address-link').attr('href', 'https://maps.google.com/?q=' + response.customer_address);
                             $('#viewEstimateIcon').attr('href', '/viewEstimate/' + response.estimate_id);
                             $('#editEventForm').attr('action', '/setScheduleEstimate');
                             $('#estimate_schedule_id').val(response.estimate_schedule.estimate_schedule_id);
@@ -744,7 +745,8 @@ $('#end_date').val(endDateTime);
             currColor = $(this).css('color')
             $('#add-new-event').css({
                 'background-color': currColor,
-                'border-color': currColor
+                'border-color': currColor,
+                'color': currColor
             })
         })
 
@@ -759,7 +761,7 @@ $('#end_date').val(endDateTime);
             event.css({
                 'background-color': currColor,
                 'border-color': currColor,
-                'color': '#000'
+                'color': currColor
             }).addClass('external-event')
             event.text(val)
             $('#external-events').prepend(event)

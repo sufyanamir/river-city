@@ -10,7 +10,20 @@
         aspect-ratio: 3/2; */
         height: 70%;
     }
+    :root {
+            --theme-color: #930027;
+        }
 </style>
+@if(isset($success) && !$success)
+<div class="bg-gray-100 flex items-center justify-center min-h-screen">
+<div class="text-center">
+        <h1 class="text-6xl font-bold text-gray-800 mb-4">{{$sts}}</h1>
+        <h2 class="text-2xl text-gray-600 mb-8">{{$message}}</h2>
+        <p class="text-gray-500 mb-6">Sorry, the page you are looking for does not exist.</p>
+        <a href="/" class="text-white bg-[color:var(--theme-color)] hover:bg-[color:var(--theme-color)]/90 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Go Home</a>
+    </div>
+</div>
+@else
 <div class="text-right my-2">
     <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
         <button class=" bg-[#930027] p-2 text-white rounded-md">
@@ -806,3 +819,4 @@
         document.head.removeChild(style);
     }
 </script>
+@endif
