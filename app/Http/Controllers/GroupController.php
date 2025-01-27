@@ -32,6 +32,8 @@ class GroupController extends Controller
                 'show_unit_price' => 'nullable|boolean', // Validate as boolean
                 'show_quantity' => 'nullable|boolean', // Validate as boolean
                 'show_total' => 'nullable|boolean', // Validate as boolean
+                'show_group_total' => 'nullable',
+                'include_est_total' => 'nullable',
             ]);
 
             $group = Groups::where('group_id', $validatedData['group_id'])->first();
@@ -43,6 +45,8 @@ class GroupController extends Controller
             $group->show_unit_price = $request->has('show_unit_price') ? 1 : 0;
             $group->show_quantity = $request->has('show_quantity') ? 1 : 0;
             $group->show_total = $request->has('show_total') ? 1 : 0;
+            $group->show_group_total = $request->has('show_group_total') ? 1 : 0;
+            $group->include_est_total = $request->has('include_est_total') ? 1 : 0;
 
             $group->save();
 
@@ -92,6 +96,8 @@ class GroupController extends Controller
                 'show_unit_price' => 'nullable',
                 'show_quantity' => 'nullable',
                 'show_total' => 'nullable',
+                'show_group_total' => 'nullable',
+                'include_est_total' => 'nullable',
             ]);
 
             $group = Groups::create([
@@ -103,6 +109,8 @@ class GroupController extends Controller
                 'show_unit_price' => $validatedData['show_unit_price'],
                 'show_quantity' => $validatedData['show_quantity'],
                 'show_total' => $validatedData['show_total'],
+                'show_group_total' => $validatedData['show_group_total'],
+                'include_est_total' => $validatedData['include_est_total'],
             ]);
 
             // foreach ($validatedData['group_item_ids'] as $key => $itemIds) {

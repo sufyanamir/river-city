@@ -27,6 +27,8 @@ class Groups extends Model
         'show_unit_price',
         'show_quantity',
         'show_total',
+        'show_group_total',
+        'include_est_total',
     ];
 
     public $timestamps = true;

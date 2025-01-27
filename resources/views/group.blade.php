@@ -73,7 +73,7 @@
                                                             </select>
                                                         </div>
                                                         <div class="col-span-2">
-                                                            <div class="flex justify-around my-2">
+                                                            <div class=" grid grid-cols-2 gap-4 my-2">
                                                                 <div>
                                                                     <input type="checkbox" name="show_unit_price" id="show_unit_price{{$group->group_id}}" value="1" {{ $group->show_unit_price == 1 ? 'checked' : '' }}>
                                                                     <label for="show_unit_price{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Unit Prices</label>
@@ -85,6 +85,14 @@
                                                                 <div>
                                                                     <input type="checkbox" name="show_total" id="show_total{{$group->group_id}}" value="1" {{ $group->show_total == 1 ? 'checked' : '' }}>
                                                                     <label for="show_total{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Totals</label>
+                                                                </div>
+                                                                <div>
+                                                                    <input type="checkbox" name="show_group_total" id="show_group_total{{$group->group_id}}" value="1" {{ $group->show_group_total == 1 ? 'checked' : '' }}>
+                                                                    <label for="show_group_total{{$group->group_id}}" class="text-gray-500 text-xs">Show Group Total</label>
+                                                                </div>
+                                                                <div>
+                                                                    <input type="checkbox" name="include_est_total" id="include_est_total{{$group->group_id}}" value="1" {{ $group->include_est_total == 1 ? 'checked' : '' }}>
+                                                                    <label for="include_est_total{{$group->group_id}}" class="text-gray-500 text-xs">Include In Estimate Total</label>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -200,7 +208,7 @@
                             </select>
                         </div>
                         <div class="col-span-2">
-                            <div class=" flex justify-around my-2">
+                            <div class=" grid grid-cols-2 gap-3 my-2">
                                 <div>
                                     <input type="checkbox" name="show_unit_price" id="show_unit_price" value="1">
                                     <label for="show_unit_price" class=" text-gray-500 text-xs">Show Line Item Unit Prices</label>
@@ -212,6 +220,14 @@
                                 <div>
                                     <input type="checkbox" name="show_total" id="show_total" value="1">
                                     <label for="show_total" class=" text-gray-500 text-xs">Show Line Item Totals</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="show_group_total" id="show_group_total" value="1">
+                                    <label for="show_total" class=" text-gray-500 text-xs">Show Group Total</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="include_est_total" id="include_est_total" value="1">
+                                    <label for="show_total" class=" text-gray-500 text-xs">Include In Estimate Total</label>
                                 </div>
                             </div>
                         </div>

@@ -506,7 +506,7 @@ $discountedTotal = null;
                             </button>
                         </form>
                         @endif
-                        @if ($estimate->estimate_assigned == 1 && $estimate->schedule_assigned != 1)
+                        @if ($estimate->estimate_assigned == 1 && $estimate->schedule_assigned != 1 && $estimate->estimate_total != null)
                         <button type="button" id="accept-estimate" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                             <div class=" flex mx-auto">
                                 <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
@@ -849,8 +849,8 @@ $discountedTotal = null;
                                                                 <label for="group_name">Group Name:</label>
                                                                 <input type="text" name="group_name" value="{{$group->group_name}}" placeholder="Group Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" list="group_names">
                                                                 <datalist id="group_names">
-                                                                    @foreach($groups as $item)
-                                                                    <option value="{{ $item->group_name }}">{{ $item->group_name }}</option>
+                                                                    @foreach($groups as $groupItem)
+                                                                    <option value="{{ $groupItem->group_name }}">{{ $groupItem->group_name }}</option>
                                                                     @endforeach
                                                                 </datalist>
                                                             </div>
@@ -869,7 +869,7 @@ $discountedTotal = null;
                                                                 </select>
                                                             </div>
                                                             <div class="col-span-2">
-                                                                <div class="flex justify-around my-2">
+                                                                <div class="grid grid-cols-2 gap-3 my-2">
                                                                     <div>
                                                                         <input type="checkbox" name="show_unit_price" id="show_unit_price{{$group->group_id}}" value="1" {{ $group->show_unit_price == 1 ? 'checked' : '' }}>
                                                                         <label for="show_unit_price{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Unit Prices</label>
@@ -881,6 +881,14 @@ $discountedTotal = null;
                                                                     <div>
                                                                         <input type="checkbox" name="show_total" id="show_total{{$group->group_id}}" value="1" {{ $group->show_total == 1 ? 'checked' : '' }}>
                                                                         <label for="show_total{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Totals</label>
+                                                                    </div>
+                                                                    <div>
+                                                                        <input type="checkbox" name="show_group_total" id="show_group_total{{$group->group_id}}" value="1" {{ $group->show_group_total == 1 ? 'checked' : '' }}>
+                                                                        <label for="show_group_total{{$group->group_id}}" class="text-gray-500 text-xs">Show Group Total</label>
+                                                                    </div>
+                                                                    <div>
+                                                                        <input type="checkbox" name="include_est_total" id="include_est_total{{$group->group_id}}" value="1" {{ $group->include_est_total == 1 ? 'checked' : '' }}>
+                                                                        <label for="include_est_total{{$group->group_id}}" class="text-gray-500 text-xs">Include In Estimate Total</label>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1014,6 +1022,9 @@ $discountedTotal = null;
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php
+                                    $groupTotal = 0;
+                                    @endphp
                                     @foreach ($itemss as $item)
                                     <tr class="bg-white border-b">
                                         <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
@@ -1122,6 +1133,11 @@ $discountedTotal = null;
                                             ${{ number_format($item->item_total, 2) }}
                                         </td>
                                         @endif
+                                        @php
+                                        if($item->group->show_group_total == 1) {
+                                        $groupTotal += $item->item_total; // Add item price to group total
+                                        }
+                                        @endphp
                                         @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
                                     <tr>
                                         <td colspan="7">
@@ -1217,6 +1233,11 @@ $discountedTotal = null;
                                     $totalPrice += $item->item_total; // Add item price to total
                                     @endphp
                                     @endforeach
+                                    <tr>
+                                        <th class=" text-right" colspan="7">
+                                            Group Total: {{ number_format($groupTotal, 2) }}
+                                        </th>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -1745,7 +1766,12 @@ $userPrivileges->estimate->items === 'on')
                                                 <div class=" grid grid-cols-2 gap-2">
                                                     <div class=" my-2">
                                                         <label for="group_name">Group Name:</label>
-                                                        <input type="text" name="group_name" value="{{$group->group_name}}" placeholder="Group Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                        <input type="text" name="group_name" value="{{$group->group_name}}" placeholder="Group Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" list="group_names">
+                                                        <datalist id="group_names">
+                                                            @foreach($groups as $item)
+                                                            <option value="{{ $item->group_name }}">{{ $item->group_name }}</option>
+                                                            @endforeach
+                                                        </datalist>
                                                     </div>
                                                     <!-- <div class="my-2">
                                                                 <label for="total_items">Total Items:</label>
@@ -1762,7 +1788,7 @@ $userPrivileges->estimate->items === 'on')
                                                         </select>
                                                     </div>
                                                     <div class="col-span-2">
-                                                        <div class="flex justify-around my-2">
+                                                        <div class="grid grid-cols-2 gap-3 my-2">
                                                             <div>
                                                                 <input type="checkbox" name="show_unit_price" id="show_unit_price{{$group->group_id}}" value="1" {{ $group->show_unit_price == 1 ? 'checked' : '' }}>
                                                                 <label for="show_unit_price{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Unit Prices</label>
@@ -1775,26 +1801,16 @@ $userPrivileges->estimate->items === 'on')
                                                                 <input type="checkbox" name="show_total" id="show_total{{$group->group_id}}" value="1" {{ $group->show_total == 1 ? 'checked' : '' }}>
                                                                 <label for="show_total{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Totals</label>
                                                             </div>
+                                                            <div>
+                                                                <input type="checkbox" name="show_group_total" id="show_group_total{{$group->group_id}}" value="1" {{ $group->show_group_total == 1 ? 'checked' : '' }}>
+                                                                <label for="show_group_total{{$group->group_id}}" class="text-gray-500 text-xs">Show Group Total</label>
+                                                            </div>
+                                                            <div>
+                                                                <input type="checkbox" name="include_est_total" id="include_est_total{{$group->group_id}}" value="1" {{ $group->include_est_total == 1 ? 'checked' : '' }}>
+                                                                <label for="include_est_total{{$group->group_id}}" class="text-gray-500 text-xs">Include In Estimate Total</label>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <!-- <div class=" text-left col-span-2">
-                                                                <h3 class=" font-medium text-lg">Items:</h3>
-                                                                {{-- <select id="customer" name="customer" autocomplete="customer-name" class=" p-2 w-[92%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                                                                    <option>Item name</option>
-                                                                    <option>Interior</option>
-                                                                    <option>Exterior</option>
-                                                                    <option>Labour</option>
-                                                                </select> --}}
-                                                                {{-- ======multiple item inputs===== --}}
-                                                                <div id="muliple_items">
-                                                                </div>
-
-                                                                <div class=" text-right mt-2">
-                                                                    <button type="button" class=" gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="selectItems" aria-expanded="true" aria-haspopup="true">
-                                                                        <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                                                                    </button>
-                                                                </div>
-                                                            </div> -->
                                                     <div class="my-2 col-span-2 relative">
                                                         <label for="group_description">Description:</label>
                                                         <textarea name="group_description" id="group_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">{{$group->group_description}}</textarea>
@@ -1836,8 +1852,61 @@ $userPrivileges->estimate->items === 'on')
                         </div>
                         @endif
                         @endforeach
-                        <div>
-                            <h1 class=" font-medium my-auto p-2">{{$groupName}}</h1>
+                        <div class=" relative">
+                            <h1 class=" font-medium my-auto p-2 inline-block">{{$groupName}}</h1>
+                            <div class=" z-10 inline-block absolute">
+                                <button type="button" id="exclude-include-menuBtn{{$item->group_id}}" class="inline p-2">
+                                    <i class="fa-solid fa-square-caret-down text-[#fff] text-lg"></i>
+                                </button>
+                                <div id="exclude-include-menu{{$item->group_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                                        <li>
+                                            <form action="/includeexcludeEstimateItem" method="post">
+                                                @csrf
+                                                <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                <input type="hidden" name="group_id" value="{{$item->group_id}}">
+                                                <input type="hidden" name="item_status" value="included">
+                                                <input type="hidden" name="estimate_item_id" value="">
+                                                <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                    Include
+                                                </button>
+                                            </form>
+                                        </li>
+                                        <hr>
+                                        <li>
+                                            <form action="/includeexcludeEstimateItem" method="post">
+                                                @csrf
+                                                <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                <input type="hidden" name="group_id" value="{{$item->group_id}}">
+                                                <input type="hidden" name="item_status" value="excluded">
+                                                <input type="hidden" name="estimate_item_id" value="">
+                                                <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                    Exclude
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <script>
+                                document.getElementById("exclude-include-menuBtn{{$item->group_id}}").addEventListener("click", function(e) {
+                                    e.stopPropagation(); // Prevents the click event from reaching the document body
+                                    var dropdownMenu = document.getElementById("exclude-include-menu{{$item->group_id}}");
+                                    dropdownMenu.classList.toggle("topbar-menuEntring");
+                                    dropdownMenu.classList.toggle("topbar-manuLeaving");
+                                });
+
+                                document.addEventListener('click', function(e) {
+                                    var btn = document.getElementById("exclude-include-menuBtn{{$item->group_id}}");
+                                    var dropdownMenu = document.getElementById("exclude-include-menu{{$item->group_id}}");
+
+                                    if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                                        // Click occurred outside the button and dropdown, hide the dropdown
+                                        dropdownMenu.classList.add("topbar-manuLeaving");
+                                        dropdownMenu.classList.remove("topbar-menuEntring");
+                                    }
+                                });
+                            </script>
                         </div>
                     </div>
                     @endif
@@ -1872,6 +1941,9 @@ $userPrivileges->estimate->items === 'on')
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                            $groupTotal = 0;
+                            @endphp
                             @foreach ($itemss as $item)
                             <tr class="bg-white border-b">
                                 <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
@@ -1886,11 +1958,11 @@ $userPrivileges->estimate->items === 'on')
                                     <p class="text-[16px]/[18px] text-[#323C47] font">
                                         @if ($item->item_description)
                                     <p class="font-medium">Description:</p>
-                                    {{ $item->item_description }}
+                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
                                     @endif
                                     @if ($item->item_note)
                                     <p class="font-medium">Note:</p>
-                                    {{ $item->item_note }}
+                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
                                     @endif
                                     </p>
                                 </td>
@@ -1980,6 +2052,11 @@ $userPrivileges->estimate->items === 'on')
                                     ${{ number_format($item->item_total, 2) }}
                                 </td>
                                 @endif
+                                @php
+                                if($item->group->show_group_total == 1) {
+                                $groupTotal += $item->item_total; // Add item price to group total
+                                }
+                                @endphp
                                 @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
                             <tr>
                                 <td colspan="7">
@@ -2021,10 +2098,10 @@ $userPrivileges->estimate->items === 'on')
                                                             <tr class="bg-white border-b">
                                                                 <td class="px-6 py-4"></td>
                                                                 <td class="px-6 py-4">
-                                                                    {{$assembly->est_ass_item_name}}
+                                                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->est_ass_item_name) !!}
                                                                 </td>
                                                                 <td class="px-6 py-4 w-[30%]">
-                                                                    {{$assembly->ass_item_description}}
+                                                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
                                                                 </td>
                                                                 @if($item->group)
                                                                 <td class="text-center">
@@ -2075,6 +2152,11 @@ $userPrivileges->estimate->items === 'on')
                             $totalPrice += $item->item_total; // Add item price to total
                             @endphp
                             @endforeach
+                            <tr>
+                                <th class=" text-right" colspan="7">
+                                    Group Total: {{ number_format($groupTotal, 2) }}
+                                </th>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -7916,4 +7998,4 @@ $userPrivileges->estimate->expenses === 'on')
         });
 
     });
-</script>x
+</script>

@@ -64,6 +64,50 @@ class EstimateController extends Controller
     }
     // estimate activity
 
+    // acceptRejectEstimateItems
+    public function acceptRejectEstimateItems(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'group_id' => 'required',
+                'type' => 'required',
+                'item_status' => 'required',
+            ]);
+            
+            switch ($validatedData['type']) {
+                case 'acceptAll':
+                case 'rejectAll':
+                    $estimateItems = EstimateItem::where('estimate_id', $validatedData['estimate_id'])
+                        ->where('group_id', $validatedData['group_id'])
+                        ->get();
+                    foreach ($estimateItems as $item) {
+                        $item->upgrade_status = $validatedData['item_status'];
+                        $item->save();
+                    }
+                    break;
+
+                case 'acceptPending':
+                case 'rejectPending':
+                    $estimateItems = EstimateItem::where('estimate_id', $validatedData['estimate_id'])
+                        ->where('group_id', $validatedData['group_id'])
+                        ->where('upgrade_status', 'pending')
+                        ->get();
+                    foreach ($estimateItems as $item) {
+                        $item->upgrade_status = $validatedData['item_status'];
+                        $item->save();
+                    }
+                    break;
+            }
+
+            return response()->json(['success' => true, 'message' => 'Items status updated!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // acceptRejectEstimateItems
+
     // update estimate detail
     public function updateEstimateDetail(Request $request)
     {
@@ -1545,7 +1589,7 @@ class EstimateController extends Controller
             // Send data to Zapier
             $estimateSending = Http::post('https://hooks.zapier.com/hooks/catch/7921384/3vr65z8/', [
                 'amount' => $totalInput,
-                'first_name' => $estimate->customer_name,
+                'first_name' => $estimate->customer_name . ' ',
                 'last_name' => $estimate->customer_last_name,
                 'customer_email' => $estimate->customer->customer_email,
                 'po_number' => $estimate->po_number,
@@ -1880,13 +1924,24 @@ class EstimateController extends Controller
                     // return response()->json(['success' => false, 'message' => 'No valid proposal found'], 404);
                     return view('accept-proposal', ['success' => false, 'message' => 'No valid Estimate found', 'sts' => 404]);
                 }
+                $proposalData = json_decode($latestProposal->proposal_data, true);
+                $userIdfromProposal = $proposalData['estimate']['added_user_id'];
+                $proposalData = json_decode($latestProposal->proposal_data, true);
+                if(!session()->has('user_details')){
+                    $notificationMessage = 'The proposal that you send has been viewed by the customer. Please check the Estimate no. ' . $proposalData['estimate']['estimate_id'] . ' for more details.';
+
+                    $notification = Notifications::create([
+                        'added_user_id' => $userIdfromProposal,
+                        'notification_message' => $notificationMessage,
+                    ]);
+                }
             } elseif ($proposalId) {
                 $proposal = EstimateProposal::where('estimate_proposal_id', $proposalId)->first();
                 if (!$proposal) {
                     // return response()->json(['success' => false, 'message' => 'Proposal not found'], 404);
                     return view('accept-proposal', ['success' => false, 'message' => 'Proposal not found', 'sts' => 404]);
                 }
-                $data = json_decode($proposal->proposal_data, true);
+
             } else {
                 // return response()->json(['success' => false, 'message' => 'No valid ID provided'], 400);
                 return view('accept-proposal', ['success' => false, 'message' => 'No valid ID provided', 'sts' => 400]);
@@ -2232,6 +2287,7 @@ class EstimateController extends Controller
                 'assembly_id' => 'nullable|array',
                 'assembly_name' => 'nullable|array',
                 'ass_item_id' => 'nullable|array',
+                'group_name' => 'nullable',
                 'assembly_unit_by_item_unit' => 'nullable|array',
                 'item_unit_by_assembly_unit' => 'nullable|array',
                 // 'selected_items' => 'required|array',
@@ -2240,6 +2296,11 @@ class EstimateController extends Controller
             $estimateItem = EstimateItem::where('estimate_item_id', $validatedData['item_id'])->first();
             $estimateItemAssembly = EstimateItemAssembly::where('estimate_item_id', $estimateItem->estimate_item_id)->get();
 
+            $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
+
+            if ($groupDetail) {
+                $estimateItem->group_id = $groupDetail->group_id;
+            }
             $estimateItem->item_name = $validatedData['item_name'];
             $estimateItem->item_unit = $validatedData['item_units'];
             $estimateItem->labour_expense = $validatedData['labour_expense'];

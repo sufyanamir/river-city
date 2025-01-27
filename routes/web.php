@@ -234,3 +234,4 @@ Route::match(['get', 'post'], 'addPayment', [EstimateController::class, 'addPaym
 Route::post('/forgotPasswordMail', [UserController::class, 'forgotPasswordMail']);
 Route::get('/resetPassword/{id}', [UserController::class, 'resetPassword']);
 Route::post('/updatePassword', [UserController::class, 'updatePassword']);
+Route::post('/acceptRejectEstimateItems', [EstimateController::class, 'acceptRejectEstimateItems']);

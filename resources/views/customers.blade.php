@@ -9,7 +9,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                 <h4>Customer List</h4>
             </div>
             <div>
-                <!-- <x-add-button :title="'+Add Customer'" :class="''" :id="'addCustomer'"></x-add-button> -->
+                <x-add-button :title="'+Add Customer'" :class="'addEstimate'" :id="'addCustomer'"></x-add-button>
             </div>
         </div>
         <div class="py-4">
@@ -74,7 +74,7 @@ $userPrivileges = session('user_details')['user_privileges'];
         <!-- Modal panel -->
         <div
             class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full lg:max-w-screen-lg">
-            <form action="" method="post" id="addEstimate-form">
+            <form action="/updateCustomer" method="post" id="addEstimate-form">
                 @csrf
                 <input type="hidden" id="customer_id" name="customer_id">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -228,6 +228,7 @@ $userPrivileges = session('user_details')['user_privileges'];
         e.preventDefault();
         $("#addEstimate-modal").addClass('hidden');
         $("#addEstimate-form")[0].reset()
+        $('#customer_id').val('');
     });
 </script>
 <script>

@@ -586,6 +586,7 @@ function clearModalAndClose() {
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
+            initialView: 'timeGridWeek',
             themeSystem: 'bootstrap',
             events: allEvents,
             editable: true,
