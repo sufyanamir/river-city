@@ -25,6 +25,7 @@ class UserToDo extends Model
         'note',
         'start_date',
         'end_date',
+        'to_do_assigned_to',
     ];
 
     public $timestamps = true;

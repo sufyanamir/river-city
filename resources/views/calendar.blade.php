@@ -104,7 +104,7 @@
                         @foreach($allEmployees as $employee)
                         <div class=" flex gap-3 mx-3">
                             <div class=" my-auto " style="width: 10px; height: 10px; background-color: {{$employee->user_color}};"></div>
-                            <div class="">{{$employee->name}} {{$employee->last_name}}</div>
+                            <a href="/calendar{{$employee->id}}"><div class="">{{$employee->name}} {{$employee->last_name}}</div></a>
                         </div>
                         @endforeach
                         </div>
@@ -176,7 +176,7 @@
                         </div>
                         <div id="dropdown-div" class="">
                             <p class=" font-medium items-center">Who will complete work?</p>
-                            <select name="assign_work" id="assign_work" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <select name="assign_work[]" id="assign_work" multiple class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 <option value="">Select User</option>
                                 @foreach($allEmployees as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}} <sub>({{$user->user_role}})</sub> </option>
@@ -251,7 +251,7 @@
                         </div>
                         <div id="dropdown-div" class="">
                             <p class=" font-medium items-center">Who will complete Estimate?</p>
-                            <select name="assign_estimate_completion" id="assign_estimate_completion" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <select name="assign_estimate_completion[]" multiple id="assign_estimate_completion" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 <option value="">Select User</option>
                                 @foreach($allEmployees as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}} <sub>({{$user->user_role}})</sub> </option>
@@ -314,12 +314,13 @@
                     </div>
                     <div class="flex justify-start gap-3 my-2">
                         <label for="">Who:</label>
-                        <select name="assign_work" id="assign_work" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                <option value="">Select User</option>
-                                @foreach($allEmployees as $employee)
-                                <option value="">{{$employee->name}} {{$employee->last_name}}</option>
-                                @endforeach
-                            </select>
+                        <select name="assign_work[]" id="assign_work" multiple
+                            class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <option value="">Select Users</option>
+                            @foreach($allEmployees as $employee)
+                                <option value="{{ $employee->id }}">{{ $employee->name }} {{ $employee->last_name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div>
                         <p class=" font-medium inline-block items-center">When should it be completed?</p>
@@ -374,24 +375,49 @@
                         <h2 id="event-project-name" class="mb-2"></h2>
                         <a href="" id="address-link" target="_blank" class=" text-[#930027]"><h2 id="event-customer-address" class="mb-2"></h2></a>
                         <p id="event-note" class="mb-2"></p>
+                        <div id="event-title-div" class=" hidden">
+                            <div class="flex justify-start gap-3 my-2">
+                                <label for="task_desc">Task:</label>
+                                <input type="text" name="task_name" id="all-event-title" autocomplete="given-name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" placeholder="Task Description">
+                            </div>
+                        </div>
+                        <div id="assign_work_div" class="flex justify-start gap-3 my-2">
+                            <label for="">Who:</label>
+                            <select name="assign_work[]" id="update_assign_work" multiple
+                                class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <option value="">Select Users</option>
+                                @foreach($allEmployees as $employee)
+                                    <option value="{{ $employee->id }}">{{ $employee->name }} {{ $employee->last_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div id="event-dates" class="hidden">
                             <div class=" flex justify-start gap-3 mb-2">
                                 <label>Start date:</label>
-                                <input type="datetime-local" name="start_date" id="start_date" autocomplete="given-name" class=" se_date  w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <input type="datetime-local" name="start_date" id="update_start_date" autocomplete="given-name" class=" se_date  w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             </div>
                             <div class=" flex justify-start gap-3 mb-2">
                                 <label>End date:</label>
-                                <input type="datetime-local" name="end_date" id="end_date" autocomplete="given-name" class=" se_date  w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <input type="datetime-local" name="end_date" id="update_end_date" autocomplete="given-name" class=" se_date  w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             </div>
                         </div>
                         <div id="event-start-end" class="">
                             <p class="mb-2"><strong>Start:</strong> <span id="event-start"></span></p>
                             <p class="mb-2"><strong>End:</strong> <span id="event-end"></span></p>
                         </div>
+                        <div class="hidden" id="event-text">
+                            <textarea name="note" id="event-textarea" class=" w-[100%] outline-none rounded-md p-2 border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"></textarea>
+                        </div>
                     </div>
                     <div class="mt-4">
                         <button type="button" class="modalClose-btn border border-black font-semibold py-1 px-7 rounded-lg" onclick="clearModalAndClose();">Close</button>
-                        <button type="button" id="editUpdateEvent" class="float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900">Edit</button>
+                        <a href="" id="deleteEventLink">
+                            <button type="button" class="modalClose-btn border border-black font-semibold py-1 px-7 rounded-lg">Delete</button>
+                        </a>
+                        <button type="button" id="editUpdateEvent" class="float-right mx-2 bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900">Edit</button>
+                        <a href="" id="completeEvent" class="hidden">
+                            <button type="button" class="float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900">Complete</button>
+                        </a>
                     </div>
                 </div>
             </form>
@@ -405,11 +431,45 @@
 <script src="assets/plugins/fullcalendar/main.js"></script>
 
 <script>
+    $(document).on('click', '#deleteEventLink, completeEvent', function (e) {
+    e.preventDefault(); // Prevent the default anchor behavior
+
+    const url = $(this).attr('href'); // Get the URL from the href attribute
+
+    if (url) {
+        // Send an AJAX DELETE request
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (response) {
+                console.log('Delete successful:', response);
+                // Reload the page
+                location.reload();
+            },
+            error: function (error) {
+                console.error('Error deleting event:', error);
+                alert('An error occurred while trying to delete the event. Please try again.');
+            }
+        });
+    } else {
+        alert('No URL is set for deletion.');
+    }
+});
+
     $("#editUpdateEvent").click(function(e) {
     e.preventDefault();
     if ($(this).text() === 'Edit') {
         $('#event-dates').removeClass('hidden');
         $('#event-start-end').addClass('hidden');
+        $('#event-text').removeClass('hidden');
+        $('#event-textarea').val($('#event-note').text());
+        $('#event-note').addClass('hidden');
+        $('#assign_work_div').removeClass('hidden');
+        if($('#editEventForm').attr('action') != '/setScheduleEstimate') {
+            $('#event-title-div').removeClass('hidden');
+            $('#all-event-title').val($('#event-title').text());
+            $('#event-title').addClass('hidden');
+        }
         $(this).text('Update').attr('type', 'submit');
     } else if ($(this).text() === 'Update') {
         // Optionally set the form's action attribute if needed
@@ -433,6 +493,14 @@ function clearModalAndClose() {
     $('#event-start-end').removeClass('hidden');
     $('#editEventForm').attr('action', '');
     $('#event-modal').addClass('hidden');
+    $('#event-text').addClass('hidden');
+    $('#event-textarea').val('');
+    $('#event-note').removeClass('hidden');
+    $('#event-title-div').addClass('hidden');
+    $('#all-event-title').val('');
+    $('#completeEvent').addClass('hidden');
+    $('#event-title').removeClass('hidden');
+    $('#deleteEventLink').attr('');
 }
 </script>
 <script>
@@ -680,27 +748,58 @@ $('#end_date').val(endDateTime);
                             $('#event-start').text(response.start_date);
                             $('#event-end').text(response.end_date);
                             $('#viewEstimateIcon').addClass('hidden');
-
+                            // Set start_date and end_date inputs
+                            $('#update_start_date').val(response.start_date);
+                            $('#update_end_date').val(response.end_date);
                             // Check if 'estimate_id' exists in the response
+                             // Populate assigned users in the multi-select dropdown
+                            const assignedUsers = Array.isArray(response.to_do_assigned_to)
+                                ? response.to_do_assigned_to // Already an array
+                                : JSON.parse(response.to_do_assigned_to || '[]'); // Parse if it's a JSON string
+                            console.log(assignedUsers);
+                            $('#update_assign_work').val(assignedUsers).trigger('change');
                             if (response.estimate_id) {
                                 $('#editEventForm').attr('action', '/addToDos');
                                 $('#estimate_schedule_id').val(response.to_do_id);
+                                $('#deleteEventLink').attr('href', '/deleteToDo' + response.to_do_id);
+                                if(response.to_do_status == 'completed') {
+                                    $('#completeEvent').addClass('hidden');
+                                } else {
+                                $('#completeEvent').removeClass('hidden');
+                                $('#completeEvent').attr('href', '/completeToDo' + response.to_do_id);
+                                }
                             } else {
                                 $('#editEventForm').attr('action', '/addUserToDo');
                                 $('#estimate_schedule_id').val(response.to_do_id);
+                                $('#deleteEventLink').attr('href', '/deleteUserToDo/' + response.to_do_id);
+                                if(response.to_do_status == 'completed') {
+                                    $('#completeEvent').addClass('hidden');
+                                } else {
+                                    $('#completeEvent').removeClass('hidden');
+                                    $('#completeEvent').attr('href', '/completeUserToDo/' + response.to_do_id);
+                                }
                             }
                         } else if (eventType === 'estimate') {
                             console.log(response);
                             $('#event-title').text(response.customer_name + ' ' + response.customer_last_name);
-                            $('#event-note').text('');
+                            $('#event-note').text(response.estimate_schedule.note);
                             $('#event-start').text(response.scheduled_start_date);
                             $('#event-end').text(response.scheduled_end_date);
                             $('#event-project-name').text(response.project_name);
+                            // Set start_date and end_date inputs
+                            const assignedUsers = Array.isArray(response.estimate_schedule_assigned_to)
+                                ? response.estimate_schedule_assigned_to // Already an array
+                                : JSON.parse(response.estimate_schedule_assigned_to || '[]'); // Parse if it's a JSON string
+                            console.log(assignedUsers);
+                            $('#update_assign_work').val(assignedUsers).trigger('change');
+                            $('#update_start_date').val(response.scheduled_start_date);
+                            $('#update_end_date').val(response.scheduled_end_date);
                             $('#event-customer-address').text(response.customer_address);
                             $('#address-link').attr('href', 'https://maps.google.com/?q=' + response.customer_address);
                             $('#viewEstimateIcon').attr('href', '/viewEstimate/' + response.estimate_id);
                             $('#editEventForm').attr('action', '/setScheduleEstimate');
                             $('#estimate_schedule_id').val(response.estimate_schedule.estimate_schedule_id);
+                            $('#deleteEventLink').attr('href', '/deleteScheduleEstimate/' + response.estimate_schedule.estimate_schedule_id);
                         }
 
                         // Show the modal

@@ -4575,7 +4575,7 @@ $userPrivileges->estimate->expenses === 'on')
                         </div>
                         <div class=" col-span-2" id="">
                             <label for="" class=" block">Who:</label>
-                            <select name="assign_work" id="assign_work" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <select name="assign_work[]" id="assign_work" multiple class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 <option value="">Select User</option>
                                 @foreach ($employees as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }}

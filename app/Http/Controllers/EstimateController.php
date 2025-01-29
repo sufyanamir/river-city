@@ -675,6 +675,34 @@ class EstimateController extends Controller
     // ==============================================================Jobs Portion=========================================================
 
     // schedule estimate
+    public function deleteScheduleEstimate($id)
+    {
+        try {
+
+            $estimateSchedule = EstimateSchedule::where('estimate_schedule_id', $id)->first();
+
+            if (!$estimateSchedule) {
+                return response()->json(['success' => false, 'message' => 'Estimate Schedule not found!'], 404);
+            }
+
+            $estimate = Estimate::where('estimate_id', $estimateSchedule->estimate_id)->first();
+
+            $estimate->estimate_schedule_assigned = 0;
+            $estimate->estimate_schedule_assigned_to = null;
+            $estimate->scheduled_start_date = null;
+            $estimate->scheduled_end_date = null;
+
+            $estimate->save();
+            $estimateSchedule->delete();
+
+            return response()->json(['success' => true, 'message' => 'Estimate Schedule Deleted!'], 200);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // schedule estimate
+
+    // schedule estimate
     public function setScheduleEstimate(Request $request)
     {
         try {
@@ -682,6 +710,8 @@ class EstimateController extends Controller
                 $validatedData = $request->validate([
                     'start_date' => 'required',
                     'end_date' => 'required',
+                    'assign_work' => 'required|array',
+                    'note' => 'nullable',
                 ]);
 
                 $estimateSchedule = EstimateSchedule::where('estimate_schedule_id', $request->input('estimate_schedule_id'))->first();
@@ -689,8 +719,11 @@ class EstimateController extends Controller
 
                 $estimateSchedule->start_date = $validatedData['start_date'];
                 $estimateSchedule->end_date = $validatedData['end_date'];
+                $estimateSchedule->estimate_complete_assigned_to = json_encode($validatedData['assign_work']);
+                $estimateSchedule->note = $validatedData['note'];
                 $estimate->scheduled_end_date = $validatedData['end_date'];
                 $estimate->scheduled_start_date = $validatedData['start_date'];
+                $estimate->estimate_schedule_assigned_to = json_encode($validatedData['assign_work']);
 
                 $estimateSchedule->save();
                 $estimate->save();
@@ -701,7 +734,7 @@ class EstimateController extends Controller
 
                 $validatedData = $request->validate([
                     'estimate_id' => 'required',
-                    'assign_estimate_completion' => 'required',
+                    'assign_estimate_completion' => 'required|array',
                     'start_date' => 'required',
                     'end_date' => 'required',
                     'note' => 'nullable'
@@ -712,14 +745,14 @@ class EstimateController extends Controller
                 $estimateSchedule = EstimateSchedule::create([
                     'added_user_id' => $userDetails['id'],
                     'estimate_id' => $validatedData['estimate_id'],
-                    'estimate_complete_assigned_to' => $validatedData['assign_estimate_completion'],
+                    'estimate_complete_assigned_to' => json_encode($validatedData['assign_estimate_completion']),
                     'start_date' => $validatedData['start_date'],
                     'end_date' => $validatedData['end_date'],
                     'note' => $validatedData['note'],
                 ]);
 
                 $estimate->estimate_schedule_assigned = 1;
-                $estimate->estimate_schedule_assigned_to = $validatedData['assign_estimate_completion'];
+                $estimate->estimate_schedule_assigned_to = json_encode($validatedData['assign_estimate_completion']);
                 $estimate->scheduled_start_date = $validatedData['start_date'];
                 $estimate->scheduled_end_date = $validatedData['end_date'];
                 $estimate->save();
@@ -843,7 +876,7 @@ class EstimateController extends Controller
         }
     }
 
-    public function getEstimatesOnCalendar()
+    public function getEstimatesOnCalendar($id = null)
     {
         $userDetails = session('user_details');
         if ($userDetails['user_role'] == 'crew') {
@@ -861,12 +894,18 @@ class EstimateController extends Controller
             return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
         } elseif ($userDetails['user_role'] == 'scheduler') {
             $estimates = Estimate::with(['scheduler', 'crew'])->get();
-        } else {
+        } elseif($id != null) {
+            $estimates = Estimate::with(['scheduler', 'crew'])->where('estimate_id', $id)->get();
+        }else {
             $estimates = Estimate::with(['scheduler', 'crew'])->get();
         }
-
-        $userToDos = UserToDo::get();
-        $estimateToDos = EstimateToDos::get();
+        if($id != null) {
+            $userToDos = UserToDo::where('added_user_id', $id)->orWhereJsonContains('to_do_assigned_to', $id)->get();
+            $estimateToDos = EstimateToDos::WhereJsonContains('to_do_assigned_to', $userDetails['id'])->orWhereJsonContains('to_do_assigned_to', $id)->get();
+        }else{
+            $userToDos = UserToDo::get();
+            $estimateToDos = EstimateToDos::get();
+        }
 
         $allEmployees = User::where('sts', 'active')->get();
         return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
@@ -1208,9 +1247,15 @@ class EstimateController extends Controller
                 $validatedData = $request->validate([
                     'start_date' => 'nullable',
                     'end_date' => 'nullable',
+                    'task_name' => 'required',
+                    'note' => 'nullable',
+                    'assign_work' => 'required',
                 ]);
                 $estimateToDo->start_date = $validatedData['start_date'];
                 $estimateToDo->end_date = $validatedData['end_date'];
+                $estimateToDo->to_do_title = $validatedData['task_name'];
+                $estimateToDo->to_do_assigned_to = json_encode($validatedData['assign_work']);
+                $estimateToDo->note = $validatedData['note'];
                 $estimateToDo->save();
                 return response()->json(['success' => true, 'message' => 'To Do updated!'], 200);
             }else{
@@ -1227,7 +1272,7 @@ class EstimateController extends Controller
                     'added_user_id' => $userDetails['id'],
                     'estimate_id' => $validatedData['estimate_id'],
                     'to_do_title' => $validatedData['task_name'],
-                    'to_do_assigned_to' => $validatedData['assign_work'],
+                    'to_do_assigned_to' => json_encode($validatedData['assign_work']),
                     'start_date' => $validatedData['start_date'],
                     'end_date' => $validatedData['end_date'],
                     'note' => $validatedData['note'],
