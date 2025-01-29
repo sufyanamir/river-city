@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('estimates', function (Blueprint $table) {
-            $table->integer('estimate_schedule_assigned')->default(0);
-            $table->text('estimate_schedule_assigned_to')->nullable();
+        Schema::table('user_to_do_list', function (Blueprint $table) {
+            $table->text('to_do_assigned_to')->nullable();
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('estimates');
+        Schema::dropIfExists('user_to_do_list');
     }
 };

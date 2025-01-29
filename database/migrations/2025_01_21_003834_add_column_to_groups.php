@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('estimates', function (Blueprint $table) {
-            $table->integer('estimate_schedule_assigned')->default(0);
-            $table->text('estimate_schedule_assigned_to')->nullable();
+        Schema::table('groups', function (Blueprint $table) {
+            $table->integer('show_group_total')->default(0);
+            $table->integer('include_est_total')->default(0);
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('estimates');
+        Schema::dropIfExists('groups');
     }
 };

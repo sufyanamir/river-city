@@ -43,8 +43,8 @@ Route::middleware('customauth')->group(function () {
     Route::post('/sendInvoiceToQB', [EstimateController::class, 'sendInvoiceToQB']);
 
     Route::post('/addUserToDo', [UserToDoController::class, 'addUserToDo']);
-    Route::post('/deleteUserToDo/{id}', [UserToDoController::class, 'deleteUserToDo']);
-    Route::post('/completeUserToDo/{id}', [UserToDoController::class, 'completeUserToDo']);
+    Route::match(['get', 'post'], '/deleteUserToDo/{id}', [UserToDoController::class, 'deleteUserToDo']);
+    Route::match(['get', 'post'], '/completeUserToDo/{id}', [UserToDoController::class, 'completeUserToDo']);
 
     Route::post('/addUserRole',  [UserController::class, 'addUserRole']);
     Route::get('/userRole', [UserController::class, 'getUserRole']);
@@ -133,7 +133,7 @@ Route::middleware('customauth')->group(function () {
     ROute::post('/updateEstimateExpense', [EstimateController::class, 'updateEstimateExpense']);
     Route::match(['get', 'post'], '/deleteEstimateExpense/{id}', [EstimateController::class, 'deleteEstimateExpense']);
 
-    Route::post('/completeToDo{id}', [EstimateController::class, 'completeToDo']);
+    Route::match(['get', 'post'], '/completeToDo{id}', [EstimateController::class, 'completeToDo']);
     Route::match(['get', 'post'], '/deleteToDo{id}', [EstimateController::class, 'deleteToDo']);
 
     Route::post('/addItemTemplate', [ItemTemplatesController::class, 'addItemTemplate']);
@@ -183,10 +183,11 @@ Route::middleware('customauth')->group(function () {
     Route::match(['post', 'get'], 'deleteEstimateImage{id}', [EstimageImagesController::class, 'deleteEstimateImage']);
 
     Route::get('/schedulesCalendar/{user?}', [EstimateController::class, 'getSchedulesOnScheduleCalendar'])->name('schedulesCalendar');
-    Route::get('/calendar', [EstimateController::class, 'getEstimatesOnCalendar']);
+    Route::get('/calendar{id?}', [EstimateController::class, 'getEstimatesOnCalendar']);
     Route::get('/getEstimateToSetScheduleWork{id}', [EstimateController::class, 'getEstimateToSetScheduleWork']);
     Route::get('/getEstimateToSetSchedule{id}', [EstimateController::class, 'getEstimateToSetSchedule']);
     Route::post('/setScheduleEstimate', [EstimateController::class, 'setScheduleEstimate']);
+    Route::get('/deleteScheduleEstimate/{id}', [EstimateController::class, 'deleteScheduleEstimate']);
     // Route::get('/calendar', function () {
     //     return view('calendar');
     // });
@@ -234,3 +235,4 @@ Route::match(['get', 'post'], 'addPayment', [EstimateController::class, 'addPaym
 Route::post('/forgotPasswordMail', [UserController::class, 'forgotPasswordMail']);
 Route::get('/resetPassword/{id}', [UserController::class, 'resetPassword']);
 Route::post('/updatePassword', [UserController::class, 'updatePassword']);
+Route::post('/acceptRejectEstimateItems', [EstimateController::class, 'acceptRejectEstimateItems']);

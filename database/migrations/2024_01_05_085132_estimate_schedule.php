@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('estimate_schedule_id');
             $table->integer('added_user_id');
             $table->integer('estimate_id');
-            $table->integer('estimate_complete_assigned_to');
+            $table->text('estimate_complete_assigned_to');
             $table->timestamp('start_date')->useCurrent();
             $table->timestamp('end_date')->nullable()->useCurrent();
             $table->text('note')->nullable();
