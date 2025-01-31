@@ -895,13 +895,13 @@ class EstimateController extends Controller
         } elseif ($userDetails['user_role'] == 'scheduler') {
             $estimates = Estimate::with(['scheduler', 'crew'])->get();
         } elseif($id != null) {
-            $estimates = Estimate::with(['scheduler', 'crew'])->where('estimate_id', $id)->get();
+            $estimates = Estimate::with(['scheduler', 'crew'])->where('added_user_id', $id)->get();
         }else {
             $estimates = Estimate::with(['scheduler', 'crew'])->get();
         }
         if($id != null) {
             $userToDos = UserToDo::where('added_user_id', $id)->orWhereJsonContains('to_do_assigned_to', $id)->get();
-            $estimateToDos = EstimateToDos::WhereJsonContains('to_do_assigned_to', $userDetails['id'])->orWhereJsonContains('to_do_assigned_to', $id)->get();
+            $estimateToDos = EstimateToDos::WhereJsonContains('added_user_id', $id)->orWhereJsonContains('to_do_assigned_to', $id)->get();
         }else{
             $userToDos = UserToDo::get();
             $estimateToDos = EstimateToDos::get();
