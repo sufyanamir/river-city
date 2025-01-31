@@ -69,6 +69,24 @@
     .fc-timeGridDay-button {
         border-radius: 0px 5px 5px 0px;
     }
+    /* Custom scrollbar styles */
+    .visible-scrollbar::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .visible-scrollbar::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .visible-scrollbar::-webkit-scrollbar-thumb {
+        background: #930027;
+        border-radius: 4px;
+    }
+
+    .visible-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #6a001b;
+    }
 </style>
 <div class=" my-4  rounded-lg shadow-lg">
     <h1 class=" text-2xl font-semibold bg-[#930027] text-white py-3 px-4 rounded-t-xl">Calendar</h1>
@@ -91,28 +109,40 @@
         </div>
         <div class="p-4 flex justify-between gap-10">
             <!-- THE CALENDAR -->
-            <div class=" w-[85%]">
+            <div class=" w-[80%]">
                 <div id="calendar" data-schedule-assigned="{{ isset($estimate) && $estimate->schedule_assigned == 1 ? 'true' : 'false' }}"></div>
             </div>
-            <div id="external-events" class="w-[15%]">
-                <div class="">
-                    <div class=" bg-white rounded-lg mt-[100px] shadow-lg">
-                        <div class=" bg-[#930027] rounded-t-lg">
-                            <p class="p-2 text-center text-white font-medium">Users</p>
-                        </div>
-                        <div class=" pt-3 pb-2 text-center items-center h-32 overflow-auto">
+            <div id="external-events" class="w-[20%]">
+            <div class=" mt-[100px] flex">
+                <a href="/crewCalendar">
+                    <button id="" class="  bg-[#930027] text-white py-1 px-7  hover:bg-red-900 rounded-l-full ">Planner
+                    </button>
+                </a>
+                <a href="/calendar">
+                    <button id="" class="  bg-[#930027] text-white py-1 px-7  hover:bg-red-900 rounded-r-full ">Clear
+                    </button>
+                </a>
+            </div>
+            <div class="">
+                <div class="bg-white rounded-lg mt-[8px] shadow-lg">
+                    <div class="bg-[#930027] rounded-t-lg">
+                        <p class="p-2 text-center text-white font-medium">Users</p>
+                    </div>
+                    <div class="pt-3 pb-2 text-center items-center h-40 overflow-auto visible-scrollbar">
                         @foreach($allEmployees as $employee)
-                        <div class=" flex gap-3 mx-3">
-                            <div class=" my-auto " style="width: 10px; height: 10px; background-color: {{$employee->user_color}};"></div>
-                            <a href="/calendar{{$employee->id}}"><div class="">{{$employee->name}} {{$employee->last_name}}</div></a>
+                        <div class="flex gap-3 mx-3 px-2 {{ $employee->id == request()->route('id') ? 'bg-[#ffdde4]' : '' }} hover:bg-gray-100 rounded">
+                            <div class="my-auto" style="width: 10px; height: 10px; background-color: {{$employee->user_color}};"></div>
+                            <a href="/calendar{{$employee->id}}" class="w-full">
+                                <div class="p-1">{{$employee->name}} {{$employee->last_name}}</div>
+                            </a>
                         </div>
                         @endforeach
-                        </div>
                     </div>
                 </div>
+            </div>
                 @if (session('user_details')['user_role'] != 'crew')
                 <div class="">
-                    <div class=" bg-white rounded-lg mt-[100px] shadow-lg">
+                    <div class=" bg-white rounded-lg mt-2 shadow-lg">
                         <div class=" bg-[#930027] rounded-t-lg">
                             <p class="p-2 text-center text-white font-medium">Pending List</p>
                         </div>
