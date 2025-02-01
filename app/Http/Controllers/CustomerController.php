@@ -57,7 +57,6 @@ class CustomerController extends Controller
                 'potential_value' => 'nullable|string',
                 'internal_note' => 'nullable|string',
                 'source' => 'nullable|string',
-                'owner' => 'nullable',
                 'branch' => 'nullable'
             ]);
 
@@ -79,9 +78,6 @@ class CustomerController extends Controller
                 $customer->company_internal_note = $validatedData['internal_note'];
                 $customer->source = $validatedData['source'];
                 $customer->branch = $validatedData['branch'];
-                if (isset($validatedData['owner']) != null) {
-                    $customer->owner = $validatedData['owner'];
-                }
     
                 $customer->save();
     
