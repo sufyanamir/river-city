@@ -461,7 +461,7 @@
 <script src="assets/plugins/fullcalendar/main.js"></script>
 
 <script>
-    $(document).on('click', '#deleteEventLink, completeEvent', function (e) {
+    $(document).on('click', '#deleteEventLink, #completeEvent', function (e) {
     e.preventDefault(); // Prevent the default anchor behavior
 
     const url = $(this).attr('href'); // Get the URL from the href attribute
@@ -645,7 +645,7 @@ function clearModalAndClose() {
         var userEvents = userToDos.map(function(todo) {
             return {
                 id: todo.to_do_id,
-                title: todo.to_do_title,
+                title: (todo.to_do_status == 'completed' ? '✔ ' : '') + todo.to_do_title,
                 start: new Date(todo.start_date), // Adjust the field according to your data
                 end: new Date(todo.end_date), // Adjust the field according to your data
                 backgroundColor: '#your_color', // Choose a color or generate dynamically
@@ -660,7 +660,7 @@ function clearModalAndClose() {
         var estimateEvents = estimateToDos.map(function(todo) {
             return {
                 id: todo.to_do_id,
-                title: todo.to_do_title,
+                title: (todo.to_do_status == 'completed' ? '✔' : '') + todo.to_do_title,
                 start: new Date(todo.start_date), // Adjust the field according to your data
                 end: new Date(todo.end_date), // Adjust the field according to your data
                 backgroundColor: '#your_color', // Choose a color or generate dynamically
