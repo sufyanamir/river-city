@@ -172,6 +172,9 @@
                     </div>
                     <div class=" mx-7 my-2">
                         <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
+                        <a href="" id="deleteScheduleWork">
+                            <button type="button" id="deleteSchedule-button" class=" border border-black  font-semibold py-1 px-7 rounded-lg">delete</button>
+                        </a>
                         <button type="button" id="editEvent" class=" float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Edit
                             <svg width="27" height="27" class=" inline-block" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0425 17.5989L16.6252 11.6726C16.8743 11.353 16.9628 10.9835 16.8798 10.6073C16.8079 10.2653 16.5976 9.94009 16.2821 9.69339L15.5128 9.08226C14.8431 8.54962 14.0129 8.60569 13.5369 9.21682L13.0222 9.88458C12.9557 9.96812 12.9723 10.0915 13.0554 10.1588C13.0554 10.1588 14.356 11.2016 14.3837 11.224C14.4722 11.3081 14.5387 11.4203 14.5553 11.5548C14.5829 11.8183 14.4003 12.065 14.1291 12.0987C14.0018 12.1155 13.88 12.0763 13.7915 12.0034L12.4244 10.9157C12.358 10.8658 12.2584 10.8764 12.203 10.9437L8.95418 15.1487C8.74387 15.4123 8.67191 15.7543 8.74387 16.0851L9.15897 17.8848C9.1811 17.9801 9.26412 18.0474 9.36375 18.0474L11.1902 18.025C11.5223 18.0194 11.8322 17.868 12.0425 17.5989ZM14.5997 17.0384H17.5779C17.8685 17.0384 18.1048 17.2778 18.1048 17.5722C18.1048 17.8671 17.8685 18.106 17.5779 18.106H14.5997C14.3092 18.106 14.0728 17.8671 14.0728 17.5722C14.0728 17.2778 14.3092 17.0384 14.5997 17.0384Z" fill="white" />
@@ -346,6 +349,30 @@
     @include('layouts.footer')
     <script>
     $(document).ready(function() {
+            $(document).on('click', '#deleteScheduleWork', function (e) {
+        e.preventDefault(); // Prevent the default anchor behavior
+
+        const url = $(this).attr('href'); // Get the URL from the href attribute
+
+        if (url) {
+            // Send an AJAX DELETE request
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (response) {
+                    console.log('Delete successful:', response);
+                    // Reload the page
+                    location.reload();
+                },
+                error: function (error) {
+                    console.error('Error deleting event:', error);
+                    alert('An error occurred while trying to delete the event. Please try again.');
+                }
+            });
+        } else {
+            alert('No URL is set for deletion.');
+        }
+    });
         let currentDate = new Date();
 
         function generateWeek(currentDate, crewsData) {
@@ -504,6 +531,7 @@
             $('#fendDate').toggleClass('hidden');
             $('#editEvent').toggleClass('hidden');
             $('#updateEvent').toggleClass('hidden');
+            $('#deleteScheduleWork').attr('href', '');
         });
 
         // Event delegation for dynamic elements
@@ -531,6 +559,7 @@
                             $('#end_date').text(estimateSchedule.end_date);
                             $('#note').text(estimateSchedule.note);
                             $('#estimate_id').val(estimateSchedule.estimate_id);
+                            $('#deleteScheduleWork').attr('href', '/deleteSchedule' + estimateSchedule.schedule_estimate_id);
                             // $('#date').val(formatDate(expenseDetail.expense_date));
 
                             // Open the modal

@@ -93,6 +93,7 @@ Route::middleware('customauth')->group(function () {
     Route::get('/getCompletedEstimate{id}', [EstimateController::class, 'getCompletedEstimate']);
     Route::post('/scheduleEstimate', [EstimateController::class, 'scheduleEstimate']);
     Route::post('/setScheduleWork', [EstimateController::class, 'setScheduleWork']);
+    Route::get('/deleteSchedule{id}', [EstimateController::class, 'deleteSchedule']);
     Route::post('/updateScheuleWork', [EstimateController::class, 'updateScheuleWork']);
     Route::post('/addEstimateImage', [EstimageImagesController::class, 'uploadImage']);
     Route::post('/addAsAttachment', [EstimageImagesController::class, 'addAsAttachment']);
