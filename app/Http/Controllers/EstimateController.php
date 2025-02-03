@@ -2340,12 +2340,20 @@ class EstimateController extends Controller
 
             $estimateItem = EstimateItem::where('estimate_item_id', $validatedData['item_id'])->first();
             $estimateItemAssembly = EstimateItemAssembly::where('estimate_item_id', $estimateItem->estimate_item_id)->get();
-
-            $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
-
-            if ($groupDetail) {
-                $estimateItem->group_id = $groupDetail->group_id;
+            if($validatedData['group_name'] != null)
+            {
+                $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
+                if (!$groupDetail) {
+                    $newGroup = Groups::create([
+                        'group_name' => $validatedData['group_name'],
+                        'group_type' => 'assemblies',
+                    ]);
+                    $estimateItem->group_id = $newGroup->group_id;
+                }else{
+                    $estimateItem->group_id = $groupDetail->group_id;
+                }
             }
+
             $estimateItem->item_name = $validatedData['item_name'];
             $estimateItem->item_unit = $validatedData['item_units'];
             $estimateItem->labour_expense = $validatedData['labour_expense'];
