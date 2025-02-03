@@ -674,7 +674,7 @@ class EstimateController extends Controller
     // get estimate on jobs
     // ==============================================================Jobs Portion=========================================================
 
-    // schedule estimate
+    // delete schedule estimate
     public function deleteScheduleEstimate($id)
     {
         try {
@@ -700,7 +700,7 @@ class EstimateController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
-    // schedule estimate
+    // delete schedule estimate
 
     // schedule estimate
     public function setScheduleEstimate(Request $request)
@@ -1724,6 +1724,34 @@ class EstimateController extends Controller
     }
     // update schedule
 
+    // delete schedule
+    public function deleteSchedule($id)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $schedule = ScheduleEstimate::where('schedule_estimate_id', $id)->first();
+
+            if (!$schedule) {
+                return response()->json(['success' => false, 'message' => 'Schedule not found!'], 404);
+            }
+
+            $estimate = Estimate::where('estimate_id', $schedule->estimate_id)->first();
+            $estimate->work_assigned = 0;
+            $estimate->work_assigned_to = null;
+            $estimate->scheduled_start_date = null;
+            $estimate->scheduled_end_date = null;
+
+            $estimate->save();
+            $schedule->delete();
+
+            return response()->json(['success' => true, 'message' => 'Schedule deleted!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // delete schedule
+    
     // set schedule
     public function setScheduleWork(Request $request)
     {
