@@ -277,7 +277,7 @@ class UserController extends Controller
                 'rate' => 'nullable',
                 'teamNumber' => 'nullable',
                 'address' => 'nullable',
-
+                'user_color' => 'nullable|string',
             ]);
 
             $crew = User::where('id', $validatedData['crewId'])->where('user_role', 'crew')->first();
@@ -310,6 +310,7 @@ class UserController extends Controller
             }
             $crew->team_number = $validatedData['teamNumber'];
             $crew->address = $validatedData['address'];
+            $crew->user_color = $validatedData['user_color'];
 
             $crew->save();
 
@@ -346,14 +347,9 @@ class UserController extends Controller
                 'teamNumber' => 'required|numeric',
                 'address' => 'required|string',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+                'user_color' => 'nullable|string',
             ]);
-            // Generate random values for red, green, and blue components
-            $red = rand(0, 255);
-            $green = rand(0, 255);
-            $blue = rand(0, 255);
-
-            // Create the color in hexadecimal format
-            $userColor = sprintf("#%02x%02x%02x", $red, $green, $blue);
+            
             $password = rand();
             $emailData = [
                 'email' => $validatedData['email'],
@@ -375,7 +371,7 @@ class UserController extends Controller
                 'rating' => $validatedData['rate'],
                 'team_number' => $validatedData['teamNumber'],
                 'added_user_id' => $userDetails['id'],
-                'user_color' => $userColor,
+                'user_color' => $validatedData['user_color'],
             ]);
 
             $notificationMessage = "A new Crew member " . $users['name'] . " " . $users['last_name'] . " has been added in the Crews.";
@@ -455,6 +451,7 @@ class UserController extends Controller
                 'phone' => 'required|string',
                 'role' => 'required|string',
                 'address' => 'required|string',
+                'user_color' => 'nullable|string',
             ]);
 
             $user = User::where('id', $validatedData['userId'])->first();
@@ -484,6 +481,7 @@ class UserController extends Controller
             $user->phone = $validatedData['phone'];
             $user->user_role = $validatedData['role'];
             $user->address = $validatedData['address'];
+            $user->user_color = $validatedData['user_color'];
 
             $user->save();
 
@@ -509,14 +507,8 @@ class UserController extends Controller
                 'role' => 'required|string',
                 'address' => 'required|string',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+                'user_color' => 'nullable|string',
             ]);
-            // Generate random values for red, green, and blue components
-            $red = rand(0, 255);
-            $green = rand(0, 255);
-            $blue = rand(0, 255);
-
-            // Create the color in hexadecimal format
-            $userColor = sprintf("#%02x%02x%02x", $red, $green, $blue);
 
             $password = rand();
 
@@ -538,7 +530,7 @@ class UserController extends Controller
                 'address' => $validatedData['address'],
                 'password' => md5($password),
                 'added_user_id' => $userDetails['id'],
-                'user_color' => $userColor,
+                'user_color' => $validatedData['user_color'],
             ]);
 
             $notificationMessage = "A new user " . $users['name'] . " " . $users['last_name'] . " has been added with the user role " . $users['user_role'] . ".";

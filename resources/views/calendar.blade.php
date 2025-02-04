@@ -131,7 +131,7 @@
                     <div class="pt-3 pb-2 text-center items-center h-40 overflow-auto visible-scrollbar">
                         @foreach($allEmployees as $employee)
                         <div class="flex gap-3 mx-3 px-2 {{ $employee->id == request()->route('id') ? 'bg-[#ffdde4]' : '' }} hover:bg-gray-100 rounded">
-                            <div class="my-auto" style="width: 10px; height: 10px; background-color: {{$employee->user_color}};"></div>
+                            <div class="my-auto" style="width: 20px; height: 20px; background-color: {{$employee->user_color}};"></div>
                             <a href="/calendar{{$employee->id}}" class="w-full">
                                 <div class="p-1">{{$employee->name}} {{$employee->last_name}}</div>
                             </a>
@@ -598,11 +598,13 @@ function clearModalAndClose() {
             var estimateEvents = {!! json_encode($estimates) !!};
 
             var events = estimateEvents.map(function(estimate) {
+                var isAllDay = new Date(estimate.scheduled_start_date).toDateString() === new Date().toDateString();
                 return {
                     id: estimate.estimate_id,
                     title: [estimate.estimate.customer_name + ' ' + estimate.estimate.customer_last_name],
                     start: new Date(estimate.start_date),
                     end: new Date(estimate.end_date),
+                    allDay: isAllDay,
                     backgroundColor: estimate.assigned_user ? estimate.assigned_user.user_color : '',
                     borderColor: estimate.assigned_user ? estimate.assigned_user.user_color : '',
                     extendedProps: {
@@ -614,11 +616,13 @@ function clearModalAndClose() {
         var estimateEvents = {!! json_encode($estimates) !!};
 
         var events = estimateEvents.map(function(estimate) {
+            var isAllDay = new Date(estimate.scheduled_start_date).toDateString() === new Date().toDateString();
             var eventObj = {
                 id: estimate.estimate_id,
-                title: [estimate.customer_name + ' ' + estimate.customer_last_name],
+                title: (estimate.status == 'completed' ? '<span style="color:white;">✔</span> ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
                 start: new Date(estimate.scheduled_start_date),
                 end: new Date(estimate.scheduled_end_date),
+                allDay: isAllDay,
                 extendedProps: {
                         type: 'estimate'
                     }
@@ -643,11 +647,13 @@ function clearModalAndClose() {
         var estimateToDos = {!! json_encode($estimateToDos) !!};
         
         var userEvents = userToDos.map(function(todo) {
+            var isAllDay = new Date(todo.start_date).toDateString() === new Date().toDateString();
             return {
                 id: todo.to_do_id,
                 title: (todo.to_do_status == 'completed' ? '✔ ' : '') + todo.to_do_title,
                 start: new Date(todo.start_date), // Adjust the field according to your data
                 end: new Date(todo.end_date), // Adjust the field according to your data
+                allDay: isAllDay,
                 backgroundColor: '#your_color', // Choose a color or generate dynamically
                 borderColor: '#your_color', // Choose a color or generate dynamically
                 extendedProps: {
@@ -658,11 +664,13 @@ function clearModalAndClose() {
 
         // Convert estimate todos to events
         var estimateEvents = estimateToDos.map(function(todo) {
+            var isAllDay = new Date(todo.start_date).toDateString() === new Date().toDateString();
             return {
                 id: todo.to_do_id,
                 title: (todo.to_do_status == 'completed' ? '✔' : '') + todo.to_do_title,
                 start: new Date(todo.start_date), // Adjust the field according to your data
                 end: new Date(todo.end_date), // Adjust the field according to your data
+                allDay: isAllDay,
                 backgroundColor: '#your_color', // Choose a color or generate dynamically
                 borderColor: '#your_color', // Choose a color or generate dynamically
                 extendedProps: {
