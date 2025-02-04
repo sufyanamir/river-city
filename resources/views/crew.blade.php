@@ -167,6 +167,10 @@ $userPrivileges = session('user_details')['user_privileges'];
                                 <label for="" class="text-gray-700 block text-left mb-1 "> Team No</label>
                                 <input type="tel" name="teamNumber" id="teamNumber" placeholder="Team No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             </div>
+                            <div class=" mt-2">
+                                <label for="" class="text-gray-700 block text-left mb-1 ">Select Color</label>
+                                <input type="color" name="user_color" id="color" value="#000000" class=" p-4 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            </div>
                         </div>
                         <div class=" col-span-2 my-2">
                             <label for="" class="text-gray-700 block text-left mb-1 "> Address</label>
@@ -224,6 +228,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                     $('#phone').val(crewDetail.phone);
                     $('#departement').val(crewDetail.departement);
                     $('#teamNumber').val(crewDetail.team_number);
+                    $('#color').val(crewDetail.user_color);
                     $('#address').val(crewDetail.address);
                     // $('#description').val(crewDetail.expense_description);
                     // Add other fields as needed
