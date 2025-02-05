@@ -598,45 +598,49 @@ function clearModalAndClose() {
             var estimateEvents = {!! json_encode($estimates) !!};
 
             var events = estimateEvents.map(function(estimate) {
-                var isAllDay = new Date(estimate.scheduled_start_date).toDateString() === new Date().toDateString();
-                return {
-                    id: estimate.estimate_id,
-                    title: [estimate.estimate.customer_name + ' ' + estimate.estimate.customer_last_name],
-                    start: new Date(estimate.start_date),
-                    end: new Date(estimate.end_date),
-                    allDay: isAllDay,
-                    backgroundColor: estimate.assigned_user ? estimate.assigned_user.user_color : '',
-                    borderColor: estimate.assigned_user ? estimate.assigned_user.user_color : '',
-                    extendedProps: {
-                        type: 'estimate'
-                    }
-                };
+            var startDate = new Date(estimate.start_date);
+            var endDate = new Date(estimate.end_date);
+            var isAllDay = startDate.getHours() === 0 && startDate.getMinutes() === 0 && endDate.getHours() === 0 && endDate.getMinutes() === 0;
+            return {
+                id: estimate.estimate_id,
+                title: [estimate.estimate.customer_name + ' ' + estimate.estimate.customer_last_name],
+                start: startDate,
+                end: endDate,
+                allDay: isAllDay,
+                backgroundColor: estimate.assigned_user ? estimate.assigned_user.user_color : '',
+                borderColor: estimate.assigned_user ? estimate.assigned_user.user_color : '',
+                extendedProps: {
+                type: 'estimate'
+                }
+            };
             });
         @else
         var estimateEvents = {!! json_encode($estimates) !!};
 
         var events = estimateEvents.map(function(estimate) {
-            var isAllDay = new Date(estimate.scheduled_start_date).toDateString() === new Date().toDateString();
+            var startDate = new Date(estimate.scheduled_start_date);
+            var endDate = new Date(estimate.scheduled_end_date);
+            var isAllDay = startDate.getHours() === 0 && startDate.getMinutes() === 0 && endDate.getHours() === 0 && endDate.getMinutes() === 0;
             var eventObj = {
-                id: estimate.estimate_id,
-                title: (estimate.status == 'completed' ? '<span style="color:white;">✔</span> ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
-                start: new Date(estimate.scheduled_start_date),
-                end: new Date(estimate.scheduled_end_date),
-                allDay: isAllDay,
-                extendedProps: {
-                        type: 'estimate'
-                    }
+            id: estimate.estimate_id,
+            title: (estimate.status == 'completed' ? '<span style="color:white;">✔</span> ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
+            start: startDate,
+            end: endDate,
+            allDay: isAllDay,
+            extendedProps: {
+                type: 'estimate'
+                }
             };
 
             if (estimate.scheduler != null) {
-                eventObj.backgroundColor = estimate.scheduler.user_color ? estimate.scheduler.user_color : ''; // Choose a color or generate dynamically
-                eventObj.borderColor = estimate.scheduler.user_color ? estimate.scheduler.user_color : ''; // Choose a color or generate dynamically
+            eventObj.backgroundColor = estimate.scheduler.user_color ? estimate.scheduler.user_color : ''; // Choose a color or generate dynamically
+            eventObj.borderColor = estimate.scheduler.user_color ? estimate.scheduler.user_color : ''; // Choose a color or generate dynamically
             } else if (estimate.crew != null) {
-                eventObj.backgroundColor = estimate.crew.user_color ? estimate.crew.user_color : ''; // Choose a color or generate dynamically
-                eventObj.borderColor = estimate.crew.user_color ? estimate.crew.user_color : ''; // Choose a color or generate dynamically
+            eventObj.backgroundColor = estimate.crew.user_color ? estimate.crew.user_color : ''; // Choose a color or generate dynamically
+            eventObj.borderColor = estimate.crew.user_color ? estimate.crew.user_color : ''; // Choose a color or generate dynamically
             } else{
-                eventObj.backgroundColor = ''; // Choose a color or generate dynamically
-                eventObj.borderColor = ''; // Choose a color or generate dynamically
+            eventObj.backgroundColor = ''; // Choose a color or generate dynamically
+            eventObj.borderColor = ''; // Choose a color or generate dynamically
             }
 
             return eventObj;
@@ -647,35 +651,39 @@ function clearModalAndClose() {
         var estimateToDos = {!! json_encode($estimateToDos) !!};
         
         var userEvents = userToDos.map(function(todo) {
-            var isAllDay = new Date(todo.start_date).toDateString() === new Date().toDateString();
+            var startDate = new Date(todo.start_date);
+            var endDate = new Date(todo.end_date);
+            var isAllDay = startDate.getHours() === 0 && startDate.getMinutes() === 0 && endDate.getHours() === 0 && endDate.getMinutes() === 0;
             return {
-                id: todo.to_do_id,
-                title: (todo.to_do_status == 'completed' ? '✔ ' : '') + todo.to_do_title,
-                start: new Date(todo.start_date), // Adjust the field according to your data
-                end: new Date(todo.end_date), // Adjust the field according to your data
-                allDay: isAllDay,
-                backgroundColor: '#your_color', // Choose a color or generate dynamically
-                borderColor: '#your_color', // Choose a color or generate dynamically
-                extendedProps: {
-                        type: 'userToDo'
-                    }
+            id: todo.to_do_id,
+            title: (todo.to_do_status == 'completed' ? '✔ ' : '') + todo.to_do_title,
+            start: startDate, // Adjust the field according to your data
+            end: endDate, // Adjust the field according to your data
+            allDay: isAllDay,
+            backgroundColor: '#your_color', // Choose a color or generate dynamically
+            borderColor: '#your_color', // Choose a color or generate dynamically
+            extendedProps: {
+                type: 'userToDo'
+                }
             };
         });
 
         // Convert estimate todos to events
         var estimateEvents = estimateToDos.map(function(todo) {
-            var isAllDay = new Date(todo.start_date).toDateString() === new Date().toDateString();
+            var startDate = new Date(todo.start_date);
+            var endDate = new Date(todo.end_date);
+            var isAllDay = startDate.getHours() === 0 && startDate.getMinutes() === 0 && endDate.getHours() === 0 && endDate.getMinutes() === 0;
             return {
-                id: todo.to_do_id,
-                title: (todo.to_do_status == 'completed' ? '✔' : '') + todo.to_do_title,
-                start: new Date(todo.start_date), // Adjust the field according to your data
-                end: new Date(todo.end_date), // Adjust the field according to your data
-                allDay: isAllDay,
-                backgroundColor: '#your_color', // Choose a color or generate dynamically
-                borderColor: '#your_color', // Choose a color or generate dynamically
-                extendedProps: {
-                        type: 'estimateToDo'
-                    }
+            id: todo.to_do_id,
+            title: (todo.to_do_status == 'completed' ? '✔' : '') + todo.to_do_title,
+            start: startDate, // Adjust the field according to your data
+            end: endDate, // Adjust the field according to your data
+            allDay: isAllDay,
+            backgroundColor: '#your_color', // Choose a color or generate dynamically
+            borderColor: '#your_color', // Choose a color or generate dynamically
+            extendedProps: {
+                type: 'estimateToDo'
+                }
             };
         });
         var allEvents = events.concat(userEvents, estimateEvents);
