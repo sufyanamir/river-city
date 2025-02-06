@@ -165,82 +165,6 @@
 
 </div>
 @if(isset($estimate))
-@if ($estimate->schedule_assigned == 1)
-<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="schedule-work-modal">
-    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <!-- Background overlay -->
-        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
-        </div>
-
-        <!-- Modal panel -->
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="/setScheduleWork" id="schedule-work-form">
-                @csrf
-                <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <!-- Modal content here -->
-                    <div class=" flex justify-between">
-                        <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">{{ $customer->customer_first_name }} {{ $customer->customer_last_name }}</h2>
-                        <button class="modal-close" type="button">
-                            <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-                        </button>
-                    </div>
-                    <!-- task details -->
-                    <div>
-                        <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{$customer->customer_primary_address}}, {{$customer->customer_city}}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</p>
-                    </div>
-                    <div>
-                        <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_email }}</p>
-                    </div>
-                    <div>
-                        <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_phone }}</p>
-                    </div>
-                    <div>
-                        <div id="estimators" class="">
-                            <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                            <p class=" font-medium inline-block items-center">Estimator: {{ $user_details['name'] }}</p>
-                        </div>
-                        <div id="dropdown-div" class="">
-                            <p class=" font-medium items-center">Who will complete work?</p>
-                            <select name="assign_work[]" id="assign_work" multiple class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                <option value="">Select User</option>
-                                @foreach($allEmployees as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }} {{$user->last_name}} <sub>({{$user->user_role}})</sub> </option>
-                                @endforeach
-                            </select>
-                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                                        <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                                    </button> -->
-                        </div>
-                    </div>
-                    <div>
-                        <p class=" font-medium inline-block items-center">When should it be completed?</p>
-                    </div>
-                    <div class="flex justify-start gap-3 mb-2">
-                        <label for="start_date">Start date:</label>
-                        <input type="datetime-local" name="start_date" id="start_date" autocomplete="given-name" class="se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    </div>
-                    <div class="flex justify-start gap-3 mb-2">
-                        <label for="end_date">End date:</label>
-                        <input type="datetime-local" name="end_date" id="end_date" autocomplete="given-name" class="se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                    </div>
-                    <textarea placeholder="Note " class=" w-[100%] outline-none rounded-md p-2 border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6" name="note" id="note"></textarea>
-                    <!-- You can customize this part according to your needs -->
-                    <div>
-                        <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
-                        <button id="" class=" float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Set Schedule
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-@else
 <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="schedule-estimate-modal">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <!-- Background overlay -->
@@ -315,7 +239,6 @@
         </div>
     </div>
 </div>
-@endif
 @endif
 <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="assignment-work-modal">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -600,7 +523,7 @@ function clearModalAndClose() {
             var events = estimateEvents.map(function(estimate) {
             var startDate = new Date(estimate.start_date);
             var endDate = new Date(estimate.end_date);
-            var isAllDay = startDate.getHours() === 0 && startDate.getMinutes() === 0 && endDate.getHours() === 0 && endDate.getMinutes() === 0;
+            var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
             return {
                 id: estimate.estimate_id,
                 title: [estimate.estimate.customer_name + ' ' + estimate.estimate.customer_last_name],
@@ -620,7 +543,7 @@ function clearModalAndClose() {
         var events = estimateEvents.map(function(estimate) {
             var startDate = new Date(estimate.scheduled_start_date);
             var endDate = new Date(estimate.scheduled_end_date);
-            var isAllDay = startDate.getHours() === 0 && startDate.getMinutes() === 0 && endDate.getHours() === 0 && endDate.getMinutes() === 0;
+            var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
             var eventObj = {
             id: estimate.estimate_id,
             title: (estimate.status == 'completed' ? '<span style="color:white;">✔</span> ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
@@ -653,7 +576,7 @@ function clearModalAndClose() {
         var userEvents = userToDos.map(function(todo) {
             var startDate = new Date(todo.start_date);
             var endDate = new Date(todo.end_date);
-            var isAllDay = startDate.getHours() === 0 && startDate.getMinutes() === 0 && endDate.getHours() === 0 && endDate.getMinutes() === 0;
+            var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
             return {
             id: todo.to_do_id,
             title: (todo.to_do_status == 'completed' ? '✔ ' : '') + todo.to_do_title,
@@ -672,7 +595,7 @@ function clearModalAndClose() {
         var estimateEvents = estimateToDos.map(function(todo) {
             var startDate = new Date(todo.start_date);
             var endDate = new Date(todo.end_date);
-            var isAllDay = startDate.getHours() === 0 && startDate.getMinutes() === 0 && endDate.getHours() === 0 && endDate.getMinutes() === 0;
+            var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
             return {
             id: todo.to_do_id,
             title: (todo.to_do_status == 'completed' ? '✔' : '') + todo.to_do_title,
