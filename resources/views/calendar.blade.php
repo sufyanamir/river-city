@@ -88,6 +88,23 @@
         background: #6a001b;
     }
 </style>
+<style>
+    .fc .fc-col-header-cell-cushion {
+        border-bottom: 1px solid #ddd;
+    }
+    .fc .fc-daygrid-day-frame {
+        border-right: 1px solid #ddd;
+    }
+    .fc .fc-timegrid-slot {
+        border-bottom: 1px solid #ddd;
+    }
+    .fc .fc-timegrid-axis-cushion {
+        border-right: 1px solid #ddd;
+    }
+    .fc .fc-timegrid-col-frame {
+        border-right: 1px solid #ddd;
+    }
+</style>
 <div class=" my-4  rounded-lg shadow-lg">
     <h1 class=" text-2xl font-semibold bg-[#930027] text-white py-3 px-4 rounded-t-xl">Calendar</h1>
     <div class=" bg-white w-full">
@@ -520,7 +537,9 @@ function clearModalAndClose() {
         @if(isset($crewSchedule) && $crewSchedule === 1)
             var estimateEvents = {!! json_encode($estimates) !!};
 
-            var events = estimateEvents.map(function(estimate) {
+            var events = estimateEvents.filter(function(estimate) {
+            return !(estimate.work_completed == 1 && estimate.invoice_assigned == 1);
+            }).map(function(estimate) {
             var startDate = new Date(estimate.start_date);
             var endDate = new Date(estimate.end_date);
             var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
@@ -538,36 +557,39 @@ function clearModalAndClose() {
             };
             });
         @else
-        var estimateEvents = {!! json_encode($estimates) !!};
+            var estimateEvents = {!! json_encode($estimates) !!};
 
-        var events = estimateEvents.map(function(estimate) {
+            var events = estimateEvents.filter(function(estimate) {
+            return !(estimate.work_completed == 1 && estimate.invoice_assigned == 1);
+            }).map(function(estimate) {
             var startDate = new Date(estimate.scheduled_start_date);
             var endDate = new Date(estimate.scheduled_end_date);
             var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
             var eventObj = {
-            id: estimate.estimate_id,
-            title: (estimate.status == 'completed' ? '<span style="color:white;">✔</span> ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
-            start: startDate,
-            end: endDate,
-            allDay: isAllDay,
-            extendedProps: {
+                id: estimate.estimate_id,
+                title: (estimate.status == 'completed' ? '<span style="color:white;">✔</span> ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
+                start: startDate,
+                end: endDate,
+                allDay: isAllDay,
+                extendedProps: {
                 type: 'estimate'
                 }
             };
 
             if (estimate.scheduler != null) {
-            eventObj.backgroundColor = estimate.scheduler.user_color ? estimate.scheduler.user_color : ''; // Choose a color or generate dynamically
-            eventObj.borderColor = estimate.scheduler.user_color ? estimate.scheduler.user_color : ''; // Choose a color or generate dynamically
+                eventObj.backgroundColor = estimate.scheduler.user_color ? estimate.scheduler.user_color : ''; // Choose a color or generate dynamically
+                eventObj.borderColor = estimate.scheduler.user_color ? estimate.scheduler.user_color : ''; // Choose a color or generate dynamically
             } else if (estimate.crew != null) {
-            eventObj.backgroundColor = estimate.crew.user_color ? estimate.crew.user_color : ''; // Choose a color or generate dynamically
-            eventObj.borderColor = estimate.crew.user_color ? estimate.crew.user_color : ''; // Choose a color or generate dynamically
-            } else{
-            eventObj.backgroundColor = ''; // Choose a color or generate dynamically
-            eventObj.borderColor = ''; // Choose a color or generate dynamically
+                eventObj.backgroundColor = estimate.crew.user_color ? estimate.crew.user_color : ''; // Choose a color or generate dynamically
+                eventObj.borderColor = estimate.crew.user_color ? estimate.crew.user_color : ''; // Choose a color or generate dynamically
+            } else {
+                var userColor = '{{ session('user_details')['user_color'] }}';
+                eventObj.backgroundColor = userColor ? userColor : ''; // Choose a color or generate dynamically
+                eventObj.borderColor = userColor ? userColor : ''; // Choose a color or generate dynamically
             }
 
             return eventObj;
-        });
+            });
         @endif
 
         var userToDos = {!! json_encode($userToDos) !!};
@@ -577,17 +599,18 @@ function clearModalAndClose() {
             var startDate = new Date(todo.start_date);
             var endDate = new Date(todo.end_date);
             var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
+            var userColor = todo.assigned_to ? todo.assigned_to.user_color : '#your_default_color';
             return {
             id: todo.to_do_id,
             title: (todo.to_do_status == 'completed' ? '✔ ' : '') + todo.to_do_title,
             start: startDate, // Adjust the field according to your data
             end: endDate, // Adjust the field according to your data
             allDay: isAllDay,
-            backgroundColor: '#your_color', // Choose a color or generate dynamically
-            borderColor: '#your_color', // Choose a color or generate dynamically
+            backgroundColor: userColor, // Use the assigned user's color
+            borderColor: userColor, // Use the assigned user's color
             extendedProps: {
                 type: 'userToDo'
-                }
+            }
             };
         });
 
@@ -596,17 +619,18 @@ function clearModalAndClose() {
             var startDate = new Date(todo.start_date);
             var endDate = new Date(todo.end_date);
             var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
+            var userColor = todo.assigned_by ? todo.assigned_by.user_color : '#your_default_color';
             return {
             id: todo.to_do_id,
             title: (todo.to_do_status == 'completed' ? '✔' : '') + todo.to_do_title,
             start: startDate, // Adjust the field according to your data
             end: endDate, // Adjust the field according to your data
             allDay: isAllDay,
-            backgroundColor: '#your_color', // Choose a color or generate dynamically
-            borderColor: '#your_color', // Choose a color or generate dynamically
+            backgroundColor: userColor, // Use the assigned user's color
+            borderColor: userColor, // Use the assigned user's color
             extendedProps: {
                 type: 'estimateToDo'
-                }
+            }
             };
         });
         var allEvents = events.concat(userEvents, estimateEvents);
@@ -714,8 +738,8 @@ $('#end_date').val(endDateTime);
                             $('#event-title').text(response.to_do_title);
                             $('#assigned_user').text(response.assigned_to.name);
                             $('#event-note').text(response.note);
-                            $('#event-start').text(response.start_date);
-                            $('#event-end').text(response.end_date);
+                            $('#event-start').text(new Date(response.start_date).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' }));
+                            $('#event-end').text(new Date(response.end_date).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' }));
                             $('#viewEstimateIcon').addClass('hidden');
                             // Set start_date and end_date inputs
                             $('#update_start_date').val(response.start_date);
@@ -752,8 +776,8 @@ $('#end_date').val(endDateTime);
                             console.log(response);
                             $('#event-title').text(response.customer_name + ' ' + response.customer_last_name);
                             $('#event-note').text(response.estimate_schedule.note);
-                            $('#event-start').text(response.scheduled_start_date);
-                            $('#event-end').text(response.scheduled_end_date);
+                            $('#event-start').text(new Date(response.scheduled_start_date).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' }));
+                            $('#event-end').text(new Date(response.scheduled_end_date).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' }));
                             $('#event-project-name').text(response.project_name);
                             // Set start_date and end_date inputs
                             const assignedUsers = Array.isArray(response.estimate_schedule_assigned_to)

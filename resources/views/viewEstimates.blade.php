@@ -832,6 +832,7 @@ $discountedTotal = null;
 
                                             <!-- Modal panel -->
                                             <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                                <div class=" ">
                                                 <form action="/editGroup" method="post" id="formData{{$group->group_id}}">
                                                     @csrf
                                                     <input type="hidden" name="group_id" value="{{$group->group_id}}">
@@ -913,6 +914,15 @@ $discountedTotal = null;
                                                         </div>
                                                     </div>
                                                 </form>
+                                                <div class=" mb-2 mx-6">
+                                                    <form action="/deleteEstimateGroupItems" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                        <input type="hidden" name="group_id" value="{{$group->group_id}}">
+                                                        <button type="submit" class=" border border-black text-black font-semibold py-1 px-7 rounded-lg">Delete</button>
+                                                    </form>
+                                                </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

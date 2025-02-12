@@ -45,7 +45,7 @@ class CustomerController extends Controller
                 'customer_id' => 'nullable',
                 'first_name' => 'required|string',
                 'last_name' => 'nullable|string',
-                'email' => 'required|string',
+                'email' => 'nullable|string',
                 'phone' => 'nullable',
                 'company_name' => 'nullable|string',
                 'first_address' => 'required|string',
@@ -60,7 +60,7 @@ class CustomerController extends Controller
                 'branch' => 'nullable'
             ]);
 
-            if ($validatedData['customer_id'] == null) {
+            if ($validatedData['customer_id'] != null) {
                 $customer = Customer::where('customer_id', $validatedData['customer_id'])->first();
     
                 $customer->customer_first_name = $validatedData['first_name'];
@@ -99,8 +99,8 @@ class CustomerController extends Controller
                     'company_internal_note' => $validatedData['internal_note'],
                     'source' => $validatedData['source'],
                     'branch' => $validatedData['branch'],
-                    'owner' => $validatedData['owner'],
-                    'added_by' => $userDetails['user_id']
+                    // 'owner' => $validatedData['owner'],
+                    'added_user_id' => $userDetails['id']
                 ]);
                 return response()->json(['success' => true, 'message' => 'Customer Created Successfully!'], 200);
             }

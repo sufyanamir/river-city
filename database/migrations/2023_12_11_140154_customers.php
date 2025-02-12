@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('added_user_id');
             $table->string('customer_first_name');
             $table->string('customer_last_name')->nullable();
-            $table->text('customer_email');
+            $table->text('customer_email')->nullable();
             $table->text('customer_phone');
             $table->text('customer_company_name')->nullable();
             $table->text('customer_project_name')->nullable();

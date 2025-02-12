@@ -38,6 +38,8 @@ Route::post('/acceptProposal/{id}', [EstimateController::class, 'acceptProposal'
 
 Route::middleware('customauth')->group(function () {
 
+    Route::post('/deleteEstimateGroupItems', [EstimateController::class, 'deleteEstimateGroupItems']);
+
     Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
 
     Route::post('/sendInvoiceToQB', [EstimateController::class, 'sendInvoiceToQB']);

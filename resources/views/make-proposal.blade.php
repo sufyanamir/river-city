@@ -491,7 +491,7 @@
 
                     </div>
                 </div>
-                <div class="max-w-3xl mx-auto bg-white p-4 rounded-lg shadow-md">
+                <div class="max-w-3xl mx-auto bg-white p-4 rounded-lg shadow-md" id="editor-div">
                     <textarea name="terms_and_conditions" id="editor" class="h-64 bg-white p-4 border border-gray-300 rounded-lg">
                         <p><strong>Required Deposit</strong></p>
                         <p>A nonrefundable 1/3 deposit is required for all projects due at the time of scheduling to secure your spot on our schedule. The remaining balance will be due upon completion.</p>
@@ -631,7 +631,7 @@
                 <input type="hidden" name="customer_email" value="{{ $customer->customer_email }}">
                 <input type="hidden" name="estimate_total" value="{{ $subTotal + ($subTotal * $estimate->tax_rate) / 100 }}">
                 <input type="hidden" name="discounted_total" value="{{ $discountedTotal }}">
-                <div class="col-span-12 p-4 flex justify-end mt-10">
+                <div class="col-span-12 p-4 flex justify-end mt-10" id="send-button">
                     <button class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 " id="sendProposal-btn">Send Proposal</button>
                 </div>
                 @else
@@ -730,23 +730,56 @@ $exsistingProposals = $existing_proposals;
         $("#formData")[0].reset()
     });
 
+    let editorInstance; // Store the editor instance globally
+
+ClassicEditor
+    .create(document.querySelector('#editor'))
+    .then(editor => {
+        editorInstance = editor; // Assign editor instance globally
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
     function printPageArea(areaID) {
-        var printContent = document.getElementById(areaID).innerHTML;
-        var originalContent = document.body.innerHTML;
-
-        // Create a style tag with the desired background color
-        var style = document.createElement('style');
-        style.innerHTML = 'body { background-color: black !important; } .group-card { color: black !important;  }';
-
-        // Append the style tag to the head of the document
-        document.head.appendChild(style);
-
-        // Set the body content to the print content and print
-        document.body.innerHTML = printContent;
-        window.print();
-
-        // Restore the original content and remove the added style tag
-        document.body.innerHTML = originalContent;
-        document.head.removeChild(style);
+    if (!editorInstance) {
+        console.error("Editor instance is not initialized.");
+        return;
     }
+
+    // Extract content from CKEditor
+    var editorContent = editorInstance.getData();
+    var originalContent = document.body.innerHTML;
+
+    // Get the printable area content
+    var printContent = document.getElementById(areaID).innerHTML;
+
+    // Combine the printable area content with the editor content
+    var combinedContent = printContent + editorContent;
+
+    // Create a temporary div to hold the combined content
+    var tempDiv = document.createElement('div');
+    tempDiv.innerHTML = combinedContent;
+    
+    // Append the temporary div to the body
+    document.body.innerHTML = tempDiv.innerHTML;
+
+    // Apply print-specific CSS to hide the editor UI
+    var style = document.createElement('style');
+    style.innerHTML = `
+        @media print {
+            #send-button{ display: none !important; } /* Hide the send button */
+            #editor{ display: none !important; } /* Hide CKEditor Textarea */
+            #footer{ display: none !important; } /* Hide the footer */
+            #editor-div{ display: none !important; } /* Hide the editor div */
+        }
+    `;
+    document.head.appendChild(style);
+
+    window.print(); // Print the content
+
+    // Restore the original page content
+    document.body.innerHTML = originalContent;
+    document.head.removeChild(style); // Remove added styles
+}
 </script>
