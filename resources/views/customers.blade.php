@@ -29,7 +29,11 @@ $userPrivileges = session('user_details')['user_privileges'];
                 <tbody class=" text-sm">
                     @foreach($customers as $customer)
                     <tr>
-                        <td>{{ $customer->customer_first_name }} {{ $customer->customer_last_name }}</td>
+                        <td>
+                            <a href="/viewCustomerDetails/{{ $customer->customer_id }}" class=" text-[#930027] hover:border-b hover:border-[#930027]">
+                                {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
+                            </a>
+                        </td>
                         <td>{{ $customer->customer_email }}</td>
                         <td>{{ date('d, F Y', strtotime($customer->created_at)) }}</td>
                         <td>{{ $customer->customer_phone }} <br> <a href="https://maps.google.com/?q={{ $customer->customer_primary_address }}" target="_blank" class=" text-[#930027]">{{ $customer->customer_primary_address }}</a></td>
