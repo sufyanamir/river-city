@@ -45,6 +45,26 @@ class Estimate extends Model
         return $this->hasOne(EstimateSchedule::class, 'estimate_id');
     }
 
+    public function estimateFiles()
+    {
+        return $this->hasMany(EstimateFile::class, 'estimate_id');
+    }
+
+    public function estimateNotes()
+    {
+        return $this->hasMany(EstimateNote::class, 'estimate_id');
+    }
+
+    public function estimateEmails()
+    {
+        return $this->hasMany(EstimateEmail::class, 'estimate_id');
+    }
+
+    public function estimateContacts()
+    {
+        return $this->hasMany(EstimateContact::class, 'estimate_id');
+    }
+
     protected $table = 'estimates';
 
     protected $primaryKey = 'estimate_id';

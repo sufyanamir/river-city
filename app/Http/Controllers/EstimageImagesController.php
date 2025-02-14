@@ -69,6 +69,24 @@ class EstimageImagesController extends Controller
         // return response()->json(['customers' => $customers, 'estimates_with_images' => $estimateData, 'user_details' => $userDetails], 200);
     }
 
+    public function addImageCaption(Request $request) {
+        try {
+            $validatedData = $request->validate([
+                'estimate_image_id' => 'required',
+                'image_caption' => 'required',
+            ]);
+
+            $image = EstimateImages::where('estimate_image_id', $validatedData['estimate_image_id'])->first();
+            $image->image_caption = $validatedData['image_caption'];
+            $image->save();
+
+            return response()->json(['success' => true, 'message' => 'Image caption added successfully'], 200);
+
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
     public function uploadImage(Request $request)
     {
         try {

@@ -661,7 +661,7 @@
             <div class="col-span-12 p-4 flex justify-end mt-10">
                 @if(!session()->has('user_details'))
                 @if($estimate['estimate_total'] == null )
-                <button type="button" id="addSign" class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 ">I Agree to Pay</button>
+                <button type="button" id="addSign" class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 ">Accept</button>
                 @else
                 <div>
                     <div>

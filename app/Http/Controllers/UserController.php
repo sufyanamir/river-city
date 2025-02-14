@@ -12,6 +12,7 @@ use App\Models\Notifications;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Exists;
 
@@ -632,6 +633,7 @@ class UserController extends Controller
             // }
 
             // Create a session for the user
+            $notifications = Notifications::where('added_user_id', $user->id)->where('notification_status', '<>', 'unread')->count();
             session(['user_details' => [
                 'token' => $token, // Set token value if needed
                 'id' => $user->id,
@@ -641,11 +643,13 @@ class UserController extends Controller
                 'user_role' => $user->user_role,
                 'user_image' => $user->user_image,
                 'phone' => $user->phone,
+                'user_color' => $user->user_color,
                 'address' => $user->address,
                 'departement' => $user->departement,
                 'rating' => $user->rating,
                 'team_number' => $user->team_number,
                 'user_privileges' => json_decode($user->user_privileges),
+                'notifications' => $notifications,
             ]]);
 
             return response()->json(['success' => true, 'message' => 'Login successful', 'user_details' => session('user_details')]);

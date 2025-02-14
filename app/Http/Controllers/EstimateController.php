@@ -64,6 +64,30 @@ class EstimateController extends Controller
     }
     // estimate activity
 
+    // deleteEstimateGroupItems
+    public function deleteEstimateGroupItems(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'group_id' => 'required',
+            ]);
+
+            $estimateItems = EstimateItem::where('estimate_id', $validatedData['estimate_id'])
+                ->where('group_id', $validatedData['group_id'])
+                ->get();
+
+            foreach ($estimateItems as $item) {
+                $item->delete();
+            }
+
+            return response()->json(['success' => true, 'message' => 'Items deleted!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // deleteEstimateGroupItems
+
     // acceptRejectEstimateItems
     public function acceptRejectEstimateItems(Request $request)
     {
@@ -888,8 +912,8 @@ class EstimateController extends Controller
                 $estimates[] = $estimate;
             }
 
-            $userToDos = UserToDo::get();
-            $estimateToDos = EstimateToDos::get();
+            $userToDos = UserToDo::with('assigned_to')->where('to_do_status', null)->get();
+            $estimateToDos = EstimateToDos::with('assigned_by')->where('to_do_status', 'pending')->get();
             $allEmployees = User::where('sts', 'active')->get();
             return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
         } elseif ($userDetails['user_role'] == 'scheduler') {
@@ -900,11 +924,11 @@ class EstimateController extends Controller
             $estimates = Estimate::with(['scheduler', 'crew'])->get();
         }
         if($id != null) {
-            $userToDos = UserToDo::where('added_user_id', $id)->orWhereJsonContains('to_do_assigned_to', $id)->get();
-            $estimateToDos = EstimateToDos::WhereJsonContains('added_user_id', $id)->orWhereJsonContains('to_do_assigned_to', $id)->get();
+            $userToDos = UserToDo::with('assigned_to')->where('added_user_id', $id)->orWhereJsonContains('to_do_assigned_to', $id)->where('to_do_status', null)->get();
+            $estimateToDos = EstimateToDos::with('assigned_by')->WhereJsonContains('added_user_id', $id)->orWhereJsonContains('to_do_assigned_to', $id)->where('to_do_status', 'pending')->get();
         }else{
-            $userToDos = UserToDo::get();
-            $estimateToDos = EstimateToDos::get();
+            $userToDos = UserToDo::with('assigned_to')->where('to_do_status', null)->get();
+            $estimateToDos = EstimateToDos::with('assigned_by')->where('to_do_status', 'pending')->get();
         }
 
         $allEmployees = User::where('sts', 'active')->get();
@@ -2001,7 +2025,7 @@ class EstimateController extends Controller
                 $userIdfromProposal = $proposalData['estimate']['added_user_id'];
                 $proposalData = json_decode($latestProposal->proposal_data, true);
                 if(!session()->has('user_details')){
-                    $notificationMessage = 'The proposal that you send has been viewed by the customer. Please check the Estimate no. ' . $proposalData['estimate']['estimate_id'] . ' for more details.';
+                    $notificationMessage = 'The proposal that you send has been viewed by the customer ' . $proposalData['estimate']['customer_name'] . ' ' . $proposalData['estimate']['customer_last_name'] . '. Please check the Estimate no. ' . $proposalData['estimate']['estimate_id'] . ' for more details.';
 
                     $notification = Notifications::create([
                         'added_user_id' => $userIdfromProposal,
@@ -2985,7 +3009,7 @@ class EstimateController extends Controller
                 'customer_id' => 'nullable',
                 'first_name' => 'required|string',
                 'last_name' => 'nullable|string',
-                'email' => 'required|string',
+                'email' => 'nullable|string',
                 'phone' => 'required|string',
                 'company_name' => 'nullable|string',
                 'project_name' => 'nullable|string',

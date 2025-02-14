@@ -38,6 +38,10 @@ Route::post('/acceptProposal/{id}', [EstimateController::class, 'acceptProposal'
 
 Route::middleware('customauth')->group(function () {
 
+    Route::get('/viewCustomerDetails/{id}', [CustomerController::class, 'getCustomerDetails']);
+
+    Route::post('/deleteEstimateGroupItems', [EstimateController::class, 'deleteEstimateGroupItems']);
+
     Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
 
     Route::post('/sendInvoiceToQB', [EstimateController::class, 'sendInvoiceToQB']);
@@ -95,6 +99,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/setScheduleWork', [EstimateController::class, 'setScheduleWork']);
     Route::get('/deleteSchedule{id}', [EstimateController::class, 'deleteSchedule']);
     Route::post('/updateScheuleWork', [EstimateController::class, 'updateScheuleWork']);
+    // Route::post('/addImageCaption', [EstimageImagesController::class, 'addImageCaption']);
     Route::post('/addEstimateImage', [EstimageImagesController::class, 'uploadImage']);
     Route::post('/addAsAttachment', [EstimageImagesController::class, 'addAsAttachment']);
     Route::post('/completeWorkAndAssignInvoice', [EstimateController::class, 'completeWorkAndAssignInvoice']);

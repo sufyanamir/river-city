@@ -1,6 +1,6 @@
 
 
-<footer class="bg-white rounded-lg shadow m-4 dark:bg-gray-800">
+<footer class="bg-white rounded-lg shadow m-4 dark:bg-gray-800" id="footer">
     <div class="w-full mx-auto max-w-screen-xl p-4 text-center">
       <span class="text-sm text-[#930027] sm:text-center dark:text-gray-400"><a target="_blank" href="https://thewebconcept.com/" class="hover:underline">Powered by : The Web Concept™.</a>
     </span>
@@ -38,13 +38,13 @@
 </script>
 <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script> -->
 
-<script>
+<!-- <script>
         ClassicEditor
             .create(document.querySelector('#editor'))
             .catch(error => {
                 console.error(error);
             });
-    </script>
+    </script> -->
 <script>
     $(document).ready(function() {
         $('select').select2({

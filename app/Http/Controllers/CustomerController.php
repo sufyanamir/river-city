@@ -9,6 +9,42 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
+    public function getCustomerDetails($id)
+    {
+        try {
+            $customer = Customer::where('customer_id', $id)->first();
+
+            if (!$customer) {
+                return response()->json(['success' => false, 'message' => 'Customer not found!'], 200);
+            }
+
+            $estimates = Estimate::where('customer_id', $id)->get();
+            $estimateFiles = [];
+            $estimateNotes = [];
+            $estimateEmails = [];
+            $estimateContacts = [];
+
+            foreach ($estimates as $estimate) {
+                $estimateFiles = array_merge($estimateFiles, $estimate->estimateFiles->toArray());
+                $estimateNotes = array_merge($estimateNotes, $estimate->estimateNotes->toArray());
+                $estimateEmails = array_merge($estimateEmails, $estimate->estimateEmails->toArray());
+                $estimateContacts = array_merge($estimateContacts, $estimate->estimateContacts->toArray());
+            }
+
+            return view('viewCustomerDetails', [
+                'customer' => $customer,
+                'estimates' => $estimates,
+                'estimateFiles' => $estimateFiles,
+                'estimateNotes' => $estimateNotes,
+                'estimateEmails' => $estimateEmails,
+                'estimateContacts' => $estimateContacts
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
     public function index()
     {
         $userDetails = session('user_details');
@@ -45,7 +81,7 @@ class CustomerController extends Controller
                 'customer_id' => 'nullable',
                 'first_name' => 'required|string',
                 'last_name' => 'nullable|string',
-                'email' => 'required|string',
+                'email' => 'nullable|string',
                 'phone' => 'nullable',
                 'company_name' => 'nullable|string',
                 'first_address' => 'required|string',
@@ -60,7 +96,7 @@ class CustomerController extends Controller
                 'branch' => 'nullable'
             ]);
 
-            if ($validatedData['customer_id'] == null) {
+            if ($validatedData['customer_id'] != null) {
                 $customer = Customer::where('customer_id', $validatedData['customer_id'])->first();
     
                 $customer->customer_first_name = $validatedData['first_name'];
@@ -99,8 +135,8 @@ class CustomerController extends Controller
                     'company_internal_note' => $validatedData['internal_note'],
                     'source' => $validatedData['source'],
                     'branch' => $validatedData['branch'],
-                    'owner' => $validatedData['owner'],
-                    'added_by' => $userDetails['user_id']
+                    // 'owner' => $validatedData['owner'],
+                    'added_user_id' => $userDetails['id']
                 ]);
                 return response()->json(['success' => true, 'message' => 'Customer Created Successfully!'], 200);
             }
