@@ -9,6 +9,42 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
+    public function getCustomerDetails($id)
+    {
+        try {
+            $customer = Customer::where('customer_id', $id)->first();
+
+            if (!$customer) {
+                return response()->json(['success' => false, 'message' => 'Customer not found!'], 200);
+            }
+
+            $estimates = Estimate::where('customer_id', $id)->get();
+            $estimateFiles = [];
+            $estimateNotes = [];
+            $estimateEmails = [];
+            $estimateContacts = [];
+
+            foreach ($estimates as $estimate) {
+                $estimateFiles = array_merge($estimateFiles, $estimate->estimateFiles->toArray());
+                $estimateNotes = array_merge($estimateNotes, $estimate->estimateNotes->toArray());
+                $estimateEmails = array_merge($estimateEmails, $estimate->estimateEmails->toArray());
+                $estimateContacts = array_merge($estimateContacts, $estimate->estimateContacts->toArray());
+            }
+
+            return view('viewCustomerDetails', [
+                'customer' => $customer,
+                'estimates' => $estimates,
+                'estimateFiles' => $estimateFiles,
+                'estimateNotes' => $estimateNotes,
+                'estimateEmails' => $estimateEmails,
+                'estimateContacts' => $estimateContacts
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
     public function index()
     {
         $userDetails = session('user_details');
