@@ -14,7 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('user_to_do_list', function (Blueprint $table) {
-            $table->text('to_do_assigned_to')->nullable();
+            if (!Schema::hasColumn('user_to_do_list', 'to_do_assigned_to')) {
+                $table->text('to_do_assigned_to')->nullable();
+            }
         });
     }
 
@@ -25,6 +27,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_to_do_list');
+        Schema::table('user_to_do_list', function (Blueprint $table) {
+            if (Schema::hasColumn('user_to_do_list', 'to_do_assigned_to')) {
+                $table->dropColumn('to_do_assigned_to');
+            }
+        });
     }
 };

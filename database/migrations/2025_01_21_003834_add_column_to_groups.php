@@ -14,8 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::table('groups', function (Blueprint $table) {
-            $table->integer('show_group_total')->default(0);
-            $table->integer('include_est_total')->default(0);
+            if (!Schema::hasColumn('groups', 'show_group_total')) {
+                $table->integer('show_group_total')->default(0);
+            }
+            if (!Schema::hasColumn('groups', 'include_est_total')) {
+                $table->integer('include_est_total')->default(0);
+            }
         });
     }
 
@@ -26,6 +30,13 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('groups');
+        Schema::table('groups', function (Blueprint $table) {
+            if (Schema::hasColumn('groups', 'show_group_total')) {
+                $table->dropColumn('show_group_total');
+            }
+            if (Schema::hasColumn('groups', 'include_est_total')) {
+                $table->dropColumn('include_est_total');
+            }
+        });
     }
 };

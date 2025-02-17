@@ -14,9 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::table('estimates', function (Blueprint $table) {
-            $table->float('percentage_discount')->nullable();
-            $table->float('price_discount')->nullable();
-            $table->double('discounted_total')->nullable();
+            if (!Schema::hasColumn('estimates', 'percentage_discount')) {
+                $table->float('percentage_discount')->nullable();
+            }
+            if (!Schema::hasColumn('estimates', 'price_discount')) {
+                $table->float('price_discount')->nullable();
+            }
+            if (!Schema::hasColumn('estimates', 'discounted_total')) {
+                $table->double('discounted_total')->nullable();
+            }
         });
     }
 
@@ -27,6 +33,16 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('estimates');
+        Schema::table('estimates', function (Blueprint $table) {
+            if (Schema::hasColumn('estimates', 'percentage_discount')) {
+                $table->dropColumn('percentage_discount');
+            }
+            if (Schema::hasColumn('estimates', 'price_discount')) {
+                $table->dropColumn('price_discount');
+            }
+            if (Schema::hasColumn('estimates', 'discounted_total')) {
+                $table->dropColumn('discounted_total');
+            }
+        });
     }
 };

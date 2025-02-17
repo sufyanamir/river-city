@@ -100,6 +100,7 @@ Route::middleware('customauth')->group(function () {
     Route::get('/deleteSchedule{id}', [EstimateController::class, 'deleteSchedule']);
     Route::post('/updateScheuleWork', [EstimateController::class, 'updateScheuleWork']);
     // Route::post('/addImageCaption', [EstimageImagesController::class, 'addImageCaption']);
+    Route::get('/getImageDetails{id}', [EstimageImagesController::class, 'getImageDetails']);
     Route::post('/addEstimateImage', [EstimageImagesController::class, 'uploadImage']);
     Route::post('/addAsAttachment', [EstimageImagesController::class, 'addAsAttachment']);
     Route::post('/completeWorkAndAssignInvoice', [EstimateController::class, 'completeWorkAndAssignInvoice']);
@@ -118,6 +119,7 @@ Route::middleware('customauth')->group(function () {
     Route::get('/getCustomerDetails/{id}', [EstimateController::class, 'getCustomerDetails']);
     Route::post('/sendChat', [EstimateChatController::class, 'sendChat']);
     Route::get('/estimates/getChatMessage/{id}', [EstimateChatController::class, 'getChatMessage']);
+    Route::post('/addImageChat', [EstimageImagesController::class, 'addImageChat']);
     Route::get('/getItemData/{id}', [ItemsController::class, 'getItemData']);
     Route::post('/updateEstimateItem', [EstimateController::class, 'updateEstimateItem']);
     Route::post('/updateAdditionalContact', [EstimateController::class, 'updateAdditionalContact']);
