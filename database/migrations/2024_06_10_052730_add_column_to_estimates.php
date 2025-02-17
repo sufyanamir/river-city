@@ -14,7 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('estimates', function (Blueprint $table) {
-            $table->text('po_number')->nullable();
+            if (!Schema::hasColumn('estimates', 'po_number')) {
+                $table->text('po_number')->nullable();
+            }
         });
     }
 
@@ -25,6 +27,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('estimates');
+        Schema::table('estimates', function (Blueprint $table) {
+            if (Schema::hasColumn('estimates', 'po_number')) {
+                $table->dropColumn('po_number');
+            }
+        });
     }
 };

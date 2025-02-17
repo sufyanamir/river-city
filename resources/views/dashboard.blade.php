@@ -1,6 +1,6 @@
 @include('layouts.header')
 <div class="my-2">
-@if (now()->lessThan(\Carbon\Carbon::create(2025, 2, 18)))
+@if (now()->lessThan(\Carbon\Carbon::create(2025, 2, 20)))
 <div id="alert-additional-content-1" class="p-4 mb-4 text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
     <div class="flex items-center">
         <svg class="shrink-0 w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -10,7 +10,7 @@
         <h3 class="text-lg font-medium">This is a info alert</h3>
     </div>
     <div class="mt-2 mb-4 text-sm">
-        <p>We have recently made some modifications to the system to enhance your experience. Please review the changes and provide your feedback. This alert will be removed after 4 February 2025.</p>
+        <p>We have recently made some modifications to the system to enhance your experience. Please review the changes and provide your feedback. This alert will be removed after 20 February 2025.</p>
     </div>
     <div class="flex">
         <button type="button" onclick="window.location.href = window.location.href.split('?')[0] + '?refresh=' + Date.now(); location.reload(true);" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-xs px-3 py-1.5 me-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">

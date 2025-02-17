@@ -22,4 +22,9 @@ class EstimateImages extends Model
 
     public  $timestamps = true;
 
+    public function chat()
+    {
+        return $this->hasMany(EstimateImageChat::class, 'estimate_image_id', 'estimate_image_id')->orderBy('estimate_image_chat_id', 'desc');
+    }
+
 }

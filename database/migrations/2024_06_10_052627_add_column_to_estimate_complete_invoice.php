@@ -14,7 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('estimate_complete_invoice', function (Blueprint $table) {
-            $table->double('invoice_subtotal')->nullable();
+            if (!Schema::hasColumn('estimate_complete_invoice', 'invoice_subtotal')) {
+                $table->double('invoice_subtotal')->nullable();
+            }
         });
     }
 
@@ -25,6 +27,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('estimate_complete_invoice');
+        Schema::table('estimate_complete_invoice', function (Blueprint $table) {
+            if (Schema::hasColumn('estimate_complete_invoice', 'invoice_subtotal')) {
+                $table->dropColumn('invoice_subtotal');
+            }
+        });
     }
 };

@@ -80,9 +80,11 @@ $userPrivileges = session('user_details')['user_privileges'];
                 <div class="col-span-10 p-3 grid grid-cols-3">
                     @foreach ($estimate_images as $image)
                     <div class="col-span-1 p-2 relative hover:scale-105 duration-300">
-                        <a href="{{ asset('storage/' . $image->estimate_image) }}" data-fancybox="image-set" data-caption="Your Image Caption">
+                        <!-- <a href="{{ asset('storage/' . $image->estimate_image) }}"> -->
+                        <button id="image-btn{{$image->estimate_image_id}}" class="">
                             <img class="rounded-xl" style="width: 100%; height: 200px; object-fit: cover;" src="{{ asset('storage/' . $image->estimate_image) }}" alt="">
-                        </a>
+                        </button>
+                        <!-- </a> -->
                         @if (session('user_details')['user_role'] == 'admin')
                         <form action="/deleteEstimateImage{{ $image->estimate_image_id }}" method="post">
                             @csrf
@@ -149,17 +151,82 @@ $userPrivileges = session('user_details')['user_privileges'];
         </div>
     </div>
 </div>
+<div class="fixed z-10 inset-0 overflow-y-auto hidden" id="image-btn-modal">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+        </div>
+
+        <!-- Modal panel -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full lg:max-w-screen-lg">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <!-- Modal content here -->
+                <div class=" flex justify-between border-b">
+                    <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Image Details</h2>
+                    <button class="image-btn-close" type="button">
+                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                    </button>
+                </div>
+                <!-- task details -->
+
+                <div class="mt-2 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                    <div class="flex justify-between">
+                        <img class="object-cover w-full h-80 rounded-l-lg" id="imageView" src="" alt="">
+                        <div class="flex flex-col justify-between leading-normal">
+                            <div id="chatDiv" class="w-96 h-60 overflow-auto">
+
+                            </div>
+                            <div>
+                                <form method="POST" action="/addImageChat" enctype="multipart/form-data" id="chat-form">
+                                    @csrf
+                                    <input type="hidden" name="estimate_image_id" id="estimate_image_id" value="">
+                                    <div class="flex items-center px-3 py-2 rounded-lg bg-gray-50">
+                                        <textarea id="message" name="message" rows="1" class="message block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Your message..."></textarea>
+
+                                        <!-- Voice Recording Button -->
+                                        <button type="button" id="recordButton" class="inline-flex justify-center p-2 text-red-600 rounded-full cursor-pointer hover:bg-red-100 text-lg">
+                                            🎤
+                                        </button>
+
+                                        <button type="submit" class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100">
+                                            <svg class="w-5 h-5 rotate-90 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                                                <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z" />
+                                            </svg>
+                                            <span class="sr-only">Send message</span>
+                                        </button>
+                                    </div>
+                                    <input type="hidden" name="mentioned_users[]" id="mentioned_user_ids">
+                                    <input type="hidden" name="audio_data" id="audio_data">
+                                </form>
+                            </div>
+
+                            <audio id="audioPlayback" class="mx-2 my-1" controls style="display:none;"></audio>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @include('layouts.footer')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/recorderjs/0.1.0/recorder.min.js"></script>
 <script>
     $("#addImage-btn").click(function(e) {
         e.preventDefault();
         $("#addImage-btn-modal").removeClass('hidden');
     });
-
+    $(".image-btn-close").click(function(e) {
+        e.preventDefault();
+        e.stopPropagation(); // Prevent the event from bubbling up
+        $('#estimate_image_id').val('');
+        $("#image-btn-modal").addClass('hidden');
+    });
     $(".modal-close").click(function(e) {
         e.preventDefault();
         $("#addImage-btn-modal").addClass('hidden');
-        $("#addImage-btn-form")[0].reset()
+        $("#addImage-btn-form")[0].reset();
     });
 </script>
 <script>
@@ -171,19 +238,200 @@ $userPrivileges = session('user_details')['user_privileges'];
 </script>
 <script>
     $(document).ready(function() {
+        $('[id^="image-btn"]').click(function() {
+            var itemId = this.id.replace('image-btn', ''); // Extract item ID from button ID
+
+            // Function to generate a random color
+            function getRandomColor() {
+                const colors = ["#e57373", "#f06292", "#ba68c8", "#64b5f6", "#4db6ac", "#81c784", "#ffb74d", "#a1887f", "#90a4ae"];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            // Make an AJAX request to get item details
+            $.ajax({
+                url: '/getImageDetails' + itemId,
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        // Populate the modal with the retrieved data
+                        $('#imageView').attr('src', '/storage/' + response.data.estimate_image);
+                        $('#estimate_image_id').val(response.data.estimate_image_id);
+                        console.log(response.data);
+
+                        // Clear previous chat messages
+                        $('#chatDiv').empty();
+
+                        // Populate chat messages
+                        if (response.data.chat && response.data.chat.length > 0) {
+                            response.data.chat.forEach(function(chat) {
+                                let randomColor = getRandomColor();
+                                let chatContent = '';
+
+                                // Check if the message contains a .wav file path
+                                if (chat.message.endsWith('.wav')) {
+                                    chatContent = `<audio controls>
+                                    <source src="/storage/${chat.message}" type="audio/wav">
+                                    Your browser does not support the audio element.
+                                </audio>`;
+                                } else {
+                                    chatContent = `<p>${chat.message}</p>`;
+                                }
+
+                                let chatBubble = `<div class="mx-2 mb-3 chat-bubble ${chat.user_id === 1 ? 'sent' : 'received'}">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <strong style="color: ${randomColor};">${chat.user_name}</strong>
+                                    <span class="chat-timestamp" style="color: ${randomColor};">${new Date(chat.created_at).toLocaleString()}</span>
+                                </div>
+                                ${chatContent}
+                            </div>`;
+
+                                $('#chatDiv').append(chatBubble);
+                            });
+                        } else {
+                            $('#chatDiv').append('<p class="text-gray-500 text-center flex items-center justify-center h-full">No messages yet.</p>');
+                        }
+
+                        // Open the modal
+                        $('#image-btn-modal').removeClass('hidden');
+                    } else {
+                        console.error('Error fetching item details.');
+                    }
+                },
+                error: function(error) {
+                    console.error('AJAX request failed:', error);
+                }
+            });
+        });
+
         $("[data-fancybox]").fancybox({
-            // Options for Fancybox
-            loop: true, // Enables looping through images
+            loop: true,
             buttons: ["slideShow", "fullScreen", "thumbs", "close"],
         });
     });
 </script>
 <script>
-  $(document).ready(function() {
-    // Add click event listener to the button
-    $('#reloadButton').click(function() {
-      // Reload the page
-      location.reload();
+    $(document).ready(function() {
+        // Add click event listener to the button
+        $('#reloadButton').click(function() {
+            // Reload the page
+            location.reload();
+        });
     });
-  });
+</script>
+<script>
+    // Your existing JavaScript code
+    // Your list of users with names and ids
+    const users = {!!json_encode($users->pluck('name', 'id')) !!};
+
+    // Get the textarea, user dropdown, and hidden input elements
+    const messageTextarea = $("#message");
+    const userDropdown = $("#userDropdown");
+    const userIdInput = $("#mentioned_user_ids");
+
+    // Append the hidden input to the form
+    // $("#chat-form").append(userIdInput);
+
+    // Track mentioned user ids
+    let mentionedUserIds = [];
+
+    // Event listener for typing '@' in the textarea
+    messageTextarea.on("input", function(event) {
+        const text = event.target.value;
+        const lastIndex = text.lastIndexOf("@");
+
+        if (lastIndex !== -1) {
+            const query = text.substring(lastIndex + 1);
+            const matchingUsers = Object.entries(users)
+                .filter(([id, name]) =>
+                    name.toLowerCase().includes(query.toLowerCase())
+                );
+
+            // Display matching users in the dropdown
+            renderDropdown(matchingUsers);
+        } else {
+            // Hide the dropdown if '@' is not present
+            userDropdown.hide();
+        }
+    });
+
+    // Function to render the user dropdown
+    function renderDropdown(users) {
+        if (users.length > 0) {
+            const dropdownContent = users.map(([id, name]) => `
+            <button type="button" onclick="mentionUser('${name}', '${id}')">${name}</button>
+        `).join("");
+
+            userDropdown.html(dropdownContent).show();
+        } else {
+            userDropdown.hide();
+        }
+    }
+
+    // Function to handle user selection from the dropdown
+    function mentionUser(userName, userId) {
+        const currentText = messageTextarea.val();
+        const lastIndex = currentText.lastIndexOf("@");
+        const newText = currentText.substring(0, lastIndex) + `@${userName} `;
+
+        messageTextarea.val(newText);
+
+        // Add the mentioned user's id to the array
+        mentionedUserIds.push(userId);
+
+        // Set the array of mentioned user ids in the hidden input
+        userIdInput.val(mentionedUserIds);
+
+        userDropdown.hide();
+    }
+
+    // Close the dropdown when clicking outside of it
+    $(document).on("click", function(event) {
+        if (!$(event.target).closest("#userDropdown").length && !$(event.target).is("#message")) {
+            userDropdown.hide();
+        }
+    });
+</script>
+<script>
+    let recorder, audioChunks;
+
+    document.getElementById('recordButton').addEventListener('click', async function() {
+        if (!recorder || recorder.state === "inactive") {
+            startRecording();
+        } else {
+            stopRecording();
+        }
+    });
+
+    async function startRecording() {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true
+        });
+        recorder = new MediaRecorder(stream);
+        audioChunks = [];
+
+        recorder.ondataavailable = event => {
+            audioChunks.push(event.data);
+        };
+
+        recorder.onstop = async () => {
+            const audioBlob = new Blob(audioChunks, {
+                type: 'audio/wav'
+            });
+            const reader = new FileReader();
+            reader.readAsDataURL(audioBlob);
+            reader.onloadend = () => {
+                document.getElementById('audio_data').value = reader.result;
+                document.getElementById('audioPlayback').src = reader.result;
+                document.getElementById('audioPlayback').style.display = "block";
+            };
+        };
+
+        recorder.start();
+        document.getElementById('recordButton').textContent = "⏹️"; // Change icon to stop
+    }
+
+    function stopRecording() {
+        recorder.stop();
+        document.getElementById('recordButton').textContent = "🎤"; // Change icon back to mic
+    }
 </script>
