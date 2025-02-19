@@ -1146,7 +1146,7 @@ $discountedTotal = null;
                                         </td>
                                         @endif
                                         @php
-                                        if($item->group->show_group_total == 1) {
+                                        if(isset($item->group->show_group_total) != null && $item->group->show_group_total == 1) {
                                         $groupTotal += $item->item_total; // Add item price to group total
                                         }
                                         @endphp
@@ -2065,7 +2065,7 @@ $userPrivileges->estimate->items === 'on')
                                 </td>
                                 @endif
                                 @php
-                                if($item->group->show_group_total == 1) {
+                                if(isset($item->group->show_group_total) != null && $item->group->show_group_total == 1) {
                                 $groupTotal += $item->item_total; // Add item price to group total
                                 }
                                 @endphp
