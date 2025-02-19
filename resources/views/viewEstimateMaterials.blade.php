@@ -60,7 +60,7 @@
                             {{ $estimate->estimate_status }}
                         </p>
                         <p class="text-[#323C47]">
-                            {{ date('d, F Y', strtotime($estimate->created_at)) }}
+                            {{ date('m/d/y', strtotime($estimate->created_at)) }}
                         </p>
                     </div>
                 </div>

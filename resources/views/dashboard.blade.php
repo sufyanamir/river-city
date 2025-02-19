@@ -47,7 +47,7 @@
             <p>Today</p>
         </div>
         <div class="font-semibold">
-            <p>{{ date('d, F Y') }}</p>
+            <p>{{ date('m/d/Y') }}</p>
         </div>
     </div>
     <div class="mb-4">
@@ -156,7 +156,7 @@
                         <tbody class=" text-center">
                             @foreach ($schedule_estimates_with_estimates as $item)
                             <tr>
-                                <td>{{ isset($item['estimate']->created_at) ? date('d, F Y', strtotime($item['estimate']->created_at)) : '' }}</td>
+                                <td>{{ isset($item['estimate']->created_at) ? date('m/d/y', strtotime($item['estimate']->created_at)) : '' }}</td>
                                 <td>
                                     <h3 class="text-lg font-medium">
                                         <a href="">
@@ -221,7 +221,7 @@
                                     </form>
                                 </div>
                                 <div class=" inline-block font-semibold" style="width: 90%;">
-                                <p>{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('d, F Y', strtotime($todo->start_date))}}) - End date:({{date('d, F Y', strtotime($todo->end_date))}}), (Added by: {{ isset($todo->assigned_by) ? $todo->assigned_by->name . ' ' . $todo->assigned_by->last_name : 'Unknown' }})</span>
+                                <p>{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('m/d/y', strtotime($todo->start_date))}}) - End date:({{date('m/d/y', strtotime($todo->end_date))}}), (Added by: {{ isset($todo->assigned_by) ? $todo->assigned_by->name . ' ' . $todo->assigned_by->last_name : 'Unknown' }})</span>
                                         <br>
                                         <span class=" text-sm">
                                             Note:
@@ -254,7 +254,7 @@
                             </div>
                             <div>
                                 <div class=" inline-block font-semibold">
-                                    <p>{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('d, F Y', strtotime($todo->start_date))}}) - End date:({{date('d, F Y', strtotime($todo->end_date))}}), (Added by: {{ isset($todo->assigned_by) ? $todo->assigned_by->name . ' ' . $todo->assigned_by->last_name : 'Unknown' }})</span>
+                                    <p>{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('m/d/y', strtotime($todo->start_date))}}) - End date:({{date('m/d/y', strtotime($todo->end_date))}}), (Added by: {{ isset($todo->assigned_by) ? $todo->assigned_by->name . ' ' . $todo->assigned_by->last_name : 'Unknown' }})</span>
                                         <br>
                                         <span class=" text-sm">
                                             Note:
@@ -326,9 +326,9 @@
                             @if (session('user_details')['user_role'] == 'scheduler' || $user_details['user_role'] == 'scheduler')
                             @if ($estimate->estimate_schedule_assigned_to == session('user_details')['id'] || $estimate->estimate_schedule_assigned_to == $user_details['id'])
                             <tr>
-                                <td>{{ date('d, F Y', strtotime($estimate->scheduled_start_date)) }}
+                                <td>{{ date('m/d/y', strtotime($estimate->scheduled_start_date)) }}
                                 </td>
-                                <td>{{ date('d, F Y', strtotime($estimate->scheduled_end_date)) }}
+                                <td>{{ date('m/d/y', strtotime($estimate->scheduled_end_date)) }}
                                 </td>
                                 <td>
                                     <h3 class="text-lg font-medium">
@@ -354,7 +354,7 @@
                             @else
                             <tr>
                                 <td>
-                                    {{ isset($estimate->created_at) ? date('d, F Y', strtotime($estimate->created_at)) : '' }}
+                                    {{ isset($estimate->created_at) ? date('m/d/y', strtotime($estimate->created_at)) : '' }}
                                 </td>
                                 <td>
                                     <h3 class="text-lg font-medium">
@@ -415,7 +415,7 @@
                                 </form>
                             </div>
                             <div class=" inline-block font-semibold" style="width: 90%;">
-                                <p>{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('d, F Y', strtotime($todo->start_date))}}) - End date:({{date('d, F Y', strtotime($todo->end_date))}}), (Added by: {{ isset($todo->assigned_by) ? $todo->assigned_by->name . ' ' . $todo->assigned_by->last_name : 'Unknown' }})</span>
+                                <p>{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('m/d/y', strtotime($todo->start_date))}}) - End date:({{date('m/d/y', strtotime($todo->end_date))}}), (Added by: {{ isset($todo->assigned_by) ? $todo->assigned_by->name . ' ' . $todo->assigned_by->last_name : 'Unknown' }})</span>
                                     <br>
                                     <span class=" text-sm">
                                         Note:
@@ -448,7 +448,7 @@
                         </div>
                         <div>
                             <div class=" inline-block font-semibold">
-                                <p>{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('d, F Y', strtotime($todo->start_date))}}) - End date:({{date('d, F Y', strtotime($todo->end_date))}}), (Added by: {{ isset($todo->assigned_by) ? $todo->assigned_by->name . ' ' . $todo->assigned_by->last_name : 'Unknown' }})</span>
+                                <p>{{ $todo->to_do_title }} <span class=" text-xs">Start date:({{date('m/d/y', strtotime($todo->start_date))}}) - End date:({{date('m/d/y', strtotime($todo->end_date))}}), (Added by: {{ isset($todo->assigned_by) ? $todo->assigned_by->name . ' ' . $todo->assigned_by->last_name : 'Unknown' }})</span>
                                     <br>
                                     <span class=" text-sm">
                                         Note:

@@ -47,13 +47,29 @@
     </script> -->
 <script>
     $(document).ready(function() {
-        $('select').select2({
-            width: '100%'
-        });
-        $('#Items_dropdown').select2({
-            minimumResultsForSearch: Infinity
-        });
+    $('select').select2({
+        width: '100%',
+        matcher: function(params, data) {
+            if ($.trim(params.term) === '') {
+                return data;
+            }
+
+            if (typeof data.text === 'undefined') {
+                return null;
+            }
+
+            // Convert both search term and option text to lowercase
+            let searchTerm = params.term.toLowerCase();
+            let optionText = data.text.toLowerCase();
+
+            // Split search term by space and check if all words are present in the option text
+            let searchWords = searchTerm.split(" ");
+            let matchesAllWords = searchWords.every(word => optionText.includes(word));
+
+            return matchesAllWords ? data : null;
+        }
     });
+});
 </script>
 <style>
     .select2-results__option[aria-selected="true"] {

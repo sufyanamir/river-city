@@ -530,7 +530,10 @@ class EstimateController extends Controller
                 'template_item_id' => 'required|array',
                 'estimate_template_description' => 'nullable',
                 'estimate_template_note' => 'nullable',
+                'group_name' => 'nullable',
             ]);
+
+            $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
 
             // $estTemplate = EstimateItemTemplates::create([
             //     'added_user_id' => $userDetails['id'],
@@ -584,7 +587,7 @@ class EstimateController extends Controller
                                 'item_Description' => $item->item_description,
                                 'item_note' => $item->item_note,
                                 // 'is_upgrade' => $validatedData['is_upgrade'],
-                                'group_id' => $item->group_ids,
+                                'group_id' => $groupDetail != null ? $groupDetail->group_id : $item->group_ids,
                             ]);
 
                             if ($item->item_type == 'assemblies') {
@@ -793,15 +796,15 @@ class EstimateController extends Controller
     {
         $userDetails = session('user_details');
 
-        $estimate = Estimate::where('estimate_id', $id)->first();
+        $estimate = Estimate::with(['scheduler', 'crew'])->where('estimate_id', $id)->first();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
         $estimates = Estimate::with(['scheduler', 'crew'])->get();
         $users = User::where('user_role', 'scheduler')->where('sts', 'active')->get();
         $allEmployees = User::where('sts', 'active')->get();
-        $allEmployees = User::where('sts', 'active')->get();
+        // $allEmployees = User::where('sts', 'active')->get();
 
-        $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->get();
-        $estimateToDos = EstimateToDos::where('to_do_assigned_to', $userDetails['id'])->get();
+        $userToDos = UserToDo::with('assigned_to')->where('added_user_id', $userDetails['id'])->where('to_do_status', null)->get();
+        $estimateToDos = EstimateToDos::with('assigned_by')->where('to_do_assigned_to', $userDetails['id'])->where('to_do_status', 'pending')->get();
 
         return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
         // return response()->json(['success' => true, 'estimate' => $estimate]);
@@ -912,8 +915,8 @@ class EstimateController extends Controller
                 $estimates[] = $estimate;
             }
 
-            $userToDos = UserToDo::with('assigned_to')->where('to_do_status', null)->get();
-            $estimateToDos = EstimateToDos::with('assigned_by')->where('to_do_status', 'pending')->get();
+            $userToDos = UserToDo::with('assigned_to')->get();
+            $estimateToDos = EstimateToDos::with('assigned_by')->get();
             $allEmployees = User::where('sts', 'active')->get();
             return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
         } elseif ($userDetails['user_role'] == 'scheduler') {
@@ -924,11 +927,11 @@ class EstimateController extends Controller
             $estimates = Estimate::with(['scheduler', 'crew'])->get();
         }
         if($id != null) {
-            $userToDos = UserToDo::with('assigned_to')->where('added_user_id', $id)->orWhereJsonContains('to_do_assigned_to', $id)->where('to_do_status', null)->get();
-            $estimateToDos = EstimateToDos::with('assigned_by')->WhereJsonContains('added_user_id', $id)->orWhereJsonContains('to_do_assigned_to', $id)->where('to_do_status', 'pending')->get();
+            $userToDos = UserToDo::with('assigned_to')->where('added_user_id', $id)->orWhereJsonContains('to_do_assigned_to', $id)->get();
+            $estimateToDos = EstimateToDos::with('assigned_by')->WhereJsonContains('added_user_id', $id)->orWhereJsonContains('to_do_assigned_to', $id)->get();
         }else{
-            $userToDos = UserToDo::with('assigned_to')->where('to_do_status', null)->get();
-            $estimateToDos = EstimateToDos::with('assigned_by')->where('to_do_status', 'pending')->get();
+            $userToDos = UserToDo::with('assigned_to')->get();
+            $estimateToDos = EstimateToDos::with('assigned_by')->get();
         }
 
         $allEmployees = User::where('sts', 'active')->get();
