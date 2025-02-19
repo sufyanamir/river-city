@@ -7252,148 +7252,157 @@ $userPrivileges->estimate->expenses === 'on')
             // Your existing code inside the click event handler
             var itemId = this.id.replace('addTemplate', '');
             $.ajax({
-                url: '/getItemTemplateItems/' + itemId,
-                method: 'GET',
-                success: function(response) {
-                    if (response.success) {
-                        var itemTemplate = response.data.item_template;
-                        var itemTemplateItems = response.data.item_template_items;
-                        var itemsData = response.data.items_data;
-                        console.log(itemsData);
+            url: '/getItemTemplateItems/' + itemId,
+            method: 'GET',
+            success: function(response) {
+                if (response.success) {
+                var itemTemplate = response.data.item_template;
+                var itemTemplateItems = response.data.item_template_items;
+                var itemsData = response.data.items_data;
+                console.log(itemsData);
 
-                        for (var i = 0; i < itemTemplateItems.length; i++) {
-                            var currentItem = itemTemplateItems[i];
-                            console.log("Current item:", currentItem);
-                            console.log("Items data:", itemsData);
-
-                            // Find the corresponding item data based on item_id
-                            var correspondingItemData = itemsData.find(item => item.item_id == currentItem.item_id);
-                            // console.log(correspondingItemData);
-                            // Assuming currentItem has properties 'name' and 'quantity'
-                            var itemNameInput = $('#template_item_name');
-                            // var itemQtyInput = $('#template_item_qty');
-                            var itemTemplateTitle = $('#itemTemplate-title');
-                            itemTemplateTitle.text(itemTemplate.item_template_name)
-                            // Update input values with currentItem and item data
-                            var estimateTemplateId = $('#estimate_template_id');
-                            var estimateTemplateName = $('#estimate_template_name');
-                            $('#estimate_template_description').val(itemTemplate.description);
-                            $('#estimate_template_note').val(itemTemplate.note);
-                            estimateTemplateId.val(itemTemplate.item_template_id);
-                            estimateTemplateName.val(itemTemplate.item_template_name);
-                            var demoInput = $('<div>').html(`
-                            <input type="hidden" name="template_item_id[]" id="template_item_id" placeholder="Item Name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                            <div class="my-0 flex items-center gap-2 text-left">
-                                <div class="relative text-left my-1">
-                                    <button type="button"
-                                        class="bg-[#930027] py-[6px] px-2 rounded-md text-white">
-                                        <div id="cal-menubutton" class=" cursor-pointer" aria-expanded="true"
-                                            aria-haspopup="true">
-                                            {{-- <img id="calculater-modal"  class="" src="{{ asset('assets/icons/calculator-icon.svg') }}"
-                                            alt="icon"> --}}
-                                            <i id="calculater-modal" class="fa-solid fa-calculator"></i>
-                                        </div>
-                                    </button>
-                                    {{-- ====================== --}}
-                                    <div id="cal-menu" class="absolute hidden  text-left h-[100%]  z-[999] " <div 
-                                        style="background-color:#3a4655 !important;"
-                                        class="    z-10 mt-2 w-56 origin-top-right rounded-md bg-[#3a4655] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                                        role="menu" aria-orientation="vertical" aria-labelledby="menu-button"
-                                        tabindex="-1">
-                                        <div class="py-1 left-5" role="none">
-                                            <div class="relative  bg-[#3a4655]">
-                                                <input
-                                                    class="block mx-2 mt-2 border bg-[#3a4655] h-[30px] rounded text-white border-white "
-                                                    type="text" readonly id="cal_display">
-                                                <div class="grid text-white grid-cols-4 gap-y-3  p-2 mt-3">
-                                                    <button type="button"
-                                                        class="cal_btn border rounded text-center mx-1  h-[30px]">%</button>
-                                                    <button type="button"
-                                                        class="cal_btn border rounded text-center mx-1  h-[30px]">/</button>
-                                                    <button type="button"
-                                                        class="cal_btn border rounded text-center mx-1  h-[30px] ">
-                                                        << /button>
-                                                            <button id="clear_btn" type="button"
-                                                                class=" border rounded text-center mx-1  h-[30px] ">C</button>
-
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">7</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">8</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">9</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">*</button>
-
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">4</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">5</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">6</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">-</button>
-
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">1</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">2</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">3</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">+</button>
-
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">0</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px]">00</button>
-                                                            <button type="button"
-                                                                class="cal_btn border rounded text-center mx-1  h-[30px] ">.</button>
-                                                            <button id="equal_btn" type="button"
-                                                                class=" border rounded text-center mx-1  h-[30px] ">=</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <input type="number" step="any" name="template_item_qty[]" id="template_item_qty" placeholder="" class=" w-[15%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                <p id="template_item_name" class=" font-medium overflow-hidden whitespace-nowrap items-center bg-[#EBEAEB] py-1 px-2 rounded-lg w-[75%]"></p>
-                            </div>
-                            `);
-                            var itemNameInput = demoInput.find('#template_item_name');
-                            var itemQtyInput = demoInput.find('#template_item_qty');
-                            var itemIdInput = demoInput.find('#template_item_id');
-
-                            itemNameInput.attr('id', 'template_item_name_' + i);
-                            itemQtyInput.attr('id', 'template_item_qty_' + i);
-                            itemIdInput.attr('id', 'template_item_id_' + i);
-                            var templateItemDiv = $('#template-items');
-
-                            // demoInput.addClass('flex justify-between');
-                            // Dynamic IDs for calculator elements
-                            var calButtonId = 'cal-button-' + i;
-                            var calMenuId = 'cal-menu-' + i;
-
-                            // Find and update IDs in the HTML template
-                            demoInput.find('#cal-menubutton').attr('id', calButtonId);
-                            demoInput.find('#cal-menu').attr('id', calMenuId);
-
-                            templateItemDiv.append(demoInput);
-
-                            $('#template_item_name_' + i).text(correspondingItemData.item_name + (correspondingItemData.item_description ? ' ' + correspondingItemData.item_description : ''));
-                            $('#template_item_id_' + i).val(correspondingItemData.item_id);
-                            $('#template_item_qty_' + i).val(currentItem.item_qty);
-                            // console.log(itemTemplateItems.length)
-                            // itemQtyInput.val(currentItem.quantity);
-
-                            $('#addItemTemplate-modal').removeClass('hidden');
-                            initializeCalculator(calButtonId, calMenuId, itemQtyInput);
-                        }
-                    }
-                },
-                error: function(error) {
-                    console.error('AJAX request failed:', error);
+                if (itemsData.length === 0) {
+                    var itemTemplateTitle = $('#itemTemplate-title');
+                    itemTemplateTitle.text(itemTemplate.item_template_name);
+                    var templateItemDiv = $('#template-items');
+                    templateItemDiv.html('<p class="text-center text-gray-500">No items in template</p>');
+                    $('#addItemTemplate-modal').removeClass('hidden');
+                    return;
                 }
+
+                for (var i = 0; i < itemTemplateItems.length; i++) {
+                    var currentItem = itemTemplateItems[i];
+                    console.log("Current item:", currentItem);
+                    console.log("Items data:", itemsData);
+
+                    // Find the corresponding item data based on item_id
+                    var correspondingItemData = itemsData.find(item => item.item_id == currentItem.item_id);
+                    // console.log(correspondingItemData);
+                    // Assuming currentItem has properties 'name' and 'quantity'
+                    var itemNameInput = $('#template_item_name');
+                    // var itemQtyInput = $('#template_item_qty');
+                    var itemTemplateTitle = $('#itemTemplate-title');
+                    itemTemplateTitle.text(itemTemplate.item_template_name)
+                    // Update input values with currentItem and item data
+                    var estimateTemplateId = $('#estimate_template_id');
+                    var estimateTemplateName = $('#estimate_template_name');
+                    $('#estimate_template_description').val(itemTemplate.description);
+                    $('#estimate_template_note').val(itemTemplate.note);
+                    estimateTemplateId.val(itemTemplate.item_template_id);
+                    estimateTemplateName.val(itemTemplate.item_template_name);
+                    var demoInput = $('<div>').html(`
+                    <input type="hidden" name="template_item_id[]" id="template_item_id" placeholder="Item Name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    <div class="my-0 flex items-center gap-2 text-left">
+                    <div class="relative text-left my-1">
+                        <button type="button"
+                        class="bg-[#930027] py-[6px] px-2 rounded-md text-white">
+                        <div id="cal-menubutton" class=" cursor-pointer" aria-expanded="true"
+                            aria-haspopup="true">
+                            {{-- <img id="calculater-modal"  class="" src="{{ asset('assets/icons/calculator-icon.svg') }}"
+                            alt="icon"> --}}
+                            <i id="calculater-modal" class="fa-solid fa-calculator"></i>
+                        </div>
+                        </button>
+                        {{-- ====================== --}}
+                        <div id="cal-menu" class="absolute hidden  text-left h-[100%]  z-[999] " <div 
+                        style="background-color:#3a4655 !important;"
+                        class="    z-10 mt-2 w-56 origin-top-right rounded-md bg-[#3a4655] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                        role="menu" aria-orientation="vertical" aria-labelledby="menu-button"
+                        tabindex="-1">
+                        <div class="py-1 left-5" role="none">
+                            <div class="relative  bg-[#3a4655]">
+                            <input
+                                class="block mx-2 mt-2 border bg-[#3a4655] h-[30px] rounded text-white border-white "
+                                type="text" readonly id="cal_display">
+                            <div class="grid text-white grid-cols-4 gap-y-3  p-2 mt-3">
+                                <button type="button"
+                                class="cal_btn border rounded text-center mx-1  h-[30px]">%</button>
+                                <button type="button"
+                                class="cal_btn border rounded text-center mx-1  h-[30px]">/</button>
+                                <button type="button"
+                                class="cal_btn border rounded text-center mx-1  h-[30px] ">
+                                << /button>
+                                    <button id="clear_btn" type="button"
+                                    class=" border rounded text-center mx-1  h-[30px] ">C</button>
+
+                                    <button type="button"
+                                    class="cal_btn border rounded text-center mx-1  h-[30px] ">7</button>
+                                    <button type="button"
+                                    class="cal_btn border rounded text-center mx-1  h-[30px]">8</button>
+                                    <button type="button"
+                                    class="cal_btn border rounded text-center mx-1  h-[30px]">9</button>
+                                    <button type="button"
+                                    class="cal_btn border rounded text-center mx-1  h-[30px] ">*</button>
+
+                                    <button type="button"
+                                    class="cal_btn border rounded text-center mx-1  h-[30px] ">4</button>
+                                    <button type="button"
+                                    class="cal_btn border rounded text-center mx-1  h-[30px]">5</button>
+                                    <button type="button"
+                                    class="cal_btn border rounded text-center mx-1  h-[30px]">6</button>
+                                    <button type="button"
+                                    class="cal_btn border rounded text-center mx-1  h-[30px] ">-</button>
+
+                                    <button type="button"
+                                    class="cal_btn border rounded text-center mx-1  h-[30px] ">1</button>
+                                    <button type="button"
+                                    class="cal_btn border rounded text-center mx-1  h-[30px]">2</button>
+                                    <button type="button"
+                                    class="cal_btn border rounded text-center mx-1  h-[30px]">3</button>
+                                    <button type="button"
+                                    class="cal_btn border rounded text-center mx-1  h-[30px] ">+</button>
+
+                                    <button type="button"
+                                    class="cal_btn border rounded text-center mx-1  h-[30px] ">0</button>
+                                    <button type="button"
+                                    class="cal_btn border rounded text-center mx-1  h-[30px]">00</button>
+                                    <button type="button"
+                                    class="cal_btn border rounded text-center mx-1  h-[30px] ">.</button>
+                                    <button id="equal_btn" type="button"
+                                    class=" border rounded text-center mx-1  h-[30px] ">=</button>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <input type="number" step="any" name="template_item_qty[]" id="template_item_qty" placeholder="" class=" w-[15%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    <p id="template_item_name" class=" font-medium overflow-hidden whitespace-nowrap items-center bg-[#EBEAEB] py-1 px-2 rounded-lg w-[75%]"></p>
+                    </div>
+                    `);
+                    var itemNameInput = demoInput.find('#template_item_name');
+                    var itemQtyInput = demoInput.find('#template_item_qty');
+                    var itemIdInput = demoInput.find('#template_item_id');
+
+                    itemNameInput.attr('id', 'template_item_name_' + i);
+                    itemQtyInput.attr('id', 'template_item_qty_' + i);
+                    itemIdInput.attr('id', 'template_item_id_' + i);
+                    var templateItemDiv = $('#template-items');
+
+                    // demoInput.addClass('flex justify-between');
+                    // Dynamic IDs for calculator elements
+                    var calButtonId = 'cal-button-' + i;
+                    var calMenuId = 'cal-menu-' + i;
+
+                    // Find and update IDs in the HTML template
+                    demoInput.find('#cal-menubutton').attr('id', calButtonId);
+                    demoInput.find('#cal-menu').attr('id', calMenuId);
+
+                    templateItemDiv.append(demoInput);
+
+                    $('#template_item_name_' + i).text(correspondingItemData.item_name + (correspondingItemData.item_description ? ' ' + correspondingItemData.item_description : ''));
+                    $('#template_item_id_' + i).val(correspondingItemData.item_id);
+                    $('#template_item_qty_' + i).val(currentItem.item_qty);
+                    // console.log(itemTemplateItems.length)
+                    // itemQtyInput.val(currentItem.quantity);
+
+                    $('#addItemTemplate-modal').removeClass('hidden');
+                    initializeCalculator(calButtonId, calMenuId, itemQtyInput);
+                }
+                }
+            },
+            error: function(error) {
+                console.error('AJAX request failed:', error);
+            }
             });
         });
 

@@ -1003,23 +1003,26 @@ class EstimateController extends Controller
         }
     }
 
-    public function index($type = null)
+    public function index(Request $request, $type = null)
     {
         $userDetails = session('user_details');
+
+        $status = $request->query('status');
+
         if ($userDetails['user_role'] == 'admin') {
             $customers = Customer::get();
-            $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->orderBy('created_at', 'desc')->get();
+            $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->where('estimate_status', $status ? $status : 'pending')->orderBy('created_at', 'desc')->get();
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
         } elseif ($userDetails['user_role'] == 'scheduler') {
             if ($type == 'assigned') {
-                $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->where('estimate_schedule_assigned_to', $userDetails['id'])->orderBy('created_at', 'desc')->get();
+                $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->where('estimate_status', $status ? $status : 'pending')->where('estimate_schedule_assigned_to', $userDetails['id'])->orderBy('created_at', 'desc')->get();
             } else {
-                $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->orderBy('created_at', 'desc')->get();
+                $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->where('estimate_status', $status ? $status : 'pending')->orderBy('created_at', 'desc')->get();
             }
             $customers = Customer::get();
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
         } else {
-            $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->orderBy('created_at', 'desc')->get();
+            $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->where('estimate_status', $status ? $status : 'pending')->orderBy('created_at', 'desc')->get();
             $customers = Customer::get();
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
         }
@@ -2616,7 +2619,7 @@ class EstimateController extends Controller
     {
         $userDetails = session('user_details');
 
-        $estimates = Estimate::get();
+        $estimates = Estimate::where('estimate_status', 'pending')->get();
         $customers = Customer::get();
 
         $estimateData = [];
