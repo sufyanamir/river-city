@@ -9,6 +9,10 @@ $userPrivileges = session('user_details')['user_privileges'];
                 <h4>Estimates List</h4>
             </div>
             <div>
+                <a href="/estimates?status=pending"><x-add-button :title="'Pending'" :class="''" :id="''"></x-add-button></a>
+                <a href="/estimates?status=complete"><x-add-button :title="'Completed'" :class="''" :id="''"></x-add-button></a>
+                <a href="/estimates?status=paid"><x-add-button :title="'Paid'" :class="''" :id="''"></x-add-button></a>
+                <a href="/estimates?status=cancel"><x-add-button :title="'Cancel'" :class="''" :id="''"></x-add-button></a>
                 @if($user_details['user_role'] == 'scheduler')
                 <a href="/estimates"><x-add-button :title="'View All'" :class="''" :id="''"></x-add-button></a>
                 <a href="{{ route('estimates', ['type' => 'assigned']) }}"><x-add-button :title="'View Assigned'" :class="''" :id="''"></x-add-button></a>
@@ -335,15 +339,15 @@ $userPrivileges = session('user_details')['user_privileges'];
                             </div>
                         </div>
                         <div class=" flex justify-evenly gap-3">
-                        <p id="invoiceTotal" class="mt-1 text-red-900">
-                                    Total: $0.00
-                                </p>
-                                <p id="invoiceInvoiced" class="flex justify-end text-blue-900">
-                                    Invoiced: $0.00
-                                </p>
-                                <p id="invoicePaid" class="flex justify-end text-green-900">
-                                    Paid: $0.00
-                                </p>
+                            <p id="invoiceTotal" class="mt-1 text-red-900">
+                                Total: $0.00
+                            </p>
+                            <p id="invoiceInvoiced" class="flex justify-end text-blue-900">
+                                Invoiced: $0.00
+                            </p>
+                            <p id="invoicePaid" class="flex justify-end text-green-900">
+                                Paid: $0.00
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -682,49 +686,49 @@ $userPrivileges = session('user_details')['user_privileges'];
     });
 </script>
 <script>
-$(document).ready(function() {
-    $('body').on('click', '[id^="viewEstimate-info"]', function() {
-        var estimateId = $(this).attr('id').split('viewEstimate-info')[1];
-        var url = '/getInvoiceDetails' + estimateId;
-        $.ajax({
-            url: url,
-            method: 'GET',
-            success: function(response) {
-                if (response.success) {
-                    var details = response.estimateDetails;
-                    $('#invoiceCustomerName').text(details.customer_name);
-                    $('#invoiceProjectName').text(details.project_name);
-                    $('#invoiceEstimateDate').text(details.scheduled_start_date);
-                    $('#invoiceTotal').text('Total: $' + details.estimate_total);
-                    $('#invoiceInvoiced').text('Invoiced: $' + details.invoiced_payment);
-                    $('#invoicePaid').text('Paid: $' + details.invoice_paid_total);
-                    var invoices = details.invoices;
-                    var invoiceTableBody = '';
-                    invoices.forEach(function(invoice) {
-                        invoiceTableBody += '<tr class="bg-white border-b">' +
-                            '<th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">' + invoice.complete_invoice_date + '</th>' +
-                            '<td class="px-6 py-4">' + invoice.invoice_name + '</td>' +
-                            '<td class="px-6 py-4">' + (invoice.tax_rate ? invoice.tax_rate : 'N/A') + '</td>' +
-                            '<td class="px-6 py-4">' + invoice.invoice_total + '</td>' +
-                            '<td class="px-6 py-4">' + invoice.invoice_due + '</td>' +
-                            '<td class="px-6 py-4">' + invoice.invoice_status + '</td>' +
-                            '</tr>';
-                    });
-                    $('#invoiceTableBody').html(invoiceTableBody);
-                    $('#viewEstimate-info-modal').removeClass('hidden');
-                } else {
-                    alert('Failed to fetch the estimate details.');
+    $(document).ready(function() {
+        $('body').on('click', '[id^="viewEstimate-info"]', function() {
+            var estimateId = $(this).attr('id').split('viewEstimate-info')[1];
+            var url = '/getInvoiceDetails' + estimateId;
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        var details = response.estimateDetails;
+                        $('#invoiceCustomerName').text(details.customer_name);
+                        $('#invoiceProjectName').text(details.project_name);
+                        $('#invoiceEstimateDate').text(details.scheduled_start_date);
+                        $('#invoiceTotal').text('Total: $' + details.estimate_total);
+                        $('#invoiceInvoiced').text('Invoiced: $' + details.invoiced_payment);
+                        $('#invoicePaid').text('Paid: $' + details.invoice_paid_total);
+                        var invoices = details.invoices;
+                        var invoiceTableBody = '';
+                        invoices.forEach(function(invoice) {
+                            invoiceTableBody += '<tr class="bg-white border-b">' +
+                                '<th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">' + invoice.complete_invoice_date + '</th>' +
+                                '<td class="px-6 py-4">' + invoice.invoice_name + '</td>' +
+                                '<td class="px-6 py-4">' + (invoice.tax_rate ? invoice.tax_rate : 'N/A') + '</td>' +
+                                '<td class="px-6 py-4">' + invoice.invoice_total + '</td>' +
+                                '<td class="px-6 py-4">' + invoice.invoice_due + '</td>' +
+                                '<td class="px-6 py-4">' + invoice.invoice_status + '</td>' +
+                                '</tr>';
+                        });
+                        $('#invoiceTableBody').html(invoiceTableBody);
+                        $('#viewEstimate-info-modal').removeClass('hidden');
+                    } else {
+                        alert('Failed to fetch the estimate details.');
+                    }
+                },
+                error: function() {
+                    alert('Error in AJAX request.');
                 }
-            },
-            error: function() {
-                alert('Error in AJAX request.');
-            }
+            });
+        });
+        $('.modal-close').click(function() {
+            $('#viewEstimate-info-modal').addClass('hidden');
         });
     });
-    $('.modal-close').click(function() {
-        $('#viewEstimate-info-modal').addClass('hidden');
-    });
-});
 </script>
 <script>
     function openFileMenu() {
