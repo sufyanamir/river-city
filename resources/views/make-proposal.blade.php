@@ -494,7 +494,7 @@
 
                     </div>
                 </div>
-                <div class="w-full mx-auto bg-white p-4 rounded-lg shadow-md" id="editor-div">
+                <div class="mx-auto bg-white p-4 rounded-lg shadow-md" id="editor-div">
                     <textarea name="terms_and_conditions" id="editor" class="h-64 bg-white p-4 border border-gray-300 rounded-lg">
                         <p><strong>Required Deposit</strong></p>
                         <p>A nonrefundable 1/3 deposit is required for all projects due at the time of scheduling to secure your spot on our schedule. The remaining balance will be due upon completion.</p>
