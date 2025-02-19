@@ -18,7 +18,9 @@ class CustomerController extends Controller
                 return response()->json(['success' => false, 'message' => 'Customer not found!'], 200);
             }
 
-            $estimates = Estimate::where('customer_id', $id)->get();
+            $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
+
+            $estimates = Estimate::where('customer_id', $id)->orderBy('estimate_id', 'desc')->get();
             $estimateFiles = [];
             $estimateNotes = [];
             $estimateEmails = [];
@@ -37,7 +39,8 @@ class CustomerController extends Controller
                 'estimateFiles' => $estimateFiles,
                 'estimateNotes' => $estimateNotes,
                 'estimateEmails' => $estimateEmails,
-                'estimateContacts' => $estimateContacts
+                'estimateContacts' => $estimateContacts,
+                'users' => $users,
             ]);
 
         } catch (\Exception $e) {

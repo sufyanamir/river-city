@@ -127,7 +127,7 @@ $discountedTotal = null;
                             {{ $estimate->estimate_status }}
                         </p>
                         <p class="text-[#323C47]">
-                            {{ date('d, F Y', strtotime($estimate->created_at)) }}
+                            {{ date('m/d/y', strtotime($estimate->created_at)) }}
                         </p>
                         <p class="mt-1 text-red-900">
                             Total: ${{ number_format($estimate->estimate_total, 2) }}
@@ -3404,7 +3404,7 @@ $userPrivileges->estimate->photos === 'on')
                         @endphp
                         <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ date('d, F Y', strtotime($proposal->created_at)) }}
+                                {{ date('m/d/y', strtotime($proposal->created_at)) }}
                             </th>
                             <td class="px-6 py-4">
                                 {{ $proposal->proposal_total }}
@@ -3496,7 +3496,7 @@ $userPrivileges->estimate->proposals === 'on')
                         @endphp
                         <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ date('d, F Y', strtotime($proposal->created_at)) }}
+                                {{ date('m/d/y', strtotime($proposal->created_at)) }}
                             </th>
                             <td class="px-6 py-4">
                                 {{ $proposal->proposal_total }}
@@ -3810,7 +3810,7 @@ $userPrivileges->estimate->notes === 'on')
                         @foreach ($estimate_emails as $email)
                         <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ date('d, F Y', strtotime($email->created_at)) }}
+                                {{ date('m/d/y', strtotime($email->created_at)) }}
                             </th>
                             <td class="px-6 py-4">
                                 {{ $email->email_name }}
@@ -3873,7 +3873,7 @@ $userPrivileges->estimate->emails === 'on')
                         @foreach ($estimate_emails as $email)
                         <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ date('d, F Y', strtotime($email->created_at)) }}
+                                {{ date('m/d/y', strtotime($email->created_at)) }}
                             </th>
                             <td class="px-6 py-4">
                                 {{ $email->email_name }}
@@ -3951,10 +3951,10 @@ $userPrivileges->estimate->emails === 'on')
                                 {{ $toDo->assigned_to ? $toDo->assigned_to->name : '' }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ date('d, F Y', strtotime($toDo->start_date)) }}
+                                {{ date('m/d/y', strtotime($toDo->start_date)) }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ date('d, F Y', strtotime($toDo->end_date)) }}
+                                {{ date('m/d/y', strtotime($toDo->end_date)) }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $toDo->to_do_status }}
@@ -4039,10 +4039,10 @@ $userPrivileges->estimate->todos === 'on')
                                 {{ $toDo->assigned_to->name }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ date('d, F Y', strtotime($toDo->start_date)) }}
+                                {{ date('m/d/y', strtotime($toDo->start_date)) }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ date('d, F Y', strtotime($toDo->end_date)) }}
+                                {{ date('m/d/y', strtotime($toDo->end_date)) }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $toDo->to_do_status }}
@@ -4116,7 +4116,7 @@ $userPrivileges->estimate->todos === 'on')
                         @foreach ($invoices as $invoices)
                         <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ date('d, F Y', strtotime($invoices->complete_invoice_date)) }}
+                                {{ date('m/d/y', strtotime($invoices->complete_invoice_date)) }}
                             </th>
                             <td class="px-6 py-4">
                                 {{ $invoices->invoice_name }}
@@ -4189,7 +4189,7 @@ $userPrivileges->estimate->todos === 'on')
                         @foreach ($payments as $payments)
                         <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ date('d, F Y', strtotime($payments->complete_invoice_date)) }}
+                                {{ date('m/d/y', strtotime($payments->complete_invoice_date)) }}
                             </th>
                             <td class="px-6 py-4">
                                 {{ $payments->note }}
@@ -4265,7 +4265,7 @@ $userPrivileges->estimate->todos === 'on')
                                 </button>
                             </td>
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ date('d, F Y', strtotime($expense->expense_date)) }}
+                                {{ date('m/d/y', strtotime($expense->expense_date)) }}
                             </th>
                             <td class="px-6 py-4">
                                 {{ $expense->expense_vendor }}
@@ -4360,7 +4360,7 @@ $userPrivileges->estimate->expenses === 'on')
                                 </button>
                             </td>
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ date('d, F Y', strtotime($expense->expense_date)) }}
+                                {{ date('m/d/y', strtotime($expense->expense_date)) }}
                             </th>
                             <td class="px-6 py-4">
                                 {{ $expense->expense_vendor }}
@@ -6092,6 +6092,16 @@ $userPrivileges->estimate->expenses === 'on')
                     <div class=" text-center grid grid-cols-12 gap-2">
                         <div id="template-items" class=" col-span-12">
 
+                        </div>
+                        <div class="my-0 col-span-12" id="">
+                            <label for="" class="block text-left text-sm mb-1">Group Name</label>
+                            <input type="text" step="any" name="group_name" id="group_name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-ins.et focus:ring-[#0095E5] sm:text-sm" list="goup_names">
+                            <datalist id="goup_names">
+                                @foreach($groups as $item)
+                                <option value="{{ $item->group_name }}">{{ $item->group_name }}</option>
+                                @endforeach
+                            </datalist>
+                            <!-- <input type="hidden" name="group_id" id="group_id"> -->
                         </div>
                         <div class="my-0 col-span-12 relative">
                             <label for="" class="block text-left mb-1"> Item Description </label>

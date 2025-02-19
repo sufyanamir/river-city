@@ -130,7 +130,11 @@
                 <div id="calendar" data-schedule-assigned="{{ isset($estimate) && $estimate->schedule_assigned == 1 ? 'true' : 'false' }}"></div>
             </div>
             <div id="external-events" class="w-[20%]">
-            <div class=" mt-[100px] flex">
+            <div class="mt-[100px]">
+                <input type="checkbox" name="completed" id="completed">
+                <label for="completed" class=" text-gray-500">Completed</label>
+            </div>
+            <div class=" mt-2 flex">
                 <a href="/crewCalendar">
                     <button id="" class="  bg-[#930027] text-white py-1 px-7  hover:bg-red-900 rounded-l-full ">Planner
                     </button>
@@ -595,7 +599,9 @@ function clearModalAndClose() {
         var userToDos = {!! json_encode($userToDos) !!};
         var estimateToDos = {!! json_encode($estimateToDos) !!};
         
-        var userEvents = userToDos.map(function(todo) {
+        var userEvents = userToDos.filter(function(todo) {
+            return todo.to_do_status === null;
+        }).map(function(todo) {
             var startDate = new Date(todo.start_date);
             var endDate = new Date(todo.end_date);
             var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
@@ -609,13 +615,15 @@ function clearModalAndClose() {
             backgroundColor: userColor, // Use the assigned user's color
             borderColor: userColor, // Use the assigned user's color
             extendedProps: {
-                type: 'userToDo'
+            type: 'userToDo'
             }
             };
         });
 
         // Convert estimate todos to events
-        var estimateEvents = estimateToDos.map(function(todo) {
+        var estimateEvents = estimateToDos.filter(function(todo) {
+            return todo.to_do_status === 'pending';
+        }).map(function(todo) {
             var startDate = new Date(todo.start_date);
             var endDate = new Date(todo.end_date);
             var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
@@ -629,11 +637,69 @@ function clearModalAndClose() {
             backgroundColor: userColor, // Use the assigned user's color
             borderColor: userColor, // Use the assigned user's color
             extendedProps: {
-                type: 'estimateToDo'
+            type: 'estimateToDo'
             }
             };
         });
         var allEvents = events.concat(userEvents, estimateEvents);
+        $('#completed').change(function() {
+    var showCompleted = $(this).is(':checked'); // Check if checkbox is checked
+
+    // If checked, show all todos (both completed and pending)
+    var updatedUserEvents = userToDos.filter(function(todo) {
+        return showCompleted || todo.to_do_status === null; // Show all if checked
+    }).map(function(todo) {
+        var startDate = new Date(todo.start_date);
+        var endDate = new Date(todo.end_date);
+        var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
+        var userColor = todo.assigned_to ? todo.assigned_to.user_color : '#your_default_color';
+        return {
+            id: todo.to_do_id,
+            title: (todo.to_do_status == 'completed' ? '✔ ' : '') + todo.to_do_title,
+            start: startDate,
+            end: endDate,
+            allDay: isAllDay,
+            backgroundColor: userColor,
+            borderColor: userColor,
+            extendedProps: {
+                type: 'userToDo'
+            }
+        };
+    });
+
+    var updatedEstimateEvents = estimateToDos.filter(function(todo) {
+        return showCompleted || todo.to_do_status === 'pending'; // Show all if checked
+    }).map(function(todo) {
+        var startDate = new Date(todo.start_date);
+        var endDate = new Date(todo.end_date);
+        var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
+        var userColor = todo.assigned_by ? todo.assigned_by.user_color : '#your_default_color';
+        return {
+            id: todo.to_do_id,
+            title: (todo.to_do_status == 'completed' ? '✔ ' : '') + todo.to_do_title,
+            start: startDate,
+            end: endDate,
+            allDay: isAllDay,
+            backgroundColor: userColor,
+            borderColor: userColor,
+            extendedProps: {
+                type: 'estimateToDo'
+            }
+        };
+    });
+
+    var updatedEvents = estimateEvents.filter(function(estimate) {
+        return showCompleted || !(estimate.work_completed == 1 && estimate.invoice_assigned == 1); // Show all if checked
+    });
+
+    var allUpdatedEvents = events.concat(updatedUserEvents, updatedEstimateEvents);
+
+    // Remove all events and re-add updated events
+    calendar.removeAllEvents();
+    calendar.addEventSource(allUpdatedEvents);
+});
+
+
         function formatDate(date) {
             var year = date.getFullYear();
             var month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -738,8 +804,8 @@ $('#end_date').val(endDateTime);
                             $('#event-title').text(response.to_do_title);
                             $('#assigned_user').text(response.assigned_to.name);
                             $('#event-note').text(response.note);
-                            $('#event-start').text(new Date(response.start_date).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' }));
-                            $('#event-end').text(new Date(response.end_date).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' }));
+                            $('#event-start').text(new Date(response.start_date).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' }));
+                            $('#event-end').text(new Date(response.end_date).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' }));
                             $('#viewEstimateIcon').addClass('hidden');
                             // Set start_date and end_date inputs
                             $('#update_start_date').val(response.start_date);
@@ -776,8 +842,8 @@ $('#end_date').val(endDateTime);
                             console.log(response);
                             $('#event-title').text(response.customer_name + ' ' + response.customer_last_name);
                             $('#event-note').text(response.estimate_schedule.note);
-                            $('#event-start').text(new Date(response.scheduled_start_date).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' }));
-                            $('#event-end').text(new Date(response.scheduled_end_date).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' }));
+                            $('#event-start').text(new Date(response.scheduled_start_date).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' }));
+                            $('#event-end').text(new Date(response.scheduled_end_date).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' }));
                             $('#event-project-name').text(response.project_name);
                             // Set start_date and end_date inputs
                             const assignedUsers = Array.isArray(response.estimate_schedule_assigned_to)

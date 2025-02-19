@@ -6,7 +6,10 @@
         height: 70%;
     }
 </style>
-<div class="text-right my-2">
+<div class="flex justify-between text-right my-2">
+    <a href="/viewEstimate/{{$estimate->estimate_id}}">
+        <button type="button" class=" border border-black  font-semibold py-1 px-7 rounded-lg">Back</button>
+    </a>
     <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
         <button class=" bg-[#930027] p-2 text-white rounded-md">
             Print
