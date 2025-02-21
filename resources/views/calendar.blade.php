@@ -357,7 +357,7 @@
                         </div>
                         <div id="assign_work_div" class="flex justify-start gap-3 my-2">
                             <label for="">Who:</label>
-                            <select name="assign_work[]" id="update_assign_work" multiple
+                            <select name="assign_work" id="update_assign_work"
                                 class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 <option value="">Select Users</option>
                                 @foreach($allEmployees as $employee)
@@ -475,6 +475,10 @@ function clearModalAndClose() {
     $('#completeEvent').addClass('hidden');
     $('#event-title').removeClass('hidden');
     $('#deleteEventLink').attr('');
+    $('#update_assign_work')
+    .attr('name', 'assign_work') // Change name attribute
+    .attr('multiple', false) // Add multiple attribute
+
 }
 </script>
 <script>
@@ -561,39 +565,80 @@ function clearModalAndClose() {
             };
             });
         @else
-            var estimateEvents = {!! json_encode($estimates) !!};
+        var estimateEvents = {!! json_encode($estimates) !!};
+var filterId = {!! json_encode($filterId) !!}; // Get the filter ID from Laravel
 
-            var events = estimateEvents.filter(function(estimate) {
-            return !(estimate.work_completed == 1 && estimate.invoice_assigned == 1);
-            }).map(function(estimate) {
-            var startDate = new Date(estimate.scheduled_start_date);
-            var endDate = new Date(estimate.scheduled_end_date);
-            var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
+var events = [];
+
+estimateEvents.forEach(function(estimate) {
+    if (estimate.work_completed == 1 && estimate.invoice_assigned == 1) {
+        return; // Skip this estimate
+    }
+
+    var startDate = new Date(estimate.scheduled_start_date);
+    var endDate = new Date(estimate.scheduled_end_date);
+    var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
+
+    if (estimate.schedulers && estimate.schedulers.length > 0) {
+        estimate.schedulers.forEach(function(scheduler) {
+            // If filterId is set, only show matching schedulers
+            if (filterId && scheduler.id != filterId) {
+                return;
+            }
+
             var eventObj = {
+                id: estimate.estimate_id + '-' + scheduler.id,
+                title: (estimate.status == 'completed' ? '<span style="color:white;">✔</span> ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
+                start: startDate,
+                end: endDate,
+                allDay: isAllDay,
+                backgroundColor: scheduler.user_color ? scheduler.user_color : '',
+                borderColor: scheduler.user_color ? scheduler.user_color : '',
+                extendedProps: {
+                    type: 'estimate',
+                    scheduler_name: scheduler.name
+                }
+            };
+            events.push(eventObj);
+        });
+    } else if (estimate.crew != null) {
+        // If filterId is set, only show matching crew members
+        if (filterId && estimate.crew.id != filterId) {
+            return;
+        }
+
+        events.push({
+            id: estimate.estimate_id,
+            title: (estimate.status == 'completed' ? '<span style="color:white;">✔</span> ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
+            start: startDate,
+            end: endDate,
+            allDay: isAllDay,
+            backgroundColor: estimate.crew.user_color ? estimate.crew.user_color : '',
+            borderColor: estimate.crew.user_color ? estimate.crew.user_color : '',
+            extendedProps: {
+                type: 'estimate'
+            }
+        });
+    } else {
+        // Default user color, only show if no filter is applied
+        if (!filterId) {
+            var userColor = '{{ session('user_details')['user_color'] }}';
+            events.push({
                 id: estimate.estimate_id,
                 title: (estimate.status == 'completed' ? '<span style="color:white;">✔</span> ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
                 start: startDate,
                 end: endDate,
                 allDay: isAllDay,
+                backgroundColor: userColor ? userColor : '',
+                borderColor: userColor ? userColor : '',
                 extendedProps: {
-                type: 'estimate'
+                    type: 'estimate'
                 }
-            };
-
-            if (estimate.scheduler != null) {
-                eventObj.backgroundColor = estimate.scheduler.user_color ? estimate.scheduler.user_color : ''; // Choose a color or generate dynamically
-                eventObj.borderColor = estimate.scheduler.user_color ? estimate.scheduler.user_color : ''; // Choose a color or generate dynamically
-            } else if (estimate.crew != null) {
-                eventObj.backgroundColor = estimate.crew.user_color ? estimate.crew.user_color : ''; // Choose a color or generate dynamically
-                eventObj.borderColor = estimate.crew.user_color ? estimate.crew.user_color : ''; // Choose a color or generate dynamically
-            } else {
-                var userColor = '{{ session('user_details')['user_color'] }}';
-                eventObj.backgroundColor = userColor ? userColor : ''; // Choose a color or generate dynamically
-                eventObj.borderColor = userColor ? userColor : ''; // Choose a color or generate dynamically
-            }
-
-            return eventObj;
             });
+        }
+    }
+});
+
         @endif
 
         var userToDos = {!! json_encode($userToDos) !!};
@@ -850,7 +895,11 @@ $('#end_date').val(endDateTime);
                                 ? response.estimate_schedule_assigned_to // Already an array
                                 : JSON.parse(response.estimate_schedule_assigned_to || '[]'); // Parse if it's a JSON string
                             console.log(assignedUsers);
-                            $('#update_assign_work').val(assignedUsers).trigger('change');
+                            $('#update_assign_work')
+                            .attr('name', 'assign_work[]') // Change name attribute
+                            .attr('multiple', true) // Add multiple attribute
+                            .val(assignedUsers)
+                            .trigger('change');
                             $('#update_start_date').val(response.scheduled_start_date);
                             $('#update_end_date').val(response.scheduled_end_date);
                             $('#event-customer-address').text(response.customer_address);
