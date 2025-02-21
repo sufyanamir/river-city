@@ -183,7 +183,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     <input type="hidden" name="estimate_image_id" id="estimate_image_id" value="">
                                     <div class="flex items-center px-3 py-2 rounded-lg bg-gray-50">
                                         <textarea id="message" name="message" rows="1" class="message block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Your message..."></textarea>
-
+                                        <div id="userDropdown" class="userDropdown"></div>
                                         <!-- Voice Recording Button -->
                                         <button type="button" id="recordButton" class="inline-flex justify-center p-2 text-red-600 rounded-full cursor-pointer hover:bg-red-100 text-lg">
                                             🎤
@@ -212,6 +212,79 @@ $userPrivileges = session('user_details')['user_privileges'];
 </div>
 @include('layouts.footer')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/recorderjs/0.1.0/recorder.min.js"></script>
+<script>
+    // Your existing JavaScript code
+    // Your list of users with names and ids
+    const users = {!! json_encode($users->pluck('name', 'id')) !!};
+
+    // Get the textarea, user dropdown, and hidden input elements
+    const messageTextarea = $("#message");
+    const userDropdown = $("#userDropdown");
+    const userIdInput = $("#mentioned_user_ids");
+
+    // Append the hidden input to the form
+    // $("#chat-form").append(userIdInput);
+
+    // Track mentioned user ids
+    let mentionedUserIds = [];
+
+    // Event listener for typing '@' in the textarea
+    messageTextarea.on("input", function(event) {
+        const text = event.target.value;
+        const lastIndex = text.lastIndexOf("@");
+
+        if (lastIndex !== -1) {
+            const query = text.substring(lastIndex + 1);
+            const matchingUsers = Object.entries(users)
+                .filter(([id, name]) =>
+                    name.toLowerCase().includes(query.toLowerCase())
+                );
+
+            // Display matching users in the dropdown
+            renderDropdown(matchingUsers);
+        } else {
+            // Hide the dropdown if '@' is not present
+            userDropdown.hide();
+        }
+    });
+
+    // Function to render the user dropdown
+    function renderDropdown(users) {
+        if (users.length > 0) {
+            const dropdownContent = users.map(([id, name]) => `
+            <button type="button" onclick="mentionUser('${name}', '${id}')">${name}</button>
+        `).join("");
+
+            userDropdown.html(dropdownContent).show();
+        } else {
+            userDropdown.hide();
+        }
+    }
+
+    // Function to handle user selection from the dropdown
+    function mentionUser(userName, userId) {
+        const currentText = messageTextarea.val();
+        const lastIndex = currentText.lastIndexOf("@");
+        const newText = currentText.substring(0, lastIndex) + `@${userName} `;
+
+        messageTextarea.val(newText);
+
+        // Add the mentioned user's id to the array
+        mentionedUserIds.push(userId);
+
+        // Set the array of mentioned user ids in the hidden input
+        userIdInput.val(mentionedUserIds);
+
+        userDropdown.hide();
+    }
+
+    // Close the dropdown when clicking outside of it
+    $(document).on("click", function(event) {
+        if (!$(event.target).closest("#userDropdown").length && !$(event.target).is("#message")) {
+            userDropdown.hide();
+        }
+    });
+</script>
 <script>
     $("#addImage-btn").click(function(e) {
         e.preventDefault();
@@ -318,79 +391,7 @@ $userPrivileges = session('user_details')['user_privileges'];
         });
     });
 </script>
-<script>
-    // Your existing JavaScript code
-    // Your list of users with names and ids
-    const users = {!!json_encode($users->pluck('name', 'id')) !!};
 
-    // Get the textarea, user dropdown, and hidden input elements
-    const messageTextarea = $("#message");
-    const userDropdown = $("#userDropdown");
-    const userIdInput = $("#mentioned_user_ids");
-
-    // Append the hidden input to the form
-    // $("#chat-form").append(userIdInput);
-
-    // Track mentioned user ids
-    let mentionedUserIds = [];
-
-    // Event listener for typing '@' in the textarea
-    messageTextarea.on("input", function(event) {
-        const text = event.target.value;
-        const lastIndex = text.lastIndexOf("@");
-
-        if (lastIndex !== -1) {
-            const query = text.substring(lastIndex + 1);
-            const matchingUsers = Object.entries(users)
-                .filter(([id, name]) =>
-                    name.toLowerCase().includes(query.toLowerCase())
-                );
-
-            // Display matching users in the dropdown
-            renderDropdown(matchingUsers);
-        } else {
-            // Hide the dropdown if '@' is not present
-            userDropdown.hide();
-        }
-    });
-
-    // Function to render the user dropdown
-    function renderDropdown(users) {
-        if (users.length > 0) {
-            const dropdownContent = users.map(([id, name]) => `
-            <button type="button" onclick="mentionUser('${name}', '${id}')">${name}</button>
-        `).join("");
-
-            userDropdown.html(dropdownContent).show();
-        } else {
-            userDropdown.hide();
-        }
-    }
-
-    // Function to handle user selection from the dropdown
-    function mentionUser(userName, userId) {
-        const currentText = messageTextarea.val();
-        const lastIndex = currentText.lastIndexOf("@");
-        const newText = currentText.substring(0, lastIndex) + `@${userName} `;
-
-        messageTextarea.val(newText);
-
-        // Add the mentioned user's id to the array
-        mentionedUserIds.push(userId);
-
-        // Set the array of mentioned user ids in the hidden input
-        userIdInput.val(mentionedUserIds);
-
-        userDropdown.hide();
-    }
-
-    // Close the dropdown when clicking outside of it
-    $(document).on("click", function(event) {
-        if (!$(event.target).closest("#userDropdown").length && !$(event.target).is("#message")) {
-            userDropdown.hide();
-        }
-    });
-</script>
 <script>
     let recorder, audioChunks;
 

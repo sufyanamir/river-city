@@ -16,7 +16,7 @@ class EstimateToDos extends Model
     
     public function assigned_by()
     {
-        return $this->belongsTo(User::class, 'added_user_id');
+        return $this->belongsTo(User::class, 'to_do_assigned_to');
     }
 
     protected $table = 'estimate_to_dos';

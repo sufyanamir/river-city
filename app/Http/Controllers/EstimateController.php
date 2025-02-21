@@ -927,15 +927,30 @@ class EstimateController extends Controller
             $estimates = Estimate::with(['scheduler', 'crew'])->get();
         }
         if($id != null) {
-            $userToDos = UserToDo::with('assigned_to')->where('added_user_id', $id)->orWhereJsonContains('to_do_assigned_to', $id)->get();
-            $estimateToDos = EstimateToDos::with('assigned_by')->WhereJsonContains('added_user_id', $id)->orWhereJsonContains('to_do_assigned_to', $id)->get();
+            $userToDos = UserToDo::with('assigned_to')->Where('to_do_assigned_to', $id)->get();
+            $estimateToDos = EstimateToDos::with('assigned_by')->where('to_do_assigned_to', $id)->get();
         }else{
             $userToDos = UserToDo::with('assigned_to')->get();
             $estimateToDos = EstimateToDos::with('assigned_by')->get();
         }
-
+        foreach ($estimates as $estimate) {
+            // Decode the JSON safely
+            $userIds = json_decode($estimate->estimate_schedule_assigned_to, true);
+        
+            // Ensure $userIds is an array; if null, set to an empty array
+            if (!is_array($userIds) || empty($userIds)) {
+                $userIds = []; // Avoid error in whereIn()
+            }
+        
+            // Fetch users matching those IDs
+            $schedulers = User::whereIn('id', $userIds)->get();
+        
+            // Attach users to the estimate dynamically
+            $estimate->schedulers = $schedulers;
+        }
+        
         $allEmployees = User::where('sts', 'active')->get();
-        return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
+        return view('calendar', ['filterId' => $id ,'estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
     }
 
     public function getSchedulesOnScheduleCalendar($user = null)
@@ -1284,7 +1299,7 @@ class EstimateController extends Controller
                 $estimateToDo->start_date = $validatedData['start_date'];
                 $estimateToDo->end_date = $validatedData['end_date'];
                 $estimateToDo->to_do_title = $validatedData['task_name'];
-                $estimateToDo->to_do_assigned_to = json_encode($validatedData['assign_work']);
+                $estimateToDo->to_do_assigned_to = $validatedData['assign_work'];
                 $estimateToDo->note = $validatedData['note'];
                 $estimateToDo->save();
                 return response()->json(['success' => true, 'message' => 'To Do updated!'], 200);
@@ -1297,16 +1312,17 @@ class EstimateController extends Controller
                     'end_date' => 'required',
                     'note' => 'nullable',
                 ]);
-    
-                $toDo = EstimateToDos::create([
-                    'added_user_id' => $userDetails['id'],
-                    'estimate_id' => $validatedData['estimate_id'],
-                    'to_do_title' => $validatedData['task_name'],
-                    'to_do_assigned_to' => json_encode($validatedData['assign_work']),
-                    'start_date' => $validatedData['start_date'],
-                    'end_date' => $validatedData['end_date'],
-                    'note' => $validatedData['note'],
-                ]);
+                foreach ($validatedData['assign_work'] as $userId) {
+                    $toDo = EstimateToDos::create([
+                        'added_user_id' => $userDetails['id'],
+                        'estimate_id' => $validatedData['estimate_id'],
+                        'to_do_title' => $validatedData['task_name'],
+                        'to_do_assigned_to' => $userId,
+                        'start_date' => $validatedData['start_date'],
+                        'end_date' => $validatedData['end_date'],
+                        'note' => $validatedData['note'],
+                    ]);
+                }
     
                 $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'To-Do Added', "A new To-Do added in To-Dos Section");
     

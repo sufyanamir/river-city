@@ -11,7 +11,7 @@ class UserToDo extends Model
 
     public function assigned_to()
     {
-        return $this->belongsTo(User::class, 'added_user_id');
+        return $this->belongsTo(User::class, 'to_do_assigned_to');
     }
 
     protected $table = 'user_to_do_list';

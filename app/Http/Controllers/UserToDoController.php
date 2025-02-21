@@ -47,14 +47,14 @@ class UserToDoController extends Controller
                 $validatedData = $request->validate([
                     'start_date' => 'nullable',
                     'end_date' => 'nullable',
-                    'assign_work' => 'nullable|array',
+                    'assign_work' => 'nullable',
                     'task_name' => 'required',
                     'note' => 'nullable',
                 ]);
                 $toDo = UserToDo::where('to_do_id', $toDoId)->first();
                 $toDo->start_date = $validatedData['start_date'];
                 $toDo->end_date = $validatedData['end_date'];
-                $toDo->to_do_assigned_to = $validatedData['assign_work'] ? json_encode($validatedData['assign_work']) : null;
+                $toDo->to_do_assigned_to = $validatedData['assign_work'];
                 $toDo->to_do_title = $validatedData['task_name'];
                 $toDo->note = $validatedData['note'];
                 $toDo->save();
@@ -68,14 +68,16 @@ class UserToDoController extends Controller
                     'note' => 'nullable',
                 ]);
 
-                $toDo = UserToDo::create([
-                    'added_user_id' => $userDetails['id'],
-                    'to_do_title' => $validatedData['to_do_title'],
-                    'start_date' => $validatedData['start_date'],
-                    'end_date' => $validatedData['end_date'],
-                    'note' => $validatedData['note'],
-                    'to_do_assigned_to' => $validatedData['assign_work'] ? json_encode($validatedData['assign_work']) : null,
-                ]);
+                foreach ($validatedData['assign_work'] as $userId) {
+                    UserToDo::create([
+                        'added_user_id' => $userDetails['id'],
+                        'to_do_title' => $validatedData['to_do_title'],
+                        'start_date' => $validatedData['start_date'],
+                        'end_date' => $validatedData['end_date'],
+                        'note' => $validatedData['note'],
+                        'to_do_assigned_to' => $userId,
+                    ]);
+                }
 
                 return response()->json(['success' => true, 'message' => 'To Do added!'], 200);
             }
