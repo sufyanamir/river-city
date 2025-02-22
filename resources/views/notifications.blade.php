@@ -21,9 +21,9 @@
                     @endif
                 </span>
                 <div class=" flex justify-between gap-2">
-                    <a href="/estimates/getChatMessage/{{$notification->estimate_id}}" class=" hover:border-b border-[#930027]">
+                    <!-- <a href="/estimates/getChatMessage/{{$notification->estimate_id}}" class=" hover:border-b border-[#930027]"> -->
                         <p class=" text-[#930027]">{{ $notification->notification_message }}</p>
-                    </a>
+                    <!-- </a> -->
                     <p class=" text-xs">{{ date('d, F Y', strtotime($notification->created_at)) }}</p>
                 </div>
             </div>

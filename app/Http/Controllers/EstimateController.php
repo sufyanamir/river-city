@@ -2173,10 +2173,10 @@ class EstimateController extends Controller
     // send proposal
 
     // make proposal
-    public function makeProposal($id)
+    public function makeProposal($id, $preview = null)
     {
         try {
-            $data = $this->prepareProposalData($id);
+            $data = $this->prepareProposalData($id, $preview);
 
             return view('make-proposal', $data);
         } catch (\Exception $e) {
@@ -2184,7 +2184,7 @@ class EstimateController extends Controller
         }
     }
 
-    private function prepareProposalData($id)
+    private function prepareProposalData($id, $preview = null)
     {
         $userDetails = session('user_details');
 
@@ -2240,7 +2240,8 @@ class EstimateController extends Controller
             'estimate_items' => $items,
             'existing_proposals' => $existingProposals,
             'upgrades' => $upgrades,
-            'templates' => $estimateItemTemplates
+            'templates' => $estimateItemTemplates,
+            'preview' => $preview,
         ];
     }
 

@@ -238,12 +238,12 @@
                                                         </td>
                                                         @endif
                                                         @php
-                                                        if($item->group->show_group_total == 1) {
+                                                        if(isset($item->group->show_group_total) && $item->group->show_group_total == 1) {
                                                             $groupTotal += $item->item_total; // Add item price to group total
                                                         }
                                                         @endphp
                                                         @php
-                                                        if($item->group->include_est_total == 1){
+                                                        if(isset($item->group->include_est_total) && $item->group->include_est_total == 1){
                                                             $subTotal += $item->item_total; // Add item price to total
                                                         }
                                                         @endphp
@@ -495,7 +495,9 @@
                     </div>
                 </div>
                 <div class="mx-auto bg-white p-4 rounded-lg shadow-md" id="editor-div">
+                    @if($preview == null)
                     <textarea name="terms_and_conditions" id="editor" class="h-64 bg-white p-4 border border-gray-300 rounded-lg">
+                    @endif
                         <p><strong>Required Deposit</strong></p>
                         <p>A nonrefundable 1/3 deposit is required for all projects due at the time of scheduling to secure your spot on our schedule. The remaining balance will be due upon completion.</p>
 
@@ -541,7 +543,9 @@
 
                         <p><strong>Invoicing & Payment</strong></p>
                         <p>Invoice will be issued to Client upon Completion of the work client shall pay invoice within 10 days of client’s receipt of the invoice. Client shall also pay a late charge of 1-1/2% per month on all balances unpaid 30 days after the invoice date.</p>
+                    @if($preview == null)
                     </textarea>
+                    @endif
                 </div>
                 <!-- <div class="col-span-12 p-4">
                     <div class=" mt-5">
@@ -630,6 +634,7 @@
                     </div>
                 </div> -->
                 @if ($user_details['user_role'] != 'crew')
+                @if($preview == null)
                 <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
                 <input type="hidden" name="customer_email" value="{{ $customer->customer_email }}">
                 <input type="hidden" name="estimate_total" value="{{ $subTotal + ($subTotal * $estimate->tax_rate) / 100 }}">
@@ -637,6 +642,7 @@
                 <div class="col-span-12 p-4 flex justify-end mt-10" id="send-button">
                     <button class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 " id="sendProposal-btn">Send Proposal</button>
                 </div>
+                @endif
                 @else
                 @endif
             </div>
@@ -732,7 +738,7 @@ $exsistingProposals = $existing_proposals;
         $("#sendProposal-modal").addClass('hidden');
         $("#formData")[0].reset()
     });
-
+@if($preview == null)
     let editorInstance; // Store the editor instance globally
 
 ClassicEditor
@@ -772,8 +778,8 @@ ClassicEditor
     style.innerHTML = `
         @media print {
             #send-button{ display: none !important; } /* Hide the send button */
-            #editor{ display: none !important; } /* Hide CKEditor Textarea */
             #footer{ display: none !important; } /* Hide the footer */
+            #editor{ display: none !important; } /* Hide CKEditor Textarea */
             #editor-div{ display: none !important; } /* Hide the editor div */
         }
     `;
@@ -785,4 +791,37 @@ ClassicEditor
     document.body.innerHTML = originalContent;
     document.head.removeChild(style); // Remove added styles
 }
+@else
+function printPageArea(areaID) {
+    // Get the printable area content
+    var printContent = document.getElementById(areaID).innerHTML;
+
+    // Create a temporary div to hold the content
+    var tempDiv = document.createElement('div');
+    tempDiv.innerHTML = printContent;
+    
+    // Store the original content
+    var originalContent = document.body.innerHTML;
+    
+    // Replace body content with the printable content
+    document.body.innerHTML = tempDiv.innerHTML;
+
+    // Apply print-specific CSS
+    var style = document.createElement('style');
+    style.innerHTML = `
+        @media print {
+            #send-button{ display: none !important; } /* Hide the send button */
+            #footer{ display: none !important; } /* Hide the footer */
+        }
+    `;
+    document.head.appendChild(style);
+
+    window.print(); // Print the content
+
+    // Restore the original page content
+    document.body.innerHTML = originalContent;
+    document.head.removeChild(style); // Remove added styles
+}
+
+@endif
 </script>

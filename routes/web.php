@@ -166,7 +166,7 @@ Route::middleware('customauth')->group(function () {
         return view('campaign');
     });
     Route::post('/sendProposal', [EstimateController::class, 'sendProposal']);
-    Route::get('/makeProposal/{id}', [EstimateController::class, 'makeProposal']);
+    Route::get('/makeProposal/{id}/{preview?}', [EstimateController::class, 'makeProposal']);
     Route::get('/payment-template', function () {
         return view('paymentTemplate');
     });
