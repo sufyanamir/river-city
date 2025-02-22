@@ -494,7 +494,7 @@
 
                     </div>
                 </div>
-                <div class="mx-auto bg-white p-4 rounded-lg shadow-md" id="editor-div">
+                <div class="mx-auto bg-white p-4 rounded-lg shadow-md w-[1200%]" id="editor-div">
                     @if($preview == null)
                     <textarea name="terms_and_conditions" id="editor" class="h-64 bg-white p-4 border border-gray-300 rounded-lg">
                     @endif
