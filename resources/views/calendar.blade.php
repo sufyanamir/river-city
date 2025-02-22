@@ -546,14 +546,14 @@ function clearModalAndClose() {
             var estimateEvents = {!! json_encode($estimates) !!};
 
             var events = estimateEvents.filter(function(estimate) {
-            return !(estimate.work_completed == 1 && estimate.invoice_assigned == 1);
+            return !(estimate.estimate_assigned == 1);
             }).map(function(estimate) {
             var startDate = new Date(estimate.start_date);
             var endDate = new Date(estimate.end_date);
             var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
             return {
                 id: estimate.estimate_id,
-                title: [estimate.estimate.customer_name + ' ' + estimate.estimate.customer_last_name],
+                title: (estimate.estimate_assigned == 1 ? '✔ ' : '') +  [estimate.estimate.customer_name + ' ' + estimate.estimate.customer_last_name],
                 start: startDate,
                 end: endDate,
                 allDay: isAllDay,
@@ -571,7 +571,7 @@ var filterId = {!! json_encode($filterId) !!}; // Get the filter ID from Laravel
 var events = [];
 
 estimateEvents.forEach(function(estimate) {
-    if (estimate.work_completed == 1 && estimate.invoice_assigned == 1) {
+    if (estimate.estimate_assigned == 1) {
         return; // Skip this estimate
     }
 
@@ -588,7 +588,7 @@ estimateEvents.forEach(function(estimate) {
 
             var eventObj = {
                 id: estimate.estimate_id + '-' + scheduler.id,
-                title: (estimate.status == 'completed' ? '<span style="color:white;">✔</span> ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
+                title: (estimate.estimate_assigned == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
                 start: startDate,
                 end: endDate,
                 allDay: isAllDay,
@@ -609,7 +609,7 @@ estimateEvents.forEach(function(estimate) {
 
         events.push({
             id: estimate.estimate_id,
-            title: (estimate.status == 'completed' ? '<span style="color:white;">✔</span> ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
+            title: (estimate.estimate_assigned == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
             start: startDate,
             end: endDate,
             allDay: isAllDay,
@@ -625,7 +625,7 @@ estimateEvents.forEach(function(estimate) {
             var userColor = '{{ session('user_details')['user_color'] }}';
             events.push({
                 id: estimate.estimate_id,
-                title: (estimate.status == 'completed' ? '<span style="color:white;">✔</span> ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
+                title: (estimate.estimate_assigned == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
                 start: startDate,
                 end: endDate,
                 allDay: isAllDay,
@@ -734,10 +734,11 @@ estimateEvents.forEach(function(estimate) {
     });
 
     var updatedEvents = estimateEvents.filter(function(estimate) {
-        return showCompleted || !(estimate.work_completed == 1 && estimate.invoice_assigned == 1); // Show all if checked
+        return showCompleted || (estimate.estimate_assigned == 0); // Show all if checked
     });
 
-    var allUpdatedEvents = events.concat(updatedUserEvents, updatedEstimateEvents);
+    var allUpdatedEvents = events.concat(updatedUserEvents, updatedEstimateEvents, updatedEvents);
+
 
     // Remove all events and re-add updated events
     calendar.removeAllEvents();

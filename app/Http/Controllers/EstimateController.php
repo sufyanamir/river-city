@@ -795,7 +795,7 @@ class EstimateController extends Controller
     public function getEstimateToSetSchedule($id)
     {
         $userDetails = session('user_details');
-
+        $filterId = null;
         $estimate = Estimate::with(['scheduler', 'crew'])->where('estimate_id', $id)->first();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
         $estimates = Estimate::with(['scheduler', 'crew'])->get();
@@ -803,10 +803,10 @@ class EstimateController extends Controller
         $allEmployees = User::where('sts', 'active')->get();
         // $allEmployees = User::where('sts', 'active')->get();
 
-        $userToDos = UserToDo::with('assigned_to')->where('added_user_id', $userDetails['id'])->where('to_do_status', null)->get();
-        $estimateToDos = EstimateToDos::with('assigned_by')->where('to_do_assigned_to', $userDetails['id'])->where('to_do_status', 'pending')->get();
+        $userToDos = UserToDo::with('assigned_to')->get();
+        $estimateToDos = EstimateToDos::with('assigned_by')->get();
 
-        return view('calendar', ['estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
+        return view('calendar', ['filterId' => $filterId ,'estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
         // return response()->json(['success' => true, 'estimate' => $estimate]);
     }
     // get schedule estimate
