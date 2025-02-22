@@ -100,6 +100,11 @@ $discountedTotal = null;
                             <span class="pl-2">Building Type: {{ $estimate->building_type }}
                             </span>
                         </p>
+                        <p class="mt-1 flex text-[#323C47] font-medium">
+                            <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
+                            <span class="pl-2">note: {{ $customer->company_internal_note }}
+                            </span>
+                        </p>
                         <hr class="bg-gray-300 my-2 w-full">
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/page-icon.svg') }}" alt="">
@@ -609,7 +614,7 @@ $discountedTotal = null;
                         <div class="absolute top-14 z-10">
                             <div id="action-menu" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                                 <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                                    <a href="{{'/viewProposal?estimateId=' . $estimate->estimate_id}}" target="_blank">
+                                    <a href="/makeProposal/{{ $estimate->estimate_id }}/preview" target="_blank">
                                         <li>
                                             <button id="" type="button" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                                 Estimate
@@ -625,7 +630,7 @@ $discountedTotal = null;
                                         </li>
                                     </a>
                                     <hr>
-                                    <a href="{{'/viewProposal?estimateId=' . $estimate->estimate_id}}" target="_blank">
+                                    <a href="/makeProposal/{{ $estimate->estimate_id }}/preview" target="_blank">
                                         <li>
                                             <button id="" type="button" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                                 Invoice

@@ -37,6 +37,11 @@
                             <span class="pl-2">{{ $customer->customer_phone }}
                             </span>
                         </p>
+                        <p class="mt-1 flex text-[#323C47]  font-medium">
+                            Note:
+                            <span class="pl-2">{{ $customer->company_internal_note }}
+                            </span>
+                        </p>
                         <hr class="bg-gray-300 my-2 w-full">
                     </div>
                     <div class=" col-span-2 p-3 text-right">

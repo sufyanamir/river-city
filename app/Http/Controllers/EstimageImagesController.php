@@ -7,6 +7,7 @@ use App\Models\Estimate;
 use App\Models\EstimateActivity;
 use App\Models\EstimateImageChat;
 use App\Models\EstimateImages;
+use App\Models\Notifications;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -75,6 +76,21 @@ class EstimageImagesController extends Controller
             }
 
             $chat->save();
+
+            if(isset($validatedData['mentioned_users']) && !empty($validatedData['mentioned_users'])) {
+                foreach($validatedData['mentioned_users'] as $singleMentionedId){
+                    if ($singleMentionedId != null) {
+                        $notification = new Notifications([
+                            'added_user_id' => $userDetails['id'],
+                            'estimate_id' => $image->estimate_id,
+                            'notification_message' => $userDetails['name'] . " mentioned you in the chat of this estimate's image " . $image->estimate_id . ".",
+                            'mentioned_user_id' => $singleMentionedId,
+                            'notification_type' => 'mention',
+                        ]);
+                        $notification->save();
+                    }
+                }
+            }
 
             // Add activity log
             $this->addEstimateActivity($userDetails, $image->estimate_id, 'Image Chat Sent', "New Chat has been sent in Photos Section");
