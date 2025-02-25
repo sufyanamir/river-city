@@ -102,7 +102,7 @@ $discountedTotal = null;
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
-                            <span class="pl-2">note: {{ $customer->company_internal_note }}
+                            <span class="pl-2">Internal Note: {{ $customer->company_internal_note }}
                             </span>
                         </p>
                         <hr class="bg-gray-300 my-2 w-full">

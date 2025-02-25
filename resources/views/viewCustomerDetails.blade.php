@@ -38,7 +38,7 @@
                             </span>
                         </p>
                         <p class="mt-1 flex text-[#323C47]  font-medium">
-                            Note:
+                            Internal Note:
                             <span class="pl-2">{{ $customer->company_internal_note }}
                             </span>
                         </p>
