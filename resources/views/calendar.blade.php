@@ -950,7 +950,9 @@ $('#end_date').val(endDateTime);
                         } else if (eventType === 'estimate') {
                             console.log(response);
                             $('#event-title').text(response.customer_name + ' ' + response.customer_last_name);
-                            $('#event-note').text(response.estimate_schedule.note);
+                            if (response.estimate_schedule && response.estimate_schedule.note) {
+                                $('#event-note').text(response.estimate_schedule.note);
+                            }
                             $('#event-start').text(new Date(response.scheduled_start_date).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' }));
                             $('#event-end').text(new Date(response.scheduled_end_date).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' }));
                             $('#event-project-name').text(response.project_name);
