@@ -1042,6 +1042,22 @@ class EstimateController extends Controller
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
         }
 
+        foreach ($estimates as $estimate) {
+            // Decode the JSON safely
+            $userIds = json_decode($estimate->estimate_schedule_assigned_to, true);
+        
+            // Ensure $userIds is an array; if null, set to an empty array
+            if (!is_array($userIds) || empty($userIds)) {
+                $userIds = []; // Avoid error in whereIn()
+            }
+        
+            // Fetch users matching those IDs
+            $schedulers = User::whereIn('id', $userIds)->get();
+        
+            // Attach users to the estimate dynamically
+            $estimate->schedulers = $schedulers;
+        }
+
         // Access related data for each estimate
         // foreach ($estimates as $estimate) {
         //     if ($estimate->assigned_work) {

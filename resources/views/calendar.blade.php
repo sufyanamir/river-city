@@ -543,9 +543,9 @@ function clearModalAndClose() {
         });
 
         @if(isset($crewSchedule) && $crewSchedule === 1)
-            var estimateEvents = {!! json_encode($estimates) !!};
+            var estimateEvent = {!! json_encode($estimates) !!};
 
-            var events = estimateEvents.filter(function(estimate) {
+            var events = estimateEvent.filter(function(estimate) {
             return !(estimate.estimate_assigned == 1);
             }).map(function(estimate) {
             var startDate = new Date(estimate.start_date);
@@ -565,12 +565,12 @@ function clearModalAndClose() {
             };
             });
         @else
-        var estimateEvents = {!! json_encode($estimates) !!};
+        var estimateEvent = {!! json_encode($estimates) !!};
 var filterId = {!! json_encode($filterId) !!}; // Get the filter ID from Laravel
 
 var events = [];
 
-estimateEvents.forEach(function(estimate) {
+estimateEvent.forEach(function(estimate) {
     if (estimate.estimate_assigned == 1) {
         return; // Skip this estimate
     }
@@ -733,9 +733,61 @@ estimateEvents.forEach(function(estimate) {
         };
     });
 
-    var updatedEvents = estimateEvents.filter(function(estimate) {
-        return showCompleted || (estimate.estimate_assigned == 0); // Show all if checked
-    });
+    var updatedEvents = [];
+
+estimateEvent.filter(function(estimate) {
+    return showCompleted || estimate.estimate_assigned !== 1;
+}).forEach(function (estimate) {
+    var startDate = new Date(estimate.scheduled_start_date);
+    var endDate = new Date(estimate.scheduled_end_date);
+    var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
+
+    if (estimate.schedulers && estimate.schedulers.length > 0) {
+        estimate.schedulers.forEach(function(scheduler) {
+            updatedEvents.push({
+                id: estimate.estimate_id + '-' + scheduler.id,
+                title: (estimate.estimate_assigned == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
+                start: startDate,
+                end: endDate,
+                allDay: isAllDay,
+                backgroundColor: scheduler.user_color ? scheduler.user_color : '',
+                borderColor: scheduler.user_color ? scheduler.user_color : '',
+                extendedProps: {
+                    type: 'estimate',
+                    scheduler_name: scheduler.name
+                }
+            });
+        });
+    } else if (estimate.crew != null) {
+        updatedEvents.push({
+            id: estimate.estimate_id,
+            title: (estimate.estimate_assigned == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
+            start: startDate,
+            end: endDate,
+            allDay: isAllDay,
+            backgroundColor: estimate.crew.user_color ? estimate.crew.user_color : '',
+            borderColor: estimate.crew.user_color ? estimate.crew.user_color : '',
+            extendedProps: {
+                type: 'estimate'
+            }
+        });
+    } else {
+        var userColor = '{{ session('user_details')['user_color'] }}';
+        updatedEvents.push({
+            id: estimate.estimate_id,
+            title: (estimate.estimate_assigned == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
+            start: startDate,
+            end: endDate,
+            allDay: isAllDay,
+            backgroundColor: userColor ? userColor : '',
+            borderColor: userColor ? userColor : '',
+            extendedProps: {
+                type: 'estimate'
+            }
+        });
+    }
+});
+
 
     var allUpdatedEvents = events.concat(updatedUserEvents, updatedEstimateEvents, updatedEvents);
 
