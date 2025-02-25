@@ -475,9 +475,20 @@ function clearModalAndClose() {
     $('#completeEvent').addClass('hidden');
     $('#event-title').removeClass('hidden');
     $('#deleteEventLink').attr('');
-    $('#update_assign_work')
-    .attr('name', 'assign_work') // Change name attribute
-    .attr('multiple', false) // Add multiple attribute
+    let $select = $('#update_assign_work');
+
+    // Destroy Select2 before resetting attributes
+    $select.select2('destroy');
+
+    // Reset to original form
+    $select.removeAttr('multiple').attr('name', 'assign_work');
+
+    $select.select2({
+        placeholder: 'Select Users',
+        width: '100%'
+    });
+    // Optionally reset the selection to default
+    $select.val('').trigger('change');
 
 }
 </script>
@@ -948,11 +959,22 @@ $('#end_date').val(endDateTime);
                                 ? response.estimate_schedule_assigned_to // Already an array
                                 : JSON.parse(response.estimate_schedule_assigned_to || '[]'); // Parse if it's a JSON string
                             console.log(assignedUsers);
-                            $('#update_assign_work')
-                            .attr('name', 'assign_work[]') // Change name attribute
-                            .attr('multiple', true) // Add multiple attribute
-                            .val(assignedUsers)
-                            .trigger('change');
+                            let $select = $('#update_assign_work');
+
+                            // Destroy Select2 before modifying the select element
+                            $select.select2('destroy');
+
+                            // Modify the attributes
+                            $select.attr('name', 'assign_work[]').attr('multiple', true);
+
+                            // Reinitialize Select2 with full width
+                            $select.select2({
+                                width: '100%',  // Ensures full width
+                                placeholder: "Select Users"
+                            });
+
+                            // Set the selected values
+                            $select.val(assignedUsers).trigger('change');
                             $('#update_start_date').val(response.scheduled_start_date);
                             $('#update_end_date').val(response.scheduled_end_date);
                             $('#event-customer-address').text(response.customer_address);
