@@ -46,7 +46,7 @@
                     </div>
                     <div class=" col-span-2 p-3 text-right">
                         <p class="text-md my-2 font-semibold text-[#323C47]">
-                            Total Projects Vlaue:
+                            Total Projects Value:
                             <span>${{ number_format($estimates->sum('estimate_total'), 2)}}</span>
                         </p>
                     </div>
@@ -131,7 +131,7 @@
                             <div class="col-span-8 p-3">
                                 <p class="text-[#F5222D] text-xl font-bold">
                                     <a href="/viewEstimate/{{ $project->estimate_id }}" class="hover:text">
-                                        {{ $project->created_at->format('d/m/Y') }} {{ $project->project_name }} {{ $project->project_number != null ? '(' . $project->project_number . ')' : '' }}
+                                        {{ $project->created_at->format('m/d/Y') }} {{ $project->project_name }} {{ $project->project_number != null ? '(' . $project->project_number . ')' : '' }}
                                     </a>
                                 </p>
                                 <p class="mt-2 flex text-[#323C47] font-medium">

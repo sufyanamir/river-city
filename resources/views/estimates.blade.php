@@ -74,7 +74,15 @@ $userPrivileges = session('user_details')['user_privileges'];
                                 @endif
                                 </p>
                             </td>
-                            <td>{{ $item->scheduler ? $item->scheduler->name . ' ' . $item->scheduler->last_name : 'Not Assigned' }}</td>
+                            <td>
+                                @if($item->schedulers && $item->schedulers->count())
+                                    @foreach($item->schedulers as $scheduler)
+                                        {{ $scheduler->name . ' ' . $scheduler->last_name }}, <br>
+                                    @endforeach
+                                @else
+                                    Not Assigned
+                                @endif
+                            </td>
                             <td>{{ $item->crew ? $item->crew->name . ' ' . $item->crew->last_name : 'Not Assigned' }}</td>
                             @if ($item->estimate_status == 'pending')
                             <td>
