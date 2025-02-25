@@ -747,7 +747,7 @@ estimateEvent.forEach(function(estimate) {
     var updatedEvents = [];
 
 estimateEvent.filter(function(estimate) {
-    return showCompleted || estimate.estimate_assigned !== 1;
+    return showCompleted || estimate.estimate_assigned != 1;
 }).forEach(function (estimate) {
     var startDate = new Date(estimate.scheduled_start_date);
     var endDate = new Date(estimate.scheduled_end_date);
