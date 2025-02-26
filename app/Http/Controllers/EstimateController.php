@@ -806,6 +806,22 @@ class EstimateController extends Controller
         $userToDos = UserToDo::with('assigned_to')->get();
         $estimateToDos = EstimateToDos::with('assigned_by')->get();
 
+        foreach ($estimates as $estimate) {
+            // Decode the JSON safely
+            $userIds = json_decode($estimate->estimate_schedule_assigned_to, true);
+        
+            // Ensure $userIds is an array; if null, set to an empty array
+            if (!is_array($userIds) || empty($userIds)) {
+                $userIds = []; // Avoid error in whereIn()
+            }
+        
+            // Fetch users matching those IDs
+            $schedulers = User::whereIn('id', $userIds)->get();
+        
+            // Attach users to the estimate dynamically
+            $estimate->schedulers = $schedulers;
+        }
+
         return view('calendar', ['filterId' => $filterId ,'estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
         // return response()->json(['success' => true, 'estimate' => $estimate]);
     }
