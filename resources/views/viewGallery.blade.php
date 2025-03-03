@@ -119,7 +119,7 @@ $userPrivileges = session('user_details')['user_privileges'];
             <x-add-button :title="'Back'" :class="' px-7 bg-black-100 border-2 text-[#000]'" :id="'back-btn'" />
         </div>
     </div>
-    <div class=" col-span-1  w-full overflow-auto rounded-lg shadow-lg">
+    <div class=" col-span-1  w-full overflow-auto ">
         <div class=" p-3 bg-[#930027] rounded-t-lg text-white">
             <h1 class=" text-2xl font-semibold">Project Chat</h1>
         </div>
