@@ -119,12 +119,12 @@ $userPrivileges = session('user_details')['user_privileges'];
             <x-add-button :title="'Back'" :class="' px-7 bg-black-100 border-2 text-[#000]'" :id="'back-btn'" />
         </div>
     </div>
-    <div class=" col-span-1 bg-white w-full overflow-auto rounded-lg shadow-lg">
+    <div class=" col-span-1  w-full overflow-auto rounded-lg shadow-lg">
         <div class=" p-3 bg-[#930027] rounded-t-lg text-white">
             <h1 class=" text-2xl font-semibold">Project Chat</h1>
         </div>
         <div class="pb-2">
-            <div class="border rounded-lg w-full h-[573px] overflow-auto">
+            <div class="border rounded-lg w-full h-[573px] bg-white overflow-auto">
                 <div class="m-2" id="chat-dialog">
                     <div class="pb-2">
                         <!-- Chat messages will be dynamically inserted here -->
