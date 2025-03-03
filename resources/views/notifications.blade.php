@@ -21,9 +21,15 @@
                     @endif
                 </span>
                 <div class=" flex justify-between gap-2">
-                    <!-- <a href="/estimates/getChatMessage/{{$notification->estimate_id}}" class=" hover:border-b border-[#930027]"> -->
+                    @if($notification->notification_type == 'mention')
+                    <a href="/estimates/getChatMessage/{{$notification->estimate_id}}" class=" hover:border-b border-[#930027]">
                         <p class=" text-[#930027]">{{ $notification->notification_message }}</p>
-                    <!-- </a> -->
+                    </a>
+                    @elseif($notification->notification_type == 'mentionGallery')
+                    <a href="/viewGallery{{$notification->estimate_id}}" class=" hover:border-b border-[#930027]">
+                        <p class=" text-[#930027]">{{ $notification->notification_message }}</p>
+                    </a>
+                    @endif
                     <p class=" text-xs">{{ date('d, F Y', strtotime($notification->created_at)) }}</p>
                 </div>
             </div>

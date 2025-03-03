@@ -78,46 +78,59 @@
         </div>
     </div>
     <div class=" pb-2">
-        <div class=" border rounded-lg h-40 w-full overflow-auto">
+        <div class=" border rounded-lg h-72 w-full overflow-auto">
             <div class=" m-2" id="chat-dialog">
                 <div class="pb-2">
                     <!-- Chat messages will be dynamically inserted here -->
                     @foreach($chatMessages as $message)
-                    <div class="m-2">
-                        <div>
-                            <div class="text-right">
-                                <span class="text-sm">{{ date('d, F Y', strtotime($message->created_at)) }}</span>
-                            </div>
-                            <div class="flex justify-start gap-2">
-                                <h6 class="font-medium text-red-500">{{ $message->added_user_name }}: </h6>
-                                <p>{{ $message->chat_message }}</p>
+                    <div class="mx-2 my-3">
+                            <div>
+                                <div class="flex justify-start gap-1 mb-2">
+                                    <img class="w-7 h-7 rounded-full" style="object-fit: cover;" src="{{ (isset($message->addedUser->user_image) && asset_exists($message->addedUser->user_image)) ? asset($message->addedUser->user_image) : asset('assets/images/demo-user.svg') }}" alt="image">
+                                    <h6 class="font-medium text-red-500">{{ $message->added_user_name }}: </h6>
+                                </div>
+                                <div class="">
+                                    @if($message->chat_message && Str::startsWith($message->chat_message, 'voice_messages/') && Str::endsWith($message->chat_message, '.wav'))
+                                    <audio controls class="max-w-[300px]">
+                                        <source src="{{ Storage::url($message->chat_message) }}" type="audio/wav">
+                                        Your browser does not support the audio element.
+                                    </audio>
+                                    @else
+                                    <div class=" bg-gray-100 rounded-lg w-full p-2">
+                                        <p>{{ $message->chat_message }}</p>
+                                    </div>
+                                    @endif
+                                </div>
+                                <span class="text-xs mx-2">{{ date('m/d/y', strtotime($message->created_at)) }}</span>
                             </div>
                         </div>
-                    </div>
                     @endforeach
                 </div>
             </div>
         </div>
     </div>
-    <div class=" pb-2">
+    <div class="pb-2">
         <form method="POST" action="/sendChat" id="chat-form">
             @csrf
             <input type="hidden" name="estimate_id" id="estimate_id" value="{{$estimate->estimate_id}}">
-            <label for="chat" class="sr-only">Your
-                message</label>
-            <div class="flex items-center px-3 py-2 rounded-lg bg-gray-50">
+            <label for="chat" class="sr-only">Your message</label>
+            <div class="relative flex items-center px-3 py-2 rounded-lg bg-gray-50">
                 <textarea id="message" name="chat_message" rows="1" class="message block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Your message..."></textarea>
                 <div id="userDropdown" class="userDropdown"></div>
-                <button class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100">
+                <button type="button" id="recordButton" class="inline-flex justify-center p-2 text-red-600 rounded-full cursor-pointer hover:bg-red-100 text-lg">
+                    🎤
+                </button>
+                <button type="submit" id="chatSubmit" class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100" disabled>
                     <svg class="w-5 h-5 rotate-90 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
                         <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z" />
                     </svg>
-                    <span class="sr-only">Send
-                        message</span>
+                    <span class="sr-only">Send message</span>
                 </button>
             </div>
             <input type="hidden" name="mentioned_user_ids[]" id="mentioned_user_ids">
+            <input type="hidden" name="audio_data" id="audio_data">
         </form>
+        <audio id="audioPlayback" class="mx-2 my-1" controls style="display:none;"></audio>
     </div>
 </div>
 @include('layouts.footer')
@@ -194,4 +207,113 @@ $(document).on("click", function(event) {
     }
 });
 
+</script>
+<script>
+    let chatRecorder, imageRecorder, chatAudioChunks, imageAudioChunks;
+
+    // Get DOM elements
+    const chatTextarea = document.getElementById('message');
+    const chatSubmit = document.getElementById('chatSubmit');
+    const chatAudioData = document.getElementById('audio_data');
+    
+    const imageTextarea = document.getElementById('imageMessage');
+    const imageSubmit = document.getElementById('imageSubmit');
+    const imageAudioData = document.getElementById('image_audio_data');
+
+    // Function to update submit button state
+    function updateChatSubmitState() {
+        chatSubmit.disabled = !((chatTextarea.value.trim().length > 0) || (chatAudioData.value.length > 0));
+    }
+
+    function updateImageSubmitState() {
+        imageSubmit.disabled = !((imageTextarea.value.trim().length > 0) || (imageAudioData.value.length > 0));
+    }
+
+    // Chat Form Event Listeners
+    chatTextarea.addEventListener('input', updateChatSubmitState);
+    
+    document.getElementById('recordButton').addEventListener('click', async function() {
+        if (!chatRecorder || chatRecorder.state === "inactive") {
+            startChatRecording();
+        } else {
+            stopChatRecording();
+        }
+    });
+
+    // Image Form Event Listeners
+    imageTextarea.addEventListener('input', updateImageSubmitState);
+    
+    document.getElementById('imageRecordButton').addEventListener('click', async function() {
+        if (!imageRecorder || imageRecorder.state === "inactive") {
+            startImageRecording();
+        } else {
+            stopImageRecording();
+        }
+    });
+
+    // Chat Recording Functions
+    async function startChatRecording() {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        chatRecorder = new MediaRecorder(stream);
+        chatAudioChunks = [];
+
+        chatRecorder.ondataavailable = event => {
+            chatAudioChunks.push(event.data);
+        };
+
+        chatRecorder.onstop = async () => {
+            const audioBlob = new Blob(chatAudioChunks, { type: 'audio/wav' });
+            const reader = new FileReader();
+            reader.readAsDataURL(audioBlob);
+            reader.onloadend = () => {
+                chatAudioData.value = reader.result;
+                document.getElementById('audioPlayback').src = reader.result;
+                document.getElementById('audioPlayback').style.display = "block";
+                updateChatSubmitState(); // Update button state after recording
+            };
+        };
+
+        chatRecorder.start();
+        document.getElementById('recordButton').textContent = "⏹️";
+    }
+
+    function stopChatRecording() {
+        chatRecorder.stop();
+        document.getElementById('recordButton').textContent = "🎤";
+    }
+
+    // Image Recording Functions
+    async function startImageRecording() {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        imageRecorder = new MediaRecorder(stream);
+        imageAudioChunks = [];
+
+        imageRecorder.ondataavailable = event => {
+            imageAudioChunks.push(event.data);
+        };
+
+        imageRecorder.onstop = async () => {
+            const audioBlob = new Blob(imageAudioChunks, { type: 'audio/wav' });
+            const reader = new FileReader();
+            reader.readAsDataURL(audioBlob);
+            reader.onloadend = () => {
+                imageAudioData.value = reader.result;
+                document.getElementById('imageAudioPlayback').src = reader.result;
+                document.getElementById('imageAudioPlayback').style.display = "block";
+                updateImageSubmitState(); // Update button state after recording
+            };
+        };
+
+        imageRecorder.start();
+        document.getElementById('imageRecordButton').textContent = "⏹️";
+    }
+
+    function stopImageRecording() {
+        imageRecorder.stop();
+        document.getElementById('imageRecordButton').textContent = "🎤";
+    }
+
+    // Initial state check
+    updateChatSubmitState();
+    updateImageSubmitState();
 </script>

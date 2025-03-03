@@ -2443,6 +2443,7 @@ class EstimateController extends Controller
                 'assembly_unit_by_item_unit' => 'nullable|array',
                 'item_unit_by_assembly_unit' => 'nullable|array',
                 // 'selected_items' => 'required|array',
+                'additional_item' => 'nullable',
             ]);
 
             $estimateItem = EstimateItem::where('estimate_item_id', $validatedData['item_id'])->first();
@@ -2512,6 +2513,15 @@ class EstimateController extends Controller
                         EstimateItemAssembly::create($assemblyData);
                     }
                     // Insert new record
+                }
+            }
+            if ($validatedData['additional_item'] == 'no') {
+                $pendingProposal = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->where('proposal_status', 'pending')->first();
+
+                if ($pendingProposal) {
+                    $pendingProposal->proposal_status = 'canceled';
+
+                    $pendingProposal->save();
                 }
             }
             return response()->json(['success' => true, 'message' => 'Item updated successfully!'], 200);

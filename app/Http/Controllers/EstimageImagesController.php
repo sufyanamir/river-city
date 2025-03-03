@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Estimate;
 use App\Models\EstimateActivity;
+use App\Models\EstimateChat;
 use App\Models\EstimateImageChat;
 use App\Models\EstimateImages;
 use App\Models\Notifications;
@@ -70,24 +71,24 @@ class EstimageImagesController extends Controller
                 'message' => $messageContent, // Store either text or audio file path
             ]);
 
-            // Handle mentioned users
-            if (!empty($validatedData['mentioned_users'])) {
-                $chat->mentioned_users = implode(',', $validatedData['mentioned_users']);
-            }
+            if (isset($validatedData['mentioned_users']) && !empty($validatedData['mentioned_users'])) {
+                foreach ($validatedData['mentioned_users'] as $mentionedId) {
+                    $chat->mentioned_users = $mentionedId;
+                    $chat->save();
 
-            $chat->save();
-
-            if(isset($validatedData['mentioned_users']) && !empty($validatedData['mentioned_users'])) {
-                foreach($validatedData['mentioned_users'] as $singleMentionedId){
-                    if ($singleMentionedId != null) {
-                        $notification = new Notifications([
-                            'added_user_id' => $userDetails['id'],
-                            'estimate_id' => $image->estimate_id,
-                            'notification_message' => $userDetails['name'] . " mentioned you in the chat of this estimate's image " . $image->estimate_id . ".",
-                            'mentioned_user_id' => $singleMentionedId,
-                            'notification_type' => 'mention',
-                        ]);
-                        $notification->save();
+                    // Extract mentioned_user_ids from the newly created EstimateChat
+                    $mentionedUserIds = explode(',', $chat->mentioned_users);
+                    foreach ($mentionedUserIds as $singleMentionedId) {
+                        if ($singleMentionedId != null) {
+                            $notification = new Notifications([
+                                'added_user_id' => $userDetails['id'],
+                                'estimate_id' => $image->estimate_id,
+                                'notification_message' => $userDetails['name'] . " mentioned you in the chat of this estimate's image " . $image->estimate_id . ".",
+                                'mentioned_user_id' => $singleMentionedId,
+                                'notification_type' => 'mentionGallery',
+                            ]);
+                            $notification->save();
+                        }
                     }
                 }
             }
@@ -149,8 +150,9 @@ class EstimageImagesController extends Controller
         $estimateImages = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
         $users = User::where('id', '<>', $userDetails['id'])->get();
+        $chatMessages = EstimateChat::with('addedUser')->where('estimate_id', $id)->orderby('estimate_chat_id', 'desc')->get();
         // return response()->json(['success' => true, 'data' => ['estimate_with_images' => $estimateData]], 200);
-        return view('viewGallery', ['estimate' => $estimate, 'estimate_images' => $estimateImages, 'customer' => $customer, 'users' => $users, 'user_details' => $userDetails]);
+        return view('viewGallery', ['chatMessages' => $chatMessages, 'estimate' => $estimate, 'estimate_images' => $estimateImages, 'customer' => $customer, 'users' => $users, 'user_details' => $userDetails]);
 
         // return response()->json(['customers' => $customers, 'estimates_with_images' => $estimateData, 'user_details' => $userDetails], 200);
     }

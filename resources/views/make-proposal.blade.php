@@ -8,13 +8,16 @@
 </style>
 <div class="flex justify-between text-right my-2">
     <a href="/viewEstimate/{{$estimate->estimate_id}}">
-        <button type="button" class=" border border-black  font-semibold py-1 px-7 rounded-lg">Back</button>
+        <button type="button" class="border border-black font-semibold py-1 px-7 rounded-lg">Back</button>
     </a>
-    <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
-        <button class=" bg-[#930027] p-2 text-white rounded-md">
-            Print
-        </button>
-    </a>
+    <div>
+        <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
+            <button class="bg-[#930027] p-2 text-white rounded-md">Print</button>
+        </a>
+        <a href="javascript:void(0);" onclick="downloadAsPDF('printableArea')">
+            <button class="bg-[#930027] p-2 text-white rounded-md ml-2">Download as PDF</button>
+        </a>
+    </div>
 </div>
 <form action="/sendProposal" method="post" id="sendProposalForm">
     @csrf
@@ -547,92 +550,6 @@
                     </textarea>
                     @endif
                 </div>
-                <!-- <div class="col-span-12 p-4">
-                    <div class=" mt-5">
-                        <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
-                            Required Deposit
-                        </p>
-                        <p class="text-[#858585] pt-2 text-justify">
-                            A nonrefundable 1/3 deposit is required for all projects due at the time of scheduling to secure your spot on our schedule. The remaining balance will be due upon completion.
-                        </p>
-                        <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
-                            Final Walkthrough
-                        </p>
-                        <p class="text-[#858585] pt-2 text-justify">
-                            If final walkthrough is unable to be done within 3 days of project completion then customer will be sent final invoice for full amount and payment is due.
-                        </p>
-                        <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
-                            Color Policy
-                        </p>
-                        <p class="text-[#858585] pt-2 text-justify">
-                            Please list all color numbers and names with specified areas to be painted and email to
-                            @if($customer->branch == 'wichita')
-                            <a class="text-blue-400" href="https://paintwichita.com/">info@paintwichita.com</a>
-                            @elseif($customer->branch == 'kansas')
-                            <a class="text-blue-400" href="https://office@rivercitypaintinginc.com/">office@rivercitypaintinginc.com</a>
-                            @endif
-                            no later than three days before your projected start date. You may also call
-                            @if($customer->branch == 'wichita')
-                            (316) 262-3289
-                            @elseif($customer->branch == 'kansas')
-                            913-660-9099
-                            @endif
-                            to list your colors. Prices may vary for multiple color schemes , deep colors, and accent walls that are not noted on your estimate.
-                        </p>
-                        <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
-                            Paint Samples
-                        </p>
-                        <p class="text-[#858585] pt-2 text-justify">
-                            Sample colors can be done at the request of customer when project starts but before full paint quantities have been purchased. If customer requests samples to be painted prior to work beginning then customer will be charged one additional labor hour rate of $48 per hour. If full paint quantities have been purchased and customer requests to make a color change, customer will be billed AT COST for purchase of paint as large paint orders cannot be returned.
-                        </p>
-                        <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
-                            Professional Standards
-                        </p>
-                        <p class="text-[#858585] pt-2 text-justify">
-                            Our company follows professional standards from guidelines of the “Painting Contractors of America” for all touch-ups and damage repair, please refer to PCA P1-92. Inspection of completed work will be done by the customer according to PCA Standards (Painting Contractors of America) which states: “In order to determine whether a surface has been “properly painted” it shall be examined without magnification at a distance of thirty-nine (39) inches or one (1) meter, or more, under finished lighting conditions and from a normal viewing position.”
-                        </p>
-                        <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
-                            Quality Standards
-                        </p>
-                        <p class="text-[#858585] pt-2 text-justify">
-                            We will only use the finest quality products as an investment in your property. NOTE: some degree of yellowing must be expected with the aging of all paints. Rework caused by others will be completed at an hourly rate of $95.00 per hour, with a minimum of two hours. Change Order: Any changes from original will need to be brought to the attention of Project Manager of River City Painting office so that a change order can be completed and approved by customer. We will not deviate from original work order unless all items and pricing have been approved.
-                        </p>
-                        <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
-                            Photographs
-                        </p>
-                        <p class="text-[#858585] pt-2 text-justify">
-                            River City Painting, Inc. assumes the right to take photographs of all work performed on your site to use in our advertising and marketing efforts.
-                        </p>
-                        <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
-                            General
-                        </p>
-                        <p class="text-[#858585] pt-2 text-justify">
-                            An area in the garage or a place to park the River City Painting trailer may be needed to store materials, tools, and equipment during the course of your project. River City Painting would like permission to set a yard sign during work. Any damage such as dry rot, termites, mold, etc. may not be apparent during initial inspection for a variety of reasons. Any damage or additional work required that was not on the original estimate will be discussed with the homeowner prior to any repairs being completed. The job site will be kept clean and debris will be hauled away upon completion. The customer shall not directly or indirectly interfere with River City Painting crew members in any way during the project. This stops the flow of the painter and disrupts the pattern and final outcome. Customer interference may result in additional labor and/or material charges. We cannot be held responsible for after-the-fact items, which could result in us having to stop in the middle of a project. We have an Office staff as well as a project manager staffed during business hours to assist you with anything you need, so feel free to give us a call. Customer agrees to allow access to project area of customers’ home between the hours of 8:30am - 5:00pm, Mon-Fri from the start of the project through completion. Hours/days spent at customer home can vary due to a number of variables. Employee and/or contractor may come and go during the above hours/days, according to what is most efficient each day to complete the job correctly. Sometimes there are circumstances that arise where we may ask to work outside of the above hours but we will always receive your permission before doing so. We do our best to keep you informed of the process but you are always welcome to check with your project manager or the office anytime you have questions. River City Painting, Inc. is a member of the Wichita Executives Association, Painting Contractors of America, and The Better Business Bureau. We are fully insured for your protection! ESTIMATES ARE FOR COMPLETING THE JOB AS DESCRIBED IN THE ESTIMATE. IT IS A SET PRICE PER JOB AND IS BASED UPON OUR EVALUATION. IT DOES NOT INCLUDE INCREASES FOR ADDITIONAL LABOR OR MATERIALS WHICH MAY BE REQUIRED SHOULD UNFORESEEN PROBLEMS ARISE. ALL WORKMANSHIP IS GUARANTEED FOR THREE YEARS WITH THE EXCEPTION OF DECK PAINTING/STAINING AND GENERAL STAINING WHICH IS NOT WARRANTIED. THE PRICES INCLUDED IN YOUR ESTIMATE ARE FOR COMPLETE JOB BOOKING. SHOULD YOU DECIDE ON ONLY A PORTION OF THE ESTIMATE, PRICING MAY VARY, AS WE GIVE PRICE BREAKS ON LARGER ESTIMATES. Any changes to the specifications above must be requested by the Client and approved by the Project Manager. Additional charges may apply and will be payable upon completion. All agreements are contingent based upon weather changes during and prior to your project that is outside of our control.
-                        </p>
-                        <p class="text-[25px]/[29.23px] font-bold text-[#323C47]">
-                            Acceptance
-                        </p>
-                        <p class="text-[#858585] pt-2 text-justify">
-                            The above prices, specifications, and conditions are satisfactory and are hereby accepted. You are authorized to do the work as specified. Payment will be made as outlined above. Both parties agree to a three-day (3) right to cancel on all signed/dated contracts. "YOU THE BUYER, MAY CANCEL THIS TRANSACTION AT ANY TIME PRIOR TO MIDNIGHT OF THE THIRD BUSINESS DAY AFTER THE DATE OF THIS TRANSACTION. SEE THE ATTACHED NOTICE OF CANCELLATION FORM FOR AN EXPLANATION OF THIS RIGHT." For purposes of the required notices under this section, the term "buyer" shall have the same meaning as the term "consumer" Final Payment Terms The customer agrees to pay the entire remaining balance owed for their project on the day of completion/installation. Failure to do so will result in a 10% weekly late fee for the first six weeks and an 18% monthly interest fee from six weeks (added to the balance owed), until paid in full. The customer will also be responsible for all attorney/ legal/court/lien fees paid by the contractor to collect payment.
-                        </p>
-                        <p class="text-[25px]/[29.23px] mt-4 font-bold text-[#323C47]">
-                            Compensation
-                        </p>
-                        <p class="text-[#858585] pt-2 text-justify">
-                            Client shall pay as set forth in this document. Price is subject to change, with customer’s
-                            approval
-                        </p>
-                        <p class="text-[25px]/[29.23px] mt-4 font-bold text-[#323C47]">
-                            Invoicing & Payment
-                        </p>
-                        <p class="text-[#858585] pt-2 text-justify">
-                            Invoice will be issued to Client upon Completion of the work client shall pay
-                            invoice within 10 days of client’s receipt of the invoice. Client shall also pay a late charge
-                            of 1-1/2% per month
-                            on all balances unpaid 30 days after the invoice date.
-                        </p>
-                    </div>
-                </div> -->
                 @if ($user_details['user_role'] != 'crew')
                 @if($preview == null)
                 <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
@@ -704,6 +621,7 @@
         </div>
 </form>
 @include('layouts.footer')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 @php
 $exsistingProposals = $existing_proposals;
 @endphp
@@ -738,90 +656,161 @@ $exsistingProposals = $existing_proposals;
         $("#sendProposal-modal").addClass('hidden');
         $("#formData")[0].reset()
     });
-@if($preview == null)
+
+    @if($preview == null)
     let editorInstance; // Store the editor instance globally
 
-ClassicEditor
-    .create(document.querySelector('#editor'))
-    .then(editor => {
-        editorInstance = editor; // Assign editor instance globally
-    })
-    .catch(error => {
-        console.error(error);
-    });
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .then(editor => {
+            editorInstance = editor; // Assign editor instance globally
+        })
+        .catch(error => {
+            console.error(error);
+        });
 
     function printPageArea(areaID) {
-    if (!editorInstance) {
-        console.error("Editor instance is not initialized.");
-        return;
+        if (!editorInstance) {
+            console.error("Editor instance is not initialized.");
+            return;
+        }
+
+        // Extract content from CKEditor
+        var editorContent = editorInstance.getData();
+        var originalContent = document.body.innerHTML;
+
+        // Get the printable area content
+        var printContent = document.getElementById(areaID).innerHTML;
+
+        // Combine the printable area content with the editor content
+        var combinedContent = printContent + editorContent;
+
+        // Create a temporary div to hold the combined content
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = combinedContent;
+        
+        // Append the temporary div to the body
+        document.body.innerHTML = tempDiv.innerHTML;
+
+        // Apply print-specific CSS to hide the editor UI
+        var style = document.createElement('style');
+        style.innerHTML = `
+            @media print {
+                #send-button { display: none !important; } /* Hide the send button */
+                #footer { display: none !important; } /* Hide the footer */
+                #editor { display: none !important; } /* Hide CKEditor Textarea */
+                #editor-div { display: none !important; } /* Hide the editor div */
+            }
+        `;
+        document.head.appendChild(style);
+
+        window.print(); // Print the content
+
+        // Restore the original page content
+        document.body.innerHTML = originalContent;
+        document.head.removeChild(style); // Remove added styles
     }
 
-    // Extract content from CKEditor
-    var editorContent = editorInstance.getData();
-    var originalContent = document.body.innerHTML;
-
-    // Get the printable area content
-    var printContent = document.getElementById(areaID).innerHTML;
-
-    // Combine the printable area content with the editor content
-    var combinedContent = printContent + editorContent;
-
-    // Create a temporary div to hold the combined content
-    var tempDiv = document.createElement('div');
-    tempDiv.innerHTML = combinedContent;
-    
-    // Append the temporary div to the body
-    document.body.innerHTML = tempDiv.innerHTML;
-
-    // Apply print-specific CSS to hide the editor UI
-    var style = document.createElement('style');
-    style.innerHTML = `
-        @media print {
-            #send-button{ display: none !important; } /* Hide the send button */
-            #footer{ display: none !important; } /* Hide the footer */
-            #editor{ display: none !important; } /* Hide CKEditor Textarea */
-            #editor-div{ display: none !important; } /* Hide the editor div */
+    function downloadAsPDF(areaID) {
+        if (!editorInstance) {
+            console.error("Editor instance is not initialized.");
+            return;
         }
-    `;
-    document.head.appendChild(style);
 
-    window.print(); // Print the content
+        // Extract content from CKEditor
+        var editorContent = editorInstance.getData();
+        
+        // Get the printable area content
+        var printContent = document.getElementById(areaID).innerHTML;
 
-    // Restore the original page content
-    document.body.innerHTML = originalContent;
-    document.head.removeChild(style); // Remove added styles
-}
-@else
-function printPageArea(areaID) {
-    // Get the printable area content
-    var printContent = document.getElementById(areaID).innerHTML;
+        // Combine the printable area content with the editor content
+        var combinedContent = printContent + editorContent;
 
-    // Create a temporary div to hold the content
-    var tempDiv = document.createElement('div');
-    tempDiv.innerHTML = printContent;
-    
-    // Store the original content
-    var originalContent = document.body.innerHTML;
-    
-    // Replace body content with the printable content
-    document.body.innerHTML = tempDiv.innerHTML;
+        // Create a temporary div to hold the combined content
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = combinedContent;
 
-    // Apply print-specific CSS
-    var style = document.createElement('style');
-    style.innerHTML = `
-        @media print {
-            #send-button{ display: none !important; } /* Hide the send button */
-            #footer{ display: none !important; } /* Hide the footer */
-        }
-    `;
-    document.head.appendChild(style);
+        // Define PDF options
+        var opt = {
+            margin: 0.5,
+            filename: 'Estimate_{{ $estimate->customer_name }}_{{$estimate->customer_last_name}}.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
 
-    window.print(); // Print the content
+        // Apply styles to hide unwanted elements (similar to print)
+        var style = document.createElement('style');
+        style.innerHTML = `
+            #send-button { display: none !important; }
+            #footer { display: none !important; }
+            #editor { display: none !important; }
+            #editor-div { display: none !important; }
+        `;
+        tempDiv.appendChild(style);
 
-    // Restore the original page content
-    document.body.innerHTML = originalContent;
-    document.head.removeChild(style); // Remove added styles
-}
+        // Generate and download the PDF
+        html2pdf().set(opt).from(tempDiv).save();
+    }
+    @else
+    function printPageArea(areaID) {
+        // Get the printable area content
+        var printContent = document.getElementById(areaID).innerHTML;
 
-@endif
+        // Create a temporary div to hold the content
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = printContent;
+        
+        // Store the original content
+        var originalContent = document.body.innerHTML;
+        
+        // Replace body content with the printable content
+        document.body.innerHTML = tempDiv.innerHTML;
+
+        // Apply print-specific CSS
+        var style = document.createElement('style');
+        style.innerHTML = `
+            @media print {
+                #send-button { display: none !important; } /* Hide the send button */
+                #footer { display: none !important; } /* Hide the footer */
+            }
+        `;
+        document.head.appendChild(style);
+
+        window.print(); // Print the content
+
+        // Restore the original page content
+        document.body.innerHTML = originalContent;
+        document.head.removeChild(style); // Remove added styles
+    }
+
+    function downloadAsPDF(areaID) {
+        // Get the printable area content
+        var printContent = document.getElementById(areaID).innerHTML;
+
+        // Create a temporary div to hold the content
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = printContent;
+
+        // Define PDF options
+        var opt = {
+            margin: 0.5,
+            filename: 'Estimate_{{ $estimate->customer_name }}_{{$estimate->customer_last_name}}.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        // Apply styles to hide unwanted elements
+        var style = document.createElement('style');
+        style.innerHTML = `
+            #send-button { display: none !important; }
+            #footer { display: none !important; }
+        `;
+        tempDiv.appendChild(style);
+
+        // Generate and download the PDF
+        html2pdf().set(opt).from(tempDiv).save();
+    }
+    @endif
 </script>

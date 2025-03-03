@@ -12,7 +12,11 @@ class NotificationsController extends Controller
         $userDetails = session('user_details');
 
         $notifications = Notifications::where('added_user_id', $userDetails['id'])->where('notification_type', '<>', 'mention')->orderBy('created_at', 'desc')->where('notification_status', '<>', 'read')->get();
-        $mentions = Notifications::where('mentioned_user_id', $userDetails['id'])->where('notification_type', 'mention')->orderBy('created_at', 'desc')->where('notification_status', '<>', 'read')->get();
+        $mentions = Notifications::where('mentioned_user_id', $userDetails['id'])
+            ->whereIn('notification_type', ['mention', 'mentionGallery'])
+            ->orderBy('created_at', 'desc')
+            ->where('notification_status', '<>', 'read')
+            ->get();
 
         return view('notifications', ['user_details' => $userDetails, 'notifications' => $notifications, 'mentions' => $mentions]);
 
@@ -23,12 +27,20 @@ class NotificationsController extends Controller
         try {
             $userDetails = session('user_details');
     
-            $notifications = Notifications::where('added_user_id', $userDetails['id'])->get();
+            $notifications = Notifications::where('added_user_id', $userDetails['id'])->where('notification_type', '<>', 'mention')->get();
+            $mentions = Notifications::where('mentioned_user_id', $userDetails['id'])
+                ->whereIn('notification_type', ['mention', 'mentionGallery'])
+                ->get();
     
             foreach ($notifications as $notification) {
                 $notification->notification_status = 'read';
         
                 $notification->save();
+            }
+            foreach ($mentions as $mention) {
+                $mention->notification_status = 'read';
+        
+                $mention->save();
             }
     
             return response()->json(['success' => true, 'message' => 'Marked as Read!'], 200);

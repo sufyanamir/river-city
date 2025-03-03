@@ -240,7 +240,7 @@ input[type=checkbox]:checked+label:before {
 }
 
 /* Add your CSS styling here */
-#userDropdown {
+.userDropdown {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
@@ -249,7 +249,7 @@ input[type=checkbox]:checked+label:before {
     z-index: 1;
 }
 
-#userDropdown button {
+.userDropdown button {
     width: 100%;
     padding: 8px;
     text-align: left;

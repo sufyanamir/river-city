@@ -50,7 +50,6 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <th>Units</th>
                             <th>Cost</th>
                             <th>Price</th>
-                            <th style="width:300px !important">Description</th>
                             <th>Group</th>
                             <th>Actions</th>
                         </tr>
@@ -67,7 +66,6 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <td>{{ ucwords($item->item_units) }}</td>
                             <td>${{ number_format($item->item_cost, 2) }}</td>
                             <td>${{ number_format($item->item_price, 2) }}</td>
-                            <td class="description-cell w-[100px]">{{ ucfirst($item->item_description) }}</td>
                             <td>{{ucfirst(isset($item->group->group_name) ? $item->group->group_name : 'No Group')}}</td>
                             <td>
                                 @if (session('user_details')['user_role'] == 'admin')

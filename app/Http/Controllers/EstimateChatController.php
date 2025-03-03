@@ -7,6 +7,7 @@ use App\Models\EstimateChat;
 use App\Models\Notifications;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EstimateChatController extends Controller
 {
@@ -17,17 +18,35 @@ class EstimateChatController extends Controller
     
             $validatedData = $request->validate([
                 'estimate_id' => 'required',
-                'chat_message' => 'required',
+                'chat_message' => 'nullable|string',
                 'mentioned_user_ids' => 'nullable|array',
+                'audio_data' => 'nullable|string',
             ]);
 
             // dd($validatedData);
+
+            $messageContent = null;
+
+            if (!empty($validatedData['chat_message'])) {
+                $messageContent = $validatedData['chat_message']; // Store text message
+            } elseif (!empty($validatedData['audio_data'])) {
+                // Decode the Base64 audio data
+                $audioData = base64_decode(preg_replace('#^data:audio/\w+;base64,#i', '', $validatedData['audio_data']));
+    
+                // Generate unique filename
+                $filename = 'voice_messages/' . uniqid() . '.wav';
+    
+                // Store the audio file
+                Storage::disk('public')->put($filename, $audioData);
+
+                $messageContent = $filename;
+            }
     
             $message = EstimateChat::create([
                 'estimate_id' => $validatedData['estimate_id'],
                 'added_user_id' => $userDetails['id'],
                 'added_user_name' => $userDetails['name'],
-                'chat_message' => $validatedData['chat_message'],
+                'chat_message' => $messageContent,
             ]);
     
             if (isset($validatedData['mentioned_user_ids']) && !empty($validatedData['mentioned_user_ids'])) {
@@ -65,7 +84,7 @@ class EstimateChatController extends Controller
             $userDetails = session('user_details');
             $estimate = Estimate::where('estimate_id', $id)->first();
             $customer = Estimate::where('customer_id', $estimate->customer_id)->first();
-            $chatMessages = EstimateChat::where('estimate_id', $id)->get();
+            $chatMessages = EstimateChat::with('addedUser')->where('estimate_id', $id)->orderBy('estimate_chat_id', 'desc')->get();
             $users = User::where('id', '<>', $userDetails['id'])->get();
 
             // Assuming you have a Blade view named 'chat_messages.blade.php' for formatting the messages
