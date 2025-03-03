@@ -25,4 +25,9 @@ class EstimateChat extends Model
 
     public $timestamps = true;
     
+    public function addedUser()
+    {
+        return $this->belongsTo(User::class, 'added_user_id', 'id');
+    }
+
 }

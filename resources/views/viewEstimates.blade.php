@@ -72,7 +72,7 @@ $discountedTotal = null;
                         <p class="mt-2 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/home-icon.svg') }}" alt="">
                             <a href="https://maps.google.com/?q={{$customer->customer_primary_address}}" target="_blank" class=" text-[#930027]">
-                                <span class="pl-2">{{ $customer->customer_primary_address }}</span>
+                                <span class="pl-2">{{ $estimate->customer_address }}</span>
                             </a>
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
@@ -8000,7 +8000,7 @@ $userPrivileges->estimate->expenses === 'on')
 
                 if (confirmSubmit) {
                     // If the user confirms, submit the form
-                    this.submit();
+                    return true;
                 } else {
                     // If the user cancels, do nothing (the form will not be submitted)
                     return false;
@@ -8022,7 +8022,7 @@ $userPrivileges->estimate->expenses === 'on')
 
                 if (confirmSubmit) {
                     // If the user confirms, submit the form
-                    this.submit();
+                    return true;
                 } else {
                     // If the user cancels, do nothing (the form will not be submitted)
                     return false;

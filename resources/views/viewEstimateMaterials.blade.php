@@ -6,11 +6,16 @@
             <div class="text-xl font-semibold">
                 <h4>Work Order</h4>
             </div>
-            <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
-                <button class=" bg-white p-2 text-black rounded-md">
-                    Print
-                </button>
-            </a>
+            <div>
+                <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
+                    <button class=" bg-white p-2 text-black rounded-md">
+                        Print
+                    </button>
+                </a>
+                <a href="javascript:void(0);" onclick="downloadAsPDF('printableArea')">
+                    <button class="bg-white p-2 text-black rounded-md ml-2">Download as PDF</button>
+                </a>
+            </div>
         </div>
 
         @if(count($estimate_items) > 0 || count($assemblies) > 0 || count($upgrades) > 0 || count($templates) > 0)
@@ -400,6 +405,7 @@
 
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     function printPageArea(areaID) {
         var printContent = document.getElementById(areaID).innerHTML;
@@ -419,6 +425,34 @@
         // Restore the original content and remove the added style tag
         document.body.innerHTML = originalContent;
         document.head.removeChild(style);
+    }
+    function downloadAsPDF(areaID) {
+        // Get the printable area content
+        var printContent = document.getElementById(areaID).innerHTML;
+
+        // Create a temporary div to hold the content
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = printContent;
+
+        // Define PDF options with original styling
+        var opt = {
+            margin: 0.5, // Original 0.5 inch margin
+            filename: '{{ $customer->customer_first_name }}_{{$customer->customer_last_name}}-Work_Order.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 }, // Original scale of 2
+            jsPDF: { unit: 'in', formayt: 'letter', orientation: 'portrait' }
+        };
+
+        // Apply minimal styles to hide unwanted elements (original approach)
+        var style = document.createElement('style');
+        style.innerHTML = `
+            body { background-color: white !important; }
+            .group-card { background-color: #930027 !important; } /* Maintain group header styling */
+        `;
+        tempDiv.appendChild(style);
+
+        // Generate and download the PDF
+        html2pdf().set(opt).from(tempDiv).save();
     }
 </script>
 @include('layouts.footer')

@@ -207,7 +207,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     <i class="fa-solid fa-sort"></i>
                                     <div class="inline-block w-[90%]">
                                     <label for="" class="block text-left mb-1"> Assembly Name </label>
-                                    <select name="item_id[]" id="" placeholder="Item Name"
+                                    <select name="item_id[]" id="select2-${id}" placeholder="Item Name"
                                         autocomplete="given-name"
                                         class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                         <option value="">Select Item</option>
@@ -233,6 +233,10 @@ $userPrivileges = session('user_details')['user_privileges'];
 
         mulitple_input.append(newele);
         newele.append(rembtn);
+        $(`#select2-${id}`).select2({
+        placeholder: "Select an option",
+        allowClear: true
+    });
 
     });
 
@@ -271,7 +275,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <i class="fa-solid fa-sort"></i>
                             <div class="inline-block w-[90%]">
                             <label for="" class="block text-left mb-1"> Assembly Name </label>
-                            <select name="item_id[]" placeholder="Item Name" autocomplete="given-name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></select>
+                            <select name="item_id[]" id="" placeholder="Item Name" autocomplete="given-name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></select>
                             </div>
                             </div>
                             <div>
@@ -284,7 +288,16 @@ $userPrivileges = session('user_details')['user_privileges'];
                                 </div>
                             </div>
                         </div>
-                    `);
+                    `
+                        );
+
+                        // Initialize select2
+                        newItemDiv.find('select').select2({
+                            placeholder: "Select an option",
+                            // allowClear: true
+                            width: '100%',
+                        }
+                );
 
                         // Populate select options
                         var select = newItemDiv.find('select');

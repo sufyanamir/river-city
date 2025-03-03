@@ -38,6 +38,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <th>Type</th>
                             <th>Schedular Assigned</th>
                             <th>Crew Leader</th>
+                            <th>Total/Paid</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -84,6 +85,9 @@ $userPrivileges = session('user_details')['user_privileges'];
                                 @endif
                             </td>
                             <td>{{ $item->crew ? $item->crew->name . ' ' . $item->crew->last_name : 'Not Assigned' }}</td>
+                            <td>
+                                ${{number_format($item->estimate_total, 2)}}/${{number_format($item->invoice_paid_total, 2)}}
+                            </td>
                             @if ($item->estimate_status == 'pending')
                             <td>
                                 <span class="bg-gray-100 text-gray-800 text-sm font-medium px-2 py-1 rounded ring-1 ring-inset ring-gray-600/20">Pending</span>
@@ -707,9 +711,9 @@ $userPrivileges = session('user_details')['user_privileges'];
                         $('#invoiceCustomerName').text(details.customer_name);
                         $('#invoiceProjectName').text(details.project_name);
                         $('#invoiceEstimateDate').text(details.scheduled_start_date);
-                        $('#invoiceTotal').text('Total: $' + details.estimate_total);
-                        $('#invoiceInvoiced').text('Invoiced: $' + details.invoiced_payment);
-                        $('#invoicePaid').text('Paid: $' + details.invoice_paid_total);
+                        $('#invoiceTotal').text('Total: $' + (details.estimate_total ? details.estimate_total : '0.00'));
+                        $('#invoiceInvoiced').text('Invoiced: $' + (details.invoiced_payment ? details.invoiced_payment : '0.00'));
+                        $('#invoicePaid').text('Paid: $' + (details.invoice_paid_total ? details.invoice_paid_total : '0.00'));
                         var invoices = details.invoices;
                         var invoiceTableBody = '';
                         invoices.forEach(function(invoice) {
