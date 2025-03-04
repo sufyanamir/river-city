@@ -138,9 +138,9 @@
                             @foreach ($groupedItems as $groupName => $itemss)
                             <div class="mb-2 bg-white shadow-xl">
                                 <div class=" group-card p-1 bg-[#930027] text-white w-full rounded-t-lg">
-                                    <div class="inline-block">
+                                    <div class="">
                                         @if($groupName)
-                                        <div class="flex gap-3">
+                                        <div class="">
                                             @php
                                             $displayedGroups = []; // Array to keep track of displayed groups
                                             @endphp
@@ -156,23 +156,25 @@
                                             @endphp
                                             @endif
                                             @endforeach
-                                            <div class="relative flex">
-                                                <h1 class=" font-medium my-auto p-2">{{$groupName}}</h1>
-                                                <div class="">
-                                                    <button type="button" id="exclude-include-menuBtn{{$item->group_id}}" class="inline p-2">
+                                            <div class="w-full flex justify-between">
+                                                <div>
+                                                    <h1 class=" font-medium my-auto p-2">{{$groupName}}</h1>
+                                                    <div id="formData{{$item->group_id}}" class="hidden">
+                                                        @csrf
+                                                        <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                        <input type="hidden" name="group_id" value="{{$item->group_id}}">
+                                                        <input type="hidden" name="type" value="acceptAll">
+                                                        <input type="hidden" name="item_status" value="accepted">
+                                                        <input type="hidden" name="estimate_item_id" value="">
+                                                    </div>
+                                                </div>
+                                                <!-- <div class=""> -->
+                                                    <!-- <button type="button" id="exclude-include-menuBtn{{$item->group_id}}" class="inline p-2">
                                                         <i class="fa-solid fa-square-caret-down text-[#fff] text-lg"></i>
-                                                    </button>
-                                                    <div id="exclude-include-menu{{$item->group_id}}" class=" absolute z-10 topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                                    </button> -->
+                                                    <!-- <div id="exclude-include-menu{{$item->group_id}}" class=" absolute z-10 topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                                                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                                                             <li>
-                                                                <div id="formData{{$item->group_id}}" class="hidden">
-                                                                    @csrf
-                                                                    <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                                    <input type="hidden" name="group_id" value="{{$item->group_id}}">
-                                                                    <input type="hidden" name="type" value="acceptAll">
-                                                                    <input type="hidden" name="item_status" value="accepted">
-                                                                    <input type="hidden" name="estimate_item_id" value="">
-                                                                </div>
                                                                 <button type="button" id="submitAcceptionRejection{{$item->group_id}}"
                                                                     data-type="acceptAll"
                                                                     data-status="accepted"
@@ -208,9 +210,9 @@
                                                                 </button>
                                                             </li>
                                                         </ul>
-                                                    </div>
-                                                </div>
-                                                <script>
+                                                    </div> -->
+                                                <!-- </div> -->
+                                                <!-- <script>
                                                     document.getElementById("exclude-include-menuBtn{{$item->group_id}}").addEventListener("click", function(e) {
                                                         e.stopPropagation(); // Prevents the click event from reaching the document body
                                                         var dropdownMenu = document.getElementById("exclude-include-menu{{$item->group_id}}");
@@ -228,7 +230,28 @@
                                                             dropdownMenu.classList.remove("topbar-menuEntring");
                                                         }
                                                     });
-                                                </script>
+                                                </script> -->
+                                                @if($item->group->include_est_total == 0)
+                                                    <div class="my-auto mx-2">
+                                                        <input type="radio" 
+                                                            name="group_accept_reject" 
+                                                            value="accepted" 
+                                                            id="submitAcceptionRejection{{$item->group_id}}" 
+                                                            data-type="acceptAll"
+                                                            data-status="accepted"
+                                                            {{ $item->upgrade_status == 'accepted' ? 'checked' : '' }}>
+                                                        <label for="">Accept</label>
+                                                        
+                                                        <input type="radio" 
+                                                            name="group_accept_reject" 
+                                                            value="rejected" 
+                                                            id="submitAcceptionRejection{{$item->group_id}}" 
+                                                            data-type="rejectAll"
+                                                            data-status="rejected"
+                                                            {{ $item->upgrade_status == 'rejected' ? 'checked' : '' }}>
+                                                        <label for="">Reject</label>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                         @endif
@@ -256,6 +279,7 @@
                                             <tbody>
                                                 @php
                                                 $groupTotal = 0;
+                                                $incEstTotal = 0;
                                                 @endphp
                                                 @foreach ($itemss as $item)
                                                 <tr class="bg-white border-b">
@@ -265,7 +289,7 @@
                                                     </th> -->
                                                     <td class="px-6 py-4">
                                                         <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_name'] }}
-                                                            <span class="bg-{{ $item['upgrade_status'] == 'accepted' ? 'green' : ($item['upgrade_status'] == 'rejected' ? 'red' : 'gray') }}-100 text-{{ $item['upgrade_status'] == 'accepted' ? 'green' : ($item['upgrade_status'] == 'rejected' ? 'red' : 'gray') }}-800 text-xs font-medium me-2 px-2.5 py-1 rounded-sm dark:bg-{{ $item['upgrade_status'] == 'accepted' ? 'green' : ($item['upgrade_status'] == 'rejected' ? 'red' : 'gray') }}-700 dark:text-{{ $item['upgrade_status'] == 'accepted' ? 'green' : ($item['upgrade_status'] == 'rejected' ? 'red' : 'gray') }}-300">{{ $item['upgrade_status'] }}</span>
+                                                            <!-- <span class="bg-{{ $item['upgrade_status'] == 'accepted' ? 'green' : ($item['upgrade_status'] == 'rejected' ? 'red' : 'gray') }}-100 text-{{ $item['upgrade_status'] == 'accepted' ? 'green' : ($item['upgrade_status'] == 'rejected' ? 'red' : 'gray') }}-800 text-xs font-medium me-2 px-2.5 py-1 rounded-sm dark:bg-{{ $item['upgrade_status'] == 'accepted' ? 'green' : ($item['upgrade_status'] == 'rejected' ? 'red' : 'gray') }}-700 dark:text-{{ $item['upgrade_status'] == 'accepted' ? 'green' : ($item['upgrade_status'] == 'rejected' ? 'red' : 'gray') }}-300">{{ $item['upgrade_status'] }}</span> -->
                                                         </label>
                                                         <p class="text-[16px]/[18px] text-[#323C47] font">
                                                             @if ($item['item_description'])
@@ -305,10 +329,23 @@
                                                 @endphp
                                                 @php
                                                 if(isset($item['group']['include_est_total']) && $item['group']['include_est_total'] == 1) {
+                                                    $incEstTotal = 1;
                                                 $subTotal += $item['item_total']; // Add item price to total
+                                                }else{
+                                                    if($item['upgrade_status'] == 'accepted'){
+                                                        $subTotal += $item['item_total'];
+                                                    }
                                                 }
+                                                $acceptorreject = $item['upgrade_status'];
                                                 @endphp
                                                 @endforeach
+                                                <tr>
+                                                    <th>
+                                                        @if($incEstTotal == 0 && $acceptorreject == 'rejected')
+                                                        **Not include in Estimate Total**
+                                                        @endif
+                                                    </th>
+                                                </tr>
                                                 <tr>
                                                     <th class=" text-right py-3" colspan="7">
                                                         Group Total: {{ number_format($groupTotal, 2) }}
