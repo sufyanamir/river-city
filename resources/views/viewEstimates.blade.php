@@ -1041,6 +1041,7 @@ $discountedTotal = null;
                                 <tbody>
                                     @php
                                     $groupTotal = 0;
+                                    $incEstTotal = 0;
                                     @endphp
                                     @foreach ($itemss as $item)
                                     <tr class="bg-white border-b">
@@ -1248,8 +1249,18 @@ $discountedTotal = null;
                                     </tr>
                                     @php
                                     $totalPrice += $item->item_total; // Add item price to total
+                                    if($item->group->include_est_total == 1) {
+                                    $incEstTotal = 1; // Add item price to included estimate total
+                                    }
                                     @endphp
                                     @endforeach
+                                    <tr>
+                                        <th class="" colspan="7">
+                                            @if($incEstTotal == 0)
+                                            **Not include in Estimate Total**
+                                            @endif
+                                        </th>
+                                    </tr>
                                     <tr>
                                         <th class=" text-right" colspan="7">
                                             Group Total: {{ number_format($groupTotal, 2) }}
@@ -7703,8 +7714,8 @@ $userPrivileges->estimate->expenses === 'on')
             var itemUnitValue = parseFloat($(this).val());
 
             // Perform calculations based on item type for the current row
-            if (itemType === 'labour') {
-                if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
+            if (itemType == 'labour') {
+                if (!isNaN(itemUnitValue) && itemUnitValue != 0) {
                     var calculatedValue = 1 / itemUnitValue;
 
                     $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
@@ -7720,8 +7731,8 @@ $userPrivileges->estimate->expenses === 'on')
                     $('#ass_unit_by_item_unit_' + itemId).val('');
                     $('#total_qty_' + itemId).val('');
                 }
-            } else if (itemType === 'material') {
-                if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
+            } else if (itemType == 'material') {
+                if (!isNaN(itemUnitValue) && itemUnitValue != 0) {
                     var calculatedValue = 1 / itemUnitValue;
                     $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
                     // Update total material expense for the current row
