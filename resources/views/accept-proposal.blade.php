@@ -129,7 +129,7 @@
 
                         $groupedItems = [];
                         foreach ($estimate_items as $groupItems) {
-                        $groupName = $groupItems['group']['group_name'] ?? 'Other'; // Use 'Other' if no group is associated
+                        $groupName = $groupItems['group']['group_name'] ?? ''; // Use 'Other' if no group is associated
                         $groupedItems[$groupName][] = $groupItems;
                         }
                         @endphp
