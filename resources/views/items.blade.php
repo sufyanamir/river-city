@@ -292,7 +292,7 @@ $userPrivileges = session('user_details')['user_privileges'];
     });
 
     // Initialize select2 for existing select elements
-    // $('.select2').select2();
+    $('.select2').select2();
 
     function remass(e) {
         let ele = document.querySelector(e);
@@ -366,7 +366,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                         ${assembly.assembly_name}
                                     </option>
                                     @foreach ($itemsForAssemblies as $item)
-                                    <option value="{{ $item->item_name }}" data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
+                                    <option value="{{ $item->item_name }}" data-item-cost="{{$item->item_cost}}" data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -389,7 +389,8 @@ $userPrivileges = session('user_details')['user_privileges'];
                             // Apply select2 to the new select element
                             $('#assembly_id_' + index).select2();
                         });
-
+// Initialize select2 for existing select elements
+    $('.select2').select2();
                         // Add event listener for delete button
                        // Add event listener for delete button
                         $(document).on('click', '.delete-row-btn', function() {
