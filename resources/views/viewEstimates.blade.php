@@ -6610,6 +6610,8 @@ $userPrivileges->estimate->expenses === 'on')
                             let ele = document.querySelector(e);
                             if (ele) {
                                 ele.remove();
+                                // Recalculate values by triggering input event on remaining elements
+                                $('[id^="item_unit_by_ass_unit_"]').trigger('input');
                             }
                         }
                         // applyInputEventListenerForAssUnit();
@@ -6809,6 +6811,8 @@ $userPrivileges->estimate->expenses === 'on')
                                 let ele = document.querySelector(e);
                                 if (ele) {
                                     ele.remove();
+                                    // Recalculate values by triggering input event on remaining elements
+                                    $('[id^="item_unit_by_ass_unit_"]').trigger('input');
                                 }
                             }
                         }
@@ -7677,6 +7681,8 @@ $userPrivileges->estimate->expenses === 'on')
         let ele = document.querySelector(e);
         if (ele) {
             ele.remove();
+            // Recalculate values by triggering input event on remaining elements
+            $('[id^="item_unit_by_ass_unit_"]').trigger('input');
         }
     }
     $(document).on('input', '[id^="item_unit_by_ass_unit_"]', function() {
@@ -7721,7 +7727,7 @@ $userPrivileges->estimate->expenses === 'on')
                     $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
                     // Update total labour expense for the current row
                     totalLabourExpense += labourExpense / itemUnitValue;
-                    labourPrice = itemPrice / itemUnitValue;
+                    labourPrice += itemPrice / itemUnitValue;
 
                     findingCostLabour = totalLabourExpense * itemCost / labourExpense;
                     var assTotalQty = EstItemQty * calculatedValue;
@@ -7737,7 +7743,7 @@ $userPrivileges->estimate->expenses === 'on')
                     $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue);
                     // Update total material expense for the current row
                     totalMaterialExpense += calculatedValue * 1 * itemCost;
-                    materialPrice = itemPrice / itemUnitValue;
+                    materialPrice += itemPrice / itemUnitValue;
 
                     var assTotalQty = EstItemQty * calculatedValue;
                     $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
