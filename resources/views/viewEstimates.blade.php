@@ -1249,7 +1249,7 @@ $discountedTotal = null;
                                     </tr>
                                     @php
                                     $totalPrice += $item->item_total; // Add item price to total
-                                    if($item->group->include_est_total == 1) {
+                                    if(isset($item->group->include_est_total) && $item->group->include_est_total == 1) {
                                     $incEstTotal = 1; // Add item price to included estimate total
                                     }
                                     @endphp
