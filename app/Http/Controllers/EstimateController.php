@@ -2086,14 +2086,17 @@ class EstimateController extends Controller
                         'notification_message' => $notificationMessage,
                     ]);
                 }
-            } elseif ($proposalId) {
+            }elseif ($proposalId) {
                 $proposal = EstimateProposal::where('estimate_proposal_id', $proposalId)->first();
+            
                 if (!$proposal) {
-                    // return response()->json(['success' => false, 'message' => 'Proposal not found'], 404);
                     return view('accept-proposal', ['success' => false, 'message' => 'Proposal not found', 'sts' => 404]);
                 }
-
-            } else {
+            
+                $data = $this->prepareProposalData($proposal->estimate_id);
+                $data['terms_and_conditions'] = $proposal->proposal_terms_and_conditions; // Add terms and conditions
+            }
+             else {
                 // return response()->json(['success' => false, 'message' => 'No valid ID provided'], 400);
                 return view('accept-proposal', ['success' => false, 'message' => 'No valid ID provided', 'sts' => 400]);
             }
