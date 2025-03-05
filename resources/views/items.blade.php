@@ -261,7 +261,7 @@ $userPrivileges = session('user_details')['user_privileges'];
 
         newele.html(`
         <input type="hidden" name="ass_item_id[]" id="${assItemId}" >
-        <select name="assembly_name[]" id="${selectId}" placeholder="Item Name" autocomplete="given-name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm select2">
+        <select name="assembly_name[]" id="${selectId}" placeholder="Item Name" autocomplete="given-name" class="select2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm select2">
             <option value="">Select Item</option>
             @foreach ($itemsForAssemblies as $item)
             <option id="option_id{{$item->item_id}}" value="{{ $item->item_name }}" data-item-cost="{{$item->item_cost}}" data-item-price="{{$item->item_price}}" data-item-id="{{$item->item_id}}" data-item-type="{{$item->item_type}}" data-labour-expense="{{$item->labour_expense}}" data-material-expense="{{$item->material_expense}}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}</option>
@@ -288,11 +288,11 @@ $userPrivileges = session('user_details')['user_privileges'];
         newele.append(rembtn);
 
         // Apply select2 to the new select element
-        $('#' + selectId).select2();
+        // $('#' + selectId).select2();
+        $('.select2').select2();
     });
 
     // Initialize select2 for existing select elements
-    $('.select2').select2();
 
     function remass(e) {
         let ele = document.querySelector(e);
@@ -353,7 +353,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                             newAssemblyDiv.html(`
                             <div class="flex justify-between">
                             <input type="hidden" name="ass_item_id[]" id="ass_item_id_${index}" value="${assembly.ass_item_id}">
-                                <select name="assembly_name[]" id="assembly_id_${index}" placeholder="Item Name" autocomplete="given-name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm select2">
+                                <select name="assembly_name[]" id="assembly_id_${index}" placeholder="Item Name" autocomplete="given-name" class="select2${index} w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm select2">
                                     <option value="">Select Item</option>
                                     <option selected value="${assembly.assembly_name}" 
                                         data-item-cost="${assembly.assemblyItemData.item_cost}" 
@@ -387,10 +387,10 @@ $userPrivileges = session('user_details')['user_privileges'];
                             $('#mulitple_input').append(newAssemblyDiv);
 
                             // Apply select2 to the new select element
-                            $('#assembly_id_' + index).select2();
+                            // $('#assembly_id_' + index).select2();
+                            $('.select2' + index).select2();
                         });
-// Initialize select2 for existing select elements
-    $('.select2').select2();
+                    // Initialize select2 for existing select elements
                         // Add event listener for delete button
                        // Add event listener for delete button
                         $(document).on('click', '.delete-row-btn', function() {

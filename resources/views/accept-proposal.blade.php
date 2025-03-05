@@ -231,7 +231,7 @@
                                                         }
                                                     });
                                                 </script> -->
-                                                @if($item->group->include_est_total == 0)
+                                                @if(isset($item->group->include_est_total) && $item->group->include_est_total == 0)
                                                     <div class="my-auto mx-2">
                                                         <input type="radio" 
                                                             name="group_accept_reject" 
