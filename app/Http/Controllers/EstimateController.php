@@ -800,8 +800,8 @@ class EstimateController extends Controller
     {
         $userDetails = session('user_details');
         $filterId = null;
-        $estimate = Estimate::with(['scheduler', 'crew'])->where('estimate_id', $id)->first();
-        $customer = Customer::where('customer_id', $estimate->customer_id)->first();
+        $eventEstimate = Estimate::with(['scheduler', 'crew'])->where('estimate_id', $id)->first();
+        $customer = Customer::where('customer_id', $eventEstimate->customer_id)->first();
         $estimates = Estimate::with(['scheduler', 'crew'])->get();
         $users = User::where('user_role', 'scheduler')->where('sts', 'active')->get();
         $allEmployees = User::where('sts', 'active')->get();
@@ -826,7 +826,7 @@ class EstimateController extends Controller
             $estimate->schedulers = $schedulers;
         }
 
-        return view('calendar', ['filterId' => $filterId ,'estimates' => $estimates, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
+        return view('calendar', ['filterId' => $filterId ,'estimates' => $estimates, 'estimate' => $eventEstimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
         // return response()->json(['success' => true, 'estimate' => $estimate]);
     }
     // get schedule estimate
