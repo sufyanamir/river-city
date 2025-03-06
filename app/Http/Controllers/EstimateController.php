@@ -283,7 +283,7 @@ class EstimateController extends Controller
                 'group_id' => 'nullable',
             ]);
 
-            if ($validatedData['group_id'] != null) {
+            if (isset($validatedData['group_id']) && $validatedData['group_id'] != null) {
 
                 $estimateItems = EstimateItem::where('group_id', $validatedData['group_id'])->get();
 
