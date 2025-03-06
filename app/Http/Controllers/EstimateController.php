@@ -536,7 +536,7 @@ class EstimateController extends Controller
             if (isset($validatedData['group_name']) && $validatedData['group_name'] != null) {
                 $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
             }else{
-                $groupDetail = Groups::where('group_name', 'No Group')->first();
+                $groupDetail = Groups::where('group_name', 'Single')->first();
             }
 
             // $estTemplate = EstimateItemTemplates::create([
@@ -2479,7 +2479,7 @@ class EstimateController extends Controller
                     $estimateItem->group_id = $groupDetail->group_id;
                 }
             }else{
-                $groupDetail = Groups::where('group_name', 'No Group')->first();
+                $groupDetail = Groups::where('group_name', 'Single')->first();
                 $estimateItem->group_id = $groupDetail->group_id;
             }
 
@@ -2609,7 +2609,7 @@ class EstimateController extends Controller
             if (isset($validatedData['group_name']) && $validatedData['group_name'] != null) {
                 $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
             }else{
-                $groupDetail = Groups::where('group_name', 'No Group')->first();
+                $groupDetail = Groups::where('group_name', 'Single')->first();
             }
 
             $estimateItem = EstimateItem::create([

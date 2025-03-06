@@ -155,12 +155,14 @@
                                                             <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
                                                             <p class="text-[16px]/[18px] text-[#323C47] font">
                                                                 @if ($item->item_description)
-                                                            <p class="font-medium">Description:</p>
-                                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
+                                                            <p class="font-medium">Description:
+                                                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
+                                                            </p>
                                                             @endif
                                                             @if ($item->item_note)
-                                                            <p class="font-medium">Note:</p>
-                                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
+                                                            <p class="font-medium">Note:
+                                                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
+                                                            </p>
                                                             @endif
                                                             </p>
                                                         </td>
@@ -689,6 +691,9 @@ $exsistingProposals = $existing_proposals;
             #footer { display: none !important; }
             #editor { display: none !important; }
             #editor-div { display: none !important; }
+            * { font-size: 15px !important; word-wrap: break-word; } /* Reduce overall font size */
+        div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
+        table { page-break-before: auto; page-break-after: auto; }
         `;
         tempDiv.appendChild(style);
 
@@ -728,32 +733,41 @@ $exsistingProposals = $existing_proposals;
     }
 
     function downloadAsPDF(areaID) {
-        // Get the printable area content
-        var printContent = document.getElementById(areaID).innerHTML;
+    var element = document.getElementById(areaID);
 
-        // Create a temporary div to hold the content
-        var tempDiv = document.createElement('div');
-        tempDiv.innerHTML = printContent;
+    // Define PDF options
+    var opt = {
+        margin: 0.5,
+        filename: 'Estimate_{{ $estimate->customer_name }}_{{$estimate->customer_last_name}}.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // Prevents text splitting across pages
+    };
 
-        // Define PDF options
-        var opt = {
-            margin: 0.5,
-            filename: 'Estimate_{{ $estimate->customer_name }}_{{$estimate->customer_last_name}}.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-        };
+    // Apply styles to hide unwanted elements and format content
+    var style = document.createElement('style');
+    style.innerHTML = `
+        #send-button, #footer { display: none !important; } /* Hide specific elements */
+        * { font-size: 10px !important; word-wrap: break-word; } /* Reduce overall font size */
+        div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
+        table { page-break-before: auto; page-break-after: auto; }
+    `;
+    document.head.appendChild(style);
 
-        // Apply styles to hide unwanted elements
-        var style = document.createElement('style');
-        style.innerHTML = `
-            #send-button { display: none !important; }
-            #footer { display: none !important; }
-        `;
-        tempDiv.appendChild(style);
+    // Generate the PDF and add page numbers
+    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+        var totalPages = pdf.internal.getNumberOfPages();
 
-        // Generate and download the PDF
-        html2pdf().set(opt).from(tempDiv).save();
-    }
+        for (var i = 1; i <= totalPages; i++) {
+            pdf.setPage(i);
+            pdf.setFontSize(10);
+            pdf.text(`Page ${i} of ${totalPages}`, pdf.internal.pageSize.width - 50, pdf.internal.pageSize.height - 10);
+        }
+
+        pdf.save(); // Save after adding page numbers
+    });
+}
+
     @endif
 </script>
