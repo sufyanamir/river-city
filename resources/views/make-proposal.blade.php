@@ -137,10 +137,14 @@
                                                             Item Name
                                                         </th>
                                                         <th scope="col" class="text-center">
+                                                        @if($item->group->show_quantity == 1)
                                                             Item Qty
+                                                        @endif
                                                         </th>
                                                         <th scope="col" class="text-center">
+                                                        @if($item->group->show_total == 1)
                                                             Item Total
+                                                        @endif
                                                         </th>
                                                     </tr>
                                                 </thead>
