@@ -441,7 +441,16 @@
                 }
 
                 // Append the rating stars container to the crew container
-                crewContainer.append(crewRatingContainer);
+                crewCell.append(crewRatingContainer);
+                crewCell.css({
+    'display': 'flex',
+    'flex-direction': 'column',
+    'align-items': 'center',
+    'text-align': 'center'
+});
+crewRatingContainer.css({
+    'margin-top': '5px' // Adjust spacing between name and rating if needed
+});
 
                 // Loop through each day of the week
                 for (let i = 0; i < 7; i++) {

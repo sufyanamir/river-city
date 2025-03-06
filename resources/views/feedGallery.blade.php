@@ -12,11 +12,19 @@
                 <thead class=" text-white text-sm">
                     <tr>
                         <th></th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="universalTableBody" class=" text-sm">
                     @foreach ($estimates_with_images as $item)
                     <tr>
+                    <td>
+                            {{ $item['estimate']->estimate_id }}
+                        </td>
+                        <td>
+                        {{ $item['estimate']->customer_name }} {{ $item['estimate']->customer_last_name }}
+                        </td>
                         <td>
                             <div class="grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">
                                 <div class="col-span-5 p-2 flex justify-between">
@@ -24,7 +32,7 @@
                                         <div class="pl-3">
                                             <h3 class="text-[#323C47] font-bold">{{ $item['estimate']->project_name }}</h3>
                                             <p class="font-medium text-sm text-[#858585]">
-                                                {{ $item['estimate']->customer_name }} {{ $item['estimate']->customer_last_name }} / {{ $item['estimate']->customer_address }}
+                                                {{ $item['estimate']->customer_address }}
                                             </p>
                                         </div>
                                         <div class="pl-3">

@@ -33,7 +33,7 @@
 <body>
     <div class="container">
         <div class="card-header" style="text-align: center;">
-            <img src="{{ $message->embed(public_path().'/assets/images/projectLogo.jpg') }}" alt="Hello">
+            <img src="https://soft.rivercitypainting.tech/assets/images/projectLogo.jpg" alt="Hello">
         </div>
         <p style="padding:20px 50px; font-size:large">
         <?php echo nl2br($emailData['body']); ?>
@@ -54,10 +54,11 @@
             </a>
         </div> -->
         <div style=" padding:20px 50px;">
-            <img src="{{ $message->embed(public_path().'/assets/images/PCA-Logo-RGB .png') }}" class="footerImage" style="height: 80px;" alt="Image">
-            <img src="{{ $message->embed(public_path().'/assets/images/2023BOW_GoldWInner.png') }}" class="footerImage" style="height: 80px;" alt="Image">
-            <img src="{{ $message->embed(public_path().'/assets/images/Lead-Safe-EPA-Certified-Firm .png') }}" class="footerImage" style="height: 80px;" alt="Image">
-            <img src="{{ $message->embed(public_path().'/assets/images/workmanship.png') }}" class="footerImage" style="height: 80px;" alt="Image">
+            
+            <img src="https://soft.rivercitypainting.tech/assets/images/PCA-Logo-RGB%20.png" class="footerImage" style="height: 80px;" alt="Image">
+            <img src="https://soft.rivercitypainting.tech/assets/images/2023BOW_GoldWInner.png" class="footerImage" style="height: 80px;" alt="Image">
+            <img src="https://soft.rivercitypainting.tech/assets/images/Lead-Safe-EPA-Certified-Firm%20.png" class="footerImage" style="height: 80px;" alt="Image">
+            <img src="https://soft.rivercitypainting.tech/assets/images/workmanship.png" class="footerImage" style="height: 80px;" alt="Image">
         </div>
     </div>
 </body>

@@ -204,8 +204,8 @@ Route::middleware('customauth')->group(function () {
     // Route::get('/dashboard', function () {
     //     return view('dashboard');
     // });
-    Route::get('//addEmail', function () {
-        return view('addEmail');
+    Route::get('/addEmail', function () {
+        return view('emails.proposal-mail');
     });
     Route::post('/addEmail', [EmailController::class, 'addMailTemplate']);
     Route::get('/emails', [EmailController::class, 'getEmails']);

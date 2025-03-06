@@ -89,9 +89,7 @@ class GroupController extends Controller
         try {
             $validatedData = $request->validate([
                 'group_name' => 'required|string',
-                // 'total_items' => 'required|numeric',
                 'group_type' => 'required|string',
-                // 'group_item_ids' => 'required|array',
                 'group_description' => 'nullable|string',
                 'show_unit_price' => 'nullable',
                 'show_quantity' => 'nullable',
@@ -100,18 +98,29 @@ class GroupController extends Controller
                 'include_est_total' => 'nullable',
             ]);
 
-            $group = Groups::create([
+            $groupData = [
                 'group_name' => $validatedData['group_name'],
-                // 'total_items' => $validatedData['total_items'],
                 'group_type' => $validatedData['group_type'],
-                // 'group_items' => json_encode($validatedData['group_item_ids']),
                 'group_description' => $validatedData['group_description'],
-                'show_unit_price' => $validatedData['show_unit_price'],
-                'show_quantity' => $validatedData['show_quantity'],
-                'show_total' => $validatedData['show_total'],
-                'show_group_total' => $validatedData['show_group_total'],
-                'include_est_total' => $validatedData['include_est_total'],
-            ]);
+            ];
+
+            if (isset($validatedData['show_unit_price'])) {
+                $groupData['show_unit_price'] = $validatedData['show_unit_price'];
+            }
+            if (isset($validatedData['show_quantity'])) {
+                $groupData['show_quantity'] = $validatedData['show_quantity'];
+            }
+            if (isset($validatedData['show_total'])) {
+                $groupData['show_total'] = $validatedData['show_total'];
+            }
+            if (isset($validatedData['show_group_total'])) {
+                $groupData['show_group_total'] = $validatedData['show_group_total'];
+            }
+            if (isset($validatedData['include_est_total'])) {
+                $groupData['include_est_total'] = $validatedData['include_est_total'];
+            }
+
+            $group = Groups::create($groupData);
 
             // foreach ($validatedData['group_item_ids'] as $key => $itemIds) {
             //     $items = Items::where('item_id', $itemIds)->first();

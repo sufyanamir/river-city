@@ -36,7 +36,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                         </td>
                         <td>{{ $customer->customer_email }}</td>
                         <td>{{ date('m/d/y', strtotime($customer->created_at)) }}</td>
-                        <td>{{ $customer->customer_phone }} <br> <a href="https://maps.google.com/?q={{ $customer->customer_primary_address }}" target="_blank" class=" text-[#930027]">{{ $customer->customer_primary_address }}</a></td>
+                        <td>{{ $customer->customer_phone }} <br> <a href="https://maps.google.com/?q={{ $customer->customer_primary_address }}{{ $customer->customer_city}}{{ $customer->customer_state }}{{ $customer->customer_zip_code }}" target="_blank" class=" text-[#930027]">{{ $customer->customer_primary_address }}, {{ $customer->customer_city}}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</a></td>
                         <td>{{ $customer->source }}</td>
                         <td>{{ $customer->addedBy ? $customer->addedBy->name : '' }}</td>
                         <td>{{ $customer->branch }}</td>

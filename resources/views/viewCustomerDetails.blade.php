@@ -23,8 +23,8 @@
                         </p>
                         <p class="mt-2 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/home-icon.svg') }}" alt="">
-                            <a href="https://maps.google.com/?q={{$customer->customer_primary_address}}" target="_blank" class=" text-[#930027]">
-                                <span class="pl-2">{{ $customer->customer_primary_address }}</span>
+                            <a href="https://maps.google.com/?q={{$customer->customer_primary_address}}{{ $customer->customer_city }}{{ $customer->customer_state }}{{ $customer->customer_zip_code }}" target="_blank" class=" text-[#930027]">
+                                <span class="pl-2">{{ $customer->customer_primary_address }}, {{ $customer->customer_city }}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</span>
                             </a>
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
@@ -136,8 +136,8 @@
                                 </p>
                                 <p class="mt-2 flex text-[#323C47] font-medium">
                                     <img src="{{ asset('assets/icons/home-icon.svg') }}" alt="">
-                                    <a href="https://maps.google.com/?q={{$customer->customer_primary_address}}" target="_blank" class=" text-[#930027]">
-                                        <span class="pl-2">{{ $customer->customer_primary_address }}</span>
+                                    <a href="https://maps.google.com/?q={{$customer->customer_primary_address}}{{ $customer->customer_city }}{{ $customer->customer_state }}{{ $customer->customer_zip_code }}" target="_blank" class=" text-[#930027]">
+                                        <span class="pl-2">{{ $customer->customer_primary_address }}, {{ $customer->customer_city }}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</span>
                                     </a>
                                 </p>
                                 <p class="mt-1 flex text-[#323C47] font-medium">
