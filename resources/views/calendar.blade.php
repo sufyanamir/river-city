@@ -169,11 +169,7 @@
                         </div>
                         <div class=" pt-3 pb-2 flex flex-col items-center">
                             @if(isset($estimate))
-                            @if ($estimate->schedule_assigned == 1)
-                            <div class="external-event bg-[#B7E4FF] text-xs font-medium px-2 py-2 rounded-lg w-32 mb-2 cursor-pointer" id="schedule-work">{{ $estimate->customer_name }} {{$estimate->customer_last_name}}</div>
-                            @else
                             <div class="external-event bg-[#B7E4FF] text-xs font-medium px-2 py-2 rounded-lg w-32 mb-2 cursor-pointer" id="schedule-estimate">{{ $estimate->customer_name }} {{$estimate->customer_last_name}}</div>
-                            @endif
                             @endif
                         </div>
                     </div>
