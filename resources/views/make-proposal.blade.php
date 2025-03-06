@@ -98,69 +98,12 @@
                     </div>
                 </div>
                 <div class="col-span-12 p-4">
-                    <div class="heading bg-[#930027] ">
-                        <p class="text-white  py-2 px-4">
-                            <span class="text-[22px]/[25.78px]  font-bold">
-                                {{ $customer->customer_project_name }}
-                            </span> <br>
-                        </p>
-                    </div>
                     <div class="text-[#323C47] font-medium mt-4 border-b border-[#323C47] pb-6 border-solid">
                         @php
                         $subTotal = 0;
                         $groupTotal = 0;
                         @endphp
                         <div class="py-1" id="printableArea">
-                            <div class="col-span-10  pl-2 ">
-                                <div class="grid sm:grid-cols-10">
-                                    <div class="col-span-8 p-3">
-                                        <p class="text-[#F5222D] text-xl font-bold">
-                                            {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
-                                        </p>
-                                        <p class="text-[#323C47] text-lg font-semibold">
-                                            {{ $customer->customer_project_name }}
-                                        </p>
-                                        <p class="mt-2 flex text-[#323C47] font-medium">
-                                            <img src="{{ asset('assets/icons/home-icon.svg') }}" alt="">
-                                            <span class="pl-2">{{ $customer->customer_primary_address }}</span>
-                                        </p>
-                                        <p class="mt-1 flex text-[#323C47] font-medium">
-                                            <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
-                                            <span class="pl-2">Project Owner: {{ $customer->owner }}
-                                            </span>
-                                        </p>
-                                        <hr class="bg-gray-300 my-2 w-full">
-                                        <p class="mt-1 flex text-[#323C47] font-medium">
-                                            <img src="{{ asset('assets/icons/page-icon.svg') }}" alt="">
-                                            <span class="pl-2">Estimate Pending Schedule
-                                            </span>
-                                        </p>
-                                        {{-- <p class="mt-1 flex text-[#323C47] font-medium">
-                            <img src="{{ asset('assets/icons/person-icon.svg') }}" alt="">
-                                        <span class="pl-2 flex">{{ $customer->owner }} Assigned To Schedule Estimate On <span class="pl-2 text-[#31A613] flex">
-                                                <img class="pr-1" src="{{ asset('assets/icons/green-calendar.svg') }}" alt="">
-                                                {{ $customer->created_at }}</span>
-                                        </span>
-                                        </p> --}}
-                                    </div>
-                                    <div class=" col-span-2 p-3 text-right">
-                                        <p class="text-lg font-bold text-[#323C47]">
-                                            Estimate
-                                            <br>
-                                            <span>{{ $estimate->project_name }}</span>
-                                        </p>
-                                        <p class="mt-[2px] text-[#323C47]">
-                                            {{ $estimate->project_number }}
-                                        </p>
-                                        <p class="text-[#323C47]">
-                                            {{ $estimate->estimate_status }}
-                                        </p>
-                                        <p class="text-[#323C47]">
-                                            {{ date('d, F Y', strtotime($estimate->created_at)) }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
                             @php
 
                             $groupedItems = [];

@@ -56,8 +56,8 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <td style=" width:50px;">
                                 {{ $item->customer_phone }}
                                 <br>
-                                <a href="https://maps.google.com/?q={{ $item->customer_address }}" target="_blank" class=" text-[#930027]">
-                                    {{ $item->customer_address }}
+                                <a href="https://maps.google.com/?q={{ $item->customer_address }}{{$item->customer->customer_city}}{{ $item->customer->customer_state }}{{ $item->customer->customer_zip_code }}" target="_blank" class=" text-[#930027]">
+                                    {{ $item->customer_address }}, {{$item->customer->customer_city}}, {{ $item->customer->customer_state }}, {{ $item->customer->customer_zip_code }}
                                 </a>
                             </td>
                             <td style=" width:50px;">

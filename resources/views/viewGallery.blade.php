@@ -124,7 +124,7 @@ $userPrivileges = session('user_details')['user_privileges'];
             <h1 class=" text-2xl font-semibold">Project Chat</h1>
         </div>
         <div class="pb-2">
-            <div class="border rounded-lg w-full h-[573px] bg-white overflow-auto">
+            <div class="border rounded-lg w-full h-[480px] bg-white overflow-auto">
                 <div class="m-2" id="chat-dialog">
                     <div class="pb-2">
                         <!-- Chat messages will be dynamically inserted here -->
@@ -162,13 +162,13 @@ $userPrivileges = session('user_details')['user_privileges'];
                 <input type="hidden" name="estimate_id" id="estimate_id" value="{{$estimate->estimate_id}}">
                 <label for="chat" class="sr-only">Your message</label>
                 <div class="relative flex items-center px-3 py-2 rounded-lg bg-gray-50">
-                    <textarea id="message" name="chat_message" rows="1" class="message block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Your message..."></textarea>
+                    <textarea id="message" name="chat_message" rows="2" class="message block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Your message..."></textarea>
                     <div id="userDropdown" class="userDropdown"></div>
-                    <button type="button" id="recordButton" class="inline-flex justify-center p-2 text-red-600 rounded-full cursor-pointer hover:bg-red-100 text-lg">
+                    <button type="button" id="recordButton" class="inline-flex justify-center p-2 text-red-600 rounded-full cursor-pointer hover:bg-red-100 text-2xl">
                         🎤
                     </button>
-                    <button type="submit" id="chatSubmit" class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100" disabled>
-                        <svg class="w-5 h-5 rotate-90 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                    <button type="submit" id="chatSubmit" class="text-2xl inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100" disabled>
+                        <svg class="w-6 h-6 rotate-90 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
                             <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z" />
                         </svg>
                         <span class="sr-only">Send message</span>

@@ -20,7 +20,7 @@ class CustomerController extends Controller
 
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
 
-            $estimates = Estimate::where('customer_id', $id)->orderBy('estimate_id', 'desc')->get();
+            $estimates = Estimate::with('customer')->where('customer_id', $id)->orderBy('estimate_id', 'desc')->get();
             $estimateFiles = [];
             $estimateNotes = [];
             $estimateEmails = [];

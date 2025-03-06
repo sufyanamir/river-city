@@ -47,6 +47,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class EstimateController extends Controller
@@ -532,8 +533,11 @@ class EstimateController extends Controller
                 'estimate_template_note' => 'nullable',
                 'group_name' => 'nullable',
             ]);
-
-            $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
+            if (isset($validatedData['group_name']) && $validatedData['group_name'] != null) {
+                $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
+            }else{
+                $groupDetail = Groups::where('group_name', 'No Group')->first();
+            }
 
             // $estTemplate = EstimateItemTemplates::create([
             //     'added_user_id' => $userDetails['id'],
@@ -2093,8 +2097,10 @@ class EstimateController extends Controller
                     return view('accept-proposal', ['success' => false, 'message' => 'Proposal not found', 'sts' => 404]);
                 }
             
-                $data = $this->prepareProposalData($proposal->estimate_id);
+                $data = json_decode($proposal->proposal_data, true);
                 $data['terms_and_conditions'] = $proposal->proposal_terms_and_conditions; // Add terms and conditions
+
+                return view('previousProposal', $data);
             }
              else {
                 // return response()->json(['success' => false, 'message' => 'No valid ID provided'], 400);
@@ -2110,100 +2116,109 @@ class EstimateController extends Controller
 
     // send proposal
     public function sendProposal(Request $request)
-    {
-        try {
-            $userDetails = session('user_details');
+{
+    try {
+        $userDetails = session('user_details');
 
-            $validatedData = $request->validate([
-                'estimate_id' => 'required',
-                'email_to' => 'required|string',
-                'estimate_total' => 'required',
-                'email_title' => 'required',
-                'email_subject' => 'required',
-                'email_body' => 'required',
-                'terms_and_conditions' => 'required',
-                'discounted_total' => 'nullable',
-            ]);
-            $emailTo = explode(',', $validatedData['email_to']);
+        $validatedData = $request->validate([
+            'estimate_id' => 'required',
+            'email_to' => 'required|string',
+            'estimate_total' => 'required',
+            'email_title' => 'required',
+            'email_subject' => 'required',
+            'email_body' => 'required',
+            'terms_and_conditions' => 'required',
+            'discounted_total' => 'nullable',
+        ]);
+        // Prepare the proposal data
+        $data = $this->prepareProposalData($validatedData['estimate_id']);
+        $data['terms_and_conditions'] = $validatedData['terms_and_conditions'];
+        $jsonData = json_encode($data);
+        $emailTo = explode(',', $validatedData['email_to']);
+        $loggedInUserEmail = $userDetails['email'] ?? 'noreply@example.com'; // Default fallback
 
-            // Prepare the proposal data
-            $data = $this->prepareProposalData($validatedData['estimate_id']);
-            $data['terms_and_conditions'] = $validatedData['terms_and_conditions'];
-            $jsonData = json_encode($data);
+        $estimate = Estimate::with('customer')->where('estimate_id', $validatedData['estimate_id'])->first();
+        $estimateFiles = EstimateFile::where('estimate_id', $validatedData['estimate_id'])->get();
+        $estimateImages = EstimateImages::where('estimate_id', $validatedData['estimate_id'])->where('attachment', 1)->get();
 
-            $estimate = Estimate::with('customer')->where('estimate_id', $validatedData['estimate_id'])->first();
-            $estimateFiles = EstimateFile::where('estimate_id', $validatedData['estimate_id'])->get();
-            $estimateImages = EstimateImages::where('estimate_id', $validatedData['estimate_id'])->where('attachment', 1)->get();
-            $emailData = [
-                'estimate_id' => $validatedData['estimate_id'],
-                'email' => $validatedData['email_to'],
-                'name' => $estimate['customer_name'] . ' ' . $estimate['customer_last_name'],
-                'title' => $validatedData['email_title'],
-                'subject' => $validatedData['email_subject'],
-                'body' => $validatedData['email_body'],
-                'branch' => $estimate->customer->branch,
-            ];
+        // Generate HTML Email Content
+        $emailData = [
+            'estimate_id' => $validatedData['estimate_id'],
+            'email' => $validatedData['email_to'],
+            'name' => $estimate['customer_name'] . ' ' . $estimate['customer_last_name'],
+            'title' => $validatedData['email_title'],
+            'subject' => $validatedData['email_subject'],
+            'body' => $validatedData['email_body'],
+            'branch' => $estimate->customer->branch,
+            'attachments' => [],
+        ];
+        $estimate->estimate_total = null;
+        $estimate->discounted_total = $validatedData['discounted_total'];
+        $estimate->save();
 
-            $existingProposals = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->get();
-            if (!$existingProposals->isEmpty()) {
-                $existingProposals->each(function ($proposal) {
-                    $proposal->proposal_status = 'canceled';
-                    $proposal->save();
-                });
+        // Render the email template into an HTML string
+        $htmlEmailContent = View::make('emails.proposal-mail', ['emailData' => $emailData])->render();
+
+        // Attach files (Public URLs)
+        foreach ($estimateFiles as $file) {
+            $filePath = storage_path('app/public/' . $file->estimate_file);
+            if (File::exists($filePath)) {
+                $url = asset('storage/' . $file->estimate_file);
+                $emailData['attachments'][] = $url;
             }
-
-            foreach ($emailTo as $email) {
-                $emailData['email'] = $email;
-
-                $mail = new ProposalMail($emailData);
-
-                // Attach estimate files to the email
-                if ($estimateFiles) {
-                    foreach ($estimateFiles as $file) {
-                        $filePath = storage_path('app/public/' . $file->estimate_file);
-                        if (File::exists($filePath)) {
-                            $mail->attach($filePath, [
-                                'as' => $file->estimate_file_name, // Rename the file if needed
-                            ]);
-                        }
-                    }
-                }
-
-                // Attach estimate images to the email
-                if ($estimateImages) {
-                    foreach ($estimateImages as $image) {
-                        $imagePath = storage_path('app/public/' . $image->estimate_image);
-                        if (File::exists($imagePath)) {
-                            $mail->attach($imagePath, [
-                                'as' => basename($imagePath), // Use the base name of the image file
-                            ]);
-                        }
-                    }
-                }
-
-                Mail::to(trim($email))->send($mail); // Use trim() to remove extra spaces
-            }
-
-            $companyProposalMail = new ProposalMail($emailData);
-            Mail::to('office@rivercitypaintinginc.com')->send($companyProposalMail);
-
-            $estimate->estimate_total = null;
-            $estimate->discounted_total = $validatedData['discounted_total'];
-            $estimate->save();
-            $proposal = EstimateProposal::create([
-                'estimate_id' => $validatedData['estimate_id'],
-                'proposal_total' => $validatedData['estimate_total'],
-                'proposal_data' => $jsonData,
-                'proposal_terms_and_conditions' => $validatedData['terms_and_conditions'],
-            ]);
-
-            $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Proposal Sent', "A Proposal has been created and sent to the Customer");
-
-            return response()->json(['success' => true, 'message' => 'Proposal Sent Successfully!', 'estimate_id' => $validatedData['estimate_id']], 200);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
+
+        foreach ($estimateImages as $image) {
+            $imagePath = storage_path('app/public/' . $image->estimate_image);
+            if (File::exists($imagePath)) {
+                $url = asset('storage/' . $image->estimate_image);
+                $emailData['attachments'][] = $url;
+            }
+        }
+
+        // Prepare the final data to send to Zapier
+        $zapierData = [
+            'email_to' => '', // Will be set dynamically
+            'cc' => ['office@rivercitypaintinginc.com', $loggedInUserEmail], // Company + Logged-in User
+            'reply_to' => $loggedInUserEmail, // Set reply-to
+            'subject' => $validatedData['email_subject'],
+            'html_body' => $htmlEmailContent,
+            'attachments' => $emailData['attachments'],
+        ];
+
+        // Send the email via Zapier for each recipient
+        foreach ($emailTo as $email) {
+            $zapierData['email_to'] = trim($email);
+            Http::post('https://hooks.zapier.com/hooks/catch/17891889/2q9xn0t/', $zapierData);
+        }
+
+        // Send a copy to the company (already included in CC, but for safety)
+        $zapierData['email_to'] = 'office@rivercitypaintinginc.com';
+        Http::post('https://hooks.zapier.com/hooks/catch/17891889/2q9xn0t/', $zapierData);
+        $existingProposals = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->get();
+        if (!$existingProposals->isEmpty()) {
+            $existingProposals->each(function ($proposal) {
+                $proposal->proposal_status = 'canceled';
+                $proposal->save();
+            });
+        }
+        // Save proposal data in the database
+        EstimateProposal::create([
+            'estimate_id' => $validatedData['estimate_id'],
+            'proposal_total' => $validatedData['estimate_total'],
+            'proposal_data' => $jsonData,
+            'proposal_terms_and_conditions' => $validatedData['terms_and_conditions'],
+        ]);
+
+        // Log activity
+        $this->addEstimateActivity($userDetails, $validatedData['estimate_id'], 'Proposal Sent', "A Proposal has been created and sent to the Customer");
+
+        return response()->json(['success' => true, 'message' => 'Proposal Sent Successfully!', 'estimate_id' => $validatedData['estimate_id']], 200);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
     }
+}
+
 
     // send proposal
 
@@ -2451,7 +2466,7 @@ class EstimateController extends Controller
 
             $estimateItem = EstimateItem::where('estimate_item_id', $validatedData['item_id'])->first();
             $estimateItemAssembly = EstimateItemAssembly::where('estimate_item_id', $estimateItem->estimate_item_id)->get();
-            if($validatedData['group_name'] != null)
+            if(isset($validatedData['group_name']) && $validatedData['group_name'] != null)
             {
                 $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
                 if (!$groupDetail) {
@@ -2463,6 +2478,9 @@ class EstimateController extends Controller
                 }else{
                     $estimateItem->group_id = $groupDetail->group_id;
                 }
+            }else{
+                $groupDetail = Groups::where('group_name', 'No Group')->first();
+                $estimateItem->group_id = $groupDetail->group_id;
             }
 
             $estimateItem->item_name = $validatedData['item_name'];
@@ -2588,8 +2606,11 @@ class EstimateController extends Controller
             //         'item_price' => $item->item_price,
             //     ];
             // }
-
-            $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
+            if (isset($validatedData['group_name']) && $validatedData['group_name'] != null) {
+                $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
+            }else{
+                $groupDetail = Groups::where('group_name', 'No Group')->first();
+            }
 
             $estimateItem = EstimateItem::create([
                 'added_user_id' => $userDetails['id'],
@@ -2687,7 +2708,7 @@ class EstimateController extends Controller
         $estimateData = [];
 
         foreach ($estimates as $estimate) {
-            $images = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
+            $images = EstimateImages::where('estimate_id', $estimate->estimate_id)->limit(2)->get();
             $estimateData[] = [
                 'estimate' => $estimate,
                 'images' => $images,

@@ -223,11 +223,11 @@
                                 </div>
                                 <div>
                                     <input type="checkbox" name="show_group_total" id="show_group_total" value="1">
-                                    <label for="show_total" class=" text-gray-500 text-xs">Show Group Total</label>
+                                    <label for="show_group_total" class=" text-gray-500 text-xs">Show Group Total</label>
                                 </div>
                                 <div>
                                     <input type="checkbox" name="include_est_total" id="include_est_total" value="1">
-                                    <label for="show_total" class=" text-gray-500 text-xs">Include In Estimate Total</label>
+                                    <label for="include_est_total" class=" text-gray-500 text-xs">Include In Estimate Total</label>
                                 </div>
                             </div>
                         </div>

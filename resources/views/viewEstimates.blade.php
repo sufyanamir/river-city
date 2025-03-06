@@ -71,8 +71,8 @@ $discountedTotal = null;
                         </p>
                         <p class="mt-2 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/home-icon.svg') }}" alt="">
-                            <a href="https://maps.google.com/?q={{$customer->customer_primary_address}}" target="_blank" class=" text-[#930027]">
-                                <span class="pl-2">{{ $estimate->customer_address }}</span>
+                            <a href="https://maps.google.com/?q={{$customer->customer_primary_address}}{{ $customer->customer_city }}{{ $customer->customer_state }}{{ $customer->customer_zip_code }}" target="_blank" class=" text-[#930027]">
+                                <span class="pl-2">{{ $estimate->customer_address }}, {{ $customer->customer_city }}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</span>
                             </a>
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
@@ -1054,7 +1054,7 @@ $discountedTotal = null;
                                             {{ $item->item_name }}
                                         </td>
                                         <td class="px-6 py-4 w-[30%]">
-                                            <p class="text-[16px]/[18px] text-[#323C47] font">
+                                            <p class="text-xs text-[#323C47]">
                                                 @if ($item->item_description)
                                             <p class="font-medium">Description:</p>
                                             {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
