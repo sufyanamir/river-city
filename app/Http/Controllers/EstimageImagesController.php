@@ -44,6 +44,8 @@ class EstimageImagesController extends Controller
             // Fetch the related estimate image
             $image = EstimateImages::where('estimate_image_id', $validatedData['estimate_image_id'])->first();
 
+            $estimate = Estimate::where('estimate_id', $image->estimate_id)->first();
+
             // Determine message content: either text or audio
             $messageContent = null;
 
@@ -83,7 +85,7 @@ class EstimageImagesController extends Controller
                             $notification = new Notifications([
                                 'added_user_id' => $userDetails['id'],
                                 'estimate_id' => $image->estimate_id,
-                                'notification_message' => $userDetails['name'] . " mentioned you in the chat of this estimate's image " . $image->estimate_id . ".",
+                                'notification_message' => $userDetails['name'] . " mentioned you in the chat of ". $estimate->customer_name ." ". $estimate->customer_last_name  ." estimate's image " . $image->estimate_id . ".",
                                 'mentioned_user_id' => $singleMentionedId,
                                 'notification_type' => 'mentionGallery',
                             ]);

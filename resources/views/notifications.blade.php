@@ -5,12 +5,20 @@
             <div class=" text-xl font-semibold">
                 <h4>Notifications</h4>
             </div>
-            <form action="/markNotifications" method="post">
-                @csrf
-                <button id="" class="bg-white text-black  p-2 rounded-md font-medium mb-2">
-                    Mark as Read
-                </button>
-            </form>
+            <div class="flex justify-between gap-3">
+                <form action="/clearNotifications" method="post">
+                    @csrf
+                    <button id="" class="bg-white text-black  p-2 rounded-md font-medium mb-2">
+                        Clear All
+                    </button>
+                </form>
+                <form action="/markNotifications" method="post">
+                    @csrf
+                    <button id="" class="bg-white text-black  p-2 rounded-md font-medium mb-2">
+                        Mark as Read
+                    </button>
+                </form>
+            </div>
         </div>
         <div class="py-2">
             @if(count($notifications) > 0 || count($mentions) > 0)
