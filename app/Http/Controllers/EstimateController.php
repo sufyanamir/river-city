@@ -2193,8 +2193,8 @@ class EstimateController extends Controller
         }
 
         // Send a copy to the company (already included in CC, but for safety)
-        $zapierData['email_to'] = 'office@rivercitypaintinginc.com';
-        Http::post('https://hooks.zapier.com/hooks/catch/17891889/2q9xn0t/', $zapierData);
+        // $zapierData['email_to'] = 'office@rivercitypaintinginc.com';
+        // Http::post('https://hooks.zapier.com/hooks/catch/17891889/2q9xn0t/', $zapierData);
         $existingProposals = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->get();
         if (!$existingProposals->isEmpty()) {
             $existingProposals->each(function ($proposal) {

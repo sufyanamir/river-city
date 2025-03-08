@@ -56,9 +56,9 @@
         <div style=" padding:20px 50px;">
             
             <img src="https://soft.rivercitypainting.tech/assets/images/PCA-Logo-RGB%20.png" class="footerImage" style="height: 80px;" alt="Image">
-            <img src="https://soft.rivercitypainting.tech/assets/images/2023BOW_GoldWInner.png" class="footerImage" style="height: 80px;" alt="Image">
+            <img src="https://soft.rivercitypainting.tech/assets/images/RCP-Badges-02.png" class="footerImage" style="height: 80px;" alt="Image">
             <img src="https://soft.rivercitypainting.tech/assets/images/Lead-Safe-EPA-Certified-Firm%20.png" class="footerImage" style="height: 80px;" alt="Image">
-            <img src="https://soft.rivercitypainting.tech/assets/images/workmanship.png" class="footerImage" style="height: 80px;" alt="Image">
+            <img src="https://soft.rivercitypainting.tech/assets/images/RCP-Badges-01.png" class="footerImage" style="height: 80px;" alt="Image">
         </div>
     </div>
 </body>
