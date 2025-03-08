@@ -3,7 +3,7 @@
     .photos {
         /* width: 100%;
         aspect-ratio: 3/2; */
-        height: 70%;
+        /* height: 70%; */
     }
 </style>
 <div class="flex justify-between text-right my-2">
@@ -87,7 +87,7 @@
                             <img src="{{asset('assets/images/PCA-Logo-RGB .png')}}" class=" photos" alt="image">
                         </div>
                         <div>
-                            <img src="{{asset('assets/images/RCP-Badges-02.png')}}" class=" w-40" alt="image">
+                            <img src="{{asset('assets/images/RCP-Badges-02.png')}}" class=" photos" alt="image">
                         </div>
                         <div>
                             <img src="{{asset('assets/images/Lead-Safe-EPA-Certified-Firm .png')}}" class=" photos" alt="image">
