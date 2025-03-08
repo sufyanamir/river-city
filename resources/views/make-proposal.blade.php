@@ -87,7 +87,7 @@
                             <img src="{{asset('assets/images/PCA-Logo-RGB .png')}}" class=" photos" alt="image">
                         </div>
                         <div>
-                            <img src="{{asset('assets/images/RCP-Badges-02.png')}}" class=" photos" alt="image">
+                            <img src="{{asset('assets/images/RCP-Badges-02.png')}}" class=" w-40" alt="image">
                         </div>
                         <div>
                             <img src="{{asset('assets/images/Lead-Safe-EPA-Certified-Firm .png')}}" class=" photos" alt="image">
