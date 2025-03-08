@@ -26,11 +26,11 @@
 </div>
 @else
 <div class="text-right my-2">
-    <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
+    <!-- <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
         <button class=" bg-[#930027] p-2 text-white rounded-md">
             Print
         </button>
-    </a>
+    </a> -->
     <a href="javascript:void(0);" onclick="downloadAsPDF('printableArea')">
         <button class="bg-[#930027] p-2 text-white rounded-md ml-2">Download as PDF</button>
     </a>
@@ -232,12 +232,14 @@
                                                         </label>
                                                         <p class="text-[16px]/[18px] text-[#323C47] font">
                                                             @if ($item['item_description'])
-                                                        <p class="font-medium">Description:</p>
-                                                        {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}
+                                                        <p class="font-medium">Description:
+                                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}
+                                                        </p>
                                                         @endif
                                                         @if ($item['item_note'])
-                                                        <p class="font-medium">Note:</p>
-                                                        {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_note']) !!}
+                                                        <p class="font-medium">Note:
+                                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_note']) !!}
+                                                        </p>
                                                         @endif
                                                         </p>
                                                     </td>
@@ -850,32 +852,44 @@
         document.head.removeChild(style);
     }
     function downloadAsPDF(areaID) {
-        // Get the printable area content
-        var printContent = document.getElementById(areaID).innerHTML;
+    var element = document.getElementById(areaID);
 
-        // Create a temporary div to hold the content
-        var tempDiv = document.createElement('div');
-        tempDiv.innerHTML = printContent;
+    var opt = {
+        margin: 0.5,
+        filename: 'Estimate_{{ $estimate["customer_name"] }}_{{$estimate["customer_last_name"]}}.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // Improved page-break handling
+    };
+    
 
-        // Define PDF options with original styling
-        var opt = {
-            margin: 0.5, // Original 0.5 inch margin
-            filename: 'Estimate_{{ $estimate["customer_name"] }}_{{$estimate["customer_last_name"]}}.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 }, // Original scale of 2
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-        };
+    // Apply styles to fix white space issues
+    var style = document.createElement('style');
+    style.innerHTML = `
+        body { background-color: white !important; font-size: 15px !important; }
+        .group-card { background-color: #930027 !important; }
+        #grandTotal-card { display: none !important; }
+        #grandDiv { font-size: 15px !important; }
 
-        // Apply minimal styles to hide unwanted elements (original approach)
-        var style = document.createElement('style');
-        style.innerHTML = `
-            body { background-color: white !important; }
-            .group-card { background-color: #930027 !important; } /* Maintain group header styling */
-        `;
-        tempDiv.appendChild(style);
+        * { word-wrap: break-word; font-size: 15px !important; }
 
-        // Generate and download the PDF
-        html2pdf().set(opt).from(tempDiv).save();
-    }
+        div, p, span, table, td, tr, th {
+            page-break-inside: avoid !important;
+        }
+
+        table { page-break-before: auto; page-break-after: auto; }
+
+        /* Fix excessive white space issue */
+        .group-card, .item-row {
+            page-break-before: avoid !important;
+            page-break-after: auto !important;
+            display: block !important;
+        }
+    `;
+    document.head.appendChild(style);
+
+    html2pdf().set(opt).from(element).save();
+}
 </script>
 @endif

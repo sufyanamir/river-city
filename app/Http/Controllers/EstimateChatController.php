@@ -24,7 +24,7 @@ class EstimateChatController extends Controller
             ]);
 
             // dd($validatedData);
-
+            $estimate = Estimate::where('estimate_id', $validatedData['estimate_id'])->first();
             $messageContent = null;
 
             if (!empty($validatedData['chat_message'])) {
@@ -60,7 +60,7 @@ class EstimateChatController extends Controller
                     // Loop through each mentioned user ID and create a separate notification
                     foreach ($mentionedUserIds as $singleMentionedId) {
                         if ($singleMentionedId != null) {
-                            $notificationMessage = $userDetails['name'] . " mentioned you in the chat of this estimate " . $validatedData['estimate_id'] . ".";
+                            $notificationMessage = $userDetails['name'] . " mentioned you in the chat of ". $estimate->customer_name ." ". $estimate->customer_last_name ." estimate " . $validatedData['estimate_id'] . ".";
                             $notification = Notifications::create([
                                 'added_user_id' => $userDetails['id'],
                                 'estimate_id' => $validatedData['estimate_id'],
