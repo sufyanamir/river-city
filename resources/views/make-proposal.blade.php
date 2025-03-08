@@ -3,7 +3,7 @@
     .photos {
         /* width: 100%;
         aspect-ratio: 3/2; */
-        /* height: 70%; */
+        height: 70%;
     }
 </style>
 <div class="flex justify-between text-right my-2">
