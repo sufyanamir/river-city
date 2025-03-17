@@ -641,22 +641,24 @@ $exsistingProposals = $existing_proposals;
 
         // Define PDF options
         var opt = {
-            margin: 0.5,
-            filename: 'Estimate_{{ $estimate->customer_name }}_{{$estimate->customer_last_name}}.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-        };
+        margin: 0.5,
+        filename: 'Estimate_{{ $estimate->customer_name }}_{{$estimate->customer_last_name}}.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 1.5 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+        pagebreak: { mode: ['css'] } // Prevents text splitting across pages
+    };
 
-        // Apply styles to hide unwanted elements (similar to print)
-        var style = document.createElement('style');
-        style.innerHTML = `
+    // Apply styles to hide unwanted elements and format content
+    var style = document.createElement('style');
+    style.innerHTML = `
             #send-button { display: none !important; }
             #footer { display: none !important; }
             #editor { display: none !important; }
-            #editor-div { display: none !important; }
-            * { word-wrap: break-word; } /* Reduce overall font size */
-         div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
+            // #editor-div { display: none !important; }
+            * { font-size: 16px; margin: 0; padding: 0; line-height: 1.2; }
+            body, html { width: 100%; height: auto; }
+            div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
         `;
         tempDiv.appendChild(style);
 
@@ -717,6 +719,7 @@ $exsistingProposals = $existing_proposals;
             // #editor-div { display: none !important; }
             * { font-size: 16px; margin: 0; padding: 0; line-height: 1.2; }
             body, html { width: 100%; height: auto; }
+            div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
         `;
     document.head.appendChild(style);
 
