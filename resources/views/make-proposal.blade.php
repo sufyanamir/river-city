@@ -115,7 +115,7 @@
                                 @if ($estimate_items->count() > 0)
                                 @foreach ($groupedItems as $groupName => $itemss)
                                 <div class="mb-2 bg-white shadow-xl">
-                                    <div class=" group-card bg-white text-black w-full rounded-t-lg">
+                                    <div class=" group-card bg-white text-black">
                                         <div class="inline-block">
                                             @if($groupName)
                                             <div class="flex gap-3">
