@@ -115,7 +115,7 @@
                                 @if ($estimate_items->count() > 0)
                                 @foreach ($groupedItems as $groupName => $itemss)
                                 <div class="mb-2 bg-white shadow-xl">
-                                    <div class=" group-card p-1 bg-white text-black w-full rounded-t-lg">
+                                    <div class=" group-card bg-white text-black">
                                         <div class="inline-block">
                                             @if($groupName)
                                             <div class="flex gap-3">
@@ -124,7 +124,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="relative overflow-x-auto mb-8">
+                                    <div class="relative overflow-x-auto">
                                         <div class="itemDiv">
                                             <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                                                 <thead class="text-xs text-gray-700 border-b border-black uppercase bg-gray-50">
@@ -655,9 +655,8 @@ $exsistingProposals = $existing_proposals;
             #footer { display: none !important; }
             #editor { display: none !important; }
             #editor-div { display: none !important; }
-            * { font-size: 15px !important; word-wrap: break-word; } /* Reduce overall font size */
-        div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
-        table { page-break-before: auto; page-break-after: auto; }
+            * { word-wrap: break-word; } /* Reduce overall font size */
+         div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
         `;
         tempDiv.appendChild(style);
 
@@ -712,29 +711,19 @@ $exsistingProposals = $existing_proposals;
     // Apply styles to hide unwanted elements and format content
     var style = document.createElement('style');
     style.innerHTML = `
-        #send-button { display: none !important; }
+            #send-button { display: none !important; }
             #footer { display: none !important; }
             #editor { display: none !important; }
-            #editor-div { display: none !important; }
-            * { font-size: 15px !important; word-wrap: break-word; } /* Reduce overall font size */
-        div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
-        table { page-break-before: auto; page-break-after: auto; }
-    `;
+            // #editor-div { display: none !important; }
+            * { word-wrap: break-word; } /* Reduce overall font size */
+         div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
+        `;
     document.head.appendChild(style);
 
-    // Generate the PDF and add page numbers
-    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
-        var totalPages = pdf.internal.getNumberOfPages();
-
-        for (var i = 1; i <= totalPages; i++) {
-            pdf.setPage(i);
-            pdf.setFontSize(10);
-            pdf.text(`Page ${i} of ${totalPages}`, pdf.internal.pageSize.width - 50, pdf.internal.pageSize.height - 10);
-        }
-
-        pdf.save(); // Save after adding page numbers
-    });
+    // Generate and save the PDF
+    html2pdf().set(opt).from(element).save();
 }
+
 
     @endif
 </script>
