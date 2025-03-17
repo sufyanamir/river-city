@@ -703,9 +703,9 @@ $exsistingProposals = $existing_proposals;
         margin: 0.5,
         filename: 'Estimate_{{ $estimate->customer_name }}_{{$estimate->customer_last_name}}.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
+        html2canvas: { scale: 1.5 },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // Prevents text splitting across pages
+        pagebreak: { mode: ['css'] } // Prevents text splitting across pages
     };
 
     // Apply styles to hide unwanted elements and format content
@@ -715,7 +715,8 @@ $exsistingProposals = $existing_proposals;
             #footer { display: none !important; }
             #editor { display: none !important; }
             // #editor-div { display: none !important; }
-            * { font-size: 16px;} /* Reduce overall font size */
+            * { font-size: 16px; margin: 0; padding: 0; line-height: 1.2; }
+            body, html { width: 100%; height: auto; }
         `;
     document.head.appendChild(style);
 
