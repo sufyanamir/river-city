@@ -971,22 +971,21 @@
         margin: 0.5,
         filename: 'Estimate_{{ $estimate["customer_name"] }}_{{$estimate["customer_last_name"]}}.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
+        html2canvas: { scale: 1.5 },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // Improved page-break handling
+        pagebreak: { mode: ['css'] } // Improved page-break handling
     };
     
 
     // Apply styles to fix white space issues
     var style = document.createElement('style');
     style.innerHTML = `
-        body { background-color: white !important; font-size: 15px !important; }
+        body { background-color: white !important;  }
         #grandTotal-card { display: none !important; }
-        #grandDiv { font-size: 15px !important; }
 
-        * { word-wrap: break-word; font-size: 15px !important; }
-
-        div, p, span, table, td, tr, th {
+        * { font-size: 16px; margin: 0; padding: 0; line-height: 1.2; }
+            body, html { width: 100%; height: auto; }
+        p, span, td, tr, th {
             page-break-inside: avoid !important;
         }
 
