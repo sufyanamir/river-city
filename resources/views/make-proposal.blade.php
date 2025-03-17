@@ -658,7 +658,7 @@ $exsistingProposals = $existing_proposals;
             // #editor-div { display: none !important; }
             * { font-size: 16px; margin: 0; padding: 0; line-height: 1.2; }
             body, html { width: 100%; height: auto; }
-            div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
+             p, span,  td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
         `;
         tempDiv.appendChild(style);
 
@@ -719,7 +719,7 @@ $exsistingProposals = $existing_proposals;
             // #editor-div { display: none !important; }
             * { font-size: 16px; margin: 0; padding: 0; line-height: 1.2; }
             body, html { width: 100%; height: auto; }
-            div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
+            p, span, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
         `;
     document.head.appendChild(style);
 
