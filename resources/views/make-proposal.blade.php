@@ -115,7 +115,7 @@
                                 @if ($estimate_items->count() > 0)
                                 @foreach ($groupedItems as $groupName => $itemss)
                                 <div class="mb-2 bg-white shadow-xl">
-                                    <div class=" group-card p-1 bg-white text-black w-full rounded-t-lg">
+                                    <div class=" group-card bg-white text-black w-full rounded-t-lg">
                                         <div class="inline-block">
                                             @if($groupName)
                                             <div class="flex gap-3">
@@ -124,7 +124,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="relative overflow-x-auto mb-8">
+                                    <div class="relative overflow-x-auto">
                                         <div class="itemDiv">
                                             <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                                                 <thead class="text-xs text-gray-700 border-b border-black uppercase bg-gray-50">
@@ -717,7 +717,7 @@ $exsistingProposals = $existing_proposals;
             #editor { display: none !important; }
             #editor-div { display: none !important; }
             * { font-size: 15px !important; word-wrap: break-word; } /* Reduce overall font size */
-        div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
+         p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
         // table { page-break-before: auto; page-break-after: auto; }
     `;
     document.head.appendChild(style);
