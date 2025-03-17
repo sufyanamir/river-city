@@ -712,8 +712,11 @@ $exsistingProposals = $existing_proposals;
     // Apply styles to hide unwanted elements and format content
     var style = document.createElement('style');
     style.innerHTML = `
-        #send-button, #footer { display: none !important; } /* Hide specific elements */
-        * { font-size: 15px !important; word-wrap: break-word; } /* Reduce overall font size */
+        #send-button { display: none !important; }
+            #footer { display: none !important; }
+            #editor { display: none !important; }
+            #editor-div { display: none !important; }
+            * { font-size: 15px !important; word-wrap: break-word; } /* Reduce overall font size */
         div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
         table { page-break-before: auto; page-break-after: auto; }
     `;
