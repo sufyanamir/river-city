@@ -6369,7 +6369,7 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <!-- Modal content here -->
                     <div class=" flex justify-between border-b-2">
-                        <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Add Customer</h2>
+                        <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Edit Customer</h2>
                         <button class="modal-close" type="button">
                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
                         </button>
@@ -6437,7 +6437,7 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                     </div>
                     <div class=" mt-2">
                         <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
-                        <button id="" class=" save-btn mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Add
+                        <button id="" class=" save-btn mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
                         </button>
                     </div>
                 </div>
