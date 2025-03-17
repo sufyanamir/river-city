@@ -656,8 +656,7 @@ $exsistingProposals = $existing_proposals;
             #editor { display: none !important; }
             #editor-div { display: none !important; }
             * { word-wrap: break-word; } /* Reduce overall font size */
-         p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
-        // table { page-break-before: auto; page-break-after: auto; }
+         p, span, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
         `;
         tempDiv.appendChild(style);
 
@@ -717,8 +716,7 @@ $exsistingProposals = $existing_proposals;
             #editor { display: none !important; }
             #editor-div { display: none !important; }
             * { word-wrap: break-word; } /* Reduce overall font size */
-         p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
-        // table { page-break-before: auto; page-break-after: auto; }
+         p, span, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
     `;
     document.head.appendChild(style);
 
