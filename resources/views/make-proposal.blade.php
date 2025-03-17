@@ -715,8 +715,7 @@ $exsistingProposals = $existing_proposals;
             #footer { display: none !important; }
             #editor { display: none !important; }
             // #editor-div { display: none !important; }
-            * { word-wrap: break-word; } /* Reduce overall font size */
-         div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
+            * { font-size: 16px;} /* Reduce overall font size */
         `;
     document.head.appendChild(style);
 
