@@ -41,6 +41,10 @@ class NotificationsController extends Controller
         
                 $mention->save();
             }
+
+            // Update the session value for notifications
+            $userDetails['notifications'] = 0;
+            session(['user_details' => $userDetails]);
     
             return response()->json(['success' => true, 'message' => 'Marked as Read!'], 200);
 

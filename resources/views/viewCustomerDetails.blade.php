@@ -16,7 +16,7 @@
                 <div class="grid sm:grid-cols-10">
                     <div class="col-span-8 p-3">
                         <p class="text-[#F5222D] text-xl font-bold">
-                            {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
+                            {{ ucfirst($customer->customer_first_name) }} {{ ucfirst($customer->customer_last_name) }}
                         </p>
                         <p class="text-[#323C47] text-lg font-semibold">
                             {{ $customer->customer_project_name }}

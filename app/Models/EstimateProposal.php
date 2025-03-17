@@ -20,6 +20,8 @@ class EstimateProposal extends Model
         'proposal_status',
         'proposal_data',
         'proposal_terms_and_conditions',
+        'proposal_type',
+        'group_id',
     ];
 
     public $timestamps = true;
