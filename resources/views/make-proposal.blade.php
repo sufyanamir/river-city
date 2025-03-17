@@ -656,8 +656,8 @@ $exsistingProposals = $existing_proposals;
             #editor { display: none !important; }
             #editor-div { display: none !important; }
             * { font-size: 15px !important; word-wrap: break-word; } /* Reduce overall font size */
-        div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
-        table { page-break-before: auto; page-break-after: auto; }
+         p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
+        // table { page-break-before: auto; page-break-after: auto; }
         `;
         tempDiv.appendChild(style);
 
