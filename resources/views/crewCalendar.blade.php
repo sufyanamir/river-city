@@ -129,9 +129,11 @@
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <!-- Modal content here -->
                         <div class=" flex justify-between">
-                            <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">
-                                First Last
-                            </h2>
+                            <a href="" id="viewCustomerPage">
+                                <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">
+                                    First Last
+                                </h2>
+                            </a>
                             <button class="modal-close" type="button">
                                 <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
                             </button>
@@ -139,10 +141,12 @@
                         <!-- task details -->
                         <div>
                             <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
-                            <p id="customer_address" class=" font-medium inline-block items-center">Address,
-                                city, state,
-                                zip code
-                            </p>
+                            <a href="" id="viewCustomerAddress">
+                                <p id="customer_address" class=" font-medium inline-block items-center">Address,
+                                    city, state,
+                                    zip code
+                                </p>
+                            </a>
                         </div>
                         <div>
                             <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
@@ -151,6 +155,18 @@
                         <div>
                             <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
                             <p id="customer_phone" class=" font-medium inline-block items-center">Phone</p>
+                        </div>
+                        <div>
+                        <p class=" font-medium items-center">Who will complete work?</p>
+                            <p class="" id="crew_name"></p>
+                            <div id="assign_work_div" class=" hidden">
+                                <select name="assign_work" id="work_assign" class="w-[100%] hidden outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                    <option value="">Select User</option>
+                                    @foreach($employees as $user)
+                                    <option value="{{$user->id}}">{{ $user->name }} {{ $user->last_name }} ({{ $user->user_role }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div>
                             <p class=" font-medium inline-block items-center">When should it be completed?</p>
@@ -167,7 +183,7 @@
                         </div>
                         <div class="my-2 col-span-2 relative">
                             <label for="" class="block text-left mb-1"> Note: </label>
-                            <textarea name="note" disabled id="note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
+                            <textarea name="note" id="note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
                         </div>
                     </div>
                     <div class=" mx-7 my-2">
@@ -541,6 +557,7 @@ crewRatingContainer.css({
             $('#editEvent').toggleClass('hidden');
             $('#updateEvent').toggleClass('hidden');
             $('#deleteScheduleWork').attr('href', '');
+            $('#viewCustomerPage').attr('href', '');
         });
 
         // Event delegation for dynamic elements
@@ -554,22 +571,56 @@ crewRatingContainer.css({
                     method: 'GET',
                     success: function(response) {
                         if (response.success) {
-                            // Populate the modal with the retrieved data
                             var estimate = response.estimate;
                             var estimateSchedule = response.estimateSchedule;
                             var crew = response.crew;
+
+                            console.log(estimateSchedule);
+
+                            // Function to format date for input field (YYYY-MM-DD)
+                            function formatForInput(dateString) {
+                                if (!dateString) return ''; // Handle empty date
+                                var parts = dateString.split('/'); // Assuming format is DD/MM/YY or DD/MM/YYYY
+                                if (parts.length === 3) {
+                                    let year = parts[2].length === 2 ? '20' + parts[2] : parts[2]; // Convert YY to YYYY if needed
+                                    return `${year}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                                }
+                                return dateString; // Return as is if format is unexpected
+                            }
+
+                            // Function to format date for display (M/D/Y)
+                            function formatForDisplay(dateString) {
+                                if (!dateString) return ''; // Handle empty date
+                                var parts = dateString.split('-'); // Assuming format is YYYY-MM-DD
+                                if (parts.length === 3) {
+                                    return `${parseInt(parts[1])}/${parseInt(parts[2])}/${parts[0].slice(-2)}`; // Remove leading zeros
+                                }
+                                return dateString; // Return as is if format is unexpected
+                            }
+
+                            // Convert and set values
+                            let formattedStartDate = formatForInput(estimateSchedule.start_date);
+                            let formattedEndDate = formatForInput(estimateSchedule.end_date);
+
+                            $('#start_date').text(formatForDisplay(formattedStartDate)); // Show in M/D/Y
+                            $('#startDate').val(formattedStartDate); // Keep in YYYY-MM-DD for input field
+
+                            $('#end_date').text(formatForDisplay(formattedEndDate)); // Show in M/D/Y
+                            $('#fendDate').val(formattedEndDate); // Keep in YYYY-MM-DD for input field
+
+                            // Update other modal content
+                            $('#viewCustomerPage').attr('href', '/viewCustomerDetails/' + estimate.customer_id);
+                            $('#modal-title').text(estimate.customer_name.charAt(0).toUpperCase() + estimate.customer_name.slice(1) + ' ' + estimate.customer_last_name.charAt(0).toUpperCase() + estimate.customer_last_name.slice(1));
+                            $('#viewCustomerAddress').attr('href', 'https://maps.google.com/?q=' + estimate.customer_address + ', ' + estimate.customer.customer_city + ', ' + estimate.customer.customer_state + ', ' + estimate.customer.customer_zip_code);
+                            $('#customer_address').text(estimate.customer_address + ', ' + estimate.customer.customer_city + ', ' + estimate.customer.customer_state + ', ' + estimate.customer.customer_zip_code);
                             console.log(estimate);
-                            // Update modal content with item details
-                            $('#modal-title').text(estimate.customer_name + ' ' + estimate.customer_last_name);
-                            $('#customer_address').text(estimate.customer_address);
-                            $('#customer_email').text(estimate.customer_email);
+                            $('#customer_email').text(estimate.customer.customer_email);
                             $('#customer_phone').text(estimate.customer_phone);
-                            $('#start_date').text(estimateSchedule.start_date);
-                            $('#end_date').text(estimateSchedule.end_date);
                             $('#note').text(estimateSchedule.note);
                             $('#estimate_id').val(estimateSchedule.estimate_id);
                             $('#deleteScheduleWork').attr('href', '/deleteSchedule' + estimateSchedule.schedule_estimate_id);
-                            // $('#date').val(formatDate(expenseDetail.expense_date));
+                            $('#crew_name').text(estimate.crew.name + ' ' + estimate.crew.last_name);
+                            $('#work_assign').val(estimate.crew.id).trigger('change');
 
                             // Open the modal
                             $('#view-customerDetails').removeClass('hidden');
@@ -593,6 +644,8 @@ crewRatingContainer.css({
             $('#fendDate').toggleClass('hidden');
             $('#editEvent').toggleClass('hidden');
             $('#updateEvent').toggleClass('hidden');
+            $('#crew_name').toggleClass('hidden');
+            $('#assign_work_div').toggleClass('hidden');
         });
     </script>
     <script>

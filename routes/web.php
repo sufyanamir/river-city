@@ -166,7 +166,7 @@ Route::middleware('customauth')->group(function () {
         return view('campaign');
     });
     Route::post('/sendProposal', [EstimateController::class, 'sendProposal']);
-    Route::get('/makeProposal/{id}/{preview?}', [EstimateController::class, 'makeProposal']);
+    Route::get('/makeProposal/{id}', [EstimateController::class, 'makeProposal']);
     Route::get('/payment-template', function () {
         return view('paymentTemplate');
     });
@@ -205,7 +205,7 @@ Route::middleware('customauth')->group(function () {
     //     return view('dashboard');
     // });
     Route::get('/addEmail', function () {
-        return view('emails.proposal-mail');
+        return view('addEmail');
     });
     Route::post('/addEmail', [EmailController::class, 'addMailTemplate']);
     Route::get('/emails', [EmailController::class, 'getEmails']);
@@ -239,6 +239,7 @@ Route::middleware('customauth')->group(function () {
 Route::get('/forgotPassword', function () {
     return view('forgotPassword');
 });
+Route::get('/customerPortal/{id}', [EstimateController::class, 'getCustomerEstimateProposals']);
 // Route::get('/paymentReceipt', [EstimateController::class, 'getInvoiceDetails']);
 Route::match(['get', 'post'], 'addPayment', [EstimateController::class, 'addPayment']);
 Route::post('/forgotPasswordMail', [UserController::class, 'forgotPasswordMail']);

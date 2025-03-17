@@ -7,11 +7,11 @@
                 <h4>Work Order</h4>
             </div>
             <div>
-                <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
+                <!-- <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
                     <button class=" bg-white p-2 text-black rounded-md">
                         Print
                     </button>
-                </a>
+                </a> -->
                 <a href="javascript:void(0);" onclick="downloadAsPDF('printableArea')">
                     <button class="bg-white p-2 text-black rounded-md ml-2">Download as PDF</button>
                 </a>
@@ -24,14 +24,14 @@
                 <div class="grid sm:grid-cols-10">
                     <div class="col-span-8 p-3">
                         <p class="text-[#F5222D] text-xl font-bold">
-                            {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
+                            {{ ucfirst($customer->customer_first_name) }} {{ ucfirst($customer->customer_last_name) }}
                         </p>
                         <p class="text-[#323C47] text-lg font-semibold">
                             {{ $customer->customer_project_name }}
                         </p>
-                        <p class="mt-2 flex text-[#323C47] font-medium">
+                        <p class="my-2 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/home-icon.svg') }}" alt="">
-                            <span class="pl-2">{{ $customer->customer_primary_address }}</span>
+                            <span class="pl-2">{{ $customer->customer_primary_address }}, {{ $customer->customer_city }}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</span>
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
@@ -83,10 +83,10 @@
                 @if ($estimate_items->count() > 0)
                 @foreach ($groupedItems as $groupName => $itemss)
                 <div class="mb-2 bg-white shadow-xl">
-                    <div class=" p-1 bg-[#930027] text-white w-full rounded-t-lg">
+                    <div class=" p-1 text-black w-full rounded-t-lg">
                         <div class="inline-block">
                             <div class="flex gap-3">
-                                <h1 class=" font-medium my-auto p-2">{{$groupName}}</h1>
+                                <h1 class=" font-medium my-auto p-2 underline">{{$groupName}}</h1>
                             </div>
                         </div>
                     </div>
@@ -109,15 +109,19 @@
                                     <tr class="bg-white border-b">
                                         
                                         <td class="px-6 py-4" style="width: 85% !important; text-align:justify">
-                                            <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
-                                            <p class="text-[16px]/[18px] text-[#323C47] font">
+                                            <label class="text-md font-semibold text-[#323C47] underline" for="">{{ $item->item_name }}</label>
+                                            <p class="text-[16px]/[18px] text-[#323C47] mt-2">
                                                 @if ($item->item_description)
                                             <p class="font-medium">Description:</p>
-                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
+                                            <p>
+                                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
+                                            </p>
                                             @endif
                                             @if ($item->item_note)
                                             <p class="font-medium">Note:</p>
-                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
+                                            <p>
+                                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
+                                            </p>
                                             @endif
                                             </p>
                                         </td>
@@ -154,12 +158,18 @@
                                                                     @foreach($item->assemblies as $assembly)
                                                                     <tr class="bg-white border-b">
                                                                         <td class="px-6 py-4" style="width: 85% !important; text-align:justify">
-                                                                        {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->est_ass_item_name) !!}
+                                                                            <p>
+                                                                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->est_ass_item_name) !!}
+                                                                            </p>
                                                                             <br>
-                                                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
+                                                                            <p>
+                                                                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
+                                                                            </p>
                                                                         </td>
                                                                         <td class="text-center">
-                                                                            {{number_format($assembly->ass_item_qty, 2)}} <br> {{$assembly->ass_item_unit}}
+                                                                            <p>
+                                                                                {{number_format($assembly->ass_item_qty, 2)}} <br> {{$assembly->ass_item_unit}}
+                                                                            </p>
                                                                         </td>
                                                                     </tr>
                                                                     @endforeach
@@ -446,8 +456,14 @@
         // Apply minimal styles to hide unwanted elements (original approach)
         var style = document.createElement('style');
         style.innerHTML = `
-            body { background-color: white !important; }
-            .group-card { background-color: #930027 !important; } /* Maintain group header styling */
+            body { background-color: white !important; font-size: 10px !important; }
+            div, p, span, table, td, tr, th {
+            page-break-inside: avoid !important;
+            page-break-after: auto !important;
+            }
+            // .group-card { background-color: #930027 !important; } /* Maintain group header styling */
+            * { word-wrap: break-word; font-size: 10px !important; }
+            table { page-break-before: auto; page-break-after: auto; }
         `;
         tempDiv.appendChild(style);
 

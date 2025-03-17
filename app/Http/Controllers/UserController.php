@@ -633,7 +633,11 @@ class UserController extends Controller
             // }
 
             // Create a session for the user
-            $notifications = Notifications::where('added_user_id', $user->id)->where('notification_status', '<>', 'unread')->count();
+            $notifications = Notifications::where('added_user_id', $user->id)
+                ->where('notification_status', '<>', 'unread')
+                ->count() + Notifications::where('mentioned_user_id', $user->id)
+                ->whereIn('notification_type', ['mention', 'mentionGallery'])
+                ->count();
             session(['user_details' => [
                 'token' => $token, // Set token value if needed
                 'id' => $user->id,

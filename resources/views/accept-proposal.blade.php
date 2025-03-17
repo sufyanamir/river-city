@@ -37,8 +37,11 @@
             <button class="bg-[#930027] p-2 text-white rounded-md ml-2">Download as PDF</button>
         </a>
     </div>
-    <form action="/acceptProposal/{{ $estimate['estimate_id'] }}" method="post">
+    <form action="/acceptProposal/{{ $estimate['estimate_id'] }}" method="post" id="proposalForm">
         @csrf
+        <input type="hidden" name="proposal_id" value="{{ $proposal_id }}">
+        <input type="hidden" name="proposal_group_id" value="{{ $group_id }}">
+        <div id="groupStatuses"></div>
         <div class="my-4" id="printableArea">
             <div class="bg-white w-full overflow-auto rounded-lg shadow-lg">
                 <div class="grid grid-cols-12 p-5">
@@ -74,7 +77,7 @@
                         </div>
                         <div class="mt-12">
                             <p class="text-end mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
-                                {{ $customer['customer_first_name'] }} {{ $customer['customer_last_name'] }}
+                                {{ ucfirst($customer['customer_first_name']) }} {{ ucfirst($customer['customer_last_name']) }}
                             </p>
                             <p class="text-end mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
                                 {{ $customer['customer_primary_address'] }}
@@ -115,9 +118,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-span-12 p-4">
+                    <div class="col-span-12">
                         
-                        <div class="text-[#323C47] font-medium mt-4 border-b border-[#323C47] pb-6 border-solid">
+                        <div class="text-[#323C47] font-medium border-b border-[#323C47] pb-6 border-solid">
                             @php
                             $subTotal = 0;
                             @endphp
@@ -129,125 +132,57 @@
                             $groupedItems[$groupName][] = $groupItems;
                             }
                             @endphp
-                            <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
+                            <div class=" itemDiv col-span-10 overflow-auto  rounded-lg border-[#0000004D]">
                                 @if (count($estimate_items) > 0)
                                 @foreach ($groupedItems as $groupName => $itemss)
                                 <div class="mb-2 bg-white shadow-xl">
-                                    <div class=" group-card p-1 bg-[#930027] text-white w-full rounded-t-lg">
+                                    <div class=" group-card p-1 bg-white text-black w-full rounded-t-lg">
                                         <div class="">
                                             @if($groupName)
                                             <div class="">
                                                 @php
-                                                $displayedGroups = []; // Array to keep track of displayed groups
+                                                $displayedGroups = [];
+                                                $groupTotal = 0;
                                                 @endphp
 
                                                 @foreach($itemss as $item)
                                                 @php
-                                                $group = $item->group
+                                                $group = $item['group'];
+                                                if(isset($item['group']['show_group_total']) && $item['group']['show_group_total'] == 1) {
+                                                    $groupTotal += $item['item_total'];
+                                                }
                                                 @endphp
-                                                @if(!empty($group) && !in_array($group->group_id, $displayedGroups))
-                                                <!-- Display edit button only if the group has not been displayed before -->
+                                                @if(!empty($group) && !in_array($group['group_id'], $displayedGroups))
                                                 @php
-                                                $displayedGroups[] = $group->group_id; // Add group to displayed groups
+                                                $displayedGroups[] = $group['group_id'];
                                                 @endphp
                                                 @endif
                                                 @endforeach
+                                                
                                                 <div class="w-full flex justify-between">
                                                     <div>
-                                                        <h1 class=" font-medium my-auto p-2">{{$groupName}}</h1>
-                                                        <div id="formData{{$item->group_id}}" class="hidden">
-                                                            @csrf
-                                                            <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                            <input type="hidden" name="group_id" value="{{$item->group_id}}">
-                                                            <input type="hidden" name="type" value="acceptAll">
-                                                            <input type="hidden" name="item_status" value="accepted">
-                                                            <input type="hidden" name="estimate_item_id" value="">
-                                                        </div>
+                                                        <h1 class="font-bold text-xl my-auto p-2 underline">{{$groupName}}</h1>
+                                                        <input type="hidden" class="group-total" data-group-id="{{$item['group_id']}}" value="{{$groupTotal}}">
                                                     </div>
-                                                    <!-- <div class=""> -->
-                                                    <!-- <button type="button" id="exclude-include-menuBtn{{$item->group_id}}" class="inline p-2">
-                                                        <i class="fa-solid fa-square-caret-down text-[#fff] text-lg"></i>
-                                                    </button> -->
-                                                    <!-- <div id="exclude-include-menu{{$item->group_id}}" class=" absolute z-10 topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                                                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                                                            <li>
-                                                                <button type="button" id="submitAcceptionRejection{{$item->group_id}}"
-                                                                    data-type="acceptAll"
-                                                                    data-status="accepted"
-                                                                    class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                                    Accept All Items
-                                                                </button>
-                                                            </li>
-                                                            <hr>
-                                                            <li>
-                                                                <button type="button" id="submitAcceptionRejection{{$item->group_id}}"
-                                                                    data-type="rejectAll"
-                                                                    data-status="rejected"
-                                                                    class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                                    Reject All Items
-                                                                </button>
-                                                            </li>
-                                                            <hr>
-                                                            <li>
-                                                                <button type="button" id="submitAcceptionRejection{{$item->group_id}}"
-                                                                    data-type="acceptPending"
-                                                                    data-status="accepted"
-                                                                    class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                                    Accept Pending Items
-                                                                </button>
-                                                            </li>
-                                                            <hr>
-                                                            <li>
-                                                                <button type="button" id="submitAcceptionRejection{{$item->group_id}}"
-                                                                    data-type="rejectPending"
-                                                                    data-status="rejected"
-                                                                    class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                                    Reject Pending Items
-                                                                </button>
-                                                            </li>
-                                                        </ul>
-                                                    </div> -->
-                                                    <!-- </div> -->
-                                                    <!-- <script>
-                                                    document.getElementById("exclude-include-menuBtn{{$item->group_id}}").addEventListener("click", function(e) {
-                                                        e.stopPropagation(); // Prevents the click event from reaching the document body
-                                                        var dropdownMenu = document.getElementById("exclude-include-menu{{$item->group_id}}");
-                                                        dropdownMenu.classList.toggle("topbar-menuEntring");
-                                                        dropdownMenu.classList.toggle("topbar-manuLeaving");
-                                                    });
-
-                                                    document.addEventListener('click', function(e) {
-                                                        var btn = document.getElementById("exclude-include-menuBtn{{$item->group_id}}");
-                                                        var dropdownMenu = document.getElementById("exclude-include-menu{{$item->group_id}}");
-
-                                                        if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                                                            // Click occurred outside the button and dropdown, hide the dropdown
-                                                            dropdownMenu.classList.add("topbar-manuLeaving");
-                                                            dropdownMenu.classList.remove("topbar-menuEntring");
-                                                        }
-                                                    });
-                                                </script> -->
-                                                    @if(isset($item->group->include_est_total) && $item->group->include_est_total == 0)
+                                                    @if(isset($item['group']['include_est_total']) && $item['group']['include_est_total'] == 0)
                                                     <div class="my-auto mx-2 text-lg">
-                                                        <input required
-                                                            type="radio"
-                                                            name="group_accept_reject"
+                                                        <input type="radio"
+                                                            name="group_accept_reject_{{$item['group_id']}}"
                                                             value="accepted"
-                                                            id="submitAcceptionRejection{{$item->group_id}}"
-                                                            data-type="acceptAll"
-                                                            data-status="accepted"
-                                                            {{ $item->upgrade_status == 'accepted' ? 'checked' : '' }}>
-                                                        <label for="">Accept</label>
+                                                            class="group-radio"
+                                                            data-group-id="{{$item['group_id']}}"
+                                                            data-proposal-id="{{$proposal_id}}"
+                                                            {{ $item['upgrade_status'] == 'accepted' ? 'checked' : '' }}>
+                                                        <label>Accept</label>
 
-                                                        <input required
-                                                            type="radio"
-                                                            name="group_accept_reject"
+                                                        <input type="radio"
+                                                            name="group_accept_reject_{{$item['group_id']}}"
                                                             value="rejected"
-                                                            id="submitAcceptionRejection{{$item->group_id}}"
-                                                            data-type="rejectAll"
-                                                            data-status="rejected"
-                                                            {{ $item->upgrade_status == 'rejected' ? 'checked' : '' }}>
-                                                        <label for="">Reject</label>
+                                                            class="group-radio"
+                                                            data-group-id="{{$item['group_id']}}"
+                                                            data-proposal-id="{{$proposal_id}}"
+                                                            {{ $item['upgrade_status'] == 'rejected' ? 'checked' : '' }}>
+                                                        <label>Reject</label>
                                                     </div>
                                                     @endif
                                                 </div>
@@ -258,7 +193,7 @@
                                     <div class="relative overflow-x-auto mb-8">
                                         <div class="itemDiv">
                                             <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                                <thead class="text-xs text-gray-700 border-b border-black uppercase bg-gray-50">
                                                     <tr>
                                                         <!-- <th scope="col" class="px-6 py-3">
 
@@ -266,11 +201,23 @@
                                                         <th scope="col" class="px-6 py-3">
                                                             Item Name
                                                         </th>
+                                                        @foreach ($itemss as $singleItem)
+                                                        @php
+                                                            $showItemQty = 0;
+                                                            $showItemTotal = 0;
+                                                            $singleItem['group']['show_quantity'] == 1 ? $showItemQty = 1 : 0;
+                                                            $singleItem['group']['show_total'] == 1 ? $showItemTotal = 1 : 0;
+                                                        @endphp
+                                                        @endforeach
                                                         <th scope="col" class="text-center">
+                                                            @if($showItemQty == 1)
                                                             Item Qty
+                                                            @endif
                                                         </th>
                                                         <th scope="col" class="text-center">
+                                                            @if($showItemTotal == 1)
                                                             Item Total
+                                                            @endif
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -285,11 +232,11 @@
                                                         <input type="checkbox" disabled name="privileges[reports][view]" id="privilegeReportsView">
                                                         <label for="privilegeReportsView" class=" text-gray-500"></label>
                                                     </th> -->
-                                                        <td class="px-6 py-4">
-                                                            <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_name'] }}
+                                                        <td class="px-6 py-4 w-[70%]">
+                                                            <label class="text-lg font-semibold text-[#323C47] underline" for="">{{ $item['item_name'] }}
                                                                 <!-- <span class="bg-{{ $item['upgrade_status'] == 'accepted' ? 'green' : ($item['upgrade_status'] == 'rejected' ? 'red' : 'gray') }}-100 text-{{ $item['upgrade_status'] == 'accepted' ? 'green' : ($item['upgrade_status'] == 'rejected' ? 'red' : 'gray') }}-800 text-xs font-medium me-2 px-2.5 py-1 rounded-sm dark:bg-{{ $item['upgrade_status'] == 'accepted' ? 'green' : ($item['upgrade_status'] == 'rejected' ? 'red' : 'gray') }}-700 dark:text-{{ $item['upgrade_status'] == 'accepted' ? 'green' : ($item['upgrade_status'] == 'rejected' ? 'red' : 'gray') }}-300">{{ $item['upgrade_status'] }}</span> -->
                                                             </label>
-                                                            <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                            <p class="text-[16px]/[18px] text-[#323C47] pt-2">
                                                                 @if ($item['item_description'])
                                                             <p class="font-medium">Description:</p>
                                                             <p>
@@ -574,7 +521,7 @@
                                     </p>
                                 </div>
                                 <div>
-                                    <p class="text-[#858585]">
+                                    <p class="text-[#858585] dynamic-total">
                                         ${{ number_format($subTotal, 2) }}
                                     </p>
                                     <p class="text-[#858585]">
@@ -584,7 +531,7 @@
                                         @php
                                         $grandTotal = $subTotal + ($subTotal * $estimate['tax_rate']) / 100;
                                         @endphp
-                                        <span id="dynamic-total">${{ number_format($grandTotal, 2) }}</span>
+                                        <span id="dynamic-total" class="dynamic-total">${{ number_format($grandTotal, 2) }}</span>
                                         <input type="hidden" id="dynamic_total_input" value="{{$subTotal + ($subTotal * $estimate['tax_rate']) / 100}}">
                                     </p>
                                     @php
@@ -622,7 +569,7 @@
                 <input type="hidden" name="estimate_total" value="{{ $subTotal + ($subTotal * $estimate['tax_rate']) / 100 }}">
                 <div class="col-span-12 p-4 flex justify-end my-10" style="">
                     @if(!session()->has('user_details'))
-                    @if($estimate['estimate_total'] == null )
+                    @if($proposal_status == 'pending')
                     <button type="button" id="addSign" class="bg-[#930027] text-white text-lg px-10 py-2 rounded-md hover:bg-red-900 ">I Agree!</button>
                     @else
                     <div>
@@ -754,10 +701,12 @@
             // Get the data-type and data-status values from the clicked button
             var type = $(this).data('type');
             var status = $(this).data('status');
+            var proposalId = $(this).data('proposalid');
 
             // Override the type and item_status values in formData
             formData['type'] = type;
             formData['item_status'] = status;
+            formData['proposal_id'] = proposalId;
 
             // Perform the AJAX request
             $.ajax({
@@ -871,7 +820,7 @@
         var upgradeAcceptRadio = $('#upgrade_accept');
         var upgradeRejectRadio = $('#upgrade_reject');
         var upgradeTotal = $('#upgrade_total');
-        var dynamicTotalSpan = $('#dynamic-total');
+        var dynamicTotalSpan = $('.dynamic-total');
         var dynamicTotalInput = $('#dynamic_total_input');
         var estimateTotalInput = $('input[name="estimate_total"]');
 
@@ -894,6 +843,94 @@
         upgradeAcceptRadio.on('change', updateTotal);
         upgradeRejectRadio.on('change', updateTotal);
     });
+
+    $(document).ready(function() {
+        // Variables for totals
+        let baseSubTotal = {{ $subTotal }};
+        let taxRate = {{ $estimate['tax_rate'] !== null ? $estimate['tax_rate'] : 0 }};
+        let percentageDiscount = {{ $estimate['percentage_discount'] ?? 0 }};
+        let priceDiscount = {{ $estimate['price_discount'] ?? 0 }};
+        
+        // Function to update totals
+        function updateTotals() {
+            console.log('Updating totals');
+            let additionalTotal = 0;
+            
+            // Calculate additional total from accepted groups
+            $('.group-radio[value="accepted"]:checked').each(function() {
+                let groupId = $(this).data('group-id');
+                let groupTotal = parseFloat($('.group-total[data-group-id="' + groupId + '"]').val());
+                additionalTotal += groupTotal;
+            });
+
+            // Calculate grand total
+            let subTotal = baseSubTotal + additionalTotal;
+            let grandTotal = subTotal + (subTotal * taxRate / 100);
+            
+            // Apply discount if exists
+            let discountedTotal = grandTotal;
+            if (percentageDiscount) {
+                discountedTotal = grandTotal - (grandTotal * (percentageDiscount / 100));
+            } else if (priceDiscount) {
+                discountedTotal = grandTotal - priceDiscount;
+            }
+
+            // Update display
+            $('.dynamic-total').text('$' + grandTotal.toFixed(2));
+            $('#dynamic_total_input').val(grandTotal);
+            $('input[name="estimate_total"]').val(discountedTotal);
+            $('.group-total-display').text('$' + discountedTotal.toFixed(2)); // Assuming you have a grand total display element
+            
+            // Update grand total card
+            $('#grandTotal-card .font-medium').text('Grand Total: $' + grandTotal.toFixed(2));
+        }
+
+        // Handle radio button changes
+        $('.group-radio').on('change', function() {
+            console.log('Radio button changed');
+            updateTotals();
+            
+            // Store group status for form submission
+            let groupId = $(this).data('group-id');
+            let status = $(this).val();
+            let proposalId = $(this).data('proposal-id');
+            
+            // Remove existing status input for this group
+            $('#groupStatuses input[data-group-id="' + groupId + '"]').remove();
+            
+            // Add new status input
+            $('#groupStatuses').append(
+                `<input type="hidden" 
+                    name="group_statuses[${groupId}][status]" 
+                    value="${status}" 
+                    data-group-id="${groupId}">
+                <input type="hidden" 
+                    name="group_statuses[${groupId}][proposal_id]" 
+                    value="${proposalId}" 
+                    data-group-id="${groupId}">
+                <input type="hidden" 
+                    name="group_statuses[${groupId}][type]" 
+                    value="${status === 'accepted' ? 'acceptAll' : 'rejectAll'}" 
+                    data-group-id="${groupId}">`
+            );
+        });
+
+        // Handle form submission
+        $('#saveButton').click(function(e) {
+            e.preventDefault();
+            
+            // Show spinner
+            $('#spinner').removeClass('hidden');
+            $('#text').addClass('hidden');
+            
+            // Submit the form
+            $('#proposalForm').submit();
+        });
+
+        // Initial total calculation
+        updateTotals();
+    });
+    
 </script>
 <script>
     $("#addSign").click(function(e) {
@@ -943,12 +980,11 @@
     // Apply styles to fix white space issues
     var style = document.createElement('style');
     style.innerHTML = `
-        body { background-color: white !important; font-size: 15px !important; }
-        .group-card { background-color: #930027 !important; }
+        body { background-color: white !important; font-size: 10px !important; }
         #grandTotal-card { display: none !important; }
-        #grandDiv { font-size: 15px !important; }
+        #grandDiv { font-size: 10px !important; }
 
-        * { word-wrap: break-word; font-size: 15px !important; }
+        * { word-wrap: break-word; font-size: 10px !important; }
 
         div, p, span, table, td, tr, th {
             page-break-inside: avoid !important;

@@ -56,7 +56,7 @@
                     </div>
                     <div class="mt-12">
                         <p class="text-end mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
-                            {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
+                            {{ ucfirst($customer->customer_first_name) }} {{ ucfirst($customer->customer_last_name) }}
                         </p>
                         <p class="text-end mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
                             {{ $customer->customer_primary_address }}
@@ -97,13 +97,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-span-12 p-4">
-                    <div class="text-[#323C47] font-medium mt-4 border-b border-[#323C47] pb-6 border-solid">
+                <div class="col-span-12">
+                    <div class="text-[#323C47] font-medium border-b border-[#323C47] pb-6 border-solid">
                         @php
                         $subTotal = 0;
-                        $groupTotal = 0;
                         @endphp
-                        <div class="py-1" id="printableArea">
+                        <div class="" id="printableArea">
                             @php
 
                             $groupedItems = [];
@@ -112,15 +111,15 @@
                             $groupedItems[$groupName][] = $groupItems;
                             }
                             @endphp
-                            <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
+                            <div class=" itemDiv col-span-10 overflow-auto  rounded-lg border-[#0000004D]">
                                 @if ($estimate_items->count() > 0)
                                 @foreach ($groupedItems as $groupName => $itemss)
                                 <div class="mb-2 bg-white shadow-xl">
-                                    <div class=" group-card p-1 bg-[#930027] text-white w-full rounded-t-lg">
+                                    <div class=" group-card p-1 bg-white text-black w-full rounded-t-lg">
                                         <div class="inline-block">
                                             @if($groupName)
                                             <div class="flex gap-3">
-                                                <h1 class=" font-medium my-auto p-2">{{$groupName}}</h1>
+                                                <h1 class=" font-bold text-xl my-auto p-2 underline">{{$groupName}}</h1>
                                             </div>
                                             @endif
                                         </div>
@@ -128,7 +127,7 @@
                                     <div class="relative overflow-x-auto mb-8">
                                         <div class="itemDiv">
                                             <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                                <thead class="text-xs text-gray-700 border-b border-black uppercase bg-gray-50">
                                                     <tr>
                                                         <!-- <th scope="col" class="px-6 py-3">
 
@@ -136,24 +135,40 @@
                                                         <th scope="col" class="px-6 py-3">
                                                             Item Name
                                                         </th>
+                                                        @foreach ($itemss as $singleItem)
+                                                        @php
+                                                            $showItemQty = 0;
+                                                            $showItemTotal = 0;
+                                                            $singleItem->group->show_quantity == 1 ? $showItemQty = 1 : 0;
+                                                            $singleItem->group->show_total == 1 ? $showItemTotal = 1 : 0;
+                                                        @endphp
+                                                        @endforeach
                                                         <th scope="col" class="text-center">
+                                                            @if($showItemQty == 1)
                                                             Item Qty
+                                                            @endif
                                                         </th>
                                                         <th scope="col" class="text-center">
+                                                            @if($showItemTotal == 1)
                                                             Item Total
+                                                            @endif
                                                         </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    @php
+                                                    $groupTotal = 0;
+                                                    $incEstTotal = 0;
+                                                    @endphp
                                                     @foreach ($itemss as $item)
                                                     <tr class="bg-white border-b">
                                                         <!-- <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
                                                             <input type="checkbox" disabled name="privileges[reports][view]" id="privilegeReportsView">
                                                             <label for="privilegeReportsView" class=" text-gray-500"></label>
                                                         </th> -->
-                                                        <td class="px-6 py-4">
-                                                            <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
-                                                            <p class="text-[16px]/[18px] text-[#323C47] font">
+                                                        <td class="px-6 py-4 w-[70%]">
+                                                            <label class="text-lg font-semibold text-[#323C47] underline" for="">{{ $item->item_name }}</label>
+                                                            <p class="text-[16px]/[18px] text-[#323C47] pt-2">
                                                                 @if ($item->item_description)
                                                             <p class="font-medium">Description:
                                                                 {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
@@ -192,10 +207,23 @@
                                                         @endphp
                                                         @php
                                                         if(isset($item->group->include_est_total) && $item->group->include_est_total == 1){
+                                                            $incEstTotal = 1;
                                                             $subTotal += $item->item_total; // Add item price to total
+                                                        }else{
+                                                            if($item->upgrade_status == 'accepted'){
+                                                                $subTotal += $item->item_total;
+                                                            }
                                                         }
+                                                        $acceptorreject = $item->upgrade_status;
                                                         @endphp
                                                         @endforeach
+                                                        <tr>
+                                                            <th>
+                                                                @if($incEstTotal == 0 || $acceptorreject == 'rejected')
+                                                                **Not include in Estimate Total**
+                                                                @endif
+                                                            </th>
+                                                        </tr>
                                                         <tr>
                                                             <th class=" text-right py-3" colspan="7">
                                                                 Group Total: {{ number_format($groupTotal, 2) }}
@@ -209,73 +237,6 @@
                                 </div>
                                 @endif
                             </div>
-                            @foreach($templates as $template)
-                            <div class="mb-2 p-2 bg-white shadow-xl">
-                                <div class=" flex justify-between p-3 bg-[#930027] text-white w-full rounded-t-lg">
-                                    <h1 class=" font-medium my-auto">{{ $template->item_template_name }}</h1>
-                                </div>
-                                <div class="relative overflow-x-auto">
-                                    <div class="itemDiv">
-                                        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                                <tr>
-                                                    <!-- <th scope="col" class="px-6 py-3">Check</th> -->
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Item Name
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Item Description
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Item QTY
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Item Price
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3">
-                                                        Total
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @php
-                                                $templateItems = $template->templateItems; // Fetch related EstimateItemAssembly items
-                                                @endphp
-                                                @foreach ($templateItems as $item)
-                                                @php
-                                                $itemName = App\Models\Items::where('item_id', $item->item_id)->first();
-                                                @endphp
-                                                <tr class="bg-white border-b">
-                                                    <!-- <td class="px-6 py-4">
-                                                        <input type="checkbox" disabled name="privileges[reports][view]" id="privilegeReportsView">
-                                                        <label for="privilegeReportsView" class=" text-gray-500"></label>
-                                                    </td> -->
-                                                    <td class="px-6 py-4">
-                                                        <label class="text-lg font-semibold text-[#323C47]" for="">{{ $itemName->item_name }}</label>
-                                                    </td>
-                                                    <td class="px-6 py-4">
-                                                        <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_description'] }}</label>
-                                                    </td>
-                                                    <td class="px-6 py-4">
-                                                        <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_qty'] }}</label> <br> {{$itemName->item_units}}
-                                                    </td>
-                                                    <td class="px-6 py-4">
-                                                        <label class="text-lg font-semibold text-[#323C47]" for="">${{ $item['item_price'] }}</label>
-                                                    </td>
-                                                    <td class="px-6 py-4">
-                                                        <label class="text-lg font-semibold text-[#323C47]" for="">${{ $item['item_total'] }}</label>
-                                                    </td>
-                                                </tr>
-                                                @php
-                                                $subTotal += $item['item_total']; // Add item price to total
-                                                @endphp
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
                             @if(count($upgrades) > 0)
                             <div class="mb-2 bg-white shadow-xl">
                                 <div class=" p-1 bg-[#930027] text-white w-full rounded-t-lg">
@@ -501,6 +462,8 @@
                 <input type="hidden" name="customer_email" value="{{ $customer->customer_email }}">
                 <input type="hidden" name="estimate_total" value="{{ $subTotal + ($subTotal * $estimate->tax_rate) / 100 }}">
                 <input type="hidden" name="discounted_total" value="{{ $discountedTotal }}">
+                <input type="hidden" name="proposal_type" value="{{ $group_id != null ? 'change_order' : 'estimate' }}">
+                <input type="hidden" name="group_id" value="{{ $group_id }}">
                 <div class="col-span-12 p-4 flex justify-end mt-10" id="send-button">
                     <button class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 " id="sendProposal-btn">Send Proposal</button>
                 </div>
@@ -521,7 +484,7 @@
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <!-- Modal content here -->
                         <div class=" flex justify-between border-b-2">
-                            <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Please Add Your Signature!</h2>
+                            <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Send Proposal Mail!</h2>
                             <button class="modal-close" type="button">
                                 <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
                             </button>
@@ -544,11 +507,12 @@
                             </div>
                             <div class=" col-span-2">
                                 <label for="email_body">Email body:</label>
-                                <textarea name="email_body" id="email_body" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" rows="10">Hi there! {{$customer->customer_first_name}} {{$customer->customer_last_name}} With great pleasure, we submit our proposal for your consideration. The proposal can be viewed by clicking on the following link. We look forward to hearing from you so that we may explore this plan in more detail and possibly proceed with it.</textarea>
+                                <textarea name="email_body" id="email_body" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" rows="10">Hi {{ ucfirst($customer->customer_first_name)}} {{ ucfirst($customer->customer_last_name)}}!
+Thank you for the opportunity to provide you with an estimate.</textarea>
                             </div>
                         </div>
                         <div class="">
-                            <button onclick="return confirmSendProposal()" id="saveButton" class=" save-btn mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md">
+                            <button @if(!$group_id) onclick="return confirmSendProposal()" @endif id="saveButton" class=" save-btn mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md">
                                 <div class=" text-center hidden spinner" id="spinner">
                                     <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
@@ -691,7 +655,7 @@ $exsistingProposals = $existing_proposals;
             #footer { display: none !important; }
             #editor { display: none !important; }
             #editor-div { display: none !important; }
-            * { font-size: 15px !important; word-wrap: break-word; } /* Reduce overall font size */
+            * { font-size: 10px !important; word-wrap: break-word; } /* Reduce overall font size */
         div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
         table { page-break-before: auto; page-break-after: auto; }
         `;
