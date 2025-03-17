@@ -69,33 +69,33 @@
                     <div class="col-span-6 p-4">
                         <div class="">
                             <p class=" text-end text-[30px]/[35.16px] font-bold text-[#323C47]">Estimate</p>
-                            <p class=" text-end mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
+                            <p class=" text-end font-medium text-[17px]/[19.92px] text-[#858585]">
                                 {{ $customer['customer_project_number'] }} <br>
                                 {{ $estimate['created_at'] }}
                             </p>
                         </div>
                         <div class="mt-12">
-                            <p class="text-end mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
+                            <p class="text-end font-medium text-[17px]/[19.92px] text-[#858585]">
                                 {{ ucfirst($customer['customer_first_name']) }} {{ ucfirst($customer['customer_last_name']) }}
                             </p>
-                            <p class="text-end mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
+                            <p class="text-end font-medium text-[17px]/[19.92px] text-[#858585]">
                                 {{ $customer['customer_primary_address'] }}
                             </p>
-                            <p class="text-end mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
+                            <p class="text-end font-medium text-[17px]/[19.92px] text-[#858585]">
                                 {{ $customer['customer_city'] }} {{ $customer['customer_state'] }}
                                 {{ $customer['customer_zip_code'] }}
                             </p>
-                            <p class="text-end mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
+                            <p class="text-end font-medium text-[17px]/[19.92px] text-[#858585]">
                                 {{ $customer['customer_email'] }}
                             </p>
-                            <p class="text-end mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
+                            <p class="text-end font-medium text-[17px]/[19.92px] text-[#858585]">
                                 {{ $customer['customer_phone'] }}
                             </p>
                             <br>
-                            <p class="text-end mt-8 font-medium text-[17px]/[19.92px] text-[#858585]">
+                            <p class="text-end font-medium text-[17px]/[19.92px] text-[#858585]">
                                 {{ $customer['customer_project_name'] }}
                             </p>
-                            <p class=" text-end mt-2 font-bold text-[17px]/[19.92px] text-[#323C47] location">
+                            <p class=" text-end font-bold text-[17px]/[19.92px] text-[#323C47] location">
                                 {{ $customer['customer_primary_address'] }}, {{ $customer['customer_city'] }},
                                 {{ $customer['customer_state'] }}, {{ $customer['customer_zip_code'] }}
                             </p>
@@ -894,11 +894,11 @@
     // Apply styles to fix white space issues
     var style = document.createElement('style');
     style.innerHTML = `
-        body { background-color: white !important; font-size: 10px !important; }
+        body { background-color: white !important; font-size: 15px !important; }
         #grandTotal-card { display: none !important; }
-        #grandDiv { font-size: 10px !important; }
+        #grandDiv { font-size: 15px !important; }
 
-        * { word-wrap: break-word; font-size: 10px !important; }
+        * { word-wrap: break-word; font-size: 15px !important; }
 
         div, p, span, table, td, tr, th {
             page-break-inside: avoid !important;
