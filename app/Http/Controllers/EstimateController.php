@@ -233,6 +233,7 @@ class EstimateController extends Controller
                 'first_address' => 'nullable',
                 'tax_rate' => 'nullable',
                 'owner' => 'nullable',
+                'internal_note' => 'nullable',
             ]);
 
             $estimate = Estimate::find($validatedData['estimate_id']);
@@ -252,6 +253,7 @@ class EstimateController extends Controller
             $estimate->customer_address = $validatedData['first_address'];
             $estimate->tax_rate = $validatedData['tax_rate'];
             $estimate->project_owner = $validatedData['owner'];
+            $estimate->estimate_internal_note = $validatedData['internal_note'];
 
             $estimate->save();
 
