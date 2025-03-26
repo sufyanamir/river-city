@@ -6441,6 +6441,10 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                                 @endforeach
                             </select>
                         </div>
+                        <div class=" col-span-4">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Internal Note</h5>
+                            <input type="text" class="mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="internal_note" id="internal_note" value="{{ $estimate->estimate_internal_note }}" placeholder="Internal Note">
+                        </div>
                     </div>
                     <div class=" mt-2">
                         <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
