@@ -105,7 +105,7 @@ $modalTotal = 0;
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
-                            <span class="pl-2">Internal Note: {{ $customer->company_internal_note }}
+                            <span class="pl-2">Internal Note: {{ $estimate->estimate_internal_note ?? $customer->company_internal_note }}
                             </span>
                         </p>
                         <hr class="bg-gray-300 my-2 w-full">
@@ -777,39 +777,46 @@ $modalTotal = 0;
         @endif
         @if (session('user_details')['user_role'] == 'admin')
         <div class=" relative  border-2  shadow-lg mt-7  bg-white rounded-3xl">
-            <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
-                <button type="button" id="addItem-menubutton1" class="flex bg-white p-1 m-2 rounded-lg">
-                    <div class=" bg-[#930027] rounded-lg">
-                        <i class="fa-solid fa-plus text-white p-2"></i>
+            <div class="flex  items-center justify-between px-3  bg-[#930027] rounded-t-3xl">
+                <div class="flex justify-start">
+                    <button type="button" id="addItem-menubutton1" class="flex bg-white p-1 m-2 rounded-lg">
+                        <div class=" bg-[#930027] rounded-lg">
+                            <i class="fa-solid fa-plus text-white p-2"></i>
+                        </div>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <div class="absolute top-14 z-10">
+                        <div id="addItem-menu1" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                                <li>
+                                    <button id="" type="button" class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        Add Item
+                                    </button>
+                                </li>
+                                <hr>
+                                {{-- <li>
+                                        <button id="addTemplate" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Template Name</button>
+                                    </li> --}}
+                                @foreach ($item_templates as $template)
+                                <li>
+                                    <button id="addTemplate{{ $template->item_template_id }}" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}
+                                    </button>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
-                </button>
-                <!-- Dropdown menu -->
-                <div class="absolute top-14 z-10">
-                    <div id="addItem-menu1" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                            <li>
-                                <button id="" type="button" class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                    Add Item
-                                </button>
-                            </li>
-                            <hr>
-                            {{-- <li>
-                                    <button id="addTemplate" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Template Name</button>
-                                </li> --}}
-                            @foreach ($item_templates as $template)
-                            <li>
-                                <button id="addTemplate{{ $template->item_template_id }}" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}
-                                </button>
-                            </li>
-                            @endforeach
-                        </ul>
-                    </div>
-
+                    <p class="text-lg my-auto px-3 text-white font-medium">
+                        Items
+                    </p>
                 </div>
-
-                <p class="text-lg px-3 text-white font-medium">
-                    Items
-                </p>
+                <div class="my-auto">
+                    <a href="/rearrangeItems/{{ $estimate->estimate_id }}">
+                        <button id="" class="bg-white text-black  p-2 rounded-md font-medium">
+                            Rearrange Items
+                        </button>
+                    </a>
+                </div>
             </div>
             @php
             $totalPrice = 0; // Initialize total price variable
@@ -6785,12 +6792,12 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                                 </select>
                                 <div class=" grid grid-cols-3 gap-3 mt-2 inline-block">
                                     <div>
-                                        <input value="${assembly.item_unit_by_ass_unit}" type="text" name="item_unit_by_assembly_unit[]" id="item_unit_by_ass_unit_${index}" placeholder="00.0" autocomplete="given-name"
+                                        <input value="${assembly.item_unit_by_ass_unit ?? 0}" type="text" name="item_unit_by_assembly_unit[]" id="item_unit_by_ass_unit_${index}" placeholder="00.0" autocomplete="given-name"
                                             class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                         <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
                                     </div>
                                     <div>
-                                        <input  value="${assembly.ass_unit_by_item_unit}"  type="text" name="assembly_unit_by_item_unit[]" id="ass_unit_by_item_unit_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                        <input  value="${assembly.ass_unit_by_item_unit ?? 0}"  type="text" name="assembly_unit_by_item_unit[]" id="ass_unit_by_item_unit_${index}" placeholder="00.0" autocomplete="given-name"  class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     </div>
                                     <div class="flex ">
                                         <div class="w-[80%]  ">

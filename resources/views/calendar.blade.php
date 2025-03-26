@@ -303,6 +303,10 @@
                         <label for="end_date">End date:</label>
                         <input type="datetime-local" name="end_date" id="assignment_end_date" autocomplete="given-name" class="se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                     </div>
+                    <div class="flex justify-start gap-3 mb-2">
+                        <label for="end_date">Address:</label>
+                        <input type="text" name="address" id="assignment_address" autocomplete="given-name" class="se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    </div>
                     <textarea placeholder="Note " class=" w-[100%] outline-none rounded-md p-2 border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6" name="note" id="note"></textarea>
                     <!-- You can customize this part according to your needs -->
                     <div>
@@ -375,6 +379,12 @@
                             <p class="mb-2"><strong>Start:</strong> <span id="event-start"></span></p>
                             <p class="mb-2"><strong>End:</strong> <span id="event-end"></span></p>
                         </div>
+                        <div id="edit_address_div" class="hidden">
+                            <div class="flex justify-start gap-3 mb-2">
+                                <label for="end_date">Address:</label>
+                                <input type="text" name="address" id="edit_assignment_address" autocomplete="given-name" class="se_date w-[80%] outline-none rounded-md border-0 text-gray-400 p-1 ml-1 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            </div>
+                        </div>
                         <div class="hidden" id="event-text">
                             <textarea name="note" id="event-textarea" class=" w-[100%] outline-none rounded-md p-2 border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6"></textarea>
                         </div>
@@ -435,6 +445,7 @@
         $('#event-textarea').val($('#event-note').text());
         $('#event-note').addClass('hidden');
         $('#assign_work_div').removeClass('hidden');
+        $('#edit_address_div').removeClass('hidden');
         if($('#editEventForm').attr('action') != '/setScheduleEstimate') {
             $('#event-title-div').removeClass('hidden');
             $('#all-event-title').val($('#event-title').text());
@@ -459,6 +470,7 @@ function clearModalAndClose() {
     $('#event-end').text('');
     $('#viewEstimateIcon').removeClass('hidden').attr('href', '');
     $('#editUpdateEvent').text('Edit').attr('type', 'button');
+    $('#edit_address_div').addClass('hidden');
     $('#event-dates').addClass('hidden');
     $('#event-start-end').removeClass('hidden');
     $('#editEventForm').attr('action', '');
@@ -936,6 +948,9 @@ $('#end_date').val(endDateTime);
                                 $('#editEventForm').attr('action', '/addUserToDo');
                                 $('#estimate_schedule_id').val(response.to_do_id);
                                 $('#deleteEventLink').attr('href', '/deleteUserToDo/' + response.to_do_id);
+                                $('#event-customer-address').text(response.to_do_address);
+                                $('#edit_assignment_address').val(response.to_do_address);
+                            $('#address-link').attr('href', 'https://maps.google.com/?q=' + response.to_do_address);
                                 if(response.to_do_status == 'completed') {
                                     $('#completeEvent').addClass('hidden');
                                 } else {
@@ -975,7 +990,7 @@ $('#end_date').val(endDateTime);
                             $select.val(assignedUsers).trigger('change');
                             $('#update_start_date').val(response.scheduled_start_date);
                             $('#update_end_date').val(response.scheduled_end_date);
-                            $('#event-customer-address').text(response.customer_address);
+                            $('#event-customer-address').text(response.customer_address + ', ' + response.customer.customer_city + ', ' + response.customer.customer_state + ', ' + response.customer.customer_zip_code);
                             $('#address-link').attr('href', 'https://maps.google.com/?q=' + response.customer_address);
                             $('#viewEstimateIcon').attr('href', '/viewEstimate/' + response.estimate_id);
                             $('#editEventForm').attr('action', '/setScheduleEstimate');

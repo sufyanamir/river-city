@@ -61,7 +61,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                 </a>
                             </td>
                             <td style=" width:50px;">
-                                {{ $item->customer->branch }}
+                                {{ ucfirst($item->customer->branch) }}
                             </td>
                             <td>
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
@@ -518,8 +518,9 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Branch</h5>
                             <select name="branch" id="branch" required autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 <option value="">Select Branch</option>
-                                <option value="wichita">Wichita</option>
-                                <option value="kansas">Kansas City</option>
+                                @foreach($branches as $branch)
+                                <option value="{{ strtolower($branch->branch_name) }}">{{$branch->branch_name}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class=" col-span-2">

@@ -21,6 +21,7 @@ class UserToDo extends Model
     protected $fillable = [
         'added_user_id',
         'to_do_title',
+        'to_do_address',
         'to_do_status',
         'note',
         'start_date',

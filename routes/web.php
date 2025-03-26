@@ -118,6 +118,7 @@ Route::middleware('customauth')->group(function () {
     ROute::match(['get', 'post'], '/deleteFile{id}', [EstimateController::class, 'deleteFile']);
     Route::get('/getCustomerDetails/{id}', [EstimateController::class, 'getCustomerDetails']);
     Route::post('/sendChat', [EstimateChatController::class, 'sendChat']);
+    Route::get('/getLatestMessages/{estimate_id}', [EstimateChatController::class, 'getLatestMessages']);
     Route::get('/estimates/getChatMessage/{id}', [EstimateChatController::class, 'getChatMessage']);
     Route::post('/addImageChat', [EstimageImagesController::class, 'addImageChat']);
     Route::get('/getItemData/{id}', [ItemsController::class, 'getItemData']);
@@ -165,6 +166,10 @@ Route::middleware('customauth')->group(function () {
     Route::get('/campaign', function () {
         return view('campaign');
     });
+
+    Route::get('/rearrangeItems/{id}', [EstimateController::class, 'rearrangeItems']);
+    Route::post('/saveRearrangeItems', [EstimateController::class, 'saveRearrangeItems']);
+
     Route::post('/sendProposal', [EstimateController::class, 'sendProposal']);
     Route::get('/makeProposal/{id}', [EstimateController::class, 'makeProposal']);
     Route::get('/payment-template', function () {

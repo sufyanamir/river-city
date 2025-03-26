@@ -36,8 +36,10 @@ $(document).ready(function () {
       processData: false, // Important: Don't process the data
       contentType: false, // Important: Don't set content type (jQuery will automatically set it based on FormData)
       beforeSend: function () {
-        $('.text').addClass('hidden');
-        $('.spinner').removeClass('hidden');
+        if (apiUrl != '/sendChat') {
+          $('.text').addClass('hidden');
+          $('.spinner').removeClass('hidden');
+        }
         topbar.config({
           autoRun: false,
           barThickness: 3,
@@ -61,9 +63,22 @@ $(document).ready(function () {
       success: function (response) {
         if (response.success == true) {
           // Handle success, if needed
-          handleSuccess(response);
+          if (apiUrl != '/sendChat') {
+            handleSuccess(response);
+          }
           if (apiUrl == '/addEstimate' || apiUrl == '/setScheduleWork' || apiUrl == '/setScheduleEstimate' || apiUrl == '/sendProposal') {
             window.location.assign('/viewEstimate/' + response.estimate_id);
+          } else if (apiUrl == '/sendChat') {
+            $('#message').val('');
+            $('#imageAudioPlayback').hide();
+
+            // Play message sent sound
+            document.getElementById('messageSound').play();
+
+
+            // Fetch new chat messages
+            loadLatestMessages();
+            topbar.hide();
           } else {
             setInterval(
               location.reload()
@@ -88,6 +103,35 @@ $(document).ready(function () {
       }
     });
   });
+
+  function loadLatestMessages() {
+    var estimateId = $('#estimate_id').val();
+    $.ajax({
+      url: '/getLatestMessages/' + estimateId,
+      type: 'GET',
+      success: function (response) {
+        if (response.success) {
+          let oldMessages = $('#chat-dialog').html();
+          if (oldMessages != response.messages) {
+            $('#chat-dialog').html(response.messages);
+            // scrollToBottom();
+
+            // Play message received sound
+            // document.getElementById('messageSound').play();
+          }
+        }
+      }
+    });
+  }
+  // Scroll chat to the bottom automatically
+  function scrollToBottom() {
+    var chatDiv = $('.overflow-auto');
+    chatDiv.scrollTop(chatDiv[0].scrollHeight);
+  }
+
+  setInterval(function () {
+    loadLatestMessages();
+  }, 5000);
 
   function handleSuccess(response) {
     // Redirect to the dashboard or do something else

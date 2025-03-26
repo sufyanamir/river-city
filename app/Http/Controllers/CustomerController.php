@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\CompanyBranches;
 use App\Models\Customer;
 use App\Models\Estimate;
 use App\Models\User;
@@ -53,9 +55,10 @@ class CustomerController extends Controller
         $userDetails = session('user_details');
 
         $customers = Customer::with('addedBy')->get();
+        $branches = CompanyBranches::get();
         $users = User::where('user_role', '<>', 'crew')->get();
 
-        return view('customers', ['customers' => $customers, 'users' => $users, 'user_details' => $userDetails]);
+        return view('customers', ['customers' => $customers, 'users' => $users, 'user_details' => $userDetails, 'branches' => $branches]);
     }
 
     public function getCustomerToEdit($id)

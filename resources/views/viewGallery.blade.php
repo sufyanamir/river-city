@@ -18,7 +18,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                 <div class="flex justify-between">
                     <div>
                         <p class="text-[#F5222D] text-[25px]/[29.3px] font-bold">
-                            {{ $estimate->customer_name }} {{ $estimate->customer_last_name }}
+                            {{ ucfirst($estimate->customer_name) }} {{ ucfirst($estimate->customer_last_name) }}
                         </p>
                         <p class="text-[#323C47] text-[20px]/[23.44px] font-semibold">
                             {{ $estimate->project_name }}
@@ -131,9 +131,12 @@ $userPrivileges = session('user_details')['user_privileges'];
                         @foreach($chatMessages as $message)
                         <div class="mx-2 my-3">
                             <div>
-                                <div class="flex justify-start gap-1 mb-2">
-                                    <img class="w-7 h-7 rounded-full" style="object-fit: cover;" src="{{ (isset($message->addedUser->user_image) && asset_exists($message->addedUser->user_image)) ? asset($message->addedUser->user_image) : asset('assets/images/demo-user.svg') }}" alt="image">
-                                    <h6 class="font-medium text-red-500">{{ $message->added_user_name }}: </h6>
+                                <div class="flex justify-between gap-1 mb-2">
+                                    <div class=" flex justify-start gap-1">
+                                        <img class="w-7 h-7 rounded-full" style="object-fit: cover;" src="{{ (isset($message->addedUser->user_image) && asset_exists($message->addedUser->user_image)) ? asset($message->addedUser->user_image) : asset('assets/images/demo-user.svg') }}" alt="image">
+                                        <h6 class="font-medium text-red-500">{{ $message->added_user_name }}: </h6>
+                                    </div>
+                                    <span class="text-xs mx-2 my-auto">{{ date('m/d/y', strtotime($message->created_at)) }}</span>
                                 </div>
                                 <div class="">
                                     @if($message->chat_message && Str::startsWith($message->chat_message, 'voice_messages/') && Str::endsWith($message->chat_message, '.wav'))
@@ -147,7 +150,6 @@ $userPrivileges = session('user_details')['user_privileges'];
                                     </div>
                                     @endif
                                 </div>
-                                <span class="text-xs mx-2">{{ date('m/d/y', strtotime($message->created_at)) }}</span>
                             </div>
                         </div>
                         @endforeach
