@@ -112,6 +112,7 @@ class Estimate extends Model
         'percentage_discount',
         'price_discount',
         'discounted_total',
+        'estimate_internal_note',
     ];
 
     public $timestamps = true;

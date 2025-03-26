@@ -9,6 +9,7 @@ use App\Mail\SendPaymentReceiptMail;
 use App\Models\AdvancePayment;
 use App\Models\AssignPayment;
 use App\Models\Company;
+use App\Models\CompanyBranches;
 use App\Models\CompleteEstimate;
 use App\Models\CompleteEstimateInvoiceWork;
 use App\Models\Customer;
@@ -66,6 +67,59 @@ class EstimateController extends Controller
         ]);
     }
     // estimate activity
+
+    // save rearrange items
+    public function saveRearrangeItems(Request $request)
+    {
+        try {
+            // Validate the incoming request
+            $validatedData = $request->validate([
+                'estimate_id' => 'required|exists:estimates,estimate_id',
+                'items' => 'required|array',
+                'items.*.id' => 'required|exists:estimate_items,estimate_item_id',
+                'items.*.position' => 'required|integer',
+            ]);
+
+            // Loop through the sorted items and update their positions
+            foreach ($validatedData['items'] as $item) {
+                EstimateItem::where('estimate_id', $validatedData['estimate_id'])->where('estimate_item_id', $item['id'])
+                    ->update(['sort_order' => $item['position']]);
+            }
+
+            return response()->json(['success' => true, 'message' => 'Items reordered successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // save rearrange items
+
+    // rearrange items
+    public function rearrangeItems($id)
+{
+    try {
+        $estimate = Estimate::where('estimate_id', $id)->first();
+
+        $estimateItems = EstimateItem::with('group')
+            ->where('estimate_id', $id)
+            ->get()
+            ->sortBy(function ($item) {
+                return [
+                    $item->group->group_name, // Sort by group name first
+                    $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order // Sort order (0 goes last)
+                ];
+            });
+
+        return view('partials.rearrange-items', [
+            'estimate' => $estimate,
+            'estimateItems' => $estimateItems
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+    }
+}
+
+    // rearrange items
 
     // get Estimates
     public function getCustomerEstimateProposals($id)
@@ -955,7 +1009,7 @@ class EstimateController extends Controller
                     $event = UserToDo::with('assigned_to')->find($id);
                     break;
                 case 'estimate':
-                    $event = Estimate::with('estimateSchedule')->find($id);
+                    $event = Estimate::with('estimateSchedule', 'customer')->find($id);
                     break;
                 case 'estimateToDo':
                     $event = EstimateToDos::with('assigned_to')->find($id);
@@ -1096,6 +1150,8 @@ class EstimateController extends Controller
 
         $status = $request->query('status');
 
+        $branches = CompanyBranches::get();
+
         if ($userDetails['user_role'] == 'admin') {
             $customers = Customer::get();
             $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->where('estimate_status', $status ? $status : 'pending')->orderBy('created_at', 'desc')->get();
@@ -1143,7 +1199,7 @@ class EstimateController extends Controller
 
         // dd($estimates);
 
-        return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails, 'customers' => $customers, 'users' => $users]);
+        return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails, 'customers' => $customers, 'users' => $users, 'branches' => $branches]);
     }
 
 
@@ -2332,11 +2388,10 @@ class EstimateController extends Controller
                     'attachments' => [],
                 ];
 
-                
-                Http::post('https://hooks.zapier.com/hooks/catch/17891889/2q9xn0t/', $zapierData);
-                
-                return response()->json(['success' => true, 'message' => 'Proposal mail sent successfully!', 'estimate_id' => $validatedData['estimate_id']], 200);
 
+                Http::post('https://hooks.zapier.com/hooks/catch/17891889/2q9xn0t/', $zapierData);
+
+                return response()->json(['success' => true, 'message' => 'Proposal mail sent successfully!', 'estimate_id' => $validatedData['estimate_id']], 200);
             } else {
                 $validatedData = $request->validate([
                     'estimate_id' => 'required',
@@ -3149,7 +3204,17 @@ class EstimateController extends Controller
 
 
             $additionalContacts = EstimateContact::where('estimate_id', $estimate->estimate_id)->get();
-            $estimateItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', '<>', 'yes')->get();
+            $estimateItems = EstimateItem::with('group', 'assemblies')
+                ->where('estimate_id', $estimate->estimate_id)
+                ->where('additional_item', '<>', 'yes')
+                ->get()
+                ->sortBy(function ($item) {
+                    return [
+                        $item->group->group_name, // Sort by group name first
+                        $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order // Items with 0 sort_order go last
+                    ];
+                });
+
 
             $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
 
@@ -3429,7 +3494,6 @@ class EstimateController extends Controller
                     'customer_zip_code' => $validatedData['zip_code'],
                     'tax_rate' => $validatedData['tax_rate'],
                     'potential_value' => $validatedData['potential_value'],
-                    'company_internal_note' => $validatedData['internal_note'],
                     'source' => $validatedData['source'],
                     'branch' => $validatedData['branch'],
                 ]);
@@ -3449,6 +3513,7 @@ class EstimateController extends Controller
                 'building_type' => $validatedData['building_type'],
                 'project_owner' => $validatedData['owner'],
                 'po_number' => $po_number,
+                'estimate_internal_note' => $validatedData['internal_note'],
             ]);
 
             if ($validatedData['customer_id']) {

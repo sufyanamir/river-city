@@ -23,7 +23,7 @@
                             {{ $item['estimate']->estimate_id }}
                         </td>
                         <td>
-                        {{ $item['estimate']->customer_name }} {{ $item['estimate']->customer_last_name }}
+                        {{ ucfirst($item['estimate']->customer_name) }} {{ ucfirst($item['estimate']->customer_last_name) }}
                         </td>
                         <td>
                             <div class="grid sm:grid-cols-11 bg-[#F5F5F5] rounded-[10px] m-4">

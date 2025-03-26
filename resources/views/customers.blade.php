@@ -39,7 +39,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                         <td>{{ $customer->customer_phone }} <br> <a href="https://maps.google.com/?q={{ $customer->customer_primary_address }}{{ $customer->customer_city}}{{ $customer->customer_state }}{{ $customer->customer_zip_code }}" target="_blank" class=" text-[#930027]">{{ $customer->customer_primary_address }}, {{ $customer->customer_city}}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</a></td>
                         <td>{{ $customer->source }}</td>
                         <td>{{ $customer->addedBy ? $customer->addedBy->name : '' }}</td>
-                        <td>{{ $customer->branch }}</td>
+                        <td>{{ ucfirst($customer->branch) }}</td>
                         <td>
                             @if(session('user_details')['user_role'] == 'admin')
                             <button id="editCustomer{{$customer->customer_id}}">
@@ -157,8 +157,9 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Branch</h5>
                             <select name="branch" id="branch" required autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 <option value="">Select Branch</option>
-                                <option value="wichita">Wichita</option>
-                                <option value="kansas">Kansas City</option>
+                                @foreach($branches as $branch)
+                                <option value="{{ strtolower($branch->branch_name) }}">{{ $branch->branch_name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class=" col-span-2">

@@ -653,7 +653,7 @@ class UserController extends Controller
                 'rating' => $user->rating,
                 'team_number' => $user->team_number,
                 'user_privileges' => json_decode($user->user_privileges),
-                'notifications' => $notifications,
+                // 'notifications' => $notifications,
             ]]);
 
             return response()->json(['success' => true, 'message' => 'Login successful', 'user_details' => session('user_details')]);

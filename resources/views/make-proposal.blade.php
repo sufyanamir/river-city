@@ -5,6 +5,46 @@
         aspect-ratio: 3/2; */
         height: 70%;
     }
+    *{
+        font-size: 10px;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        line-height: 1.2;
+    }
+
+    body, html {
+        width: 100%;
+        height: auto;
+    }
+
+    div, p, span, table, td, tr, th {
+        page-break-inside: auto !important; /* Allow natural page breaks */
+    }
+
+    table {
+        page-break-before: auto;
+        page-break-after: auto;
+    }
+
+    tr {
+        page-break-inside: avoid !important;
+    }
+
+    td, th {
+        page-break-inside: avoid !important;
+    }
+
+    .avoid-page-break {
+        page-break-before: always;
+    }
+
+    .pdf-container {
+        display: flex;
+        flex-direction: column;
+    }
 </style>
 <div class="flex justify-between text-right my-2">
     <a href="/viewEstimate/{{$estimate->estimate_id}}">
@@ -24,13 +64,13 @@
     <div class="my-4" id="printableArea">
         <div class="bg-white w-full overflow-auto rounded-lg shadow-lg">
             <div class="grid grid-cols-12 p-5">
-                <div class="col-span-6 p-4 ">
+                <div class="col-span-6 px-4 ">
                     <div class="projectLogo ">
-                        <img class="w-[288px] h-[73px]" src="{{ asset('assets/icons/tproject-logo.svg') }}" alt="">
+                        <img class="w-[35%] h-[35%]" src="{{ asset('assets/icons/tproject-logo.svg') }}" alt="">
                     </div>
-                    <div class="mt-12 p-4">
-                        <p class="text-[22px]/[25.78px] font-bold text-[#323C47]">River City Painting, Inc</p>
-                        <p class=" mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
+                    <div class=" px-4">
+                        <p class="text-[16px] font-bold text-[#323C47]">River City Painting, Inc</p>
+                        <p class=" mt-2 font-medium text-[12px] text-[#858585]">
                             @if($customer->branch == 'wichita')
                             4425 W Walker St<br>
                             Wichita Kansas 67209 <br>
@@ -42,58 +82,59 @@
                             913-660-9099
                             <br>
                             office@rivercitypaintinginc.com <br>
+                            @elseif($customer->branch == 'tulsa')
+                            1904 W Iola St unit 101, <br>
+                            Broken Arrow, OK 74012 <br>
+                            918-973-0242
+                            <br>
                             @endif
                         </p>
                     </div>
                 </div>
-                <div class="col-span-6 p-4">
+                <div class="col-span-6 px-4">
                     <div class="">
-                        <p class=" text-end text-[30px]/[35.16px] font-bold text-[#323C47]">Estimate</p>
-                        <p class=" text-end mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
+                        <p class=" text-end text-[16px] font-bold text-[#323C47]">Estimate</p>
+                        <p class=" text-end font-medium text-[12px] text-[#858585]">
                             {{ $customer->customer_project_number }} <br>
                             {{ $estimate->created_at }}
                         </p>
                     </div>
-                    <div class="mt-12">
-                        <p class="text-end mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
+                    <div class="">
+                        <p class="text-end font-medium text-[12px] text-[#858585]">
                             {{ ucfirst($customer->customer_first_name) }} {{ ucfirst($customer->customer_last_name) }}
                         </p>
-                        <p class="text-end mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
+                        <p class="text-end font-medium text-[12px] text-[#858585]">
                             {{ $customer->customer_primary_address }}
                         </p>
-                        <p class="text-end mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
+                        <p class="text-end font-medium text-[12px] text-[#858585]">
                             {{ $customer->customer_city }} {{ $customer->customer_state }}
                             {{ $customer->customer_zip_code }}
                         </p>
-                        <p class="text-end mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
+                        <p class="text-end font-medium text-[12px] text-[#858585]">
                             {{ $customer->customer_email }}
                         </p>
-                        <p class="text-end mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
+                        <p class="text-end font-medium text-[12px] text-[#858585]">
                             {{ $customer->customer_phone }}
                         </p>
                         <br>
-                        <p class="text-end mt-8 font-medium text-[17px]/[19.92px] text-[#858585]">
+                        <p class="text-end font-medium text-[12px] text-[#858585]">
                             {{ $customer->customer_project_name }}
-                        </p>
-                        <p class=" text-end mt-2 font-bold text-[17px]/[19.92px] text-[#323C47] location">
-                            {{ $customer->customer_primary_address }}, {{ $customer->customer_city }},
-                            {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}
                         </p>
                     </div>
                 </div>
                 <div class=" col-span-12 mx-auto">
                     <div class=" flex gap-6">
                         <div>
-                            <img src="{{asset('assets/images/PCA-Logo-RGB .png')}}" class=" photos" alt="image">
+                            <img src="{{asset('assets/images/PCA-Logo-RGB .png')}}" class=" w-[60%] h-[70%]" alt="image">
                         </div>
                         <div>
-                            <img src="{{asset('assets/images/RCP Badges-02.png')}}" class=" photos" alt="image">
+                            <img src="{{asset('assets/images/RCP Badges-02.png')}}" class=" w-[60%] h-[70%]" alt="image">
                         </div>
                         <div>
-                            <img src="{{asset('assets/images/Lead-Safe-EPA-Certified-Firm .png')}}" class=" photos" alt="image">
+                            <img src="{{asset('assets/images/Lead-Safe-EPA-Certified-Firm .png')}}" class=" w-[60%] h-[70%]" alt="image">
                         </div>
                         <div>
-                            <img src="{{asset('assets/images/RCP-Badges-01.png')}}" class=" photos" alt="image">
+                            <img src="{{asset('assets/images/RCP-Badges-01.png')}}" class=" w-[60%] h-[70%]" alt="image">
                         </div>
                     </div>
                 </div>
@@ -652,13 +693,9 @@ $exsistingProposals = $existing_proposals;
     // Apply styles to hide unwanted elements and format content
     var style = document.createElement('style');
     style.innerHTML = `
-            #send-button { display: none !important; }
-            #footer { display: none !important; }
-            #editor { display: none !important; }
-            // #editor-div { display: none !important; }
-            * { font-size: 16px; margin: 0; padding: 0; line-height: 1.2; }
-            body, html { width: 100%; height: auto; }
-             p, span,  td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
+            #send-button, #footer, #editor, #editor-div {
+        display: none !important;
+    }
         `;
         tempDiv.appendChild(style);
 
@@ -713,13 +750,9 @@ $exsistingProposals = $existing_proposals;
     // Apply styles to hide unwanted elements and format content
     var style = document.createElement('style');
     style.innerHTML = `
-            #send-button { display: none !important; }
-            #footer { display: none !important; }
-            #editor { display: none !important; }
-            // #editor-div { display: none !important; }
-            * { font-size: 16px; margin: 0; padding: 0; line-height: 1.2; }
-            body, html { width: 100%; height: auto; }
-            p, span, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
+    #send-button, #footer, #editor, #editor-div {
+        display: none !important;
+    }
         `;
     document.head.appendChild(style);
 
