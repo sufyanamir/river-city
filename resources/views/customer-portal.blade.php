@@ -14,21 +14,38 @@
 </head>
 
 <body class="bg-slate-300">
-    <div class=" flex justify-center items-center h-[100vh]  p-3">
+    <div class=" flex justify-center items-center mt-16  p-3">
         <div class=" bg-white rounded-lg  w-[70%] p-4">
-            <div class="flex justify-between">
-                <div>
-                    <div class="projectLogo ">
-                        <img class="w-[288px] h-[73px]" src="{{ asset('assets/icons/tproject-logo.svg') }}" alt="">
+            <div class="flex flex-wrap items-center justify-between gap-4 md:gap-8">
+                <div class="w-full md:w-auto text-center md:text-left">
+                    <div class="projectLogo">
+                        <img class="w-[180px] md:w-[250px] lg:w-[288px] h-auto mx-auto md:mx-0"
+                            src="{{ asset('assets/icons/tproject-logo.svg') }}"
+                            alt="Logo">
                     </div>
                 </div>
-                <div class="">
-                    <p class="text-[22px]/[25.78px] font-bold text-[#323C47]">River City Painting, Inc</p>
-                    <p class=" mt-2 font-medium text-[17px]/[19.92px] text-[#858585]">
+                <div class="w-full md:w-auto text-center md:text-left">
+                    <p class="text-lg md:text-xl lg:text-[22px] font-bold text-[#323C47]">
+                        River City Painting, Inc
+                    </p>
+                    <p class="mt-2 font-medium text-sm md:text-base lg:text-[17px] text-[#858585]">
+                        @if($estimate->customer->branch == 'wichita')
                         4425 W Walker St<br>
                         Wichita Kansas 67209 <br>
                         info@paintwichita.com <br>
                         (316) 262-3289
+                        @elseif($estimate->customer->branch == 'kansas')
+                        12022 Blue Valley Pkwy<br>
+                        Overland Park, Ks 66213 <br>
+                        913-660-9099
+                        <br>
+                        office@rivercitypaintinginc.com <br>
+                        @elseif($estimate->customer->branch == 'tulsa')
+                        1904 W Iola St unit 101, <br>
+                        Broken Arrow, OK 74012 <br>
+                        918-973-0242
+                        <br>
+                        @endif
                     </p>
                 </div>
             </div>
@@ -36,7 +53,7 @@
                 Active Proposal & Change Orders
             </div>
             <div>
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <div class="relative h-72 overflow-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>

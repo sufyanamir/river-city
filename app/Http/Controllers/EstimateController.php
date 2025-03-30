@@ -125,7 +125,7 @@ class EstimateController extends Controller
     public function getCustomerEstimateProposals($id)
     {
         try {
-            $estimate = Estimate::where('estimate_id', $id)->first();
+            $estimate = Estimate::with('customer')->where('estimate_id', $id)->first();
             $estimateProposals = EstimateProposal::where('estimate_id', $id)->get();
 
             return view('customer-portal', ['estimate' => $estimate, 'proposals' => $estimateProposals]);
