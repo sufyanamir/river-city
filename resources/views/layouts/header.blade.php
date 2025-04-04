@@ -9,7 +9,7 @@
         ->count() 
         + Notifications::where('mentioned_user_id', $user['id'])
         ->whereIn('notification_type', ['mention', 'mentionGallery'])
-        ->where('notification_status', '<>', 'unread')
+        ->where('notification_status', 'unread')
         ->count();
 @endphp
 
