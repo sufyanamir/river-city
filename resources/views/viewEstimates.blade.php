@@ -679,7 +679,7 @@ $modalTotal = 0;
                             <input type="hidden" name="email_body" id="email_body" value="Hi {{ ucfirst($customer->customer_first_name)}} {{ ucfirst($customer->customer_last_name)}}! Thank you for the opportunity to provide you with an estimate.">
                             <button id="sendProposal-btn" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                                 <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
-                                <span class=" my-auto whitespace-nowrap">Send Estimate Mail</span>
+                                <span class=" my-auto whitespace-nowrap">Send Proposal Again</span>
                             </button>
                         </form>
                         <!-- <button type="button" class=" flex h-[40px] w-[190px] ml-2 px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#4088CD]">

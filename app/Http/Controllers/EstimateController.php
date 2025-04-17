@@ -95,29 +95,28 @@ class EstimateController extends Controller
 
     // rearrange items
     public function rearrangeItems($id)
-{
-    try {
-        $estimate = Estimate::where('estimate_id', $id)->first();
+    {
+        try {
+            $estimate = Estimate::where('estimate_id', $id)->first();
 
-        $estimateItems = EstimateItem::with('group')
-            ->where('estimate_id', $id)
-            ->get()
-            ->sortBy(function ($item) {
-                return [
-                    $item->group->group_name, // Sort by group name first
-                    $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order // Sort order (0 goes last)
-                ];
-            });
+            $estimateItems = EstimateItem::with('group')
+                ->where('estimate_id', $id)
+                ->get()
+                ->sortBy(function ($item) {
+                    return [
+                        // $item->group->group_name, // Sort by group name first
+                        $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order // Sort order (0 goes last)
+                    ];
+                });
 
-        return view('partials.rearrange-items', [
-            'estimate' => $estimate,
-            'estimateItems' => $estimateItems
-        ]);
-
-    } catch (\Exception $e) {
-        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+            return view('partials.rearrange-items', [
+                'estimate' => $estimate,
+                'estimateItems' => $estimateItems
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
     }
-}
 
     // rearrange items
 
@@ -397,7 +396,13 @@ class EstimateController extends Controller
 
         $userDetails = session('user_details');
         $estimate = Estimate::where('estimate_id', $id)->first();
-        $materialItems = EstimateItem::where('estimate_id', $id)->where('item_type', '<>', 'upgrades')->where('additional_item', '<>', 'yes')->get();
+        $materialItems = EstimateItem::where('estimate_id', $id)
+            ->where('item_type', '<>', 'upgrades')
+            ->where('additional_item', '<>', 'yes')
+            ->get()
+            ->sortBy(function ($item) {
+                return $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order;
+            });
         $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->where('additional_item', '<>', 'yes')->get();
         $upgrades = EstimateItem::with('assemblies')->where('estimate_id', $id)->where('item_type', 'upgrades')->where('upgrade_status', 'accepted')->where('additional_item', '<>', 'yes')->get();
         $itemTemplates = EstimateItemTemplates::with('templateItems')->where('estimate_id', $id)->get();
@@ -2545,7 +2550,12 @@ class EstimateController extends Controller
             $itemsQuery->where('group_id', $group_id);
         }
 
+
         $items = $itemsQuery->get();
+
+        $items = $itemsQuery->get()->sortBy(function ($item) {
+            return $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order;
+        });
 
         $upgrades = EstimateItem::with('assemblies')
             ->where('estimate_id', $estimate->estimate_id)
@@ -3211,10 +3221,8 @@ class EstimateController extends Controller
                 ->where('additional_item', '<>', 'yes')
                 ->get()
                 ->sortBy(function ($item) {
-                    return [
-                        $item->group->group_name, // Sort by group name first
-                        $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order // Items with 0 sort_order go last
-                    ];
+                    // Push sort_order == 0 to the end
+                    return $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order;
                 });
 
 

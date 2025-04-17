@@ -11,7 +11,7 @@
         height: 70%;
     }
     *{
-        font-size: 10px;
+        font-size: 12px;
     }
     #send-button, #footer, #editor, #editor-div {
         display: none !important;
