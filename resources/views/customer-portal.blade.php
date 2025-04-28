@@ -52,8 +52,8 @@
 </head>
 
 <body class="bg-slate-300">
-    <div class=" flex justify-center items-center mt-16  p-3">
-        <div class=" bg-white rounded-lg  w-[70%] p-4">
+    <div class=" flex justify-center items-center  p-3">
+        <div class=" bg-white rounded-lg  w-[100%] p-4">
             <div class="flex flex-wrap items-center justify-between gap-4 md:gap-8">
                 <div class="w-full md:w-auto text-center md:text-left">
                     <div class="projectLogo">
