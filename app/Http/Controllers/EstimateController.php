@@ -68,6 +68,97 @@ class EstimateController extends Controller
     }
     // estimate activity
 
+    // send invoice or payment mail to client
+    public function sendInvoiceOrPaymentMail(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'email_title' => 'required',
+                'email_body' => 'required',
+                'email_subject' => 'required',
+                'email_to' => 'required',
+            ]);
+            $emailTo = explode(',', $validatedData['email_to']);
+
+            $estimate = Estimate::with('customer')->where('estimate_id', $request->estimate_id)->first();
+
+            $estimateCustomer = $estimate->customer_id;
+            $loggedInUserEmail = $userDetails['email'] ?? 'noreply@example.com'; // Default fallback
+
+            // Generate HTML Email Content
+            $emailData = [
+                'estimate_id' => $validatedData['estimate_id'],
+                'customer_id' => $estimateCustomer,
+                'email' => $validatedData['email_to'],
+                'name' => $estimate['customer_name'] . ' ' . $estimate['customer_last_name'],
+                'title' => $validatedData['email_title'],
+                'subject' => $validatedData['email_subject'],
+                'body' => $validatedData['email_body'],
+                'branch' => $estimate->customer->branch,
+                'attachments' => [],
+            ];
+
+            // Render the email template into an HTML string
+            $htmlEmailContent = View::make('emails.proposal-mail', ['emailData' => $emailData])->render();
+
+            // Prepare the final data to send to Zapier
+            $zapierData = [
+                'email_to' => '', // Will be set dynamically
+                'cc' => ['office@rivercitypaintinginc.com', $loggedInUserEmail], // Company + Logged-in User
+                'reply_to' => $loggedInUserEmail, // Set reply-to
+                'subject' => $validatedData['email_subject'],
+                'html_body' => $htmlEmailContent,
+                'attachments' => [],
+            ];
+
+            // Send the email via Zapier for each recipient
+            foreach ($emailTo as $email) {
+                $zapierData['email_to'] = trim($email);
+                Http::post('https://hooks.zapier.com/hooks/catch/17891889/2q9xn0t/', $zapierData);
+            }
+
+            return response()->json(['success' => true, 'message' => 'Email sent successfully!'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // send invoice or payment mail to client
+
+    // viewPayment
+    public function viewPayment($id)
+    {
+        try {
+            $userDetails = session('user_details');
+            $estimate = Estimate::with('customer')->where('estimate_id', $id)->first();
+            $payment = EstimatePayments::where('estimate_payment_id', $id)->first();
+            // dd($payment);
+
+            return view('viewInvoice', ['user_details' => $userDetails, 'payment' => $payment, 'estimate' => $estimate, 'type' => 'Payment']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // viewPayment
+
+    // viewInvoice
+    public function viewInvoice($id)
+    {
+        try {
+            $userDetails = session('user_details');
+            $estimate = Estimate::with('customer')->where('estimate_id', $id)->first();
+            $invoice = AssignPayment::where('estimate_complete_invoice_id', $id)->first();
+            // dd($invoice);
+
+            return view('viewInvoice', ['user_details' => $userDetails, 'invoice' => $invoice, 'estimate' => $estimate, 'type' => 'Invoice']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // viewInvoice
+
     // save rearrange items
     public function saveRearrangeItems(Request $request)
     {
@@ -126,8 +217,10 @@ class EstimateController extends Controller
         try {
             $estimate = Estimate::with('customer')->where('estimate_id', $id)->first();
             $estimateProposals = EstimateProposal::where('estimate_id', $id)->get();
+            $estimateInvoices = AssignPayment::where('estimate_id', $id)->get();
+            $estimatePayments = EstimatePayments::with('invoice')->where('estimate_id', $id)->get();
 
-            return view('customer-portal', ['estimate' => $estimate, 'proposals' => $estimateProposals]);
+            return view('customer-portal', ['estimate' => $estimate, 'proposals' => $estimateProposals, 'invoices' => $estimateInvoices, 'payments' => $estimatePayments]);
             // return response()->json(['success' => true, 'data' => ['estimate' => $estimate, 'proposals' => $estimateProposals]], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -2141,7 +2234,7 @@ class EstimateController extends Controller
                 'customer_signature' => 'nullable',
                 'proposal_id' => 'nullable',
                 'proposal_group_id' => 'nullable',
-                'group_statuses' => 'nullable|array', // Add validation for group_statuses
+                'group_statuses' => 'nullable|array',
                 'group_statuses.*.status' => 'nullable|in:accepted,rejected',
                 'group_statuses.*.proposal_id' => 'nullable',
                 'group_statuses.*.type' => 'nullable|in:acceptAll,rejectAll',
@@ -2157,7 +2250,7 @@ class EstimateController extends Controller
                 ->first();
             $estimator = User::where('id', $estimate->added_user_id)->first();
 
-            // Handle individual upgrade status if provided
+            // Handle individual upgrade status
             if (isset($validatedData['upgrade_accept_reject'])) {
                 if ($upgrade) {
                     $upgrade->upgrade_status = $validatedData['upgrade_accept_reject'];
@@ -2165,15 +2258,21 @@ class EstimateController extends Controller
                 }
             }
 
-            // Handle group statuses
+            // Load and update proposal signature regardless of group_statuses
+            $proposal = EstimateProposal::where('estimate_proposal_id', $validatedData['proposal_id'])->first();
+            if (!$proposal) {
+                return response()->json(['success' => false, 'message' => 'Proposal not found'], 404);
+            }
+
+            $proposalData = json_decode($proposal->proposal_data, true);
+
+            // ✅ Always update customer_signature in proposal_data
+            if (isset($validatedData['customer_signature']) && isset($proposalData['estimate'])) {
+                $proposalData['estimate']['customer_signature'] = $validatedData['customer_signature'];
+            }
+
+            // Handle group_statuses only if provided
             if (isset($validatedData['group_statuses']) && !empty($validatedData['group_statuses'])) {
-                $proposal = EstimateProposal::where('estimate_proposal_id', $validatedData['proposal_id'])->first();
-                if (!$proposal) {
-                    return response()->json(['success' => false, 'message' => 'Proposal not found'], 404);
-                }
-
-                $proposalData = json_decode($proposal->proposal_data, true);
-
                 if (isset($proposalData['estimate_items'])) {
                     foreach ($validatedData['group_statuses'] as $groupId => $groupData) {
                         $status = $groupData['status'];
@@ -2185,7 +2284,7 @@ class EstimateController extends Controller
                             if ($item['estimate_id'] == $id && $item['group_id'] == $groupId) {
                                 $item['upgrade_status'] = $status;
 
-                                // Update upgrade_status in database
+                                // Update upgrade_status in DB
                                 $dbItem = EstimateItem::find($item['estimate_item_id']);
                                 if ($dbItem) {
                                     $dbItem->upgrade_status = $status;
@@ -2194,7 +2293,7 @@ class EstimateController extends Controller
                             }
                         }
 
-                        // Update group include_est_total
+                        // Update include_est_total
                         if ($type === 'acceptAll' || $type === 'rejectAll') {
                             $group = Groups::where('group_id', $groupId)->first();
                             if ($group) {
@@ -2203,14 +2302,14 @@ class EstimateController extends Controller
                             }
                         }
                     }
-
-                    // Save the updated proposal data
-                    $proposal->proposal_data = json_encode($proposalData);
-                    $proposal->save();
                 }
             }
 
-            // Send email notification
+            // ✅ Save updated proposal data with customer_signature
+            $proposal->proposal_data = json_encode($proposalData);
+            $proposal->save();
+
+            // Email notification
             $emailData = [
                 'customer_name' => $estimate->customer_name . ' ' . $estimate->customer_last_name,
                 'estimate_id' => $id,
@@ -2225,17 +2324,13 @@ class EstimateController extends Controller
                 return response()->json(['success' => false, 'message' => 'Email sending failed: ' . $e->getMessage()], 400);
             }
 
-            // Update proposal status and estimate
-            if ($validatedData['proposal_group_id'] == null) {
-                $proposal = EstimateProposal::where('estimate_proposal_id', $validatedData['proposal_id'])
-                    ->where('proposal_status', 'pending')
-                    ->first();
-            } else {
-                $proposal = EstimateProposal::where('estimate_proposal_id', $validatedData['proposal_id'])
-                    ->where('group_id', $validatedData['proposal_group_id'])
-                    ->where('proposal_status', 'pending')
-                    ->first();
-            }
+            // Update proposal status
+            $proposal = EstimateProposal::where('estimate_proposal_id', $validatedData['proposal_id'])
+                ->when($validatedData['proposal_group_id'], function ($query, $groupId) {
+                    return $query->where('group_id', $groupId);
+                })
+                ->where('proposal_status', 'pending')
+                ->first();
 
             if (!$proposal) {
                 return response()->json(['success' => false, 'message' => 'Pending proposal not found'], 404);
@@ -2243,11 +2338,13 @@ class EstimateController extends Controller
 
             $proposal->proposal_status = 'accepted';
             $proposal->proposal_accepted += $validatedData['estimate_total'];
-            $estimate->estimate_total += $validatedData['estimate_total']; // Changed from += to = to reflect final total
+
+            // ✅ Save customer_signature in main estimate
             if (isset($validatedData['customer_signature'])) {
                 $estimate->customer_signature = $validatedData['customer_signature'];
             }
 
+            $estimate->estimate_total += $validatedData['estimate_total'];
             $estimate->save();
             $proposal->save();
 
@@ -2338,6 +2435,8 @@ class EstimateController extends Controller
                 $data['proposal_id'] = $latestProposal->estimate_proposal_id;
                 $data['group_id'] = $latestProposal->group_id;
                 $data['proposal_status'] = $latestProposal->proposal_status;
+                $data['proposal_total'] = $latestProposal->proposal_total;
+                // dd($data);
                 return view('previousProposal', $data);
             } else {
                 // return response()->json(['success' => false, 'message' => 'No valid ID provided'], 400);
@@ -2365,6 +2464,8 @@ class EstimateController extends Controller
                     'email_body' => 'required',
                 ]);
 
+                $emailTo = explode(',', $validatedData['email_to']);
+
                 $estimate = Estimate::with('customer')->where('estimate_id', $validatedData['estimate_id'])->first();
                 $estimateCustomer = $estimate->customer_id;
                 $loggedInUserEmail = $userDetails['email'] ?? 'noreply@example.com'; // Default fallback
@@ -2387,7 +2488,7 @@ class EstimateController extends Controller
 
                 // Prepare the final data to send to Zapier
                 $zapierData = [
-                    'email_to' => $validatedData['email_to'], // Will be set dynamically
+                    'email_to' => '', // Will be set dynamically
                     'cc' => ['office@rivercitypaintinginc.com', $loggedInUserEmail], // Company + Logged-in User
                     'reply_to' => $loggedInUserEmail, // Set reply-to
                     'subject' => $validatedData['email_subject'],
@@ -2395,8 +2496,11 @@ class EstimateController extends Controller
                     'attachments' => [],
                 ];
 
-
-                Http::post('https://hooks.zapier.com/hooks/catch/17891889/2q9xn0t/', $zapierData);
+                // Send the email via Zapier for each recipient
+                foreach ($emailTo as $email) {
+                    $zapierData['email_to'] = trim($email);
+                    Http::post('https://hooks.zapier.com/hooks/catch/17891889/2q9xn0t/', $zapierData);
+                }
 
                 return response()->json(['success' => true, 'message' => 'Proposal mail sent successfully!', 'estimate_id' => $validatedData['estimate_id']], 200);
             } else {

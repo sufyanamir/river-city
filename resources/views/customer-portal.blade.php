@@ -11,6 +11,44 @@
     <script src="{{ asset('assets/js/fontawesome.js') }}" crossorigin="anonymous"></script>
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="{{ asset('assets/css/fancybox.min.css') }}" />
+    <style>
+        @media (max-width: 768px) {
+            table thead {
+                display: none;
+            }
+
+            table,
+            table tbody,
+            table tr,
+            table td {
+                display: block;
+                width: 100%;
+            }
+
+            table tr {
+                margin-bottom: 1rem;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background-color: #fff;
+                padding: 10px;
+            }
+
+            table td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+
+            table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                top: 12px;
+                font-weight: bold;
+                text-align: left;
+            }
+        }
+    </style>
 </head>
 
 <body class="bg-slate-300">
@@ -76,33 +114,135 @@
                         </thead>
                         <tbody>
                             @foreach($proposals as $proposal)
-                            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 dark:border-gray-700">
+                                <td data-label="Date" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ date('m/d/y H:i:s', strtotime($proposal->created_at)) }}
-                                </th>
-                                <td class="px-6 py-4">
-                                    @if($proposal->proposal_type === 'estimate')
-                                    Estimate
-                                    @else
-                                    Change Order
-                                    @endif
                                 </td>
-                                <td class="px-6 py-4">
+                                <td data-label="Type" class="px-6 py-4">
+                                    {{ $proposal->proposal_type === 'estimate' ? 'Estimate' : 'Change Order' }}
+                                </td>
+                                <td data-label="Total" class="px-6 py-4">
                                     {{ $proposal->proposal_total }}
                                 </td>
-                                <td class="px-6 py-4">
+                                <td data-label="Status" class="px-6 py-4">
                                     {{ $proposal->proposal_status }}
                                 </td>
-                                <td class="px-6 py-4">
+                                <td data-label="Action" class="px-6 py-4">
                                     @if(!empty($proposal->proposal_data))
                                     <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline" href="{{ $proposal->proposal_status === 'pending' 
-                                        ? '/viewProposal?estimateId=' . $proposal->estimate_proposal_id 
-                                        : '/viewProposal?proposalId=' . $proposal->estimate_proposal_id }}{{ $proposal->group_id ? '&group_id=' . $proposal->group_id : '' }}">
-                                        <button class="px-2 py-2 bg-blue-500 text-white rounded-md">
-                                            view
-                                        </button>
+                ? '/viewProposal?estimateId=' . $proposal->estimate_proposal_id 
+                : '/viewProposal?proposalId=' . $proposal->estimate_proposal_id }}{{ $proposal->group_id ? '&group_id=' . $proposal->group_id : '' }}">
+                                        <button class="px-2 py-2 bg-blue-500 text-white rounded-md">view</button>
                                     </a>
                                     @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="mt-10 mb-10 text-center text-slate-400">
+                Invoices
+            </div>
+            <div>
+                <div class="relative h-72 overflow-auto shadow-md sm:rounded-lg">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Date
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Tax
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Total
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Due
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Status
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($invoices as $invoice)
+                            <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 dark:border-gray-700">
+                                <td data-label="Date" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ date('m/d/y H:i:s', strtotime($invoice->complete_invoice_date)) }}
+                                </td>
+                                <td data-label="Type" class="px-6 py-4">
+                                    {{ $invoice->invoice_name }}
+                                </td>
+                                <td data-label="Type" class="px-6 py-4">
+                                    {{ $invoice->tax_rate }}
+                                </td>
+                                <td data-label="Total" class="px-6 py-4">
+                                    {{ $invoice->invoice_total }}
+                                </td>
+                                <td data-label="Status" class="px-6 py-4">
+                                    {{ $invoice->invoice_due }}
+                                </td>
+                                <td data-label="Status" class="px-6 py-4">
+                                    {{ $invoice->invoice_status }}
+                                </td>
+                                <td data-label="Action" class="px-6 py-4">
+                                    <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline" href="/viewInvoice/{{ $invoice->estimate_complete_invoice_id }}">
+                                        <button class="px-2 py-2 bg-blue-500 text-white rounded-md">view</button>
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="mt-10 mb-10 text-center text-slate-400">
+                Payments
+            </div>
+            <div>
+                <div class="relative h-72 overflow-auto shadow-md sm:rounded-lg">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Date
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Description
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Total
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($payments as $payment)
+                            <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 dark:border-gray-700">
+                                <td data-label="Date" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ date('m/d/y H:i:s', strtotime($payment->complete_invoice_date)) }}
+                                </td>
+                                <td data-label="Total" class="px-6 py-4">
+                                    {{ $payment->note }}
+                                </td>
+                                <td data-label="Status" class="px-6 py-4">
+                                    {{ $payment->invoice_total }}
+                                </td>
+                                <td data-label="Action" class="px-6 py-4">
+                                    <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline" href="/viewPayment/{{ $payment->estimate_payment_id }}">
+                                        <button class="px-2 py-2 bg-blue-500 text-white rounded-md">view</button>
+                                    </a>
                                 </td>
                             </tr>
                             @endforeach

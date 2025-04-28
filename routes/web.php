@@ -137,6 +137,7 @@ Route::middleware('customauth')->group(function () {
     Route::get('/getEventDetailOnCalendar', [EstimateController::class, 'getEventDetailOnCalendar']);
     Route::get('/viewEstimateMaterials/{id}', [EstimateController::class, 'viewEstimateMaterials']);
     Route::post('/applyDiscount', [EstimateController::class, 'applyDiscount']);
+    Route::post('/sendInvoiceOrPaymentMail', [EstimateController::class, 'sendInvoiceOrPaymentMail']);
 
     Route::get('/getExpenseDataToEdit{id}', [EstimateController::class, 'getExpenseDataToEdit']);
     ROute::post('/updateEstimateExpense', [EstimateController::class, 'updateEstimateExpense']);
@@ -251,3 +252,5 @@ Route::post('/forgotPasswordMail', [UserController::class, 'forgotPasswordMail']
 Route::get('/resetPassword/{id}', [UserController::class, 'resetPassword']);
 Route::post('/updatePassword', [UserController::class, 'updatePassword']);
 Route::post('/acceptRejectEstimateItems', [EstimateController::class, 'acceptRejectEstimateItems']);
+Route::get('/viewInvoice/{id}', [EstimateController::class, 'viewInvoice']);
+Route::get('/viewPayment/{id}', [EstimateController::class, 'viewPayment']);

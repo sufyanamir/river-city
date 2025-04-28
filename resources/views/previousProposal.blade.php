@@ -612,10 +612,7 @@
                 <input type="hidden" name="customer_email" value="{{ $customer['customer_email'] }}">
                 <input type="hidden" name="estimate_total" value="{{ $subTotal + ($subTotal * $estimate['tax_rate']) / 100 }}">
                 <div class="col-span-12 p-4 flex justify-end my-10" style="">
-                    @if(!session()->has('user_details'))
-                    @if($estimate['estimate_total'] == null || $proposal_status == 'pending')
-                    <button type="button" id="addSign" class="bg-[#930027] text-white text-lg px-10 py-2 rounded-md hover:bg-red-900 ">I Agree!</button>
-                    @else
+                    @if($proposal_total != null || $proposal_status == 'accepted')
                     <div>
                         <div>
                             @if($estimate['customer_signature'] != null)
@@ -628,22 +625,6 @@
                         </div>
                     </div>
                     <!-- <span class="bg-[#930027] text-white p-2 rounded-md">Proposal Accepted</span> -->
-                    @endif
-                    @endif
-                    @if(session()->has('user_details'))
-                    @if($estimate['estimate_total'] != null)
-                    <div>
-                        <div>
-                            @if($estimate['customer_signature'] != null)
-                            <img src="{{$estimate['customer_signature']}}" alt="Customer Signature">
-                            @endif
-                        </div>
-                        <hr>
-                        <div class=" text-center">
-                            <p class="text-[#930027]">Proposal Accepted</p>
-                        </div>
-                    </div>
-                    @endif
                     @endif
                 </div>
             </div>

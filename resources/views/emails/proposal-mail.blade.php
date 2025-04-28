@@ -39,7 +39,7 @@
         <?php echo nl2br($emailData['body']); ?>
         <br>
         <br>
-        <a href="https://soft.rivercitypainting.tech/{{'customerPortal/' . $emailData['estimate_id']}}" style="color: #930027;">You can see your proposal Here</a>
+        <a href="https://soft.rivercitypainting.tech/{{'customerPortal/' . $emailData['estimate_id']}}" style="color: #930027;">Click here to view!</a>
         <br>
         <br>
         @if($emailData['branch'] == 'kansas')

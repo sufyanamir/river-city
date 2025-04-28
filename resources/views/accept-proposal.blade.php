@@ -627,7 +627,7 @@
                     @endif
                     @endif
                     @if(session()->has('user_details'))
-                    @if($estimate['estimate_total'] != null)
+                    @if($estimate['estimate_total'] != null && $proposal_status != 'pending')
                     <div>
                         <div>
                             @if($estimate['customer_signature'] != null)
@@ -692,17 +692,17 @@
         </div>
         <input type="hidden" id="drawingData" name="customer_signature">
     </form>
-    <div class="w-full bottom-0 z-10 " id="grandTotal-card" style=" position: fixed !important;">
-        <div class="flex items-center justify-center mx-auto p-4 mb-4 h-20 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
-            <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-            </svg>
-            <span class="sr-only">Info</span>
-            <div>
-                <span class="font-medium text-lg">Grand Total: ${{number_format($grandTotal, 2)}}</span>
-            </div>
+    <div class="fixed bottom-0 left-1/2 transform -translate-x-1/2 z-10 w-[50%]" id="grandTotal-card">
+    <div class="flex items-center justify-center p-4 mb-4 h-20 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+        <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+        </svg>
+        <div>
+            <span class="font-medium text-lg">Grand Total: ${{ number_format($grandTotal, 2) }}</span>
         </div>
     </div>
+</div>
+
 </div>
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
 <script src="{{ asset('assets/js/custom.js') }}"></script>
