@@ -91,7 +91,7 @@
                         4425 W Walker St<br>
                         Wichita Kansas 67209 <br>
                         info@paintwichita.com <br>
-                        (316) 262-3289
+                        (316) 262-3289 <br>
                         @elseif($estimate->customer->branch == 'kansas')
                         12022 Blue Valley Pkwy<br>
                         Overland Park, Ks 66213 <br>
