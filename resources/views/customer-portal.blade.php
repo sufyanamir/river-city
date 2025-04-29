@@ -104,10 +104,13 @@
                         918-973-0242
                         <br>
                         @endif
+                        {{$estimate->customer->customer_first_name}} {{$estimate->customer->customer_last_name}}
+                        <br>
+                        Total Proposals: {{ $proposals->count() }}
                     </p>
                 </div>
             </div>
-            <div class="mt-10 mb-10 text-center text-black font-bold text-xl">
+            <div class="my-2 text-center text-black font-bold text-xl">
                 Active Proposal & Change Orders
             </div>
             <div>
@@ -168,7 +171,7 @@
                     </table>
                 </div>
             </div>
-            <div class="mt-10 mb-10 text-center text-black font-bold text-xl">
+            <div class="my-2 text-center text-black font-bold text-xl">
                 Invoices
             </div>
             <div>
@@ -237,7 +240,7 @@
                     </table>
                 </div>
             </div>
-            <div class="mt-10 mb-10 text-center text-black font-bold text-xl">
+            <div class="my-2 text-center text-black font-bold text-xl">
                 Payments
             </div>
             <div>
