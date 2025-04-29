@@ -15,23 +15,29 @@
         * {
             overflow-y: visible !important;
         }
+
         /* Apply to the entire page */
-::-webkit-scrollbar {
-    width: 8px; /* Thickness of vertical scrollbar */
-}
+        ::-webkit-scrollbar {
+            width: 8px;
+            /* Thickness of vertical scrollbar */
+        }
 
-::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Track color */
-}
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            /* Track color */
+        }
 
-::-webkit-scrollbar-thumb {
-    background: #930027; /* Scroll thumb color */
-    border-radius: 6px;
-}
+        ::-webkit-scrollbar-thumb {
+            background: #930027;
+            /* Scroll thumb color */
+            border-radius: 6px;
+        }
 
-::-webkit-scrollbar-thumb:hover {
-    background: #555; /* Thumb hover color */
-}
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+            /* Thumb hover color */
+        }
+
         @media (max-width: 768px) {
             table thead {
                 display: none;
@@ -104,17 +110,20 @@
                         918-973-0242
                         <br>
                         @endif
-                        {{$estimate->customer->customer_first_name}} {{$estimate->customer->customer_last_name}}
-                        <br>
-                        Total Proposals: {{ $proposals->count() }}
                     </p>
                 </div>
             </div>
             <div class="my-2 text-center text-black font-bold text-xl">
                 Active Proposal & Change Orders
             </div>
+            <hr>
+            <div class="mt-2 text-center font-medium text-sm md:text-base lg:text-[17px] text-[#858585]">
+                {{$estimate->customer->customer_first_name}} {{$estimate->customer->customer_last_name}}
+                <br>
+                Total Proposals: {{ $proposals->count() }}
+            </div>
             <div>
-                <div class="relative h-72 overflow-auto shadow-md sm:rounded-lg">
+                <div class="relative h-72 overflow-auto shadow-md sm:rounded-lg border-2">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
@@ -174,8 +183,9 @@
             <div class="my-2 text-center text-black font-bold text-xl">
                 Invoices
             </div>
-            <div>
-                <div class="relative h-72 overflow-auto shadow-md sm:rounded-lg">
+            <hr>
+            <div class="mt-2">
+                <div class="relative h-72 overflow-auto shadow-md sm:rounded-lg border-2">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
@@ -243,8 +253,9 @@
             <div class="my-2 text-center text-black font-bold text-xl">
                 Payments
             </div>
-            <div>
-                <div class="relative h-72 overflow-auto shadow-md sm:rounded-lg">
+            <hr>
+            <div class="mt-2">
+                <div class="relative h-72 overflow-auto shadow-md sm:rounded-lg border-2">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
@@ -268,10 +279,10 @@
                         <tbody>
                             @foreach($payments as $index => $payment)
                             <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 dark:border-gray-700">
-                            <td data-label="#" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <td data-label="#" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ $index + 1 }}
-                                </td>    
-                            <td data-label="Date" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                </td>
+                                <td data-label="Date" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ date('m/d/y H:i:s', strtotime($payment->complete_invoice_date)) }}
                                 </td>
                                 <td data-label="Total" class="px-6 py-4">
