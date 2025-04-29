@@ -15,6 +15,23 @@
         * {
             overflow-y: visible !important;
         }
+        /* Apply to the entire page */
+::-webkit-scrollbar {
+    width: 8px; /* Thickness of vertical scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Track color */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #930027; /* Scroll thumb color */
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Thumb hover color */
+}
         @media (max-width: 768px) {
             table thead {
                 display: none;
