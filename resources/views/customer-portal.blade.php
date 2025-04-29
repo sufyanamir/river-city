@@ -12,6 +12,9 @@
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="{{ asset('assets/css/fancybox.min.css') }}" />
     <style>
+        * {
+            overflow-y: visible !important;
+        }
         @media (max-width: 768px) {
             table thead {
                 display: none;
@@ -87,7 +90,7 @@
                     </p>
                 </div>
             </div>
-            <div class="mt-10 mb-10 text-center text-slate-400">
+            <div class="mt-10 mb-10 text-center text-black font-bold text-xl">
                 Active Proposal & Change Orders
             </div>
             <div>
@@ -95,6 +98,9 @@
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    #
+                                </th>
                                 <th scope="col" class="px-6 py-3">
                                     Date
                                 </th>
@@ -113,8 +119,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($proposals as $proposal)
+                            @foreach($proposals as $index => $proposal)
                             <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 dark:border-gray-700">
+                                <td data-label="#" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ $index + 1 }}
+                                </td>
                                 <td data-label="Date" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ date('m/d/y H:i:s', strtotime($proposal->created_at)) }}
                                 </td>
@@ -142,7 +151,7 @@
                     </table>
                 </div>
             </div>
-            <div class="mt-10 mb-10 text-center text-slate-400">
+            <div class="mt-10 mb-10 text-center text-black font-bold text-xl">
                 Invoices
             </div>
             <div>
@@ -150,6 +159,9 @@
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    #
+                                </th>
                                 <th scope="col" class="px-6 py-3">
                                     Date
                                 </th>
@@ -174,8 +186,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($invoices as $invoice)
+                            @foreach($invoices as $index => $invoice)
                             <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 dark:border-gray-700">
+                                <td data-label="#" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ $index + 1 }}
+                                </td>
                                 <td data-label="Date" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ date('m/d/y H:i:s', strtotime($invoice->complete_invoice_date)) }}
                                 </td>
@@ -205,7 +220,7 @@
                     </table>
                 </div>
             </div>
-            <div class="mt-10 mb-10 text-center text-slate-400">
+            <div class="mt-10 mb-10 text-center text-black font-bold text-xl">
                 Payments
             </div>
             <div>
@@ -213,6 +228,9 @@
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    #
+                                </th>
                                 <th scope="col" class="px-6 py-3">
                                     Date
                                 </th>
@@ -228,9 +246,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($payments as $payment)
+                            @foreach($payments as $index => $payment)
                             <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 dark:border-gray-700">
-                                <td data-label="Date" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <td data-label="#" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ $index + 1 }}
+                                </td>    
+                            <td data-label="Date" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ date('m/d/y H:i:s', strtotime($payment->complete_invoice_date)) }}
                                 </td>
                                 <td data-label="Total" class="px-6 py-4">
