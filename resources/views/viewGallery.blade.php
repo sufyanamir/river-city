@@ -54,6 +54,23 @@ $userPrivileges = session('user_details')['user_privileges'];
                 <div class="col-span-1"></div>
                 <div class="col-span-10 px-3  flex justify-between">
                     <p class="text-[22px]/[25.78px] font-medium">Images <span>{{ count($estimate_images) }}</span></p>
+                    <div>
+                    <button class="p-2 rounded-md font-medium bg-[#930027] text-white" id="copyLink-btn">
+                        <div class="text">
+                            Copy Link
+                        </div>
+                    </button>
+                    <script>
+                        document.getElementById('copyLink-btn').addEventListener('click', function() {
+                            const baseUrl = window.location.origin;
+                            const link = `${baseUrl}/viewImages/{{$estimate->estimate_id}}`;
+                            navigator.clipboard.writeText(link).then(() => {
+                                alert('Link copied to clipboard!');
+                            }).catch(err => {
+                                console.error('Failed to copy link: ', err);
+                            });
+                        });
+                    </script>
                     @if (session('user_details')['user_role'] == 'admin')
                     <button class="p-2 rounded-md font-medium bg-[#930027] text-white" id="addImage-btn">
                         <div class=" text-center hidden spinner" id="spinner">
@@ -79,6 +96,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                         </div>
                     </button>
                     @endif
+                    </div>
                 </div>
             </div>
             <hr class="bg-gray-300 h-[2px] w-full">
@@ -243,7 +261,7 @@ $userPrivileges = session('user_details')['user_privileges'];
 
                 <div class="mt-2 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                     <div class="flex justify-between">
-                        <img class="object-cover w-full h-80 rounded-l-lg" id="imageView" src="" alt="">
+                        <img class="object-contain w-[55%] h-80 rounded-l-lg" id="imageView" src="" alt="">
                         <div class="flex flex-col justify-between leading-normal">
                             <div class="h-80 overflow-y-auto w-full">
                                 <div id="chatDiv" class="w-96 h-60 overflow-auto">

@@ -120,7 +120,6 @@ class EstimateController extends Controller
             }
 
             return response()->json(['success' => true, 'message' => 'Email sent successfully!'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -1285,20 +1284,6 @@ class EstimateController extends Controller
             // Attach users to the estimate dynamically
             $estimate->schedulers = $schedulers;
         }
-
-        // Access related data for each estimate
-        // foreach ($estimates as $estimate) {
-        //     if ($estimate->assigned_work) {
-        //         $crew = User::find($estimate->assigned_work->work_assign_id);
-        //         $estimate->crew = $crew;
-        //     } else {
-        //         // Handle the case where assigned_work is null
-        //         $estimate->crew = null;
-        //     }
-        // }
-
-        // dd($estimates);
-
         return view('estimates', ['estimates' => $estimates, 'user_details' => $userDetails, 'customers' => $customers, 'users' => $users, 'branches' => $branches]);
     }
 
@@ -3307,7 +3292,20 @@ class EstimateController extends Controller
     {
         try {
             $userDetails = session('user_details');
-            $estimate = Estimate::where('estimate_id', $id)->first();
+            $estimate = Estimate::with(
+                'customer',
+                'estimateContacts',
+                'estimateFiles',
+                'images',
+                'proposals',
+                'notes',
+                'estimateEmails',
+                'invoices',
+                'invoice',
+            )
+                ->where('estimate_id', $id)
+                ->first();
+
             $company = Company::first();
 
             if (!$estimate) {
@@ -3316,10 +3314,6 @@ class EstimateController extends Controller
                 return response()->json(['success' => false, 'message' => 'Estimate not found'], 404);
             }
 
-            $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-
-
-            $additionalContacts = EstimateContact::where('estimate_id', $estimate->estimate_id)->get();
             $estimateItems = EstimateItem::with('group', 'assemblies')
                 ->where('estimate_id', $estimate->estimate_id)
                 ->where('additional_item', '<>', 'yes')
@@ -3359,15 +3353,7 @@ class EstimateController extends Controller
             $materialItems = Items::where('item_type', 'material')->get();
             $assemblyItems = Items::where('item_type', 'assemblies')->get();
             $users = User::where('sts', 'active')->get();
-            $estimateNotes = EstimateNote::where('estimate_id', $estimate->estimate_id)->get();
             $emailTemplates = Email::get();
-            $estimateEmails = EstimateEmail::where('estimate_id', $estimate->estimate_id)->get();
-            $proposals = EstimateProposal::where('estimate_id', $estimate->estimate_id)->get();
-            $estimator = User::where('id', $estimate->estimated_completed_by)->get();
-            $schedule = ScheduleWork::where('estimate_id', $estimate->estimate_id)->get();
-            $work = ScheduleEstimate::where('estimate_id', $estimate->estimate_id)->get();
-            $invoices = AssignPayment::where('estimate_id', $estimate->estimate_id)->get();
-            $invoice = AssignPayment::where('estimate_id', $estimate->estimate_id)->where('invoice_status', 'unpaid')->first();
             $payments = EstimatePayments::with('invoice')->where('estimate_id', $estimate->estimate_id)->get();
             $toDos = EstimateToDos::with('assigned_to', 'assigned_by')->where('estimate_id', $estimate->estimate_id)->get();
             $advancePayment = AdvancePayment::where('estimate_id', $id)->first();
@@ -3390,73 +3376,10 @@ class EstimateController extends Controller
                 // Add the expense total to the vendor's total
                 $vendorTotals[$vendorId] += $expense->expense_total;
             }
-
-            // Now $vendorTotals array contains vendor-wise total expenses
-            // You can use it as needed in your application
-
-
-            //dd($vendorTotals);
+            
             $expenseTotal = $expenses->sum('expense_total');
-            $estimateImages = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
-            $estimateFiles = EstimateFile::where('estimate_id', $estimate->estimate_id)->get();
             $itemTemplates = ItemTemplates::get();
-            // $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->get();
-            $estimateItemTemplates = EstimateItemTemplates::where('estimate_id', $estimate->estimate_id)->get();
-            $estimateItemTemplateItems = [];
-            $profitCostTemplateItems = 0;
-            $profitFromTemplateItems = 0;
-            $budgetLabourFromTemplateItems = 0;
-            $budgetMaterialFromTemplateItems = 0;
-            $estimateItemTemplateItemsLabourQty = 0;
-            foreach ($estimateItemTemplates as $key => $itemTemplate) {
-                $templateItems = EstimateItemTemplateItems::where('est_template_id', $itemTemplate->est_template_id)->get();
 
-                // Extract item_qty from the template items
-                $itemQuantities = $templateItems->pluck('item_qty')->toArray();
-                $itemTotals = $templateItems->pluck('item_total')->toArray();
-
-                $labourTemplateItems = EstimateItemTemplateItems::where('est_template_id', $itemTemplate->est_template_id)->where('item_type', 'labour')->get();
-                $budgetLabourFromTemplateItems += $labourTemplateItems->sum('item_total');
-                $estimateItemTemplateItemsLabourQty += $labourTemplateItems->sum('item_qty');
-
-                $materialTemplateItems = EstimateItemTemplateItems::where('est_template_id', $itemTemplate->est_template_id)->where('item_type', 'material')->get();
-                $budgetMaterialFromTemplateItems += $materialTemplateItems->sum('item_total');
-
-                $profitFromTemplateItems += $templateItems->sum('item_total');
-                $profitCostTemplateItems += $templateItems->sum(function ($templateItem) {
-                    return $templateItem->item_cost * $templateItem->item_qty;
-                });
-
-                // Fetch all data for Items
-                $itemss = Items::whereIn('item_id', $templateItems->pluck('item_id')->toArray())->get(); // Replace 'Item' with your actual model name
-
-                // Combine item_qty and Items data in a new array
-                $combinedItems = [];
-                foreach ($itemss as $index => $item) {
-                    $combinedItems[] = [
-                        'est_template_item_id' => $templateItems[$index]->est_template_item_id,
-                        'item_qty' => $itemQuantities[$index],
-                        'item_total' => $itemTotals[$index],
-                        'item_id' => $item->item_id,
-                        'item_name' => $item->item_name,
-                        'item_type' => $item->item_type,
-                        'item_units' => $item->item_units,
-                        'item_cost' => $templateItems[$index]->item_cost,
-                        'item_price' => $templateItems[$index]->item_price,
-                        'labour_expense' => $templateItems[$index]->labour_expense,
-                        'material_expense' => $templateItems[$index]->material_expense,
-                        'item_description' => $templateItems[$index]->item_description,
-                        'item_note' => $templateItems[$index]->item_note,
-                    ];
-                }
-
-                // Add the combinedItems to the template items
-                $itemTemplate->estimateItemTemplateItems = $combinedItems;
-
-                // Add the modified itemTemplate to the result array
-                $estimateItemTemplateItems[] = $itemTemplate;
-            }
-            $profitHours += $estimateItemTemplateItemsLabourQty;
             $sumEstimateItems = EstimateItem::where('estimate_id', $id)->where('additional_item', '<>', 'yes')->get();
             $profitFromEstimateItems = $sumEstimateItems->sum('item_total');
 
@@ -3464,11 +3387,8 @@ class EstimateController extends Controller
                 return $itemm->item_cost * $itemm->item_qty;
             });
 
-            $profitCost = $profitCostEstimateItems + $profitCostTemplateItems;
-            $profitItems = $profitFromEstimateItems + $profitFromTemplateItems;
-
-            $budgetLabourFromEstimateItems  = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->where('additional_item', '<>', 'yes')->sum('item_total');
-            $budgetMaterialFromEstimateItems = EstimateItem::where('item_type', 'Material')->where('estimate_id', $id)->where('additional_item', '<>', 'yes')->sum('item_total');
+            $profitCost = $profitCostEstimateItems;
+            $profitItems = $profitFromEstimateItems;
 
             $budgetLabour = $profitItems;
             $budgetLabour = $budgetLabour * (1 - $company->company_labor_budget);
@@ -3490,9 +3410,8 @@ class EstimateController extends Controller
 
             // Calculate the sum of item_price for the estimate
             $totalPrice = $sumEstimateItems->sum('item_price');
-            // return response()->json(['estimateItemTemplates' => $estimateItemTemplates]);
+            
             return view('viewEstimates', [
-                'customer' => $customer,
                 'estimate' => $estimate,
                 'items' => $items,
                 'labour_items' => $labourItems,
@@ -3500,28 +3419,16 @@ class EstimateController extends Controller
                 'assembly_items' => $assemblyItems,
                 'estimate_items' => $estimateItems,
                 'estimate_assembly_items' => $estimateAssemblyItems,
-                'additional_contacts' => $additionalContacts,
                 'user_details' => $userDetails,
                 'item_total' => $totalPrice, // Pass the total price to the view
                 'employees' => $users,
                 'groups' => $groups,
-                'estimate_notes' => $estimateNotes,
                 'email_templates' => $emailTemplates,
-                'estimate_emails' => $estimateEmails,
-                'proposals' => $proposals,
-                'estimator' => $estimator,
-                'schedule' => $schedule,
-                'work' => $work,
-                'invoices' => $invoices,
                 'payments' => $payments,
                 'toDos' => $toDos,
                 'expenses' => $expenses,
-                'estimate_images' => $estimateImages,
-                'estimate_files' => $estimateFiles,
-                'invoice' => $invoice,
                 'itemsForAssemblies' => $itemsForAssemblies,
                 'item_templates' => $itemTemplates,
-                'estimateItemTemplates' => $estimateItemTemplates,
                 'profitHours' => $profitHours,
                 'profitCost' => $profitCost,
                 'mainProfit' => $mainProfit,
