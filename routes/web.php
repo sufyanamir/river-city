@@ -254,3 +254,5 @@ Route::post('/updatePassword', [UserController::class, 'updatePassword']);
 Route::post('/acceptRejectEstimateItems', [EstimateController::class, 'acceptRejectEstimateItems']);
 Route::get('/viewInvoice/{id}', [EstimateController::class, 'viewInvoice']);
 Route::get('/viewPayment/{id}', [EstimateController::class, 'viewPayment']);
+Route::get('/viewImages/{id}', [EstimageImagesController::class, 'viewImages']);
+Route::get('/download-images/{id}', [EstimageImagesController::class, 'downloadAll']);

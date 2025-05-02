@@ -19,7 +19,7 @@ $discountedTotal = null;
 $modalTotal = 0;
 
 @endphp
-<input type="hidden" id="hasPendingProposal" value="{{ $proposals->where('proposal_status', 'pending')->isNotEmpty() }}">
+<input type="hidden" id="hasPendingProposal" value="{{ $estimate->proposals->where('proposal_status', 'pending')->isNotEmpty() }}">
 <div class=" absolute bottom-10 right-10 z-30">
     <button type="button" id="addItem-menubutton" class=" rounded-full flex bg-white p-1 m-2">
         <div class=" bg-[#930027] rounded-full w-12 h-12">
@@ -65,22 +65,22 @@ $modalTotal = 0;
                 <div class="grid sm:grid-cols-10">
                     <div class="col-span-8 p-3">
                         <p class="text-[#F5222D] text-xl font-bold">
-                            <a href="/viewCustomerDetails/{{ $customer->customer_id }}" class="hover:text-[#F5222D]">
-                                {{ ucfirst($customer->customer_first_name) }} {{ ucfirst($customer->customer_last_name) }}
+                            <a href="/viewCustomerDetails/{{ $estimate->customer->customer_id }}" class="hover:text-[#F5222D]">
+                                {{ ucfirst($estimate->customer->customer_first_name) }} {{ ucfirst($estimate->customer->customer_last_name) }}
                             </a>
                         </p>
                         <p class="text-[#323C47] text-lg font-semibold">
-                            {{ $customer->customer_project_name }}
+                            {{ $estimate->customer->customer_project_name }}
                         </p>
                         <p class="mt-2 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/home-icon.svg') }}" alt="">
-                            <a href="https://maps.google.com/?q={{$customer->customer_primary_address}}{{ $customer->customer_city }}{{ $customer->customer_state }}{{ $customer->customer_zip_code }}" target="_blank" class=" text-[#930027]">
-                                <span class="pl-2">{{ $estimate->customer_address }}, {{ $customer->customer_city }}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</span>
+                            <a href="https://maps.google.com/?q={{$estimate->customer->customer_primary_address}}{{ $estimate->customer->customer_city }}{{ $estimate->customer->customer_state }}{{ $estimate->customer->customer_zip_code }}" target="_blank" class=" text-[#930027]">
+                                <span class="pl-2">{{ $estimate->customer_address }}, {{ $estimate->customer->customer_city }}, {{ $estimate->customer->customer_state }}, {{ $estimate->customer->customer_zip_code }}</span>
                             </a>
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/mail-icon.svg') }}" alt="">
-                            <span class="pl-2">{{ $customer->customer_email }}
+                            <span class="pl-2">{{ $estimate->customer->customer_email }}
                             </span>
                         </p>
                         <p class="mt-1 flex text-[#323C47]  font-medium">
@@ -105,7 +105,7 @@ $modalTotal = 0;
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
-                            <span class="pl-2">Internal Note: {{ $estimate->estimate_internal_note ?? $customer->company_internal_note }}
+                            <span class="pl-2">Internal Note: {{ $estimate->estimate_internal_note ?? $estimate->customer->company_internal_note }}
                             </span>
                         </p>
                         <hr class="bg-gray-300 my-2 w-full">
@@ -116,9 +116,9 @@ $modalTotal = 0;
                         </p>
                         {{-- <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/person-icon.svg') }}" alt="">
-                        <span class="pl-2 flex">{{ $customer->owner }} Assigned To Schedule Estimate On <span class="pl-2 text-[#31A613] flex">
+                        <span class="pl-2 flex">{{ $estimate->customer->owner }} Assigned To Schedule Estimate On <span class="pl-2 text-[#31A613] flex">
                                 <img class="pr-1" src="{{ asset('assets/icons/green-calendar.svg') }}" alt="">
-                                {{ $customer->created_at }}</span>
+                                {{ $estimate->customer->created_at }}</span>
                         </span>
                         </p> --}}
                     </div>
@@ -201,7 +201,7 @@ $modalTotal = 0;
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($additional_contacts as $contacts)
+                                @foreach ($estimate->estimateContacts as $contacts)
                                 <tr class="bg-white border-b">
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                         {{ $contacts->contact_title }}
@@ -354,7 +354,7 @@ $modalTotal = 0;
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($additional_contacts as $contacts)
+                                @foreach ($estimate->estimateContacts as $contacts)
                                 <tr class="bg-white border-b">
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                         {{ $contacts->contact_title }}
@@ -548,9 +548,9 @@ $modalTotal = 0;
                             @csrf
                             <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
                             <input type="hidden" name="total_amount" value="{{ $estimate->estimate_total }}">
-                            <input type="hidden" name="customer_first_name" value="{{$customer->customer_first_name}}">
-                            <input type="hidden" name="customer_last_name" value="{{$customer->customer_last_name}}">
-                            <input type="hidden" name="customer_email" value="{{$customer->customer_email}}">
+                            <input type="hidden" name="customer_first_name" value="{{$estimate->customer->customer_first_name}}">
+                            <input type="hidden" name="customer_last_name" value="{{$estimate->customer->customer_last_name}}">
+                            <input type="hidden" name="customer_email" value="{{$estimate->customer->customer_email}}">
                             <button id="" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                                 <div class=" flex mx-auto">
                                     <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
@@ -576,7 +576,7 @@ $modalTotal = 0;
                                 <span class="my-auto whitespace-nowrap">Copy proposal Link</span>
                             </div>
                         </button>
-                        @if(!isset($advancePayment) && isset($invoice) == null)
+                        @if(!isset($advancePayment) && isset($estimate->invoice) == null)
                         <button id="add-payment" class=" add-payment flex h-[40px] w-[190px] ml-2 p-2 py-auto text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#930027]">
                             <div class="flex mx-auto">
                                 <!-- <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt=""> -->
@@ -663,13 +663,13 @@ $modalTotal = 0;
                                 });
                             });
                         </script>
-                        <a href="https://maps.google.com/?q={{ $customer->customer_primary_address }}" target="_blank" class="pl-3">
+                        <a href="https://maps.google.com/?q={{ $estimate->customer->customer_primary_address }}" target="_blank" class="pl-3">
                             <button type="button" class="flex h-[40px] w-[190px] ml-2  px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#4088CD]" id="action-menubutton" aria-expanded="true" aria-haspopup="true">
                                 <span class=" my-auto">Location</span>
                                 <i class="fa-solid fa-location-dot my-auto mx-auto"></i>
                             </button>
                         </a>
-                            <button id="sendProposal-btn" type="button" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                            <button id="sendProposal-btn" type="button" class=" flex justify-start ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                                 <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
                                 <span class=" my-auto whitespace-nowrap">Send Proposal Again</span>
                             </button>
@@ -2413,41 +2413,6 @@ $userPrivileges->estimate->items === 'on')
                         $totalLaborPrice += $itemData['total']; // Add labor item price to total
                         @endphp
                         @endforeach
-                        @foreach ($estimateItemTemplates as $template)
-                        @foreach ($template->estimateItemTemplateItems as $item)
-                        @if ($item['item_type'] === 'labour')
-                        <tr class="bg-white border-b">
-                            <td class="px-6 py-4 w-[30%]">
-                                {{ $item['item_name'] }}
-                            </td>
-                            <td class="px-6 py-4 w-[30%]">
-                                <p class="text-[16px]/[18px] text-[#323C47] font">
-                                    @if ($item['item_description'])
-                                <p class="font-medium">Description:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}
-                                @endif
-                                @if ($item['item_note'])
-                                <p class="font-medium">Note:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_note']) !!}
-                                @endif
-                                </p>
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($item['item_price'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                {{ number_format($item['item_qty'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($item['item_total'], 2) }}
-                            </td>
-                        </tr>
-                        @php
-                        $totalLaborPrice += $item['item_total']; // Add labor item price to total
-                        @endphp
-                        @endif
-                        @endforeach
-                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -2593,41 +2558,6 @@ $userPrivileges->estimate->items === 'on')
                         $totalLaborPrice += $itemData['total']; // Add labor item price to total
                         @endphp
                         @endforeach
-                        @foreach ($estimateItemTemplates as $template)
-                        @foreach ($template->estimateItemTemplateItems as $item)
-                        @if ($item['item_type'] === 'labour')
-                        <tr class="bg-white border-b">
-                            <td class="px-6 py-4 w-[30%]">
-                                {{ $item['item_name'] }}
-                            </td>
-                            <td class="px-6 py-4 w-[30%]">
-                                <p class="text-[16px]/[18px] text-[#323C47] font">
-                                    @if ($item['item_description'])
-                                <p class="font-medium">Description:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}
-                                @endif
-                                @if ($item['item_note'])
-                                <p class="font-medium">Note:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_note']) !!}
-                                @endif
-                                </p>
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($item['item_price'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                {{ number_format($item['item_qty'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($item['item_total'], 2) }}
-                            </td>
-                        </tr>
-                        @php
-                        $totalLaborPrice += $item['item_total']; // Add labor item price to total
-                        @endphp
-                        @endif
-                        @endforeach
-                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -2770,40 +2700,6 @@ $userPrivileges->estimate->items === 'on')
                         $totalMaterialPrice += $itemData['total']; // Add material item price to total
                         @endphp
                         @endforeach
-                        @foreach ($estimateItemTemplates as $template)
-                        @foreach ($template->estimateItemTemplateItems as $item)
-                        @if ($item['item_type'] === 'material')
-                        <tr class="bg-white border-b">
-                            <td class="px-6 py-4 w-[60%]">
-                                {{ $item['item_name'] }}
-                                <p class="text-[16px]/[18px] text-[#323C47] font">
-                                    @if ($item['item_description'])
-                                <p class="font-medium">Description:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}
-                                @endif
-                                @if ($item['item_note'])
-                                <p class="font-medium">Note:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_note']) !!}
-                                @endif
-                                </p>
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($item['item_price'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                {{ number_format($item['item_qty'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($item['item_total'], 2) }}
-                            </td>
-                        </tr>
-                        @php
-                        $totalMaterialPrice += $item['item_total']; // Add labor item price to total
-                        @endphp
-                        @endif
-                        @endforeach
-                        @endforeach
-
                     </tbody>
                 </table>
             </div>
@@ -2947,40 +2843,6 @@ $userPrivileges->estimate->items === 'on')
                         $totalMaterialPrice += $itemData['total']; // Add material item price to total
                         @endphp
                         @endforeach
-                        @foreach ($estimateItemTemplates as $template)
-                        @foreach ($template->estimateItemTemplateItems as $item)
-                        @if ($item['item_type'] === 'material')
-                        <tr class="bg-white border-b">
-                            <td class="px-6 py-4 w-[60%]">
-                                {{ $item['item_name'] }}
-                                <p class="text-[16px]/[18px] text-[#323C47] font">
-                                    @if ($item['item_description'])
-                                <p class="font-medium">Description:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}
-                                @endif
-                                @if ($item['item_note'])
-                                <p class="font-medium">Note:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_note']) !!}
-                                @endif
-                                </p>
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($item['item_price'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                {{ number_format($item['item_qty'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($item['item_total'], 2) }}
-                            </td>
-                        </tr>
-                        @php
-                        $totalMaterialPrice += $item['item_total']; // Add labor item price to total
-                        @endphp
-                        @endif
-                        @endforeach
-                        @endforeach
-
                     </tbody>
                 </table>
             </div>
@@ -3282,7 +3144,7 @@ $userPrivileges->estimate->items === 'on')
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($estimate_files as $file)
+                    @foreach ($estimate->estimateFiles as $file)
                     <tr class="bg-white border-b">
                         <td class="px-6 py-4">
                             <a href="{{ asset('storage/' . $file->estimate_file) }}" class=" text-[#930027] hover:border-b border-[#930027]" target="_blank">
@@ -3332,7 +3194,7 @@ $userPrivileges->estimate->files === 'on')
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($estimate_files as $file)
+                    @foreach ($estimate->estimateFiles as $file)
                     <tr class="bg-white border-b">
                         <td class="px-6 py-4">
                             <a href="{{ asset('storage/' . $file->estimate_file) }}" class=" text-[#930027] hover:border-b border-[#930027]" target="_blank">
@@ -3371,7 +3233,7 @@ $userPrivileges->estimate->files === 'on')
     </div>
     <div class=" mx-auto  px-5 py-7">
         <div class="itemDiv">
-            @foreach ($estimate_images as $image)
+            @foreach ($estimate->images as $image)
             <div class=" relative inline-block">
                 <div class="absolute z-50 right-1 top-1">
                     <form method="post" action="/addAsAttachment">
@@ -3412,7 +3274,7 @@ $userPrivileges->estimate->photos === 'on')
     </div>
     <div class=" mx-auto  px-5 py-7">
         <div class="itemDiv">
-            @foreach ($estimate_images as $image)
+            @foreach ($estimate->images as $image)
             <a href="/viewGallery{{ $image->estimate_id }}">
                 <div class=" inline-block p-2 mx-auto">
                     <img class=" w-16 h-16 rounded-md hover:scale-105 duration-300" src="{{ asset('storage/' . $image->estimate_image) }}" alt="Estimate Image">
@@ -3465,10 +3327,10 @@ $userPrivileges->estimate->photos === 'on')
                     </thead>
                     <tbody>
                         @php
-                        $totalProposals = count($proposals);
+                        $totalProposals = count($estimate->proposals);
                         $currentIndex = 0;
                         @endphp
-                        @foreach ($proposals as $proposal)
+                        @foreach ($estimate->proposals as $proposal)
                         @php
                         $currentIndex++;
                         @endphp
@@ -3571,10 +3433,10 @@ $userPrivileges->estimate->proposals === 'on')
                     </thead>
                     <tbody>
                         @php
-                        $totalProposals = count($proposals);
+                        $totalProposals = count($estimate->proposals);
                         $currentIndex = 0;
                         @endphp
-                        @foreach ($proposals as $proposal)
+                        @foreach ($estimate->proposals as $proposal)
                         @php
                         $currentIndex++;
                         @endphp
@@ -3663,7 +3525,7 @@ $userPrivileges->estimate->proposals === 'on')
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($estimate_notes as $note)
+                            @foreach ($estimate->notes as $note)
                             <tr class="bg-white border-b">
                                 <td class="px-6 py-4">
                                     {{ $note->estimate_note }}
@@ -3781,7 +3643,7 @@ $userPrivileges->estimate->notes === 'on')
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($estimate_notes as $note)
+                            @foreach ($estimate->notes as $note)
                             <tr class="bg-white border-b">
                                 <td class="px-6 py-4">
                                     {{ $note->estimate_note }}
@@ -3905,7 +3767,7 @@ $userPrivileges->estimate->notes === 'on')
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($estimate_emails as $email)
+                        @foreach ($estimate->estimateEmails as $email)
                         <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ date('m/d/y', strtotime($email->created_at)) }}
@@ -3968,7 +3830,7 @@ $userPrivileges->estimate->emails === 'on')
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($estimate_emails as $email)
+                        @foreach ($estimate->estimateEmails as $email)
                         <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ date('m/d/y', strtotime($email->created_at)) }}
@@ -4211,7 +4073,7 @@ $userPrivileges->estimate->todos === 'on')
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($invoices as $invoices)
+                        @foreach ($estimate->invoices as $invoices)
                         <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ date('m/d/y', strtotime($invoices->complete_invoice_date)) }}
@@ -4922,14 +4784,14 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- Display email details here -->
                     <div class=" grid grid-cols-2 gap-4 my-2">
                         <input type="hidden" name="email_id" id="email_id">
-                        <input type="hidden" name="customer_id" value="{{$customer->customer_id}}">
+                        <input type="hidden" name="customer_id" value="{{$estimate->customer->customer_id}}">
                         <div>
                             <label for="email_title">Email title:</label>
                             <input type="text" name="email_name" id="email_name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div>
                             <label for="email_to">Email to:</label>
-                            <input type="text" name="email_to" id="email_to" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $customer->customer_email }}">
+                            <input type="text" name="email_to" id="email_to" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $estimate->customer->customer_email }}">
                         </div>
                         <div class=" col-span-2">
                             <label for="email_subject">Email Subject:</label>
@@ -5284,7 +5146,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- Modal content here -->
                     <div class=" flex justify-between">
                         <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">
-                            {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
+                            {{ $estimate->customer->customer_first_name }} {{ $estimate->customer->customer_last_name }}
                         </h2>
                         <button class="modal-close" type="button">
                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
@@ -5293,18 +5155,18 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- task details -->
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_primary_address }},
-                            {{ $customer->customer_city }}, {{ $customer->customer_state }},
-                            {{ $customer->customer_zip_code }}
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_primary_address }},
+                            {{ $estimate->customer->customer_city }}, {{ $estimate->customer->customer_state }},
+                            {{ $estimate->customer->customer_zip_code }}
                         </p>
                     </div>
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_email }}</p>
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_email }}</p>
                     </div>
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_phone }}</p>
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_phone }}</p>
                     </div>
                     <div>
                         <div id="estimators" class="">
@@ -5367,7 +5229,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- Modal content here -->
                     <div class=" flex justify-between">
                         <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">
-                            {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
+                            {{ $estimate->customer->customer_first_name }} {{ $estimate->customer->customer_last_name }}
                         </h2>
                         <button class="modal-close" type="button">
                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
@@ -5376,18 +5238,18 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- task details -->
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_primary_address }},
-                            {{ $customer->customer_city }}, {{ $customer->customer_state }},
-                            {{ $customer->customer_zip_code }}
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_primary_address }},
+                            {{ $estimate->customer->customer_city }}, {{ $estimate->customer->customer_state }},
+                            {{ $estimate->customer->customer_zip_code }}
                         </p>
                     </div>
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_email }}</p>
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_email }}</p>
                     </div>
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_phone }}</p>
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_phone }}</p>
                     </div>
                     <div>
                         <div id="estimators" class="">
@@ -5460,7 +5322,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- Modal content here -->
                     <div class=" flex justify-between">
                         <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">
-                            {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
+                            {{ $estimate->customer->customer_first_name }} {{ $estimate->customer->customer_last_name }}
                         </h2>
                         <button class="modal-close" type="button">
                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
@@ -5469,9 +5331,9 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- task details -->
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_primary_address }},
-                            {{ $customer->customer_city }}, {{ $customer->customer_state }},
-                            {{ $customer->customer_zip_code }}
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_primary_address }},
+                            {{ $estimate->customer->customer_city }}, {{ $estimate->customer->customer_state }},
+                            {{ $estimate->customer->customer_zip_code }}
                         </p>
                     </div>
                     <div class=" mb-2">
@@ -5548,7 +5410,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- Modal content here -->
                     <div class=" flex justify-between">
                         <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">
-                            {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
+                            {{ $estimate->customer->customer_first_name }} {{ $estimate->customer->customer_last_name }}
                         </h2>
                         <button class="modal-close" type="button">
                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
@@ -5557,9 +5419,9 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- task details -->
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_primary_address }},
-                            {{ $customer->customer_city }}, {{ $customer->customer_state }},
-                            {{ $customer->customer_zip_code }}
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_primary_address }},
+                            {{ $estimate->customer->customer_city }}, {{ $estimate->customer->customer_state }},
+                            {{ $estimate->customer->customer_zip_code }}
                         </p>
                     </div>
                     <div class=" mb-2">
@@ -5762,7 +5624,7 @@ $userPrivileges->estimate->expenses === 'on')
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <form action="/addPayment" method="post" id="complete-payment-form">
                 @csrf
-                @if (isset($invoice->invoice_status) && $invoice->invoice_status == 'unpaid')
+                @if (isset($estimate->invoice->invoice_status) && $estimate->invoice->invoice_status == 'unpaid')
                 <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
                 <input type="hidden" name="po_number" id="po_number" value="{{ $estimate->po_number }}">
                 <input type="hidden" name="payment_id" id="payment_id">
@@ -5779,8 +5641,8 @@ $userPrivileges->estimate->expenses === 'on')
                     <div class=" mb-2">
                         <div id="dropdown-div" class="">
                             <p class=" font-medium items-center">Invoice:</p>
-                            <input type="text" id="invoice" name="invoice" value="{{ $invoice->invoice_name }} (Due {{ $invoice->invoice_due }})" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                            <input type="hidden" name="invoice_id" value="{{ $invoice->estimate_complete_invoice_id }}">
+                            <input type="text" id="invoice" name="invoice" value="{{ $estimate->invoice->invoice_name }} (Due {{ $estimate->invoice->invoice_due }})" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <input type="hidden" name="invoice_id" value="{{ $estimate->invoice->estimate_complete_invoice_id }}">
                             <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
                                 <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
                             </button> -->
@@ -5796,11 +5658,11 @@ $userPrivileges->estimate->expenses === 'on')
                     <div class=" grid grid-cols-2 gap-3">
                         <div>
                             <label for="">Date:</label>
-                            <input type="date" id="invoice_date" name="invoice_date" value="{{ date('Y-m-d', strtotime($invoice->complete_invoice_date)) }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <input type="date" id="invoice_date" name="invoice_date" value="{{ date('Y-m-d', strtotime($estimate->invoice->complete_invoice_date)) }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                         </div>
                         <div>
                             <label for="">Amount:</label>
-                            <input type="text" id="invoice_amount" name="invoice_amount" value="{{ $invoice->invoice_due }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <input type="text" id="invoice_amount" name="invoice_amount" value="{{ $estimate->invoice->invoice_due }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                         </div>
                     </div>
                     <div class="my-2 col-span-2 relative">
@@ -5905,7 +5767,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- Modal content here -->
                     <div class=" flex justify-between">
                         <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">
-                            {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
+                            {{ $estimate->customer->customer_first_name }} {{ $estimate->customer->customer_last_name }}
                         </h2>
                         <button class="modal-close" type="button">
                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
@@ -5914,18 +5776,18 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- task details -->
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_primary_address }},
-                            {{ $customer->customer_city }}, {{ $customer->customer_state }},
-                            {{ $customer->customer_zip_code }}
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_primary_address }},
+                            {{ $estimate->customer->customer_city }}, {{ $estimate->customer->customer_state }},
+                            {{ $estimate->customer->customer_zip_code }}
                         </p>
                     </div>
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_email }}</p>
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_email }}</p>
                     </div>
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_phone }}</p>
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_phone }}</p>
                     </div>
                     <div>
                         <div id="estimators" class="">
@@ -6338,7 +6200,7 @@ $userPrivileges->estimate->expenses === 'on')
                                 </div>
                                 <div>
                                     <label for="email_to">Email to:</label>
-                                    <input type="text" name="email_to" id="email_to" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $customer->customer_email }}">
+                                    <input type="text" name="email_to" id="email_to" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $estimate->customer->customer_email }}">
                                     <p class="text-[#930027] text-xs">Please use "," to send mail to multiple persons.</p>
                                 </div>
                                 <div class=" col-span-2">
@@ -6347,7 +6209,7 @@ $userPrivileges->estimate->expenses === 'on')
                                 </div>
                                 <div class=" col-span-2">
                                     <label for="email_body">Email body:</label>
-                                    <textarea name="email_body" id="email_body" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" rows="10">Hi {{ ucfirst($customer->customer_first_name)}} {{ ucfirst($customer->customer_last_name)}}!
+                                    <textarea name="email_body" id="email_body" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" rows="10">Hi {{ ucfirst($estimate->customer->customer_first_name)}} {{ ucfirst($estimate->customer->customer_last_name)}}!
     Thank you for the opportunity to provide you with an estimate.</textarea>
                                 </div>
                             </div>

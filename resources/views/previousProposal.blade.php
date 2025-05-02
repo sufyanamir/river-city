@@ -85,7 +85,7 @@
                 <div class="grid grid-cols-12 p-5">
                     <div class="col-span-6 px-4 ">
                         <div class="projectLogo ">
-                            <img class="w-[35%] h-[35%]" src="{{ asset('assets/icons/tproject-logo.svg') }}" alt="">
+                            <img class="w-[50%] h-[40%]" src="{{ asset('assets/icons/tproject-logo.svg') }}" alt="">
                         </div>
                         <div class="px-4">
                             <p class="text-[16px] font-bold text-[#323C47]">River City Painting, Inc</p>
@@ -905,29 +905,56 @@
     // Define PDF options
     var opt = {
         margin: 0.5,
-        filename: 'Estimate_{{ $estimate['customer_name'] }}_{{$estimate['customer_last_name']}}.pdf',
+        filename: 'Estimate_{{ $estimate["customer_name"] }}_{{ $estimate["customer_last_name"] }}.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 1.5 },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-        pagebreak: { mode: ['css'] } // Prevents text splitting across pages
+        pagebreak: { mode: ['css'] }
     };
 
-    // Apply styles to hide unwanted elements and format content
+    // Optional: Add styles if needed
     var style = document.createElement('style');
     // style.innerHTML = `
-    //         #send-button { display: none !important; }
-    //         #footer { display: none !important; }
-    //         #editor { display: none !important; }
-    //         // #editor-div { display: none !important; }
-    //         * { font-size: 16px; margin: 0; padding: 0; line-height: 1.2; }
-    //         body, html { width: 100%; height: auto; }
-    //         div, p, span, table, td, tr, th { page-break-inside: avoid !important; } /* Prevents page splitting */
-    //     `;
+    //     /* Optional PDF styles */
+    //     #send-button, #footer, #editor, #editor-div {
+    //         display: none !important;
+    //     }
+    //     * {
+    //         font-size: 16px;
+    //         margin: 0;
+    //         padding: 0;
+    //         line-height: 1.2;
+    //     }
+    //     body, html {
+    //         width: 100%;
+    //         height: auto;
+    //     }
+    //     div, p, span, table, td, tr, th {
+    //         page-break-inside: avoid !important;
+    //     }
+    // `;
     document.head.appendChild(style);
 
-    // Generate and save the PDF
-    html2pdf().set(opt).from(element).save();
+    // Generate PDF and add page numbers
+    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+        var totalPages = pdf.internal.getNumberOfPages();
+        var pageWidth = pdf.internal.pageSize.getWidth();
+        var pageHeight = pdf.internal.pageSize.getHeight();
+
+        for (var i = 1; i <= totalPages; i++) {
+            pdf.setPage(i);
+            pdf.setFontSize(10);
+            pdf.setTextColor(150);
+            pdf.text(
+                'Page ' + i + ' of ' + totalPages,
+                pageWidth / 2,
+                pageHeight - 0.3,
+                { align: 'center' }
+            );
+        }
+    }).save();
 }
+
 
 
 </script>

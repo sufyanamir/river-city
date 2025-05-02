@@ -1,6 +1,7 @@
 @include('layouts.header')
 @php
 $userPrivileges = session('user_details')['user_privileges'];
+$userRole = session('user_details')['user_role'];
 @endphp
 <div class=" my-4">
     <div class=" bg-white w-full rounded-2xl shadow-lg">
@@ -13,11 +14,11 @@ $userPrivileges = session('user_details')['user_privileges'];
                 <a href="/estimates?status=complete"><x-add-button :title="'Completed'" :class="''" :id="''"></x-add-button></a>
                 <a href="/estimates?status=paid"><x-add-button :title="'Paid'" :class="''" :id="''"></x-add-button></a>
                 <a href="/estimates?status=cancel"><x-add-button :title="'Cancel'" :class="''" :id="''"></x-add-button></a>
-                @if($user_details['user_role'] == 'scheduler')
+                @if($userRole == 'scheduler')
                 <a href="/estimates"><x-add-button :title="'View All'" :class="''" :id="''"></x-add-button></a>
                 <a href="{{ route('estimates', ['type' => 'assigned']) }}"><x-add-button :title="'View Assigned'" :class="''" :id="''"></x-add-button></a>
                 @endif
-                @if ($user_details['user_role'] == 'admin')
+                @if ($userRole == 'admin')
                 <x-add-button :title="'+ Add Estimates'" :class="'addEstimate'" :id="''"></x-add-button>
                 @endif
                 @if (isset($userPrivileges->estimate) && isset($userPrivileges->estimate->add) && $userPrivileges->estimate->add === 'on')
