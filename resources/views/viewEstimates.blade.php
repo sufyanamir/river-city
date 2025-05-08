@@ -3346,10 +3346,10 @@ $userPrivileges->estimate->photos === 'on')
                                     @endif
                             </td>
                             <td class="px-6 py-4">
-                                {{ $proposal->proposal_total }}
+                                {{ number_format($proposal->proposal_total, 2) }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $proposal->proposal_accepted }}
+                                {{ number_format($proposal->proposal_accepted, 2) }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $proposal->proposal_status }}
