@@ -95,6 +95,11 @@ $modalTotal = 0;
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
+                            <span class="pl-2">Branch: {{ $estimate->customer->branch }}
+                            </span>
+                        </p>
+                        <p class="mt-1 flex text-[#323C47] font-medium">
+                            <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
                             <span class="pl-2">Project Type: {{ $estimate->project_type }}
                             </span>
                         </p>
@@ -3365,15 +3370,12 @@ $userPrivileges->estimate->photos === 'on')
                                         </button>
                                     </a>
                                     @endif
-                                    @php
-                                    $totalPrice = $estimate_items->where('item_status', 'included')->sum('item_total');
-                                    @endphp
                                     @if($proposal->proposal_status == 'pending')
                                     <form action="/acceptProposal/{{ $estimate->estimate_id }}" method="post">
                                         @csrf
                                         <input type="hidden" name="proposal_id" value="{{ $proposal->estimate_proposal_id }}">
                                         <input type="hidden" name="proposal_group_id" value="{{ $proposal->group_id }}">
-                                        <input type="hidden" name="estimate_total" value="{{ $totalPrice + ($totalPrice * $estimate->tax_rate) / 100 }}">
+                                        <input type="hidden" name="estimate_total" value="{{ $proposal->proposal_total + ($proposal->proposal_total * $estimate->tax_rate) / 100 }}">
                                         <button class="px-2 py-2" title="Accept without signature">
                                             <i class="fa-solid fa-clipboard-check" style="color: #930027; font-size: 25px;"></i>
                                         </button>
@@ -3452,10 +3454,10 @@ $userPrivileges->estimate->proposals === 'on')
                                     @endif
                             </td>
                             <td class="px-6 py-4">
-                                {{ $proposal->proposal_total }}
+                                {{ number_format($proposal->proposal_total, 2) }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $proposal->proposal_accepted }}
+                                {{ number_format($proposal->proposal_accepted, 2) }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $proposal->proposal_status }}
@@ -3471,15 +3473,12 @@ $userPrivileges->estimate->proposals === 'on')
                                         </button>
                                     </a>
                                     @endif
-                                    @php
-                                    $totalPrice = $estimate_items->where('item_status', 'included')->sum('item_total');
-                                    @endphp
                                     @if($proposal->proposal_status == 'pending')
                                     <form action="/acceptProposal/{{ $estimate->estimate_id }}" method="post">
                                         @csrf
                                         <input type="hidden" name="proposal_id" value="{{ $proposal->estimate_proposal_id }}">
                                         <input type="hidden" name="proposal_group_id" value="{{ $proposal->group_id }}">
-                                        <input type="hidden" name="estimate_total" value="{{ $totalPrice + ($totalPrice * $estimate->tax_rate) / 100 }}">
+                                        <input type="hidden" name="estimate_total" value="{{ $proposal->proposal_total + ($proposal->proposal_total * $estimate->tax_rate) / 100 }}">
                                         <button class="px-2 py-2" title="Accept without signature">
                                             <i class="fa-solid fa-clipboard-check" style="color: #930027; font-size: 25px;"></i>
                                         </button>
@@ -6300,7 +6299,7 @@ $userPrivileges->estimate->expenses === 'on')
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Tax</h5>
                             <input type="number" step="any" name="tax_rate" id="customer_tax_rate" placeholder="Tax Rate (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2">
+                        {{-- <div class=" col-span-2">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Owner</h5>
                             <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="owner" id="customer_owner">
                                 <option>Select User</option>
@@ -6310,7 +6309,7 @@ $userPrivileges->estimate->expenses === 'on')
                                 </option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> --}}
                         <div class=" col-span-4">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Internal Note</h5>
                             <input type="text" class="mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="internal_note" id="internal_note" value="{{ $estimate->estimate_internal_note }}" placeholder="Internal Note">

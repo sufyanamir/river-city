@@ -135,17 +135,34 @@
 </div>
 @include('layouts.footer')
 <script>
-    // Your existing JavaScript code
-        // Your list of users with names and ids
-const users = {!! json_encode($users->pluck('name', 'id')) !!};
+// Corrected JavaScript code
+// Get the users data with proper structure
+const users = {!! json_encode($users->map(function($user) {
+    return [
+        'id' => $user->id,
+        'name' => $user->name,
+        'user_role' => $user->user_role
+    ];
+})) !!};
+
+// Function to scroll to the bottom of the chat
+function scrollToBottom() {
+    const chatDialog = document.getElementById('chat-dialog');
+    const chatContainer = chatDialog.closest('.overflow-auto');
+    if (chatContainer) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+}
+
+// Scroll to bottom when page loads
+$(document).ready(function() {
+    scrollToBottom();
+});
 
 // Get the textarea, user dropdown, and hidden input elements
 const messageTextarea = $("#message");
 const userDropdown = $("#userDropdown");
 const userIdInput = $("#mentioned_user_ids");
-
-// Append the hidden input to the form
-// $("#chat-form").append(userIdInput);
 
 // Track mentioned user ids
 let mentionedUserIds = [];
@@ -157,10 +174,9 @@ messageTextarea.on("input", function(event) {
 
     if (lastIndex !== -1) {
         const query = text.substring(lastIndex + 1);
-        const matchingUsers = Object.entries(users)
-            .filter(([id, name]) =>
-                name.toLowerCase().includes(query.toLowerCase())
-            );
+        const matchingUsers = users.filter(user => 
+            user.name.toLowerCase().includes(query.toLowerCase())
+        );
 
         // Display matching users in the dropdown
         renderDropdown(matchingUsers);
@@ -173,8 +189,8 @@ messageTextarea.on("input", function(event) {
 // Function to render the user dropdown
 function renderDropdown(users) {
     if (users.length > 0) {
-        const dropdownContent = users.map(([id, name]) => `
-            <button type="button" onclick="mentionUser('${name}', '${id}')">${name}</button>
+        const dropdownContent = users.map(user => `
+            <button type="button" onclick="mentionUser('${user.name}', '${user.id}', '${user.user_role}')">${user.name} (${user.user_role})</button>
         `).join("");
 
         userDropdown.html(dropdownContent).show();
@@ -184,10 +200,10 @@ function renderDropdown(users) {
 }
 
 // Function to handle user selection from the dropdown
-function mentionUser(userName, userId) {
+function mentionUser(userName, userId, userRole) {
     const currentText = messageTextarea.val();
     const lastIndex = currentText.lastIndexOf("@");
-    const newText = currentText.substring(0, lastIndex) + `@${userName} `;
+    const newText = currentText.substring(0, lastIndex) + `@${userName} (${userRole}) `;
 
     messageTextarea.val(newText);
 
@@ -205,6 +221,11 @@ $(document).on("click", function(event) {
     if (!$(event.target).closest("#userDropdown").length && !$(event.target).is("#message")) {
         userDropdown.hide();
     }
+});
+
+// Enable submit button when message has content
+messageTextarea.on("input", function() {
+    $("#chatSubmit").prop("disabled", !$(this).val().trim());
 });
 
 </script>

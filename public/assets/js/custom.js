@@ -68,6 +68,7 @@ $(document).ready(function () {
             $('#imageAudioPlayback').hide();
             document.getElementById('messageSound').play();
             loadLatestMessages();
+            scrollToBottom();
             topbar.hide();
           } else {
             setInterval(location.reload(), 5000);
@@ -104,7 +105,10 @@ $(document).ready(function () {
           let oldMessages = $('#chat-dialog').html();
           if (oldMessages != response.messages) {
             $('#chat-dialog').html(response.messages);
-            // scrollToBottom();
+            // Call the scrollToBottom function after updating messages
+            if (typeof scrollToBottom == 'function') {
+              scrollToBottom();
+            }
 
             // Play message received sound
             // document.getElementById('messageSound').play();
@@ -115,8 +119,11 @@ $(document).ready(function () {
   }
   // Scroll chat to the bottom automatically
   function scrollToBottom() {
-    var chatDiv = $('.overflow-auto');
-    chatDiv.scrollTop(chatDiv[0].scrollHeight);
+    var chatDialog = document.getElementById('chat-dialog');
+    var chatContainer = chatDialog.closest('.overflow-auto');
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
   }
 
   setInterval(function () {

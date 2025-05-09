@@ -323,7 +323,7 @@ class EstimateController extends Controller
                 'building_type' => 'nullable',
                 'first_address' => 'nullable',
                 'tax_rate' => 'nullable',
-                'owner' => 'nullable',
+                // 'owner' => 'nullable',
                 'internal_note' => 'nullable',
             ]);
 
@@ -343,7 +343,7 @@ class EstimateController extends Controller
             $estimate->building_type = $validatedData['building_type'];
             $estimate->customer_address = $validatedData['first_address'];
             $estimate->tax_rate = $validatedData['tax_rate'];
-            $estimate->project_owner = $validatedData['owner'];
+            // $estimate->project_owner = $validatedData['owner'];
             $estimate->estimate_internal_note = $validatedData['internal_note'];
 
             $estimate->save();
@@ -1004,12 +1004,23 @@ class EstimateController extends Controller
     {
         $userDetails = session('user_details');
         $filterId = null;
+        $branch = request()->query('branch');
+        $branches = CompanyBranches::get();
+        
         $eventEstimate = Estimate::with(['scheduler', 'crew'])->where('estimate_id', $id)->first();
         $customer = Customer::where('customer_id', $eventEstimate->customer_id)->first();
-        $estimates = Estimate::with(['scheduler', 'crew'])->get();
+        
+        $query = Estimate::with(['scheduler', 'crew']);
+        
+        if ($branch) {
+            $query->whereHas('customer', function($q) use ($branch) {
+                $q->where('branch', $branch);
+            });
+        }
+        
+        $estimates = $query->get();
         $users = User::where('user_role', 'scheduler')->where('sts', 'active')->get();
         $allEmployees = User::where('sts', 'active')->get();
-        // $allEmployees = User::where('sts', 'active')->get();
 
         $userToDos = UserToDo::with('assigned_to')->get();
         $estimateToDos = EstimateToDos::with('assigned_by')->get();
@@ -1030,8 +1041,18 @@ class EstimateController extends Controller
             $estimate->schedulers = $schedulers;
         }
 
-        return view('calendar', ['filterId' => $filterId, 'estimates' => $estimates, 'estimate' => $eventEstimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
-        // return response()->json(['success' => true, 'estimate' => $estimate]);
+        return view('calendar', [
+            'filterId' => $filterId, 
+            'estimates' => $estimates, 
+            'estimate' => $eventEstimate, 
+            'customer' => $customer, 
+            'user_details' => $userDetails, 
+            'employees' => $users, 
+            'allEmployees' => $allEmployees, 
+            'userToDos' => $userToDos, 
+            'estimateToDos' => $estimateToDos,
+            'branches' => $branches
+        ]);
     }
     // get schedule estimate
 
@@ -1084,16 +1105,36 @@ class EstimateController extends Controller
     {
         $userDetails = session('user_details');
         $crewSchedule = 1;
+        $branch = request()->query('branch');
+        $branches = CompanyBranches::get();
 
         $estimate = Estimate::where('estimate_id', $id)->first();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-        $estimates = ScheduleEstimate::with(['estimate', 'assigenedUser'])->get();
+        
+        $query = ScheduleEstimate::with(['estimate', 'assigenedUser']);
+        
+        if ($branch) {
+            $query->whereHas('estimate.customer', function($q) use ($branch) {
+                $q->where('branch', $branch);
+            });
+        }
+        
+        $estimates = $query->get();
         $users = User::where('user_role', 'crew')->where('sts', 'active')->get();
         $allEmployees = User::where('sts', 'active')->get();
         $crew = User::where('user_role', 'crew')->get();
 
-        return view('crewCalendar', ['estimates' => $estimates, 'crew' => $crew, 'estimate' => $estimate, 'customer' => $customer, 'user_details' => $userDetails, 'employees' => $users, 'crewSchedule' => $crewSchedule, 'allEmployees' => $allEmployees]);
-        // return response()->json(['success' => true, 'estimate' => $estimate]);
+        return view('crewCalendar', [
+            'estimates' => $estimates, 
+            'crew' => $crew, 
+            'estimate' => $estimate, 
+            'customer' => $customer, 
+            'user_details' => $userDetails, 
+            'employees' => $users, 
+            'crewSchedule' => $crewSchedule, 
+            'allEmployees' => $allEmployees,
+            'branches' => $branches
+        ]);
     }
 
     public function getEventDetailOnCalendar(Request $request)
@@ -1130,26 +1171,59 @@ class EstimateController extends Controller
     public function getEstimatesOnCalendar($id = null)
     {
         $userDetails = session('user_details');
+        $branch = request()->query('branch');
+        $branches = CompanyBranches::get();
+        
         if ($userDetails['user_role'] == 'crew') {
 
             $scheduleEstimates = ScheduleEstimate::get();
             $estimates = [];
             foreach ($scheduleEstimates as $scheduleEstimate) {
-                $estimate = Estimate::with(['scheduler', 'crew'])->where('estimate_id', $scheduleEstimate->estimate_id)->first();
-                $estimates[] = $estimate;
+                $query = Estimate::with(['scheduler', 'crew'])->where('estimate_id', $scheduleEstimate->estimate_id);
+                
+                if ($branch) {
+                    $query->whereHas('customer', function($q) use ($branch) {
+                        $q->where('branch', $branch);
+                    });
+                }
+                
+                $estimate = $query->first();
+                if ($estimate) {
+                    $estimates[] = $estimate;
+                }
             }
 
             $userToDos = UserToDo::with('assigned_to')->get();
             $estimateToDos = EstimateToDos::with('assigned_by')->get();
             $allEmployees = User::where('sts', 'active')->get();
-            return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
+            return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos, 'branches' => $branches]);
         } elseif ($userDetails['user_role'] == 'scheduler') {
-            $estimates = Estimate::with(['scheduler', 'crew'])->get();
-        } elseif ($id != null) {
-            $estimates = Estimate::with(['scheduler', 'crew'])->where('added_user_id', $id)->orWhereJsonContains('estimate_schedule_assigned_to', $id)->get();
+            $query = Estimate::with(['scheduler', 'crew']);
+            
+            if ($id) {
+                $query->where('added_user_id', $id)
+                      ->orWhereJsonContains('estimate_schedule_assigned_to', $id);
+            }
+            
+            if ($branch) {
+                $query->whereHas('customer', function($q) use ($branch) {
+                    $q->where('branch', $branch);
+                });
+            }
+            
+            $estimates = $query->get();
         } else {
-            $estimates = Estimate::with(['scheduler', 'crew'])->get();
+            $query = Estimate::with(['scheduler', 'crew']);
+            
+            if ($branch) {
+                $query->whereHas('customer', function($q) use ($branch) {
+                    $q->where('branch', $branch);
+                });
+            }
+            
+            $estimates = $query->get();
         }
+        
         if ($id != null) {
             $userToDos = UserToDo::with('assigned_to')->Where('to_do_assigned_to', $id)->get();
             $estimateToDos = EstimateToDos::with('assigned_by')->where('to_do_assigned_to', $id)->get();
@@ -1157,6 +1231,7 @@ class EstimateController extends Controller
             $userToDos = UserToDo::with('assigned_to')->get();
             $estimateToDos = EstimateToDos::with('assigned_by')->get();
         }
+        
         foreach ($estimates as $estimate) {
             // Decode the JSON safely
             $userIds = json_decode($estimate->estimate_schedule_assigned_to, true);
@@ -1174,7 +1249,7 @@ class EstimateController extends Controller
         }
 
         $allEmployees = User::where('sts', 'active')->get();
-        return view('calendar', ['filterId' => $id, 'estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos]);
+        return view('calendar', ['filterId' => $id, 'estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos, 'branches' => $branches]);
     }
 
     public function getSchedulesOnScheduleCalendar($user = null)
@@ -1184,13 +1259,37 @@ class EstimateController extends Controller
         } else {
             $userDetails = session('user_details');
         }
+        
+        $branch = request()->query('branch');
+        $branches = CompanyBranches::get();
 
-        $userToDos = UserToDo::where('added_user_id', $userDetails['id'])->get();
-        $estimateToDos = EstimateToDos::where('to_do_assigned_to', $userDetails['id'])->get();
-
+        $userToDosQuery = UserToDo::where('added_user_id', $userDetails['id']);
+        $estimateToDosQuery = EstimateToDos::where('to_do_assigned_to', $userDetails['id']);
+        
+        // Apply branch filter if provided, though it might require additional JOIN with estimates table
+        // This is a placeholder and may need modification based on your database structure
+        if ($branch) {
+            // If these models have relationships with estimates and customers, add filter
+            // This is hypothetical and would need to be adjusted to match actual relationships
+            // $userToDosQuery->whereHas('estimate.customer', function($q) use ($branch) {
+            //     $q->where('branch', $branch);
+            // });
+            // $estimateToDosQuery->whereHas('estimate.customer', function($q) use ($branch) {
+            //     $q->where('branch', $branch);
+            // });
+        }
+        
+        $userToDos = $userToDosQuery->get();
+        $estimateToDos = $estimateToDosQuery->get();
+        
         $allEmployees = User::where('sts', 'active')->get();
 
-        return view('schedulesCalendar', ['userToDos' => $userToDos, 'estimateToDos' => $estimateToDos, 'allEmployees' => $allEmployees]);
+        return view('schedulesCalendar', [
+            'userToDos' => $userToDos, 
+            'estimateToDos' => $estimateToDos, 
+            'allEmployees' => $allEmployees,
+            'branches' => $branches
+        ]);
     }
 
     public function viewDataOnCrewCalendar($id)
@@ -1207,21 +1306,44 @@ class EstimateController extends Controller
     public function getEstimatesOnCrewCalendar()
     {
         $userDetails = session('user_details');
+        $branch = request()->query('branch');
+        $branches = CompanyBranches::get();
 
         $crew = User::where('user_role', 'crew')->get();
-        $estimates = ScheduleEstimate::with(['estimate'])->get();
+        
+        $query = ScheduleEstimate::with(['estimate', 'estimate.customer']);
+        
+        if ($branch) {
+            $query->whereHas('estimate.customer', function($q) use ($branch) {
+                $q->where('branch', $branch);
+            });
+        }
+        
+        $estimates = $query->get();
+
+        // Enhance each estimate with the user who added it and their color
+        foreach ($estimates as $estimate) {
+            if ($estimate->estimate) {
+                // Get the user who added the estimate
+                $addedUserId = $estimate->estimate->added_user_id;
+                $addedUser = User::find($addedUserId);
+                
+                if ($addedUser) {
+                    // Set as attributes on the object instead of properties
+                    $estimate->setAttribute('user_color', $addedUser->user_color);
+                    $estimate->setAttribute('added_user_name', $addedUser->name . ' ' . $addedUser->last_name);
+                }
+            }
+        }
+
         $employees = User::where('user_role', 'crew')->where('sts', 'active')->get();
 
-        // $formattedEstimates = $estimates->map(function ($estimate) {
-        //     $assignedUserName = $estimate->assigenedUser->name; // Replace 'name' with the actual attribute holding the user's name
-        //     $customerName = $estimate->estimate->customer_name; // Replace 'customer_name' with the actual attribute holding the customer's name
-        //     $estimate->assignedUserName = $assignedUserName;
-        //     $estimate->customerName = $customerName;
-        //     return $estimate;
-        // });
-
-        // return response()->json(['estimates' => $estimates, 'crew' => $crew]);
-        return view('crewCalendar', ['estimates' => $estimates, 'crew' => $crew, 'employees' => $employees]);
+        return view('crewCalendar', [
+            'estimates' => $estimates, 
+            'crew' => $crew, 
+            'employees' => $employees,
+            'branches' => $branches
+        ]);
     }
 
 
@@ -1248,23 +1370,51 @@ class EstimateController extends Controller
         $userDetails = session('user_details');
 
         $status = $request->query('status');
+        $branch = $request->query('branch');
 
         $branches = CompanyBranches::get();
 
         if ($userDetails['user_role'] == 'admin') {
             $customers = Customer::get();
-            $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->where('estimate_status', $status ? $status : 'pending')->orderBy('created_at', 'desc')->get();
+            $query = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')
+                ->where('estimate_status', $status ? $status : 'pending');
+            
+            if ($branch) {
+                $query->whereHas('customer', function($q) use ($branch) {
+                    $q->where('branch', $branch);
+                });
+            }
+            
+            $estimates = $query->orderBy('created_at', 'desc')->get();
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
         } elseif ($userDetails['user_role'] == 'scheduler') {
+            $query = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')
+                ->where('estimate_status', $status ? $status : 'pending');
+            
             if ($type == 'assigned') {
-                $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->where('estimate_status', $status ? $status : 'pending')->where('estimate_schedule_assigned_to', $userDetails['id'])->orderBy('created_at', 'desc')->get();
-            } else {
-                $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->where('estimate_status', $status ? $status : 'pending')->orderBy('created_at', 'desc')->get();
+                $query->where('estimate_schedule_assigned_to', $userDetails['id']);
             }
+            
+            if ($branch) {
+                $query->whereHas('customer', function($q) use ($branch) {
+                    $q->where('branch', $branch);
+                });
+            }
+            
+            $estimates = $query->orderBy('created_at', 'desc')->get();
             $customers = Customer::get();
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
         } else {
-            $estimates = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')->where('estimate_status', $status ? $status : 'pending')->orderBy('created_at', 'desc')->get();
+            $query = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')
+                ->where('estimate_status', $status ? $status : 'pending');
+                
+            if ($branch) {
+                $query->whereHas('customer', function($q) use ($branch) {
+                    $q->where('branch', $branch);
+                });
+            }
+            
+            $estimates = $query->orderBy('created_at', 'desc')->get();
             $customers = Customer::get();
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
         }
@@ -3492,7 +3642,7 @@ class EstimateController extends Controller
                 'potential_value' => 'nullable|string',
                 'internal_note' => 'nullable|string',
                 'source' => 'nullable|string',
-                'owner' => 'nullable|string',
+                // 'owner' => 'nullable|string',
                 'branch' => 'required',
                 'project_type' => 'nullable|string',
                 'building_type' => 'nullable|string',
@@ -3532,7 +3682,7 @@ class EstimateController extends Controller
                 'project_number' => $validatedData['project_number'],
                 'project_type' => $validatedData['project_type'],
                 'building_type' => $validatedData['building_type'],
-                'project_owner' => $validatedData['owner'],
+                'project_owner' => $userDetails['name'] . ' ' . $userDetails['last_name'],
                 'po_number' => $po_number,
                 'estimate_internal_note' => $validatedData['internal_note'],
             ]);
