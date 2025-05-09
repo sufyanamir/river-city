@@ -15,7 +15,7 @@ class EstimateChatController extends Controller
     public function getLatestMessages($estimate_id)
     {
         $chatMessages = EstimateChat::with('addedUser')->where('estimate_id', $estimate_id)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->get();
 
         return response()->json([
@@ -97,8 +97,8 @@ class EstimateChatController extends Controller
         $userDetails = session('user_details');
         $estimate = Estimate::where('estimate_id', $id)->first();
         $customer = Estimate::where('customer_id', $estimate->customer_id)->first();
-        $chatMessages = EstimateChat::with('addedUser')->where('estimate_id', $id)->orderBy('estimate_chat_id', 'desc')->get();
-        $users = User::where('id', '<>', $userDetails['id'])->get();
+        $chatMessages = EstimateChat::with('addedUser')->where('estimate_id', $id)->orderBy('estimate_chat_id', 'asc')->get();
+        $users = User::where('id', '<>', $userDetails['id'])->where('sts', 'active')->get();
 
         // Assuming you have a Blade view named 'chat_messages.blade.php' for formatting the messages
         // $html = view('chat_messages', compact('chatMessages'))->render();

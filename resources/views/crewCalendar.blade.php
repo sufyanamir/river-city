@@ -70,6 +70,20 @@
             <div class=" py-4 w-[100%]">
                 @endif
                 <div class=" m-2 text-right">
+                    <div class="py-3 inline-block">
+                        <div class="flex justify-between">
+                            <div>
+                                <div class="inline-block">
+                                    <select id="branch-filter" class="rounded-lg bg-[#930027] text-white px-3 py-1.5 text-sm font-semibold shadow-sm hover:bg-[#930017] mr-1">
+                                        <option value="">All Branches</option>
+                                        @foreach($branches as $branch)
+                                        <option value="{{ strtolower($branch->branch_name) }}" {{ request('branch') == strtolower($branch->branch_name) ? 'selected' : '' }}>{{ $branch->branch_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <button id="prevBtn" class=" p-2 bg-[#930027] rounded-lg text-white">Previous</button>
                     <button id="nextBtn" class=" p-2 bg-[#930027] rounded-lg text-white">Next</button>
                 </div>
@@ -495,6 +509,12 @@ crewRatingContainer.css({
                             const badge = $('<button class="badge"></button>');
                             badge.text(estimate.estimate.customer_name + (estimate.estimate.project_name ? ' (' + estimate.estimate.project_name + ')' : ''));
                             badge.attr('id', 'viewEstimate' + estimate.estimate_id);
+                            
+                            // Apply the user color to the badge if available
+                            if (estimate.user_color) {
+                                badge.css('background-color', estimate.user_color);
+                            }
+                            
                             badges.push(badge);
                         }
                     });
@@ -658,5 +678,24 @@ crewRatingContainer.css({
         e.preventDefault();
         $("#schedule-work-modal").addClass('hidden');
         // $("#schedule-work-form")[0].reset()
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        // Branch filter change event
+        $('#branch-filter').on('change', function() {
+            var branch = $(this).val();
+            var currentUrl = new URL(window.location.href);
+            
+            // Add or update the branch parameter
+            if (branch) {
+                currentUrl.searchParams.set('branch', branch);
+            } else {
+                currentUrl.searchParams.delete('branch');
+            }
+            
+            // Redirect to the new URL
+            window.location.href = currentUrl.toString();
+        });
     });
 </script>

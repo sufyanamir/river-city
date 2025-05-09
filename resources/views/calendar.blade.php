@@ -129,8 +129,16 @@
             <div class=" w-[80%]">
                 <div id="calendar" data-schedule-assigned="{{ isset($estimate) && $estimate->schedule_assigned == 1 ? 'true' : 'false' }}"></div>
             </div>
-            <div id="external-events" class="w-[20%]">
-            <div class="mt-[100px]">
+            <div id="external-events" class="mt-[100px] w-[20%]">
+                <div class="inline-block">
+                    <select id="branch-filter" class="rounded-lg bg-[#930027] text-white px-3 py-1.5 text-sm font-semibold shadow-sm hover:bg-[#930017] mr-1">
+                        <option value="">All Branches</option>
+                        @foreach($branches as $branch)
+                        <option value="{{ strtolower($branch->branch_name) }}" {{ request('branch') == strtolower($branch->branch_name) ? 'selected' : '' }}>{{ $branch->branch_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            <div class="">
                 <input type="checkbox" name="completed" id="completed">
                 <label for="completed" class=" text-gray-500">Completed</label>
             </div>
@@ -1094,5 +1102,24 @@ $('#end_date').val(endDateTime);
         e.preventDefault();
         $("#assignment-work-modal").addClass('hidden');
         // $("#schedule-estimate-form")[0].reset()
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        // Branch filter change event
+        $('#branch-filter').on('change', function() {
+            var branch = $(this).val();
+            var currentUrl = new URL(window.location.href);
+            
+            // Add or update the branch parameter
+            if (branch) {
+                currentUrl.searchParams.set('branch', branch);
+            } else {
+                currentUrl.searchParams.delete('branch');
+            }
+            
+            // Redirect to the new URL
+            window.location.href = currentUrl.toString();
+        });
     });
 </script>

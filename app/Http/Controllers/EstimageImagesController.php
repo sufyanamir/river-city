@@ -189,8 +189,8 @@ class EstimageImagesController extends Controller
         $estimate = Estimate::where('estimate_id', $id)->first();
         $estimateImages = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-        $users = User::where('id', '<>', $userDetails['id'])->get();
-        $chatMessages = EstimateChat::with('addedUser')->where('estimate_id', $id)->orderby('estimate_chat_id', 'desc')->get();
+        $users = User::where('id', '<>', $userDetails['id'])->where('sts', 'active')->get();
+        $chatMessages = EstimateChat::with('addedUser')->where('estimate_id', $id)->orderby('estimate_chat_id', 'asc')->get();
         // return response()->json(['success' => true, 'data' => ['estimate_with_images' => $estimateData]], 200);
         return view('viewGallery', ['chatMessages' => $chatMessages, 'estimate' => $estimate, 'estimate_images' => $estimateImages, 'customer' => $customer, 'users' => $users, 'user_details' => $userDetails]);
 

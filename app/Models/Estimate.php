@@ -40,6 +40,13 @@ class Estimate extends Model
         return $this->belongsTo(User::class, 'estimate_schedule_assigned_to');
     }
 
+    public function schedulers()
+    {
+        // This relationship is defined in the controller by adding schedulers to the estimate object
+        // as it's a JSON field that needs special handling
+        return [];
+    }
+
     public function assigned_work()
     {
         return $this->belongsTo(ScheduleEstimate::class, 'estimate_id');

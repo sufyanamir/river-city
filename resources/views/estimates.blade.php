@@ -10,13 +10,21 @@ $userRole = session('user_details')['user_role'];
                 <h4>Estimates List</h4>
             </div>
             <div>
-                <a href="/estimates?status=pending"><x-add-button :title="'Pending'" :class="''" :id="''"></x-add-button></a>
-                <a href="/estimates?status=complete"><x-add-button :title="'Completed'" :class="''" :id="''"></x-add-button></a>
-                <a href="/estimates?status=paid"><x-add-button :title="'Paid'" :class="''" :id="''"></x-add-button></a>
-                <a href="/estimates?status=cancel"><x-add-button :title="'Cancel'" :class="''" :id="''"></x-add-button></a>
+                <div class=" inline-block">
+                    <select id="branch-filter" class="inline-block rounded-lg bg-[#930027] text-white px-3 py-1.5 text-sm font-semibold shadow-sm hover:bg-[#930017] mr-1">
+                        <option value="">All Branches</option>
+                        @foreach($branches as $branch)
+                        <option value="{{ strtolower($branch->branch_name) }}" {{ request('branch') == strtolower($branch->branch_name) ? 'selected' : '' }}>{{ $branch->branch_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <a href="javascript:void(0)" class="pending-filter"><x-add-button :title="'Pending'" :class="''" :id="''"></x-add-button></a>
+                <a href="javascript:void(0)" class="complete-filter"><x-add-button :title="'Completed'" :class="''" :id="''"></x-add-button></a>
+                <a href="javascript:void(0)" class="paid-filter"><x-add-button :title="'Paid'" :class="''" :id="''"></x-add-button></a>
+                <a href="javascript:void(0)" class="cancel-filter"><x-add-button :title="'Cancel'" :class="''" :id="''"></x-add-button></a>
                 @if($userRole == 'scheduler')
-                <a href="/estimates"><x-add-button :title="'View All'" :class="''" :id="''"></x-add-button></a>
-                <a href="{{ route('estimates', ['type' => 'assigned']) }}"><x-add-button :title="'View Assigned'" :class="''" :id="''"></x-add-button></a>
+                <a href="javascript:void(0)" class="view-all-filter"><x-add-button :title="'View All'" :class="''" :id="''"></x-add-button></a>
+                <a href="javascript:void(0)" class="view-assigned-filter"><x-add-button :title="'View Assigned'" :class="''" :id="''"></x-add-button></a>
                 @endif
                 @if ($userRole == 'admin')
                 <x-add-button :title="'+ Add Estimates'" :class="'addEstimate'" :id="''"></x-add-button>
@@ -553,7 +561,7 @@ $userRole = session('user_details')['user_role'];
                                 <option value="Television">Television</option>
                             </datalist>
                         </div>
-                        <div class=" col-span-2">
+                        {{-- <div class=" col-span-2">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Owner</h5>
                             <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="owner" id="owner">
                                 <option>Select User</option>
@@ -563,7 +571,7 @@ $userRole = session('user_details')['user_role'];
                                 </option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class=" mt-2">
                         <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
@@ -931,5 +939,62 @@ $userRole = session('user_details')['user_role'];
         if (!$(event.target).closest("#userDropdown").length && !$(event.target).is("#message")) {
             userDropdown.hide();
         }
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        // Branch filter change event
+        $('#branch-filter').on('change', function() {
+            var branch = $(this).val();
+            var currentUrl = new URL(window.location.href);
+            
+            // Add or update the branch parameter
+            if (branch) {
+                currentUrl.searchParams.set('branch', branch);
+            } else {
+                currentUrl.searchParams.delete('branch');
+            }
+            
+            // Redirect to the new URL
+            window.location.href = currentUrl.toString();
+        });
+        
+        // Status filter buttons
+        $('.pending-filter').on('click', function() {
+            var currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.set('status', 'pending');
+            window.location.href = currentUrl.toString();
+        });
+        
+        $('.complete-filter').on('click', function() {
+            var currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.set('status', 'complete');
+            window.location.href = currentUrl.toString();
+        });
+        
+        $('.paid-filter').on('click', function() {
+            var currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.set('status', 'paid');
+            window.location.href = currentUrl.toString();
+        });
+        
+        $('.cancel-filter').on('click', function() {
+            var currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.set('status', 'cancel');
+            window.location.href = currentUrl.toString();
+        });
+        
+        // View filters for scheduler
+        $('.view-all-filter').on('click', function() {
+            var currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.delete('type');
+            window.location.href = currentUrl.toString();
+        });
+        
+        $('.view-assigned-filter').on('click', function() {
+            var currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.set('type', 'assigned');
+            window.location.href = currentUrl.toString();
+        });
     });
 </script>
