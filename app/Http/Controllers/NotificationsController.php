@@ -21,6 +21,18 @@ class NotificationsController extends Controller
 
     }
 
+    public function markNotification($id)
+    {
+        try{
+            $notification = Notifications::find($id);
+            $notification->notification_status = 'read';
+            $notification->save();
+            return redirect()->back()->with('success', 'Notification marked as read!');
+        }catch(\Exception $e){
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
     public function markNotifications(Request $request)
     {
         try {
@@ -52,6 +64,17 @@ class NotificationsController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
         
+    }
+
+    public function deleteNotification($id)
+    {
+        try{
+            $notification = Notifications::find($id);
+            $notification->delete();
+            return redirect()->back()->with('success', 'Notification deleted!');
+        }catch(\Exception $e){
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        } 
     }
 
     public function clearNotifications(Request $request)

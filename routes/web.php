@@ -228,7 +228,9 @@ Route::middleware('customauth')->group(function () {
     });
     Route::get('/notifications', [NotificationsController::class, 'index']);
     Route::post('/markNotifications', [NotificationsController::class, 'markNotifications']);
+    Route::get('/markNotification/{id}', [NotificationsController::class, 'markNotification']);
     Route::post('/clearNotifications', [NotificationsController::class, 'clearNotifications']);
+    Route::get('/deleteNotification/{id}', [NotificationsController::class, 'deleteNotification']);
     Route::get('/privileges/{id}', [UserController::class, 'getUserOnPrivileges']);
     Route::post('/addUserPrivileges/{id}', [UserController::class, 'addUserPrivileges']);
     Route::get('/getprivileges/{id}', [UserController::class, 'getUserPrivileges']);
