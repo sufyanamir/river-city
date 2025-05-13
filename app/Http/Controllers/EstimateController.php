@@ -2451,7 +2451,7 @@ class EstimateController extends Controller
             ];
             try {
                 $mail = new ProposalAcceptedMail($emailData);
-                Mail::to('sufi.canola@gmail.com')->send($mail);
+                Mail::to('office@rivercitypaintinginc.com')->send($mail);
                 if ($estimator) {
                     Mail::to($estimator->email)->send($mail);
                 }
