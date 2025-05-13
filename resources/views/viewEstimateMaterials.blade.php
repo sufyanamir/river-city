@@ -457,12 +457,12 @@
         var style = document.createElement('style');
         style.innerHTML = `
             body { background-color: white !important; font-size: 10px !important; }
-            div, p, span, table, td, tr, th {
+            p, span, table, td, tr, th {
             page-break-inside: avoid !important;
             page-break-after: auto !important;
             }
             // .group-card { background-color: #930027 !important; } /* Maintain group header styling */
-            * { word-wrap: break-word; font-size: 10px !important; }
+            * { word-wrap: break-word; font-size: 12px !important; }
             table { page-break-before: auto; page-break-after: auto; }
         `;
         tempDiv.appendChild(style);

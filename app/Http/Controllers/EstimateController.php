@@ -2447,7 +2447,7 @@ class EstimateController extends Controller
             // Email notification
             $emailData = [
                 'customer_name' => $estimate->customer_name . ' ' . $estimate->customer_last_name,
-                'estimate_id' => $id,
+                'estimate_id' => $validatedData['proposal_id'],
             ];
             try {
                 $mail = new ProposalAcceptedMail($emailData);
