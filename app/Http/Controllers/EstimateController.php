@@ -2447,11 +2447,11 @@ class EstimateController extends Controller
             // Email notification
             $emailData = [
                 'customer_name' => $estimate->customer_name . ' ' . $estimate->customer_last_name,
-                'estimate_id' => $id,
+                'estimate_id' => $validatedData['proposal_id'],
             ];
             try {
                 $mail = new ProposalAcceptedMail($emailData);
-                Mail::to('office@rivercitypaintinginc.com')->send($mail);
+                Mail::to('sufi.canola@gmail.com')->send($mail);
                 if ($estimator) {
                     Mail::to($estimator->email)->send($mail);
                 }
