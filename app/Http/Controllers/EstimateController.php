@@ -323,11 +323,13 @@ class EstimateController extends Controller
                 'building_type' => 'nullable',
                 'first_address' => 'nullable',
                 'tax_rate' => 'nullable',
-                // 'owner' => 'nullable',
+                'owner' => 'nullable',
                 'internal_note' => 'nullable',
             ]);
 
             $estimate = Estimate::find($validatedData['estimate_id']);
+
+            $user = User::find($validatedData['owner']);
 
             if (!$estimate) {
                 return response()->json(['success' => false, 'message' => 'Estimate not found!'], 404);
@@ -343,7 +345,7 @@ class EstimateController extends Controller
             $estimate->building_type = $validatedData['building_type'];
             $estimate->customer_address = $validatedData['first_address'];
             $estimate->tax_rate = $validatedData['tax_rate'];
-            // $estimate->project_owner = $validatedData['owner'];
+            $estimate->project_owner = $user->name . ' ' . $user->last_name;
             $estimate->estimate_internal_note = $validatedData['internal_note'];
 
             $estimate->save();
@@ -3642,11 +3644,13 @@ class EstimateController extends Controller
                 'potential_value' => 'nullable|string',
                 'internal_note' => 'nullable|string',
                 'source' => 'nullable|string',
-                // 'owner' => 'nullable|string',
+                'owner' => 'nullable|string',
                 'branch' => 'required',
                 'project_type' => 'nullable|string',
                 'building_type' => 'nullable|string',
             ]);
+
+            $user = User::find($validatedData['owner']);
 
             if ($validatedData['customer_id']) {
                 $customer = Customer::find($validatedData['customer_id']);
@@ -3672,7 +3676,7 @@ class EstimateController extends Controller
 
             $estimate = Estimate::create([
                 'customer_id' => $customer->customer_id,
-                'added_user_id' => $userDetails['id'],
+                'added_user_id' => $user->id,
                 'customer_name' => $validatedData['first_name'],
                 'customer_phone' => $validatedData['phone'],
                 'customer_address' => $validatedData['first_address'],
@@ -3682,7 +3686,7 @@ class EstimateController extends Controller
                 'project_number' => $validatedData['project_number'],
                 'project_type' => $validatedData['project_type'],
                 'building_type' => $validatedData['building_type'],
-                'project_owner' => $userDetails['name'] . ' ' . $userDetails['last_name'],
+                'project_owner' => $user->name . ' ' . $user->last_name,
                 'po_number' => $po_number,
                 'estimate_internal_note' => $validatedData['internal_note'],
             ]);

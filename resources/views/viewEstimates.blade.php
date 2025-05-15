@@ -1059,6 +1059,7 @@ $modalTotal = 0;
                                     @php
                                     $groupTotal = 0;
                                     $incEstTotal = 0;
+                                    $grandGroupTotal = 0;
                                     $currentGroupId = $itemss[0]->group->group_id ?? null; // Get the group ID for this group
                                     $currentGroupName = $groupName; // Get the group name
                                     @endphp
@@ -1267,6 +1268,7 @@ $modalTotal = 0;
                                     @php
                                     if(isset($item->group->include_est_total) && $item->group->include_est_total == 1) {
                                     $incEstTotal = 1; // Add item price to included estimate total
+                                    $grandGroupTotal += $item->item_total;;
                                     }
                                     $acceptorreject = $item->upgrade_status
                                     @endphp
@@ -1305,7 +1307,7 @@ $modalTotal = 0;
                                         <th class=" text-right" colspan="7">
                                             Group Total: {{ number_format($groupTotal, 2) }}
                                             @php
-                                            $totalPrice += $groupTotal; // Add item price to total
+                                            $totalPrice += $grandGroupTotal; // Add item price to total
                                             $modalTotal = $totalPrice;
                                             @endphp
                                         </th>
@@ -6299,17 +6301,17 @@ $userPrivileges->estimate->expenses === 'on')
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Tax</h5>
                             <input type="number" step="any" name="tax_rate" id="customer_tax_rate" placeholder="Tax Rate (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        {{-- <div class=" col-span-2">
+                        <div class=" col-span-2">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Owner</h5>
-                            <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="owner" id="customer_owner">
+                            <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="owner" id="customer_owner" required>
                                 <option>Select User</option>
                                 @foreach($employees as $user)
-                                <option value="{{ $user->name }} {{ $user->last_name }}">
+                                <option value="{{ $user->id }}">
                                     {{ $user->name }} {{ $user->last_name }}
                                 </option>
                                 @endforeach
                             </select>
-                        </div> --}}
+                        </div>
                         <div class=" col-span-4">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Internal Note</h5>
                             <input type="text" class="mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="internal_note" id="internal_note" value="{{ $estimate->estimate_internal_note }}" placeholder="Internal Note">

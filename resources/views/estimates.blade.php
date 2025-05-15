@@ -561,17 +561,17 @@ $userRole = session('user_details')['user_role'];
                                 <option value="Television">Television</option>
                             </datalist>
                         </div>
-                        {{-- <div class=" col-span-2">
+                        <div class=" col-span-2">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Owner</h5>
-                            <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="owner" id="owner">
+                            <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="owner" id="owner" required>
                                 <option>Select User</option>
                                 @foreach($users as $user)
-                                <option value="{{ $user->name }} {{ $user->last_name }}">
+                                <option value="{{ $user->id }}">
                                     {{ $user->name }} {{ $user->last_name }}
                                 </option>
                                 @endforeach
                             </select>
-                        </div> --}}
+                        </div>
                     </div>
                     <div class=" mt-2">
                         <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
