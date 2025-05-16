@@ -560,9 +560,9 @@
                                     <p class="italic text-[#323C47]">
                                         Total
                                     </p>
-                                    <p class="italic text-[#323C47]">
+                                    {{-- <p class="italic text-[#323C47]">
                                         Discount
-                                    </p>
+                                    </p> --}}
                                 </div>
                                 <div>
                                     <p class="text-[#858585]">
@@ -591,9 +591,9 @@
                                     $discountedTotal = null;
                                     }
                                     @endphp
-                                    <p class="text-[#858585]">
+                                    {{-- <p class="text-[#858585]">
                                         ${{ number_format($discountedTotal, 2) }}
-                                    </p>
+                                    </p> --}}
                                 </div>
                             </div>
                         </div>

@@ -80,14 +80,14 @@ $userPrivileges = session('user_details')['user_privileges'];
                                 @if (session('user_details')['user_role'] == 'admin')
                                 <form action="/delete/item/{{ $item->item_id }}" class=" inline-block" method="post">
                                     @csrf
-                                    <button disabled>
+                                    <button >
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
                                     </button>
                                 </form>
                                 @elseif(isset($userPrivileges->item) && isset($userPrivileges->item->delete) && $userPrivileges->item->delete === 'on')
                                 <form action="/delete/item/{{ $item->item_id }}" class=" inline-block" method="post">
                                     @csrf
-                                    <button disabled>
+                                    <button >
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
                                     </button>
                                 </form>
