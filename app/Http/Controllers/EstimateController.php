@@ -3466,6 +3466,20 @@ class EstimateController extends Controller
                 return response()->json(['success' => false, 'message' => 'Estimate not found'], 404);
             }
 
+            // Process proposals to extract customer_signature from proposal_data JSON
+            foreach ($estimate->proposals as $proposal) {
+                if (!empty($proposal->proposal_data)) {
+                    $proposalData = json_decode($proposal->proposal_data, true);
+                    if (isset($proposalData['estimate']['customer_signature'])) {
+                        $proposal->customer_signature = $proposalData['estimate']['customer_signature'];
+                    } else {
+                        $proposal->customer_signature = null;
+                    }
+                } else {
+                    $proposal->customer_signature = null;
+                }
+            }
+
             $estimateItems = EstimateItem::with('group', 'assemblies')
                 ->where('estimate_id', $estimate->estimate_id)
                 ->where('additional_item', '<>', 'yes')
