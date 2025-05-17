@@ -137,6 +137,7 @@ Route::middleware('customauth')->group(function () {
     Route::get('/getEventDetailOnCalendar', [EstimateController::class, 'getEventDetailOnCalendar']);
     Route::get('/viewEstimateMaterials/{id}', [EstimateController::class, 'viewEstimateMaterials']);
     Route::post('/applyDiscount', [EstimateController::class, 'applyDiscount']);
+    Route::post('/sendInvoiceOrPaymentMail', [EstimateController::class, 'sendInvoiceOrPaymentMail']);
 
     Route::get('/getExpenseDataToEdit{id}', [EstimateController::class, 'getExpenseDataToEdit']);
     ROute::post('/updateEstimateExpense', [EstimateController::class, 'updateEstimateExpense']);
@@ -227,7 +228,9 @@ Route::middleware('customauth')->group(function () {
     });
     Route::get('/notifications', [NotificationsController::class, 'index']);
     Route::post('/markNotifications', [NotificationsController::class, 'markNotifications']);
+    Route::get('/markNotification/{id}', [NotificationsController::class, 'markNotification']);
     Route::post('/clearNotifications', [NotificationsController::class, 'clearNotifications']);
+    Route::get('/deleteNotification/{id}', [NotificationsController::class, 'deleteNotification']);
     Route::get('/privileges/{id}', [UserController::class, 'getUserOnPrivileges']);
     Route::post('/addUserPrivileges/{id}', [UserController::class, 'addUserPrivileges']);
     Route::get('/getprivileges/{id}', [UserController::class, 'getUserPrivileges']);
@@ -251,3 +254,7 @@ Route::post('/forgotPasswordMail', [UserController::class, 'forgotPasswordMail']
 Route::get('/resetPassword/{id}', [UserController::class, 'resetPassword']);
 Route::post('/updatePassword', [UserController::class, 'updatePassword']);
 Route::post('/acceptRejectEstimateItems', [EstimateController::class, 'acceptRejectEstimateItems']);
+Route::get('/viewInvoice/{id}', [EstimateController::class, 'viewInvoice']);
+Route::get('/viewPayment/{id}', [EstimateController::class, 'viewPayment']);
+Route::get('/viewImages/{id}', [EstimageImagesController::class, 'viewImages']);
+Route::get('/download-images/{id}', [EstimageImagesController::class, 'downloadAll']);

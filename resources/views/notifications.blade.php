@@ -28,7 +28,7 @@
                 <span class="absolute top-1 left-1 inline-flex items-center justify-center w-2 h-2 mr-2 text-sm font-semibold text-[#04BB16] bg-[#04BB16] rounded-full">
                     @endif
                 </span>
-                <div class=" flex justify-between gap-2">
+                <div class=" flex justify-between gap-2 py-4">
                     @if($notification->notification_type == 'mention')
                     <a href="/estimates/getChatMessage/{{$notification->estimate_id}}" class=" hover:border-b border-[#930027]">
                         <p class=" text-[#930027]">{{ $notification->notification_message }}</p>
@@ -38,8 +38,18 @@
                         <p class=" text-[#930027]">{{ $notification->notification_message }}</p>
                     </a>
                     @endif
-                    <p class=" text-xs">{{ date('d, F Y', strtotime($notification->created_at)) }}</p>
+                    <div class=" flex gap-2">
+                        <a href="/markNotification/{{$notification->notification_id}}" class=" text-xs hover:underline hover:text-[#930027] text-[#930027]">
+                            Mark as Read
+                        </a>
+                        <p class=" text-xs">{{ date('d, F Y', strtotime($notification->created_at)) }}</p>
+                    </div>
                 </div>
+                <span class="absolute top-1 right-1">
+                    <a href="/deleteNotification/{{$notification->notification_id}}">
+                        <img src="{{ asset('assets/icons/bin-icon.svg') }}" alt="delete">
+                    </a>
+                </span>
             </div>
             @endforeach
             @foreach ($notifications as $notification)
@@ -48,10 +58,20 @@
                 <span class="absolute top-1 left-1 inline-flex items-center justify-center w-2 h-2 mr-2 text-sm font-semibold text-[#04BB16] bg-[#04BB16] rounded-full">
                     @endif
                 </span>
-                <div class=" flex justify-between gap-2">
+                <div class=" flex justify-between gap-2 py-4">
                     <p>{{ $notification->notification_message }}</p>
-                    <p class=" text-xs">{{ date('d, F Y', strtotime($notification->created_at)) }}</p>
+                    <div class=" flex gap-2">
+                        <a href="/markNotification/{{$notification->notification_id}}" class=" text-xs hover:underline hover:text-[#930027] text-[#930027]">
+                            Mark as Read
+                        </a>
+                        <p class=" text-xs">{{ date('d, F Y', strtotime($notification->created_at)) }}</p>
+                    </div>
                 </div>
+                <span class="absolute top-1 right-1 flex">
+                    <a href="/deleteNotification/{{$notification->notification_id}}" class="bg-white rounded-full p-1">
+                        <img src="{{ asset('assets/icons/bin-icon.svg') }}" alt="delete">
+                    </a>
+                </span>
             </div>
             @endforeach
             @else

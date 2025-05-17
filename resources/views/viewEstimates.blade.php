@@ -19,7 +19,7 @@ $discountedTotal = null;
 $modalTotal = 0;
 
 @endphp
-<input type="hidden" id="hasPendingProposal" value="{{ $proposals->where('proposal_status', 'pending')->isNotEmpty() }}">
+<input type="hidden" id="hasPendingProposal" value="{{ $estimate->proposals->where('proposal_status', 'pending')->isNotEmpty() }}">
 <div class=" absolute bottom-10 right-10 z-30">
     <button type="button" id="addItem-menubutton" class=" rounded-full flex bg-white p-1 m-2">
         <div class=" bg-[#930027] rounded-full w-12 h-12">
@@ -65,22 +65,22 @@ $modalTotal = 0;
                 <div class="grid sm:grid-cols-10">
                     <div class="col-span-8 p-3">
                         <p class="text-[#F5222D] text-xl font-bold">
-                            <a href="/viewCustomerDetails/{{ $customer->customer_id }}" class="hover:text-[#F5222D]">
-                                {{ ucfirst($customer->customer_first_name) }} {{ ucfirst($customer->customer_last_name) }}
+                            <a href="/viewCustomerDetails/{{ $estimate->customer->customer_id }}" class="hover:text-[#F5222D]">
+                                {{ ucfirst($estimate->customer->customer_first_name) }} {{ ucfirst($estimate->customer->customer_last_name) }}
                             </a>
                         </p>
                         <p class="text-[#323C47] text-lg font-semibold">
-                            {{ $customer->customer_project_name }}
+                            {{ $estimate->customer->customer_project_name }}
                         </p>
                         <p class="mt-2 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/home-icon.svg') }}" alt="">
-                            <a href="https://maps.google.com/?q={{$customer->customer_primary_address}}{{ $customer->customer_city }}{{ $customer->customer_state }}{{ $customer->customer_zip_code }}" target="_blank" class=" text-[#930027]">
-                                <span class="pl-2">{{ $estimate->customer_address }}, {{ $customer->customer_city }}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</span>
+                            <a href="https://maps.google.com/?q={{$estimate->customer->customer_primary_address}}{{ $estimate->customer->customer_city }}{{ $estimate->customer->customer_state }}{{ $estimate->customer->customer_zip_code }}" target="_blank" class=" text-[#930027]">
+                                <span class="pl-2">{{ $estimate->customer_address }}, {{ $estimate->customer->customer_city }}, {{ $estimate->customer->customer_state }}, {{ $estimate->customer->customer_zip_code }}</span>
                             </a>
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/mail-icon.svg') }}" alt="">
-                            <span class="pl-2">{{ $customer->customer_email }}
+                            <span class="pl-2">{{ $estimate->customer->customer_email }}
                             </span>
                         </p>
                         <p class="mt-1 flex text-[#323C47]  font-medium">
@@ -95,6 +95,11 @@ $modalTotal = 0;
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
+                            <span class="pl-2">Branch: {{ $estimate->customer->branch }}
+                            </span>
+                        </p>
+                        <p class="mt-1 flex text-[#323C47] font-medium">
+                            <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
                             <span class="pl-2">Project Type: {{ $estimate->project_type }}
                             </span>
                         </p>
@@ -105,7 +110,7 @@ $modalTotal = 0;
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
-                            <span class="pl-2">Internal Note: {{ $estimate->estimate_internal_note ?? $customer->company_internal_note }}
+                            <span class="pl-2">Internal Note: {{ $estimate->estimate_internal_note ?? $estimate->customer->company_internal_note }}
                             </span>
                         </p>
                         <hr class="bg-gray-300 my-2 w-full">
@@ -116,9 +121,9 @@ $modalTotal = 0;
                         </p>
                         {{-- <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/person-icon.svg') }}" alt="">
-                        <span class="pl-2 flex">{{ $customer->owner }} Assigned To Schedule Estimate On <span class="pl-2 text-[#31A613] flex">
+                        <span class="pl-2 flex">{{ $estimate->customer->owner }} Assigned To Schedule Estimate On <span class="pl-2 text-[#31A613] flex">
                                 <img class="pr-1" src="{{ asset('assets/icons/green-calendar.svg') }}" alt="">
-                                {{ $customer->created_at }}</span>
+                                {{ $estimate->customer->created_at }}</span>
                         </span>
                         </p> --}}
                     </div>
@@ -201,7 +206,7 @@ $modalTotal = 0;
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($additional_contacts as $contacts)
+                                @foreach ($estimate->estimateContacts as $contacts)
                                 <tr class="bg-white border-b">
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                         {{ $contacts->contact_title }}
@@ -354,7 +359,7 @@ $modalTotal = 0;
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($additional_contacts as $contacts)
+                                @foreach ($estimate->estimateContacts as $contacts)
                                 <tr class="bg-white border-b">
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                         {{ $contacts->contact_title }}
@@ -548,9 +553,9 @@ $modalTotal = 0;
                             @csrf
                             <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
                             <input type="hidden" name="total_amount" value="{{ $estimate->estimate_total }}">
-                            <input type="hidden" name="customer_first_name" value="{{$customer->customer_first_name}}">
-                            <input type="hidden" name="customer_last_name" value="{{$customer->customer_last_name}}">
-                            <input type="hidden" name="customer_email" value="{{$customer->customer_email}}">
+                            <input type="hidden" name="customer_first_name" value="{{$estimate->customer->customer_first_name}}">
+                            <input type="hidden" name="customer_last_name" value="{{$estimate->customer->customer_last_name}}">
+                            <input type="hidden" name="customer_email" value="{{$estimate->customer->customer_email}}">
                             <button id="" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                                 <div class=" flex mx-auto">
                                     <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
@@ -576,7 +581,7 @@ $modalTotal = 0;
                                 <span class="my-auto whitespace-nowrap">Copy proposal Link</span>
                             </div>
                         </button>
-                        @if(!isset($advancePayment) && isset($invoice) == null)
+                        @if(!isset($advancePayment) && isset($estimate->invoice) == null)
                         <button id="add-payment" class=" add-payment flex h-[40px] w-[190px] ml-2 p-2 py-auto text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#930027]">
                             <div class="flex mx-auto">
                                 <!-- <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt=""> -->
@@ -663,25 +668,16 @@ $modalTotal = 0;
                                 });
                             });
                         </script>
-                        <a href="https://maps.google.com/?q={{ $customer->customer_primary_address }}" target="_blank" class="pl-3">
+                        <a href="https://maps.google.com/?q={{ $estimate->customer->customer_primary_address }}" target="_blank" class="pl-3">
                             <button type="button" class="flex h-[40px] w-[190px] ml-2  px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#4088CD]" id="action-menubutton" aria-expanded="true" aria-haspopup="true">
                                 <span class=" my-auto">Location</span>
                                 <i class="fa-solid fa-location-dot my-auto mx-auto"></i>
                             </button>
                         </a>
-                        <form action="/sendProposal" method="post">
-                            @csrf
-                            <input type="hidden" name="secondProposal" value="1">
-                            <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                            <input type="hidden" name="email_title" id="email_title" value="Proposal Email">
-                            <input type="hidden" name="email_to" id="email_to" value="{{ $customer->customer_email }}">
-                            <input type="hidden" name="email_subject" id="email_subject" value="Proposal Mail">
-                            <input type="hidden" name="email_body" id="email_body" value="Hi {{ ucfirst($customer->customer_first_name)}} {{ ucfirst($customer->customer_last_name)}}! Thank you for the opportunity to provide you with an estimate.">
-                            <button id="sendProposal-btn" class=" flex h-[40px] w-[190px] ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
+                            <button id="sendProposal-btn" type="button" class=" flex justify-start ml-2 p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                                 <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
                                 <span class=" my-auto whitespace-nowrap">Send Proposal Again</span>
                             </button>
-                        </form>
                         <!-- <button type="button" class=" flex h-[40px] w-[190px] ml-2 px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#4088CD]">
                             <img class="h-[14px] w-[14px]  my-auto mx-1" src="{{ asset('assets/icons/emailTemplate-icon.svg') }}" alt="">
                             <span class=" my-auto">Email</span>
@@ -1063,6 +1059,7 @@ $modalTotal = 0;
                                     @php
                                     $groupTotal = 0;
                                     $incEstTotal = 0;
+                                    $grandGroupTotal = 0;
                                     $currentGroupId = $itemss[0]->group->group_id ?? null; // Get the group ID for this group
                                     $currentGroupName = $groupName; // Get the group name
                                     @endphp
@@ -1271,6 +1268,7 @@ $modalTotal = 0;
                                     @php
                                     if(isset($item->group->include_est_total) && $item->group->include_est_total == 1) {
                                     $incEstTotal = 1; // Add item price to included estimate total
+                                    $grandGroupTotal += $item->item_total;;
                                     }
                                     $acceptorreject = $item->upgrade_status
                                     @endphp
@@ -1309,7 +1307,7 @@ $modalTotal = 0;
                                         <th class=" text-right" colspan="7">
                                             Group Total: {{ number_format($groupTotal, 2) }}
                                             @php
-                                            $totalPrice += $groupTotal; // Add item price to total
+                                            $totalPrice += $grandGroupTotal; // Add item price to total
                                             $modalTotal = $totalPrice;
                                             @endphp
                                         </th>
@@ -1749,211 +1747,335 @@ $modalTotal = 0;
 isset($userPrivileges->estimate->items) &&
 $userPrivileges->estimate->items === 'on')
 <div class=" relative  border-2  shadow-lg mt-7  bg-white rounded-3xl">
-            <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
-                <button type="button" id="addItem-menubutton1" class="flex bg-white p-1 m-2 rounded-lg">
-                    <div class=" bg-[#930027] rounded-lg">
-                        <i class="fa-solid fa-plus text-white p-2"></i>
-                    </div>
-                </button>
-                <!-- Dropdown menu -->
-                <div class="absolute top-14 z-10">
-                    <div id="addItem-menu1" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                            <li>
-                                <button id="" type="button" class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                    Add Item
-                                </button>
-                            </li>
-                            <hr>
-                            {{-- <li>
-                                    <button id="addTemplate" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Template Name</button>
-                                </li> --}}
-                            @foreach ($item_templates as $template)
-                            <li>
-                                <button id="addTemplate{{ $template->item_template_id }}" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}
-                                </button>
-                            </li>
-                            @endforeach
-                        </ul>
-                    </div>
-
+    <div class="flex  items-center justify-between px-3  bg-[#930027] rounded-t-3xl">
+        <div class="flex justify-start">
+            <button type="button" id="addItem-menubutton1" class="flex bg-white p-1 m-2 rounded-lg">
+                <div class=" bg-[#930027] rounded-lg">
+                    <i class="fa-solid fa-plus text-white p-2"></i>
                 </div>
-
-                <p class="text-lg px-3 text-white font-medium">
-                    Items
-                </p>
+            </button>
+            <!-- Dropdown menu -->
+            <div class="absolute top-14 z-10">
+                <div id="addItem-menu1" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                        <li>
+                            <button id="" type="button" class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                Add Item
+                            </button>
+                        </li>
+                        <hr>
+                        {{-- <li>
+                                <button id="addTemplate" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Template Name</button>
+                            </li> --}}
+                        @foreach ($item_templates as $template)
+                        <li>
+                            <button id="addTemplate{{ $template->item_template_id }}" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}
+                            </button>
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
             </div>
-            @php
-            $totalPrice = 0; // Initialize total price variable
-            $groupTotals = []; // New array to store group total objects
+            <p class="text-lg my-auto px-3 text-white font-medium">
+                Items
+            </p>
+        </div>
+        <div class="my-auto">
+            <a href="/rearrangeItems/{{ $estimate->estimate_id }}">
+                <button id="" class="bg-white text-black  p-2 rounded-md font-medium">
+                    Rearrange Items
+                </button>
+            </a>
+        </div>
+    </div>
+    @php
+    $totalPrice = 0; // Initialize total price variable
+    $groupTotals = []; // New array to store group total objects
 
-            $groupedItems = [];
-            foreach ($estimate_items as $groupItems) {
-            $groupName = $groupItems->group->group_name ?? ''; // Use 'Other' if no group is associated
-            $groupedItems[$groupName][] = $groupItems;
-            }
-            @endphp
-            <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
-                @if ($estimate_items->count() > 0)
-                @foreach ($groupedItems as $groupName => $itemss)
-                <div class="mb-2 bg-white shadow-xl">
-                    <div class=" p-1 bg-[#930027] text-white w-full rounded-t-lg">
-                        <div class="inline-block">
-                            @if($groupName)
-                            <div class="flex gap-3">
-                                @php
-                                $displayedGroups = []; // Array to keep track of displayed groups
-                                @endphp
+    $groupedItems = [];
+    foreach ($estimate_items as $groupItems) {
+    $groupName = $groupItems->group->group_name ?? ''; // Use 'Other' if no group is associated
+    $groupedItems[$groupName][] = $groupItems;
+    }
+    @endphp
+    <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
+        @if ($estimate_items->count() > 0)
+        @foreach ($groupedItems as $groupName => $itemss)
+        <div class="mb-2 bg-white shadow-xl">
+            <div class=" p-1 bg-[#930027] text-white w-full rounded-t-lg">
+                <div class="inline-block">
+                    @if($groupName)
+                    <div class="flex gap-3">
+                        @php
+                        $displayedGroups = []; // Array to keep track of displayed groups
+                        @endphp
 
-                                @foreach($itemss as $item)
-                                @php
-                                $group = $item->group
-                                @endphp
-                                @if(!empty($group) && !in_array($group->group_id, $displayedGroups))
-                                <!-- Display edit button only if the group has not been displayed before -->
-                                @php
-                                $displayedGroups[] = $group->group_id; // Add group to displayed groups
-                                @endphp
+                        @foreach($itemss as $item)
+                        @php
+                        $group = $item->group
+                        @endphp
+                        @if(!empty($group) && !in_array($group->group_id, $displayedGroups))
+                        <!-- Display edit button only if the group has not been displayed before -->
+                        @php
+                        $displayedGroups[] = $group->group_id; // Add group to displayed groups
+                        @endphp
 
-                                <div>
-                                    <button type="button" id="editGroup{{$group->group_id}}" class="inline">
-                                        <img class="" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                                    </button>
-                                    <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="editGroup-modal{{$group->group_id}}">
-                                        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                                            <!-- Background overlay -->
-                                            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                                                <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
-                                            </div>
+                        <div>
+                            <button type="button" id="editGroup{{$group->group_id}}" class="inline">
+                                <img class="" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                            </button>
+                            <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="editGroup-modal{{$group->group_id}}">
+                                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                    <!-- Background overlay -->
+                                    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                                        <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+                                    </div>
 
-                                            <!-- Modal panel -->
-                                            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                                                <div class=" ">
-                                                <form action="/editGroup" method="post" id="formData{{$group->group_id}}">
-                                                    @csrf
-                                                    <input type="hidden" name="group_id" value="{{$group->group_id}}">
-                                                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                                        <!-- Modal content here -->
-                                                        <div class=" flex justify-between">
-                                                            <h2 class=" text-xl font-semibold mb-2 text-black" id="modal-title">Edit Group</h2>
-                                                            <button class="modal-close" type="button">
-                                                                <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-                                                            </button>
-                                                        </div>
-                                                        <!-- task details -->
-                                                        <div class=" grid grid-cols-2 gap-2">
-                                                            <div class=" my-2">
-                                                                <label for="group_name">Group Name:</label>
-                                                                <input type="text" name="group_name" value="{{$group->group_name}}" placeholder="Group Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" list="group_names">
-                                                                <datalist id="group_names">
-                                                                    @foreach($groups as $groupItem)
-                                                                    <option value="{{ $groupItem->group_name }}">{{ $groupItem->group_name }}</option>
-                                                                    @endforeach
-                                                                </datalist>
+                                    <!-- Modal panel -->
+                                    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                        <div class=" ">
+                                        <form action="/editGroup" method="post" id="formData{{$group->group_id}}">
+                                            @csrf
+                                            <input type="hidden" name="group_id" value="{{$group->group_id}}">
+                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                                <!-- Modal content here -->
+                                                <div class=" flex justify-between">
+                                                    <h2 class=" text-xl font-semibold mb-2 text-black" id="modal-title">Edit Group</h2>
+                                                    <button class="modal-close" type="button">
+                                                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                                                    </button>
+                                                </div>
+                                                <!-- task details -->
+                                                <div class=" grid grid-cols-2 gap-2">
+                                                    <div class=" my-2">
+                                                        <label for="group_name">Group Name:</label>
+                                                        <input type="text" name="group_name" value="{{$group->group_name}}" placeholder="Group Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" list="group_names">
+                                                        <datalist id="group_names">
+                                                            @foreach($groups as $groupItem)
+                                                            <option value="{{ $groupItem->group_name }}">{{ $groupItem->group_name }}</option>
+                                                            @endforeach
+                                                        </datalist>
+                                                    </div>
+                                                    <!-- <div class="my-2">
+                                                        <label for="total_items">Total Items:</label>
+                                                        <input type="text" name="total_items" id="total_items" placeholder="Total Items" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                    </div> -->
+                                                    <div class=" my-2">
+                                                        <label for="group_type">Group Type:</label>
+                                                        <select id="group_type" name="group_type" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                                                            <option value="{{$group->group_type}}">{{ucfirst($group->group_type)}}</option>
+                                                            <option>type</option>
+                                                            <option value="labour">Labor</option>
+                                                            <option value="material">Material</option>
+                                                            <option value="assemblies">Assemblies</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-span-2">
+                                                        <div class="grid grid-cols-2 gap-3 my-2">
+                                                            <div>
+                                                                <input type="checkbox" name="show_unit_price" id="show_unit_price{{$group->group_id}}" value="1" {{ $group->show_unit_price == 1 ? 'checked' : '' }}>
+                                                                <label for="show_unit_price{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Unit Prices</label>
                                                             </div>
-                                                            <!-- <div class="my-2">
-                                                                <label for="total_items">Total Items:</label>
-                                                                <input type="text" name="total_items" id="total_items" placeholder="Total Items" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                                            </div> -->
-                                                            <div class=" my-2">
-                                                                <label for="group_type">Group Type:</label>
-                                                                <select id="group_type" name="group_type" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                                                                    <option value="{{$group->group_type}}">{{ucfirst($group->group_type)}}</option>
-                                                                    <option>type</option>
-                                                                    <option value="labour">Labor</option>
-                                                                    <option value="material">Material</option>
-                                                                    <option value="assemblies">Assemblies</option>
-                                                                </select>
+                                                            <div>
+                                                                <input type="checkbox" name="show_quantity" id="show_quantity{{$group->group_id}}" value="1" {{ $group->show_quantity == 1 ? 'checked' : '' }}>
+                                                                <label for="show_quantity{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Quantities</label>
                                                             </div>
-                                                            <div class="col-span-2">
-                                                                <div class="grid grid-cols-2 gap-3 my-2">
-                                                                    <div>
-                                                                        <input type="checkbox" name="show_unit_price" id="show_unit_price{{$group->group_id}}" value="1" {{ $group->show_unit_price == 1 ? 'checked' : '' }}>
-                                                                        <label for="show_unit_price{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Unit Prices</label>
-                                                                    </div>
-                                                                    <div>
-                                                                        <input type="checkbox" name="show_quantity" id="show_quantity{{$group->group_id}}" value="1" {{ $group->show_quantity == 1 ? 'checked' : '' }}>
-                                                                        <label for="show_quantity{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Quantities</label>
-                                                                    </div>
-                                                                    <div>
-                                                                        <input type="checkbox" name="show_total" id="show_total{{$group->group_id}}" value="1" {{ $group->show_total == 1 ? 'checked' : '' }}>
-                                                                        <label for="show_total{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Totals</label>
-                                                                    </div>
-                                                                    <div>
-                                                                        <input type="checkbox" name="show_group_total" id="show_group_total{{$group->group_id}}" value="1" {{ $group->show_group_total == 1 ? 'checked' : '' }}>
-                                                                        <label for="show_group_total{{$group->group_id}}" class="text-gray-500 text-xs">Show Group Total</label>
-                                                                    </div>
-                                                                    <div>
-                                                                        <input type="checkbox" name="include_est_total" id="include_est_total{{$group->group_id}}" value="1" {{ $group->include_est_total == 1 ? 'checked' : '' }}>
-                                                                        <label for="include_est_total{{$group->group_id}}" class="text-gray-500 text-xs">Include In Estimate Total</label>
-                                                                    </div>
-                                                                </div>
+                                                            <div>
+                                                                <input type="checkbox" name="show_total" id="show_total{{$group->group_id}}" value="1" {{ $group->show_total == 1 ? 'checked' : '' }}>
+                                                                <label for="show_total{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Totals</label>
                                                             </div>
-                                                            <div class="my-2 col-span-2 relative">
-                                                                <label for="group_description">Description:</label>
-                                                                <textarea name="group_description" id="group_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">{{$group->group_description}}</textarea>
-                                                                <button type="button" id="group-description-mic" class=" absolute mt-8 right-4" onclick="voice('group-description-mic', 'group_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                                                            <div>
+                                                                <input type="checkbox" name="show_group_total" id="show_group_total{{$group->group_id}}" value="1" {{ $group->show_group_total == 1 ? 'checked' : '' }}>
+                                                                <label for="show_group_total{{$group->group_id}}" class="text-gray-500 text-xs">Show Group Total</label>
                                                             </div>
-                                                        </div>
-                                                        <div class="">
-                                                            <button class=" save-btn mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
-                                                                <div class=" text-center hidden spinner" id="spinner">
-                                                                    <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-                                                                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
-                                                                    </svg>
-                                                                </div>
-                                                                <div class="text" id="text">
-                                                                    Save
-                                                                </div>
-                                                            </button>
+                                                            <div>
+                                                                <input type="checkbox" name="include_est_total" id="include_est_total{{$group->group_id}}" value="1" {{ $group->include_est_total == 1 ? 'checked' : '' }}>
+                                                                <label for="include_est_total{{$group->group_id}}" class="text-gray-500 text-xs">Include In Estimate Total</label>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </form>
-                                                <div class=" mb-2 mx-6">
-                                                    <form action="/deleteEstimateGroupItems" method="post">
-                                                        @csrf
-                                                        <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                        <input type="hidden" name="group_id" value="{{$group->group_id}}">
-                                                        <button type="submit" class=" border border-black text-black font-semibold py-1 px-7 rounded-lg">Delete</button>
-                                                    </form>
+                                                    <div class="my-2 col-span-2 relative">
+                                                        <label for="group_description">Description:</label>
+                                                        <textarea name="group_description" id="group_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">{{$group->group_description}}</textarea>
+                                                        <button type="button" id="group-description-mic" class=" absolute mt-8 right-4" onclick="voice('group-description-mic', 'group_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                                                    </div>
                                                 </div>
+                                                <div class="">
+                                                    <button class=" save-btn mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
+                                                        <div class=" text-center hidden spinner" id="spinner">
+                                                            <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                                                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                                                            </svg>
+                                                        </div>
+                                                        <div class="text" id="text">
+                                                            Save
+                                                        </div>
+                                                    </button>
                                                 </div>
                                             </div>
+                                        </form>
+                                        <div class=" mb-2 mx-6">
+                                            <form action="/deleteEstimateGroupItems" method="post">
+                                                @csrf
+                                                <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                <input type="hidden" name="group_id" value="{{$group->group_id}}">
+                                                <button type="submit" class=" border border-black text-black font-semibold py-1 px-7 rounded-lg">Delete</button>
+                                            </form>
+                                        </div>
                                         </div>
                                     </div>
-                                    <script>
-                                        document.getElementById("editGroup{{$group->group_id}}").addEventListener("click", function(e) {
-                                            e.preventDefault();
-                                            document.getElementById("editGroup-modal{{$group->group_id}}").classList.remove('hidden');
-                                        });
-
-                                        document.querySelectorAll(".modal-close").forEach(function(closeBtn) {
-                                            closeBtn.addEventListener("click", function(e) {
-                                                e.preventDefault();
-                                                document.getElementById("editGroup-modal{{$group->group_id}}").classList.add('hidden');
-                                                document.getElementById("formData{{$group->group_id}}").reset();
-                                            });
-                                        });
-                                    </script>
                                 </div>
-                                @endif
-                                @endforeach
-                                <div class=" relative">
-                                    <h1 class=" font-medium my-auto p-2 inline-block">{{$groupName}}</h1>
-                                    <div class=" z-10 inline-block absolute">
-                                        <button type="button" id="exclude-include-menuBtn{{$item->group_id}}" class="inline p-2">
-                                            <i class="fa-solid fa-square-caret-down text-[#fff] text-lg"></i>
-                                        </button>
-                                        <div id="exclude-include-menu{{$item->group_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                            </div>
+                            <script>
+                                document.getElementById("editGroup{{$group->group_id}}").addEventListener("click", function(e) {
+                                    e.preventDefault();
+                                    document.getElementById("editGroup-modal{{$group->group_id}}").classList.remove('hidden');
+                                });
+
+                                document.querySelectorAll(".modal-close").forEach(function(closeBtn) {
+                                    closeBtn.addEventListener("click", function(e) {
+                                        e.preventDefault();
+                                        document.getElementById("editGroup-modal{{$group->group_id}}").classList.add('hidden');
+                                        document.getElementById("formData{{$group->group_id}}").reset();
+                                    });
+                                });
+                            </script>
+                        </div>
+                        @endif
+                        @endforeach
+                        <div class=" relative">
+                            <h1 class=" font-medium my-auto p-2 inline-block">{{$groupName}}</h1>
+                            <div class=" z-10 inline-block absolute">
+                                <button type="button" id="exclude-include-menuBtn{{$item->group_id}}" class="inline p-2">
+                                    <i class="fa-solid fa-square-caret-down text-[#fff] text-lg"></i>
+                                </button>
+                                <div id="exclude-include-menu{{$item->group_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                                        <li>
+                                            <form action="/includeexcludeEstimateItem" method="post">
+                                                @csrf
+                                                <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                <input type="hidden" name="group_id" value="{{$item->group_id}}">
+                                                <input type="hidden" name="item_status" value="included">
+                                                <input type="hidden" name="estimate_item_id" value="">
+                                                <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                    Include
+                                                </button>
+                                            </form>
+                                        </li>
+                                        <hr>
+                                        <li>
+                                            <form action="/includeexcludeEstimateItem" method="post">
+                                                @csrf
+                                                <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                <input type="hidden" name="group_id" value="{{$item->group_id}}">
+                                                <input type="hidden" name="item_status" value="excluded">
+                                                <input type="hidden" name="estimate_item_id" value="">
+                                                <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                    Exclude
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <script>
+                                document.getElementById("exclude-include-menuBtn{{$item->group_id}}").addEventListener("click", function(e) {
+                                    e.stopPropagation(); // Prevents the click event from reaching the document body
+                                    var dropdownMenu = document.getElementById("exclude-include-menu{{$item->group_id}}");
+                                    dropdownMenu.classList.toggle("topbar-menuEntring");
+                                    dropdownMenu.classList.toggle("topbar-manuLeaving");
+                                });
+
+                                document.addEventListener('click', function(e) {
+                                    var btn = document.getElementById("exclude-include-menuBtn{{$item->group_id}}");
+                                    var dropdownMenu = document.getElementById("exclude-include-menu{{$item->group_id}}");
+
+                                    if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                                        // Click occurred outside the button and dropdown, hide the dropdown
+                                        dropdownMenu.classList.add("topbar-manuLeaving");
+                                        dropdownMenu.classList.remove("topbar-menuEntring");
+                                    }
+                                });
+                            </script>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+            <div class="relative overflow-x-auto mb-8">
+                <div class="itemDiv">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Item Name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Item Status (excluded/included)
+                                </th>
+                                <th scope="col" class="text-center px-6 py-3">
+                                    Item Cost
+                                </th>
+                                <th scope="col" class="text-center px-6 py-3">
+                                    Item Qty
+                                </th>
+                                <th scope="col" class="text-center px-6 py-3">
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                            $groupTotal = 0;
+                            $incEstTotal = 0;
+                            $grandGroupTotal = 0;
+                            $currentGroupId = $itemss[0]->group->group_id ?? null; // Get the group ID for this group
+                            $currentGroupName = $groupName; // Get the group name
+                            @endphp
+                            @foreach ($itemss as $item)
+                            <tr class="bg-white border-b">
+                                <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                    <button type="button" style="height: 70px; width:70px;" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
+                                        <img class="" style="height: 70px; width:70px;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                    </button>
+                                </th>
+                                <td class="px-6 py-4 w-[60%]">
+                                    {{ $item->item_name }}
+                                    <p class="text-xs text-[#323C47]">
+                                        @if ($item->item_description)
+                                    <p class="font-medium">Description:</p>
+                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
+                                    @endif
+                                    @if ($item->item_note)
+                                    <p class="font-medium">Note:</p>
+                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
+                                    @endif
+                                    </p>
+                                </td>
+                                <td class="text-center">
+                                    @if($item->item_status == 'included')
+                                    <span class="inline-flex my-auto items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $item->item_status }}</span>
+                                    @elseif($item->item_status == 'excluded')
+                                    <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">{{ $item->item_status }}</span>
+                                    @endif
+                                    <button type="button" id="exclude-include-menuBtn{{$item->estimate_item_id}}" class="inline p-2">
+                                        <i class="fa-solid fa-square-caret-down text-[#930027] text-lg"></i>
+                                    </button>
+                                    <!-- Dropdown menu -->
+                                    <div class=" z-10">
+                                        <div id="exclude-include-menu{{$item->estimate_item_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                                             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                                                 <li>
                                                     <form action="/includeexcludeEstimateItem" method="post">
                                                         @csrf
                                                         <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                        <input type="hidden" name="group_id" value="{{$item->group_id}}">
+                                                        <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
                                                         <input type="hidden" name="item_status" value="included">
-                                                        <input type="hidden" name="estimate_item_id" value="">
                                                         <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                                             Include
                                                         </button>
@@ -1964,9 +2086,8 @@ $userPrivileges->estimate->items === 'on')
                                                     <form action="/includeexcludeEstimateItem" method="post">
                                                         @csrf
                                                         <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                        <input type="hidden" name="group_id" value="{{$item->group_id}}">
+                                                        <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
                                                         <input type="hidden" name="item_status" value="excluded">
-                                                        <input type="hidden" name="estimate_item_id" value="">
                                                         <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                                             Exclude
                                                         </button>
@@ -1976,16 +2097,16 @@ $userPrivileges->estimate->items === 'on')
                                         </div>
                                     </div>
                                     <script>
-                                        document.getElementById("exclude-include-menuBtn{{$item->group_id}}").addEventListener("click", function(e) {
+                                        document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}").addEventListener("click", function(e) {
                                             e.stopPropagation(); // Prevents the click event from reaching the document body
-                                            var dropdownMenu = document.getElementById("exclude-include-menu{{$item->group_id}}");
+                                            var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
                                             dropdownMenu.classList.toggle("topbar-menuEntring");
                                             dropdownMenu.classList.toggle("topbar-manuLeaving");
                                         });
 
                                         document.addEventListener('click', function(e) {
-                                            var btn = document.getElementById("exclude-include-menuBtn{{$item->group_id}}");
-                                            var dropdownMenu = document.getElementById("exclude-include-menu{{$item->group_id}}");
+                                            var btn = document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}");
+                                            var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
 
                                             if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
                                                 // Click occurred outside the button and dropdown, hide the dropdown
@@ -1994,299 +2115,605 @@ $userPrivileges->estimate->items === 'on')
                                             }
                                         });
                                     </script>
-                                </div>
-                            </div>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="relative overflow-x-auto mb-8">
-                        <div class="itemDiv">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3">
-
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Item Name
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Item Status (excluded/included)
-                                        </th>
-                                        <th scope="col" class="text-center px-6 py-3">
-                                            Item Cost
-                                        </th>
-                                        <th scope="col" class="text-center px-6 py-3">
-                                            Item Qty
-                                        </th>
-                                        <th scope="col" class="text-center px-6 py-3">
-                                            Total
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                    $groupTotal = 0;
-                                    $incEstTotal = 0;
-                                    $currentGroupId = $itemss[0]->group->group_id ?? null; // Get the group ID for this group
-                                    $currentGroupName = $groupName; // Get the group name
-                                    @endphp
-                                    @foreach ($itemss as $item)
-                                    <tr class="bg-white border-b">
-                                        <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                            <button type="button" style="height: 70px; width:70px;" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
-                                                <img class="" style="height: 70px; width:70px;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                                            </button>
-                                        </th>
-                                        <td class="px-6 py-4 w-[60%]">
-                                            {{ $item->item_name }}
-                                            <p class="text-xs text-[#323C47]">
-                                                @if ($item->item_description)
-                                            <p class="font-medium">Description:</p>
-                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
-                                            @endif
-                                            @if ($item->item_note)
-                                            <p class="font-medium">Note:</p>
-                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
-                                            @endif
-                                            </p>
-                                        </td>
-                                        <td class="text-center">
-                                            @if($item->item_status == 'included')
-                                            <span class="inline-flex my-auto items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $item->item_status }}</span>
-                                            @elseif($item->item_status == 'excluded')
-                                            <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">{{ $item->item_status }}</span>
-                                            @endif
-                                            <button type="button" id="exclude-include-menuBtn{{$item->estimate_item_id}}" class="inline p-2">
-                                                <i class="fa-solid fa-square-caret-down text-[#930027] text-lg"></i>
-                                            </button>
-                                            <!-- Dropdown menu -->
-                                            <div class=" z-10">
-                                                <div id="exclude-include-menu{{$item->estimate_item_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                                                        <li>
-                                                            <form action="/includeexcludeEstimateItem" method="post">
-                                                                @csrf
-                                                                <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                                <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
-                                                                <input type="hidden" name="item_status" value="included">
-                                                                <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                                    Include
-                                                                </button>
-                                                            </form>
-                                                        </li>
-                                                        <hr>
-                                                        <li>
-                                                            <form action="/includeexcludeEstimateItem" method="post">
-                                                                @csrf
-                                                                <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                                <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
-                                                                <input type="hidden" name="item_status" value="excluded">
-                                                                <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                                    Exclude
-                                                                </button>
-                                                            </form>
-                                                        </li>
-                                                    </ul>
+                                </td>
+                                @if($item->group)
+                                <td class="text-center mx-2">
+                                    @if($item->group->show_unit_price == 1)
+                                    ${{ number_format($item->item_price, 2) }}
+                                    @endif
+                                </td>
+                                <td class="text-center mx-2">
+                                    @if($item->group->show_quantity == 1)
+                                    {{ number_format($item->item_qty, 2) }}
+                                    @endif
+                                </td>
+                                <td class="text-center mx-2">
+                                    @if($item->group->show_total == 1)
+                                    ${{ number_format($item->item_total, 2) }}
+                                    @endif
+                                </td>
+                                @else
+                                <td class="text-center mx-2">
+                                    ${{ number_format($item->item_price, 2) }}
+                                </td>
+                                <td class="text-center mx-2">
+                                    {{ number_format($item->item_qty, 2) }}
+                                </td>
+                                <td class="text-center mx-2">
+                                    ${{ number_format($item->item_total, 2) }}
+                                </td>
+                                @endif
+                                @php
+                                if(isset($item->group->show_group_total) && $item->group->show_group_total == 1) {
+                                $groupTotal += $item->item_total; // Add item price to group total
+                                }
+                                @endphp
+                                @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
+                            <tr>
+                                <td colspan="7">
+                                    <div class="">
+                                        <div id="accordion-collapse{{$item->estimate_item_id}}" class="accordion-collapse mb-2" data-accordion="collapse">
+                                            <h2 id="accordion-collapse-heading-1" class="border-b-2">
+                                                <button type="button" class="flex items-center bg-[#F5F5F5] justify-between w-full p-2  text-left rounded-t-lg  focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-1" aria-expanded="true" aria-controls="accordion-collapse-body-1">
+                                                    <span></span>
+                                                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
+                                                    </svg>
+                                                </button>
+                                            </h2>
+                                            <div id="accordion-collapse-body{{$item->estimate_item_id}}" class="accordion-collapse-body bg-[#F5F5F5] hidden" aria-labelledby="accordion-collapse-heading-1">
+                                                <div class="p-2">
+                                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                                            <tr>
+                                                                <th scope="col" class="px-6 py-3"></th>
+                                                                <th scope="col" class="px-6 py-3">
+                                                                    Item Name
+                                                                </th>
+                                                                <th scope="col" class="px-6 py-3">
+                                                                    Item Description
+                                                                </th>
+                                                                <th scope="col" class="text-center px-6 py-3">
+                                                                    Item Cost
+                                                                </th>
+                                                                <th scope="col" class="text-center px-6 py-3">
+                                                                    Item Qty
+                                                                </th>
+                                                                <th scope="col" class="text-center px-6 py-3">
+                                                                    Total
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach($item->assemblies as $assembly)
+                                                            <tr class="bg-white border-b">
+                                                                <td class="px-6 py-4"></td>
+                                                                <td class="px-6 py-4">
+                                                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->est_ass_item_name) !!}
+                                                                </td>
+                                                                <td class="px-6 py-4 w-[30%]">
+                                                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
+                                                                </td>
+                                                                @if($item->group)
+                                                                <td class="text-center">
+                                                                    @if($item->group->show_unit_price == 1)
+                                                                    ${{number_format($assembly->ass_item_price, 2)}}
+                                                                    @endif
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    @if($item->group->show_quantity == 1)
+                                                                    {{number_format($assembly->ass_item_qty, 2)}}
+                                                                    @endif
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    @if($item->group->show_total == 1)
+                                                                    ${{number_format($assembly->ass_item_total, 2)}}
+                                                                    @endif
+                                                                </td>
+                                                                @else
+                                                                <td class="text-center">
+                                                                    ${{number_format($assembly->ass_item_price, 2)}}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    {{number_format($assembly->ass_item_qty, 2)}}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    ${{number_format($assembly->ass_item_total, 2)}}
+                                                                </td>
+                                                                @endif
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
-                                            <script>
-                                                document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}").addEventListener("click", function(e) {
-                                                    e.stopPropagation(); // Prevents the click event from reaching the document body
-                                                    var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
-                                                    dropdownMenu.classList.toggle("topbar-menuEntring");
-                                                    dropdownMenu.classList.toggle("topbar-manuLeaving");
-                                                });
-
-                                                document.addEventListener('click', function(e) {
-                                                    var btn = document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}");
-                                                    var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
-
-                                                    if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                                                        // Click occurred outside the button and dropdown, hide the dropdown
-                                                        dropdownMenu.classList.add("topbar-manuLeaving");
-                                                        dropdownMenu.classList.remove("topbar-menuEntring");
-                                                    }
-                                                });
-                                            </script>
-                                        </td>
-                                        @if($item->group)
-                                        <td class="text-center mx-2">
-                                            @if($item->group->show_unit_price == 1)
-                                            ${{ number_format($item->item_price, 2) }}
-                                            @endif
-                                        </td>
-                                        <td class="text-center mx-2">
-                                            @if($item->group->show_quantity == 1)
-                                            {{ number_format($item->item_qty, 2) }}
-                                            @endif
-                                        </td>
-                                        <td class="text-center mx-2">
-                                            @if($item->group->show_total == 1)
-                                            ${{ number_format($item->item_total, 2) }}
-                                            @endif
-                                        </td>
-                                        @else
-                                        <td class="text-center mx-2">
-                                            ${{ number_format($item->item_price, 2) }}
-                                        </td>
-                                        <td class="text-center mx-2">
-                                            {{ number_format($item->item_qty, 2) }}
-                                        </td>
-                                        <td class="text-center mx-2">
-                                            ${{ number_format($item->item_total, 2) }}
-                                        </td>
-                                        @endif
-                                        @php
-                                        if(isset($item->group->show_group_total) != null && $item->group->show_group_total == 1) {
-                                        $groupTotal += $item->item_total; // Add item price to group total
+                                        </div>
+                                    </div>
+                                </td>
+                                <script>
+                                    document.getElementById("accordion-collapse{{$item->estimate_item_id}}").addEventListener("click", function() {
+                                        var accordionBody = document.getElementById("accordion-collapse-body{{$item->estimate_item_id}}");
+                                        accordionBody.classList.toggle("hidden");
+                                    });
+                                </script>
+                            </tr>
+                            @endif
+                            </tr>
+                            @php
+                            if(isset($item->group->include_est_total) && $item->group->include_est_total == 1) {
+                            $incEstTotal = 1; // Add item price to included estimate total
+                            $grandGroupTotal += $item->item_total;;
+                            }
+                            $acceptorreject = $item->upgrade_status
+                            @endphp
+                            @endforeach
+                            @php
+                                if($currentGroupId && $groupTotal > 0) {
+                                    // Check if this group ID already exists in $groupTotals
+                                    $groupExists = false;
+                                    foreach($groupTotals as &$existingGroup) {
+                                        if($existingGroup['group_id'] === $currentGroupId) {
+                                            $existingGroup['total'] += $groupTotal; // Add to existing total
+                                            $groupExists = true;
+                                            break;
                                         }
-                                        @endphp
-                                        @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
-                                    <tr>
-                                        <td colspan="7">
-                                            <div class="">
-                                                <div id="accordion-collapse{{$item->estimate_item_id}}" class="accordion-collapse mb-2" data-accordion="collapse">
-                                                    <h2 id="accordion-collapse-heading-1" class="border-b-2">
-                                                        <button type="button" class="flex items-center bg-[#F5F5F5] justify-between w-full p-2  text-left rounded-t-lg  focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-1" aria-expanded="true" aria-controls="accordion-collapse-body-1">
-                                                            <span></span>
-                                                            <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
-                                                            </svg>
-                                                        </button>
-                                                    </h2>
-                                                    <div id="accordion-collapse-body{{$item->estimate_item_id}}" class="accordion-collapse-body bg-[#F5F5F5] hidden" aria-labelledby="accordion-collapse-heading-1">
-                                                        <div class="p-2">
-                                                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                                                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                                                    <tr>
-                                                                        <th scope="col" class="px-6 py-3"></th>
-                                                                        <th scope="col" class="px-6 py-3">
-                                                                            Item Name
-                                                                        </th>
-                                                                        <th scope="col" class="px-6 py-3">
-                                                                            Item Description
-                                                                        </th>
-                                                                        <th scope="col" class="text-center px-6 py-3">
-                                                                            Item Cost
-                                                                        </th>
-                                                                        <th scope="col" class="text-center px-6 py-3">
-                                                                            Item Qty
-                                                                        </th>
-                                                                        <th scope="col" class="text-center px-6 py-3">
-                                                                            Total
-                                                                        </th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    @foreach($item->assemblies as $assembly)
-                                                                    <tr class="bg-white border-b">
-                                                                        <td class="px-6 py-4"></td>
-                                                                        <td class="px-6 py-4">
-                                                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->est_ass_item_name) !!}
-                                                                        </td>
-                                                                        <td class="px-6 py-4 w-[30%]">
-                                                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
-                                                                        </td>
-                                                                        @if($item->group)
-                                                                        <td class="text-center">
-                                                                            @if($item->group->show_unit_price == 1)
-                                                                            ${{number_format($assembly->ass_item_price, 2)}}
-                                                                            @endif
-                                                                        </td>
-                                                                        <td class="text-center">
-                                                                            @if($item->group->show_quantity == 1)
-                                                                            {{number_format($assembly->ass_item_qty, 2)}}
-                                                                            @endif
-                                                                        </td>
-                                                                        <td class="text-center">
-                                                                            @if($item->group->show_total == 1)
-                                                                            ${{number_format($assembly->ass_item_total, 2)}}
-                                                                            @endif
-                                                                        </td>
-                                                                        @else
-                                                                        <td class="text-center">
-                                                                            ${{number_format($assembly->ass_item_price, 2)}}
-                                                                        </td>
-                                                                        <td class="text-center">
-                                                                            {{number_format($assembly->ass_item_qty, 2)}}
-                                                                        </td>
-                                                                        <td class="text-center">
-                                                                            ${{number_format($assembly->ass_item_total, 2)}}
-                                                                        </td>
-                                                                        @endif
-                                                                    </tr>
-                                                                    @endforeach
-                                                                </tbody>
-                                                            </table>
+                                    }
+                                    // If group doesn't exist, add a new object
+                                    if(!$groupExists) {
+                                        $groupTotals[] = [
+                                            'group_id' => $currentGroupId,
+                                            'group_name' => $currentGroupName,
+                                            'total' => $groupTotal
+                                        ];
+                                    }
+                                }
+                            @endphp
+                            <tr>
+                                <th class="" colspan="7">
+                                    @if($incEstTotal == 0 || $acceptorreject == 'rejected')
+                                    **Not include in Estimate Total**
+                                    @elseif($acceptorreject == 'accepted')
+                                    **Accepted by the customer**
+                                    @endif
+                                </th>
+                            </tr>
+                            <tr>
+                                <th class=" text-right" colspan="7">
+                                    Group Total: {{ number_format($groupTotal, 2) }}
+                                    @php
+                                    $totalPrice += $grandGroupTotal; // Add item price to total
+                                    $modalTotal = $totalPrice;
+                                    @endphp
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        @endif
+    </div>
+    <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
+        <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Grand Total</span>
+        <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
+    </div>
+    <br>
+</div>
+<div class=" relative  border-2  shadow-lg mt-7  bg-white rounded-3xl">
+    <div class="flex justify-between items-center px-3 py-3  bg-[#930027] rounded-t-3xl">
+        <p class="text-lg px-3 text-white font-medium">
+            Additional Items
+        </p>
+    </div>
+    @php
+    $additionaltotalPrice = 0; // Initialize total price variable
+
+    $groupedItems = [];
+    foreach ($estimateAdditionalItems as $groupItems) {
+    $groupName = $groupItems->group->group_name ?? 'Other'; // Use 'Other' if no group is associated
+    $groupedItems[$groupName][] = $groupItems;
+    }
+    @endphp
+    <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
+        @if ($estimateAdditionalItems->count() > 0)
+        @foreach ($groupedItems as $groupName => $itemss)
+        <div class="mb-2 bg-white shadow-xl">
+            <div class=" p-1 bg-[#930027] text-white w-full rounded-t-lg">
+                <div class="inline-block">
+                    @if($groupName)
+                    <div class="flex gap-3">
+                        @php
+                        $displayedGroups = []; // Array to keep track of displayed groups
+                        @endphp
+
+                        @foreach($itemss as $item)
+                        @php
+                        $group = $item->group
+                        @endphp
+                        @if(!empty($group) && !in_array($group->group_id, $displayedGroups))
+                        <!-- Display edit button only if the group has not been displayed before -->
+                        @php
+                        $displayedGroups[] = $group->group_id; // Add group to displayed groups
+                        @endphp
+
+                        <div>
+                            <!-- <button type="button" id="editGroup{{$group->group_id}}" class="inline">
+                                        <img class="" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                    </button> -->
+                            <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="editGroup-modal{{$group->group_id}}">
+                                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                    <!-- Background overlay -->
+                                    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                                        <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+                                    </div>
+
+                                    <!-- Modal panel -->
+                                    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                        <form action="/editGroup" method="post" id="formData{{$group->group_id}}">
+                                            @csrf
+                                            <input type="hidden" name="group_id" value="{{$group->group_id}}">
+                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                                <!-- Modal content here -->
+                                                <div class=" flex justify-between">
+                                                    <h2 class=" text-xl font-semibold mb-2 text-black" id="modal-title">Edit Group</h2>
+                                                    <button class="modal-close" type="button">
+                                                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                                                    </button>
+                                                </div>
+                                                <!-- task details -->
+                                                <div class=" grid grid-cols-2 gap-2">
+                                                    <div class=" my-2">
+                                                        <label for="group_name">Group Name:</label>
+                                                        <input type="text" name="group_name" value="{{$group->group_name}}" placeholder="Group Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" list="group_namess">
+                                                        <datalist id="group_namess">
+                                                            @foreach($groups as $item)
+                                                            <option value="{{ $item->group_name }}">{{ $item->group_name }}</option>
+                                                            @endforeach
+                                                        </datalist>
+                                                    </div>
+                                                    <!-- <div class="my-2">
+                                                                <label for="total_items">Total Items:</label>
+                                                                <input type="text" name="total_items" id="total_items" placeholder="Total Items" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                                            </div> -->
+                                                    <div class=" my-2">
+                                                        <label for="group_type">Group Type:</label>
+                                                        <select id="group_type" name="group_type" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                                                            <option value="{{$group->group_type}}">{{ucfirst($group->group_type)}}</option>
+                                                            <option>type</option>
+                                                            <option value="labour">Labor</option>
+                                                            <option value="material">Material</option>
+                                                            <option value="assemblies">Assemblies</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-span-2">
+                                                        <div class="flex justify-around my-2">
+                                                            <div>
+                                                                <input type="checkbox" name="show_unit_price" id="show_unit_price{{$group->group_id}}" value="1" {{ $group->show_unit_price == 1 ? 'checked' : '' }}>
+                                                                <label for="show_unit_price{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Unit Prices</label>
+                                                            </div>
+                                                            <div>
+                                                                <input type="checkbox" name="show_quantity" id="show_quantity{{$group->group_id}}" value="1" {{ $group->show_quantity == 1 ? 'checked' : '' }}>
+                                                                <label for="show_quantity{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Quantities</label>
+                                                            </div>
+                                                            <div>
+                                                                <input type="checkbox" name="show_total" id="show_total{{$group->group_id}}" value="1" {{ $group->show_total == 1 ? 'checked' : '' }}>
+                                                                <label for="show_total{{$group->group_id}}" class="text-gray-500 text-xs">Show Line Item Totals</label>
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                    <!-- <div class=" text-left col-span-2">
+                                                                <h3 class=" font-medium text-lg">Items:</h3>
+                                                                {{-- <select id="customer" name="customer" autocomplete="customer-name" class=" p-2 w-[92%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                                                                    <option>Item name</option>
+                                                                    <option>Interior</option>
+                                                                    <option>Exterior</option>
+                                                                    <option>Labour</option>
+                                                                </select> --}}
+                                                                {{-- ======multiple item inputs===== --}}
+                                                                <div id="muliple_items">
+                                                                </div>
+
+                                                                <div class=" text-right mt-2">
+                                                                    <button type="button" class=" gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="selectItems" aria-expanded="true" aria-haspopup="true">
+                                                                        <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
+                                                                    </button>
+                                                                </div>
+                                                            </div> -->
+                                                    <div class="my-2 col-span-2 relative">
+                                                        <label for="group_description">Description:</label>
+                                                        <textarea name="group_description" id="group_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">{{$group->group_description}}</textarea>
+                                                        <button type="button" id="group-description-mic" class=" absolute mt-8 right-4" onclick="voice('group-description-mic', 'group_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div class="">
+                                                    <button class=" save-btn mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
+                                                        <div class=" text-center hidden spinner" id="spinner">
+                                                            <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                                                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                                                            </svg>
+                                                        </div>
+                                                        <div class="text" id="text">
+                                                            Save
+                                                        </div>
+                                                    </button>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <script>
-                                            document.getElementById("accordion-collapse{{$item->estimate_item_id}}").addEventListener("click", function() {
-                                                var accordionBody = document.getElementById("accordion-collapse-body{{$item->estimate_item_id}}");
-                                                accordionBody.classList.toggle("hidden");
-                                            });
-                                        </script>
-                                    </tr>
-                                    @endif
-                                    </tr>
-                                    @php
-                                    $totalPrice += $item->item_total; // Add item price to total
-                                    if(isset($item->group->include_est_total) && $item->group->include_est_total == 1) {
-                                    $incEstTotal = 1; // Add item price to included estimate total
-                                    }
-                                    @endphp
-                                    @endforeach
-                                    @php
-                                        if($currentGroupId && $groupTotal > 0) {
-                                            // Check if this group ID already exists in $groupTotals
-                                            $groupExists = false;
-                                            foreach($groupTotals as &$existingGroup) {
-                                                if($existingGroup['group_id'] === $currentGroupId) {
-                                                    $existingGroup['total'] += $groupTotal; // Add to existing total
-                                                    $groupExists = true;
-                                                    break;
-                                                }
-                                            }
-                                            // If group doesn't exist, add a new object
-                                            if(!$groupExists) {
-                                                $groupTotals[] = [
-                                                    'group_id' => $currentGroupId,
-                                                    'group_name' => $currentGroupName,
-                                                    'total' => $groupTotal
-                                                ];
-                                            }
-                                        }
-                                    @endphp
-                                    <tr>
-                                        <th class="" colspan="7">
-                                            @if($incEstTotal == 0)
-                                            **Not include in Estimate Total**
-                                            @endif
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th class=" text-right" colspan="7">
-                                            Group Total: {{ number_format($groupTotal, 2) }}
-                                        </th>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                                document.getElementById("editGroup{{$group->group_id}}").addEventListener("click", function(e) {
+                                    e.preventDefault();
+                                    document.getElementById("editGroup-modal{{$group->group_id}}").classList.remove('hidden');
+                                });
+
+                                document.querySelectorAll(".modal-close").forEach(function(closeBtn) {
+                                    closeBtn.addEventListener("click", function(e) {
+                                        e.preventDefault();
+                                        document.getElementById("editGroup-modal{{$group->group_id}}").classList.add('hidden');
+                                        document.getElementById("formData{{$group->group_id}}").reset();
+                                    });
+                                });
+                            </script>
+                        </div>
+                        @endif
+                        @endforeach
+                        <div>
+                            <h1 class=" font-medium my-auto p-2">{{$groupName}}</h1>
                         </div>
                     </div>
-                    @endforeach
+                    @endif
                 </div>
-                @endif
             </div>
-            <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
-                <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Grand Total</span>
-                <span>${{ number_format($totalPrice, 2) }}</span> {{-- Display the formatted total --}}
+            <div class="relative overflow-x-auto mb-8">
+                <div class="itemDiv">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Item Name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Item Description
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Item Status (excluded/included)
+                                </th>
+                                <th scope="col" class="text-center px-6 py-3">
+                                    Item Cost
+                                </th>
+                                <th scope="col" class="text-center px-6 py-3">
+                                    Item Qty
+                                </th>
+                                <th scope="col" class="text-center px-6 py-3">
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($itemss as $item)
+                            <tr class="bg-white border-b">
+                                <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
+                                    <button type="button" style="height: 70px; width:70px;" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
+                                        <img class="" style="height: 70px; width:70px;" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
+                                    </button>
+                                </th>
+                                <td class="px-6 py-4 w-[30%]">
+                                    {{ $item->item_name }}
+                                </td>
+                                <td class="px-6 py-4 w-[30%]">
+                                    <p class="text-[16px]/[18px] text-[#323C47] font">
+                                        @if ($item->item_description)
+                                    <p class="font-medium">Description:</p>
+                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
+                                    @endif
+                                    @if ($item->item_note)
+                                    <p class="font-medium">Note:</p>
+                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
+                                    @endif
+                                    </p>
+                                </td>
+                                <td class="text-center">
+                                    @if($item->item_status == 'included')
+                                    <span class="inline-flex my-auto items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $item->item_status }}</span>
+                                    @elseif($item->item_status == 'excluded')
+                                    <span class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">{{ $item->item_status }}</span>
+                                    @endif
+                                    <button type="button" id="exclude-include-menuBtn{{$item->estimate_item_id}}" class="inline p-2">
+                                        <i class="fa-solid fa-square-caret-down text-[#930027] text-lg"></i>
+                                    </button>
+                                    <!-- Dropdown menu -->
+                                    <div class=" z-10">
+                                        <div id="exclude-include-menu{{$item->estimate_item_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                                                <li>
+                                                    <form action="/includeexcludeEstimateItem" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                        <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
+                                                        <input type="hidden" name="item_status" value="included">
+                                                        <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                            Include
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                                <hr>
+                                                <li>
+                                                    <form action="/includeexcludeEstimateItem" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
+                                                        <input type="hidden" name="estimate_item_id" value="{{$item->estimate_item_id}}">
+                                                        <input type="hidden" name="item_status" value="excluded">
+                                                        <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                            Exclude
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}").addEventListener("click", function(e) {
+                                            e.stopPropagation(); // Prevents the click event from reaching the document body
+                                            var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
+                                            dropdownMenu.classList.toggle("topbar-menuEntring");
+                                            dropdownMenu.classList.toggle("topbar-manuLeaving");
+                                        });
+
+                                        document.addEventListener('click', function(e) {
+                                            var btn = document.getElementById("exclude-include-menuBtn{{$item->estimate_item_id}}");
+                                            var dropdownMenu = document.getElementById("exclude-include-menu{{$item->estimate_item_id}}");
+
+                                            if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                                                // Click occurred outside the button and dropdown, hide the dropdown
+                                                dropdownMenu.classList.add("topbar-manuLeaving");
+                                                dropdownMenu.classList.remove("topbar-menuEntring");
+                                            }
+                                        });
+                                    </script>
+                                </td>
+                                @if($item->group)
+                                <td class="text-center mx-2">
+                                    @if($item->group->show_unit_price == 1)
+                                    ${{ number_format($item->item_price, 2) }}
+                                    @endif
+                                </td>
+                                <td class="text-center mx-2">
+                                    @if($item->group->show_quantity == 1)
+                                    {{ number_format($item->item_qty, 2) }}
+                                    @endif
+                                </td>
+                                <td class="text-center mx-2">
+                                    @if($item->group->show_total == 1)
+                                    ${{ number_format($item->item_total, 2) }}
+                                    @endif
+                                </td>
+                                @else
+                                <td class="text-center mx-2">
+                                    ${{ number_format($item->item_price, 2) }}
+                                </td>
+                                <td class="text-center mx-2">
+                                    {{ number_format($item->item_qty, 2) }}
+                                </td>
+                                <td class="text-center mx-2">
+                                    ${{ number_format($item->item_total, 2) }}
+                                </td>
+                                @endif
+                                @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
+                            <tr>
+                                <td colspan="7">
+                                    <div class="">
+                                        <div id="accordion-collapse{{$item->estimate_item_id}}" class="accordion-collapse mb-2" data-accordion="collapse">
+                                            <h2 id="accordion-collapse-heading-1" class="border-b-2">
+                                                <button type="button" class="flex items-center bg-[#F5F5F5] justify-between w-full p-2  text-left rounded-t-lg  focus:ring-gray-200" data-accordion-target="#accordion-collapse-body-1" aria-expanded="true" aria-controls="accordion-collapse-body-1">
+                                                    <span></span>
+                                                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
+                                                    </svg>
+                                                </button>
+                                            </h2>
+                                            <div id="accordion-collapse-body{{$item->estimate_item_id}}" class="accordion-collapse-body bg-[#F5F5F5] hidden" aria-labelledby="accordion-collapse-heading-1">
+                                                <div class="p-2">
+                                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                                            <tr>
+                                                                <th scope="col" class="px-6 py-3"></th>
+                                                                <th scope="col" class="px-6 py-3">
+                                                                    Item Name
+                                                                </th>
+                                                                <th scope="col" class="px-6 py-3">
+                                                                    Item Description
+                                                                </th>
+                                                                <th scope="col" class="text-center px-6 py-3">
+                                                                    Item Cost
+                                                                </th>
+                                                                <th scope="col" class="text-center px-6 py-3">
+                                                                    Item Qty
+                                                                </th>
+                                                                <th scope="col" class="text-center px-6 py-3">
+                                                                    Total
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach($item->assemblies as $assembly)
+                                                            <tr class="bg-white border-b">
+                                                                <td class="px-6 py-4"></td>
+                                                                <td class="px-6 py-4">
+                                                                    {{$assembly->est_ass_item_name}}
+                                                                </td>
+                                                                <td class="px-6 py-4 w-[30%]">
+                                                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
+                                                                </td>
+                                                                @if($item->group)
+                                                                <td class="text-center">
+                                                                    @if($item->group->show_unit_price == 1)
+                                                                    ${{number_format($assembly->ass_item_price, 2)}}
+                                                                    @endif
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    @if($item->group->show_quantity == 1)
+                                                                    {{number_format($assembly->ass_item_qty, 2)}}
+                                                                    @endif
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    @if($item->group->show_total == 1)
+                                                                    ${{number_format($assembly->ass_item_total, 2)}}
+                                                                    @endif
+                                                                </td>
+                                                                @else
+                                                                <td class="text-center">
+                                                                    ${{number_format($assembly->ass_item_price, 2)}}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    {{number_format($assembly->ass_item_qty, 2)}}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    ${{number_format($assembly->ass_item_total, 2)}}
+                                                                </td>
+                                                                @endif
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <script>
+                                    document.getElementById("accordion-collapse{{$item->estimate_item_id}}").addEventListener("click", function() {
+                                        var accordionBody = document.getElementById("accordion-collapse-body{{$item->estimate_item_id}}");
+                                        accordionBody.classList.toggle("hidden");
+                                    });
+                                </script>
+                            </tr>
+                            @endif
+                            </tr>
+                            @php
+                            $additionaltotalPrice += $item->item_total; // Add item price to total
+                            @endphp
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <br>
+            @endforeach
         </div>
+        @endif
+    </div>
+    <div class="bottom-2 mt-4 border-[#0000001A] w-full pt-4 px-4 pl-2 flex justify-end">
+        <span class="font-semibold text-[18px]/[21.2px] text-[#323C47] pr-7">Grand Total</span>
+        <span>${{ number_format($additionaltotalPrice, 2) }}</span> {{-- Display the formatted total --}}
+    </div>
+    <br>
+</div>
 @endif
 @if (session('user_details')['user_role'] == 'admin')
 <div class="mb-5 shadow-lg bg-white  rounded-3xl mt-7">
@@ -2422,41 +2849,6 @@ $userPrivileges->estimate->items === 'on')
                         $totalLaborPrice += $itemData['total']; // Add labor item price to total
                         @endphp
                         @endforeach
-                        @foreach ($estimateItemTemplates as $template)
-                        @foreach ($template->estimateItemTemplateItems as $item)
-                        @if ($item['item_type'] === 'labour')
-                        <tr class="bg-white border-b">
-                            <td class="px-6 py-4 w-[30%]">
-                                {{ $item['item_name'] }}
-                            </td>
-                            <td class="px-6 py-4 w-[30%]">
-                                <p class="text-[16px]/[18px] text-[#323C47] font">
-                                    @if ($item['item_description'])
-                                <p class="font-medium">Description:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}
-                                @endif
-                                @if ($item['item_note'])
-                                <p class="font-medium">Note:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_note']) !!}
-                                @endif
-                                </p>
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($item['item_price'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                {{ number_format($item['item_qty'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($item['item_total'], 2) }}
-                            </td>
-                        </tr>
-                        @php
-                        $totalLaborPrice += $item['item_total']; // Add labor item price to total
-                        @endphp
-                        @endif
-                        @endforeach
-                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -2602,41 +2994,6 @@ $userPrivileges->estimate->items === 'on')
                         $totalLaborPrice += $itemData['total']; // Add labor item price to total
                         @endphp
                         @endforeach
-                        @foreach ($estimateItemTemplates as $template)
-                        @foreach ($template->estimateItemTemplateItems as $item)
-                        @if ($item['item_type'] === 'labour')
-                        <tr class="bg-white border-b">
-                            <td class="px-6 py-4 w-[30%]">
-                                {{ $item['item_name'] }}
-                            </td>
-                            <td class="px-6 py-4 w-[30%]">
-                                <p class="text-[16px]/[18px] text-[#323C47] font">
-                                    @if ($item['item_description'])
-                                <p class="font-medium">Description:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}
-                                @endif
-                                @if ($item['item_note'])
-                                <p class="font-medium">Note:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_note']) !!}
-                                @endif
-                                </p>
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($item['item_price'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                {{ number_format($item['item_qty'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($item['item_total'], 2) }}
-                            </td>
-                        </tr>
-                        @php
-                        $totalLaborPrice += $item['item_total']; // Add labor item price to total
-                        @endphp
-                        @endif
-                        @endforeach
-                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -2779,40 +3136,6 @@ $userPrivileges->estimate->items === 'on')
                         $totalMaterialPrice += $itemData['total']; // Add material item price to total
                         @endphp
                         @endforeach
-                        @foreach ($estimateItemTemplates as $template)
-                        @foreach ($template->estimateItemTemplateItems as $item)
-                        @if ($item['item_type'] === 'material')
-                        <tr class="bg-white border-b">
-                            <td class="px-6 py-4 w-[60%]">
-                                {{ $item['item_name'] }}
-                                <p class="text-[16px]/[18px] text-[#323C47] font">
-                                    @if ($item['item_description'])
-                                <p class="font-medium">Description:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}
-                                @endif
-                                @if ($item['item_note'])
-                                <p class="font-medium">Note:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_note']) !!}
-                                @endif
-                                </p>
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($item['item_price'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                {{ number_format($item['item_qty'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($item['item_total'], 2) }}
-                            </td>
-                        </tr>
-                        @php
-                        $totalMaterialPrice += $item['item_total']; // Add labor item price to total
-                        @endphp
-                        @endif
-                        @endforeach
-                        @endforeach
-
                     </tbody>
                 </table>
             </div>
@@ -2956,40 +3279,6 @@ $userPrivileges->estimate->items === 'on')
                         $totalMaterialPrice += $itemData['total']; // Add material item price to total
                         @endphp
                         @endforeach
-                        @foreach ($estimateItemTemplates as $template)
-                        @foreach ($template->estimateItemTemplateItems as $item)
-                        @if ($item['item_type'] === 'material')
-                        <tr class="bg-white border-b">
-                            <td class="px-6 py-4 w-[60%]">
-                                {{ $item['item_name'] }}
-                                <p class="text-[16px]/[18px] text-[#323C47] font">
-                                    @if ($item['item_description'])
-                                <p class="font-medium">Description:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}
-                                @endif
-                                @if ($item['item_note'])
-                                <p class="font-medium">Note:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_note']) !!}
-                                @endif
-                                </p>
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($item['item_price'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                {{ number_format($item['item_qty'], 2) }}
-                            </td>
-                            <td class="text-center">
-                                ${{ number_format($item['item_total'], 2) }}
-                            </td>
-                        </tr>
-                        @php
-                        $totalMaterialPrice += $item['item_total']; // Add labor item price to total
-                        @endphp
-                        @endif
-                        @endforeach
-                        @endforeach
-
                     </tbody>
                 </table>
             </div>
@@ -3291,7 +3580,7 @@ $userPrivileges->estimate->items === 'on')
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($estimate_files as $file)
+                    @foreach ($estimate->estimateFiles as $file)
                     <tr class="bg-white border-b">
                         <td class="px-6 py-4">
                             <a href="{{ asset('storage/' . $file->estimate_file) }}" class=" text-[#930027] hover:border-b border-[#930027]" target="_blank">
@@ -3341,7 +3630,7 @@ $userPrivileges->estimate->files === 'on')
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($estimate_files as $file)
+                    @foreach ($estimate->estimateFiles as $file)
                     <tr class="bg-white border-b">
                         <td class="px-6 py-4">
                             <a href="{{ asset('storage/' . $file->estimate_file) }}" class=" text-[#930027] hover:border-b border-[#930027]" target="_blank">
@@ -3380,7 +3669,7 @@ $userPrivileges->estimate->files === 'on')
     </div>
     <div class=" mx-auto  px-5 py-7">
         <div class="itemDiv">
-            @foreach ($estimate_images as $image)
+            @foreach ($estimate->images as $image)
             <div class=" relative inline-block">
                 <div class="absolute z-50 right-1 top-1">
                     <form method="post" action="/addAsAttachment">
@@ -3421,7 +3710,7 @@ $userPrivileges->estimate->photos === 'on')
     </div>
     <div class=" mx-auto  px-5 py-7">
         <div class="itemDiv">
-            @foreach ($estimate_images as $image)
+            @foreach ($estimate->images as $image)
             <a href="/viewGallery{{ $image->estimate_id }}">
                 <div class=" inline-block p-2 mx-auto">
                     <img class=" w-16 h-16 rounded-md hover:scale-105 duration-300" src="{{ asset('storage/' . $image->estimate_image) }}" alt="Estimate Image">
@@ -3468,16 +3757,19 @@ $userPrivileges->estimate->photos === 'on')
                                 Status
                             </th>
                             <th scope="col" class="px-6 py-3">
+                                Customer Signature
+                            </th>
+                            <th scope="col" class="px-6 py-3">
                                 View
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @php
-                        $totalProposals = count($proposals);
+                        $totalProposals = count($estimate->proposals);
                         $currentIndex = 0;
                         @endphp
-                        @foreach ($proposals as $proposal)
+                        @foreach ($estimate->proposals as $proposal)
                         @php
                         $currentIndex++;
                         @endphp
@@ -3493,13 +3785,20 @@ $userPrivileges->estimate->photos === 'on')
                                     @endif
                             </td>
                             <td class="px-6 py-4">
-                                {{ $proposal->proposal_total }}
+                                {{ number_format($proposal->proposal_total, 2) }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $proposal->proposal_accepted }}
+                                {{ number_format($proposal->proposal_accepted, 2) }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $proposal->proposal_status }}
+                            </td>
+                            <td class="px-6 py-4">
+                                @if($proposal->customer_signature)
+                                <img src="{{ $proposal->customer_signature }}" class=" w-16 h-12" alt="Customer Signature">
+                                @else
+                                No Signature
+                                @endif
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex gap-3">
@@ -3512,15 +3811,12 @@ $userPrivileges->estimate->photos === 'on')
                                         </button>
                                     </a>
                                     @endif
-                                    @php
-                                    $totalPrice = $estimate_items->where('item_status', 'included')->sum('item_total');
-                                    @endphp
                                     @if($proposal->proposal_status == 'pending')
                                     <form action="/acceptProposal/{{ $estimate->estimate_id }}" method="post">
                                         @csrf
                                         <input type="hidden" name="proposal_id" value="{{ $proposal->estimate_proposal_id }}">
                                         <input type="hidden" name="proposal_group_id" value="{{ $proposal->group_id }}">
-                                        <input type="hidden" name="estimate_total" value="{{ $totalPrice + ($totalPrice * $estimate->tax_rate) / 100 }}">
+                                        <input type="hidden" name="estimate_total" value="{{ $proposal->proposal_total + ($proposal->proposal_total * $estimate->tax_rate) / 100 }}">
                                         <button class="px-2 py-2" title="Accept without signature">
                                             <i class="fa-solid fa-clipboard-check" style="color: #930027; font-size: 25px;"></i>
                                         </button>
@@ -3574,16 +3870,19 @@ $userPrivileges->estimate->proposals === 'on')
                                 Status
                             </th>
                             <th scope="col" class="px-6 py-3">
+                                Customer Signature
+                            </th>
+                            <th scope="col" class="px-6 py-3">
                                 View
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @php
-                        $totalProposals = count($proposals);
+                        $totalProposals = count($estimate->proposals);
                         $currentIndex = 0;
                         @endphp
-                        @foreach ($proposals as $proposal)
+                        @foreach ($estimate->proposals as $proposal)
                         @php
                         $currentIndex++;
                         @endphp
@@ -3599,13 +3898,20 @@ $userPrivileges->estimate->proposals === 'on')
                                     @endif
                             </td>
                             <td class="px-6 py-4">
-                                {{ $proposal->proposal_total }}
+                                {{ number_format($proposal->proposal_total, 2) }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $proposal->proposal_accepted }}
+                                {{ number_format($proposal->proposal_accepted, 2) }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $proposal->proposal_status }}
+                            </td>
+                            <td class="px-6 py-4">
+                                @if($proposal->customer_signature)
+                                <img src="{{ $proposal->customer_signature }}" class="w-16 h-12" alt="Customer Signature">
+                                @else
+                                No Signature
+                                @endif
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex gap-3">
@@ -3618,15 +3924,12 @@ $userPrivileges->estimate->proposals === 'on')
                                         </button>
                                     </a>
                                     @endif
-                                    @php
-                                    $totalPrice = $estimate_items->where('item_status', 'included')->sum('item_total');
-                                    @endphp
                                     @if($proposal->proposal_status == 'pending')
                                     <form action="/acceptProposal/{{ $estimate->estimate_id }}" method="post">
                                         @csrf
                                         <input type="hidden" name="proposal_id" value="{{ $proposal->estimate_proposal_id }}">
                                         <input type="hidden" name="proposal_group_id" value="{{ $proposal->group_id }}">
-                                        <input type="hidden" name="estimate_total" value="{{ $totalPrice + ($totalPrice * $estimate->tax_rate) / 100 }}">
+                                        <input type="hidden" name="estimate_total" value="{{ $proposal->proposal_total + ($proposal->proposal_total * $estimate->tax_rate) / 100 }}">
                                         <button class="px-2 py-2" title="Accept without signature">
                                             <i class="fa-solid fa-clipboard-check" style="color: #930027; font-size: 25px;"></i>
                                         </button>
@@ -3672,7 +3975,7 @@ $userPrivileges->estimate->proposals === 'on')
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($estimate_notes as $note)
+                            @foreach ($estimate->notes as $note)
                             <tr class="bg-white border-b">
                                 <td class="px-6 py-4">
                                     {{ $note->estimate_note }}
@@ -3790,7 +4093,7 @@ $userPrivileges->estimate->notes === 'on')
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($estimate_notes as $note)
+                            @foreach ($estimate->notes as $note)
                             <tr class="bg-white border-b">
                                 <td class="px-6 py-4">
                                     {{ $note->estimate_note }}
@@ -3914,7 +4217,7 @@ $userPrivileges->estimate->notes === 'on')
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($estimate_emails as $email)
+                        @foreach ($estimate->estimateEmails as $email)
                         <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ date('m/d/y', strtotime($email->created_at)) }}
@@ -3977,7 +4280,7 @@ $userPrivileges->estimate->emails === 'on')
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($estimate_emails as $email)
+                        @foreach ($estimate->estimateEmails as $email)
                         <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ date('m/d/y', strtotime($email->created_at)) }}
@@ -4220,7 +4523,7 @@ $userPrivileges->estimate->todos === 'on')
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($invoices as $invoices)
+                        @foreach ($estimate->invoices as $invoices)
                         <tr class="bg-white border-b">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ date('m/d/y', strtotime($invoices->complete_invoice_date)) }}
@@ -4252,6 +4555,11 @@ $userPrivileges->estimate->todos === 'on')
                                         </button>
                                     </form>
                                 </button>
+                                <a href="/viewInvoice/{{ $invoices->estimate_complete_invoice_id }}">
+                                    <button>
+                                        <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
+                                    </button>
+                                </a>
                             </td>
                         </tr>
                         @endforeach
@@ -4308,12 +4616,19 @@ $userPrivileges->estimate->todos === 'on')
                                 <button id="edit-payment{{ $payments->estimate_complete_invoice_id }}">
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
                                 </button>
-                                <form action="/deletePayment/{{ $payments->estimate_payment_id }}" class="" class="inline-block" method="post">
-                                    @csrf
-                                    <button type="submit" class="">
-                                        <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                <button>
+                                    <form action="/deletePayment/{{ $payments->estimate_payment_id }}" class="" class="inline-block" method="post">
+                                        @csrf
+                                        <button type="submit" class="">
+                                            <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </form>
+                                </button>
+                                <a href="/viewPayment/{{ $payments->estimate_payment_id }}">
+                                    <button>
+                                        <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
                                     </button>
-                                </form>
+                                </a>
                             </td>
                         </tr>
                         @endforeach
@@ -4919,14 +5234,14 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- Display email details here -->
                     <div class=" grid grid-cols-2 gap-4 my-2">
                         <input type="hidden" name="email_id" id="email_id">
-                        <input type="hidden" name="customer_id" value="{{$customer->customer_id}}">
+                        <input type="hidden" name="customer_id" value="{{$estimate->customer->customer_id}}">
                         <div>
                             <label for="email_title">Email title:</label>
                             <input type="text" name="email_name" id="email_name" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div>
                             <label for="email_to">Email to:</label>
-                            <input type="text" name="email_to" id="email_to" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $customer->customer_email }}">
+                            <input type="text" name="email_to" id="email_to" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $estimate->customer->customer_email }}">
                         </div>
                         <div class=" col-span-2">
                             <label for="email_subject">Email Subject:</label>
@@ -5281,7 +5596,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- Modal content here -->
                     <div class=" flex justify-between">
                         <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">
-                            {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
+                            {{ $estimate->customer->customer_first_name }} {{ $estimate->customer->customer_last_name }}
                         </h2>
                         <button class="modal-close" type="button">
                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
@@ -5290,18 +5605,18 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- task details -->
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_primary_address }},
-                            {{ $customer->customer_city }}, {{ $customer->customer_state }},
-                            {{ $customer->customer_zip_code }}
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_primary_address }},
+                            {{ $estimate->customer->customer_city }}, {{ $estimate->customer->customer_state }},
+                            {{ $estimate->customer->customer_zip_code }}
                         </p>
                     </div>
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_email }}</p>
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_email }}</p>
                     </div>
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_phone }}</p>
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_phone }}</p>
                     </div>
                     <div>
                         <div id="estimators" class="">
@@ -5364,7 +5679,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- Modal content here -->
                     <div class=" flex justify-between">
                         <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">
-                            {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
+                            {{ $estimate->customer->customer_first_name }} {{ $estimate->customer->customer_last_name }}
                         </h2>
                         <button class="modal-close" type="button">
                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
@@ -5373,18 +5688,18 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- task details -->
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_primary_address }},
-                            {{ $customer->customer_city }}, {{ $customer->customer_state }},
-                            {{ $customer->customer_zip_code }}
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_primary_address }},
+                            {{ $estimate->customer->customer_city }}, {{ $estimate->customer->customer_state }},
+                            {{ $estimate->customer->customer_zip_code }}
                         </p>
                     </div>
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_email }}</p>
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_email }}</p>
                     </div>
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_phone }}</p>
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_phone }}</p>
                     </div>
                     <div>
                         <div id="estimators" class="">
@@ -5457,7 +5772,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- Modal content here -->
                     <div class=" flex justify-between">
                         <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">
-                            {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
+                            {{ $estimate->customer->customer_first_name }} {{ $estimate->customer->customer_last_name }}
                         </h2>
                         <button class="modal-close" type="button">
                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
@@ -5466,9 +5781,9 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- task details -->
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_primary_address }},
-                            {{ $customer->customer_city }}, {{ $customer->customer_state }},
-                            {{ $customer->customer_zip_code }}
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_primary_address }},
+                            {{ $estimate->customer->customer_city }}, {{ $estimate->customer->customer_state }},
+                            {{ $estimate->customer->customer_zip_code }}
                         </p>
                     </div>
                     <div class=" mb-2">
@@ -5545,7 +5860,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- Modal content here -->
                     <div class=" flex justify-between">
                         <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">
-                            {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
+                            {{ $estimate->customer->customer_first_name }} {{ $estimate->customer->customer_last_name }}
                         </h2>
                         <button class="modal-close" type="button">
                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
@@ -5554,9 +5869,9 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- task details -->
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_primary_address }},
-                            {{ $customer->customer_city }}, {{ $customer->customer_state }},
-                            {{ $customer->customer_zip_code }}
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_primary_address }},
+                            {{ $estimate->customer->customer_city }}, {{ $estimate->customer->customer_state }},
+                            {{ $estimate->customer->customer_zip_code }}
                         </p>
                     </div>
                     <div class=" mb-2">
@@ -5759,7 +6074,7 @@ $userPrivileges->estimate->expenses === 'on')
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <form action="/addPayment" method="post" id="complete-payment-form">
                 @csrf
-                @if (isset($invoice->invoice_status) && $invoice->invoice_status == 'unpaid')
+                @if (isset($estimate->invoice->invoice_status) && $estimate->invoice->invoice_status == 'unpaid')
                 <input type="hidden" name="estimate_id" id="estimate_id" value="{{ $estimate->estimate_id }}">
                 <input type="hidden" name="po_number" id="po_number" value="{{ $estimate->po_number }}">
                 <input type="hidden" name="payment_id" id="payment_id">
@@ -5776,8 +6091,8 @@ $userPrivileges->estimate->expenses === 'on')
                     <div class=" mb-2">
                         <div id="dropdown-div" class="">
                             <p class=" font-medium items-center">Invoice:</p>
-                            <input type="text" id="invoice" name="invoice" value="{{ $invoice->invoice_name }} (Due {{ $invoice->invoice_due }})" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                            <input type="hidden" name="invoice_id" value="{{ $invoice->estimate_complete_invoice_id }}">
+                            <input type="text" id="invoice" name="invoice" value="{{ $estimate->invoice->invoice_name }} (Due {{ $estimate->invoice->invoice_due }})" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <input type="hidden" name="invoice_id" value="{{ $estimate->invoice->estimate_complete_invoice_id }}">
                             <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
                                 <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
                             </button> -->
@@ -5793,11 +6108,11 @@ $userPrivileges->estimate->expenses === 'on')
                     <div class=" grid grid-cols-2 gap-3">
                         <div>
                             <label for="">Date:</label>
-                            <input type="date" id="invoice_date" name="invoice_date" value="{{ date('Y-m-d', strtotime($invoice->complete_invoice_date)) }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <input type="date" id="invoice_date" name="invoice_date" value="{{ date('Y-m-d', strtotime($estimate->invoice->complete_invoice_date)) }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                         </div>
                         <div>
                             <label for="">Amount:</label>
-                            <input type="text" id="invoice_amount" name="invoice_amount" value="{{ $invoice->invoice_due }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
+                            <input type="text" id="invoice_amount" name="invoice_amount" value="{{ $estimate->invoice->invoice_due }}" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                         </div>
                     </div>
                     <div class="my-2 col-span-2 relative">
@@ -5902,7 +6217,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- Modal content here -->
                     <div class=" flex justify-between">
                         <h2 class=" text-xl font-semibold mb-2 text-[#F5222D] " id="modal-title">
-                            {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
+                            {{ $estimate->customer->customer_first_name }} {{ $estimate->customer->customer_last_name }}
                         </h2>
                         <button class="modal-close" type="button">
                             <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
@@ -5911,18 +6226,18 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- task details -->
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/home-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_primary_address }},
-                            {{ $customer->customer_city }}, {{ $customer->customer_state }},
-                            {{ $customer->customer_zip_code }}
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_primary_address }},
+                            {{ $estimate->customer->customer_city }}, {{ $estimate->customer->customer_state }},
+                            {{ $estimate->customer->customer_zip_code }}
                         </p>
                     </div>
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_email }}</p>
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_email }}</p>
                     </div>
                     <div>
                         <img class=" inline-block" src="{{ asset('assets/icons/mail-icon.svg') }}" alt="icon">
-                        <p class=" font-medium inline-block items-center">{{ $customer->customer_phone }}</p>
+                        <p class=" font-medium inline-block items-center">{{ $estimate->customer->customer_phone }}</p>
                     </div>
                     <div>
                         <div id="estimators" class="">
@@ -6314,50 +6629,55 @@ $userPrivileges->estimate->expenses === 'on')
 
                 <!-- Modal panel -->
                 <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <!-- Modal content here -->
-                        <div class=" flex justify-between border-b-2">
-                            <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Send Proposal Mail!</h2>
-                            <button class="modal-close" type="button">
-                                <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-                            </button>
-                        </div>
-                        <!-- task details -->
-                        <div class=" grid grid-cols-2 gap-4 my-2">
-                            <input type="hidden" name="email_id" id="email_id">
-                            <div>
-                                <label for="email_title">Email title:</label>
-                                <input type="text" name="email_title" id="email_title" value="Proposal Email" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                    <form action="/sendProposal" method="post">
+                    @csrf
+                    <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
+                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                            <!-- Modal content here -->
+                            <div class=" flex justify-between border-b-2">
+                                <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Send Proposal Mail!</h2>
+                                <button class="modal-close" type="button">
+                                    <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                                </button>
                             </div>
-                            <div>
-                                <label for="email_to">Email to:</label>
-                                <input type="text" name="email_to" id="email_to" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $customer->customer_email }}">
-                                <p class="text-[#930027] text-xs">Please use "," to send mail to multiple persons.</p>
-                            </div>
-                            <div class=" col-span-2">
-                                <label for="email_subject">Email Subject:</label>
-                                <textarea name="email_subject" id="email_subject" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">Proposal Mail</textarea>
-                            </div>
-                            <div class=" col-span-2">
-                                <label for="email_body">Email body:</label>
-                                <textarea name="email_body" id="email_body" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" rows="10">Hi {{ ucfirst($customer->customer_first_name)}} {{ ucfirst($customer->customer_last_name)}}!
+                            <!-- task details -->
+                            <input type="hidden" name="secondProposal" value="1">
+                            <div class=" grid grid-cols-2 gap-4 my-2">
+                                <input type="hidden" name="email_id" id="email_id">
+                                <div>
+                                    <label for="email_title">Email title:</label>
+                                    <input type="text" name="email_title" id="email_title" value="Proposal Email" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="email_to">Email to:</label>
+                                    <input type="text" name="email_to" id="email_to" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $estimate->customer->customer_email }}">
+                                    <p class="text-[#930027] text-xs">Please use "," to send mail to multiple persons.</p>
+                                </div>
+                                <div class=" col-span-2">
+                                    <label for="email_subject">Email Subject:</label>
+                                    <textarea name="email_subject" id="email_subject" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">Proposal Mail</textarea>
+                                </div>
+                                <div class=" col-span-2">
+                                    <label for="email_body">Email body:</label>
+                                    <textarea name="email_body" id="email_body" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" rows="10">Hi {{ ucfirst($estimate->customer->customer_first_name)}}!
 Thank you for the opportunity to provide you with an estimate.</textarea>
+                                </div>
+                            </div>
+                            <div class="">
+                                <button id="saveButton" class=" save-btn mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md">
+                                    <div class=" text-center hidden spinner" id="spinner">
+                                        <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                                            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                                        </svg>
+                                    </div>
+                                    <div class="text" id="text">
+                                        Send
+                                    </div>
+                                </button>
                             </div>
                         </div>
-                        <div class="">
-                            <button id="saveButton" class=" save-btn mb-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md">
-                                <div class=" text-center hidden spinner" id="spinner">
-                                    <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-                                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
-                                    </svg>
-                                </div>
-                                <div class="text" id="text">
-                                    Send
-                                </div>
-                            </button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -6432,10 +6752,10 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                         </div>
                         <div class=" col-span-2">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Owner</h5>
-                            <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="owner" id="customer_owner">
+                            <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="owner" id="customer_owner" required>
                                 <option>Select User</option>
                                 @foreach($employees as $user)
-                                <option value="{{ $user->name }} {{ $user->last_name }}">
+                                <option value="{{ $user->id }}">
                                     {{ $user->name }} {{ $user->last_name }}
                                 </option>
                                 @endforeach
@@ -6510,7 +6830,7 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
         $("#addContact-modal").addClass('hidden');
         $("#addContact-form")[0].reset()
     });
-    $("#sendproposal-btn").click(function(e) {
+    $("#sendProposal-btn").click(function(e) {
         e.preventDefault();
         $("#sendProposal-modal").removeClass('hidden');
     });

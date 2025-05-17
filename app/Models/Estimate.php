@@ -15,6 +15,21 @@ class Estimate extends Model
         return $this->belongsTo(Customer::class, 'customer_id');
     }
 
+    public function proposals()
+    {
+        return $this->hasMany(EstimateProposal::class, 'estimate_id');
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(EstimateNote::class, 'estimate_id');
+    }
+
+    public function invoice()
+    {
+        return $this->hasOne(AssignPayment::class, 'estimate_id')->where('invoice_status', 'unpaid');
+    }
+
     public function images()
     {
         return $this->hasMany(EstimateImages::class, 'estimate_id');
@@ -23,6 +38,13 @@ class Estimate extends Model
     public function scheduler()
     {
         return $this->belongsTo(User::class, 'estimate_schedule_assigned_to');
+    }
+
+    public function schedulers()
+    {
+        // This relationship is defined in the controller by adding schedulers to the estimate object
+        // as it's a JSON field that needs special handling
+        return [];
     }
 
     public function assigned_work()

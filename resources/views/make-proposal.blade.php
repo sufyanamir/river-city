@@ -66,7 +66,7 @@
             <div class="grid grid-cols-12 p-5">
                 <div class="col-span-6 px-4 ">
                     <div class="projectLogo ">
-                        <img class="w-[35%] h-[35%]" src="{{ asset('assets/icons/tproject-logo.svg') }}" alt="">
+                        <img class="w-[50%] h-[40%]" src="{{ asset('assets/icons/tproject-logo.svg') }}" alt="">
                     </div>
                     <div class=" px-4">
                         <p class="text-[16px] font-bold text-[#323C47]">River City Painting, Inc</p>
@@ -184,16 +184,16 @@
                                                             $singleItem->group->show_total == 1 ? $showItemTotal = 1 : 0;
                                                         @endphp
                                                         @endforeach
+                                                        @if($showItemQty == 1)
                                                         <th scope="col" class="text-center">
-                                                            @if($showItemQty == 1)
                                                             Item Qty
-                                                            @endif
                                                         </th>
+                                                        @endif
+                                                        @if($showItemTotal == 1)
                                                         <th scope="col" class="text-center">
-                                                            @if($showItemTotal == 1)
                                                             Item Total
-                                                            @endif
                                                         </th>
+                                                        @endif
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -207,7 +207,12 @@
                                                             <input type="checkbox" disabled name="privileges[reports][view]" id="privilegeReportsView">
                                                             <label for="privilegeReportsView" class=" text-gray-500"></label>
                                                         </th> -->
-                                                        <td class="px-6 py-4 w-[70%]">
+                                                        @php
+                                                        $showQty = $item->group && $item->group->show_quantity == 1;
+                                                        $showTotal = $item->group && $item->group->show_total == 1;
+                                                        $colspan = (!$showQty && !$showTotal) ? 3 : 1;
+                                                        @endphp
+                                                        <td class="px-6 py-4 w-[70%]" colspan="{{ $colspan }}">
                                                             <label class="text-lg font-semibold text-[#323C47] underline" for="">{{ $item->item_name }}</label>
                                                             <p class="text-[16px]/[18px] text-[#323C47] pt-2">
                                                                 @if ($item->item_description)
@@ -222,24 +227,15 @@
                                                             @endif
                                                             </p>
                                                         </td>
-                                                        @if($item->group)
-                                                        <td class="text-center">
-                                                            @if($item->group->show_quantity == 1)
-                                                            {{ number_format($item->item_qty, 2) }} <br> {{ $item->item_unit }}
-                                                            @endif
-                                                        </td>
-                                                        <td class="text-center">
-                                                            @if($item->group->show_total == 1)
-                                                            ${{ number_format($item->item_total, 2) }}
-                                                            @endif
-                                                        </td>
-                                                        @else
-                                                        <td class="text-center">
-                                                            {{ number_format($item->item_qty, 2) }} <br> {{ $item->item_unit }}
-                                                        </td>
-                                                        <td class="text-center">
-                                                            ${{ number_format($item->item_total, 2) }}
-                                                        </td>
+                                                        @if($showQty)
+                                                            <td scope="col" class="text-center">
+                                                                {{ number_format($item->item_qty, 2) }} <br> {{ $item->item_unit }}
+                                                            </td>
+                                                        @endif
+                                                        @if($showTotal)
+                                                            <td scope="col" class="text-center">
+                                                                ${{ number_format($item->item_total, 2) }}
+                                                            </td>
                                                         @endif
                                                         @php
                                                         if(isset($item->group->show_group_total) && $item->group->show_group_total == 1) {
@@ -408,9 +404,9 @@
                                     <p class="italic text-[#323C47]">
                                         Total
                                     </p>
-                                    <p class="italic text-[#323C47]">
+                                    {{-- <p class="italic text-[#323C47]">
                                         Discount
-                                    </p>
+                                    </p> --}}
                                 </div>
                                 <div>
                                     <p class="text-[#858585]">
@@ -435,9 +431,9 @@
                                     $discountedTotal = null;
                                     }
                                     @endphp
-                                    <p class="text-[#858585]">
+                                    {{-- <p class="text-[#858585]">
                                         ${{ number_format($discountedTotal, 2) }}
-                                    </p>
+                                    </p> --}}
                                 </div>
                             </div>
                         </div>
@@ -662,46 +658,63 @@ $exsistingProposals = $existing_proposals;
     }
 
     function downloadAsPDF(areaID) {
-        if (!editorInstance) {
-            console.error("Editor instance is not initialized.");
-            return;
+    if (!editorInstance) {
+        console.error("Editor instance is not initialized.");
+        return;
+    }
+
+    // Extract content from CKEditor
+    var editorContent = editorInstance.getData();
+
+    // Get the printable area content
+    var printContent = document.getElementById(areaID).innerHTML;
+
+    // Combine the printable area content with the editor content
+    var combinedContent = printContent + editorContent;
+
+    // Create a temporary div to hold the combined content
+    var tempDiv = document.createElement('div');
+    tempDiv.innerHTML = combinedContent;
+
+    // Apply styles to hide unwanted elements
+    var style = document.createElement('style');
+    style.innerHTML = `
+        #send-button, #footer, #editor, #editor-div {
+            display: none !important;
         }
+    `;
+    tempDiv.appendChild(style);
 
-        // Extract content from CKEditor
-        var editorContent = editorInstance.getData();
-        
-        // Get the printable area content
-        var printContent = document.getElementById(areaID).innerHTML;
-
-        // Combine the printable area content with the editor content
-        var combinedContent = printContent + editorContent;
-
-        // Create a temporary div to hold the combined content
-        var tempDiv = document.createElement('div');
-        tempDiv.innerHTML = combinedContent;
-
-        // Define PDF options
-        var opt = {
+    // Define PDF options
+    var opt = {
         margin: 0.5,
         filename: 'Estimate_{{ $estimate->customer_name }}_{{$estimate->customer_last_name}}.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 1.5 },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-        pagebreak: { mode: ['css'] } // Prevents text splitting across pages
+        pagebreak: { mode: ['css'] }
     };
 
-    // Apply styles to hide unwanted elements and format content
-    var style = document.createElement('style');
-    style.innerHTML = `
-            #send-button, #footer, #editor, #editor-div {
-        display: none !important;
-    }
-        `;
-        tempDiv.appendChild(style);
+    // Generate PDF with centered page numbers
+    html2pdf().set(opt).from(tempDiv).toPdf().get('pdf').then(function (pdf) {
+        var totalPages = pdf.internal.getNumberOfPages();
+        var pageWidth = pdf.internal.pageSize.getWidth();
+        var pageHeight = pdf.internal.pageSize.getHeight();
 
-        // Generate and download the PDF
-        html2pdf().set(opt).from(tempDiv).save();
-    }
+        for (var i = 1; i <= totalPages; i++) {
+            pdf.setPage(i);
+            pdf.setFontSize(10);
+            pdf.setTextColor(150);
+            pdf.text(
+                'Page ' + i + ' of ' + totalPages,
+                pageWidth / 2,
+                pageHeight - 0.3,
+                { align: 'center' }
+            );
+        }
+    }).save();
+}
+
     @else
     function printPageArea(areaID) {
         // Get the printable area content

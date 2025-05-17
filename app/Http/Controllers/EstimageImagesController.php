@@ -12,6 +12,7 @@ use App\Models\Notifications;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use ZipArchive;
 
 class EstimageImagesController extends Controller
 {
@@ -27,6 +28,43 @@ class EstimageImagesController extends Controller
         ]);
     }
     // estimate activity
+
+    public function downloadAll($id)
+    {
+        $images = EstimateImages::where('estimate_id', $id)->get(); // Or use your filtered images
+
+        $zip = new ZipArchive;
+        $fileName = 'images_' . now()->format('Ymd_His') . '.zip';
+
+        $zipPath = storage_path('app/public/zips/' . $fileName);
+        if (!file_exists(dirname($zipPath))) {
+            mkdir(dirname($zipPath), 0755, true);
+        }
+
+        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+            foreach ($images as $image) {
+                $filePath = storage_path('app/public/' . $image->estimate_image);
+                if (file_exists($filePath)) {
+                    $zip->addFile($filePath, basename($image->estimate_image));
+                }
+            }
+            $zip->close();
+        }
+
+        return response()->download($zipPath)->deleteFileAfterSend(true);
+    }
+
+    public function viewImages($id)
+    {
+        try {
+
+            $images = EstimateImages::where('estimate_id', $id)->get();
+
+            return view('viewImages', ['images' => $images, 'estimate_id' => $id]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
 
     public function addImageChat(Request $request)
     {
@@ -85,7 +123,7 @@ class EstimageImagesController extends Controller
                             $notification = new Notifications([
                                 'added_user_id' => $userDetails['id'],
                                 'estimate_id' => $image->estimate_id,
-                                'notification_message' => $userDetails['name'] . " mentioned you in the chat of ". $estimate->customer_name ." ". $estimate->customer_last_name  ." estimate's image " . $image->estimate_id . ".",
+                                'notification_message' => $userDetails['name'] . " mentioned you in the chat of " . $estimate->customer_name . " " . $estimate->customer_last_name  . " estimate's image " . $image->estimate_id . ".",
                                 'mentioned_user_id' => $singleMentionedId,
                                 'notification_type' => 'mentionGallery',
                             ]);
@@ -151,8 +189,8 @@ class EstimageImagesController extends Controller
         $estimate = Estimate::where('estimate_id', $id)->first();
         $estimateImages = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-        $users = User::where('id', '<>', $userDetails['id'])->get();
-        $chatMessages = EstimateChat::with('addedUser')->where('estimate_id', $id)->orderby('estimate_chat_id', 'desc')->get();
+        $users = User::where('id', '<>', $userDetails['id'])->where('sts', 'active')->get();
+        $chatMessages = EstimateChat::with('addedUser')->where('estimate_id', $id)->orderby('estimate_chat_id', 'asc')->get();
         // return response()->json(['success' => true, 'data' => ['estimate_with_images' => $estimateData]], 200);
         return view('viewGallery', ['chatMessages' => $chatMessages, 'estimate' => $estimate, 'estimate_images' => $estimateImages, 'customer' => $customer, 'users' => $users, 'user_details' => $userDetails]);
 

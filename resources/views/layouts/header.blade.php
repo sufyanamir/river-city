@@ -3,15 +3,14 @@
     use Illuminate\Support\Facades\Auth;
 
     $user = session('user_details');
-    $notificationsCount =
-        Notifications::where('added_user_id', $user['id'])
-            ->where('notification_status', '<>', 'unread')
-            ->where('notification_type', '<>', 'mention')
-            ->count() +
-        Notifications::where('mentioned_user_id', $user['id'])
-            ->whereIn('notification_type', ['mention', 'mentionGallery'])
-            ->where('notification_status', 'unread')
-            ->count();
+    $notificationsCount = Notifications::where('added_user_id', $user['id'])
+        ->where('notification_status', 'unread')
+        ->where('notification_type', '<>', 'mention')
+        ->count() 
+        + Notifications::where('mentioned_user_id', $user['id'])
+        ->whereIn('notification_type', ['mention', 'mentionGallery'])
+        ->where('notification_status', 'unread')
+        ->count();
 @endphp
 
 <!doctype html>
@@ -464,10 +463,10 @@
                     <div class="relative my-auto">
                         <a href="/notifications">
                             <img src="{{ asset('assets/icons/bell.svg') }}" alt="logo">
-                            @if (isset($notificationsCount) && $notificationsCount > 0)
-                                <div
-                                    class="absolute top-0 right-0 bg-[#F5222D] text-white rounded-full w-3 h-3 flex items-center justify-center">
-                                </div>
+                            @if(isset($notificationsCount) && $notificationsCount > 0)
+                            <div class="absolute top-0 right-0 bg-[#F5222D] text-white rounded-full w-3 h-3 flex items-center justify-center p-2 text-xs">
+                                {{ $notificationsCount }}
+                            </div>
                             @endif
                         </a>
                     </div>

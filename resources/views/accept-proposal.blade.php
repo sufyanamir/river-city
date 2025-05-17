@@ -86,7 +86,7 @@
                 <div class="grid grid-cols-12 p-5">
                     <div class="col-span-6 px-4 ">
                         <div class="projectLogo ">
-                            <img class="w-[35%] h-[35%]" src="{{ asset('assets/icons/tproject-logo.svg') }}" alt="">
+                            <img class="w-[50%] h-[40%]" src="{{ asset('assets/icons/tproject-logo.svg') }}" alt="">
                         </div>
                         <div class="px-4">
                             <p class="text-[16px] font-bold text-[#323C47]">River City Painting, Inc</p>
@@ -249,16 +249,16 @@
                                                             $singleItem['group']['show_total'] == 1 ? $showItemTotal = 1 : 0;
                                                         @endphp
                                                         @endforeach
+                                                        @if($showItemQty == 1)
                                                         <th scope="col" class="text-center">
-                                                            @if($showItemQty == 1)
                                                             Item Qty
-                                                            @endif
                                                         </th>
+                                                        @endif
+                                                        @if($showItemTotal == 1)
                                                         <th scope="col" class="text-center">
-                                                            @if($showItemTotal == 1)
                                                             Item Total
-                                                            @endif
                                                         </th>
+                                                        @endif
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -272,7 +272,12 @@
                                                         <input type="checkbox" disabled name="privileges[reports][view]" id="privilegeReportsView">
                                                         <label for="privilegeReportsView" class=" text-gray-500"></label>
                                                     </th> -->
-                                                        <td class="px-6 py-4 w-[70%]">
+                                                        @php
+                                                        $showQty = $item['group'] && $item['group']['show_quantity'] == 1;
+                                                        $showTotal = $item['group'] && $item['group']['show_total'] == 1;
+                                                        $colspan = (!$showQty && !$showTotal) ? 3 : 1;
+                                                        @endphp
+                                                        <td class="px-6 py-4 w-[70%]" colspan="{{ $colspan }}">
                                                             <label class="text-lg font-semibold text-[#323C47] underline" for="">{{ $item['item_name'] }}
                                                                 <!-- <span class="bg-{{ $item['upgrade_status'] == 'accepted' ? 'green' : ($item['upgrade_status'] == 'rejected' ? 'red' : 'gray') }}-100 text-{{ $item['upgrade_status'] == 'accepted' ? 'green' : ($item['upgrade_status'] == 'rejected' ? 'red' : 'gray') }}-800 text-xs font-medium me-2 px-2.5 py-1 rounded-sm dark:bg-{{ $item['upgrade_status'] == 'accepted' ? 'green' : ($item['upgrade_status'] == 'rejected' ? 'red' : 'gray') }}-700 dark:text-{{ $item['upgrade_status'] == 'accepted' ? 'green' : ($item['upgrade_status'] == 'rejected' ? 'red' : 'gray') }}-300">{{ $item['upgrade_status'] }}</span> -->
                                                             </label>
@@ -291,24 +296,15 @@
                                                             @endif
                                                             </p>
                                                         </td>
-                                                        @if(isset($item['group']) && $item['group'])
-                                                        <td class="text-center">
-                                                            @if($item['group']['show_quantity'] == 1)
-                                                            {{ number_format($item['item_qty'], 2) }} <br> {{ $item['item_unit'] }}
-                                                            @endif
-                                                        </td>
-                                                        <td class="text-center">
-                                                            @if($item['group']['show_total'] == 1)
-                                                            ${{ number_format($item['item_total'], 2) }}
-                                                            @endif
-                                                        </td>
-                                                        @else
-                                                        <td class="text-center">
-                                                            {{ number_format($item['item_qty'], 2) }} <br> {{ $item['item_unit'] }}
-                                                        </td>
-                                                        <td class="text-center">
-                                                            ${{ number_format($item['item_total'], 2) }}
-                                                        </td>
+                                                        @if($showQty)
+                                                            <td scope="col" class="text-center">
+                                                                {{ number_format($item['item_qty'], 2) }} <br> {{ $item['item_unit'] }}
+                                                            </td>
+                                                        @endif
+                                                        @if($showTotal)
+                                                            <td scope="col" class="text-center">
+                                                                ${{ number_format($item['item_total'], 2) }}
+                                                            </td>
                                                         @endif
                                                     </tr>
                                                     @php
@@ -556,9 +552,9 @@
                                     <p class="italic text-[#323C47]">
                                         Total
                                     </p>
-                                    <p class="italic text-[#323C47]">
+                                    {{-- <p class="italic text-[#323C47]">
                                         Discount
-                                    </p>
+                                    </p> --}}
                                 </div>
                                 <div>
                                     <p class="text-[#858585] dynamic-total">
@@ -587,9 +583,9 @@
                                     $discountedTotal = null;
                                     }
                                     @endphp
-                                    <p class="text-[#858585]">
+                                    {{-- <p class="text-[#858585]">
                                         ${{ number_format($discountedTotal, 2) }}
-                                    </p>
+                                    </p> --}}
                                 </div>
                             </div>
                         </div>
@@ -627,7 +623,7 @@
                     @endif
                     @endif
                     @if(session()->has('user_details'))
-                    @if($estimate['estimate_total'] != null)
+                    @if($estimate['estimate_total'] != null && $proposal_status != 'pending')
                     <div>
                         <div>
                             @if($estimate['customer_signature'] != null)
@@ -692,17 +688,17 @@
         </div>
         <input type="hidden" id="drawingData" name="customer_signature">
     </form>
-    <div class="w-full bottom-0 z-10 " id="grandTotal-card" style=" position: fixed !important;">
-        <div class="flex items-center justify-center mx-auto p-4 mb-4 h-20 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
-            <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-            </svg>
-            <span class="sr-only">Info</span>
-            <div>
-                <span class="font-medium text-lg">Grand Total: ${{number_format($grandTotal, 2)}}</span>
-            </div>
+    <div class="fixed bottom-0 left-1/2 transform -translate-x-1/2 z-10 w-[50%]" id="grandTotal-card">
+    <div class="flex items-center justify-center p-4 mb-4 h-20 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+        <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+        </svg>
+        <div>
+            <span class="font-medium text-lg">Grand Total: ${{ number_format($grandTotal, 2) }}</span>
         </div>
     </div>
+</div>
+
 </div>
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
 <script src="{{ asset('assets/js/custom.js') }}"></script>
@@ -1010,24 +1006,41 @@
     // Define PDF options
     var opt = {
         margin: 0.5,
-        filename: 'Estimate_{{ $estimate['customer_name'] }}_{{$estimate['customer_last_name']}}.pdf',
+        filename: 'Estimate_{{ $estimate["customer_name"] }}_{{ $estimate["customer_last_name"] }}.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 1.5 },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-        pagebreak: { mode: ['css'] } // Prevents text splitting across pages
+        pagebreak: { mode: ['css'] }
     };
 
-    // Apply styles to hide unwanted elements and format content
+    // Apply styles to hide unwanted elements
     var style = document.createElement('style');
     style.innerHTML = `
         #grandTotal-card { display: none !important; }
-        #addSign{ display: none !important; }
-        `;
+        #addSign { display: none !important; }
+    `;
     document.head.appendChild(style);
 
-    // Generate and save the PDF
-    html2pdf().set(opt).from(element).save();
+    // Generate the PDF with centered page numbers
+    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+        var totalPages = pdf.internal.getNumberOfPages();
+        var pageWidth = pdf.internal.pageSize.getWidth();
+        var pageHeight = pdf.internal.pageSize.getHeight();
+
+        for (var i = 1; i <= totalPages; i++) {
+            pdf.setPage(i);
+            pdf.setFontSize(10);
+            pdf.setTextColor(150);
+            pdf.text(
+                'Page ' + i + ' of ' + totalPages,
+                pageWidth / 2,
+                pageHeight - 0.3,
+                { align: 'center' }
+            );
+        }
+    }).save();
 }
+
 
 
 </script>

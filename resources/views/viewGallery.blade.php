@@ -54,6 +54,23 @@ $userPrivileges = session('user_details')['user_privileges'];
                 <div class="col-span-1"></div>
                 <div class="col-span-10 px-3  flex justify-between">
                     <p class="text-[22px]/[25.78px] font-medium">Images <span>{{ count($estimate_images) }}</span></p>
+                    <div>
+                    <button class="p-2 rounded-md font-medium bg-[#930027] text-white" id="copyLink-btn">
+                        <div class="text">
+                            Copy Link
+                        </div>
+                    </button>
+                    <script>
+                        document.getElementById('copyLink-btn').addEventListener('click', function() {
+                            const baseUrl = window.location.origin;
+                            const link = `${baseUrl}/viewImages/{{$estimate->estimate_id}}`;
+                            navigator.clipboard.writeText(link).then(() => {
+                                alert('Link copied to clipboard!');
+                            }).catch(err => {
+                                console.error('Failed to copy link: ', err);
+                            });
+                        });
+                    </script>
                     @if (session('user_details')['user_role'] == 'admin')
                     <button class="p-2 rounded-md font-medium bg-[#930027] text-white" id="addImage-btn">
                         <div class=" text-center hidden spinner" id="spinner">
@@ -79,6 +96,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                         </div>
                     </button>
                     @endif
+                    </div>
                 </div>
             </div>
             <hr class="bg-gray-300 h-[2px] w-full">
@@ -243,7 +261,7 @@ $userPrivileges = session('user_details')['user_privileges'];
 
                 <div class="mt-2 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                     <div class="flex justify-between">
-                        <img class="object-cover w-full h-80 rounded-l-lg" id="imageView" src="" alt="">
+                        <img class="object-contain w-[55%] h-80 rounded-l-lg" id="imageView" src="" alt="">
                         <div class="flex flex-col justify-between leading-normal">
                             <div class="h-80 overflow-y-auto w-full">
                                 <div id="chatDiv" class="w-96 h-60 overflow-auto">
@@ -283,15 +301,34 @@ $userPrivileges = session('user_details')['user_privileges'];
 @include('layouts.footer')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/recorderjs/0.1.0/recorder.min.js"></script>
 <script>
-    // Your list of users with names and IDs
-    const users = {!! json_encode($users->pluck('name', 'id')) !!};
+    // Function to scroll to the bottom of the chat
+    function scrollToBottom() {
+        const chatDialog = document.getElementById('chat-dialog');
+        const chatContainer = chatDialog.closest('.overflow-auto');
+        if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    }
+
+    // Scroll to bottom when page loads
+    $(document).ready(function() {
+        scrollToBottom();
+    });
+
+    // Updated user data structure to include user_role
+    const users = {!! json_encode($users->map(function($user) {
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'user_role' => $user->user_role
+        ];
+    })) !!};
 
     // Function to initialize mention functionality for a given form
     function initializeMentionFunctionality(textareaId, dropdownId, hiddenInputId) {
         const messageTextarea = $("#" + textareaId);
         const userDropdown = $("#" + dropdownId);
         const userIdInput = $("#" + hiddenInputId);
-        let mentionedUserIds = [];
 
         messageTextarea.on("input", function(event) {
             const text = event.target.value;
@@ -299,8 +336,8 @@ $userPrivileges = session('user_details')['user_privileges'];
 
             if (lastIndex !== -1) {
                 const query = text.substring(lastIndex + 1);
-                const matchingUsers = Object.entries(users).filter(([id, name]) =>
-                    name.toLowerCase().includes(query.toLowerCase())
+                const matchingUsers = users.filter(user => 
+                    user.name.toLowerCase().includes(query.toLowerCase())
                 );
 
                 // Display matching users in the dropdown
@@ -314,8 +351,8 @@ $userPrivileges = session('user_details')['user_privileges'];
         function renderDropdown(users, dropdownId, textareaId, hiddenInputId) {
             const dropdown = $("#" + dropdownId);
             if (users.length > 0) {
-                const dropdownContent = users.map(([id, name]) => `
-                <button type="button" onclick="mentionUser('${name}', '${id}', '${textareaId}', '${hiddenInputId}', '${dropdownId}')">${name}</button>
+                const dropdownContent = users.map(user => `
+                <button type="button" onclick="mentionUser('${user.name}', '${user.id}', '${user.user_role}', '${textareaId}', '${hiddenInputId}', '${dropdownId}')">${user.name} (${user.user_role})</button>
             `).join("");
                 dropdown.html(dropdownContent).show();
             } else {
@@ -329,17 +366,23 @@ $userPrivileges = session('user_details')['user_privileges'];
                 userDropdown.hide();
             }
         });
+        
+        // Enable submit button when message has content (optional enhancement)
+        messageTextarea.on("input", function() {
+            const submitBtn = $(this).closest("form").find("button[type='submit']");
+            submitBtn.prop("disabled", !$(this).val().trim());
+        });
     }
 
-    // Function to handle user selection from the dropdown
-    function mentionUser(userName, userId, textareaId, hiddenInputId, dropdownId) {
+    // Updated function to handle user selection from the dropdown
+    function mentionUser(userName, userId, userRole, textareaId, hiddenInputId, dropdownId) {
         const messageTextarea = $("#" + textareaId);
         const userIdInput = $("#" + hiddenInputId);
         const dropdown = $("#" + dropdownId);
 
         const currentText = messageTextarea.val();
         const lastIndex = currentText.lastIndexOf("@");
-        const newText = currentText.substring(0, lastIndex) + `@${userName} `;
+        const newText = currentText.substring(0, lastIndex) + `@${userName} (${userRole}) `;
 
         messageTextarea.val(newText);
 
@@ -436,6 +479,12 @@ $userPrivileges = session('user_details')['user_privileges'];
 
                         // Open the modal
                         $('#image-btn-modal').removeClass('hidden');
+                        
+                        // Scroll the chat div to the bottom
+                        const chatDiv = document.getElementById('chatDiv');
+                        if (chatDiv) {
+                            chatDiv.scrollTop = chatDiv.scrollHeight;
+                        }
                     } else {
                         console.error('Error fetching item details.');
                     }
@@ -492,6 +541,14 @@ $userPrivileges = session('user_details')['user_privileges'];
         } else {
             stopChatRecording();
         }
+    });
+
+    // Add event listener for form submission
+    document.getElementById('chat-form').addEventListener('submit', function() {
+        // Set a timeout to call scrollToBottom after the message is sent
+        setTimeout(function() {
+            scrollToBottom();
+        }, 500);
     });
 
     // Image Form Event Listeners
@@ -574,6 +631,17 @@ $userPrivileges = session('user_details')['user_privileges'];
         imageRecorder.stop();
         document.getElementById('imageRecordButton').textContent = "🎤";
     }
+
+    // Add event listener for image chat form submission
+    document.getElementById('image-chat-form').addEventListener('submit', function() {
+        // Set a timeout to scroll the image chat to bottom after message is sent
+        setTimeout(function() {
+            const chatDiv = document.getElementById('chatDiv');
+            if (chatDiv) {
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+            }
+        }, 500);
+    });
 
     // Initial state check
     updateChatSubmitState();
