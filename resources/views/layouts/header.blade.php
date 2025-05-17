@@ -163,7 +163,7 @@
                 </div>
 
             </div>
-            <div id="submenu-1"
+            <div id="submenu1"
                 class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 duration-300 font-bold hidden">
                 <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/items'" :title="'Items'" :hoverIcon="'item-icon.svg'"
                     :icon="'item-icon.svg'"></x-sidebar-links>
