@@ -10,13 +10,31 @@ use Illuminate\Http\Request;
 class ItemTemplatesController extends Controller
 {
 
+    public function updateTemplateOrder(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'template_id' => 'required',
+                'template_order' => 'required',
+            ]);
+            
+            $itemTemplate = ItemTemplates::find($validatedData['template_id']);
+            $itemTemplate->template_order = $validatedData['template_order'];
+            $itemTemplate->save();
+
+            return response()->json(['success' => true, 'message' => 'Template order updated successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
     public function index()
     {
         $userDetails = session('user_details');
 
         $items = Items::get();
 
-        $itemTemplates = ItemTemplates::get();
+        $itemTemplates = ItemTemplates::orderByRaw('CASE WHEN template_order IS NULL OR template_order = 0 THEN 1 ELSE 0 END, template_order ASC')->get();
 
         foreach ($itemTemplates as $key => $template) {
             $itemTemplateItems = ItemTemplateItems::where('item_template_id', $template->item_template_id)->get();

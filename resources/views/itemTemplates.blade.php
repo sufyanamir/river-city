@@ -21,6 +21,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                 <table id="universalTable" class="display" style="width:100%">
                     <thead class="bg-[#930027] text-white text-sm">
                         <tr>
+                            <th>Order</th>
                             <th style="width: 90% !important;">Template Name</th>
                             <th>Actions</th>
                         </tr>
@@ -28,6 +29,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                     <tbody id="universalTableBody" class=" text-sm">
                         @foreach ($item_templates as $item)
                         <tr>
+                            <td><input type="number" name="template_order" id="template_order" oninput="updateTemplateOrder({{$item->item_template_id}}, this.value)" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $item->template_order }}"></td>
                             <td class=" text-justify">
                                 <p class=" font-medium">
                                     {{ $item->item_template_name }}
@@ -359,4 +361,22 @@ $userPrivileges = session('user_details')['user_privileges'];
             }
         });
     });
+    
+    function updateTemplateOrder(templateId, newOrder) {
+        $.ajax({
+            url: '/updateTemplateOrder',
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                template_id: templateId,
+                template_order: newOrder
+            },
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.error('AJAX request failed:', error);
+            }
+        });
+    }
 </script>

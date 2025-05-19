@@ -3544,7 +3544,7 @@ class EstimateController extends Controller
             }
             
             $expenseTotal = $expenses->sum('expense_total');
-            $itemTemplates = ItemTemplates::get();
+            $itemTemplates = ItemTemplates::orderByRaw('CASE WHEN template_order IS NULL OR template_order = 0 THEN 1 ELSE 0 END, template_order ASC')->get();
 
             $sumEstimateItems = EstimateItem::where('estimate_id', $id)->where('additional_item', '<>', 'yes')->get();
             $profitFromEstimateItems = $sumEstimateItems->sum('item_total');

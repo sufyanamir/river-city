@@ -23,6 +23,7 @@ class ItemTemplates extends Model
         'item_template_name',
         'description',
         'note',
+        'template_order',
     ];
 
     public $timestamps = true;
