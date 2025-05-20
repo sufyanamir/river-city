@@ -126,7 +126,7 @@
     <audio id="messageSound" src="{{ asset('assets/sounds/message-sound.wav') }}"></audio>
     @if (session('user_details')['user_role'] == 'admin')
         <div
-            class="sidebar fixed top-0 left-0 h-screen w-[250px] bg-[#930027] z-[9999] duration-500 overflow-y-auto text-center">
+            class="sidebar fixed top-0 left-0 h-screen w-[250px] bg-[#930027] z-[10] duration-500 overflow-y-auto text-center">
             <div class="text-gray-100 text-xl">
                 <div class="p-2.5 mt-1 flex items-center">
                     <img src="{{ asset('assets/icons/projectLogo.svg') }}" class=" mx-auto" alt="icon">

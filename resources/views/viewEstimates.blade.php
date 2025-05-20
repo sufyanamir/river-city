@@ -3757,6 +3757,12 @@ $userPrivileges->estimate->photos === 'on')
                                 Status
                             </th>
                             <th scope="col" class="px-6 py-3">
+                                View Count
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Last Viewed
+                            </th>
+                            <th scope="col" class="px-6 py-3">
                                 Customer Signature
                             </th>
                             <th scope="col" class="px-6 py-3">
@@ -3792,6 +3798,12 @@ $userPrivileges->estimate->photos === 'on')
                             </td>
                             <td class="px-6 py-4">
                                 {{ $proposal->proposal_status }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $proposal->view_count }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $proposal->last_viewed_at ? date('m/d/y, h:i A', strtotime($proposal->last_viewed_at)) : 'N/A' }}
                             </td>
                             <td class="px-6 py-4">
                                 @if($proposal->customer_signature)

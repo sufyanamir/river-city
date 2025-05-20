@@ -22,6 +22,8 @@ class EstimateProposal extends Model
         'proposal_terms_and_conditions',
         'proposal_type',
         'group_id',
+        'view_count',
+        'last_viewed_at'
     ];
 
     public $timestamps = true;

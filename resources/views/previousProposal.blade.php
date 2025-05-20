@@ -612,7 +612,7 @@
                 <input type="hidden" name="customer_email" value="{{ $customer['customer_email'] }}">
                 <input type="hidden" name="estimate_total" value="{{ $subTotal + ($subTotal * $estimate['tax_rate']) / 100 }}">
                 <div class="col-span-12 p-4 flex justify-end my-10" style="">
-                    @if($proposal_total != null || $proposal_status == 'accepted')
+                    @if($proposal_status == 'accepted')
                     <div>
                         <div>
                             @if($estimate['customer_signature'] != null)
