@@ -2534,6 +2534,9 @@ class EstimateController extends Controller
                         'added_user_id' => $userIdfromProposal,
                         'notification_message' => $notificationMessage,
                     ]);
+                    $latestProposal->view_count++;
+                    $latestProposal->last_viewed_at = now();
+                    $latestProposal->save();
                 }
                 $data['proposal_id'] = $latestProposal->estimate_proposal_id;
                 $data['group_id'] = $latestProposal->group_id;
@@ -2659,6 +2662,13 @@ class EstimateController extends Controller
                 $estimateCustomer = Estimate::where('estimate_id', $validatedData['estimate_id'])->pluck('customer_id')->first();
                 $data = $this->prepareProposalData($validatedData['estimate_id'], $preview, $group_id);
                 $data['terms_and_conditions'] = $validatedData['terms_and_conditions'];
+                
+                // Set estimate_total and customer_signature to null
+                if (isset($data['estimate'])) {
+                    $data['estimate']['estimate_total'] = null;
+                    $data['estimate']['customer_signature'] = null;
+                }
+                
                 $jsonData = json_encode($data);
                 $emailTo = explode(',', $validatedData['email_to']);
                 $loggedInUserEmail = $userDetails['email'] ?? 'noreply@example.com'; // Default fallback
