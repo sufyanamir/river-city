@@ -183,7 +183,7 @@ h1, h2, h3, h4, h5 {
                     </div>
                     <div class="col-span-2 p-3 text-right">
                         <p class="text-lg font-bold text-[#323C47]">
-                            Estimate
+                            Work Order
                             <br>
                             <span>{{ $estimate->project_name }}</span>
                         </p>
