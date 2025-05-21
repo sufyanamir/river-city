@@ -15,6 +15,7 @@ class CustomerController extends Controller
     {
         try {
             $customer = Customer::where('customer_id', $id)->first();
+            $branches = CompanyBranches::get();
 
             if (!$customer) {
                 return response()->json(['success' => false, 'message' => 'Customer not found!'], 200);
@@ -43,6 +44,7 @@ class CustomerController extends Controller
                 'estimateEmails' => $estimateEmails,
                 'estimateContacts' => $estimateContacts,
                 'users' => $users,
+                'branches' => $branches
             ]);
 
         } catch (\Exception $e) {
