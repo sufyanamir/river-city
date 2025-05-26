@@ -6,7 +6,7 @@
     $notificationsCount = Notifications::where('added_user_id', $user['id'])
         ->where('notification_status', 'unread')
         ->where('notification_type', '<>', 'mention')
-        ->count() 
+        ->count()
         + Notifications::where('mentioned_user_id', $user['id'])
         ->whereIn('notification_type', ['mention', 'mentionGallery'])
         ->where('notification_status', 'unread')
@@ -91,6 +91,16 @@
             transition: transform 0.5s ease;
         }
 
+        @media (max-width: 499px) {
+            .navLogo{
+                width: 115px !important;
+
+            }
+        }
+
+         @media (max-width: 767px) {
+            .
+        }
         /* Large screen width animation */
         @media (min-width: 1024px) {
             .sidebar-collapse {
@@ -126,11 +136,11 @@
     <audio id="messageSound" src="{{ asset('assets/sounds/message-sound.wav') }}"></audio>
     @if (session('user_details')['user_role'] == 'admin')
         <div
-            class="sidebar fixed top-0 left-0 h-screen w-[250px] bg-[#930027] z-[10] duration-500 overflow-y-auto text-center">
+            class="sidebar fixed top-0 left-0 h-screen w-[250px] bg-[#930027] z-[99] duration-500 overflow-y-auto text-center">
             <div class="text-gray-100 text-xl">
                 <div class="p-2.5 mt-1 flex items-center">
                     <img src="{{ asset('assets/icons/projectLogo.svg') }}" class=" mx-auto" alt="icon">
-                    <button id="sidebarClose" class="text-white text-3xl cursor-pointer p-2 lg:hidden">
+                    <button id="sidebarClose" class="text-white text-3xl lg:hidden cursor-pointer p-2 ">
                         <i class="bi bi-x bg-[#930027] px-2 py-1 rounded-md"></i>
                     </button>
                     <!-- <i class="bi bi-x cursor-pointer  ml-6 openClose-sidebar"></i> -->
@@ -141,13 +151,13 @@
         <input type="text" placeholder="Search" class="text-[15px] ml-4 w-full bg-transparent focus:outline-none" />
       </div> -->
             {{-- Dashboard link --}}
-            <x-sidebar-links :class="'text-white'" :url="'/dashboard'" :title="'Dashboard'" :hoverIcon="'hover-dashboard-icon.svg'"
+            <x-sidebar-links :class="'text-white sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/dashboard'" :title="'Dashboard'" :hoverIcon="'hover-dashboard-icon.svg'"
                 :icon="'dashboard-icon.svg'"></x-sidebar-links>
             {{-- Customer link --}}
-            <x-sidebar-links :class="'text-white'" :url="'/customers'" :title="'Customers'" :hoverIcon="'hover-user-icon.svg'"
+            <x-sidebar-links :class="'text-white sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/customers'" :title="'Customers'" :hoverIcon="'hover-user-icon.svg'"
                 :icon="'user-icon.svg'"></x-sidebar-links>
             {{-- Estimates link --}}
-            <x-sidebar-links :class="'text-white'" :url="'/estimates'" :title="'Estimates'" :hoverIcon="'hover-estimate-icon.svg'"
+            <x-sidebar-links :class="'text-white sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/estimates'" :title="'Estimates'" :hoverIcon="'hover-estimate-icon.svg'"
                 :icon="'estimate-icon.svg'"></x-sidebar-links>
             {{-- Items dropdown menu --}}
             <div id="dropdown-card1"
@@ -165,25 +175,25 @@
             </div>
             <div id="submenu1"
                 class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 duration-300 font-bold hidden">
-                <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/items'" :title="'Items'" :hoverIcon="'item-icon.svg'"
+                <x-sidebar-links :class="'bg-white text-[#930027] sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/items'" :title="'Items'" :hoverIcon="'hover-item-icon.svg'"
                     :icon="'item-icon.svg'"></x-sidebar-links>
-                <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/itemTemplates'" :title="'Templates'" :hoverIcon="'item-icon.svg'"
+                <x-sidebar-links :class="'bg-white text-[#930027] sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/itemTemplates'" :title="'Templates'" :hoverIcon="'item-icon.svg'"
                     :icon="'item-icon.svg'"></x-sidebar-links>
-                <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/group'" :title="'Groups'" :hoverIcon="'group-icon.svg'"
+                <x-sidebar-links :class="'bg-white text-[#930027] sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/group'" :title="'Groups'" :hoverIcon="'group-icon.svg'"
                     :icon="'group-icon.svg'"></x-sidebar-links>
             </div>
             {{-- Other admin links --}}
-            <x-sidebar-links :class="'text-white'" :url="'/calendar'" :title="'Calendar'" :hoverIcon="'hover-calendar-icon.svg'"
+            <x-sidebar-links :class="'text-white sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/calendar'" :title="'Calendar'" :hoverIcon="'hover-calendar-icon.svg'"
                 :icon="'calendar-icon.svg'"></x-sidebar-links>
-            <x-sidebar-links :class="'text-white'" :url="'/crewCalendar'" :title="'Crew Calendar'" :hoverIcon="'hover-calendar-icon.svg'"
+            <x-sidebar-links :class="'text-white sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/crewCalendar'" :title="'Crew Calendar'" :hoverIcon="'hover-calendar-icon.svg'"
                 :icon="'calendar-icon.svg'"></x-sidebar-links>
-            <x-sidebar-links :class="'text-white'" :url="'/feedGallery'" :title="'Gallery'" :hoverIcon="'hover-gallery-icon.svg'"
+            <x-sidebar-links :class="'text-white sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/feedGallery'" :title="'Gallery'" :hoverIcon="'hover-gallery-icon.svg'"
                 :icon="'gallery-icon.svg'"></x-sidebar-links>
-            <x-sidebar-links :class="'text-white'" :url="'/campaign'" :title="'Campaign'" :hoverIcon="'hover-campaign-icon.svg'"
+            <x-sidebar-links :class="'text-white sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/campaign'" :title="'Campaign'" :hoverIcon="'hover-campaign-icon.svg'"
                 :icon="'campaign-icon.svg'"></x-sidebar-links>
-            <x-sidebar-links :class="'text-white'" :url="'/reports'" :title="'Reports'" :hoverIcon="'hover-reports-icon.svg'"
+            <x-sidebar-links :class="'text-white sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/reports'" :title="'Reports'" :hoverIcon="'hover-reports-icon.svg'"
                 :icon="'reports-icon.svg'"></x-sidebar-links>
-            <x-sidebar-links :class="'text-white'" :url="'/emails'" :title="'Email Templates'" :hoverIcon="'hover-emailTemplate-icon.svg'"
+            <x-sidebar-links :class="'text-white sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/emails'" :title="'Email Templates'" :hoverIcon="'hover-emailTemplate-icon.svg'"
                 :icon="'emailTemplate-icon.svg'"></x-sidebar-links>
 
             {{-- User dropdown menu --}}
@@ -200,18 +210,18 @@
                 </div>
             </div>
             <div id="submenu2" class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 font-bold hidden">
-                <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/users'" :title="'Users'" :hoverIcon="'user-icon.svg'"
+                <x-sidebar-links :class="'bg-white text-[#930027] sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/users'" :title="'Users'" :hoverIcon="'user-icon.svg'"
                     :icon="'user-icon.svg'"></x-sidebar-links>
-                <x-sidebar-links :class="'bg-white text-[#930027]'" :url="'/userRole'" :title="'User role'" :hoverIcon="'userRole-icon.svg'"
+                <x-sidebar-links :class="'bg-white text-[#930027] sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/userRole'" :title="'User role'" :hoverIcon="'userRole-icon.svg'"
                     :icon="'userRole-icon.svg'"></x-sidebar-links>
             </div>
-            <x-sidebar-links :class="'text-white'" :url="'/crew'" :title="'Crew'" :hoverIcon="'hover-user-icon.svg'"
+            <x-sidebar-links :class="'text-white sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/crew'" :title="'Crew'" :hoverIcon="'hover-user-icon.svg'"
                 :icon="'user-icon.svg'"></x-sidebar-links>
-            <x-sidebar-links :class="'text-white'" :url="'/settings'" :title="'Settings'" :hoverIcon="'hover-settings-icon.svg'"
+            <x-sidebar-links :class="'text-white sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/settings'" :title="'Settings'" :hoverIcon="'hover-settings-icon.svg'"
                 :icon="'settings-icon.svg'"></x-sidebar-links>
-            <x-sidebar-links :class="'text-white'" :url="'/help'" :title="'Help'" :hoverIcon="'hover-help-icon.svg'"
+            <x-sidebar-links :class="'text-white sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/help'" :title="'Help'" :hoverIcon="'hover-help-icon.svg'"
                 :icon="'help-icon.svg'"></x-sidebar-links>
-            <x-sidebar-links :class="'text-white'" :url="'/logout'" :title="'Logout'" :hoverIcon="'hover-logout-icon.svg'"
+            <x-sidebar-links :class="'text-white sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027]'" :url="'/logout'" :title="'Logout'" :hoverIcon="'hover-logout-icon.svg'"
                 :icon="'logout-icon.svg'"></x-sidebar-links>
         </div>
     @elseif(session('user_details')['user_role'] == 'crew')
@@ -430,16 +440,38 @@
     {{-- Sidebar background --}}
     <div class="bg-[#930027] h-screen">
         {{-- Main container for content, shifted right to make room for sidebar --}}
-        <div class="main-container duration-500 rounded-l-3xl h-screen overflow-auto bg-[#edf2f7] ml-[250px] p-3">
+        <div class="main-container duration-500 rounded-l-3xl h-screen overflow-auto bg-[#edf2f7] ml-[250px] ps-4">
             {{-- Topbar --}}
-            <div class="topbar py-1 flex justify-between">
+            <div class="topbar py-1 flex justify-between bg-[#fff] rounded-[12px] sticky top-0 z-10">
                 {{-- Sidebar toggle button for smaller screens --}}
-                <div>
+                <div class="flex justify-center items-center">
                     <button id="sidebarToggle" class="text-white text-3xl cursor-pointer p-2">
                         <i class="bi bi-list bg-[#930027] px-2 py-1 rounded-md"></i>
                         <i class="bi bi-x bg-[#930027] px-2 py-1 rounded-md hidden toggle-close-icon"></i>
                     </button>
                 </div>
+                <a href="{{route('dashboard')}}" class="flex"><img id="navSideLogo" src="http://127.0.0.1:8000/assets/icons/projectLogo.svg" class="navLogo mx-[9px] justify-center" alt="icon"></a>
+            {{-- @dd(session('user_details')) --}}
+
+
+                {{-- Center Side --}}
+                <div class="gap-6 hidden sm:hidden md:hidden lg:flex">
+                     {{-- Dashboard link --}}
+                    <x-sidebar-links :class="' text-[#930027] sidebar-link p-2 my-3 flex items-center rounded-md  duration-300 cursor-pointer hover:bg-[#930027] hover:text-white  mx-0  '" :url="'/dashboard'" :title="'Dashboard'" :hoverIcon="'dashboard-icon.svg'"
+                        :icon="'hover-dashboard-icon.svg'"></x-sidebar-links>
+                    {{-- Customers link --}}
+                    <x-sidebar-links :class="' text-[#930027] sidebar-link p-2 my-3 flex items-center rounded-md duration-300 cursor-pointer hover:bg-[#930027] hover:text-white  mx-0  '" :url="'/customers'" :title="'Customers'" :hoverIcon="'user-icon.svg'"
+                     :icon="'hover-user-icon.svg'"></x-sidebar-links>
+                    {{-- Estimates link --}}
+                    <x-sidebar-links :class="' text-[#930027] sidebar-link p-2 my-3 flex items-center rounded-md duration-300 cursor-pointer hover:bg-[#930027] hover:text-white  mx-0 '" :url="'/estimates'" :title="'Projects'" :hoverIcon="'estimate-icon.svg'"
+                        :icon="'hover-estimate-icon.svg'"></x-sidebar-links>
+                    <x-sidebar-links :class="' text-[#930027] sidebar-link p-2 my-3 flex items-center rounded-md \duration-300 cursor-pointer hover:bg-[#930027] hover:text-white  mx-0 '" :url="'/calendar'" :title="'Calendar'" :hoverIcon="'calendar-icon.svg'"
+                        :icon="'hover-calendar-icon.svg'"></x-sidebar-links>
+                    <x-sidebar-links :class="' text-[#930027] sidebar-link p-2 my-3 flex items-center rounded-md duration-300 cursor-pointer hover:bg-[#930027] hover:text-white  mx-0 '" :url="'/settings'" :title="'Settings'" :hoverIcon="'settings-icon.svg'"
+                :icon="'hover-settings-icon.svg'"></x-sidebar-links>
+                </div>
+
+
                 {{-- Right-side icons and buttons --}}
                 <div class="flex justify-end gap-5">
                     {{-- <div class=" my-auto">
@@ -453,9 +485,9 @@
 
                     {{-- Add button visible only for admin users --}}
                     @if (session('user_details')['user_role'] == 'admin')
-                        <div class=" my-auto">
+                        {{-- <div class=" my-auto">
                             <x-quick-add-btn :hoverIcon="''" :icon="'plus-icon.svg'"></x-quick-add-btn>
-                        </div>
+                        </div> --}}
                     @endif
                     <!-------------------------------- plus icon ------------------------------------>
                     <!-------------------------------- notification icon ------------------------------------>

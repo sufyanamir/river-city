@@ -2,7 +2,7 @@
     <div class="grid grid-cols-2 gap-1">
         <div>
             @if (session()->has('user_details'))
-                <h6 class="">{{ session('user_details')['name'] }}</h6>
+                <h6 class="text-[#0000000]">{{ session('user_details')['name'] }}</h6>
                 <p class="text-xs text-[#ACADAE]">{{ session('user_details')['user_role'] }}</p>
             @endif
         </div>
@@ -13,7 +13,7 @@
 
         <button type="button" id="profile-btn">
             <img class="h-10 w-10 rounded-md" style="object-fit: cover;" src="{{ $imageSrc }}" alt="icon"
-                onerror="this.onerror=null;this.src='{{ asset('assets/images/demo-user.svg') }}';">
+                onerror="this.onerror=null;this.src='{{ asset('assets/images/demo-user2.png') }}';">
         </button>
 
     </div>

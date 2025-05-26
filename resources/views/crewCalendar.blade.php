@@ -67,7 +67,7 @@
             @if(isset($estimate))
             <div class=" py-4 w-[85%]">
                 @else
-            <div class=" py-4 w-[100%]">
+            <div class=" py-4 w-[100%]  overflow-x-auto">
                 @endif
                 <div class=" m-2 text-right">
                     <div class="py-3 inline-block">
@@ -101,7 +101,7 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-    
+
                     </tbody>
                 </table>
             </div>
@@ -127,6 +127,7 @@
                 </div>
             </div>
             @endif
+    </div>
     </div>
     <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="view-customerDetails">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -509,12 +510,12 @@ crewRatingContainer.css({
                             const badge = $('<button class="badge"></button>');
                             badge.text(estimate.estimate.customer_name + (estimate.estimate.project_name ? ' (' + estimate.estimate.project_name + ')' : ''));
                             badge.attr('id', 'viewEstimate' + estimate.estimate_id);
-                            
+
                             // Apply the user color to the badge if available
                             if (estimate.user_color) {
                                 badge.css('background-color', estimate.user_color);
                             }
-                            
+
                             badges.push(badge);
                         }
                     });
@@ -686,14 +687,14 @@ crewRatingContainer.css({
         $('#branch-filter').on('change', function() {
             var branch = $(this).val();
             var currentUrl = new URL(window.location.href);
-            
+
             // Add or update the branch parameter
             if (branch) {
                 currentUrl.searchParams.set('branch', branch);
             } else {
                 currentUrl.searchParams.delete('branch');
             }
-            
+
             // Redirect to the new URL
             window.location.href = currentUrl.toString();
         });

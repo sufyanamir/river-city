@@ -44,7 +44,7 @@
                         </p>
                         <hr class="bg-gray-300 my-2 w-full">
                     </div>
-                    <div class=" col-span-2 p-3 text-right">
+                    <div class=" col-span-8 sm:col-span-8 md:col-span-2 lg:col-span-2 p-3 text-center sm:text-right md:text-right lg:text-right">
                         <p class="text-md my-2 font-semibold text-[#323C47]">
                             Total Projects Value:
                             <span>${{ number_format($estimates->sum('estimate_total'), 2)}}</span>
@@ -152,7 +152,7 @@
                                 </p>
                                 <hr class="bg-gray-300 my-2 w-full">
                             </div>
-                            <div class=" col-span-2 p-3 text-right">
+                            <div class="col-span-8 sm:col-span-8 md:col-span-2 lg:col-span-2 p-3 text-center sm:text-right md:text-right lg:text-right">
                                 <p class="text-md my-2 font-semibold text-[#323C47]">
                                     status: {{ $project->estimate_status }}
                                     <span></span>
@@ -219,7 +219,7 @@
             </p>
         </div>
         <div class="py-4     ">
-            <div class="relative overflow-x-auto">
+            <div class="relative overflow-hidden">
                 <div class="itemDiv">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -326,11 +326,11 @@
                         </button>
                     </div>
                     <!-- task details -->
-                    <div class=" text-center grid grid-cols-4 gap-2">
-                        <div class=" flex justify-between border-b-2 mb-2 col-span-4 mt-4">
+                    <div class=" text-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class=" flex justify-between border-b-2 mb-2 col-span-full mt-4">
                             <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Contact</h2>
                         </div>
-                        <div class="col-span-4">
+                        <div class="col-span-full">
                             <select name="customer_id" id="customer_id" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 <option value="">New Client</option>
                                 <option selected value="{{ $customer->customer_id }}">{{ $customer->customer_first_name }}
@@ -355,23 +355,23 @@
                             <input type="tel" name="phone" id="phone" placeholder="XXX-XXX-XXXX/XXXXXXXXXX" value="{{$customer->customer_phone}}" autocomplete="given-name" class="mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" pattern="([0-9]{3}-?[0-9]{3}-?[0-9]{4})(/[0-9]{3}-?[0-9]{3}-?[0-9]{4})*" title="Phone number must be in the format XXX-XXX-XXXX or XXXXXXXXXX, separated by slashes" required>
                             <span class=" text-[#930027]" style="font-size:12px;">Please use "/" to add more than one number.</span>
                         </div>
-                        <div class=" col-span-4 ">
+                        <div class=" col-span-full ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Company Name (Optional)</h5>
                             <input type="text" name="company_name" id="company_name" value="{{$customer->customer_company_name}}" placeholder="Company Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Project Name (Optional)</h5>
                             <input type="text" name="project_name" id="project_name" placeholder="Project Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Project Number (Optional)</h5>
                             <input type="text" step="any" name="project_number" id="project_number" placeholder="Project Number (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class="  ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Project Type (Optional)</h5>
                             <input type="text" step="any" name="project_type" id="project_type" placeholder="Project Type (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Building Type (Optional)</h5>
                             <select name="building_type" id="building_type" placeholder="Building Type (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 <option value="">Select Type</option>
@@ -379,14 +379,14 @@
                                 <option value="commercial">Commercial</option>
                             </select>
                         </div>
-                        <div class=" flex justify-between border-b-2 mb-2 col-span-4  mt-1 mb-3">
+                        <div class=" flex justify-between border-b-2 mb-2 col-span-full  mt-1 mb-3">
                             <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Billing</h2>
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class="  ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Address 1</h5>
                             <input type="text" name="first_address" id="first_address" value="{{$customer->customer_primary_address}}" placeholder="Address 1" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Address 2 (Optional)</h5>
                             <input type="text" name="second_address" id="second_address" value="{{$customer->customer_secondary_address}}" placeholder="Address 2 (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
@@ -410,19 +410,19 @@
                                 <option value="kansas">Kansas City</option>
                             </select>
                         </div>
-                        <div class=" col-span-2">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Tax</h5>
                             <input type="number" step="any" name="tax_rate" id="tax_rate"  placeholder="Tax Rate (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Potential Value</h5>
                             <input type="text" name="potential_value" id="potential_value" placeholder="Potential Value" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-4">
+                        <div class=" col-span-full">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Note</h5>
                             <input type="text" name="internal_note" id="internal_note" placeholder="Internal Notes (Optional, only visible to employees)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Source (Optional)</h5>
                             <input type="text" list="sources" name="source" id="source" placeholder="Source (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             <datalist id="sources">
@@ -439,7 +439,7 @@
                                 <option value="Television">Television</option>
                             </datalist>
                         </div>
-                        <div class=" col-span-2">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Owner</h5>
                             <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="owner" id="owner">
                                 <option>Select User</option>

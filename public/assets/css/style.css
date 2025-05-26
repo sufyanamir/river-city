@@ -4,6 +4,7 @@
     opacity: 1;
 }
 
+
 .topbar-manuLeaving {
     transition: transform 0.075s ease-in, opacity 0.075s ease-in, scale 0.075s ease-in;
     transform: scale(0.95);
@@ -19,6 +20,18 @@ div.dataTables_length {
 .dataTables_length select {
     border-radius: 10px !important;
     outline: none !important;
+}
+
+@media (max-width:640px) {
+    .dataTables_length{
+        width: 90%;
+    }
+    .dataTables_filter{
+        width: 100%;
+    }
+    .dataTables_filter input{
+        width: 75%;
+    }
 }
 
 /* Apply margin to the search section */

@@ -356,4 +356,4 @@ fileInput.addEventListener('change', function (event) {
 //   document.querySelector(".sidebar").classList.toggle("w-[0]");
 //   document.querySelector(".main-container").classList.toggle("ml-[0px]");
 //   document.querySelector(".main-container").classList.toggle("rounded-l-none");
-// }     
+// }

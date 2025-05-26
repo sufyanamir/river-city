@@ -4,11 +4,12 @@ $userPrivileges = session('user_details')['user_privileges'];
 @endphp
 <div class=" my-4">
     <div class=" bg-white w-full rounded-2xl shadow-lg">
-        <div class=" flex justify-between p-3 bg-[#930027] text-white rounded-t-2xl">
-            <div class=" text-xl font-semibold">
+        <div class=" flex  flex-col sm:flex-col md:flex-row lg:flex-row items-center justify-between p-3 bg-[#930027] text-white rounded-t-2xl">
+            <div class=" text-xl font-semibold mb-3 sm:mb-3 md:mb-0 lg:mb-0">
                 <h4>Items List</h4>
             </div>
-            <div class=" flex gap-5">
+            {{-- flex gap-5 --}}
+            <div class="inline-block mb-2 sm:mb-2 md:mb-0 lg:mb-0">
                 @if (session('user_details')['user_role'] == 'admin')
                 <a href="/items">
                     <x-add-button :id="'all'" :title="'All'" :class="' w-24'"></x-add-button>
@@ -151,12 +152,12 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <label for="" class=" block text-left text-xs mb-1">Cost ($/<span class="unit">unit</span>)</label>
                             <input type="number" step="any" name="item_cost" id="item_cost" readonly placeholder="0.00" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 bg-gray-200 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class="my-2" id="labourExpense">
+                        <div class="my-2 col-span-2" id="labourExpense">
                             <label for="" class="block text-left text-xs mb-1"> Labor Cost (min/<span class="unit">unit</span>)</label>
                             <input type="number" step="any" name="labour_expense" id="labour_expense" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             <span class=" m-0 p-0 text-xs float-left text-gray-400">Labor Cost: ${{$company->company_labor_cost}}/hr</span>
                         </div>
-                        <div class="my-2" id="materialExpense">
+                        <div class="my-2 col-span-3" id="materialExpense">
                             <label for="" class="block text-left text-xs mb-1"> Material Cost ($/<span class="unit">unit</span>)</label>
                             <input type="number" step="any" name="material_expense" id="material_expense" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
@@ -303,7 +304,7 @@ $userPrivileges = session('user_details')['user_privileges'];
         }
     }
 
-    
+
 </script>
 <script>
     $('[id^="editItem"]').click(function() {
@@ -355,13 +356,13 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <input type="hidden" name="ass_item_id[]" id="ass_item_id_${index}" value="${assembly.ass_item_id}">
                                 <select name="assembly_name[]" id="assembly_id_${index}" placeholder="Item Name" autocomplete="given-name" class="select2${index} w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm select2">
                                     <option value="">Select Item</option>
-                                    <option selected value="${assembly.assembly_name}" 
-                                        data-item-cost="${assembly.assemblyItemData.item_cost}" 
-                                        data-item-price="${assembly.assemblyItemData.item_price}" 
-                                        data-item-id="${assembly.assemblyItemData.item_id}" 
-                                        data-item-type="${assembly.assemblyItemData.item_type}" 
-                                        data-labour-expense="${assembly.assemblyItemData.labour_expense}" 
-                                        data-material-expense="${assembly.assemblyItemData.material_expense}" 
+                                    <option selected value="${assembly.assembly_name}"
+                                        data-item-cost="${assembly.assemblyItemData.item_cost}"
+                                        data-item-price="${assembly.assemblyItemData.item_price}"
+                                        data-item-id="${assembly.assemblyItemData.item_id}"
+                                        data-item-type="${assembly.assemblyItemData.item_type}"
+                                        data-labour-expense="${assembly.assemblyItemData.labour_expense}"
+                                        data-material-expense="${assembly.assemblyItemData.material_expense}"
                                         data-unit="${assembly.assemblyItemData.item_units}">
                                         ${assembly.assembly_name}
                                     </option>

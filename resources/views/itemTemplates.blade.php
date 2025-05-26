@@ -5,7 +5,7 @@ $userPrivileges = session('user_details')['user_privileges'];
 <div class=" my-4">
     <div class=" bg-white w-full rounded-2xl shadow-lg">
         <div class=" flex justify-between p-3 bg-[#930027] text-white rounded-t-2xl">
-            <div class=" text-xl font-semibold">
+            <div class=" md:text-xl lg:text-xl sm:text-[14px] text-[14px] font-semibold">
                 <h4>Item Templates List</h4>
             </div>
             <div class=" flex gap-5">
@@ -81,7 +81,7 @@ $userPrivileges = session('user_details')['user_privileges'];
         </div>
 
         <!-- Modal panel -->
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full w-[100%]">
             <form action="/addItemTemplate" method="post" enctype="multipart/form-data" id="formData">
                 @csrf
                 <input type="hidden" name="template_id" id="template_id">
@@ -361,7 +361,7 @@ $userPrivileges = session('user_details')['user_privileges'];
             }
         });
     });
-    
+
     function updateTemplateOrder(templateId, newOrder) {
         $.ajax({
             url: '/updateTemplateOrder',

@@ -82,7 +82,7 @@
                     </div>
                 </div>
             </form>
-            <div class="grid grid-cols-3 gab-4">
+            <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gab-4">
                 <div class="card px-3 mt-3">
                     <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
                         <h3>Sales By Source</h3>

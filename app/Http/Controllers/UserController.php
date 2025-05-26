@@ -128,13 +128,16 @@ class UserController extends Controller
                 'old_password' => 'nullable',
                 'confirm_password' => 'nullable',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+                'sidebar' => 'nullable',
             ]);
 
             $user = User::where('id', $validatedData['user_id'])->first();
 
+            session()->put('user_details.sidebar', $request->sidebar);
             $user->name = $validatedData['name'];
             $user->phone = $validatedData['phone'];
             $user->address = $validatedData['address'];
+            $user->sidebar = $validatedData['sidebar'];
 
             if (isset($validatedData['old_password'])) {
                 if (md5($validatedData['old_password']) == $user->password) {
@@ -350,7 +353,7 @@ class UserController extends Controller
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
                 'user_color' => 'nullable|string',
             ]);
-            
+
             $password = rand();
             $emailData = [
                 'email' => $validatedData['email'],
@@ -652,6 +655,7 @@ class UserController extends Controller
                 'departement' => $user->departement,
                 'rating' => $user->rating,
                 'team_number' => $user->team_number,
+                'sidebar' => $user->sidebar,
                 'user_privileges' => json_decode($user->user_privileges),
                 // 'notifications' => $notifications,
             ]]);

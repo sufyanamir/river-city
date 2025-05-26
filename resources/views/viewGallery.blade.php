@@ -3,7 +3,7 @@
 $userPrivileges = session('user_details')['user_privileges'];
 @endphp
 <div class=" my-4">
-    <div class=" grid grid-cols-3 gap-3">
+    <div class=" grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3">
         <div class=" col-span-2 bg-white w-full overflow-auto rounded-lg shadow-lg">
             <div class=" p-3 bg-[#930027] rounded-t-lg text-white">
                 <h1 class=" text-2xl font-semibold">Estimates</h1>
@@ -137,7 +137,7 @@ $userPrivileges = session('user_details')['user_privileges'];
             <x-add-button :title="'Back'" :class="' px-7 bg-black-100 border-2 text-[#000]'" :id="'back-btn'" />
         </div>
     </div>
-    <div class=" col-span-1  w-full overflow-auto ">
+    <div class=" col-span-2 sm:col-span-2 md:col-span-1 lg:col-span-1 w-full overflow-auto ">
         <div class=" p-3 bg-[#930027] rounded-t-lg text-white">
             <h1 class=" text-2xl font-semibold">Project Chat</h1>
         </div>
@@ -336,7 +336,7 @@ $userPrivileges = session('user_details')['user_privileges'];
 
             if (lastIndex !== -1) {
                 const query = text.substring(lastIndex + 1);
-                const matchingUsers = users.filter(user => 
+                const matchingUsers = users.filter(user =>
                     user.name.toLowerCase().includes(query.toLowerCase())
                 );
 
@@ -366,7 +366,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                 userDropdown.hide();
             }
         });
-        
+
         // Enable submit button when message has content (optional enhancement)
         messageTextarea.on("input", function() {
             const submitBtn = $(this).closest("form").find("button[type='submit']");
@@ -479,7 +479,7 @@ $userPrivileges = session('user_details')['user_privileges'];
 
                         // Open the modal
                         $('#image-btn-modal').removeClass('hidden');
-                        
+
                         // Scroll the chat div to the bottom
                         const chatDiv = document.getElementById('chatDiv');
                         if (chatDiv) {

@@ -107,18 +107,21 @@ const toggleBtn = document.getElementById("sidebarToggle");
 
 const openIcon = toggleBtn.querySelector(".bi-list");
 const closeIcon = toggleBtn.querySelector(".toggle-close-icon");
+const navsidelogo = document.getElementById("navSideLogo");
 
 function isSmallScreen() {
-  return window.innerWidth < 1024;
+  return window.innerWidth < 1160;
 }
 
 function updateIcons(isHidden) {
   if (isHidden) {
     openIcon.classList.remove("hidden");
     closeIcon.classList.add("hidden");
+    navsidelogo.style.display = "flex";
   } else {
     openIcon.classList.add("hidden");
     closeIcon.classList.remove("hidden");
+    navsidelogo.style.display = "none";
   }
 }
 
@@ -194,7 +197,15 @@ if (sidebarCloseBtn) {
 
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const sidebarValue = "{{ session('user_details.sidebar') }}";
+    const sidebarToggleBtn = document.getElementById("sidebarToggle");
 
-
+    if (sidebarValue === "0" && sidebarToggleBtn) {
+        sidebarToggleBtn.click(); // Auto-close sidebar if value is 0
+    }
+});
+</script>
 
 </html>

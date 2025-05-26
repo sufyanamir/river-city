@@ -35,7 +35,8 @@ class User extends Authenticatable
         'user_privileges',
         'added_user_id',
         'user_color',
-        'sts'
+        'sts',
+        'sidebar',
     ];
 
     /**

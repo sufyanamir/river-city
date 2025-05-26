@@ -31,7 +31,7 @@
             Hello! {{ $user_details['name'] }} <span class="text-xs">({{$user_details['user_role']}})</span>
         </h1>
         @if(session('user_details')['user_role'] == 'admin')
-        <div class="w-[10%]">
+        <div class="w-[30%] sm:w-[20%] md:w-[10%] lg:w-[10%]">
             <select id="userSelect" name="" autocomplete="customer-name" class="p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                 <option value="">Users</option>
                 @foreach($admins as $user)
@@ -72,12 +72,12 @@
     <div class=" lg:flex lg:justify-between xl:flex xl:justify-between sm:grid sm:grid-cols-1 md:grid md:grid-cols-1 gap-4">
         <!-- order summary & schedules -->
 
-        <div class=" bg-white my-2 w-full rounded-xl shadow-med xl:w-[80%]">
+        <div class=" bg-white my-2 w-full rounded-xl">
             <div class=" p-2 border-b-2 bg-[#930027] rounded-t-xl">
                 <h3 class=" text-xl font-semibold text-white ">Orders Summary</h3>
             </div>
             <div class=" lg:flex lg:justify-evenly xl:flex xl:justify-evenly md:grid md:grid-cols-1 sm:grid sm:grid-cols-1">
-                <div class=" p-2 text-center sm:mx-auto md:mx-auto lg:mx-0 xl:mx-0">
+                <div class=" p-2 text-center flex justify-center md:block lg:block xl:block sm:mx-auto md:mx-auto lg:mx-0 xl:mx-0">
                     <canvas id="myDoughnutChart1"></canvas>
                 </div>
                 <div class=" p-2 my-auto text-center">
@@ -118,7 +118,7 @@
             <div class="bg-[#930027] rounded-t-2xl border-b-2 p-2 text-white">
                 <h3 class=" text-lg font-semibold">Orders</h3>
             </div>
-            <div class=" my-2 text-white text-center mx-auto">
+            <div class=" my-2 text-white text-center flex justify-center md:block lg:block xl:block mx-auto">
                 <canvas id="myDoughnutChart"></canvas>
             </div>
         </div>
@@ -133,7 +133,7 @@
                     <h3 class=" text-lg font-medium">Schedules</h3>
                 </div>
             </div>
-            <div class=" p-2">
+            <div class=" p-2 mb-4">
                 <div class="relative overflow-x-auto h-60 overflow-y-auto my-2">
                     <table class="w-full text-sm text-left ">
                         <thead class="text-xs text-white uppercase bg-[#930027]">
@@ -194,7 +194,7 @@
                         <canvas id="myDoughnutChart"></canvas>
                     </div>
                 </div> -->
-            <div class=" bg-white w-full rounded-xl">
+            <div class=" bg-white w-full rounded-xl mb-2">
                 <div class=" border-b-2 p-2 bg-[#930027] rounded-t-xl">
                     <h3 class=" text-lg font-medium text-white">To do List</h3>
                 </div>
@@ -287,7 +287,7 @@
                     <h3 class=" text-lg font-semibold">Schedules</h3>
                 </div>
             </div>
-            <div class=" p-2">
+            <div class=" p-2 mb-4">
                 <div class="relative overflow-x-auto h-60 overflow-y-auto my-2">
                     <table class="w-full text-sm text-left ">
                         <thead class="text-xs text-white uppercase bg-[#930027]">
