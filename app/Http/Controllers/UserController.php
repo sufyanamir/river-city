@@ -150,6 +150,8 @@ class UserController extends Controller
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
                 $image->storeAs('public/user_images', $imageName); // Adjust storage path as needed
                 $user->user_image = 'storage/user_images/' . $imageName;
+
+                session()->put('user_details.user_image', $user->user_image);
             }
 
             $user->save();
