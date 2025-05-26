@@ -12,7 +12,7 @@
         @endphp
 
         <button type="button" id="profile-btn">
-            <img class="h-10 w-10 rounded-md" style="object-fit: cover;" src="{{ $imageSrc }}" alt="icon"
+            <img  id="user_img" class="h-10 w-10 rounded-md" style="object-fit: cover;" src="{{ $imageSrc }}" alt="icon"
                 onerror="this.onerror=null;this.src='{{ asset('assets/images/demo-user2.png') }}';">
         </button>
 

@@ -505,7 +505,6 @@
                     <!-------------------------------- notification icon ------------------------------------>
                     <!-------------------------------- profile icon ------------------------------------>
 
-
                     {{-- User profile dropdown --}}
                     <div class=" my-auto">
                         <x-profile-dropdown></x-profile-dropdown>
