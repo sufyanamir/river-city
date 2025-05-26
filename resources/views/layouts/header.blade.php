@@ -450,7 +450,7 @@
                         <i class="bi bi-x bg-[#930027] px-2 py-1 rounded-md hidden toggle-close-icon"></i>
                     </button>
                 </div>
-                <a href="{{route('dashboard')}}" class="flex"><img id="navSideLogo" src="http://127.0.0.1:8000/assets/icons/projectLogo.svg" class="navLogo mx-[9px] justify-center" alt="icon"></a>
+                <a href="{{route('dashboard')}}" class="flex"><img id="navSideLogo" src="{{ asset('assets/icons/projectLogo.svg') }}" class="navLogo mx-[9px] justify-center" alt="icon"></a>
             {{-- @dd(session('user_details')) --}}
 
 
