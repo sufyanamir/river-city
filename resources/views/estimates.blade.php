@@ -5,12 +5,12 @@ $userRole = session('user_details')['user_role'];
 @endphp
 <div class=" my-4">
     <div class=" bg-white w-full rounded-2xl shadow-lg">
-        <div class=" flex justify-between items-center p-3 bg-[#930027] text-white rounded-t-2xl">
-            <div class=" text-xl font-semibold">
+        <div class=" flex flex-col sm:flex-col md:flex-row lg:flex-row justify-between items-center p-3 bg-[#930027] text-white rounded-t-2xl">
+            <div class=" text-xl font-semibold mb-3 sm:mb-3 md:mb-0 lg:mb-0">
                 <h4>Estimates List</h4>
             </div>
-            <div>
-                <div class=" inline-block">
+            <div class="">
+                <div class=" inline-block mb-2 sm:mb-2 md:mb-0 lg:mb-0">
                     <select id="branch-filter" class="inline-block rounded-lg bg-[#930027] text-white px-3 py-1.5 text-sm font-semibold shadow-sm hover:bg-[#930017] mr-1">
                         <option value="">All Branches</option>
                         @foreach($branches as $branch)
@@ -34,7 +34,7 @@ $userRole = session('user_details')['user_role'];
                 @endif
             </div>
         </div>
-        <div class="py-4">
+        <div class="py-4 overflow-x-auto">
             <div class="">
                 <table id="universalTable" class="display" style="width:100%">
                     <thead class="bg-[#930027] text-white text-sm">
@@ -445,12 +445,12 @@ $userRole = session('user_details')['user_role'];
                         </button>
                     </div>
                     <!-- task details -->
-                    <div class=" text-center grid grid-cols-4 gap-2">
-                        <div class=" flex justify-between border-b-2 mb-2 col-span-4 mt-4">
+                    <div class=" text-center grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class=" flex justify-between border-b-2 mb-2 col-span-full mt-4">
                             <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Contact</h2>
                         </div>
-                        <div class="col-span-4">
-                            <select name="customer_id" id="customer_id" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                        <div class="col-span-full">
+                            <select name="customer_id" id="customer_id" class=" mb-2 w-full outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 <option value="">New Client</option>
                                 @foreach ($customers as $item)
                                 <option value="{{ $item->customer_id }}">{{ $item->customer_first_name }}
@@ -476,23 +476,23 @@ $userRole = session('user_details')['user_role'];
                             <input type="tel" name="phone" id="phone" placeholder="XXX-XXX-XXXX/XXXXXXXXXX" autocomplete="given-name" class="mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" pattern="([0-9]{3}-?[0-9]{3}-?[0-9]{4})(/[0-9]{3}-?[0-9]{3}-?[0-9]{4})*" title="Phone number must be in the format XXX-XXX-XXXX or XXXXXXXXXX, separated by slashes" required>
                             <span class=" text-[#930027]" style="font-size:12px;">Please use "/" to add more than one number.</span>
                         </div>
-                        <div class=" col-span-4 ">
+                        <div class=" col-span-full ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Company Name (Optional)</h5>
                             <input type="text" name="company_name" id="company_name" placeholder="Company Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Project Name (Optional)</h5>
                             <input type="text" name="project_name" id="project_name" placeholder="Project Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class="  ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Project Number (Optional)</h5>
                             <input type="text" step="any" name="project_number" id="project_number" placeholder="Project Number (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class="">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Project Type (Optional)</h5>
                             <input type="text" step="any" name="project_type" id="project_type" placeholder="Project Type (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class="  ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Building Type (Optional)</h5>
                             <select name="building_type" id="building_type" placeholder="Building Type (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 <option value="">Select Type</option>
@@ -500,14 +500,14 @@ $userRole = session('user_details')['user_role'];
                                 <option value="commercial">Commercial</option>
                             </select>
                         </div>
-                        <div class=" flex justify-between border-b-2 mb-2 col-span-4  mt-1 mb-3">
+                        <div class=" flex justify-between border-b-2 mb-2 col-span-full  mt-1 mb-3">
                             <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Billing</h2>
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class=" col-span-full ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Address 1</h5>
                             <input type="text" name="first_address" id="first_address" placeholder="Address 1" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class=" col-span-full ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Address 2 (Optional)</h5>
                             <input type="text" name="second_address" id="second_address" placeholder="Address 2 (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
@@ -532,19 +532,19 @@ $userRole = session('user_details')['user_role'];
                                 @endforeach
                             </select>
                         </div>
-                        <div class=" col-span-2">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Tax</h5>
                             <input type="number" step="any" name="tax_rate" id="tax_rate" placeholder="Tax Rate (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Potential Value</h5>
                             <input type="text" name="potential_value" id="potential_value" placeholder="Potential Value" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-4">
+                        <div class=" col-span-full">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Note</h5>
                             <input type="text" name="internal_note" id="internal_note" placeholder="Internal Notes (Optional, only visible to employees)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Source (Optional)</h5>
                             <input type="text" list="sources" name="source" id="source" placeholder="Source (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             <datalist id="sources">
@@ -561,7 +561,7 @@ $userRole = session('user_details')['user_role'];
                                 <option value="Television">Television</option>
                             </datalist>
                         </div>
-                        <div class=" col-span-2">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Owner</h5>
                             <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="owner" id="owner" required>
                                 <option>Select User</option>
@@ -947,50 +947,50 @@ $userRole = session('user_details')['user_role'];
         $('#branch-filter').on('change', function() {
             var branch = $(this).val();
             var currentUrl = new URL(window.location.href);
-            
+
             // Add or update the branch parameter
             if (branch) {
                 currentUrl.searchParams.set('branch', branch);
             } else {
                 currentUrl.searchParams.delete('branch');
             }
-            
+
             // Redirect to the new URL
             window.location.href = currentUrl.toString();
         });
-        
+
         // Status filter buttons
         $('.pending-filter').on('click', function() {
             var currentUrl = new URL(window.location.href);
             currentUrl.searchParams.set('status', 'pending');
             window.location.href = currentUrl.toString();
         });
-        
+
         $('.complete-filter').on('click', function() {
             var currentUrl = new URL(window.location.href);
             currentUrl.searchParams.set('status', 'complete');
             window.location.href = currentUrl.toString();
         });
-        
+
         $('.paid-filter').on('click', function() {
             var currentUrl = new URL(window.location.href);
             currentUrl.searchParams.set('status', 'paid');
             window.location.href = currentUrl.toString();
         });
-        
+
         $('.cancel-filter').on('click', function() {
             var currentUrl = new URL(window.location.href);
             currentUrl.searchParams.set('status', 'cancel');
             window.location.href = currentUrl.toString();
         });
-        
+
         // View filters for scheduler
         $('.view-all-filter').on('click', function() {
             var currentUrl = new URL(window.location.href);
             currentUrl.searchParams.delete('type');
             window.location.href = currentUrl.toString();
         });
-        
+
         $('.view-assigned-filter').on('click', function() {
             var currentUrl = new URL(window.location.href);
             currentUrl.searchParams.set('type', 'assigned');

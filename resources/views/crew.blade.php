@@ -164,7 +164,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                                 <label for="star1" title="1 star">1 star</label>
                             </div>
                             <div class="mt-3">
-                                <label for="" class="text-gray-700 block text-left mb-1 "> Team No</label>
+                                <label for="" class="text-gray-700 ms:block md:block lg:block inline-flex mt-3 sm:mt-0 md:mt-0 lg:mt-0 text-left mb-1 "> Team No</label>
                                 <input type="tel" name="teamNumber" id="teamNumber" placeholder="Team No." autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             </div>
                             <div class=" mt-2">

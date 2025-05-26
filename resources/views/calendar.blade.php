@@ -87,6 +87,17 @@
     .visible-scrollbar::-webkit-scrollbar-thumb:hover {
         background: #6a001b;
     }
+    @media (max-width:991px){
+        .fc-header-toolbar {
+            display: block !important;
+        }
+        .fc-col-header-cell-cushion{
+            font-size: 12px;
+        }
+    }
+    .fc-toolbar-chunk{
+
+    }
 </style>
 <style>
     .fc .fc-col-header-cell-cushion {
@@ -124,12 +135,13 @@
                 </div>
             </div>
         </div>
-        <div class="p-4 flex justify-between gap-10">
+        <div class="p-4 flex flex-col sm:flex-col md:flex-row lg:flex-row justify-between gap-10">
             <!-- THE CALENDAR -->
-            <div class=" w-[80%]">
+            <div class="w-[100%] lg:w-[80%] sm:w-[100%] md:w-[100%]">
                 <div id="calendar" data-schedule-assigned="{{ isset($estimate) && $estimate->schedule_assigned == 1 ? 'true' : 'false' }}"></div>
             </div>
-            <div id="external-events" class="mt-[100px] w-[20%]">
+            <div id="external-events" class="mt-[0px] sm:mt-[0px]  w-[100%] lg:w-[20%] sm:w-[100%] md:w-[100%]">
+                <div class="mb-8  flex justify-between flex-col sm:flex-col md:flex-row lg:flex-row sm:flex md:flex md:flex-wrap lg:flex lg:flex-wrap">
                 <div class="inline-block">
                     <select id="branch-filter" class="rounded-lg bg-[#930027] text-white px-3 py-1.5 text-sm font-semibold shadow-sm hover:bg-[#930017] mr-1">
                         <option value="">All Branches</option>
@@ -140,17 +152,18 @@
                 </div>
             <div class="">
                 <input type="checkbox" name="completed" id="completed">
-                <label for="completed" class=" text-gray-500">Completed</label>
+                <label for="completed" class=" text-gray-500 text-[12px] sm:text-[16px] md:text-[16px] lg:text-[16px]">Completed</label>
             </div>
             <div class=" mt-2 flex">
                 <a href="/crewCalendar">
-                    <button id="" class="  bg-[#930027] text-white py-1 px-7  hover:bg-red-900 rounded-l-full ">Planner
+                    <button id="" class="  bg-[#930027] text-white py-1 px-2 lg:px-4   hover:bg-red-900 rounded-l-full ">Planner
                     </button>
                 </a>
                 <a href="/calendar">
-                    <button id="" class="  bg-[#930027] text-white py-1 px-7  hover:bg-red-900 rounded-r-full ">Clear
+                    <button id="" class="  bg-[#930027] text-white py-1 px-2 lg:px-4 hover:bg-red-900 rounded-r-full ">Clear
                     </button>
                 </a>
+            </div>
             </div>
             <div class="">
                 <div class="bg-white rounded-lg mt-[8px] shadow-lg">
@@ -463,7 +476,7 @@
     } else if ($(this).text() === 'Update') {
         // Optionally set the form's action attribute if needed
         // $('#editEventForm').attr('action', '/update-url');
-        
+
         $('#editEventForm').submit(); // Submit the form
     }
 });
@@ -670,7 +683,7 @@ estimateEvent.forEach(function(estimate) {
 
         var userToDos = {!! json_encode($userToDos) !!};
         var estimateToDos = {!! json_encode($estimateToDos) !!};
-        
+
         var userEvents = userToDos.filter(function(todo) {
             return todo.to_do_status === null;
         }).map(function(todo) {
@@ -1110,14 +1123,14 @@ $('#end_date').val(endDateTime);
         $('#branch-filter').on('change', function() {
             var branch = $(this).val();
             var currentUrl = new URL(window.location.href);
-            
+
             // Add or update the branch parameter
             if (branch) {
                 currentUrl.searchParams.set('branch', branch);
             } else {
                 currentUrl.searchParams.delete('branch');
             }
-            
+
             // Redirect to the new URL
             window.location.href = currentUrl.toString();
         });

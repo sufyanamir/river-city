@@ -12,7 +12,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                 <x-add-button :title="'+Add Customer'" :class="'addEstimate'" :id="'addCustomer'"></x-add-button>
             </div>
         </div>
-        <div class="py-4">
+        <div class="py-4 overflow-x-auto">
             <table id="universalTable" class="display" style="width:100%">
                 <thead class="bg-[#930027] text-white text-sm">
                     <tr>
@@ -90,8 +90,9 @@ $userPrivileges = session('user_details')['user_privileges'];
                         </button>
                     </div>
                     <!-- task details -->
-                    <div class=" text-center grid grid-cols-4 gap-2">
-                        <div class=" flex justify-between border-b-2 mb-2 col-span-4 mt-4">
+                    {{-- text-center grid grid-cols-4 gap-2 --}}
+                    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-4 sm:px-6 md:px-10">
+                        <div class=" flex justify-between border-b-2 mb-2 col-span-full mt-4">
                             <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Contact</h2>
                         </div>
                         <div class=" ">
@@ -116,22 +117,23 @@ $userPrivileges = session('user_details')['user_privileges'];
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Phone No.</h5>
                             <input type="tel" name="phone" id="phone" placeholder="XXX-XXX-XXXX/XXXXXXXXXX" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}" title="Phone number must be in the format XXX-XXX-XXXX" required>
                         </div>
-                        <div class=" col-span-4 ">
+                        {{-- col-span-4 --}}
+                        <div class=" col-span-full ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Company Name (Optional)</h5>
                             <input type="text" name="company_name" id="company_name"
                                 placeholder="Company Name (Optional)" autocomplete="given-name"
                                 class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" flex justify-between border-b-2 mb-2 col-span-4  mt-1 mb-3">
+                        <div class=" flex justify-between border-b-2 mb-2 col-span-full  mt-1">
                             <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Billing</h2>
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class=" col-span-full ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Address 1</h5>
                             <input type="text" name="first_address" id="first_address" placeholder="Address 1"
                                 autocomplete="given-name"
                                 class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class="col-span-full ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Address 2 (Optional)</h5>
                             <input type="text" name="second_address" id="second_address"
                                 placeholder="Address 2 (Optional)" autocomplete="given-name"
@@ -162,39 +164,39 @@ $userPrivileges = session('user_details')['user_privileges'];
                                 @endforeach
                             </select>
                         </div>
-                        <div class=" col-span-2">
+                        <div class=" sm:col-span-2">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Tax</h5>
                             <input type="number" step="any" name="tax_rate" id="tax_rate" placeholder="Tax Rate (Optional)"
                                 autocomplete="given-name"
                                 class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2">
+                        <div class=" sm:col-span-2">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Potential Value</h5>
                             <input type="text" name="potential_value" id="potential_value"
                                 placeholder="Potential Value" autocomplete="given-name"
                                 class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-4">
+                        <div class=" col-span-full">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Note</h5>
                             <input type="text" name="internal_note" id="internal_note"
                                 placeholder="Internal Notes (Optional, only visible to employees)"
                                 autocomplete="given-name"
                                 class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2">
+                        <div class=" sm:col-span-2">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Source</h5>
                             <input type="text" list="sources" name="source" id="source" placeholder="Source (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             <datalist id="sources">
-                                <option value="Google">Google</option>                                
-                                <option value="Website">Website</option>                                
-                                <option value="Referral">Referral</option>                                
-                                <option value="Returning Customer">Returning Customer</option>                                
-                                <option value="Google LSA">Google LSA</option>                                
-                                <option value="WEA">WEA</option>                                
-                                <option value="Rhoden Roofing">Rhoden Roofing</option>                                
-                                <option value="Steamatic">Steamatic</option>                                
-                                <option value="Billboard">Billboard</option>                                
-                                <option value="Radio">Radio</option>                                
+                                <option value="Google">Google</option>
+                                <option value="Website">Website</option>
+                                <option value="Referral">Referral</option>
+                                <option value="Returning Customer">Returning Customer</option>
+                                <option value="Google LSA">Google LSA</option>
+                                <option value="WEA">WEA</option>
+                                <option value="Rhoden Roofing">Rhoden Roofing</option>
+                                <option value="Steamatic">Steamatic</option>
+                                <option value="Billboard">Billboard</option>
+                                <option value="Radio">Radio</option>
                                 <option value="Television">Television</option>
                             </datalist>
                         </div>

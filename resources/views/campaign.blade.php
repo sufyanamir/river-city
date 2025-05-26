@@ -16,7 +16,7 @@
                 @endif
             </div>
         </div>
-        <div class="py-4">
+        <div class="py-4 overflow-x-auto">
             <div class=" overflow-x-auto">
                 <table id="universalTable" class="display" style="width:100%">
                     <thead class="bg-[#930027] text-white text-sm">

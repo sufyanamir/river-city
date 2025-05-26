@@ -127,7 +127,7 @@ $modalTotal = 0;
                         </span>
                         </p> --}}
                     </div>
-                    <div class=" col-span-2 p-3 text-right">
+                    <div class=" col-span-2 p-3 text-left sm:text-right md:text-right lg:text-right">
                         <p class="text-lg font-bold text-[#323C47]">
                             Estimate
                             <br>
@@ -155,10 +155,10 @@ $modalTotal = 0;
                         </p>
                         @endif
                         @endif
-                        <p class="flex justify-end text-blue-900">
+                        <p class="flex justify-start sm:lg:justify-end md:justify-end lg:justify-end xl:justify-end text-blue-900">
                             Invoiced: ${{ number_format($estimate->invoiced_payment, 2) }}
                         </p>
-                        <p class="flex justify-end text-green-900">
+                        <p class="flex justify-start sm:lg:justify-end md:justify-end lg:justify-end xl:justify-end text-green-900">
                             Paid: ${{ number_format($estimate->invoice_paid_total, 2) }}
                         </p>
 
@@ -188,19 +188,19 @@ $modalTotal = 0;
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                         Title
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                         Name
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                         email
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                         Phone
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                         Actions
                                     </th>
                                 </tr>
@@ -472,15 +472,15 @@ $modalTotal = 0;
             </div>
         </div>
         @endif
-        <div class=" border-2  shadow-lg mt-7     bg-white rounded-3xl   ">
+        <div class=" border-2  shadow-lg mt-7     bg-white rounded-3xl">
             <div class="">
                 <div class=" px-3  bg-[#930027] rounded-t-3xl">
                     <p class="text-lg py-3 pl-3  text-white  font-medium">
                         Actions
                     </p>
                 </div>
-                <div class=" px-3">
-                    <div class="my-auto py-4 flex p-2">
+                <div class=" px-3 ">
+                    <div class="my-auto py-4 flex flex-wrap gap-1 p-2">
                         @if ($estimate->schedule_assigned == 1 && $estimate->work_assigned != 1)
                         <a href="/getEstimateToSetScheduleWork{{ $estimate->estimate_id }}">
                             <button type="button" id="schedule-estimate" class=" flex h-[40px] w-[190px] p-2 py-auto  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
@@ -604,7 +604,7 @@ $modalTotal = 0;
                     </p>
                 </div>
                 <div>
-                    <div class="my-auto flex  py-4 relative">
+                    <div class="my-auto flex flex-wrap gap-1 py-4 relative">
                         <button type="button" class="flex h-[40px] w-[190px] ml-2  px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#4088CD]" id="action-menubutton" aria-expanded="true" aria-haspopup="true">
                             Preview
                             <svg class="-mr-1 h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -711,21 +711,21 @@ $modalTotal = 0;
                         <thead class=" text-center">
                             <tr class="border border-solid border-l-0 border-r-0 border-t-0">
                                 <th></th>
-                                <th class="">Hours</th>
-                                <th class="">Cost</th>
-                                <th>Expenses</th>
-                                <th class="">Profit</th>
-                                <th class="">Margin</th>
+                                <th class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">Hours</th>
+                                <th class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">Cost</th>
+                                <th class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">Expenses</th>
+                                <th class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">Profit</th>
+                                <th class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">Margin</th>
                             </tr>
                         </thead>
                         <tbody class=" text-center">
                             <tr>
-                                <td class="font-semibold text-xl">Estimated</td>
-                                <td class="">{{number_format($profitHours, 2)}}</td>
-                                <td class="">${{ number_format($profitCost, 2) }}</td>
-                                <td>${{ number_format($expenseTotal, 2)}}</td>
-                                <td class="">${{ number_format($mainProfit, 2)}}</td>
-                                <td class="">{{ number_format($profitMargin, 2)}}%</td>
+                                <td class="font-semibold text-[14px] md:text-xl lg:text-xl xl:text-xl">Estimated</td>
+                                <td class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">{{number_format($profitHours, 2)}}</td>
+                                <td class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">${{ number_format($profitCost, 2) }}</td>
+                                <td class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">${{ number_format($expenseTotal, 2)}}</td>
+                                <td class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">${{ number_format($mainProfit, 2)}}</td>
+                                <td class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">{{ number_format($profitMargin, 2)}}%</td>
                             </tr>
                         </tbody>
                     </table>
@@ -749,21 +749,21 @@ $modalTotal = 0;
                         <thead class=" text-center">
                             <tr class="border border-solid border-l-0 border-r-0 border-t-0">
                                 <th></th>
-                                <th class="">Labor</th>
-                                <th class="">Material</th>
-                                <th>Expenses</th>
-                                <th class="">Profit</th>
-                                <th class="">Margin</th>
+                                <th class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">Labor</th>
+                                <th class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">Material</th>
+                                <th class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">Expenses</th>
+                                <th class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">Profit</th>
+                                <th class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">Margin</th>
                             </tr>
                         </thead>
                         <tbody class=" text-center">
                             <tr>
-                                <td class="font-semibold text-xl">Estimated</td>
-                                <td class="">${{number_format($budgetLabour, 2)}}</td>
-                                <td class="">${{number_format($budgetMaterial, 2)}}</td>
-                                <td>${{number_format($expenseTotal, 2)}}</td>
-                                <td class="">${{number_format($budgetProfit, 2)}}</td>
-                                <td class="">{{number_format($budgetMargin, 2)}}%</td>
+                                <td class="font-semibold  text-[14px] md:text-xl lg:text-xl xl:text-xl">Estimated</td>
+                                <td class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">${{number_format($budgetLabour, 2)}}</td>
+                                <td class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">${{number_format($budgetMaterial, 2)}}</td>
+                                <td class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">${{number_format($expenseTotal, 2)}}</td>
+                                <td class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">${{number_format($budgetProfit, 2)}}</td>
+                                <td class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">{{number_format($budgetMargin, 2)}}%</td>
                             </tr>
                         </tbody>
                     </table>
@@ -2734,16 +2734,16 @@ $userPrivileges->estimate->items === 'on')
                             <!-- <th scope="col" class="px-6 py-3">
 
                             </th> -->
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 Item Name
                             </th>
-                            <th scope="col" class="text-center px-6 py-3">
+                            <th scope="col" class="text-center px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 Item Cost
                             </th>
-                            <th scope="col" class="text-center px-6 py-3">
+                            <th scope="col" class="text-center px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 Item Qty
                             </th>
-                            <th scope="col" class="text-center px-6 py-3">
+                            <th scope="col" class="text-center px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 Total
                             </th>
                         </tr>
@@ -2824,10 +2824,10 @@ $userPrivileges->estimate->items === 'on')
 
                         @foreach ($uniqueItems as $itemData)
                         <tr class="bg-white border-b">
-                            <td class="px-6 py-4 w-[30%]">
+                            <td class="px-2 py-4 w-[30%] text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 {{ $itemData['name'] }}
                             </td>
-                            <td class="px-6 py-4 w-[30%]">
+                            <td class="px-2 py-4 w-[30%] text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($itemData['description'])
                                 <p class="font-medium">Description:</p>
@@ -2835,13 +2835,13 @@ $userPrivileges->estimate->items === 'on')
                                 @endif
                                 </p>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 ${{ number_format($itemData['price'], 2) }}
                             </td>
-                            <td class="text-center">
+                            <td class="text-center text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 {{ number_format($itemData['qty'], 2) }}
                             </td>
-                            <td class="text-center">
+                            <td class="text-center text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 ${{ number_format($itemData['total'], 2) }}
                             </td>
                         </tr>
@@ -3023,16 +3023,16 @@ $userPrivileges->estimate->items === 'on')
                             <!-- <th scope="col" class="px-6 py-3">
 
                             </th> -->
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 Item Name
                             </th>
-                            <th scope="col" class="text-center px-6 py-3">
+                            <th scope="col" class="text-center px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 Item Cost
                             </th>
-                            <th scope="col" class="text-center px-6 py-3">
+                            <th scope="col" class="text-center px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 Item Qty
                             </th>
-                            <th scope="col" class="text-center px-6 py-3">
+                            <th scope="col" class="text-center px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 Total
                             </th>
                         </tr>
@@ -3046,9 +3046,9 @@ $userPrivileges->estimate->items === 'on')
                                     <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                 </button>
                             </th> -->
-                            <td class="px-6 py-4 w-[60%]">
+                            <td class="px-2 py-4 w-[60%] text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 {{ $item->item_name }}
-                                <p class="text-[16px]/[18px] text-[#323C47] font">
+                                <p class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px] text-[#323C47] font">
                                     @if ($item->item_description)
                                 <p class="font-medium">Description:</p>
                                 {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
@@ -3059,13 +3059,13 @@ $userPrivileges->estimate->items === 'on')
                                 @endif
                                 </p>
                             </td>
-                            <td class="text-center">
+                            <td class="text-center text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 ${{ $item->item_cost }}
                             </td>
-                            <td class="text-center">
+                            <td class="text-center text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 {{ $item->item_qty }}
                             </td>
-                            <td class="text-center">
+                            <td class="text-center text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 ${{ $item->item_total }}
                             </td>
                         </tr>
@@ -3290,31 +3290,32 @@ $userPrivileges->estimate->items === 'on')
 </div>
 @endif
 @if (session('user_details')['user_role'] == 'admin')
-<div class="mb-5 shadow-lg bg-white  rounded-3xl mt-7">
+<div class="mb-5 shadow-lg bg-white  rounded-3xl mt-7 ">
     <div class="flex justify-between items-center px-3 py-3  bg-[#930027] rounded-t-3xl">
         <p class="text-lg px-3  text-white font-medium">
             Upgrade
         </p>
     </div>
+    <div class="">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
 
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                     Item Name
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                     Item Description
                 </th>
-                <th scope="col" class="text-center px-6 py-3">
+                <th scope="col" class="text-center px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                     Item Cost
                 </th>
-                <th scope="col" class="text-center px-6 py-3">
+                <th scope="col" class="text-center px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                     Item Qty
                 </th>
-                <th scope="col" class="text-center px-6 py-3">
+                <th scope="col" class="text-center px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                     Total
                 </th>
             </tr>
@@ -3416,6 +3417,7 @@ $userPrivileges->estimate->items === 'on')
             @endforeach
         </tbody>
     </table>
+</div>
     <div class="text-right mr-4 py-6">
         <span>${{ number_format($totalUpgradePrice, 2) }}</span> {{-- Display the formatted total labor price --}}
     </div>
@@ -3815,8 +3817,8 @@ $userPrivileges->estimate->photos === 'on')
                             <td class="px-6 py-4">
                                 <div class="flex gap-3">
                                     @if(!empty($proposal->proposal_data))
-                                    <a href="{{ $proposal->proposal_status === 'pending' 
-                                        ? '/viewProposal?estimateId=' . $proposal->estimate_proposal_id 
+                                    <a href="{{ $proposal->proposal_status === 'pending'
+                                        ? '/viewProposal?estimateId=' . $proposal->estimate_proposal_id
                                         : '/viewProposal?proposalId=' . $proposal->estimate_proposal_id }}{{ $proposal->group_id ? '&group_id=' . $proposal->group_id : '' }}">
                                         <button class="px-2 py-2">
                                             <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
@@ -3928,8 +3930,8 @@ $userPrivileges->estimate->proposals === 'on')
                             <td class="px-6 py-4">
                                 <div class="flex gap-3">
                                     @if(!empty($proposal->proposal_data))
-                                    <a href="{{ $proposal->proposal_status === 'pending' 
-                                        ? '/viewProposal?estimateId=' . $proposal->estimate_proposal_id 
+                                    <a href="{{ $proposal->proposal_status === 'pending'
+                                        ? '/viewProposal?estimateId=' . $proposal->estimate_proposal_id
                                         : '/viewProposal?proposalId=' . $proposal->estimate_proposal_id }}{{ $proposal->group_id ? '&group_id=' . $proposal->group_id : '' }}">
                                         <button class="px-2 py-2">
                                             <img src="{{ asset('assets/icons/view-icon.svg') }}" alt="icon">
@@ -4211,19 +4213,19 @@ $userPrivileges->estimate->notes === 'on')
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 Date
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 Title
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 Sent To
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 Email Subject
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
 
                             </th>
                         </tr>
@@ -4234,13 +4236,13 @@ $userPrivileges->estimate->notes === 'on')
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ date('m/d/y', strtotime($email->created_at)) }}
                             </th>
-                            <td class="px-6 py-4">
+                            <td class="px-2 py-4 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 {{ $email->email_name }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-2 py-4 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 {{ $email->email_to }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-2 py-4 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 {{ $email->email_subject }}
                             </td>
                             <td>
@@ -4598,16 +4600,16 @@ $userPrivileges->estimate->todos === 'on')
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 Date
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 Description
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 Total
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-2 py-3 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 Actions
                             </th>
                         </tr>
@@ -4618,13 +4620,13 @@ $userPrivileges->estimate->todos === 'on')
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ date('m/d/y', strtotime($payments->complete_invoice_date)) }}
                             </th>
-                            <td class="px-6 py-4">
+                            <td class="px-2 py-4 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 {{ $payments->note }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-2 py-4 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 {{ $payments->invoice_total }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-2 py-4 text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 <button id="edit-payment{{ $payments->estimate_complete_invoice_id }}">
                                     <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
                                 </button>
@@ -6714,8 +6716,8 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                         </button>
                     </div>
                     <!-- task details -->
-                    <div class=" text-center grid grid-cols-4 gap-2">
-                        <div class=" flex justify-between border-b-2 mb-2 col-span-4 mt-4">
+                    <div class=" text-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class=" flex justify-between border-b-2 mb-2 col-span-full mt-4">
                             <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Contact</h2>
                         </div>
                         <div class=" ">
@@ -6726,24 +6728,24 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Last Name</h5>
                             <input type="text" name="last_name" id="customer_last_name" placeholder="Last Name" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Phone No.</h5>
                             <input type="tel" name="phone" id="customer_phone" placeholder="XXX-XXX-XXXX/XXXXXXXXXX" autocomplete="given-name" class="mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" pattern="([0-9]{3}-?[0-9]{3}-?[0-9]{4})(/[0-9]{3}-?[0-9]{3}-?[0-9]{4})*" title="Phone number must be in the format XXX-XXX-XXXX or XXXXXXXXXX, separated by slashes" required>
                             <span class=" text-[#930027]" style="font-size:12px;">Please use "/" to add more than one number.</span>
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Project Name (Optional)</h5>
                             <input type="text" name="project_name" id="customer_project_name" placeholder="Project Name (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class="  ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Project Number (Optional)</h5>
                             <input type="text" step="any" name="project_number" id="customer_project_number" placeholder="Project Number (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Project Type (Optional)</h5>
                             <input type="text" step="any" name="project_type" id="customer_project_type" placeholder="Project Type (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2 ">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Building Type (Optional)</h5>
                             <select name="building_type" id="customer_building_type" placeholder="Building Type (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 <option value="">Select Type</option>
@@ -6751,18 +6753,18 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                                 <option value="commercial">Commercial</option>
                             </select>
                         </div>
-                        <div class=" flex justify-between border-b-2 mb-2 col-span-4  mt-1 mb-3">
+                        <div class=" flex justify-between border-b-2 mb-2 col-span-full  mt-1 mb-3">
                             <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Billing</h2>
                         </div>
-                        <div class=" col-span-4 ">
+                        <div class=" col-span-full ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Address</h5>
                             <input type="text" name="first_address" id="customer_first_address" placeholder="Address 1" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Tax</h5>
                             <input type="number" step="any" name="tax_rate" id="customer_tax_rate" placeholder="Tax Rate (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
-                        <div class=" col-span-2">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Owner</h5>
                             <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="owner" id="customer_owner" required>
                                 <option>Select User</option>
@@ -6773,7 +6775,7 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                                 @endforeach
                             </select>
                         </div>
-                        <div class=" col-span-4">
+                        <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Internal Note</h5>
                             <input type="text" class="mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="internal_note" id="internal_note" value="{{ $estimate->estimate_internal_note }}" placeholder="Internal Note">
                         </div>
@@ -7111,13 +7113,13 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                             <input type="hidden" name="ass_item_id[]" id="ass_item_id_${index}" value="${assembly.ass_item_id}">
                                 <select name="assembly_name[]" id="assembly_id_${index}" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
-                                    <option selected value="${assembly.assembly_name}" 
-                                        data-item-cost="${assembly.assemblyItemData.item_cost}" 
-                                        data-item-price="${assembly.assemblyItemData.item_price}" 
-                                        data-item-id="${assembly.assemblyItemData.item_id}" 
-                                        data-item-type="${assembly.assemblyItemData.item_type}" 
-                                        data-labour-expense="${assembly.assemblyItemData.labour_expense}" 
-                                        data-material-expense="${assembly.assemblyItemData.material_expense}" 
+                                    <option selected value="${assembly.assembly_name}"
+                                        data-item-cost="${assembly.assemblyItemData.item_cost}"
+                                        data-item-price="${assembly.assemblyItemData.item_price}"
+                                        data-item-id="${assembly.assemblyItemData.item_id}"
+                                        data-item-type="${assembly.assemblyItemData.item_type}"
+                                        data-labour-expense="${assembly.assemblyItemData.labour_expense}"
+                                        data-material-expense="${assembly.assemblyItemData.material_expense}"
                                         data-unit="${assembly.assemblyItemData.item_units}">
                                         ${assembly.assembly_name}
                                     </option>
@@ -7313,13 +7315,13 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                                 <input type="hidden" name="ass_item_id[]" id="ass_item_id_${index}" value="${itemData.item_id}">
                                 <select name="assembly_name[]" id="assembly_id_${index}" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                     <option value="">Select Item</option>
-                                    <option selected value="${itemData.est_ass_item_name}" 
-                                        data-item-price="${itemData.ass_item_price}" 
-                                        data-item-cost="${itemData.ass_item_cost}" 
-                                        data-item-id="${itemData.item_id}" 
-                                        data-item-type="${itemData.ass_item_type}" 
-                                        data-labour-expense="${itemData.ass_labour_expense}" 
-                                        data-material-expense="${itemData.ass_material_expense}" 
+                                    <option selected value="${itemData.est_ass_item_name}"
+                                        data-item-price="${itemData.ass_item_price}"
+                                        data-item-cost="${itemData.ass_item_cost}"
+                                        data-item-id="${itemData.item_id}"
+                                        data-item-type="${itemData.ass_item_type}"
+                                        data-labour-expense="${itemData.ass_labour_expense}"
+                                        data-material-expense="${itemData.ass_material_expense}"
                                         data-unit="${itemData.ass_item_unit}">
                                         ${itemData.est_ass_item_name}
                                     </option>
@@ -7885,7 +7887,7 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                         </div>
                         </button>
                         {{-- ====================== --}}
-                        <div id="cal-menu" class="absolute hidden  text-left h-[100%]  z-[999] " <div 
+                        <div id="cal-menu" class="absolute hidden  text-left h-[100%]  z-[999] " <div
                         style="background-color:#3a4655 !important;"
                         class="    z-10 mt-2 w-56 origin-top-right rounded-md bg-[#3a4655] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                         role="menu" aria-orientation="vertical" aria-labelledby="menu-button"
@@ -8619,7 +8621,7 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
         var $changeOrderSelect = $('#changeOrder-select');
         var $makeProposalUrl = $('#makeProposal-url');
         var baseUrl = '/makeProposal/{{ $estimate->estimate_id }}';
-        
+
         // Function to toggle select state and update URL
         function updateFormState() {
             if ($makeChangeOrderRadio.is(':checked')) {
