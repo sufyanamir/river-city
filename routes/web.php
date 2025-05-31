@@ -10,7 +10,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ItemTemplatesController;
 use App\Http\Controllers\NotificationsController;
-use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\ReportsController;//report controller
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserToDoController;
 use App\Http\Controllers\BotManController;
@@ -57,7 +57,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/editUser', [UserController::class, 'editUser']);
     Route::match(['get', 'post'], '/delete/user/{id}', [UserController::class, 'deleteUser']);
     Route::match(['get', 'post'], '/delete/userRole/{id}', [UserController::class, 'deleteUserRole']);
-    
+
     Route::get('/customers', [CustomerController::class, 'index']);
     Route::get('/getCustomerToEdit{id}', [CustomerController::class, 'getCustomerToEdit']);
     Route::post('/updateCustomer', [CustomerController::class, 'updateCustomer']);
@@ -178,8 +178,9 @@ Route::middleware('customauth')->group(function () {
         return view('paymentTemplate');
     });
 
-    Route::match(['post', 'get'], '/reports', [ReportsController::class, 'index']);
-    
+    Route::match(['post', 'get'], '/reports/{range?}/{date?}/{keyword?}', [ReportsController::class, 'index']);
+    Route::get('/report_details/{reportBy?}/{keyword?}', [ReportsController::class, 'firstreport'])->name('report-details');
+
     Route::get('/jobs', [EstimateController::class, 'getEstimateOnJobs']);
     // Route::get('/jobs', function () {
     //     return view('jobs');
@@ -221,7 +222,7 @@ Route::middleware('customauth')->group(function () {
     Route::get('/settings', [UserController::class, 'getUserOnSettings']);
     Route::post('/updateSettings', [UserController::class, 'updateSettings']);
     Route::post('/updateCompany', [UserController::class, 'updateCompany']);
-    
+
     Route::get('/getEmailToEdit/{id}', [EmailController::class, 'getEmailToEdit']);
     Route::post('/updateEmail', [EmailController::class, 'updateEmail']);
     Route::get('/help', function () {
