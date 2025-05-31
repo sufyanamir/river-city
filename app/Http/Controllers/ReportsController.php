@@ -4,17 +4,63 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Estimate;
+use App\Models\Groups;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use PHPUnit\TextUI\XmlConfiguration\Group;
 
 class ReportsController extends Controller
 {
+
+    public function firstreport($reportBy, $keyword = null)
+    {
+
+        if($reportBy == 'source')
+        {
+            $customers = Customer::where('source', $keyword)
+                                ->with('estimates')
+                                ->get();
+        }elseif($reportBy == 'completedEstimate')
+        {
+            $customers = Customer::with(['estimates' => fn($q) =>
+            $q->where('project_owner', $keyword)
+            ->where('estimate_status', 'complete')])->get();
+        }elseif($reportBy == 'pandingEstimate')
+        {
+            $customers = Customer::with(['estimates' => fn($q) =>
+    $q->where('project_owner', $keyword)
+      ->where('estimate_status', 'pending')])->get();
+        }elseif($reportBy == 'completedWorkOrders')
+        {
+            $customers = Customer::with(['estimates' => fn($q) =>
+            $q->where('project_owner', $keyword)
+            ->where('estimate_status', 'paid')])->get();
+        }elseif($reportBy == 'acceptedEstimate')
+        {
+           $customers =  Customer::with(['estimates' => fn($q) =>
+            $q->where('project_owner', $keyword)
+            ->whereNotNull('estimate_total',)])->get();
+        }elseif($reportBy == 'salesByEstimate')
+        {
+            $customers =  Customer::with(['estimates' => fn($q) =>
+            $q->where('project_owner', $keyword)
+            ->whereNotNull('estimate_total',)])->get();
+        }elseif($reportBy == 'newEstimateByOwner')
+        {
+            $customers =  Customer::with(['estimates' => fn($q) =>
+            $q->where('project_owner', $keyword)
+            ->where('estimate_assigned','0')])->get();
+        }
+
+        return view('report_details', compact('customers'));
+    }
     public function index($range = null, $date = null, $keyword = null)
     {
         $userDetails = session('user_details');
         if ($keyword != null) {
             // Filter customers based on the search keyword
             $customers = Customer::where('source', 'like', '%' . $keyword . '%')->with('estimates')->get();
+
         } else {
             $customers = Customer::with('estimates')->get();
         }

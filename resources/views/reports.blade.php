@@ -5,18 +5,18 @@
         <div class="p-3">
             <div class="text-right mb-3">
                 <div class="inline-flex rounded-md shadow-sm" role="group">
-                    <button type="button" class=" inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
+                    {{-- <button type="button" class=" inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
                         <span>Summary</span>
                         <svg data-accordion-icon class="w-2 h-2 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
                         </svg>
-                    </button>
-                    <button type="button" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ">
+                    </button> --}}
+                    {{-- <button type="button" onclick="downloadAsPDF('printableArea')" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ">
                         <span>Download</span>
                         <svg data-accordion-icon class="w-2 h-2 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
                         </svg>
-                    </button>
+                    </button> --}}
                 </div>
             </div>
             <form action="/reports" method="post">
@@ -83,9 +83,13 @@
                 </div>
             </form>
             <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gab-4">
-                <div class="card px-3 mt-3">
-                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
+                <div class="card px-3 mt-3" id="SalesBySource">
+                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100 flex justify-between">
                         <h3>Sales By Source</h3>
+                        <button type="button" onclick="downloadAsPDF('SalesBySource')" id="hideBtnSS" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-[4px] hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ">
+                        <span>Download</span>
+
+                    </button>
                     </div>
                     <div class=" relative overflow-auto border rounded-b-lg">
                         <table class=" w-full text-sm">
@@ -97,8 +101,8 @@
                                 </tr>
                             </thead>
                         </table>
-                        <div style="height: 100px !important; overflow-y:scroll !important;">
-                            <table class=" w-full text-sm">
+                        <div style="height: 100px !important; overflow-y:scroll !important;" id="hideStyleSS">
+                            <table class=" w-full text-sm" >
                                 @php
                                 $source_customer_total = 0;
                                 $source_estimate_total = 0;
@@ -109,7 +113,7 @@
                                     <tr class=" border-b">
                                         <td class=" text-left pl-1 py-2">{{$source}}</td>
                                         <td class=" text-center">{{$data['total_customers']}}</td>
-                                        <td class=" text-right pr-1 py-2">${{$data['estimate_total']}}</td>
+                                       <td class=" text-right pr-1 py-2 text-[#930027] hover:underline"><a href="{{ route('report-details', ['source', $source]) }}">${{ number_format($data['estimate_total'], 2, '.', ',') }}</a></td>
                                     </tr>
                                     @php
                                     $source_customer_total += $data['total_customers'];
@@ -124,15 +128,17 @@
                                 <tr>
                                     <th class=" text-left pl-1 py-2"> Grand Total</th>
                                     <td class=" text-center">{{$source_customer_total}}</td>
-                                    <td class=" text-right pr-1 py-2">${{$source_estimate_total}}</td>
+                                    <td class=" text-right pr-1 py-2">${{number_format($source_estimate_total,1,'')}}</td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
-                <div class="card px-3 mt-3">
-                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
+                <div class="card px-3 mt-3" id="CompletedEstimates">
+                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100 flex justify-between">
                         <h3>Completed Estimates</h3>
+                        <button type="button" onclick="downloadAsPDF('CompletedEstimates')" id="hideBtnCE" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-[4px] hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ">
+                        <span>Download</span>
                     </div>
                     <div class=" relative overflow-auto border rounded-b-lg">
                         <table class=" w-full text-sm">
@@ -144,7 +150,7 @@
                                 </tr>
                             </thead>
                         </table>
-                        <div style="height: 100px !important; overflow-y:scroll !important;">
+                        <div style="height: 100px !important; overflow-y:scroll !important;" id="hideStyleCE">
                             <table class=" w-full text-sm">
                                 @php
                                 $completed_estimates_total = 0;
@@ -155,7 +161,7 @@
                                     <tr class=" border-b">
                                         <td class=" text-left pl-1 py-2">{{$estimators}}</td>
                                         <td class=" text-center">{{$data['total_estimates']}}</td>
-                                        <td class=" text-right pr-1 py-2">${{$data['estimate_total']}}</td>
+                                        <td class=" text-right pr-1 py-2 text-[#930027] hover:underline"><a href="{{ route('report-details', ['completedEstimate', $estimators]) }}">${{number_format($data['estimate_total'],2,'.',',')}}</a></td>
                                     </tr>
                                     @php
                                     $completed_estimates_total += $data['total_estimates'];
@@ -170,15 +176,17 @@
                                 <tr>
                                     <th class=" text-left pl-1 py-2"> Grand Total</th>
                                     <td class=" text-center">{{$completed_estimates_total}}</td>
-                                    <td class=" text-right pr-1 py-2">${{$completed_estimate_total}}</td>
+                                    <td class=" text-right pr-1 py-2">${{number_format($completed_estimate_total,1,'.',',')}}</td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
-                <div class="card px-3 mt-3">
-                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
+                <div class="card px-3 mt-3" id="PendingEstimates">
+                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100 flex justify-between">
                         <h3>Pending Estimates</h3>
+                        <button type="button" onclick="downloadAsPDF('PendingEstimates')" id="hideBtnPE" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-[4px] hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ">
+                        <span>Download</span>
                     </div>
                     <div class=" relative overflow-auto border rounded-b-lg">
                         <table class=" w-full text-sm">
@@ -190,7 +198,7 @@
                                 </tr>
                             </thead>
                         </table>
-                        <div style="height: 100px !important; overflow-y:scroll !important;">
+                        <div style="height: 100px !important; overflow-y:scroll !important;" id="hideStylePE">
                             <table class=" w-full text-sm">
                                 @php
                                 $pending_estimates_total = 0;
@@ -201,7 +209,7 @@
                                     <tr class=" border-b">
                                         <td class=" text-left pl-1 py-2">{{$estimators}}</td>
                                         <td class=" text-center">{{$data['total_estimates']}}</td>
-                                        <td class=" text-right pr-1 py-2">${{$data['estimate_total']}}</td>
+                                        <td class=" text-right pr-1 py-2 text-[#930027] hover:underline"><a href="{{ route('report-details', ['pandingEstimate', $estimators]) }}">${{number_format($data['estimate_total'],2,'.',',')}}</a></td>
                                     </tr>
                                     @php
                                     $pending_estimates_total += $data['total_estimates'];
@@ -216,15 +224,17 @@
                                 <tr>
                                     <th class=" text-left pl-1 py-2"> Grand Total</th>
                                     <td class=" text-center">{{$pending_estimates_total}}</td>
-                                    <td class=" text-right pr-1 py-2">${{$pending_estimate_total}}</td>
+                                    <td class=" text-right pr-1 py-2">${{number_format($pending_estimate_total,1,'.',',')}}</td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
-                <div class="card px-3 mt-3">
-                    <div class="rounded-t-lg p-2 card-header border bg-gray-100">
+                <div class="card px-3 mt-3" id="CompletedWorkOrders">
+                    <div class="rounded-t-lg p-2 card-header border bg-gray-100 flex justify-between">
                         <h3>Completed Work Orders</h3>
+                        <button type="button" onclick="downloadAsPDF('CompletedWorkOrders')" id="hideBtnCO" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-[4px] hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ">
+                        <span>Download</span>
                     </div>
                     <div class="relative overflow-auto border rounded-b-lg">
                         <table class="w-full text-sm">
@@ -236,7 +246,7 @@
                                 </tr>
                             </thead>
                         </table>
-                        <div style="height: 100px !important; overflow-y:scroll !important;">
+                        <div style="height: 100px !important; overflow-y:scroll !important;" id="hideStyleCO">
                             <table class="w-full text-sm">
                                 @php
                                 $completed_work_orders_total = 0;
@@ -247,7 +257,7 @@
                                     <tr class="border-b">
                                         <td class="text-left pl-1 py-2">{{$estimators}}</td>
                                         <td class="text-center">{{$data['total_work_orders']}}</td>
-                                        <td class="text-right pr-1 py-2">${{$data['work_order_total']}}</td>
+                                        <td class="text-right pr-1 py-2 text-[#930027] hover:underline"><a href="{{ route('report-details', ['completedWorkOrders', $estimators]) }}">${{number_format($data['work_order_total'],2,'.',',')}}</a></td>
                                     </tr>
                                     @php
                                     $completed_work_orders_total += $data['total_work_orders'];
@@ -262,15 +272,17 @@
                                 <tr>
                                     <th class="text-left pl-1 py-2"> Grand Total</th>
                                     <td class="text-center">{{$completed_work_orders_total}}</td>
-                                    <td class="text-right pr-1 py-2">${{$completed_work_order_total}}</td>
+                                    <td class="text-right pr-1 py-2">${{number_format($completed_work_order_total,1,'.',',')}}</td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
-                <div class="card px-3 mt-3">
-                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
+                <div class="card px-3 mt-3" id="AcceptedEstimates">
+                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100 flex justify-between">
                         <h3>Accepted Estimates</h3>
+                        <button type="button" onclick="downloadAsPDF('AcceptedEstimates')" id="hideBtnAE" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-[4px] hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ">
+                        <span>Download</span>
                     </div>
                     <div class=" relative overflow-auto border rounded-b-lg">
                         <table class=" w-full text-sm">
@@ -282,7 +294,7 @@
                                 </tr>
                             </thead>
                         </table>
-                        <div style="height: 100px !important; overflow-y:scroll !important;">
+                        <div style="height: 100px !important; overflow-y:scroll !important;" id="hideStyleAE">
                             <table class=" w-full text-sm">
                                 @php
                                 $accepted_estimates_total = 0;
@@ -293,7 +305,7 @@
                                     <tr class=" border-b">
                                         <td class=" text-left pl-1 py-2">{{$estimators}}</td>
                                         <td class=" text-center">{{$data['total_estimates']}}</td>
-                                        <td class=" text-right pr-1 py-2">${{$data['estimate_total']}}</td>
+                                        <td class=" text-right pr-1 py-2 text-[#930027] hover:underline"><a href="{{ route('report-details', ['acceptedEstimate', $estimators]) }}">${{number_format($data['estimate_total'],2,'.',',')}}</a></td>
                                     </tr>
                                     @php
                                     $accepted_estimates_total += $data['total_estimates'];
@@ -308,15 +320,17 @@
                                 <tr>
                                     <th class=" text-left pl-1 py-2"> Grand Total</th>
                                     <td class=" text-center">{{$accepted_estimates_total}}</td>
-                                    <td class=" text-right pr-1 py-2">${{$accepted_estimate_total}}</td>
+                                    <td class=" text-right pr-1 py-2">${{number_format($accepted_estimate_total,1,'.',',')}}</td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
-                <div class="card px-3 mt-3">
-                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
+                <div class="card px-3 mt-3" id="SalesByEstimates">
+                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100 flex justify-between">
                         <h3>Sales By Estimates</h3>
+                        <button type="button" onclick="downloadAsPDF('SalesByEstimates')" id="hideBtnSE" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-[4px] hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ">
+                        <span>Download</span>
                     </div>
                     <div class=" relative overflow-auto border rounded-b-lg">
                         <table class=" w-full text-sm">
@@ -328,7 +342,7 @@
                                 </tr>
                             </thead>
                         </table>
-                        <div style="height: 100px !important; overflow-y:scroll !important;">
+                        <div style="height: 100px !important; overflow-y:scroll !important;" id="hideStyleSE">
                             <table class=" w-full text-sm">
                                 @php
                                 $sales_by_estimator_total = 0;
@@ -339,7 +353,7 @@
                                     <tr class=" border-b">
                                         <td class=" text-left pl-1 py-2">{{$estimators}}</td>
                                         <td class=" text-center">{{$data['total_estimates']}}</td>
-                                        <td class=" text-right pr-1 py-2">${{$data['estimate_total']}}</td>
+                                        <td class=" text-right pr-1 py-2 text-[#930027] hover:underline"><a href="{{ route('report-details', ['salesByEstimate', $estimators]) }}">${{number_format($data['estimate_total'],2,'.',',')}}</a></td>
                                     </tr>
                                     @php
                                     $sales_by_estimator_total += $data['total_estimates'];
@@ -354,15 +368,17 @@
                                 <tr>
                                     <th class=" text-left pl-1 py-2"> Grand Total</th>
                                     <td class=" text-center">{{$sales_by_estimator_total}}</td>
-                                    <td class=" text-right pr-1 py-2">${{$sales_total}}</td>
+                                    <td class=" text-right pr-1 py-2">${{number_format($sales_total,1,'.',',')}}</td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
-                <div class="card px-3 mt-3">
-                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100">
+                <div class="card px-3 mt-3" id="NewEstimatesbyOwner">
+                    <div class=" rounded-t-lg p-2 card-header border bg-gray-100 flex justify-between">
                         <h3>New Estimates by Owner</h3>
+                        <button type="button" onclick="downloadAsPDF('NewEstimatesbyOwner')" id="hideBtnNO" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-[4px] hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 ">
+                        <span>Download</span>
                     </div>
                     <div class=" relative overflow-auto border rounded-b-lg">
                         <table class=" w-full text-sm">
@@ -374,7 +390,7 @@
                                 </tr>
                             </thead>
                         </table>
-                        <div style="height: 100px !important; overflow-y:scroll !important;">
+                        <div style="height: 100px !important; overflow-y:scroll !important;" id="hideStyleNO">
                             <table class=" w-full text-sm">
                                 @php
                                 $new_estimate_by_owner_total = 0;
@@ -385,7 +401,7 @@
                                     <tr class=" border-b">
                                         <td class=" text-left pl-1 py-2">{{$estimators}}</td>
                                         <td class=" text-center">{{$data['total_estimates']}}</td>
-                                        <td class=" text-right pr-1 py-2">${{$data['estimate_total']}}</td>
+                                        <td class=" text-right pr-1 py-2 text-[#930027] hover:underline"><a href="{{ route('report-details', ['newEstimateByOwner', $estimators]) }}">${{number_format($data['estimate_total'],2,'.',',')}}</a></td>
                                     </tr>
                                     @php
                                     $new_estimate_by_owner_total += $data['total_estimates'];
@@ -400,7 +416,7 @@
                                 <tr>
                                     <th class=" text-left pl-1 py-2"> Grand Total</th>
                                     <td class=" text-center">{{$new_estimate_by_owner_total}}</td>
-                                    <td class=" text-right pr-1 py-2">${{$owner_total}}</td>
+                                    <td class=" text-right pr-1 py-2">${{number_format($owner_total,1,'.',',')}}</td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -411,155 +427,188 @@
     </div>
 </div>
 @include('layouts.footer')
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-    $(document).ready(function() {
-        // Function to show the selected input and hide others
-        $(".select-format").click(function() {
-            // Get the data-input-type attribute value of the clicked item
+    $(document).ready(function () {
+        // Handle format switch (day/week/month)
+        $(".select-format").click(function () {
             var inputType = $(this).data("input-type");
 
-            // Hide all input elements
             $("input[type='date'], input[type='week'], input[type='month']").addClass("hidden");
-
-            // Show the input element corresponding to the selected type
             $("#" + inputType + "_input").removeClass("hidden");
-
-            // Trigger change event when switching input types
-            // $("#" + inputType + "_input").change();
         });
 
-        // Trigger change event for the default input
+        // Trigger change for default
         $("#month_input").change();
 
-        $("input[type='date'], input[type='week'], input[type='month']").change(function() {
+        // Handle change for all inputs
+        $("input[type='date'], input[type='week'], input[type='month']").change(function () {
             var inputType = $(this).attr("id").split("_")[0];
-            var baseUrl = "/reports/";
-            var selectedDate = $("#" + inputType + "_input").val();
-            var url = baseUrl + inputType + "/" + selectedDate;
-            window.location.href = url;
-        });
+            var selectedDate = $(this).val();
 
-    });
-</script>
-<script>
-    // Function to format the date
-    $(document).ready(function() {
-        // Function to handle next and previous buttons for month, day, and week inputs
-        $("#prev-btn, #next-btn").click(function() {
-            // Get the value and type of the active input (day, week, or month)
-            var activeInput = $("input[type='date']:not(.hidden), input[type='week']:not(.hidden), input[type='month']:not(.hidden)");
-            var inputType = activeInput.attr("id").split("_")[0];
-            var currentValue = activeInput.val();
-
-            // If the active input has a value, use it to calculate next or previous value
-            if (currentValue) {
-                var currentDate = new Date(currentValue);
-                if ($(this).attr("id") === "prev-btn") {
-                    // Previous button clicked, decrement the date based on input type
-                    if (inputType === "month") {
-                        currentDate.setMonth(currentDate.getMonth() - 1);
-                    } else if (inputType === "day") {
-                        currentDate.setDate(currentDate.getDate() - 1);
-                    } else if (inputType === "week") {
-                        currentDate.setDate(currentDate.getDate() - 7);
-                    }
-                } else {
-                    // Next button clicked, increment the date based on input type
-                    if (inputType === "month") {
-                        currentDate.setMonth(currentDate.getMonth() + 1);
-                    } else if (inputType === "day") {
-                        currentDate.setDate(currentDate.getDate() + 1);
-                    } else if (inputType === "week") {
-                        currentDate.setDate(currentDate.getDate() + 7);
-                    }
-                }
-                // Set the value of the active input to the new value and trigger change event
-                activeInput.val(formatDate(currentDate, inputType)).trigger('change');
-            } else {
-                // If the active input doesn't have a value, use the current date or week
-                var baseUrl = "/reports/";
-                var currentDate = new Date();
-                if ($(this).attr("id") === "prev-btn") {
-                    // Previous button clicked, decrement the date based on input type
-                    if (inputType === "month") {
-                        currentDate.setMonth(currentDate.getMonth() - 1);
-                    } else if (inputType === "day") {
-                        currentDate.setDate(currentDate.getDate() - 1);
-                    } else if (inputType === "week") {
-                        currentDate.setDate(currentDate.getDate() - 7);
-                    }
-                } else {
-                    // Next button clicked, increment the date based on input type
-                    if (inputType === "month") {
-                        currentDate.setMonth(currentDate.getMonth() + 1);
-                    } else if (inputType === "day") {
-                        currentDate.setDate(currentDate.getDate() + 1);
-                    } else if (inputType === "week") {
-                        currentDate.setDate(currentDate.getDate() + 7);
-                    }
-                }
-                // Format the date based on input type
-                var formattedDate;
-                if (inputType === "month") {
-                    formattedDate = currentDate.toISOString().slice(0, 7);
-                } else if (inputType === "day") {
-                    formattedDate = currentDate.toISOString().slice(0, 10);
-                } else if (inputType === "week") {
-                    formattedDate = getISOWeek(currentDate);
-                }
-                // Construct the URL and redirect
-                var url = baseUrl + inputType + "/" + formattedDate;
+            if (selectedDate) {
+                var url = "/reports/" + inputType + "/" + selectedDate;
+                console.log("Redirecting to:", url);
                 window.location.href = url;
             }
         });
-        $("#search-btn").click(function() {
-            var keyword = $("#search_input").val(); // Get the value of the search input
 
-            // Get the values of the active date range inputs
+        // Previous/Next buttons
+        $("#prev-btn, #next-btn").click(function () {
+            var activeInput = $("input[type='date']:not(.hidden), input[type='week']:not(.hidden), input[type='month']:not(.hidden)");
+            var inputType = activeInput.attr("id").split("_")[0];
+            var currentValue = activeInput.val();
+            var currentDate;
+
+            // Parse current value to Date
+            if (inputType === "week" && currentValue) {
+                var parts = currentValue.split("-W");
+                var year = parseInt(parts[0]);
+                var week = parseInt(parts[1]);
+                currentDate = new Date(year, 0, 1 + (week - 1) * 7);
+            } else if (currentValue) {
+                currentDate = new Date(currentValue);
+            } else {
+                currentDate = new Date();
+            }
+
+            // Adjust date
+            if ($(this).attr("id") === "prev-btn") {
+                if (inputType === "month") currentDate.setMonth(currentDate.getMonth() - 1);
+                else if (inputType === "day") currentDate.setDate(currentDate.getDate() - 1);
+                else if (inputType === "week") currentDate.setDate(currentDate.getDate() - 7);
+            } else {
+                if (inputType === "month") currentDate.setMonth(currentDate.getMonth() + 1);
+                else if (inputType === "day") currentDate.setDate(currentDate.getDate() + 1);
+                else if (inputType === "week") currentDate.setDate(currentDate.getDate() + 7);
+            }
+
+            // Format and apply
+            var newVal = formatDate(currentDate, inputType);
+            activeInput.val(newVal).trigger('change');
+        });
+
+        // Search button
+        $("#search-btn").click(function () {
+            var keyword = $("#search_input").val();
             var range = $("input[type='month']:not(.hidden)").val();
             var date = $("input[type='date']:not(.hidden)").val();
             var week = $("input[type='week']:not(.hidden)").val();
 
-            // Construct the URL based on the search keyword and active date range inputs
             var baseUrl = "/reports/";
             var url;
-            if (range) {
-                url = baseUrl + range + "/";
-            } else if (date) {
-                url = baseUrl + "day/" + date + "/";
-            } else if (week) {
-                url = baseUrl + "week/" + getISOWeek(new Date(week)) + "/";
-            } else {
-                url = baseUrl;
-            }
-            // Append the search keyword to the URL
-            url += keyword;
 
-            // Redirect to the generated URL
+            if (range) url = baseUrl + "month/" + range + "/";
+            else if (date) url = baseUrl + "day/" + date + "/";
+            else if (week) url = baseUrl + "week/" + getISOWeek(new Date(week)) + "/";
+            else url = baseUrl;
+
+            url += keyword;
             window.location.href = url;
         });
 
-        // Function to format the date
-        function formatDate(date, inputType) {
-            var formattedDate;
-            if (inputType === "month") {
-                formattedDate = date.toISOString().slice(0, 7);
-            } else if (inputType === "day") {
-                formattedDate = date.toISOString().slice(0, 10);
-            } else if (inputType === "week") {
-                formattedDate = getISOWeek(date);
+        // Helpers
+        function formatDate(date, type) {
+            if (type === "month") {
+                return date.toISOString().slice(0, 7);
+            } else if (type === "day") {
+                return date.toISOString().slice(0, 10);
+            } else if (type === "week") {
+                return getISOWeek(date);
             }
-            return formattedDate;
         }
 
-        // Function to get the ISO week of the given date
         function getISOWeek(date) {
             var d = new Date(date);
             d.setHours(0, 0, 0, 0);
             d.setDate(d.getDate() + 4 - (d.getDay() || 7));
             var yearStart = new Date(d.getFullYear(), 0, 1);
             var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-            return yearStart.getFullYear() + '-W' + weekNo;
+            return d.getFullYear() + '-W' + (weekNo < 10 ? '0' + weekNo : weekNo);
         }
     });
+
+
+ function downloadAsPDF(areaID) {
+    var element = document.getElementById(areaID);
+
+    // Only continue if the element with this ID exists
+    if (!element) {
+        alert("Invalid section selected for download.");
+        return;
+    }
+
+    // Dynamically get the related button and scrollable div
+    let hideBtn, scrollDiv;
+
+    if (areaID === 'SalesBySource') {
+        hideBtn = document.getElementById('hideBtnSS');
+        scrollDiv = document.getElementById('hideStyleSS');
+    } else if (areaID === 'CompletedEstimates') {
+        hideBtn = document.getElementById('hideBtnCE');
+        scrollDiv = document.getElementById('hideStyleCE');
+    } else if (areaID === 'PendingEstimates') {
+        hideBtn = document.getElementById('hideBtnPE');
+        scrollDiv = document.getElementById('hideStylePE');
+    } else if (areaID === 'CompletedWorkOrders') {
+        hideBtn = document.getElementById('hideBtnCO');
+        scrollDiv = document.getElementById('hideStyleCO');
+    } else if (areaID === 'AcceptedEstimates') {
+        hideBtn = document.getElementById('hideBtnAE');
+        scrollDiv = document.getElementById('hideStyleAE');
+    }else if (areaID === 'SalesByEstimates') {
+        hideBtn = document.getElementById('hideBtnSE');
+        scrollDiv = document.getElementById('hideStyleSE');
+    } else if (areaID === 'NewEstimatesbyOwner') {
+        hideBtn = document.getElementById('hideBtnAENO');
+        scrollDiv = document.getElementById('hideStyleNO');
+    } else {
+        alert("No matching button or scroll area found for this section.");
+        return;
+    }
+
+    // Store original styles
+    const originalOverflow = scrollDiv.style.overflowY;
+    const originalHeight = scrollDiv.style.height;
+
+    // Hide the button and remove scroll styles
+    hideBtn.style.display = 'none';
+    scrollDiv.style.overflowY = 'visible';
+    scrollDiv.style.height = 'auto';
+
+    // PDF options
+    var opt = {
+        margin: 0.5,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 1.5 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+        pagebreak: { mode: ['css'] }
+    };
+
+    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+        var totalPages = pdf.internal.getNumberOfPages();
+        var pageWidth = pdf.internal.pageSize.getWidth();
+        var pageHeight = pdf.internal.pageSize.getHeight();
+
+        var today = new Date();
+        var dateStr = today.toLocaleDateString();
+
+        for (var i = 1; i <= totalPages; i++) {
+            pdf.setPage(i);
+            pdf.setFontSize(10);
+            pdf.setTextColor(150);
+            pdf.text('Downloaded on: ' + dateStr, pageWidth / 2, pageHeight - 0.6, { align: 'center' });//for date
+            pdf.text('Page ' + i + ' of ' + totalPages, pageWidth / 2, pageHeight - 0.3, { align: 'center' });
+        }
+    }).save().then(() => {
+        // Restore styles and show button
+        hideBtn.style.display = 'inline-flex';
+        scrollDiv.style.overflowY = originalOverflow;
+        scrollDiv.style.height = originalHeight;
+    });
+}
+
+
+
 </script>
