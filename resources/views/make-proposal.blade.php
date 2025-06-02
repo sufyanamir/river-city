@@ -29,11 +29,11 @@
         page-break-after: auto;
     }
 
-    tr, div {
+    tr, h1 {
         page-break-inside: avoid !important;
     }
 
-    td, th, #cuttingBug, h1 {
+    td, th, #cuttingBug {
         page-break-inside: avoid !important;
     }
 
