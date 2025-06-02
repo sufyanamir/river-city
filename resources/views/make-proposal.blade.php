@@ -20,22 +20,22 @@
         height: auto;
     }
 
-    div, p, span, table, td, tr, th, h1 {
-        page-break-inside: auto !important; /* Allow natural page breaks */
-    }
+    /* div, p, span, table, td, tr, th, h1 {
+        page-break-inside: auto !important; 
+    } */
 
     div, p, span, table, td, tr, th, h1  {
         page-break-before: auto;
         page-break-after: auto;
     }
 
-    tr, h1 {
+    /* tr, h1 {
         page-break-inside: avoid !important;
     }
 
     td, th, #cuttingBug {
         page-break-inside: avoid !important;
-    }
+    } */
 
     .avoid-page-break {
         page-break-before: always;
