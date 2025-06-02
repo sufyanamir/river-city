@@ -20,22 +20,22 @@
         height: auto;
     }
 
-    /* div, p, span, table, td, tr, th, h1 {
-        page-break-inside: auto !important; 
-    } */
+    div, p, span, table, td, tr, th, h1 {
+        page-break-inside: auto !important; /* Allow natural page breaks */
+    }
 
     div, p, span, table, td, tr, th, h1  {
         page-break-before: auto;
         page-break-after: auto;
     }
 
-    /* tr, h1 {
+    tr {
         page-break-inside: avoid !important;
     }
 
-    td, th, #cuttingBug {
+    td, th {
         page-break-inside: avoid !important;
-    } */
+    }
 
     .avoid-page-break {
         page-break-before: always;
@@ -160,7 +160,7 @@
                                         <div class="inline-block">
                                             @if($groupName)
                                             <div class="flex gap-3">
-                                                <h1 id="cuttingBug" class=" font-bold text-xl my-auto p-2 underline">{{$groupName}}</h1>
+                                                <h1 class=" font-bold text-xl my-auto p-2 underline">{{$groupName}}</h1>
                                             </div>
                                             @endif
                                         </div>
