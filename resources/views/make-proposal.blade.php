@@ -29,7 +29,7 @@
         page-break-after: auto;
     }
 
-    tr {
+    tr, div {
         page-break-inside: avoid !important;
     }
 
