@@ -748,38 +748,28 @@ $exsistingProposals = $existing_proposals;
     }
 
     function downloadAsPDF(areaID) {
-
-    // Get the printable area content
-    var printContent = document.getElementById(areaID).innerHTML;
-
-    // Combine the printable area content with the editor content
-    var combinedContent = printContent;
-
-    // Create a temporary div to hold the combined content
-    var tempDiv = document.createElement('div');
-    tempDiv.innerHTML = combinedContent;
-
-    // Apply styles to hide unwanted elements
-    var style = document.createElement('style');
-    style.innerHTML = `
-        #send-button, #footer, #editor, #editor-div {
-            display: none !important;
-        }
-    `;
-    tempDiv.appendChild(style);
+    var element = document.getElementById(areaID);
 
     // Define PDF options
     var opt = {
         margin: 0.5,
-        filename: 'Estimate_{{ $estimate->customer_name }}_{{$estimate->customer_last_name}}.pdf',
+        filename: 'Estimate_{{ $estimate->customer_name }}_{{ $estimate->customer_last_name }}.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 1.5 },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
         pagebreak: { mode: ['css'] }
     };
 
-    // Generate PDF with centered page numbers
-    html2pdf().set(opt).from(tempDiv).toPdf().get('pdf').then(function (pdf) {
+    // Apply styles to hide unwanted elements
+    var style = document.createElement('style');
+    style.innerHTML = `
+        #grandTotal-card { display: none !important; }
+        #addSign { display: none !important; }
+    `;
+    document.head.appendChild(style);
+
+    // Generate the PDF with centered page numbers
+    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
         var totalPages = pdf.internal.getNumberOfPages();
         var pageWidth = pdf.internal.pageSize.getWidth();
         var pageHeight = pdf.internal.pageSize.getHeight();
@@ -796,7 +786,6 @@ $exsistingProposals = $existing_proposals;
             );
         }
     }).save();
-
-    }
+}
     @endif
 </script>
