@@ -33,7 +33,7 @@
         page-break-inside: avoid !important;
     }
 
-    td, th, #cuttingBug {
+    td, th, #cuttingBug, h1 {
         page-break-inside: avoid !important;
     }
 
