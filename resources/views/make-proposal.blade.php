@@ -29,7 +29,7 @@
         page-break-after: auto;
     }
 
-    tr {
+    tr, #cuttingDiv, p {
         page-break-inside: avoid !important;
     }
 
@@ -159,7 +159,7 @@
                                     <div class=" group-card bg-white text-black">
                                         <div class="inline-block">
                                             @if($groupName)
-                                            <div class="flex gap-3">
+                                            <div id="cuttingDiv" class="flex gap-3">
                                                 <h1 class=" font-bold text-xl my-auto p-2 underline">{{$groupName}}</h1>
                                             </div>
                                             @endif

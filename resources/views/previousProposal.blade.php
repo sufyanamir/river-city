@@ -37,7 +37,7 @@
         page-break-after: auto;
     }
 
-    tr {
+    tr, #cuttingDiv, p {
         page-break-inside: avoid !important;
     }
 
@@ -195,7 +195,7 @@
                                                 @endif
                                                 @endforeach
                                                 <div class="w-full flex justify-between">
-                                                    <div>
+                                                    <div id="cuttingDiv">
                                                         <h1 class=" font-bold text-xl my-auto p-2 underline">{{$groupName}}</h1>
                                                         <div id="formData{{$item['group_id']}}" class="hidden">
                                                             @csrf

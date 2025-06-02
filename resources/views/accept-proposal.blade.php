@@ -37,7 +37,7 @@
         page-break-after: auto;
     }
 
-    tr {
+    tr, #cuttingDiv, p {
         page-break-inside: avoid !important;
     }
 
@@ -200,7 +200,7 @@
                                                 @endforeach
                                                 
                                                 <div class="w-full flex justify-between">
-                                                    <div>
+                                                    <div id="cuttingDiv">
                                                         <h1 class="font-bold text-xl my-auto p-2 underline">{{$groupName}}</h1>
                                                         <input type="hidden" class="group-total" data-group-id="{{$item['group_id']}}" value="{{$groupTotal}}">
                                                     </div>
