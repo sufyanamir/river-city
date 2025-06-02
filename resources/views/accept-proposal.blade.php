@@ -28,11 +28,11 @@
         height: auto;
     }
 
-    div, p, span, table, td, tr, th {
+    div, p, span, table, td, tr, th, h1 {
         page-break-inside: auto !important; /* Allow natural page breaks */
     }
 
-    table {
+    div, p, span, table, td, tr, th, h1  {
         page-break-before: auto;
         page-break-after: auto;
     }
