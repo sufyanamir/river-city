@@ -748,7 +748,25 @@ $exsistingProposals = $existing_proposals;
     }
 
     function downloadAsPDF(areaID) {
-    var element = document.getElementById(areaID);
+
+    // Get the printable area content
+    var printContent = document.getElementById(areaID).innerHTML;
+
+    // Combine the printable area content with the editor content
+    var combinedContent = printContent;
+
+    // Create a temporary div to hold the combined content
+    var tempDiv = document.createElement('div');
+    tempDiv.innerHTML = combinedContent;
+
+    // Apply styles to hide unwanted elements
+    var style = document.createElement('style');
+    style.innerHTML = `
+        #send-button, #footer, #editor, #editor-div {
+            display: none !important;
+        }
+    `;
+    tempDiv.appendChild(style);
 
     // Define PDF options
     var opt = {
@@ -757,22 +775,28 @@ $exsistingProposals = $existing_proposals;
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 1.5 },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-        pagebreak: { mode: ['css'] } // Prevents text splitting across pages
+        pagebreak: { mode: ['css'] }
     };
 
-    // Apply styles to hide unwanted elements and format content
-    var style = document.createElement('style');
-    style.innerHTML = `
-    #send-button, #footer, #editor, #editor-div {
-        display: none !important;
+    // Generate PDF with centered page numbers
+    html2pdf().set(opt).from(tempDiv).toPdf().get('pdf').then(function (pdf) {
+        var totalPages = pdf.internal.getNumberOfPages();
+        var pageWidth = pdf.internal.pageSize.getWidth();
+        var pageHeight = pdf.internal.pageSize.getHeight();
+
+        for (var i = 1; i <= totalPages; i++) {
+            pdf.setPage(i);
+            pdf.setFontSize(10);
+            pdf.setTextColor(150);
+            pdf.text(
+                'Page ' + i + ' of ' + totalPages,
+                pageWidth / 2,
+                pageHeight - 0.3,
+                { align: 'center' }
+            );
+        }
+    }).save();
+
     }
-        `;
-    document.head.appendChild(style);
-
-    // Generate and save the PDF
-    html2pdf().set(opt).from(element).save();
-}
-
-
     @endif
 </script>
