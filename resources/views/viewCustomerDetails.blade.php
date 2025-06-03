@@ -140,6 +140,15 @@
                                         <span class="pl-2">{{ $customer->customer_primary_address }}, {{ $customer->customer_city }}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</span>
                                     </a>
                                 </p>
+                                @if (!$project->billing_address == null)
+                                    <p class="mt-2 flex text-[#323C47] font-medium">
+                                    <img src="{{ asset('assets/icons/billing_address.svg') }}" class="w-5"  alt="">
+                                    <a href="https://maps.google.com/?q={{ $project->billing_address }}" target="_blank" class=" text-[#930027]">
+                                        <span class="pl-2">Billing Address: {{ $project->billing_address }}</span>
+                                    </a>
+                                </p>
+                                @endif
+
                                 <p class="mt-1 flex text-[#323C47] font-medium">
                                     <img src="{{ asset('assets/icons/mail-icon.svg') }}" alt="">
                                     <span class="pl-2">{{ $customer->customer_email }}

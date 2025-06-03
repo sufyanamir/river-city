@@ -504,12 +504,12 @@ $userRole = session('user_details')['user_role'];
                             <h2 class=" text-xl font-semibold mb-2 text-[#930027]">Billing</h2>
                         </div>
                         <div class=" col-span-full ">
-                            <h5 class="text-gray-600 mb-1  font-medium text-left">Address 1</h5>
-                            <input type="text" name="first_address" id="first_address" placeholder="Address 1" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Address </h5>
+                            <input type="text" name="first_address" id="first_address" placeholder="Address " autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class=" col-span-full ">
-                            <h5 class="text-gray-600 mb-1  font-medium text-left">Address 2 (Optional)</h5>
-                            <input type="text" name="second_address" id="second_address" placeholder="Address 2 (Optional)" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                            <h5 class="text-gray-600 mb-1  font-medium text-left">Billing Address</h5>
+                            <input type="text" name="second_address" id="second_address" placeholder="Billing Address" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                         </div>
                         <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">City</h5>

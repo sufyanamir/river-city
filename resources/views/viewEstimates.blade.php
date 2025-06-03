@@ -20,35 +20,7 @@ $modalTotal = 0;
 
 @endphp
 <input type="hidden" id="hasPendingProposal" value="{{ $estimate->proposals->where('proposal_status', 'pending')->isNotEmpty() }}">
-<div class=" absolute bottom-10 right-10 z-30">
-    <button type="button" id="addItem-menubutton" class=" rounded-full flex bg-white p-1 m-2">
-        <div class=" bg-[#930027] rounded-full w-12 h-12">
-            <i class="fa-solid fa-plus text-white p-4"></i>
-        </div>
-    </button>
-    <div class="absolute right-16 bottom-0 z-10">
-        <div id="addItem-menu" class=" topbar-manuLeaving bg-white divide-y h-24 overflow-scroll divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                <li>
-                    <button id="" type="button" class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        Add Item
-                    </button>
-                </li>
-                <hr>
-                {{-- <li>
-                                    <button id="addTemplate" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Template Name</button>
-                                </li> --}}
-                @foreach ($item_templates as $template)
-                <li>
-                    <button id="addTemplate{{ $template->item_template_id }}" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}
-                    </button>
-                </li>
-                @endforeach
-            </ul>
-        </div>
 
-    </div>
-</div>
 <div class=" my-4">
     <h1 class=" text-2xl font-semibold mb-3">Estimates</h1>
     <div class=" bg-transparent w-full">
@@ -78,6 +50,15 @@ $modalTotal = 0;
                                 <span class="pl-2">{{ $estimate->customer_address }}, {{ $estimate->customer->customer_city }}, {{ $estimate->customer->customer_state }}, {{ $estimate->customer->customer_zip_code }}</span>
                             </a>
                         </p>
+                        @if (!$estimate->billing_address == null)
+                             <p class="mt-2 flex text-[#323C47] font-medium">
+                            <img src="{{ asset('assets/icons/billing_address.svg') }}" class="w-5"  alt="">
+                            <a href="https://maps.google.com/?q={{$estimate->billing_address}}{{ $estimate->customer->customer_city }}{{ $estimate->customer->customer_state }}{{ $estimate->customer->customer_zip_code }}" target="_blank" class=" text-[#930027]">
+                                <span class="pl-2">Billing Address: {{ $estimate->billing_address }}</span>
+                            </a>
+                        </p>
+                        @endif
+
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/mail-icon.svg') }}" alt="">
                             <span class="pl-2">{{ $estimate->customer->customer_email }}
@@ -6790,6 +6771,46 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
         </div>
     </div>
 </div>
+
+<div class=" absolute bottom-10 right-10 z-30">
+    <div class="flex justify-center items-center">
+        <div class="text-white bg-[#930027] flex justify-center items-center h-10 p-2 rounded-[10px] me-[-5px]">
+            Grand Total: <span> ${{ number_format($totalPrice, 2) }}</span>
+        </div>
+
+        <button type="button" id="addItem-menubutton" class=" rounded-full flex bg-white p-1 m-2">
+        <div class=" bg-[#930027] rounded-full w-12 h-12">
+            <i class="fa-solid fa-plus text-white p-4"></i>
+        </div>
+        </button>
+
+    </div>
+    <div class="absolute right-16 bottom-0 z-10">
+        <div id="addItem-menu" class=" topbar-manuLeaving bg-white divide-y h-24 overflow-scroll divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                <li>
+                    <button id="" type="button" class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        Add Item
+                    </button>
+                </li>
+                <hr>
+                {{-- <li>
+                                    <button id="addTemplate" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Template Name</button>
+                                </li> --}}
+                @foreach ($item_templates as $template)
+                <li>
+                    <button id="addTemplate{{ $template->item_template_id }}" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}
+                    </button>
+                </li>
+                @endforeach
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+
+
 @include('layouts.footer')
 <script src="https://cdn.jsdelivr.net/npm/dropzone@5.9.2"></script>
 <script>
