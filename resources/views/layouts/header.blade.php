@@ -138,6 +138,35 @@
           fill: #930027;
       }
 
+       /* Custom CSS for the slide-in animation */
+       @keyframes slide-in-left {
+            0% {
+                transform: translateX(-100%); /* Start off-screen to the left */
+                opacity: 0; /* Start completely transparent */
+            }
+            100% {
+                transform: translateX(0); /* End at its original position */
+                opacity: 1; /* End fully opaque */
+            }
+        }
+
+        .animate-slide-in {
+            animation: slide-in-left 1.5s ease-out forwards; /* 1.5s duration, ease-out timing, stays at end state */
+        }
+
+        /* Ensure the loading screen covers the full viewport */
+        .loading-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0; /* Light gray background */
+            z-index: 9999; /* Ensure it's on top of other content */
+        }
 
     </style>
     <!-- <link href="https://cdn.tailwindcss.com" rel="stylesheet"> -->
@@ -154,8 +183,8 @@
 
 
 <body class="bg-[#930027]">
-    <div id="loader">
-    <img src="{{ asset('assets/images/infinite-spinner.svg') }}" alt="Loading">
+    <div id="loader" class="loading-container">
+    <img src="{{ asset('assets/icons/projectLogo.svg') }}" class="animate-slide-in" alt="Loading">
   </div>
 <div id="main-dashbords" style="display: block;">
 
