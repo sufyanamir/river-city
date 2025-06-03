@@ -99,7 +99,21 @@
 
     }
 </style>
+
+
+
+
+</div>
 </body>
+    {{-- for loader js --}}
+<script>
+  window.addEventListener('load', function () {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('main-dashbords').style.display = 'block';
+
+    });
+</script>
+
 <script>
 const sidebar = document.querySelector(".sidebar");
 const mainContainer = document.querySelector(".main-container");
