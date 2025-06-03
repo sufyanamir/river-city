@@ -135,6 +135,7 @@ class Estimate extends Model
         'price_discount',
         'discounted_total',
         'estimate_internal_note',
+        'billing_address',
     ];
 
     public $timestamps = true;
