@@ -51,7 +51,7 @@
                         <input type="password" id="new_password" name="new_password" class="bg-gray-50 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter New Password">
                     </div>
                     <div class=" ">
-                        <label for="confirm_password" class="block mb-2 font-medium text-[#930027] text-[11px] sm:text-sm md:text-[16px] lg:text-[16px]">Confirm New Password</label>
+                        <label for="confirm_password" class="block mb-2 font-medium text-[#930027] text-[12px] sm:text-sm md:text-[16px] lg:text-[16px]">Confirm New Password</label>
                         <input type="password" id="confirm_password" name="confirm_password" class="bg-gray-50 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Confirm Password">
                         <p id="password_match_status" style="color: green;"></p>
                     </div>

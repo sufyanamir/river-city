@@ -119,6 +119,26 @@
         .main-container {
             transition: margin-left 0.5s ease, border-radius 0.5s ease;
         }
+
+  /* Full screen loader */
+ #loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+      #loader img {
+          width: 300px;
+          fill: #930027;
+      }
+
+
     </style>
     <!-- <link href="https://cdn.tailwindcss.com" rel="stylesheet"> -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" />
@@ -132,11 +152,17 @@
     $userPrivileges = session('user_details')['user_privileges'];
 @endphp
 
+
 <body class="bg-[#930027]">
+    <div id="loader">
+    <img src="{{ asset('assets/images/infinite-spinner.svg') }}" alt="Loading">
+  </div>
+<div id="main-dashbords" style="display: block;">
+
     <audio id="messageSound" src="{{ asset('assets/sounds/message-sound.wav') }}"></audio>
     @if (session('user_details')['user_role'] == 'admin')
         <div
-            class="sidebar fixed top-0 left-0 h-screen w-[250px] bg-[#930027] z-[99] duration-500 overflow-y-auto text-center">
+            class="sidebar fixed top-0 left-0 h-screen w-[250px] bg-[#930027] z-[10] duration-500 overflow-y-auto text-center">
             <div class="text-gray-100 text-xl">
                 <div class="p-2.5 mt-1 flex items-center">
                     <img src="{{ asset('assets/icons/projectLogo.svg') }}" class=" mx-auto" alt="icon">
@@ -175,7 +201,7 @@
             </div>
             <div id="submenu1"
                 class="text-left text-sm mt-2 w-4/5 mx-auto text-gray-200 duration-300 font-bold hidden">
-                <x-sidebar-links :class="'bg-white text-[#930027] sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/items'" :title="'Items'" :hoverIcon="'hover-item-icon.svg'"
+                <x-sidebar-links :class="'bg-white text-[#930027] sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/items'" :title="'Items'" :hoverIcon="'item-icon.svg'"
                     :icon="'item-icon.svg'"></x-sidebar-links>
                 <x-sidebar-links :class="'bg-white text-[#930027] sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/itemTemplates'" :title="'Templates'" :hoverIcon="'item-icon.svg'"
                     :icon="'item-icon.svg'"></x-sidebar-links>
@@ -442,7 +468,7 @@
         {{-- Main container for content, shifted right to make room for sidebar --}}
         <div class="main-container duration-500 rounded-l-3xl h-screen overflow-auto bg-[#edf2f7] ml-[250px] ps-4">
             {{-- Topbar --}}
-            <div class="topbar py-1 flex justify-between bg-[#fff] rounded-[12px] sticky top-0 z-10">
+            <div class="topbar py-1 flex justify-between bg-[#fff] rounded-[12px] sticky top-0 z-[9]">
                 {{-- Sidebar toggle button for smaller screens --}}
                 <div class="flex justify-center items-center">
                     <button id="sidebarToggle" class="text-white text-3xl cursor-pointer p-2">
