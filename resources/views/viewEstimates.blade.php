@@ -1056,11 +1056,11 @@ $modalTotal = 0;
                                             <p class="text-xs text-[#323C47]">
                                                 @if ($item->item_description)
                                             <p class="font-medium">Description:</p>
-                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
+                                            {{formatText($item->item_description)}}
                                             @endif
                                             @if ($item->item_note)
                                             <p class="font-medium">Note:</p>
-                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
+                                            {{formatText($item->item_note)}}
                                             @endif
                                             </p>
                                         </td>
@@ -1199,7 +1199,7 @@ $modalTotal = 0;
                                                                             {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->est_ass_item_name) !!}
                                                                         </td>
                                                                         <td class="px-6 py-4 w-[30%]">
-                                                                            {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
+                                                                            {{formatText($assembly->ass_item_description)}}
                                                                         </td>
                                                                         @if($item->group)
                                                                         <td class="text-center">
@@ -1520,11 +1520,11 @@ $modalTotal = 0;
                                     <p class="text-[16px]/[18px] text-[#323C47] font">
                                         @if ($item->item_description)
                                     <p class="font-medium">Description:</p>
-                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
+                                    {{formatText($item->item_description)}}
                                     @endif
                                     @if ($item->item_note)
                                     <p class="font-medium">Note:</p>
-                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
+                                    {{formatText($item->item_note)}}
                                     @endif
                                     </p>
                                 </td>
@@ -1658,7 +1658,8 @@ $modalTotal = 0;
                                                                     {{$assembly->est_ass_item_name}}
                                                                 </td>
                                                                 <td class="px-6 py-4 w-[30%]">
-                                                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
+
+                                                                {{formatText($assembly->ass_item_description)}}
                                                                 </td>
                                                                 @if($item->group)
                                                                 <td class="text-center">
@@ -2030,11 +2031,11 @@ $userPrivileges->estimate->items === 'on')
                                     <p class="text-xs text-[#323C47]">
                                         @if ($item->item_description)
                                     <p class="font-medium">Description:</p>
-                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
+                                    {{formatText($item->item_description)}}
                                     @endif
                                     @if ($item->item_note)
                                     <p class="font-medium">Note:</p>
-                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
+                                    {{formatText($item->item_note)}}
                                     @endif
                                     </p>
                                 </td>
@@ -2492,11 +2493,11 @@ $userPrivileges->estimate->items === 'on')
                                     <p class="text-[16px]/[18px] text-[#323C47] font">
                                         @if ($item->item_description)
                                     <p class="font-medium">Description:</p>
-                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
+                                    {{formatText($item->item_description)}}
                                     @endif
                                     @if ($item->item_note)
                                     <p class="font-medium">Note:</p>
-                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
+                                    {{formatText($item->item_note)}}
                                     @endif
                                     </p>
                                 </td>
@@ -2630,7 +2631,7 @@ $userPrivileges->estimate->items === 'on')
                                                                     {{$assembly->est_ass_item_name}}
                                                                 </td>
                                                                 <td class="px-6 py-4 w-[30%]">
-                                                                    {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $assembly->ass_item_description) !!}
+                                                                    {{formatText($assembly->ass_item_description)}}
                                                                 </td>
                                                                 @if($item->group)
                                                                 <td class="text-center">
@@ -2743,11 +2744,11 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item->item_description)
                                 <p class="font-medium">Description:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
+                                {{formatText($item->item_description)}}
                                 @endif
                                 @if ($item->item_note)
                                 <p class="font-medium">Note:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
+                                {{formatText($item->item_note)}}
                                 @endif
                                 </p>
                             </td>
@@ -2888,11 +2889,11 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item->item_description)
                                 <p class="font-medium">Description:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
+                                {{formatText($item->item_description)}}
                                 @endif
                                 @if ($item->item_note)
                                 <p class="font-medium">Note:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
+                                {{formatText($item->item_note)}}
                                 @endif
                                 </p>
                             </td>
@@ -3032,11 +3033,11 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px] text-[#323C47] font">
                                     @if ($item->item_description)
                                 <p class="font-medium">Description:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
+                                {{formatText($item->item_description)}}
                                 @endif
                                 @if ($item->item_note)
                                 <p class="font-medium">Note:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
+                                {{formatText($item->item_note)}}
                                 @endif
                                 </p>
                             </td>
@@ -3175,11 +3176,11 @@ $userPrivileges->estimate->items === 'on')
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
                                     @if ($item->item_description)
                                 <p class="font-medium">Description:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
+                                {{formatText($item->item_description)}}
                                 @endif
                                 @if ($item->item_note)
                                 <p class="font-medium">Note:</p>
-                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
+                                {{formatText($item->item_note)}}
                                 @endif
                                 </p>
                             </td>

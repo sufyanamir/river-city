@@ -3672,7 +3672,28 @@ class EstimateController extends Controller
                 'branch' => 'required',
                 'project_type' => 'nullable|string',
                 'building_type' => 'nullable|string',
+                'billing_check' => 'nullable|boolean'
             ]);
+                $billingCheck = $request->input('billing_check', 1);
+
+                if ($billingCheck == 0) {
+                    $request->validate([
+                        'billing_address'   => 'required|string',
+                        'billing_city'      => 'required|string',
+                        'billing_state'     => 'required|string',
+                        'billing_zip_code'  => 'required|numeric',
+                    ]);
+                    $fullBillingAddress = $request->billing_address . ', ' .
+                                        $request->billing_city . ', ' .
+                                        $request->billing_state . ', ' .
+                                        $request->billing_zip_code;
+                } else {
+                    $fullBillingAddress = $validatedData['first_address'] . ', ' .
+                                        $validatedData['city'] . ', ' .
+                                        $validatedData['state'] . ', ' .
+                                        $validatedData['zip_code'];
+                }
+
 
             $user = User::find($validatedData['owner']);
 
@@ -3713,7 +3734,7 @@ class EstimateController extends Controller
                 'project_owner' => $user->name . ' ' . $user->last_name,
                 'po_number' => $po_number,
                 'estimate_internal_note' => $validatedData['internal_note'],
-                'billing_address'=>$validatedData['second_address'],
+                'billing_address' => $fullBillingAddress
             ]);
 
             if ($validatedData['customer_id']) {

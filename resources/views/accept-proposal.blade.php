@@ -159,7 +159,7 @@
                         </div>
                     </div>
                     <div class="col-span-12">
-                        
+
                         <div class="text-[#323C47] font-medium border-b border-[#323C47] pb-6 border-solid">
                             @php
                             $subTotal = 0;
@@ -198,7 +198,7 @@
                                                 @endphp
                                                 @endif
                                                 @endforeach
-                                                
+
                                                 <div class="w-full flex justify-between">
                                                     <div id="cuttingDiv">
                                                         <h1 class="font-bold text-xl my-auto p-2 underline">{{$groupName}}</h1>
@@ -285,13 +285,13 @@
                                                                 @if ($item['item_description'])
                                                             <p class="font-medium">Description:</p>
                                                             <p>
-                                                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}
+                                                                {{formatText($item['item_description'])}}
                                                             </p>
                                                             @endif
                                                             @if ($item['item_note'])
                                                             <p class="font-medium">Note:</p>
                                                             <p>
-                                                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_note']) !!}
+                                                                {{formatText($item['item_note'])}}
                                                             </p>
                                                             @endif
                                                             </p>
@@ -454,11 +454,11 @@
                                                         <p class="text-[16px]/[18px] text-[#323C47] font">
                                                             @if ($upgrade->item_description)
                                                         <p class="font-medium">Description:</p>
-                                                        {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
+                                                        {{formatText($item->item_description)}}
                                                         @endif
                                                         @if ($upgrade->item_note)
                                                         <p class="font-medium">Note:</p>
-                                                        {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
+                                                        {{formatText($item->item_note)}}
                                                         @endif
                                                         </p>
                                                     </td>
@@ -886,12 +886,12 @@
         let taxRate = {{ $estimate['tax_rate'] !== null ? $estimate['tax_rate'] : 0 }};
         let percentageDiscount = {{ $estimate['percentage_discount'] ?? 0 }};
         let priceDiscount = {{ $estimate['price_discount'] ?? 0 }};
-        
+
         // Function to update totals
         function updateTotals() {
             console.log('Updating totals');
             let additionalTotal = 0;
-            
+
             // Calculate additional total from accepted groups
             $('.group-radio[value="accepted"]:checked').each(function() {
                 let groupId = $(this).data('group-id');
@@ -902,7 +902,7 @@
             // Calculate grand total
             let subTotal = baseSubTotal + additionalTotal;
             let grandTotal = subTotal + (subTotal * taxRate / 100);
-            
+
             // Apply discount if exists
             let discountedTotal = grandTotal;
             if (percentageDiscount) {
@@ -916,7 +916,7 @@
             $('#dynamic_total_input').val(grandTotal);
             $('input[name="estimate_total"]').val(discountedTotal);
             $('.group-total-display').text('$' + discountedTotal.toFixed(2)); // Assuming you have a grand total display element
-            
+
             // Update grand total card
             $('#grandTotal-card .font-medium').text('Grand Total: $' + grandTotal.toFixed(2));
         }
@@ -925,28 +925,28 @@
         $('.group-radio').on('change', function() {
             console.log('Radio button changed');
             updateTotals();
-            
+
             // Store group status for form submission
             let groupId = $(this).data('group-id');
             let status = $(this).val();
             let proposalId = $(this).data('proposal-id');
-            
+
             // Remove existing status input for this group
             $('#groupStatuses input[data-group-id="' + groupId + '"]').remove();
-            
+
             // Add new status input
             $('#groupStatuses').append(
-                `<input type="hidden" 
-                    name="group_statuses[${groupId}][status]" 
-                    value="${status}" 
+                `<input type="hidden"
+                    name="group_statuses[${groupId}][status]"
+                    value="${status}"
                     data-group-id="${groupId}">
-                <input type="hidden" 
-                    name="group_statuses[${groupId}][proposal_id]" 
-                    value="${proposalId}" 
+                <input type="hidden"
+                    name="group_statuses[${groupId}][proposal_id]"
+                    value="${proposalId}"
                     data-group-id="${groupId}">
-                <input type="hidden" 
-                    name="group_statuses[${groupId}][type]" 
-                    value="${status === 'accepted' ? 'acceptAll' : 'rejectAll'}" 
+                <input type="hidden"
+                    name="group_statuses[${groupId}][type]"
+                    value="${status === 'accepted' ? 'acceptAll' : 'rejectAll'}"
                     data-group-id="${groupId}">`
             );
         });
@@ -954,11 +954,11 @@
         // Handle form submission
         $('#saveButton').click(function(e) {
             e.preventDefault();
-            
+
             // Show spinner
             $('#spinner').removeClass('hidden');
             $('#text').addClass('hidden');
-            
+
             // Submit the form
             $('#proposalForm').submit();
         });
@@ -966,7 +966,7 @@
         // Initial total calculation
         updateTotals();
     });
-    
+
 </script>
 <script>
     $("#addSign").click(function(e) {
