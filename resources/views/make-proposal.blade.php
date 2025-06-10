@@ -217,12 +217,12 @@
                                                             <p class="text-[16px]/[18px] text-[#323C47] pt-2">
                                                                 @if ($item->item_description)
                                                             <p class="font-medium">Description:
-                                                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_description) !!}
+                                                                {{formatText($item->item_description)}}
                                                             </p>
                                                             @endif
                                                             @if ($item->item_note)
                                                             <p class="font-medium">Note:
-                                                                {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item->item_note) !!}
+                                                                {{formatText($item->item_note)}}
                                                             </p>
                                                             @endif
                                                             </p>
@@ -314,11 +314,11 @@
                                                         <p class="text-[16px]/[18px] text-[#323C47] font">
                                                             @if ($upgrade->item_description)
                                                         <p class="font-medium">Description:</p>
-                                                        {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $upgrade->item_description) !!}
+                                                        {{formatText($upgrade->item_description)}}
                                                         @endif
                                                         @if ($upgrade->item_note)
                                                         <p class="font-medium">Note:</p>
-                                                        {!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $upgrade->item_note) !!}
+                                                        {{formatText($upgrade->item_note)}}
                                                         @endif
                                                         </p>
                                                     </td>
@@ -634,7 +634,7 @@ $exsistingProposals = $existing_proposals;
         // Create a temporary div to hold the combined content
         var tempDiv = document.createElement('div');
         tempDiv.innerHTML = combinedContent;
-        
+
         // Append the temporary div to the body
         document.body.innerHTML = tempDiv.innerHTML;
 
@@ -723,10 +723,10 @@ $exsistingProposals = $existing_proposals;
         // Create a temporary div to hold the content
         var tempDiv = document.createElement('div');
         tempDiv.innerHTML = printContent;
-        
+
         // Store the original content
         var originalContent = document.body.innerHTML;
-        
+
         // Replace body content with the printable content
         document.body.innerHTML = tempDiv.innerHTML;
 
