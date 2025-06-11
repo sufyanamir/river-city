@@ -206,23 +206,27 @@
                                                     </div>
                                                     @if(isset($item['group']['include_est_total']) && $item['group']['include_est_total'] == 0)
                                                     <div class="my-auto mx-2 text-lg">
-                                                        <input type="radio"
+                                                        <div class="inline-block p-3 rounded-md bg-green-100">
+                                                            <input type="radio"
                                                             name="group_accept_reject_{{$item['group_id']}}"
                                                             value="accepted"
                                                             class="group-radio"
                                                             data-group-id="{{$item['group_id']}}"
                                                             data-proposal-id="{{$proposal_id}}"
                                                             {{ $item['upgrade_status'] == 'accepted' ? 'checked' : '' }}>
-                                                        <label>Accept</label>
-
-                                                        <input type="radio"
-                                                            name="group_accept_reject_{{$item['group_id']}}"
-                                                            value="rejected"
-                                                            class="group-radio"
-                                                            data-group-id="{{$item['group_id']}}"
-                                                            data-proposal-id="{{$proposal_id}}"
-                                                            {{ $item['upgrade_status'] == 'rejected' ? 'checked' : '' }}>
-                                                        <label>Reject</label>
+                                                            <label class="text-green-800">Accept</label>
+                                                        </div>
+                                                        |
+                                                        <div class="inline-block p-3 rounded-md bg-red-100">
+                                                            <input type="radio"
+                                                                name="group_accept_reject_{{$item['group_id']}}"
+                                                                value="rejected"
+                                                                class="group-radio"
+                                                                data-group-id="{{$item['group_id']}}"
+                                                                data-proposal-id="{{$proposal_id}}"
+                                                                {{ $item['upgrade_status'] == 'rejected' ? 'checked' : '' }}>
+                                                            <label class="text-red-800">Reject</label>
+                                                        </div>
                                                     </div>
                                                     @endif
                                                 </div>
@@ -678,7 +682,7 @@
                                     </svg>
                                 </div>
                                 <div class="text" id="text">
-                                    Save
+                                    Accept
                                 </div>
                             </button>
                         </div>
