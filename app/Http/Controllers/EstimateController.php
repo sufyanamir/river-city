@@ -50,6 +50,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Symfony\Contracts\Service\Attribute\Required;
+use Illuminate\Support\Facades\DB;
 
 use function PHPSTORM_META\map;
 
@@ -2365,6 +2366,7 @@ class EstimateController extends Controller
     public function acceptProposal(Request $request, $id)
     {
         try {
+            DB::beginTransaction();
             $validatedData = $request->validate([
                 'estimate_total' => 'required',
                 'upgrade_accept_reject' => 'nullable',
@@ -2398,6 +2400,7 @@ class EstimateController extends Controller
             // Load and update proposal signature regardless of group_statuses
             $proposal = EstimateProposal::where('estimate_proposal_id', $validatedData['proposal_id'])->first();
             if (!$proposal) {
+                DB::rollBack();
                 return response()->json(['success' => false, 'message' => 'Proposal not found'], 404);
             }
 
@@ -2458,6 +2461,7 @@ class EstimateController extends Controller
                     Mail::to($estimator->email)->send($mail);
                 }
             } catch (\Exception $e) {
+                DB::rollBack();
                 return response()->json(['success' => false, 'message' => 'Email sending failed: ' . $e->getMessage()], 400);
             }
 
@@ -2470,6 +2474,7 @@ class EstimateController extends Controller
                 ->first();
 
             if (!$proposal) {
+                DB::rollBack();
                 return response()->json(['success' => false, 'message' => 'Pending proposal not found'], 404);
             }
 
@@ -2485,8 +2490,24 @@ class EstimateController extends Controller
             $estimate->save();
             $proposal->save();
 
+            $addUserId = $estimate->added_user_id;
+
+            if (!session()->has('user_details')) {
+                $customerFName = $estimate->customer_name;
+                $customerLName = $estimate->customer_last_name;
+                $estimateId = $estimate->estimate_id;
+
+               $notification = "The proposal you sent has been *accepted* by the customer {$customerFName} {$customerLName}. Please check Estimate no. {$estimateId} for more details.";
+
+                Notifications::create([
+                    'added_user_id' => $addUserId,
+                    'notification_message' => $notification,
+                ]);
+            }
+            DB::commit();
             return response()->json(['success' => true, 'message' => 'You accepted the proposal. Thank You!'], 200);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
@@ -3757,6 +3778,26 @@ class EstimateController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
+    public function deleteEstimate($id)
+{
+    try{
+        $estimate = Estimate::find($id);
+
+        if ($estimate && $estimate->estimate_status !== 'deleted') {
+            $estimate->estimate_status = 'deleted';
+            $estimate->save();
+
+            return response()->json(['success' => true, 'message' => 'Estimate deleted successfully'], 200);
+        }
+
+        return response()->json(['success' => false, 'message' => 'estimate not found'], 404);
+    } catch(\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()]);
+    }
+}
+
+
+
     // add  estimate
 
     // ==============================================================Estimates functions==================================================================

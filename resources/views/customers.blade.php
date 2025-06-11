@@ -28,7 +28,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                 </thead>
                 <tbody class=" text-sm">
                     @foreach($customers as $customer)
-                    <tr>
+                    <tr id="customerRow{{ $customer->customer_id }}">
                         <td>
                             <a href="/viewCustomerDetails/{{ $customer->customer_id }}" class=" text-[#930027] hover:border-b hover:border-[#930027]">
                                 {{ $customer->customer_first_name }} {{ $customer->customer_last_name }}
@@ -41,25 +41,27 @@ $userPrivileges = session('user_details')['user_privileges'];
                         <td>{{ $customer->addedBy ? $customer->addedBy->name : '' }}</td>
                         <td>{{ ucfirst($customer->branch) }}</td>
                         <td>
-                            @if(session('user_details')['user_role'] == 'admin')
-                            <button id="editCustomer{{$customer->customer_id}}">
-                                <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
-                            </button>
-                            @elseif(isset($userPrivileges->customers) && isset($userPrivileges->customers->edit) && $userPrivileges->customers->edit === "on")
-                            <button id="editCustomer{{$customer->customer_id}}">
-                                <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="btn">
-                            </button>
+                            {{-- Edit Button --}}
+                            @if(session('user_details')['user_role'] == 'admin' ||
+                                (isset($userPrivileges->customers) && isset($userPrivileges->customers->edit) && $userPrivileges->customers->edit === "on"))
+                                <button id="editCustomer{{ $customer->customer_id }}">
+                                    <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="Edit">
+                                </button>
                             @endif
-                            @if (session('user_details')['user_role'] == 'admin')
-                            <button disabled>
-                                <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
-                            </button>
-                            @elseif(isset($userPrivileges->customers) && isset($userPrivileges->customers->edit) && $userPrivileges->customers->delete === "on")
-                            <button disabled>
-                                <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="btn">
-                            </button>
+
+                            {{-- Delete Button --}}
+                            @if ($customer->customer_status !== 'deleted' &&
+                                (session('user_details')['user_role'] == 'admin' ||
+                                (isset($userPrivileges->customers) &&
+                                isset($userPrivileges->customers->delete) &&
+                                $userPrivileges->customers->delete === "on")))
+                                <button class="deleteCustomerBtn" data-id="{{ $customer->customer_id }}">
+                                    <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="Delete">
+                                </button>
                             @endif
+
                         </td>
+
                     </tr>
                     @endforeach
                 </tbody>
@@ -283,6 +285,40 @@ $userPrivileges = session('user_details')['user_privileges'];
             error: function(error) {
                 console.error('AJAX request failed:', error);
             }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.deleteCustomerBtn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const customerId = this.getAttribute('data-id');
+
+                if (confirm('Are you sure you want to delete all details of this customer?')) {
+                    fetch(`/customer/${customerId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Remove the row from the table
+                            const row = document.getElementById(`customerRow${customerId}`);
+                            if (row) row.remove();
+                        } else {
+                            alert('Failed to delete customer.');
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Something went wrong.');
+                    });
+                }
+            });
         });
     });
 </script>

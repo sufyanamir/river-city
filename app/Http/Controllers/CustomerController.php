@@ -56,7 +56,7 @@ class CustomerController extends Controller
     {
         $userDetails = session('user_details');
 
-        $customers = Customer::with('addedBy')->get();
+        $customers = Customer::with('addedBy')->where('customer_status', '<>', 'deleted')->get();
         $branches = CompanyBranches::get();
         $users = User::where('user_role', '<>', 'crew')->get();
 
@@ -66,7 +66,7 @@ class CustomerController extends Controller
     public function getCustomerToEdit($id)
     {
         try {
-            
+
             $customer = Customer::where('customer_id', $id)->first();
 
             if (!$customer) {
@@ -106,7 +106,7 @@ class CustomerController extends Controller
 
             if ($validatedData['customer_id'] != null) {
                 $customer = Customer::where('customer_id', $validatedData['customer_id'])->first();
-    
+
                 $customer->customer_first_name = $validatedData['first_name'];
                 $customer->customer_last_name = $validatedData['last_name'];
                 $customer->customer_email = $validatedData['email'];
@@ -122,9 +122,9 @@ class CustomerController extends Controller
                 $customer->company_internal_note = $validatedData['internal_note'];
                 $customer->source = $validatedData['source'];
                 $customer->branch = $validatedData['branch'];
-    
+
                 $customer->save();
-    
+
                 return response()->json(['success' => true, 'message' => 'Customer Updated Successfully!'], 200);
             }else{
                 $customer = Customer::create([
@@ -154,5 +154,36 @@ class CustomerController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
+
+
+   public function deleteCustomer($id){
+    try{
+        $customer = Customer::with('estimates')->find($id);
+
+        if ($customer && $customer->customer_status !== 'deleted') {
+
+            $customer->customer_status = 'deleted';
+            foreach ($customer->estimates as $estimate) {
+                $estimate->estimate_status = 'deleted';
+                $estimate->save();
+            }
+
+            $customer->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => "Customer and its related estimates marked as deleted."
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => "Customer not found or already deleted."
+        ], 404);
+    } catch (\Exception $e) {
+
+        return response()->json(['success' => false, 'message' => $e->getMessage()]);
+    }
+}
 
 }

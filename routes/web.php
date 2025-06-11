@@ -61,7 +61,7 @@ Route::middleware('customauth')->group(function () {
     Route::get('/customers', [CustomerController::class, 'index']);
     Route::get('/getCustomerToEdit{id}', [CustomerController::class, 'getCustomerToEdit']);
     Route::post('/updateCustomer', [CustomerController::class, 'updateCustomer']);
-    // Route::get('/users', function () {
+    Route::delete('/customer/{id}', [CustomerController::class, 'deleteCustomer'])->name('customer.delete');
     //     return view('users');
     // });
     // Route::get('/userRole', function () {
@@ -77,6 +77,7 @@ Route::middleware('customauth')->group(function () {
     // });
     Route::match(['get', 'post'], '/getEstimateWithImages', [EstimateController::class, 'getEstimateWithImages']);
     Route::get('/estimates/{type?}', [EstimateController::class, 'index'])->name('estimates');
+    Route::patch('/deleteEstimate/{id}', [EstimateController::class, 'deleteEstimate']);
     Route::post('/cancelEstimate/{id}', [EstimateController::class, 'cancelEstimate']);
     Route::post('/addEstimate', [EstimateController::class, 'addCustomerAndEstimate']);
     Route::get('/viewEstimate/{id}', [EstimateController::class, 'viewEstimate']);
