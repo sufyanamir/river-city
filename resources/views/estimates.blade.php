@@ -65,12 +65,13 @@ $userRole = session('user_details')['user_role'];
                             <td style=" width:50px;">
                                 {{ $item->customer_phone }}
                                 <br>
-                                <a href="https://maps.google.com/?q={{ $item->customer_address }}{{$item->customer->customer_city}}{{ $item->customer->customer_state }}{{ $item->customer->customer_zip_code }}" target="_blank" class=" text-[#930027]">
-                                    {{ $item->customer_address }}, {{$item->customer->customer_city}}, {{ $item->customer->customer_state }}, {{ $item->customer->customer_zip_code }}
+                                <a href="https://maps.google.com/?q={{ $item->customer_address }} {{ $item->customer?->customer_city }} {{ $item->customer?->customer_state }} {{ $item->customer?->customer_zip_code }}"
+                                target="_blank" class="text-[#930027]">
+                                    {{ $item->customer_address }}, {{ $item->customer?->customer_city }}, {{ $item->customer?->customer_state }}, {{ $item->customer?->customer_zip_code }}
                                 </a>
                             </td>
                             <td style=" width:50px;">
-                                {{ ucfirst($item->customer->branch) }}
+                                {{ ucfirst($item->customer?->branch) }}
                             </td>
                             <td>
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
@@ -158,7 +159,14 @@ $userRole = session('user_details')['user_role'];
                                                     <form action="/cancelEstimate/{{$item->estimate_id}}" method="post">
                                                         @csrf
                                                         <button class=" w-full">
-                                                            <p class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-del-icon.svg') }}" alt="icon"> Cancel</p>
+                                                            <p class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-cross-icon.svg') }}" alt="icon"> Cancel</p>
+                                                        </button>
+                                                    </form>
+                                                    <form action="/deleteEstimate/{{$item->estimate_id}}">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button class=" w-full">
+                                                            <p class="  px-4 py-2 text-sm hover:bg-[#edf2f7] hover:text-[#930027] rounded-sm m-2 duration-200 flex gap-4" role="menuitem" tabindex="-1" id="menu-item-1"><img src="{{ asset('assets/icons/dropdown-del-icon.svg') }}" alt="icon"> Delete</p>
                                                         </button>
                                                     </form>
                                                 </div>
