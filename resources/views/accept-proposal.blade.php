@@ -289,13 +289,13 @@
                                                                 @if ($item['item_description'])
                                                             <p class="font-medium">Description:</p>
                                                             <p>
-                                                                {{formatText($item['item_description'])}}
+                                                                {!!formatText($item['item_description'])!!}
                                                             </p>
                                                             @endif
                                                             @if ($item['item_note'])
                                                             <p class="font-medium">Note:</p>
                                                             <p>
-                                                                {{formatText($item['item_note'])}}
+                                                                {!!formatText($item['item_note'])!!}
                                                             </p>
                                                             @endif
                                                             </p>
@@ -458,11 +458,11 @@
                                                         <p class="text-[16px]/[18px] text-[#323C47] font">
                                                             @if ($upgrade->item_description)
                                                         <p class="font-medium">Description:</p>
-                                                        {{formatText($item->item_description)}}
+                                                        {!!formatText($item->item_description)!!}
                                                         @endif
                                                         @if ($upgrade->item_note)
                                                         <p class="font-medium">Note:</p>
-                                                        {{formatText($item->item_note)}}
+                                                        {!!formatText($item->item_note)!!}
                                                         @endif
                                                         </p>
                                                     </td>
