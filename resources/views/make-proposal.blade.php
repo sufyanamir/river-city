@@ -217,12 +217,12 @@
                                                             <p class="text-[16px]/[18px] text-[#323C47] pt-2">
                                                                 @if ($item->item_description)
                                                             <p class="font-medium">Description:
-                                                                {{formatText($item->item_description)}}
+                                                                {!!formatText($item->item_description)!!}
                                                             </p>
                                                             @endif
                                                             @if ($item->item_note)
                                                             <p class="font-medium">Note:
-                                                                {{formatText($item->item_note)}}
+                                                                {!!formatText($item->item_note)!!}
                                                             </p>
                                                             @endif
                                                             </p>
@@ -314,11 +314,11 @@
                                                         <p class="text-[16px]/[18px] text-[#323C47] font">
                                                             @if ($upgrade->item_description)
                                                         <p class="font-medium">Description:</p>
-                                                        {{formatText($upgrade->item_description)}}
+                                                        {!!formatText($upgrade->item_description)!!}
                                                         @endif
                                                         @if ($upgrade->item_note)
                                                         <p class="font-medium">Note:</p>
-                                                        {{formatText($upgrade->item_note)}}
+                                                        {!!formatText($upgrade->item_note)!!}
                                                         @endif
                                                         </p>
                                                     </td>
