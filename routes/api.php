@@ -19,6 +19,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::middleware(['auth:sanctum'])->group(function(){
+   Route::get('/getUserDetails', [ApiController::class, 'getUserDetails']); 
+});
+
+Route::post('/login', [ApiController::class, 'login']);
+
 Route::middleware(['check.api.key'])->group(function(){
 
     Route::post('/getCustomerDetails', [ApiController::class, 'getCustomerDetails']);

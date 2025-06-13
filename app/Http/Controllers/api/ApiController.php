@@ -14,6 +14,40 @@ use Illuminate\Support\Str;
 class ApiController extends Controller
 {
 
+
+    public function getUserDetails(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            return response()->json(['success' => true,'message' => 'User details retrieved successfully','data' => $user], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false,'message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function login(Request $request)
+    {
+        try {
+            $email = $request->input('email');
+            $password = $request->input('password');
+            $user = User::where('email', $email)->first();
+
+            $encryptedPassword = md5($password);
+
+            if (!$user || $user->password != $encryptedPassword) {
+                return response()->json(['success' => false,'message' => 'Invalid credentials'], 401);
+            }
+
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            return response()->json(['success' => true, 'message' => 'login successfull', 'token' => $token], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false,'message' => $e->getMessage()], 400);
+        }
+    }
+
+
     public function addUserToDo(Request $request)
     {
         try {
