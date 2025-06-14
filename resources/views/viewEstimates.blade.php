@@ -147,6 +147,241 @@ $modalTotal = 0;
                 </div>
             </div>
         </div>
+        @if (session('user_details')['user_role'] == 'admin')
+<div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
+    <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
+        <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addNote-btn">
+            <div class=" bg-[#930027] rounded-lg">
+                <i class="fa-solid fa-plus text-white p-2"></i>
+            </div>
+        </button>
+        <p class="text-lg px-3 text-white  font-medium ">
+            Notes
+        </p>
+    </div>
+    <br>
+    <div class=" py-5 px-4  text-black mx-auto">
+        <div class="itemDiv">
+            <div class="relative overflow-x-auto py-2">
+                <div class="itemDiv">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Notes
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($estimate->notes as $note)
+                            <tr class="bg-white border-b">
+                                <td class="px-6 py-4">
+                                    {{ $note->estimate_note }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <button id="edit-note-modal{{ $note->estimate_note_id }}">
+                                        <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
+                                    </button>
+                                    <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" class="" method="post">
+                                        @csrf
+                                        <button type="submit" class="">
+                                            <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addNote-modal{{ $note->estimate_note_id }}">
+                                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                    <!-- Background overlay -->
+                                    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                                        <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+                                    </div>
+
+                                    <!-- Modal panel -->
+                                    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                        <form action="/editEstimateNote" method="post" id="addNote-form{{ $note->estimate_note_id }}">
+                                            @csrf
+                                            <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                                            <input type="hidden" value="{{ $note->estimate_note_id }}" name="note_id" id="note_id">
+                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                                <!-- Modal content here -->
+                                                <div class=" flex justify-between border-b">
+                                                    <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Note</h2>
+                                                    <button class="modal-close" type="button">
+                                                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                                                    </button>
+                                                </div>
+                                                <!-- task details -->
+                                                <div class=" grid grid-cols-2 gap-2">
+                                                    <div class=" col-span-2 my-2">
+                                                        <label for="estimate_note">Add Note:</label>
+                                                        <textarea name="estimate_note" id="estimate_note" placeholder="Add Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $note->estimate_note }}">{{ $note->estimate_note }}</textarea>
+                                                        <button type="button" id="items-mic" class=" absolute mt-8 right-8" onclick="voice('note-mic', 'estimate_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div class=" border-t">
+                                                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
+                                                    <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
+                                                        <div class=" text-center hidden spinner" id="spinner">
+                                                            <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                                                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                                                            </svg>
+                                                        </div>
+                                                        <div class="text" id="text">
+                                                            Save
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                                document.getElementById("edit-note-modal{{ $note->estimate_note_id }}").addEventListener("click", function(e) {
+                                    e.preventDefault();
+                                    document.getElementById("addNote-modal{{ $note->estimate_note_id }}").classList.remove('hidden');
+                                });
+
+                                document.querySelectorAll(".modal-close").forEach(function(element) {
+                                    element.addEventListener("click", function(e) {
+                                        e.preventDefault();
+                                        document.getElementById("addNote-modal{{ $note->estimate_note_id }}").classList.add('hidden');
+                                        document.getElementById("addNote-form{{ $note->estimate_note_id }}").reset();
+                                    });
+                                });
+                            </script>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@elseif(isset($userPrivileges->estimate) &&
+isset($userPrivileges->estimate->notes) &&
+$userPrivileges->estimate->notes === 'on')
+<div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
+    <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
+        <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addNote-btn">
+            <div class=" bg-[#930027] rounded-lg">
+                <i class="fa-solid fa-plus text-white p-2"></i>
+            </div>
+        </button>
+        <p class="text-lg px-3 text-white  font-medium ">
+            Notes
+        </p>
+    </div>
+    <br>
+    <div class=" py-5 px-4  text-black mx-auto">
+        <div class="itemDiv">
+            <div class="relative overflow-x-auto py-2">
+                <div class="itemDiv">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Notes
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($estimate->notes as $note)
+                            <tr class="bg-white border-b">
+                                <td class="px-6 py-4">
+                                    {{ $note->estimate_note }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <button id="edit-note-modal{{ $note->estimate_note_id }}">
+                                        <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
+                                    </button>
+                                    <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" class="" method="post">
+                                        @csrf
+                                        <button type="submit" class="">
+                                            <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addNote-modal{{ $note->estimate_note_id }}">
+                                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                    <!-- Background overlay -->
+                                    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                                        <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
+                                    </div>
+
+                                    <!-- Modal panel -->
+                                    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                        <form action="/editEstimateNote" method="post" id="addNote-form{{ $note->estimate_note_id }}">
+                                            @csrf
+                                            <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
+                                            <input type="hidden" value="{{ $note->estimate_note_id }}" name="note_id" id="note_id">
+                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                                <!-- Modal content here -->
+                                                <div class=" flex justify-between border-b">
+                                                    <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Note</h2>
+                                                    <button class="modal-close" type="button">
+                                                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+                                                    </button>
+                                                </div>
+                                                <!-- task details -->
+                                                <div class=" grid grid-cols-2 gap-2">
+                                                    <div class=" col-span-2 my-2">
+                                                        <label for="estimate_note">Add Note:</label>
+                                                        <textarea name="estimate_note" id="estimate_note" placeholder="Add Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $note->estimate_note }}">{{ $note->estimate_note }}</textarea>
+                                                        <button type="button" id="items-mic" class=" absolute mt-8 right-8" onclick="voice('note-mic', 'estimate_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div class=" border-t">
+                                                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
+                                                    <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
+                                                        <div class=" text-center hidden spinner" id="spinner">
+                                                            <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                                                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                                                            </svg>
+                                                        </div>
+                                                        <div class="text" id="text">
+                                                            Save
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                                document.getElementById("edit-note-modal{{ $note->estimate_note_id }}").addEventListener("click", function(e) {
+                                    e.preventDefault();
+                                    document.getElementById("addNote-modal{{ $note->estimate_note_id }}").classList.remove('hidden');
+                                });
+
+                                document.querySelectorAll(".modal-close").forEach(function(element) {
+                                    element.addEventListener("click", function(e) {
+                                        e.preventDefault();
+                                        document.getElementById("addNote-modal{{ $note->estimate_note_id }}").classList.add('hidden');
+                                        document.getElementById("addNote-form{{ $note->estimate_note_id }}").reset();
+                                    });
+                                });
+                            </script>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
         {{-- <hr class="bg-gray-300"> --}}
         @if (session('user_details')['user_role'] == 'admin')
         <div class=" border-2  shadow-lg mt-7   bg-white   rounded-3xl ">
@@ -3937,241 +4172,6 @@ $userPrivileges->estimate->proposals === 'on')
                         @endforeach
                     </tbody>
                 </table>
-            </div>
-        </div>
-    </div>
-</div>
-@endif
-@if (session('user_details')['user_role'] == 'admin')
-<div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-    <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
-        <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addNote-btn">
-            <div class=" bg-[#930027] rounded-lg">
-                <i class="fa-solid fa-plus text-white p-2"></i>
-            </div>
-        </button>
-        <p class="text-lg px-3 text-white  font-medium ">
-            Notes
-        </p>
-    </div>
-    <br>
-    <div class=" py-5 px-4  text-black mx-auto">
-        <div class="itemDiv">
-            <div class="relative overflow-x-auto py-2">
-                <div class="itemDiv">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Notes
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($estimate->notes as $note)
-                            <tr class="bg-white border-b">
-                                <td class="px-6 py-4">
-                                    {{ $note->estimate_note }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    <button id="edit-note-modal{{ $note->estimate_note_id }}">
-                                        <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
-                                    </button>
-                                    <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" class="" method="post">
-                                        @csrf
-                                        <button type="submit" class="">
-                                            <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addNote-modal{{ $note->estimate_note_id }}">
-                                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                                    <!-- Background overlay -->
-                                    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                                        <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
-                                    </div>
-
-                                    <!-- Modal panel -->
-                                    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                                        <form action="/editEstimateNote" method="post" id="addNote-form{{ $note->estimate_note_id }}">
-                                            @csrf
-                                            <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
-                                            <input type="hidden" value="{{ $note->estimate_note_id }}" name="note_id" id="note_id">
-                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                                <!-- Modal content here -->
-                                                <div class=" flex justify-between border-b">
-                                                    <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Note</h2>
-                                                    <button class="modal-close" type="button">
-                                                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-                                                    </button>
-                                                </div>
-                                                <!-- task details -->
-                                                <div class=" grid grid-cols-2 gap-2">
-                                                    <div class=" col-span-2 my-2">
-                                                        <label for="estimate_note">Add Note:</label>
-                                                        <textarea name="estimate_note" id="estimate_note" placeholder="Add Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $note->estimate_note }}">{{ $note->estimate_note }}</textarea>
-                                                        <button type="button" id="items-mic" class=" absolute mt-8 right-8" onclick="voice('note-mic', 'estimate_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
-                                                    </div>
-                                                </div>
-                                                <div class=" border-t">
-                                                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
-                                                    <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
-                                                        <div class=" text-center hidden spinner" id="spinner">
-                                                            <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-                                                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
-                                                            </svg>
-                                                        </div>
-                                                        <div class="text" id="text">
-                                                            Save
-                                                        </div>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <script>
-                                document.getElementById("edit-note-modal{{ $note->estimate_note_id }}").addEventListener("click", function(e) {
-                                    e.preventDefault();
-                                    document.getElementById("addNote-modal{{ $note->estimate_note_id }}").classList.remove('hidden');
-                                });
-
-                                document.querySelectorAll(".modal-close").forEach(function(element) {
-                                    element.addEventListener("click", function(e) {
-                                        e.preventDefault();
-                                        document.getElementById("addNote-modal{{ $note->estimate_note_id }}").classList.add('hidden');
-                                        document.getElementById("addNote-form{{ $note->estimate_note_id }}").reset();
-                                    });
-                                });
-                            </script>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@elseif(isset($userPrivileges->estimate) &&
-isset($userPrivileges->estimate->notes) &&
-$userPrivileges->estimate->notes === 'on')
-<div class="mb-5 shadow-lg bg-white mt-7  rounded-3xl">
-    <div class="flex  items-center px-3  bg-[#930027] rounded-t-3xl">
-        <button type="button" class="flex bg-white p-1 m-2 rounded-lg" id="addNote-btn">
-            <div class=" bg-[#930027] rounded-lg">
-                <i class="fa-solid fa-plus text-white p-2"></i>
-            </div>
-        </button>
-        <p class="text-lg px-3 text-white  font-medium ">
-            Notes
-        </p>
-    </div>
-    <br>
-    <div class=" py-5 px-4  text-black mx-auto">
-        <div class="itemDiv">
-            <div class="relative overflow-x-auto py-2">
-                <div class="itemDiv">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Notes
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($estimate->notes as $note)
-                            <tr class="bg-white border-b">
-                                <td class="px-6 py-4">
-                                    {{ $note->estimate_note }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    <button id="edit-note-modal{{ $note->estimate_note_id }}">
-                                        <img src="{{ asset('assets/icons/edit-icon.svg') }}" alt="icon">
-                                    </button>
-                                    <form action="/deleteEstimateNote{{ $note->estimate_note_id }}" class="" method="post">
-                                        @csrf
-                                        <button type="submit" class="">
-                                            <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="addNote-modal{{ $note->estimate_note_id }}">
-                                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                                    <!-- Background overlay -->
-                                    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                                        <div class="absolute inset-0 bg-gray-500 opacity-80"></div>
-                                    </div>
-
-                                    <!-- Modal panel -->
-                                    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                                        <form action="/editEstimateNote" method="post" id="addNote-form{{ $note->estimate_note_id }}">
-                                            @csrf
-                                            <input type="hidden" value="{{ $estimate->estimate_id }}" name="estimate_id" id="estimate_id">
-                                            <input type="hidden" value="{{ $note->estimate_note_id }}" name="note_id" id="note_id">
-                                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                                <!-- Modal content here -->
-                                                <div class=" flex justify-between border-b">
-                                                    <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Add Note</h2>
-                                                    <button class="modal-close" type="button">
-                                                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-                                                    </button>
-                                                </div>
-                                                <!-- task details -->
-                                                <div class=" grid grid-cols-2 gap-2">
-                                                    <div class=" col-span-2 my-2">
-                                                        <label for="estimate_note">Add Note:</label>
-                                                        <textarea name="estimate_note" id="estimate_note" placeholder="Add Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $note->estimate_note }}">{{ $note->estimate_note }}</textarea>
-                                                        <button type="button" id="items-mic" class=" absolute mt-8 right-8" onclick="voice('note-mic', 'estimate_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
-                                                    </div>
-                                                </div>
-                                                <div class=" border-t">
-                                                    <button type="button" class=" my-2 modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
-                                                    <button id="" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">
-                                                        <div class=" text-center hidden spinner" id="spinner">
-                                                            <svg aria-hidden="true" class="w-5 h-5 mx-auto text-center text-gray-200 animate-spin fill-[#930027]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-                                                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
-                                                            </svg>
-                                                        </div>
-                                                        <div class="text" id="text">
-                                                            Save
-                                                        </div>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <script>
-                                document.getElementById("edit-note-modal{{ $note->estimate_note_id }}").addEventListener("click", function(e) {
-                                    e.preventDefault();
-                                    document.getElementById("addNote-modal{{ $note->estimate_note_id }}").classList.remove('hidden');
-                                });
-
-                                document.querySelectorAll(".modal-close").forEach(function(element) {
-                                    element.addEventListener("click", function(e) {
-                                        e.preventDefault();
-                                        document.getElementById("addNote-modal{{ $note->estimate_note_id }}").classList.add('hidden');
-                                        document.getElementById("addNote-form{{ $note->estimate_note_id }}").reset();
-                                    });
-                                });
-                            </script>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </div>

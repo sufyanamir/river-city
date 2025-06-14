@@ -1388,7 +1388,7 @@ class EstimateController extends Controller
                 });
             }
 
-            $estimates = $query->orderBy('created_at', 'desc')->get();
+            $estimates = $query->orderBy('created_at', 'desc')->take('100')->get();
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
         } elseif ($userDetails['user_role'] == 'scheduler') {
             $query = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')
@@ -1404,7 +1404,7 @@ class EstimateController extends Controller
                 });
             }
 
-            $estimates = $query->orderBy('created_at', 'desc')->get();
+            $estimates = $query->orderBy('created_at', 'desc')->take('100')->get();
             $customers = Customer::get();
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
         } else {
@@ -1417,7 +1417,7 @@ class EstimateController extends Controller
                 });
             }
 
-            $estimates = $query->orderBy('created_at', 'desc')->get();
+            $estimates = $query->orderBy('created_at', 'desc')->take('100')->get();
             $customers = Customer::get();
             $users = User::where('user_role', '<>', 'crew')->where('sts', 'active')->get();
         }
