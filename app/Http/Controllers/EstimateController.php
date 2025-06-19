@@ -1199,7 +1199,7 @@ class EstimateController extends Controller
             $userToDos = UserToDo::with('assigned_to')->get();
             $estimateToDos = EstimateToDos::with('assigned_by')->get();
             $allEmployees = User::where('sts', 'active')->get();
-            return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos, 'branches' => $branches]);
+            return view('calendar', ['filterId' => $id, 'estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos, 'branches' => $branches]);
         } elseif ($userDetails['user_role'] == 'scheduler') {
             $query = Estimate::with(['scheduler', 'crew']);
 
