@@ -44,6 +44,11 @@
                                         <span
                                             class="bg-red-100 text-red-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-red-600/20 ">Cancel</span>
                                     </td>
+                                @elseif($item['estimate']->estimate_status == 'paid')
+                                    <td>
+                                        <span
+                                            class="bg-green-100 text-green-800 inline-flex items-center text-sm font-medium px-2 py-1 rounded-md ring-1 ring-inset ring-green-600/20 ">Paid</span>
+                                    </td>
                                 @endif
                                 {{-- <td>
                                     <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Complete</span>
