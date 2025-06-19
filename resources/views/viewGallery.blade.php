@@ -107,7 +107,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                     <div class="col-span-1 p-2 relative hover:scale-105 duration-300">
                         <!-- <a href="{{ asset('storage/' . $image->estimate_image) }}"> -->
                         <button id="image-btn{{$image->estimate_image_id}}" class="">
-                            <img class="rounded-xl" style="width: 100%; height: 100px; object-fit: cover;" src="{{ asset('storage/' . $image->estimate_image) }}" alt="">
+                            <img class="rounded-xl" style="width: 100%; height: 100px; object-fit: cover;" src="{{ $image->estimate_image }}" alt="Upload Image">
                         </button>
                         <!-- </a> -->
                         @if (session('user_details')['user_role'] == 'admin')
