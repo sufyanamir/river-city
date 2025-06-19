@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 use App\Models\Customer;
 use App\Models\Estimate;
@@ -230,13 +231,17 @@ class EstimageImagesController extends Controller
             $estimateId = $request->input('estimate_id');
             $image = $request->file('file');
 
-            $path = $image->store('estimate_images', 'public');
+            // $path = $image->store('estimate_images', 'public');
+            $uploadedImage = Cloudinary::upload($image->getRealPath(), [
+            'folder' => 'estimate_image',
+        ]);
+         $imageUrl = $uploadedImage->getSecurePath();
 
             // Create a new record in the database for each file
             $estimateImage = new EstimateImages([
                 'added_user_id' =>  $userDetails['id'],
                 'estimate_id' => $estimateId,
-                'estimate_image' => $path,
+                'estimate_image' => $imageUrl,
             ]);
 
             $estimateImage->save();
