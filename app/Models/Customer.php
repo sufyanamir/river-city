@@ -43,6 +43,10 @@ class Customer extends Model
         'internal_note',
         'source',
         'branch',
+        'billing_address',
+        'billing_city',
+        'billing_state',
+        'billing_zip',
     ];
 
     public $timestamps = true;

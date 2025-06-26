@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+
 use App\Mail\AddUserMail;
 use App\Mail\ForgotPasswordMail;
 use App\Models\Company;
@@ -147,10 +149,14 @@ class UserController extends Controller
 
             if ($request->hasFile('upload_image')) {
                 $image = $request->file('upload_image');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->storeAs('public/user_images', $imageName); // Adjust storage path as needed
-                $user->user_image = 'storage/user_images/' . $imageName;
 
+                $CloudinaryUrl = Cloudinary::upload($image->getRealPath())->getSecurePath();
+                // $imageName = time() . '.' . $image->getClientOriginalExtension();
+                // $image->storeAs('public/user_images', $imageName); // Adjust storage path as needed
+                // $user->user_image = 'storage/user_images/' . $imageName;
+
+
+                $user->user_image = $CloudinaryUrl;
                 session()->put('user_details.user_image', $user->user_image);
             }
 

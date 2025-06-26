@@ -1312,13 +1312,22 @@ class EstimateController extends Controller
         $branch = request()->query('branch');
         $branches = CompanyBranches::get();
 
-        $crew = User::where('user_role', 'crew')->get();
-
+        if($userDetails['user_role'] == 'crew'){
+            $crew = User::where('id', $userDetails['id'])->where('user_role', 'crew')->get();
+        }else{
+            $crew = User::where('user_role', 'crew')->get();
+        }
         $query = ScheduleEstimate::with(['estimate', 'estimate.customer']);
 
         if ($branch) {
             $query->whereHas('estimate.customer', function($q) use ($branch) {
                 $q->where('branch', $branch);
+            });
+        }
+
+        if(isset($userDetails['user_role']) && $userDetails['user_role'] === 'crew'){
+            $query->whereHas('estimate', function ($q)  use ($userDetails){
+                $q->where('work_assign_id', $userDetails['id']);
             });
         }
 
@@ -3341,7 +3350,7 @@ class EstimateController extends Controller
         $estimateData = [];
 
         foreach ($estimates as $estimate) {
-            $images = EstimateImages::where('estimate_id', $estimate->estimate_id)->limit(2)->get();
+            $images = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
             $estimateData[] = [
                 'estimate' => $estimate,
                 'images' => $images,
@@ -3695,6 +3704,19 @@ class EstimateController extends Controller
                 'building_type' => 'nullable|string',
                 'billing_check' => 'nullable|boolean'
             ]);
+                     $firstAddress = $request->input('first_address');
+                if ($firstAddress) {
+                    $request->validate([
+                        'city' => 'required|string',
+                        'state' => 'required|string',
+                        'zip_code' => 'required|numeric',
+                ]);
+                $fullAddress = $validatedData['first_address'] . ', ' .
+                                        $validatedData['city'] . ', ' .
+                                        $validatedData['state'] . ', ' .
+                                        $validatedData['zip_code'];
+                }
+
                 $billingCheck = $request->input('billing_check', 1);
 
                 if ($billingCheck == 0) {
@@ -3737,6 +3759,10 @@ class EstimateController extends Controller
                     'potential_value' => $validatedData['potential_value'],
                     'source' => $validatedData['source'],
                     'branch' => $validatedData['branch'],
+                    'billing_address' => $request->billing_address,
+                    'billing_city' => $request->billing_city,
+                    'billing_state' => $request->billing_state,
+                    'billing_zip' => $request->billing_zip_code,
                 ]);
             }
 
@@ -3745,7 +3771,7 @@ class EstimateController extends Controller
                 'added_user_id' => $user->id,
                 'customer_name' => $validatedData['first_name'],
                 'customer_phone' => $validatedData['phone'],
-                'customer_address' => $validatedData['first_address'],
+                'customer_address' => $fullAddress,
                 'customer_last_name' => $validatedData['last_name'],
                 'tax_rate' => $validatedData['tax_rate'],
                 'project_name' => $validatedData['project_name'],
@@ -3755,7 +3781,10 @@ class EstimateController extends Controller
                 'project_owner' => $user->name . ' ' . $user->last_name,
                 'po_number' => $po_number,
                 'estimate_internal_note' => $validatedData['internal_note'],
-                'billing_address' => $fullBillingAddress
+                'billing_address' => $request->billing_address,
+                'billing_city' => $request->billing_city,
+                'billing_state' => $request->billing_state,
+                'billing_zip' => $request->billing_zip_code,
             ]);
 
             if ($validatedData['customer_id']) {

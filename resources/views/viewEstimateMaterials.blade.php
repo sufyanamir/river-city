@@ -27,7 +27,7 @@ table {
     page-break-inside: auto;
 }
 
-tr { 
+tr {
     page-break-inside: avoid;
     page-break-after: auto;
 }
@@ -107,32 +107,32 @@ h1, h2, h3, h4, h5 {
     @page {
         margin: 0.3in;
     }
-    
+
     /* Ensure clean page breaks only when necessary */
     .page-break {
         page-break-before: always;
     }
-    
+
     /* Hide print/download buttons during printing */
     .no-print, .no-print * {
         display: none !important;
     }
-    
+
     /* Force background colors to print */
     * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
-    
+
     /* Reduce spacing between elements */
     .mb-2 {
         margin-bottom: 0.25rem !important;
     }
-    
+
     .mb-8 {
         margin-bottom: 0.5rem !important;
     }
-    
+
     /* Make text slightly smaller in print */
     body {
         font-size: 11px;
@@ -167,7 +167,7 @@ h1, h2, h3, h4, h5 {
                         </p>
                         <p class="my-2 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/home-icon.svg') }}" alt="">
-                            <span class="pl-2">{{ $customer->customer_primary_address }}, {{ $customer->customer_city }}, {{ $customer->customer_state }}, {{ $customer->customer_zip_code }}</span>
+                            <span class="pl-2">{{ $estimate->customer_address }}</span>
                         </p>
                         <p class="mt-1 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/stat-icon.svg') }}" alt="">
@@ -223,7 +223,7 @@ h1, h2, h3, h4, h5 {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="relative overflow-x-auto mb-8 group-content">
                             <div class="itemDiv">
                                 <table class="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -254,7 +254,7 @@ h1, h2, h3, h4, h5 {
                                                 {{ number_format($item->item_qty, 2) }} <br> {{ $item->item_unit }}
                                             </td>
                                         </tr>
-                                        
+
                                         @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
                                         <tr>
                                             <td colspan="7">
@@ -291,7 +291,7 @@ h1, h2, h3, h4, h5 {
                                             </td>
                                         </tr>
                                         @endif
-                                        
+
                                         @php
                                         $totalPrice += $item->item_total; // Add item price to total
                                         @endphp
@@ -330,7 +330,7 @@ h1, h2, h3, h4, h5 {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="relative overflow-x-auto mb-8 group-content">
                                 <div class="itemDiv">
                                     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -360,7 +360,7 @@ h1, h2, h3, h4, h5 {
                                                     {{ number_format($item->item_qty, 2) }} <br> {{ $item->item_unit }}
                                                 </td>
                                             </tr>
-                                            
+
                                             @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
                                             <tr>
                                                 <td colspan="7">
@@ -405,7 +405,7 @@ h1, h2, h3, h4, h5 {
                                                 </td>
                                             </tr>
                                             @endif
-                                            
+
                                             @php
                                             $totalPrice += $item->item_total; // Add item price to total
                                             @endphp

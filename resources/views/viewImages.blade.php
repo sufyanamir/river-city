@@ -39,8 +39,8 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 gap-4 mt-6">
             @foreach ($images as $index => $image)
             <div class="relative group rounded overflow-hidden shadow-sm border border-gray-200">
-                <a data-fancybox="gallery" href="{{ asset('storage/' . $image->estimate_image) }}">
-                    <img src="{{ asset('storage/' . $image->estimate_image) }}"
+                <a data-fancybox="gallery" href="{{ $image->estimate_image }}">
+                    <img src="{{ $image->estimate_image }}"
                         alt="Image"
                         class="w-full aspect-[4/3] object-cover transition-transform duration-300 group-hover:scale-105" />
                 </a>

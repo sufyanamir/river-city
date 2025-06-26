@@ -104,12 +104,12 @@
                             {{ ucfirst($customer->customer_first_name) }} {{ ucfirst($customer->customer_last_name) }}
                         </p>
                         <p class="text-end font-medium text-[12px] text-[#858585]">
-                            {{ $customer->customer_primary_address }}
+                            {{ $estimate->customer_address }}
                         </p>
-                        <p class="text-end font-medium text-[12px] text-[#858585]">
+                        {{-- <p class="text-end font-medium text-[12px] text-[#858585]">
                             {{ $customer->customer_city }} {{ $customer->customer_state }}
                             {{ $customer->customer_zip_code }}
-                        </p>
+                        </p> --}}
                         <p class="text-end font-medium text-[12px] text-[#858585]">
                             {{ $customer->customer_email }}
                         </p>
@@ -540,7 +540,7 @@
                                     value="{{ $customer->customer_email }}">
                                 <p class="text-[#930027] text-xs">Please use "," to send mail to multiple persons.</p>
                                 <p id="email-error" class="text-red-500 text-xs mt-1 hidden">One or more email addresses are invalid.</p>
-                            </div>                            
+                            </div>
                             <div class=" col-span-2">
                                 <label for="email_subject">Email Subject:</label>
                                 <textarea name="email_subject" id="email_subject" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">Proposal Mail</textarea>
@@ -796,16 +796,16 @@ $exsistingProposals = $existing_proposals;
     $(document).ready(function () {
         const $emailInput = $('#email_to');
         const $errorElement = $('#email-error');
-    
+
         $emailInput.on('blur', function () {
             const emails = $emailInput.val().split(',').map(function (email) {
                 return $.trim(email);
             });
-    
+
             const isValid = emails.every(function (email) {
                 return validateEmail(email);
             });
-    
+
             if (!isValid) {
                 $errorElement.removeClass('hidden');
                 $emailInput.addClass('ring-red-500 focus:ring-red-500');
@@ -814,11 +814,10 @@ $exsistingProposals = $existing_proposals;
                 $emailInput.removeClass('ring-red-500 focus:ring-red-500');
             }
         });
-    
+
         function validateEmail(email) {
             const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return regex.test(email);
         }
     });
     </script>
-    
