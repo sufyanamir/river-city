@@ -1,6 +1,7 @@
 @include('layouts.header')
 @php
 $userPrivileges = session('user_details')['user_privileges'];
+ use Illuminate\Support\Str;
 @endphp
 <div class=" my-4">
     <div class=" grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3">
@@ -107,7 +108,27 @@ $userPrivileges = session('user_details')['user_privileges'];
                     <div class="col-span-1 p-2 relative hover:scale-105 duration-300">
                         <!-- <a href="{{ asset('storage/' . $image->estimate_image) }}"> -->
                         <button id="image-btn{{$image->estimate_image_id}}" class="">
-                            <img class="rounded-xl" style="width: 100%; height: 100px; object-fit: cover;" src="{{ $image->estimate_image }}" alt="Upload Image">
+                @php
+    $imagePath = $image->estimate_image ?? '';
+    $isCloudinary = Str::startsWith($imagePath, 'http');
+
+    // If Cloudinary, apply optimizations
+    $imageSrc = $isCloudinary
+        ? str_replace('/upload/', '/upload/w_800,h_600,c_limit,q_auto,f_auto/', $imagePath)
+        : asset('storage/' . $imagePath);
+@endphp
+
+@if ($imagePath)
+    <img class="rounded-xl"
+         style="width: 100%; height: 100px; object-fit: cover;"
+         src="{{ $imageSrc }}"
+         alt="Uploaded Image">
+@else
+    <p class="text-red-500 text-sm">No image uploaded.</p>
+@endif
+
+
+
                         </button>
                         <!-- </a> -->
                         @if (session('user_details')['user_role'] == 'admin')
@@ -233,7 +254,7 @@ $userPrivileges = session('user_details')['user_privileges'];
                     </form>
                 </div>
                 <div class=" border-t">
-                    <button id="reloadButton" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 ">Save
+                    <button id="reloadButton" class=" my-2 float-right bg-[#930027] text-white py-1 px-7 rounded-md hover:bg-red-900 " disabled>Save
                     </button>
                 </div>
             </div>
@@ -439,9 +460,20 @@ $userPrivileges = session('user_details')['user_privileges'];
                 method: 'GET',
                 success: function(response) {
                     if (response.success) {
-                        // Populate the modal with the retrieved data
-                        $('#imageView').attr('src', '/storage/' + response.data.estimate_image);
+                        let imagePath = response.data.estimate_image;
+
+                        // Determine if the path is Cloudinary (starts with "http")
+                        let isCloudinary = imagePath.startsWith('http');
+
+                        // If from storage, prepend with asset path
+                        let fullPath = isCloudinary ? imagePath : '/storage/' + imagePath;
+
+                        $('#imageView').attr('src', fullPath); // Set image src
                         $('#estimate_image_id').val(response.data.estimate_image_id);
+
+                        // Populate the modal with the retrieved data
+                        // $('#imageView').attr('src', '/storage/' + response.data.estimate_image);
+                        // $('#estimate_image_id').val(response.data.estimate_image_id);
                         console.log(response.data);
 
                         // Clear previous chat messages
@@ -647,3 +679,33 @@ $userPrivileges = session('user_details')['user_privileges'];
     updateChatSubmitState();
     updateImageSubmitState();
 </script>
+
+{{-- for image upload save button disable --}}
+<script>
+    Dropzone.autoDiscover = false;
+
+    let myDropzone = new Dropzone("#my-awesome-dropzone", {
+        paramName: "file", // name used in form
+        maxFilesize: 1000, // MB
+        acceptedFiles: "image/*",
+        addRemoveLinks: true,
+        autoProcessQueue: true,
+
+        init: function () {
+            const saveButton = document.getElementById('reloadButton');
+
+            // Disable button while uploading
+            this.on("processing", function () {
+                saveButton.disabled = true;
+                saveButton.classList.add('opacity-50', 'cursor-not-allowed');
+            });
+
+            // Enable after all files uploaded
+            this.on("queuecomplete", function () {
+                saveButton.disabled = false;
+                saveButton.classList.remove('opacity-50', 'cursor-not-allowed');
+            });
+        }
+    });
+</script>
+

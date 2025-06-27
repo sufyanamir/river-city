@@ -46,15 +46,16 @@ $modalTotal = 0;
                         </p>
                         <p class="mt-2 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/home-icon.svg') }}" alt="">
-                            <a href="https://maps.google.com/?q={{$estimate->customer->customer_primary_address}}{{ $estimate->customer->customer_city }}{{ $estimate->customer->customer_state }}{{ $estimate->customer->customer_zip_code }}" target="_blank" class=" text-[#930027]">
-                                <span class="pl-2">{{ $estimate->customer_address }}, {{ $estimate->customer->customer_city }}, {{ $estimate->customer->customer_state }}, {{ $estimate->customer->customer_zip_code }}</span>
+                            <a href="https://maps.google.com/?q={{$estimate->customer_address}}" target="_blank" class=" text-[#930027]">
+                                <span class="pl-2">{{ $estimate->customer_address }}</span>
                             </a>
+                            {{-- $estimate->customer->customer_primary_address --}}
                         </p>
                         @if (!$estimate->billing_address == null)
                              <p class="mt-2 flex text-[#323C47] font-medium">
                             <img src="{{ asset('assets/icons/billing_address.svg') }}" class="w-5"  alt="">
-                            <a href="https://maps.google.com/?q={{$estimate->billing_address}}{{ $estimate->customer->customer_city }}{{ $estimate->customer->customer_state }}{{ $estimate->customer->customer_zip_code }}" target="_blank" class=" text-[#930027]">
-                                <span class="pl-2">Billing Address: {{ $estimate->billing_address }}</span>
+                            <a href="https://maps.google.com/?q={{$estimate->customer->billing_address}}, {{ $estimate->customer->billing_city }}, {{ $estimate->customer->billing_state }}, {{ $estimate->customer->billing_zip }}" target="_blank" class=" text-[#930027]">
+                                <span class="pl-2">Billing Address: {{$estimate->customer->billing_address}}, {{ $estimate->customer->billing_city }}, {{ $estimate->customer->billing_state }}, {{ $estimate->customer->billing_zip }}</span>
                             </a>
                         </p>
                         @endif
@@ -3890,7 +3891,7 @@ $userPrivileges->estimate->files === 'on')
         <div class="itemDiv">
             @foreach ($estimate->images as $image)
             <div class=" relative inline-block">
-                <div class="absolute z-50 right-1 top-1">
+                <div class="absolute z-[8] right-1 top-1">
                     <form method="post" action="/addAsAttachment">
                         @csrf
                         <input type="checkbox" name="attachment_checkbox" id="attachment_checkbox{{$image->estimate_image_id}}" {{ $image->attachment == 1 ? 'checked' : '' }}>
@@ -6787,7 +6788,7 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
 
     </div>
     <div class="absolute right-16 bottom-0 z-10">
-        <div id="addItem-menu" class=" topbar-manuLeaving bg-white divide-y h-24 overflow-scroll divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+        <div id="addItem-menu" class=" topbar-manuLeaving bg-white divide-y h-[350px] overflow-scroll divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                 <li>
                     <button id="" type="button" class=" addItems block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">

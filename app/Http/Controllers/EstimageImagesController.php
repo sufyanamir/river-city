@@ -227,13 +227,19 @@ class EstimageImagesController extends Controller
                 'file.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust validation rules as needed
             ]);
 
-            // Process the form data and handle the file uploads
             $estimateId = $request->input('estimate_id');
             $image = $request->file('file');
 
             // $path = $image->store('estimate_images', 'public');
             $uploadedImage = Cloudinary::upload($image->getRealPath(), [
             'folder' => 'estimate_image',
+                'transformation' => [
+                'width' => 800,
+                'height' => 600,
+                'crop' => 'limit', // Keeps aspect ratio, limits to size
+                'quality' => 'auto', // Auto compress
+                'fetch_format' => 'auto' // Converts to WebP or JPEG
+            ]
         ]);
          $imageUrl = $uploadedImage->getSecurePath();
 

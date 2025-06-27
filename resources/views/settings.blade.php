@@ -10,7 +10,13 @@
                 <input type="hidden" name="user_id" value="{{ session('user_details')['id'] }}">
                 <div class="text-center mb-2">
                     <div id="dropzone" class="profile-dropzone" style="padding: 0 !important">
-                        <img id="profileImage" src="{{ (isset($user_details->user_image)) ? asset($user_details->user_image) : 'assets/images/demo-user.svg'}}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;" alt="text">
+                        {{-- {{ (isset($user_details->user_image)) ? asset($user_details->user_image) : 'assets/images/demo-user.svg'}} --}}
+                        @php
+                            use Illuminate\Support\Str;
+                            $imagePath = $user_details->user_image;
+                            $isCloudinary = Str::startsWith($imagePath, 'http');
+                        @endphp
+                        <img id="profileImage" src="{{ $isCloudinary ? $imagePath : asset($imagePath) }}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;" alt="text">
                         <div class="file-input-container">
                             <input class="file-input" type="file" name="upload_image" id="fileInput1">
                             <div class="upload-icon" onclick="document.getElementById('fileInput1').click()">

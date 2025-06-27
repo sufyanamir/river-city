@@ -1,4 +1,11 @@
 @include('layouts.header')
+
+<style>
+input[type=checkbox]+label:before{
+    background: white;
+}
+</style>
+
 @php
 $userPrivileges = session('user_details')['user_privileges'];
 $userRole = session('user_details')['user_role'];
@@ -65,9 +72,9 @@ $userRole = session('user_details')['user_role'];
                             <td style=" width:50px;">
                                 {{ $item->customer_phone }}
                                 <br>
-                                <a href="https://maps.google.com/?q={{ $item->customer_address }} {{ $item->customer?->customer_city }} {{ $item->customer?->customer_state }} {{ $item->customer?->customer_zip_code }}"
+                                <a href="https://maps.google.com/?q={{ $item->customer_address }} "
                                 target="_blank" class="text-[#930027]">
-                                    {{ $item->customer_address }}, {{ $item->customer?->customer_city }}, {{ $item->customer?->customer_state }}, {{ $item->customer?->customer_zip_code }}
+                                    {{ $item->customer_address }}
                                 </a>
                             </td>
                             <td style=" width:50px;">
@@ -537,42 +544,44 @@ $userRole = session('user_details')['user_role'];
                         </div>
 
                         <!-- Checkbox -->
-                        <div class="flex items-center col-span-full mb-4">
+                        <div style="border: 2px solid #d1d5db; border-radius: 8px; padding: 12px;" class=" col-span-full">
+                        <div class="flex items-center col-span-full  bg-[#930027] text-white p-2 rounded-[8px]">
                             <!-- Hidden field ensures unchecked box submits "0" -->
                             <input type="hidden" name="billing_check" value="0">
                             <input type="checkbox" name="billing_check" id="toggle-address" value="1"
-                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-2 focus:ring-blue-500"
-                                {{ old('billing_check', '1') == '1' ? 'checked' : '' }}>
+                                class="w-4 h-4 text-white bg-gray-100 border-gray-300 rounded-sm focus:ring-2 focus:ring-blue-500 "
+                                {{ old('billing_check', '0') == '1' ? 'checked' : '' }}>
 
-                            <label for="toggle-address" class="ms-2 text-sm font-medium text-gray-900">Billing Address same as Location Address</label>
+                            <label for="toggle-address" class="ms-2 text-sm font-medium text-white">Billing Address same as Location Address</label>
                         </div>
 
                         <!-- Additional Inputs (in a single row) -->
-                        <div id="additionalInputs" class="hidden col-span-full">
+                        <div id="additionalInputs" class="hidden col-span-full mt-4">
                             <div class=" col-span-full ">
                                 <h5 class="text-gray-600 mb-1  font-medium text-left">Billing Address</h5>
-                                <input type="text" name="billing_address" id="second_address" placeholder="Billing Address" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
+                                <input type="text" name="billing_address" id="billing_address" placeholder="Billing Address" autocomplete="given-name" class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             </div>
                             <div class="flex flex-wrap gap-4">
                                 <div class="flex-1 min-w-[200px]">
                                     <h5 class="text-gray-600 mb-1 font-medium text-left">City</h5>
-                                    <input type="text" name="billing_city" id="city" placeholder="City"
+                                    <input type="text" name="billing_city" id="billing_city" placeholder="City"
                                         class="mb-2 w-full outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset
                                         ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 </div>
                                 <div class="flex-1 min-w-[200px]">
                                     <h5 class="text-gray-600 mb-1 font-medium text-left">State/Province</h5>
-                                    <input type="text" name="billing_state" id="state" placeholder="State/Province"
+                                    <input type="text" name="billing_state" id="billing_state" placeholder="State/Province"
                                         class="mb-2 w-full outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset
                                         ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 </div>
                                 <div class="flex-1 min-w-[200px]">
                                     <h5 class="text-gray-600 mb-1 font-medium text-left">Zip/Postal Code</h5>
-                                    <input type="number" step="any" name="billing_zip_code" id="zip_code" placeholder="Zip/Postal Code"
+                                    <input type="number" step="any" name="billing_zip_code" id="billing_zip" placeholder="Zip/Postal Code"
                                         class="mb-2 w-full outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset
                                         ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 </div>
                             </div>
+                        </div>
                         </div>
 
 
@@ -873,6 +882,11 @@ $userRole = session('user_details')['user_role'];
                         $('#tax_rate').val(data.customer.tax_rate);
                         $('#potential_value').val(data.customer.potential_value);
                         $('#internal_note').val(data.customer.internal_note);
+                        // billin_Address
+                        $('#billing_address').val(data.customer.billing_address);
+                        $('#billing_city').val(data.customer.billing_city);
+                        $('#billing_state').val(data.customer.billing_state);
+                        $('#billing_zip').val(data.customer.billing_zip);
                         // ... populate other fields as needed
                     },
                     error: function(error) {
@@ -894,6 +908,10 @@ $userRole = session('user_details')['user_role'];
                 $('#tax_rate').val('');
                 $('#potential_value').val('');
                 $('#internal_note').val('');
+                $('#billing_address').val('');
+                $('#billing_city').val('');
+                $('#billing_state').val('');
+                $('#billing_zip').val('');
                 // ... clear other fields as needed
             }
         });
@@ -1052,9 +1070,18 @@ $userRole = session('user_details')['user_role'];
     });
 </script>
 <!-- JavaScript for checkbox -->
-<script>
+   <script>
     const checkbox = document.getElementById('toggle-address');
     const additionalInputs = document.getElementById('additionalInputs');
+
+    // Run on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        if (checkbox.checked) {
+            additionalInputs.classList.add('hidden');
+        } else {
+            additionalInputs.classList.remove('hidden');
+        }
+    });
 
     checkbox.addEventListener('change', () => {
         if (checkbox.checked) {

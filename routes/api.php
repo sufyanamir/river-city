@@ -41,6 +41,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
    Route::post('/addEstimateItems', [ApiController::class, 'addEstimateItems']);//addEstimateItems
    Route::get('/getEstimateItem/{id}',[ApiController::class, 'getEstimateItem']);//getEstimateItem
    Route::delete('/deleteEstimateItem/{id}', [ApiController::class, 'deleteEstimateItem']); //deleteEstimateItem
+    Route::post('/addEstimateItemTemplate', [ApiController::class, 'addEstimateItemTemplate']);
    //Add Estimate File
    Route::post('/addEstimateFile', [ApiController::class, 'addEstimateFile']);//addEstimateFile
    Route::delete('/deleteFile/{id}', [ApiController::class, 'deleteFile']); //deleteFile
@@ -84,17 +85,35 @@ Route::middleware(['auth:sanctum'])->group(function(){
    Route::post('/completeUserToDo/{id}', [ApiController::class, 'completeUserToDo']);//completeUserToDo
    Route::post('/setScheduleEstimate', [ApiController::class, 'setScheduleEstimate']);
     Route::delete('/deleteScheduleEstimate/{id}', [ApiController::class, 'deleteScheduleEstimate']);
+    Route::post('/completeEstimate', [ApiController::class, 'completeEstimate']);//completeEstimate
+    Route::post('/reassignCompleteEstimate', [ApiController::class, 'reassignCompleteEstimate']);
+    Route::post('/scheduleEstimate', [ApiController::class, 'scheduleEstimate']);//accept Work
+    Route::post('/setScheduleWork', [ApiController::class, 'setScheduleWork']);//setScheduleWork
+    Route::post('/updateScheuleWork', [ApiController::class, 'updateScheuleWork']);//updateScheuleWork
+    Route::post('/completeWorkAndAssignInvoice', [ApiController::class, 'completeWorkAndAssignInvoice']); //completeWorkAndAssignInvoice
 
     // viewGallery
-    Route::post('/uploadImage', [apiController::class, 'uploadImage']);//uploadImage
+    Route::post('/uploadImage', [ApiController::class, 'uploadImage']);//uploadImage
     Route::delete('/deleteEstimateImage/{id}', [ApiController::class, 'deleteEstimateImage']); //deleteEstimateImage
 
+    // getEstimateOnJobs
+    Route::get('/crew/getEstimateOnJobs', [ApiController::class, 'getEstimateOnJobs']);
+    Route::get('/crew/getChatMessage/{id}', [ApiController::class, 'getChatMessage']);
+    Route::get('/crew/viewEstimateMaterials/{id}', [ApiController::class, 'viewEstimateMaterials']);
+    Route::get('/getEstimatesOnCrewCalendar', [ApiController::class, 'getEstimatesOnCrewCalendar']);
+
+    // Settings
+    Route::get('/getUserOnSettings', [ApiController::class, 'getUserOnSettings']);
+    Route::post('/updateSettings', [ApiController::class, 'updateSettings']);
+
+    Route::post('/logout', [ApiController::class, 'logout']);
 });
 
 
 
 
 Route::post('/login', [ApiController::class, 'login']);
+
 Route::post('forgotPasswordMail',[ApiController::class, 'forgotPasswordMail']);//forgotPasswordMail
 Route::get('/resetPassword/{id}', [ApiController::class, 'resetPassword']);// resetPassword
 

@@ -101,8 +101,44 @@ class CustomerController extends Controller
                 'potential_value' => 'nullable|string',
                 'internal_note' => 'nullable|string',
                 'source' => 'nullable|string',
-                'branch' => 'nullable'
+                'branch' => 'nullable',
+                'billing_check' => 'nullable',
+                'billing_city' => 'nullable|string',
+                'billing_state' => 'nullable|string',
+                'billing_zip_code' => 'nullable|string'
             ]);
+                $firstAddress = $request->input('first_address');
+                if ($firstAddress) {
+                    $request->validate([
+                        'city' => 'required|string',
+                        'state' => 'required|string',
+                        'zip_code' => 'required|numeric',
+                ]);
+                $fullAddress = $validatedData['first_address'] . ', ' .
+                                        $validatedData['city'] . ', ' .
+                                        $validatedData['state'] . ', ' .
+                                        $validatedData['zip_code'];
+                }
+
+                 $billingCheck = $request->input('billing_check', 1);
+
+                if ($billingCheck == 0) {
+                    $request->validate([
+                        'billing_address'   => 'required|string',
+                        'billing_city'      => 'required|string',
+                        'billing_state'     => 'required|string',
+                        'billing_zip_code'  => 'required|numeric',
+                    ]);
+                    $fullBillingAddress = $request->billing_address . ', ' .
+                                        $request->billing_city . ', ' .
+                                        $request->billing_state . ', ' .
+                                        $request->billing_zip_code;
+                } else {
+                    $fullBillingAddress = $validatedData['first_address'] . ', ' .
+                                        $validatedData['city'] . ', ' .
+                                        $validatedData['state'] . ', ' .
+                                        $validatedData['zip_code'];
+                }
 
             if ($validatedData['customer_id'] != null) {
                 $customer = Customer::where('customer_id', $validatedData['customer_id'])->first();
@@ -112,7 +148,7 @@ class CustomerController extends Controller
                 $customer->customer_email = $validatedData['email'];
                 $customer->customer_phone = $validatedData['phone'];
                 $customer->customer_company_name = $validatedData['company_name'];
-                $customer->customer_primary_address = $validatedData['first_address'];
+                $customer->customer_primary_address =  $validatedData['first_address'];
                 $customer->customer_secondary_address = $validatedData['second_address'];
                 $customer->customer_city = $validatedData['city'];
                 $customer->customer_state = $validatedData['state'];
@@ -122,6 +158,10 @@ class CustomerController extends Controller
                 $customer->company_internal_note = $validatedData['internal_note'];
                 $customer->source = $validatedData['source'];
                 $customer->branch = $validatedData['branch'];
+                $customer->billing_address =  $request->billing_address;
+                 $customer->billing_city = $request->billing_city;
+                 $customer->billing_state = $request->billing_state;
+                 $customer->billing_zip = $request->billing_zip_code;
 
                 $customer->save();
 
@@ -144,7 +184,11 @@ class CustomerController extends Controller
                     'source' => $validatedData['source'],
                     'branch' => $validatedData['branch'],
                     // 'owner' => $validatedData['owner'],
-                    'added_user_id' => $userDetails['id']
+                    'added_user_id' => $userDetails['id'],
+                    'billing_address'=> $request->billling_address,
+                    'billing_city' => $request->billing_city,
+                    'billing_state' => $request->billing_state,
+                    'billing_zip' => $request->billing_zip_code,
                 ]);
                 return response()->json(['success' => true, 'message' => 'Customer Created Successfully!'], 200);
             }
