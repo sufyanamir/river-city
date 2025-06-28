@@ -269,54 +269,81 @@ $userPrivileges = session('user_details')['user_privileges'];
         </div>
 
         <!-- Modal panel -->
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full lg:max-w-screen-lg">
-            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <!-- Modal content here -->
-                <div class=" flex justify-between border-b">
-                    <h2 class=" text-xl font-semibold mb-2 " id="modal-title">Image Details</h2>
-                    <button class="image-btn-close" type="button">
-                        <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
-                    </button>
-                </div>
-                <!-- task details -->
+       <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full lg:max-w-screen-lg h-[90vh]">
+    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 h-[80vh]">
+        <div class="flex justify-between border-b">
+            <h2 class="text-xl font-semibold mb-2" id="modal-title">Image Details</h2>
+            <button class="image-btn-close" type="button">
+                <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
+            </button>
+        </div>
 
-                <div class="mt-2 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-                    <div class="flex justify-between">
-                        <img class="object-contain w-[55%] h-80 rounded-l-lg" id="imageView" src="" alt="">
-                        <div class="flex flex-col justify-between leading-normal">
-                            <div class="h-80 overflow-y-auto w-full">
-                                <div id="chatDiv" class="w-96 h-60 overflow-auto">
+        <div class="mt-2 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 h-[77vh]">
+            <div class="flex justify-between w-full">
+                <!-- Image container with canvas overlay -->
+                <div class="relative w-[100%]">
+                    <img class="object-contain w-full h-[77vh] rounded-l-lg border-r-2 border-[#e5e7eb] pr-1" id="imageView" crossorigin="anonymous" src="" alt="">
+                    <canvas id="imageCanvas" class="absolute top-0 left-0 w-full h-[77vh] pointer-events-none"></canvas>
 
-                                </div>
-                                <!-- Second Form (Image Chat Form) -->
-                                <div>
-                                    <form method="POST" action="/addImageChat" enctype="multipart/form-data" id="image-chat-form">
-                                        @csrf
-                                        <input type="hidden" name="estimate_image_id" id="estimate_image_id" value="">
-                                        <div class="relative flex items-center px-3 py-2 rounded-lg bg-gray-50">
-                                            <textarea id="imageMessage" name="message" rows="1" class="message block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Your message..."></textarea>
-                                            <div id="imageUserDropdown" class="userDropdown"></div>
-                                            <button type="button" id="imageRecordButton" class="inline-flex justify-center p-2 text-red-600 rounded-full cursor-pointer hover:bg-red-100 text-lg">
-                                                🎤
-                                            </button>
-                                            <button type="submit" id="imageSubmit" class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100" disabled>
-                                                <svg class="w-5 h-5 rotate-90 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                                                    <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z" />
-                                                </svg>
-                                                <span class="sr-only">Send message</span>
-                                            </button>
-                                        </div>
-                                        <input type="hidden" name="mentioned_users[]" id="image_mentioned_user_ids">
-                                        <input type="hidden" name="audio_data" id="image_audio_data">
-                                    </form>
-                                </div>
-                            </div>
-                            <audio id="imageAudioPlayback" class="mx-2 my-1" controls style="display:none;"></audio>
-                        </div>
+                    <!-- Edit menu button -->
+                    {{-- <button id="editMenuButton" class="absolute top-5 left-5 p-1 bg-white rounded-full shadow-md hover:bg-gray-100">
+                        <img src="{{asset('assets/icons/ellipsis-vertical.svg')}}" class="w-6 h-6" alt="Edit options">
+                    </button> --}}
+
+                    <!-- Edit options dropdown -->
+                    <div id="editOptions" class="absolute top-4 left-2 bg-white rounded-md shadow-lg py-1 z-10 w-40">
+                       <button id="enableDrawing" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2">
+                    <img src="{{asset('assets/icons/pencil.png')}}" alt="" class="w-[18px]">
+            <span id="enableDrawingText">Draw on Image</span>
+            </button>
+
+            <button id="clearDrawing" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hidden flex items-center gap-2">
+            <img src="{{asset('assets/icons/block.png')}}" class="w-[18px]" alt="">
+            Clear Drawing
+            </button>
+
+            <button id="saveDrawing" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hidden flex items-center gap-2">
+                <div id="saveLoader" class="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-[#930027]"></div>
+</div>
+
+            <img src="{{asset('assets/icons/diskette.png')}}" class="w-[18px]" alt="">
+            Save Changes
+            </button>
+
                     </div>
+                </div>
+
+                <!-- Chat section -->
+                <div class="flex flex-col justify-between leading-normal w-[40%]">
+                    <div class="h-[77vh] overflow-y-auto w-full">
+                        <div id="chatDiv" class="w-full h-[396px] overflow-auto"></div>
+                        <form method="POST" action="/addImageChat" enctype="multipart/form-data" id="image-chat-form">
+                            @csrf
+                            <input type="hidden" name="estimate_image_id" id="estimate_image_id" value="">
+                            <div class="relative flex items-center px-3 py-2 rounded-lg bg-gray-50">
+                                <textarea id="imageMessage" name="message" rows="1" class="message block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Your message..."></textarea>
+                                <div id="imageUserDropdown" class="userDropdown"></div>
+                                <button type="button" id="imageRecordButton" class="inline-flex justify-center p-2 text-red-600 rounded-full cursor-pointer hover:bg-red-100 text-lg">
+                                    🎤
+                                </button>
+                                <button type="submit" id="imageSubmit" class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100" disabled>
+                                    <svg class="w-5 h-5 rotate-90 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                                        <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <input type="hidden" name="mentioned_users[]" id="image_mentioned_user_ids">
+                            <input type="hidden" name="audio_data" id="image_audio_data">
+                        </form>
+                    </div>
+                    <audio id="imageAudioPlayback" class="mx-2 my-1" controls style="display:none;"></audio>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
     </div>
 </div>
 @include('layouts.footer')
@@ -468,8 +495,18 @@ $userPrivileges = session('user_details')['user_privileges'];
                         // If from storage, prepend with asset path
                         let fullPath = isCloudinary ? imagePath : '/storage/' + imagePath;
 
-                        $('#imageView').attr('src', fullPath); // Set image src
-                        $('#estimate_image_id').val(response.data.estimate_image_id);
+                         // ✅ Use your public modal open function:
+                        openImageEditor(
+                            response.data.estimate_image_id,
+                            response.data.estimate_id,
+                            fullPath
+                        );
+
+                        // $('#imageView').attr('src', fullPath); // Set image src
+                        // $('#estimate_image_id').val(response.data.estimate_image_id);
+
+                         currentImageId = response.data.estimate_image_id;
+                         currentEstimateId = response.data.estimate_id;
 
                         // Populate the modal with the retrieved data
                         // $('#imageView').attr('src', '/storage/' + response.data.estimate_image);
@@ -707,5 +744,205 @@ $userPrivileges = session('user_details')['user_privileges'];
             });
         }
     });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const imageView = document.getElementById('imageView');
+    const canvas = document.getElementById('imageCanvas');
+    const ctx = canvas.getContext('2d');
+    const editOptions = document.getElementById('editOptions');
+    const enableDrawingBtn = document.getElementById('enableDrawing');
+    const enableDrawingText = document.getElementById('enableDrawingText');
+    const clearDrawingBtn = document.getElementById('clearDrawing');
+    const saveDrawingBtn = document.getElementById('saveDrawing');
+    const closeButton = document.querySelector('.image-btn-close');
+
+    // State
+    let isDrawing = false;
+    let isDrawingMode = false;
+    let lastX = 0;
+    let lastY = 0;
+    let currentImageId = null;
+    let currentEstimateId = null;
+
+    // Initialize canvas
+    function initCanvas() {
+        resizeCanvas();
+        ctx.strokeStyle = '#FF0000';
+        ctx.lineWidth = 5;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+    }
+
+    function resizeCanvas() {
+        if (imageView.complete && imageView.naturalWidth !== 0) {
+            canvas.width = imageView.clientWidth;
+            canvas.height = imageView.clientHeight;
+        }
+    }
+
+    // Drawing functions
+    function startDrawing(e) {
+        if (!isDrawingMode) return;
+        isDrawing = true;
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    }
+
+    function draw(e) {
+        if (!isDrawing) return;
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    }
+
+    function stopDrawing() {
+        isDrawing = false;
+    }
+
+    async function saveEditedImage() {
+        if (!currentImageId || !currentEstimateId) {
+            alert('No image selected');
+            return;
+        }
+
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
+        const tempCtx = tempCanvas.getContext('2d');
+
+        tempCtx.drawImage(imageView, 0, 0, tempCanvas.width, tempCanvas.height);
+        tempCtx.drawImage(canvas, 0, 0);
+
+        const imageDataUrl = tempCanvas.toDataURL('image/png');
+
+         document.getElementById('saveLoader').classList.remove('hidden');
+        try {
+            const response = await fetch('/save-edited-image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    estimate_id: currentEstimateId,
+                    image_id: currentImageId,
+                    edited_image: imageDataUrl,
+                    original_url: imageView.src
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                imageView.src = data.new_url + '?' + Date.now();
+                resetDrawingMode();
+                Swal.fire(
+                    'Success!',
+                    "Changes saved successfully!",
+                    'success'
+                    );
+                    location.reload();
+                // alert('Changes saved successfully!');
+            } else {
+                throw new Error(data.message || 'Failed to save image');
+            }
+        } catch (error) {
+            console.error('Save error:', error);
+            alert('Error saving image: ' + error.message);
+        }  finally {
+        // Hide loader
+        document.getElementById('saveLoader').classList.add('hidden');
+    }
+    }
+
+    function resetDrawingMode() {
+        isDrawingMode = false;
+        isDrawing = false;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        canvas.style.pointerEvents = 'none';
+
+        // UI states
+        enableDrawingText.textContent = 'Draw on Image';
+        clearDrawingBtn.classList.add('hidden');
+        saveDrawingBtn.classList.add('hidden');
+    }
+
+    // Event Listeners
+    imageView.addEventListener('load', () => {
+        resizeCanvas();
+        initCanvas();
+    });
+
+    window.addEventListener('resize', resizeCanvas);
+
+    enableDrawingBtn.addEventListener('click', () => {
+        isDrawingMode = !isDrawingMode;
+        canvas.style.pointerEvents = isDrawingMode ? 'auto' : 'none';
+
+        clearDrawingBtn.classList.toggle('hidden', !isDrawingMode);
+        saveDrawingBtn.classList.toggle('hidden', !isDrawingMode);
+
+        enableDrawingText.textContent = isDrawingMode ? 'Disable Drawing' : 'Draw on Image';
+
+        if (!isDrawingMode) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    });
+
+    clearDrawingBtn.addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+
+    saveDrawingBtn.addEventListener('click', saveEditedImage);
+
+    // Drawing events
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+
+    // Touch support
+    canvas.addEventListener('touchstart', (e) => {
+        if (!isDrawingMode) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        startDrawing({
+            offsetX: touch.clientX - rect.left,
+            offsetY: touch.clientY - rect.top
+        });
+    });
+
+    canvas.addEventListener('touchmove', (e) => {
+        if (!isDrawingMode) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        draw({
+            offsetX: touch.clientX - rect.left,
+            offsetY: touch.clientY - rect.top
+        });
+    });
+
+    canvas.addEventListener('touchend', stopDrawing);
+
+    closeButton.addEventListener('click', resetDrawingMode);
+
+    window.openImageEditor = function(imageId, estimateId, imageUrl) {
+        currentImageId = imageId;
+        currentEstimateId = estimateId;
+        document.getElementById('estimate_image_id').value = imageId;
+        imageView.crossOrigin = "anonymous";
+        imageView.src = imageUrl;
+        resetDrawingMode();
+    };
+
+    // Initialize state
+    resetDrawingMode();
+});
 </script>
 
