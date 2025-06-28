@@ -132,8 +132,8 @@ class EstimateController extends Controller
     {
         try {
             $userDetails = session('user_details');
-            $estimate = Estimate::with('customer')->where('estimate_id', $id)->first();
             $payment = EstimatePayments::where('estimate_payment_id', $id)->first();
+            $estimate = Estimate::with('customer')->where('estimate_id', $payment->estimate_id)->first();
             // dd($payment);
 
             return view('viewInvoice', ['user_details' => $userDetails, 'payment' => $payment, 'estimate' => $estimate, 'type' => 'Payment']);
@@ -148,8 +148,8 @@ class EstimateController extends Controller
     {
         try {
             $userDetails = session('user_details');
-            $estimate = Estimate::with('customer')->where('estimate_id', $id)->first();
             $invoice = AssignPayment::where('estimate_complete_invoice_id', $id)->first();
+            $estimate = Estimate::with('customer')->where('estimate_id', $invoice->estimate_id)->first();
             // dd($invoice);
 
             return view('viewInvoice', ['user_details' => $userDetails, 'invoice' => $invoice, 'estimate' => $estimate, 'type' => 'Invoice']);
