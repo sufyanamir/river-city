@@ -246,6 +246,8 @@ Route::middleware('customauth')->group(function () {
     Route::post('/updatePayment', [EstimateController::class, 'updatePayment']);
     Route::match(['post', 'get'], '/deletePayment/{id}', [EstimateController::class, 'deletePayment']);
 
+Route::post('/save-edited-image', [EstimageImagesController::class, 'saveEditedImage']);
+
 });
 Route::get('/forgotPassword', function () {
     return view('forgotPassword');

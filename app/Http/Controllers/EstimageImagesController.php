@@ -13,6 +13,7 @@ use App\Models\Notifications;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use ZipArchive;
 
 class EstimageImagesController extends Controller
@@ -234,8 +235,8 @@ class EstimageImagesController extends Controller
             $uploadedImage = Cloudinary::upload($image->getRealPath(), [
             'folder' => 'estimate_image',
                 'transformation' => [
-                'width' => 800,
-                'height' => 600,
+                'width' => 900,
+                'height' => 700,
                 'crop' => 'limit', // Keeps aspect ratio, limits to size
                 'quality' => 'auto', // Auto compress
                 'fetch_format' => 'auto' // Converts to WebP or JPEG
@@ -260,6 +261,80 @@ class EstimageImagesController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()],  400);
         }
     }
+
+public function saveEditedImage(Request $request)
+{
+    try {
+        $userDetails = session('user_details');
+
+        $validated = $request->validate([
+            'estimate_id' => 'required|integer|exists:estimates,estimate_id',
+            'image_id' => 'required|integer|exists:estimate_images,estimate_image_id',
+            'edited_image' => 'required|string',
+            'original_url' => 'required|url'
+        ]);
+
+        $estimateImage = EstimateImages::findOrFail($validated['image_id']);
+
+        // Decode base64
+        if (!preg_match('/^data:image\/(\w+);base64,/', $validated['edited_image'], $type)) {
+            throw new \Exception('Invalid base64 image format.');
+        }
+
+        $imageData = base64_decode(substr($validated['edited_image'], strpos($validated['edited_image'], ',') + 1));
+        if ($imageData === false) {
+            throw new \Exception('Base64 decode failed.');
+        }
+
+        // Temp file
+        $tempFile = tmpfile();
+        fwrite($tempFile, $imageData);
+        $meta = stream_get_meta_data($tempFile);
+        $tempFilePath = $meta['uri'];
+
+        // Replace on Cloudinary
+        $uploadedImage = Cloudinary::upload($tempFilePath, [
+            'public_id' => $estimateImage->cloudinary_public_id,
+            'overwrite' => true,
+            'invalidate' => true,
+            'transformation' => [
+                'width' => 900,
+                'height' => 700,
+                'crop' => 'limit',
+                'quality' => 'auto',
+                'fetch_format' => 'auto'
+            ]
+        ]);
+
+        fclose($tempFile);
+
+        $estimateImage->update([
+            'estimate_image' => $uploadedImage->getSecurePath()
+        ]);
+
+        $this->addEstimateActivity(
+            $userDetails,
+            $validated['estimate_id'],
+            'Image Edited',
+            "Image edited (ID: {$estimateImage->id})"
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Image replaced successfully',
+            'new_url' => $uploadedImage->getSecurePath()
+        ]);
+    } catch (\Exception $e) {
+        \Log::error('Save Edited Image Error: ' . $e->getMessage());
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ], 400);
+    }
+}
+
+
+
 
     public function addAsAttachment(Request $request)
     {
