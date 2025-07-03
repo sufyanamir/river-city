@@ -769,10 +769,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize canvas
     function initCanvas() {
         resizeCanvas();
-        ctx.strokeStyle = '#FF0000';
+        ctx.strokeStyle = '#ffff00';
         ctx.lineWidth = 5;
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
+        ctx.shadowColor = '#f6f698';
+        ctx.shadowBlur = 2.5;
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
     }
 
     function resizeCanvas() {
