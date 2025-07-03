@@ -6749,7 +6749,7 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                         </div>
                         <div class=" ">
                             <h5 class="text-gray-600 mb-1  font-medium text-left">Owner</h5>
-                            <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" name="owner" id="customer_owner" required>
+                            <select class=" mb-2 w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" autocomplete="given-name" name="owner" id="customer_owner" required>
                                 <option>Select User</option>
                                 @foreach($employees as $user)
                                 <option value="{{ $user->id }}">
@@ -7272,7 +7272,13 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                         $('#customer_building_type').val(estimateDetails.building_type).trigger('change');
                         $('#customer_first_address').val(estimateDetails.customer_address);
                         $('#customer_tax_rate').val(estimateDetails.tax_rate);
-                        $('#customer_owner').val(estimateDetails.project_owner).trigger('change');
+                        $('#customer_owner option').each(function() {
+                        if ($(this).text().trim() === estimateDetails.project_owner.trim()) {
+                            $(this).prop('selected', true);
+                            return false;
+                        }
+                        });
+                        $('#customer_owner').trigger('change');
 
                         $('#Estimate-modal').removeClass('hidden');
                     } else {
