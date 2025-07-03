@@ -752,7 +752,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const imageView = document.getElementById('imageView');
     const canvas = document.getElementById('imageCanvas');
     const ctx = canvas.getContext('2d');
-    const editOptions = document.getElementById('editOptions');
     const enableDrawingBtn = document.getElementById('enableDrawing');
     const enableDrawingText = document.getElementById('enableDrawingText');
     const clearDrawingBtn = document.getElementById('clearDrawing');
@@ -809,17 +808,25 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = canvas.width;
-        tempCanvas.height = canvas.height;
-        const tempCtx = tempCanvas.getContext('2d');
+        const TARGET_WIDTH = 900;
+        const TARGET_HEIGHT = 700;
 
-        tempCtx.drawImage(imageView, 0, 0, tempCanvas.width, tempCanvas.height);
-        tempCtx.drawImage(canvas, 0, 0);
+        // Create a new export canvas at your desired Cloudinary target size
+        const exportCanvas = document.createElement('canvas');
+        exportCanvas.width = TARGET_WIDTH;
+        exportCanvas.height = TARGET_HEIGHT;
+        const exportCtx = exportCanvas.getContext('2d');
 
-        const imageDataUrl = tempCanvas.toDataURL('image/png');
+        // Scale original image to target
+        exportCtx.drawImage(imageView, 0, 0, TARGET_WIDTH, TARGET_HEIGHT);
 
-         document.getElementById('saveLoader').classList.remove('hidden');
+        // Scale drawing overlay to target
+        exportCtx.drawImage(canvas, 0, 0, TARGET_WIDTH, TARGET_HEIGHT);
+
+        // Get data URL
+        const imageDataUrl = exportCanvas.toDataURL('image/png');
+
+        document.getElementById('saveLoader').classList.remove('hidden');
         try {
             const response = await fetch('/save-edited-image', {
                 method: 'POST',
@@ -840,23 +847,17 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 imageView.src = data.new_url + '?' + Date.now();
                 resetDrawingMode();
-                Swal.fire(
-                    'Success!',
-                    "Changes saved successfully!",
-                    'success'
-                    );
-                    location.reload();
-                // alert('Changes saved successfully!');
+                Swal.fire('Success!', "Changes saved successfully!", 'success');
+                location.reload();
             } else {
                 throw new Error(data.message || 'Failed to save image');
             }
         } catch (error) {
             console.error('Save error:', error);
             alert('Error saving image: ' + error.message);
-        }  finally {
-        // Hide loader
-        document.getElementById('saveLoader').classList.add('hidden');
-    }
+        } finally {
+            document.getElementById('saveLoader').classList.add('hidden');
+        }
     }
 
     function resetDrawingMode() {
@@ -865,7 +866,6 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         canvas.style.pointerEvents = 'none';
 
-        // UI states
         enableDrawingText.textContent = 'Draw on Image';
         clearDrawingBtn.classList.add('hidden');
         saveDrawingBtn.classList.add('hidden');
@@ -945,4 +945,3 @@ document.addEventListener('DOMContentLoaded', function() {
     resetDrawingMode();
 });
 </script>
-

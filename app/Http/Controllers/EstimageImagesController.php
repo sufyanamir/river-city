@@ -235,9 +235,6 @@ class EstimageImagesController extends Controller
             $uploadedImage = Cloudinary::upload($image->getRealPath(), [
             'folder' => 'estimate_image',
                 'transformation' => [
-                'width' => 900,
-                'height' => 700,
-                'crop' => 'limit', // Keeps aspect ratio, limits to size
                 'quality' => 'auto', // Auto compress
                 'fetch_format' => 'auto' // Converts to WebP or JPEG
             ]
@@ -298,9 +295,6 @@ public function saveEditedImage(Request $request)
             'overwrite' => true,
             'invalidate' => true,
             'transformation' => [
-                'width' => 900,
-                'height' => 700,
-                'crop' => 'limit',
                 'quality' => 'auto',
                 'fetch_format' => 'auto'
             ]
