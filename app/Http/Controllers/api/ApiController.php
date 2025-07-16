@@ -166,9 +166,9 @@ class ApiController extends Controller
                 $cancelEstimates = Estimate::where('added_user_id', $user)->where('estimate_status', 'cancel')->count();
             } else {
 
-                $customers = Customer::where('added_user_id', $userDetails->id)->get();
-                $staff = User::where('added_user_id', $userDetails->id)->where('user_role', '<>', 'admin')->get();
-                $confirmedOrders = Estimate::where('added_user_id', $userDetails->id)->where('estimate_status', '<>', 'cancel')->get();
+                $customers = Customer::where('added_user_id', $userDetails->id)->count();
+                $staff = User::where('added_user_id', $userDetails->id)->where('user_role', '<>', 'admin')->count();
+                $confirmedOrders = Estimate::where('added_user_id', $userDetails->id)->where('estimate_status', '<>', 'cancel')->count();
                 $totalRevenue = Estimate::where('added_user_id', $userDetails->id)->where('estimate_status', '<>', 'cancel')->sum('estimate_total');
                 $schedules = EstimateSchedule::where('added_user_id', $userDetails->id)->orderBy('estimate_schedule_id', 'DESC')->get();
 
@@ -192,21 +192,23 @@ class ApiController extends Controller
             return response()->json([
                 "success" => true,
                 "data" => [
-                    'customers' => $customers,
-                'staff' => $staff,
+                'total customers' => $customers,
+                'total staff' => $staff,
                 'confirm_orders' => $confirmedOrders,
-                'Todos' => $userToDos,
-                'estimateToDos' => $estimateToDos,
-                'schedules' => [
-                    $schedules,
-                    $estimates,
+                'total revenue' => $totalRevenue,
+                'order summary' =>[
+                    'completeEstimates' => $completeEstimates,
+                    'pendingEstimates' => $pendingEstimates,
+                    'cancelEstimates' => $cancelEstimates,
                 ],
-                'completeEstimates' => $completeEstimates,
-                'pendingEstimates' => $pendingEstimates,
-                'cancelEstimates' => $cancelEstimates,
-                'revenue' => $totalRevenue,
-                'admins' => $admins,
-                'user_details' => $userDetails,
+                'Todos' => $userToDos,
+                // 'estimateToDos' => $estimateToDos,
+                // 'schedules' => [
+                //     $schedules,
+                //     $estimates,
+                // ],
+                // 'admins' => $admins,
+                // 'user_details' => $userDetails,
                 ]
             ]);
         }
@@ -222,14 +224,17 @@ class ApiController extends Controller
    public function getCustomer(){
     try {
         $userDetails = auth()->user();
-        $customers = Customer::with('addedBy')->where('customer_status', '<>', 'deleted')->get();
+        $customers = Customer::with('addedBy:id,name,email,last_name,phone,user_role')->where('customer_status', '<>', 'deleted')->get();
         $branches = CompanyBranches::get();
         $users = User::where('user_role', '<>', 'crew')->get();
 
         return response()->json([
             'success'=> true,
             'data'=>[
-                'customers' => $customers, 'users' => $users, 'user_details' => $userDetails, 'branches' => $branches
+                'customers' => $customers,
+                // 'users' => $users,
+                // 'user_details' => $userDetails,
+                // 'branches' => $branches
                 ]
         ]);
     } catch (\Exception $e) {
@@ -420,7 +425,7 @@ class ApiController extends Controller
 
         if ($userDetails['user_role'] == 'admin') {
             $customers = Customer::get();
-            $query = Estimate::with('scheduler', 'assigned_work', 'customer', 'crew')
+            $query = Estimate::with('scheduler', 'assigned_work', 'customer:customer_id,customer_first_name,customer_last_name,customer_email,customer_phone,customer_primary_address,customer_secondary_address,customer_city,customer_state,customer_zip_code,billing_address,billing_city,billing_state,billing_zip', 'crew')
                 ->where('estimate_status', $status ? $status : 'pending');
 
             if ($branch) {
@@ -481,7 +486,11 @@ class ApiController extends Controller
         return response()->json([
             'success'=> true,
             'data'=>[
-                'estimates' => $estimates, 'user_details' => $userDetails, 'customers' => $customers, 'users' => $users, 'branches' => $branches
+                'estimates' => $estimates,
+                // 'user_details' => $userDetails,
+                // 'customers' => $customers,
+                // 'users' => $users,
+                // 'branches' => $branches
             ]
             ]);
     } catch (\Exception $e) {
@@ -916,7 +925,11 @@ class ApiController extends Controller
             $estimateItem = EstimateItem::with('group')->where('estimate_item_id', $id)->first();
             $estimateItemAssembly = EstimateItemAssembly::where('estimate_item_id', $estimateItem->estimate_item_id)->get();
 
-            return response()->json(['success' => true, 'item_detail' => $estimateItem, 'assembly_items' => $estimateItemAssembly], 200);
+            return response()->json([
+                'success' => true,
+                'item_detail' => $estimateItem,
+                // 'assembly_items' => $estimateItemAssembly
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success'=> false,
@@ -1145,7 +1158,8 @@ class ApiController extends Controller
        try {
          $userDetails = auth()->user();
 
-        $estimate = Estimate::where('estimate_id', $id)->first();
+        $estimate = Estimate::where('estimate_id', $id)
+                    ->select('estimate_id','customer_id','customer_name','customer_phone','customer_address','billing_address','customer_last_name','project_name','project_number','project_type','building_type','project_owner')->first();
         $estimateImages = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
         $users = User::where('id', '<>', $userDetails->id)->where('sts', 'active')->get();
@@ -1156,9 +1170,9 @@ class ApiController extends Controller
                 'chatMessages' => $chatMessages,
                 'estimate' => $estimate,
                 'estimate_images' => $estimateImages,
-                'customer' => $customer,
-                'users' => $users,
-                'user_details' => $userDetails
+                // 'customer' => $customer,
+                // 'users' => $users,
+                // 'user_details' => $userDetails
             ]
         ]);
        } catch (\Exception $e) {
@@ -1837,7 +1851,9 @@ class ApiController extends Controller
     {
         try {
             $userDetails = auth()->user();
-            $estimate = Estimate::with('customer')->where('estimate_id', $id)->first();
+            $estimate = Estimate::with('customer:customer_id,customer_first_name,customer_last_name,customer_email,customer_phone,customer_primary_address,customer_secondary_address,customer_city,customer_state,customer_zip_code,billing_address,billing_city,billing_state,billing_zip')->where('estimate_id', $id)
+            ->select('estimate_id','customer_id','customer_name','customer_phone','customer_address','billing_address','customer_last_name','project_name','project_number','project_type','building_type','project_owner')
+            ->first();
             $payment = EstimatePayments::where('estimate_payment_id', $id)->first();
             // dd($payment);
             return response()->json([
@@ -2100,12 +2116,18 @@ class ApiController extends Controller
     {
         try {
             $userDetails = auth()->user();
-            $estimate = Estimate::with('customer')->where('estimate_id', $id)->first();
+            $estimate = Estimate::with('customer:customer_id,customer_first_name,customer_last_name,customer_email,customer_phone,customer_primary_address,customer_secondary_address,customer_city,customer_state,customer_zip_code,billing_address,billing_city,billing_state,billing_zip')->where('estimate_id', $id)
+            ->select('estimate_id','customer_id','customer_name','customer_phone','customer_address','billing_address','customer_last_name','project_name','project_number','project_type','building_type','project_owner')->first();
             $invoice = AssignPayment::where('estimate_complete_invoice_id', $id)->first();
             // dd($invoice);
             return response()->json([
                 'success'=> true,
-                'data'=> ['user_details' => $userDetails, 'invoice' => $invoice, 'estimate' => $estimate, 'type' => 'Invoice']
+                'data'=> [
+                    // 'user_details' => $userDetails,
+                    'invoice' => $invoice,
+                    'estimate' => $estimate,
+                    'type' => 'Invoice'
+                    ]
             ]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -2259,7 +2281,7 @@ class ApiController extends Controller
             $allEmployees = User::where('sts', 'active')->get();
             return view('calendar', ['estimates' => $estimates, 'allEmployees' => $allEmployees, 'userToDos' => $userToDos, 'estimateToDos' => $estimateToDos, 'branches' => $branches]);
         } elseif ($userDetails['user_role'] == 'scheduler') {
-            $query = Estimate::with(['scheduler', 'crew']);
+            $query = Estimate::with(['scheduler', 'crew'])->select('estimate_id','customer_id','customer_name','customer_phone','customer_address','billing_address','customer_last_name','project_name','project_number','project_type','building_type','project_owner');
 
             if ($id) {
                 $query->where('added_user_id', $id)
@@ -2366,17 +2388,18 @@ class ApiController extends Controller
 
             return response()->json([
                 'success'=> true,
-                'data'=> [
-                'filterId' => $filterId,
-                'estimates' => $estimates,
-                'estimate' => $eventEstimate,
-                'customer' => $customer,
                 'user_details' => $userDetails,
-                'employees' => $users,
-                'allEmployees' => $allEmployees,
-                'userToDos' => $userToDos,
-                'estimateToDos' => $estimateToDos,
-                'branches' => $branches]
+                // 'data'=> [
+                // 'filterId' => $filterId,
+                // 'estimates' => $estimates,
+                // 'estimate' => $eventEstimate,
+                // 'customer' => $customer,
+                // 'user_details' => $userDetails,
+                // 'employees' => $users,
+                // 'allEmployees' => $allEmployees,
+                // 'userToDos' => $userToDos,
+                // 'estimateToDos' => $estimateToDos,
+                // 'branches' => $branches]
             ],200);
         } catch (\Exception $e) {
             return response()->json([
@@ -3011,7 +3034,9 @@ class ApiController extends Controller
             $scheduleEstimates = ScheduleEstimate::where('work_assign_id', $userDetails->id)->get();
 
             foreach ($scheduleEstimates as $scheduleEstimate) {
-                $estimate = Estimate::where('estimate_id', $scheduleEstimate->estimate_id)->first();
+                $estimate = Estimate::where('estimate_id', $scheduleEstimate->estimate_id)
+                ->select('estimate_id','customer_id','customer_name','customer_phone','customer_address','billing_address','customer_last_name','project_name','project_number','project_type','building_type','project_owner')
+                ->first();
 
                 if ($estimate) {
                     // Associate ScheduleEstimate with Estimate
@@ -3038,7 +3063,9 @@ class ApiController extends Controller
         try{
 
         $userDetails = auth()->user();
-        $estimate = Estimate::where('estimate_id', $id)->first();
+        $estimate = Estimate::where('estimate_id', $id)
+        ->select('estimate_id','customer_id','customer_name','customer_phone','customer_address','billing_address','customer_last_name','project_name','project_number','project_type','building_type','project_owner')
+        ->first();
         $customer = Estimate::where('customer_id', $estimate->customer_id)->first();
         $chatMessages = EstimateChat::with('addedUser')->where('estimate_id', $id)->orderBy('estimate_chat_id', 'asc')->get();
         $users = User::where('id', '<>', $userDetails->id)->where('sts', 'active')->get();
@@ -3048,8 +3075,8 @@ class ApiController extends Controller
                 'data'=> [
                     'chatMessages' => $chatMessages,
                 'estimate' => $estimate,
-                'customer' => $customer,
-                'users' => $users
+                // 'customer' => $customer,
+                // 'users' => $users
                 ]
                 ]);
         } catch(\Exception $e){
@@ -3063,7 +3090,8 @@ class ApiController extends Controller
     public function viewEstimateMaterials($id){
         try{
             $userDetails = auth()->user();
-        $estimate = Estimate::where('estimate_id', $id)->first();
+        $estimate = Estimate::where('estimate_id', $id)
+        ->select('estimate_id','customer_id','customer_name','customer_phone','customer_address','billing_address','customer_last_name','project_name','project_number','project_type','building_type','project_owner')->first();
         $materialItems = EstimateItem::where('estimate_id', $id)
             ->where('item_type', '<>', 'upgrades')
             ->where('additional_item', '<>', 'yes')
@@ -3074,7 +3102,8 @@ class ApiController extends Controller
         $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->where('additional_item', '<>', 'yes')->get();
         $upgrades = EstimateItem::with('assemblies')->where('estimate_id', $id)->where('item_type', 'upgrades')->where('upgrade_status', 'accepted')->where('additional_item', '<>', 'yes')->get();
         $itemTemplates = EstimateItemTemplates::with('templateItems')->where('estimate_id', $id)->get();
-        $customer = Customer::where('customer_id', $estimate->customer_id)->first();
+        $customer = Customer::where('customer_id', $estimate->customer_id)
+        ->select('customer_id','added_user_id','customer_first_name','customer_last_name','customer_email','customer_phone','customer_city','customer_state','customer_zip_code','billing_address','billing_city','billing_state','billing_zip')->first();
         $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
         // return view('viewEstimateMaterials', ['estimate_items' => $materialItems, 'estimateAdditionalItems' => $estimateAdditionalItems, 'assemblies' => $estimateAssemblyItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
 
@@ -3101,54 +3130,67 @@ class ApiController extends Controller
     // CrewCalendar
    public function getEstimatesOnCrewCalendar()
     {
-        $userDetails = auth()->user();
-        $branch = request()->query('branch');
-        $branches = CompanyBranches::get();
+        try{
+            $userDetails = auth()->user();
+            $branch = request()->query('branch');
+            $branches = CompanyBranches::get();
 
-        if($userDetails['user_role'] == 'crew'){
-            $crew = User::where('id', $userDetails['id'])->where('user_role', 'crew')->get();
-        }else{
-            $crew = User::where('user_role', 'crew')->get();
-        }
-        $query = ScheduleEstimate::with(['estimate', 'estimate.customer']);
+            if($userDetails['user_role'] == 'crew'){
+                $crew = User::where('id', $userDetails['id'])->where('user_role', 'crew')->get();
+            }else{
+                $crew = User::where('user_role', 'crew')->get();
+            }
+            $query = ScheduleEstimate::with(['estimate', 'estimate.customer']);
 
-        if ($branch) {
-            $query->whereHas('estimate.customer', function($q) use ($branch) {
-                $q->where('branch', $branch);
-            });
-        }
+            if ($branch) {
+                $query->whereHas('estimate.customer', function($q) use ($branch) {
+                    $q->where('branch', $branch);
+                });
+            }
 
-        if(isset($userDetails['user_role']) && $userDetails['user_role'] === 'crew'){
-            $query->whereHas('estimate', function ($q)  use ($userDetails){
-                $q->where('work_assign_id', $userDetails['id']);
-            });
-        }
+            if(isset($userDetails['user_role']) && $userDetails['user_role'] === 'crew'){
+                $query->whereHas('estimate', function ($q)  use ($userDetails){
+                    $q->where('work_assign_id', $userDetails['id']);
+                });
+            }
 
-        $estimates = $query->get();
+            $estimates = $query->get();
 
-        // Enhance each estimate with the user who added it and their color
-        foreach ($estimates as $estimate) {
-            if ($estimate->estimate) {
-                // Get the user who added the estimate
-                $addedUserId = $estimate->estimate->added_user_id;
-                $addedUser = User::find($addedUserId);
+            // Enhance each estimate with the user who added it and their color
+            foreach ($estimates as $estimate) {
+                if ($estimate->estimate) {
+                    // Get the user who added the estimate
+                    $addedUserId = $estimate->estimate->added_user_id;
+                    $addedUser = User::find($addedUserId);
 
-                if ($addedUser) {
-                    // Set as attributes on the object instead of properties
-                    $estimate->setAttribute('user_color', $addedUser->user_color);
-                    $estimate->setAttribute('added_user_name', $addedUser->name . ' ' . $addedUser->last_name);
+                    if ($addedUser) {
+                        // Set as attributes on the object instead of properties
+                        $estimate->setAttribute('user_color', $addedUser->user_color);
+                        $estimate->setAttribute('added_user_name', $addedUser->name . ' ' . $addedUser->last_name);
+                    }
                 }
             }
+
+            $employees = User::where('user_role', 'crew')->where('sts', 'active')->get();
+
+            return response()->json([
+                'success'=>true,
+                'data'=>[
+                    // 'estimates' => $estimates,
+                    'crew' => $crew,
+                    'employees' => $employees,
+                    // 'branches' => $branches
+                ],
+            ],200);
+            // return view('crewCalendar', [
+            //     'estimates' => $estimates,
+            //     'crew' => $crew,
+            //     'employees' => $employees,
+            //     'branches' => $branches
+            // ]);
+        } catch(\Exception $e){
+            response()->json(['success'=>false, 'error'=> $e->getMessage()], 400);
         }
-
-        $employees = User::where('user_role', 'crew')->where('sts', 'active')->get();
-
-        return view('crewCalendar', [
-            'estimates' => $estimates,
-            'crew' => $crew,
-            'employees' => $employees,
-            'branches' => $branches
-        ]);
     }
 
 
@@ -3162,8 +3204,9 @@ class ApiController extends Controller
             $company = Company::first();
             return response()->json([
                 'success'=> true,
-                'data'=> ['user_details' => $user,
-                'company' => $company
+                'data'=> ['
+                    user_details' => $user,
+                    'company' => $company
                 ]
             ]);
         } catch(\Exception $e) {
