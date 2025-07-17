@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+v<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -93,18 +93,18 @@
                         River City Painting, Inc
                     </p>
                     <p class="mt-2 font-medium text-sm md:text-base lg:text-[17px] text-[#858585]">
-                        @if($estimate->customer->branch == 'wichita')
+                        @if($customer->branch == 'wichita')
                         4425 W Walker St<br>
                         Wichita Kansas 67209 <br>
                         info@paintwichita.com <br>
                         (316) 262-3289 <br>
-                        @elseif($estimate->customer->branch == 'kansas')
+                        @elseif($customer->branch == 'kansas')
                         12022 Blue Valley Pkwy<br>
                         Overland Park, Ks 66213 <br>
                         913-660-9099
                         <br>
                         office@rivercitypaintinginc.com <br>
-                        @elseif($estimate->customer->branch == 'tulsa')
+                        @elseif($customer->branch == 'tulsa')
                         1904 W Iola St unit 101, <br>
                         Broken Arrow, OK 74012 <br>
                         918-973-0242
@@ -118,7 +118,7 @@
             </div>
             <hr>
             <div class="mt-2 text-center font-medium text-sm md:text-base lg:text-[17px] text-[#858585]">
-                {{$estimate->customer->customer_first_name}} {{$estimate->customer->customer_last_name}}
+                {{$customer->customer_first_name}} {{$customer->customer_last_name}}
                 <br>
                 Total Proposals: {{ $proposals->count() }}
             </div>

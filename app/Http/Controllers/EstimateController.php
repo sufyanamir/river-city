@@ -215,12 +215,17 @@ class EstimateController extends Controller
     public function getCustomerEstimateProposals($id)
     {
         try {
-            $estimate = Estimate::with('customer')->where('estimate_id', $id)->first();
-            $estimateProposals = EstimateProposal::where('estimate_id', $id)->get();
-            $estimateInvoices = AssignPayment::where('estimate_id', $id)->get();
-            $estimatePayments = EstimatePayments::with('invoice')->where('estimate_id', $id)->get();
+            $customer = Customer::with('estimates')->where('customer_id', $id)->first();
+            // $estimate = Estimate::with('customer')->where('estimate_id', $id)->first();
 
-            return view('customer-portal', ['estimate' => $estimate, 'proposals' => $estimateProposals, 'invoices' => $estimateInvoices, 'payments' => $estimatePayments]);
+            // Get all estimate IDs for this customer
+            $estimateIds = $customer->estimates->pluck('estimate_id')->toArray();
+
+            $estimateProposals = EstimateProposal::whereIn('estimate_id', $estimateIds)->get();
+            $estimateInvoices = AssignPayment::whereIn('estimate_id', $estimateIds)->get();
+            $estimatePayments = EstimatePayments::with('invoice')->whereIn('estimate_id', $estimateIds)->get();
+
+            return view('customer-portal', ['customer' => $customer, 'proposals' => $estimateProposals, 'invoices' => $estimateInvoices, 'payments' => $estimatePayments]);
             // return response()->json(['success' => true, 'data' => ['estimate' => $estimate, 'proposals' => $estimateProposals]], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
