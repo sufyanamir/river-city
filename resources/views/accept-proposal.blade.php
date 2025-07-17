@@ -67,11 +67,11 @@
     </div>
     @else
     <div class="text-right my-2">
-        <!-- <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
+        <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
             <button class=" bg-[#930027] p-2 text-white rounded-md">
                 Print
             </button>
-        </a> -->
+        </a>
         <a href="javascript:void(0);" onclick="downloadAsPDF('printableArea')">
             <button class="bg-[#930027] p-2 text-white rounded-md ml-2">Download as PDF</button>
         </a>

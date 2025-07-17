@@ -1,4 +1,35 @@
 @include('layouts.header')
+
+<script>
+        function printPageArea(areaID) {
+            const printContent = document.getElementById(areaID).innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = printContent;
+            window.print();
+            document.body.innerHTML = originalContent;
+            location.reload(); // Optional to reinitialize JS/CSS after print
+        }
+    </script>
+
+    <style>
+        /* Optional - Better control over print behavior */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printableArea, #printableArea * {
+                visibility: visible;
+            }
+            #printableArea {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+
 <style>
 /* Core styling rules */
 * {
@@ -147,6 +178,11 @@ h1, h2, h3, h4, h5 {
                 <h4>Work Order</h4>
             </div>
             <div>
+                <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
+                    <button class=" bg-white p-2 text-black rounded-md">
+                        Print
+                    </button>
+                </a>
                 <a href="javascript:void(0);" onclick="downloadAsPDF('printableArea')">
                     <button class="bg-white p-2 text-black rounded-md ml-2">Download as PDF</button>
                 </a>
