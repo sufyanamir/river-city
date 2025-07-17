@@ -51,9 +51,9 @@
         <button type="button" class="border border-black font-semibold py-1 px-7 rounded-lg">Back</button>
     </a>
     <div>
-        <!-- <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
+        <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
             <button class="bg-[#930027] p-2 text-white rounded-md">Print</button>
-        </a> -->
+        </a>
         <a href="javascript:void(0);" onclick="downloadAsPDF('printableArea')">
             <button class="bg-[#930027] p-2 text-white rounded-md ml-2">Download as PDF</button>
         </a>
@@ -440,7 +440,7 @@
 
                     </div>
                 </div>
-                <div class="mx-auto bg-white p-4 rounded-lg shadow-md" id="editor-div">
+                <div class="mx-auto bg-white p-4 rounded-lg shadow-md w-[75vw] mx-2" id="editor-div">
                     @if($preview == null)
                     <textarea name="terms_and_conditions" id="editor" class="h-64 bg-white p-4 border border-gray-300 rounded-lg">
                     @endif
