@@ -295,10 +295,10 @@ $(document).ready(function () {
       var existingText = $("#" + textareaId).val();
       var newText = event.results[0][0].transcript;
       $("#" + textareaId).val(existingText + ' ' + newText);
-      $('.speak-icon').removeClass('fa-beat-fade');
+      $('#' + buttonId).removeClass('fa-beat-fade');
     };
     recognition.start();
-    $('.speak-icon').addClass('fa-beat-fade');
+    $('#' + buttonId).addClass('fa-beat-fade');
     // Disable the button while recording
     $("#" + buttonId).prop("disabled", true);
 
