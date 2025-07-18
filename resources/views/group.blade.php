@@ -117,7 +117,7 @@
                                                         <div class="my-2 col-span-2 relative">
                                                             <label for="group_description">Description:</label>
                                                             <textarea name="group_description" id="group_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">{{$group->group_description}}</textarea>
-                                                            <button type="button" id="group-description-mic" class=" absolute mt-8 right-4" onclick="voice('group-description-mic', 'group_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                                                            <button type="button" id="group-description-mic9" class=" absolute mt-8 right-4" onclick="voice('group-description-mic9', 'group_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                                                         </div>
                                                     </div>
                                                     <div class="">

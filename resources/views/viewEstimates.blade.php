@@ -220,7 +220,7 @@ $modalTotal = 0;
                                                     <div class=" col-span-2 my-2">
                                                         <label for="estimate_note">Add Note:</label>
                                                         <textarea name="estimate_note" id="estimate_note" placeholder="Add Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $note->estimate_note }}">{{ $note->estimate_note }}</textarea>
-                                                        <button type="button" id="items-mic" class=" absolute mt-8 right-8" onclick="voice('note-mic', 'estimate_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                                                        <button type="button" id="items-mic" class=" absolute mt-8 right-8" onclick="voice('items-mic', 'estimate_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                                                     </div>
                                                 </div>
                                                 <div class=" border-t">
@@ -338,7 +338,7 @@ $userPrivileges->estimate->notes === 'on')
                                                     <div class=" col-span-2 my-2">
                                                         <label for="estimate_note">Add Note:</label>
                                                         <textarea name="estimate_note" id="estimate_note" placeholder="Add Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" value="{{ $note->estimate_note }}">{{ $note->estimate_note }}</textarea>
-                                                        <button type="button" id="items-mic" class=" absolute mt-8 right-8" onclick="voice('note-mic', 'estimate_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                                                        <button type="button" id="mic-items" class=" absolute mt-8 right-8" onclick="voice('mic-items', 'estimate_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                                                     </div>
                                                 </div>
                                                 <div class=" border-t">
@@ -1668,7 +1668,7 @@ $userPrivileges->estimate->notes === 'on')
                                                     <div class="my-2 col-span-2 relative">
                                                         <label for="group_description">Description:</label>
                                                         <textarea name="group_description" id="group_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">{{$group->group_description}}</textarea>
-                                                        <button type="button" id="group-description-mic" class=" absolute mt-8 right-4" onclick="voice('group-description-mic', 'group_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                                                        <button type="button" id="group-description-mic2" class=" absolute mt-8 right-4" onclick="voice('group-description-mic2', 'group_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                                                     </div>
                                                 </div>
                                                 <div class="">
@@ -2115,7 +2115,7 @@ $userPrivileges->estimate->items === 'on')
                                                     <div class="my-2 col-span-2 relative">
                                                         <label for="group_description">Description:</label>
                                                         <textarea name="group_description" id="group_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">{{$group->group_description}}</textarea>
-                                                        <button type="button" id="group-description-mic" class=" absolute mt-8 right-4" onclick="voice('group-description-mic', 'group_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                                                        <button type="button" id="group-description-mic3" class=" absolute mt-8 right-4" onclick="voice('group-description-mic3', 'group_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                                                     </div>
                                                 </div>
                                                 <div class="">
@@ -2641,7 +2641,7 @@ $userPrivileges->estimate->items === 'on')
                                                     <div class="my-2 col-span-2 relative">
                                                         <label for="group_description">Description:</label>
                                                         <textarea name="group_description" id="group_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">{{$group->group_description}}</textarea>
-                                                        <button type="button" id="group-description-mic" class=" absolute mt-8 right-4" onclick="voice('group-description-mic', 'group_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                                                        <button type="button" id="group-description-mic4" class=" absolute mt-8 right-4" onclick="voice('group-description-mic4', 'group_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                                                     </div>
                                                 </div>
                                                 <div class="">
@@ -5090,7 +5090,7 @@ $userPrivileges->estimate->expenses === 'on')
                         <div class=" col-span-2 my-2">
                             <label for="estimate_note">Add Note:</label>
                             <textarea name="note" id="note" placeholder="Add Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
-                            <button type="button" id="items-mic" class=" absolute mt-8 right-8" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                            <button type="button" id="items-mic2" class=" absolute mt-8 right-8" onclick="voice('items-mic2', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
                     </div>
                     <div class=" border-t">
@@ -5173,7 +5173,7 @@ $userPrivileges->estimate->expenses === 'on')
                         <div class=" col-span-2 my-2">
                             <label for="description">Description:</label>
                             <textarea name="description" id="description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
-                            <button type="button" id="items-mic" class=" absolute mt-8 right-8" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                            <button type="button" id="items-mic3" class=" absolute mt-8 right-8" onclick="voice('items-mic3', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
                     </div>
                     <div class=" border-t">
@@ -5293,7 +5293,7 @@ $userPrivileges->estimate->expenses === 'on')
                         <div class=" col-span-2 my-2">
                             <label for="estimate_note">Add Note:</label>
                             <textarea name="estimate_note" id="estimate_note" placeholder="Add Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
-                            <button type="button" id="items-mic" class=" absolute mt-8 right-8" onclick="voice('note-mic', 'estimate_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                            <button type="button" id="items-mic4" class=" absolute mt-8 right-8" onclick="voice('items-mic4', 'estimate_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
                     </div>
                     <div class=" border-t">
@@ -5828,7 +5828,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <div class="my-2 col-span-2 relative">
                         <label for="" class="block text-left mb-1"> Note: </label>
                         <textarea name="note" id="note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
-                        <button type="button" id="note-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                        <button type="button" id="note-mic2" class=" absolute mt-8 right-4" onclick="voice('note-mic2', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                     </div>
                     <div class=" mt-2">
                         <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
@@ -5908,7 +5908,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <div class="my-2 col-span-2 relative">
                         <label for="" class="block text-left mb-1"> Note: </label>
                         <textarea name="note" id="note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
-                        <button type="button" id="note-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                        <button type="button" id="note-mic3" class=" absolute mt-8 right-4" onclick="voice('note-mic3', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                     </div>
                     <div class=" mt-2">
                         <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
@@ -6038,7 +6038,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <div class="my-2 col-span-2 relative">
                         <label for="" class="block text-left mb-1"> Note: </label>
                         <textarea name="note" id="note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
-                        <button type="button" id="note-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                        <button type="button" id="note-mic4" class=" absolute mt-8 right-4" onclick="voice('note-mic4', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                     </div>
                     <div class=" mt-2">
                         <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
@@ -6115,7 +6115,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <div class="my-2 col-span-2 relative">
                         <label for="" class="block text-left mb-1"> Note: </label>
                         <textarea name="note" id="invoice_note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
-                        <button type="button" id="note-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                        <button type="button" id="note-mic5" class=" absolute mt-8 right-4" onclick="voice('note-mic5', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                     </div>
                     <div class=" mt-2">
                         <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
@@ -6176,7 +6176,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <div class="my-2 col-span-2 relative">
                         <label for="" class="block text-left mb-1"> Note: </label>
                         <textarea name="note" id="invoice_note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
-                        <button type="button" id="note-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                        <button type="button" id="note-mic6" class=" absolute mt-8 right-4" onclick="voice('note-mic6', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                     </div>
                     <div class=" mt-2">
                         <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Cancel</button>
@@ -6267,7 +6267,7 @@ $userPrivileges->estimate->expenses === 'on')
                     <div class="my-2 col-span-2 relative">
                         <label for="" class="block text-left mb-1"> Note: </label>
                         <textarea name="note" id="note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
-                        <button type="button" id="note-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                        <button type="button" id="note-mic7" class=" absolute mt-8 right-4" onclick="voice('note-mic7', 'note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                     </div>
                     <div class=" mt-2">
                         <button type="button" class=" modalClose-btn border border-black  font-semibold py-1 px-7 rounded-lg modal-close">Back</button>
@@ -6504,12 +6504,12 @@ $userPrivileges->estimate->expenses === 'on')
                         <div class="my-0 col-span-12 relative">
                             <label for="" class="block text-left text-sm mb-1"> Item Description </label>
                             <textarea name="item_description" id="item_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
-                            <button type="button" id="items-mic" class=" absolute mt-8 right-4" onclick="voice('description-mic', 'item_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                            <button type="button" id="description-mic" class=" absolute mt-8 right-4" onclick="voice('description-mic', 'item_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
                         <div class="my-0 col-span-12 relative">
                             <label for="" class="block text-left text-sm mb-1"> Note </label>
                             <textarea name="item_note" id="item_note" placeholder="Note" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
-                            <button type="button" id="items-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'item_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                            <button type="button" id="Inote-mic" class=" absolute mt-8 right-4" onclick="voice('Inote-mic', 'item_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
                         <div class="my-0 col-span-4" id="">
                             <label for="" class="block text-left text-sm mb-1">Group</label>
@@ -6586,12 +6586,12 @@ $userPrivileges->estimate->expenses === 'on')
                         <div class="my-0 col-span-12 relative">
                             <label for="" class="block text-left mb-1"> Item Description </label>
                             <textarea name="estimate_template_description" id="estimate_template_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
-                            <button type="button" id="items-mic" class=" absolute mt-8 right-4" onclick="voice('description-mic', 'estimate_template_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                            <button type="button" id="items-mic5" class=" absolute mt-8 right-4" onclick="voice('items-mic5', 'estimate_template_description')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
                         <div class="my-0 col-span-12 relative">
                             <label for="" class="block text-left mb-1"> Note </label>
                             <textarea name="estimate_template_note" id="estimate_template_note" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm"></textarea>
-                            <button type="button" id="items-mic" class=" absolute mt-8 right-4" onclick="voice('note-mic', 'estimate_template_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
+                            <button type="button" id="items-mic6" class=" absolute mt-8 right-4" onclick="voice('items-mic6', 'estimate_template_note')"><i class="speak-icon fa-solid fa-microphone text-gray-400"></i></button>
                         </div>
                     </div>
                     <div class="mt-2">
@@ -7319,7 +7319,7 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                         $('#item_qty').val(itemDetail.item_qty);
                         $('#item_total').val(itemDetail.item_total);
                         $('#item_description').val(itemDetail.item_description);
-                        $('#note').val(itemDetail.item_note);
+                        $('#item_note').val(itemDetail.item_note);
                         $('#additional_item').val(itemDetail.additional_item).trigger('change');
                         if (itemDetail.group && itemDetail.group.group_name != null) {
                             $('#group_name').val(itemDetail.group.group_name);
