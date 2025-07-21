@@ -3204,8 +3204,8 @@ class ApiController extends Controller
             $company = Company::first();
             return response()->json([
                 'success'=> true,
-                'data'=> ['
-                    user_details' => $user,
+                'data'=> [
+                    'user_details' => $user,
                     'company' => $company
                 ]
             ]);
