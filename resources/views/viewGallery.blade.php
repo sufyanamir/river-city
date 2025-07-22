@@ -282,7 +282,7 @@ $userPrivileges = session('user_details')['user_privileges'];
             <div class="flex justify-between w-full">
                 <!-- Image container with canvas overlay -->
                 <div class="relative w-[100%] overflow-hidden border-r-2 border-[#e5e7eb]">
-                    <img class="object-contain w-full h-[77vh] rounded-l-lg pr-1 transition-transform duration-200 ease-in-out" id="imageView" crossorigin="anonymous" src="" alt="">
+                    <img class="object-contain w-full h-[77vh] rounded-l-lg pr-1 transition-transform duration-200 ease-in-out origin-center cursor-grab" id="imageView" crossorigin="anonymous" src="" alt="">
                     <canvas id="imageCanvas" class="absolute top-0 left-0 w-full h-[77vh] pointer-events-none"></canvas>
 
                       <!-- Zoom Buttons -->
@@ -984,5 +984,33 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             zoomOut();
         }
+    });
+     image.addEventListener("mousedown", function (e) {
+        e.preventDefault();
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        image.classList.remove("cursor-grab");
+        image.classList.add("cursor-grabbing");
+    });
+
+    window.addEventListener("mouseup", function () {
+        isDragging = false;
+        image.classList.remove("cursor-grabbing");
+    });
+
+    window.addEventListener("mousemove", function (e) {
+        if (!isDragging) return;
+
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+
+        translateX += dx;
+        translateY += dy;
+
+        startX = e.clientX;
+        startY = e.clientY;
+
+        applyTransform();
     });
 </script>
