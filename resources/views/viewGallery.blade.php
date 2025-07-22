@@ -281,10 +281,15 @@ $userPrivileges = session('user_details')['user_privileges'];
         <div class="mt-2 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 h-[77vh]">
             <div class="flex justify-between w-full">
                 <!-- Image container with canvas overlay -->
-                <div class="relative w-[100%]">
-                    <img class="object-contain w-full h-[77vh] rounded-l-lg border-r-2 border-[#e5e7eb] pr-1" id="imageView" crossorigin="anonymous" src="" alt="">
+                <div class="relative w-[100%] overflow-hidden border-r-2 border-[#e5e7eb]">
+                    <img class="object-contain w-full h-[77vh] rounded-l-lg pr-1 transition-transform duration-200 ease-in-out" id="imageView" crossorigin="anonymous" src="" alt="">
                     <canvas id="imageCanvas" class="absolute top-0 left-0 w-full h-[77vh] pointer-events-none"></canvas>
 
+                      <!-- Zoom Buttons -->
+                <div class="absolute top-4 right-4 flex flex-col gap-2 z-50">
+                    <button onclick="zoomIn()" class="bg-[#930027] text-white p-2 rounded shadow"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+                    <button onclick="zoomOut()" class="bg-[#930027] text-white p-2 rounded shadow"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+                </div>
                     <!-- Edit menu button -->
                     {{-- <button id="editMenuButton" class="absolute top-5 left-5 p-1 bg-white rounded-full shadow-md hover:bg-gray-100">
                         <img src="{{asset('assets/icons/ellipsis-vertical.svg')}}" class="w-6 h-6" alt="Edit options">
@@ -948,4 +953,36 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize state
     resetDrawingMode();
 });
+</script>
+
+<script>
+    const image = document.getElementById("imageView");
+    let scale = 1;
+    let translateX = 0;
+    let translateY = 0;
+
+    // Zoom functions
+    function zoomIn() {
+        scale += 0.1;
+        applyTransform();
+    }
+
+    function zoomOut() {
+        scale = Math.max(0.1, scale - 0.1);
+        applyTransform();
+    }
+
+    function applyTransform() {
+        image.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+    }
+
+    // Optional: Mouse wheel zoom
+    image.addEventListener("wheel", function (e) {
+        e.preventDefault();
+        if (e.deltaY < 0) {
+            zoomIn();
+        } else {
+            zoomOut();
+        }
+    });
 </script>
