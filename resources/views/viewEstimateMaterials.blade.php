@@ -541,6 +541,25 @@ h1, h2, h3, h4, h5 {
                 </div>
             </div>
             @endforeach
+            <hr>
+             <div class="py-7 px-4 shadow-md rounded-lg border">
+                    <h1 class="font-bold my-2">Lien Release</h1>
+                    <p class="text-sm text-[#6b7280] repeating-header p-3" > The undersigned Lienor, in consideration of the final payment in the amount of <br>
+                    $_______________________________, hereby waives and releases its lien and right to claim a lien for <br>
+                    labor, services or materials furnished to River City Painting on the job of (Owner of Property):</p>
+                    <p class="text-sm text-[#6b7280] repeating-header p-3">
+                        Project Name: {{$estimate->project_name}}
+                    </p>
+                    <p class="text-sm text-[#6b7280]   repeating-header p-3">
+                        Job Name: {{$estimate->project_name}}
+                    </p>
+                    <p class="text-sm text-[#6b7280]   repeating-header p-3">
+                        Job Address: {{$estimate->customer_address}}
+                    </p>
+                    <p class="text-sm text-[#6b7280]   repeating-header p-3"> Signature:___________________________________________________Date:__________________________ <br>
+                        Printed Name: __________________________________________________________
+                    </p>
+                </div>
         </div>
         <hr>
         @else
@@ -552,6 +571,24 @@ h1, h2, h3, h4, h5 {
         @endif
     </div>
 </div>
+
+{{-- <div class="w-full mx-auto px-4">
+    <p class="text-[20px] text-gray-700 uppercase  bg-gray-50 repeating-header p-3" > The undersigned Lienor, in consideration of the final payment in the amount of <br>
+ $_______________________________, hereby waives and releases its lien and right to claim a lien for <br>
+ labor, services or materials furnished to River City Painting on the job of (Owner of Property):</p>
+ <p class="text-[20px] text-gray-700 uppercase  bg-gray-50 repeating-header p-3">
+    Project Name:
+ </p>
+ <p class="text-[20px] text-gray-700 uppercase  bg-gray-50 repeating-header p-3">
+    Job Name:
+ </p>
+ <p class="text-[20px] text-gray-700 uppercase  bg-gray-50 repeating-header p-3">
+    Job Address:
+ </p>
+ <p class="text-[20px] text-gray-700 uppercase  bg-gray-50 repeating-header p-3"> Signature:___________________________________________________Date:__________________________ <br>
+    Printed Name: __________________________________________________________
+ </p>
+</div> --}}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>

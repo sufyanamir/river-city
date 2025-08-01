@@ -32,6 +32,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
    Route::get('/getEstimate',[ApiController::class, 'getEstimate']);//for Estimate
    Route::post('/CustomerAndEstimateAdd', [ApiController::class, 'CustomerAndEstimateAdd']); //Add estimate
    Route::get('/getEstimateDetails/{id}', [ApiController::class, 'getEstimateDetails']);//estimate details
+
+   Route::get('/getEstimateActivity/{id}', [ApiController::class, 'getEstimateActivity']);
+
+    Route::post('/cancelEstimate/{id}', [ApiController::class, 'cancelEstimate']);
+   Route::delete('/deleteEstimate/{id}', [ApiController::class, 'deleteEstimate']);//delete estimate
    Route::post('/updateEstimateDetail',[ApiController::class, 'updateEstimateDetail']);//updateEstimateDetail
 //    Estimate Contact Route
    Route::post('/addContacts', [ApiController::class, 'addContacts']); //addContacts
