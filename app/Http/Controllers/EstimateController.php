@@ -1157,7 +1157,7 @@ class EstimateController extends Controller
                     $event = UserToDo::with('assigned_to')->find($id);
                     break;
                 case 'estimate':
-                    $event = Estimate::with('estimateSchedule', 'customer')->find($id);
+                    $event = Estimate::with('estimateSchedule', 'customer', 'crew')->find($id);
                     break;
                 case 'estimateToDo':
                     $event = EstimateToDos::with('assigned_to')->find($id);
