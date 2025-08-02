@@ -593,7 +593,7 @@ function clearModalAndClose() {
             var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
             return {
                 id: estimate.estimate_id,
-                title: (estimate.estimate_assigned == 1 ? '✔ ' : '') +  [estimate.estimate.customer_name + ' ' + estimate.estimate.customer_last_name],
+                title: (estimate.work_completed == 1 ? '✔ ' : '') +  [estimate.estimate.customer_name + ' ' + estimate.estimate.customer_last_name],
                 start: startDate,
                 end: endDate,
                 allDay: isAllDay,
@@ -611,15 +611,36 @@ var filterId = {!! json_encode($filterId) !!}; // Get the filter ID from Laravel
 var events = [];
 
 estimateEvent.forEach(function(estimate) {
-    if (estimate.estimate_assigned == 1) {
-        return; // Skip this estimate
+    // Skip completed events (work_completed == 1) from initial load
+    if (estimate.work_completed == 1) {
+        return; // Skip completed events from initial display
     }
 
     var startDate = new Date(estimate.scheduled_start_date);
     var endDate = new Date(estimate.scheduled_end_date);
     var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
 
-    if (estimate.schedulers && estimate.schedulers.length > 0) {
+    // For work events (work_assigned == 1), prioritize crew over schedulers
+    if (estimate.work_assigned == 1 && estimate.crew != null) {
+        // If filterId is set, only show matching crew members
+        if (filterId && estimate.crew.id != filterId) {
+            return;
+        }
+
+        events.push({
+            id: estimate.estimate_id,
+            title: (estimate.work_completed == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name + ' - ' + estimate.crew.name,
+            start: startDate,
+            end: endDate,
+            allDay: isAllDay,
+            backgroundColor: estimate.crew.user_color ? estimate.crew.user_color : '',
+            borderColor: estimate.crew.user_color ? estimate.crew.user_color : '',
+            extendedProps: {
+                type: 'estimate',
+                crew_name: estimate.crew.name
+            }
+        });
+    } else if (estimate.schedulers && estimate.schedulers.length > 0) {
         estimate.schedulers.forEach(function(scheduler) {
             // If filterId is set, only show matching schedulers
             if (filterId && scheduler.id != filterId) {
@@ -628,7 +649,7 @@ estimateEvent.forEach(function(estimate) {
 
             var eventObj = {
                 id: estimate.estimate_id + '-' + scheduler.id,
-                title: (estimate.estimate_assigned == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
+                title: (estimate.work_completed == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name + ' - ' + scheduler.name,
                 start: startDate,
                 end: endDate,
                 allDay: isAllDay,
@@ -649,14 +670,15 @@ estimateEvent.forEach(function(estimate) {
 
         events.push({
             id: estimate.estimate_id,
-            title: (estimate.estimate_assigned == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
+            title: (estimate.work_completed == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name + ' - ' + estimate.crew.name,
             start: startDate,
             end: endDate,
             allDay: isAllDay,
             backgroundColor: estimate.crew.user_color ? estimate.crew.user_color : '',
             borderColor: estimate.crew.user_color ? estimate.crew.user_color : '',
             extendedProps: {
-                type: 'estimate'
+                type: 'estimate',
+                crew_name: estimate.crew.name
             }
         });
     } else {
@@ -665,7 +687,7 @@ estimateEvent.forEach(function(estimate) {
             var userColor = '{{ session('user_details')['user_color'] }}';
             events.push({
                 id: estimate.estimate_id,
-                title: (estimate.estimate_assigned == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
+                title: (estimate.work_completed == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
                 start: startDate,
                 end: endDate,
                 allDay: isAllDay,
@@ -776,17 +798,33 @@ estimateEvent.forEach(function(estimate) {
     var updatedEvents = [];
 
 estimateEvent.filter(function(estimate) {
-    return showCompleted || estimate.estimate_assigned != 1;
+    // Show all events if completed checkbox is checked, or show only non-completed events
+    return showCompleted || (estimate.work_completed != 1);
 }).forEach(function (estimate) {
     var startDate = new Date(estimate.scheduled_start_date);
     var endDate = new Date(estimate.scheduled_end_date);
     var isAllDay = startDate.getHours() == 0 && startDate.getMinutes() == 0 && endDate.getHours() == 0 && endDate.getMinutes() == 0;
 
-    if (estimate.schedulers && estimate.schedulers.length > 0) {
+    // For work events (work_assigned == 1), prioritize crew over schedulers
+    if (estimate.work_assigned == 1 && estimate.crew != null) {
+        updatedEvents.push({
+            id: estimate.estimate_id,
+            title: (estimate.work_completed == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name + ' - ' + estimate.crew.name,
+            start: startDate,
+            end: endDate,
+            allDay: isAllDay,
+            backgroundColor: estimate.crew.user_color ? estimate.crew.user_color : '',
+            borderColor: estimate.crew.user_color ? estimate.crew.user_color : '',
+            extendedProps: {
+                type: 'estimate',
+                crew_name: estimate.crew.name
+            }
+        });
+    } else if (estimate.schedulers && estimate.schedulers.length > 0) {
         estimate.schedulers.forEach(function(scheduler) {
             updatedEvents.push({
                 id: estimate.estimate_id + '-' + scheduler.id,
-                title: (estimate.estimate_assigned == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
+                title: (estimate.work_completed == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name + ' - ' + scheduler.name,
                 start: startDate,
                 end: endDate,
                 allDay: isAllDay,
@@ -801,21 +839,22 @@ estimateEvent.filter(function(estimate) {
     } else if (estimate.crew != null) {
         updatedEvents.push({
             id: estimate.estimate_id,
-            title: (estimate.estimate_assigned == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
+            title: (estimate.work_completed == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name + ' - ' + estimate.crew.name,
             start: startDate,
             end: endDate,
             allDay: isAllDay,
             backgroundColor: estimate.crew.user_color ? estimate.crew.user_color : '',
             borderColor: estimate.crew.user_color ? estimate.crew.user_color : '',
             extendedProps: {
-                type: 'estimate'
+                type: 'estimate',
+                crew_name: estimate.crew.name
             }
         });
     } else {
         var userColor = '{{ session('user_details')['user_color'] }}';
         updatedEvents.push({
             id: estimate.estimate_id,
-            title: (estimate.estimate_assigned == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
+            title: (estimate.work_completed == 1 ? '✔ ' : '') + estimate.customer_name + ' ' + estimate.customer_last_name,
             start: startDate,
             end: endDate,
             allDay: isAllDay,
@@ -829,7 +868,7 @@ estimateEvent.filter(function(estimate) {
 });
 
 
-    var allUpdatedEvents = events.concat(updatedUserEvents, updatedEstimateEvents, updatedEvents);
+    var allUpdatedEvents = updatedUserEvents.concat(updatedEstimateEvents, updatedEvents);
 
 
     // Remove all events and re-add updated events
@@ -988,11 +1027,21 @@ $('#end_date').val(endDateTime);
                             $('#event-start').text(new Date(response.scheduled_start_date).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' }));
                             $('#event-end').text(new Date(response.scheduled_end_date).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' }));
                             $('#event-project-name').text(response.project_name);
-                            // Set start_date and end_date inputs
-                            const assignedUsers = Array.isArray(response.estimate_schedule_assigned_to)
-                                ? response.estimate_schedule_assigned_to // Already an array
-                                : JSON.parse(response.estimate_schedule_assigned_to || '[]'); // Parse if it's a JSON string
-                            console.log(assignedUsers);
+                            
+                            // For work events (work_assigned == 1), prioritize crew over schedulers
+                            let assignedUsers = [];
+                            if (response.work_assigned == 1 && response.crew) {
+                                // Use crew member for work events
+                                assignedUsers = [response.crew.id];
+                                console.log('Using crew member:', response.crew.name);
+                            } else {
+                                // Use schedulers for estimate events
+                                assignedUsers = Array.isArray(response.estimate_schedule_assigned_to)
+                                    ? response.estimate_schedule_assigned_to // Already an array
+                                    : JSON.parse(response.estimate_schedule_assigned_to || '[]'); // Parse if it's a JSON string
+                                console.log('Using schedulers:', assignedUsers);
+                            }
+                            
                             let $select = $('#update_assign_work');
 
                             // Destroy Select2 before modifying the select element
