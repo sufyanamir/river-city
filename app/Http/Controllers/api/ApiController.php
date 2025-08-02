@@ -362,6 +362,53 @@ class ApiController extends Controller
         }
     }
 
+     public function getEstimateActivity($id)
+    {
+        try{
+            $userDetails = Auth()->user();
+        $activities = EstimateActivity::with('user')->where('estimate_id', $id)->orderBy('estimate_activity_id', 'desc')->get();
+
+        return response()->json(['success' => true, 'message' => 'activities', $activities],200);
+        // return view('estimate_activity', ['user_details' => $userDetails, 'activities' => $activities]);
+        } catch (\Exception $e){
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function cancelEstimate($id)
+    {
+        try {
+
+            $userDetails = Auth()->user();
+
+            $estimate = Estimate::where('estimate_id', $id)->first();
+
+            $estimate->estimate_status = 'cancel';
+
+            $estimate->save();
+
+            return response()->json(['success' => true, 'message' => 'Estimate Canceled!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
+        public function deleteEstimate($id){
+            try{
+                $estimate = Estimate::find($id);
+
+                if ($estimate && $estimate->estimate_status !== 'deleted') {
+                    $estimate->estimate_status = 'deleted';
+                    $estimate->save();
+
+                    return response()->json(['success' => true, 'message' => 'Estimate deleted successfully'], 200);
+                }
+
+                return response()->json(['success' => false, 'message' => 'estimate not found'], 404);
+            } catch(\Exception $e) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()]);
+            }
+        }
     public function editCustomer($id){
         try {
 
@@ -502,7 +549,7 @@ class ApiController extends Controller
    }
 
 
-    public function addCustomerAndEstimate(Request $request)
+    public function CustomerAndEstimateAdd(Request $request)
     {
         try {
 

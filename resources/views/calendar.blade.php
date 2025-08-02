@@ -175,7 +175,9 @@
                         <div class="flex gap-3 mx-3 px-2 {{ $employee->id == request()->route('id') ? 'bg-[#ffdde4]' : '' }} hover:bg-gray-100 rounded">
                             <div class="my-auto" style="width: 20px; height: 20px; background-color: {{$employee->user_color}};"></div>
                             <a href="/calendar{{$employee->id}}" class="w-full">
-                                <div class="p-1">{{$employee->name}} {{$employee->last_name}}</div>
+                                <div class="p-1">{{$employee->name}} {{$employee->last_name}}
+                                    <span>({{$employee->user_role}})</span>
+                                </div>
                             </a>
                         </div>
                         @endforeach
