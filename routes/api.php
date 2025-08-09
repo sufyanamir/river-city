@@ -34,6 +34,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
    Route::get('/getEstimateDetails/{id}', [ApiController::class, 'getEstimateDetails']);//estimate details
 
    Route::get('/getEstimateActivity/{id}', [ApiController::class, 'getEstimateActivity']);
+   Route::get('/viewEstimateMaterials/{id}', [ApiController::class, 'viewEstimateMaterials']);
 
     Route::post('/cancelEstimate/{id}', [ApiController::class, 'cancelEstimate']);
    Route::delete('/deleteEstimate/{id}', [ApiController::class, 'deleteEstimate']);//delete estimate
@@ -45,7 +46,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
 //    Estimate Items Route
    Route::post('/addEstimateItems', [ApiController::class, 'addEstimateItems']);//addEstimateItems
    Route::get('/getEstimateItem/{id}',[ApiController::class, 'getEstimateItem']);//getEstimateItem
+   Route::post('/updateEstimateItem', [ApiController::class, 'updateEstimateItem']);//updateEstimateItem
    Route::delete('/deleteEstimateItem/{id}', [ApiController::class, 'deleteEstimateItem']); //deleteEstimateItem
+   Route::post('/editGroup', [ApiController::class, 'editGroup']);//editGroup
+   Route::post('/deleteEstimateGroupItems', [ApiController::class, 'deleteEstimateGroupItems']);//deleteEstimateGroupItems
     Route::post('/addEstimateItemTemplate', [ApiController::class, 'addEstimateItemTemplate']);
    //Add Estimate File
    Route::post('/addEstimateFile', [ApiController::class, 'addEstimateFile']);//addEstimateFile

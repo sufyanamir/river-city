@@ -76,7 +76,7 @@ class ApiController extends Controller
 
             $token = $user->createToken('auth_token')->plainTextToken;
 
-            return response()->json(['success' => true, 'message' => 'login successfull', 'token' => $token], 200);
+            return response()->json(['success' => true, 'message' => 'login successfull', 'token' => $token, 'userDetails' => $user], 200);
 
         } catch (\Exception $e) {
             return response()->json(['success' => false,'message' => $e->getMessage()], 400);
@@ -224,7 +224,7 @@ class ApiController extends Controller
    public function getCustomer(){
     try {
         $userDetails = auth()->user();
-        $customers = Customer::with('addedBy:id,name,email,last_name,phone,user_role')->where('customer_status', '<>', 'deleted')->get();
+        $customers = Customer::with('addedBy:id,name,user_role')->select('customer_id', 'added_user_id', 'customer_first_name', 'customer_last_name', 'customer_email', 'customer_phone', 'customer_primary_address', 'customer_city', 'customer_state', 'customer_zip_code', 'billing_address', 'billing_state', 'billing_zip', 'branch','potential_value', 'source')->where('customer_status', '<>', 'deleted')->get();
         $branches = CompanyBranches::get();
         $users = User::where('user_role', '<>', 'crew')->get();
 
@@ -366,7 +366,7 @@ class ApiController extends Controller
     {
         try{
             $userDetails = Auth()->user();
-        $activities = EstimateActivity::with('user')->where('estimate_id', $id)->orderBy('estimate_activity_id', 'desc')->get();
+        $activities = EstimateActivity::with('user:id,name,email,user_role')->where('estimate_id', $id)->orderBy('estimate_activity_id', 'desc')->get();
 
         return response()->json(['success' => true, 'message' => 'activities', $activities],200);
         // return view('estimate_activity', ['user_details' => $userDetails, 'activities' => $activities]);
@@ -472,7 +472,7 @@ class ApiController extends Controller
 
         if ($userDetails['user_role'] == 'admin') {
             $customers = Customer::get();
-            $query = Estimate::with('scheduler', 'assigned_work', 'customer:customer_id,customer_first_name,customer_last_name,customer_email,customer_phone,customer_primary_address,customer_secondary_address,customer_city,customer_state,customer_zip_code,billing_address,billing_city,billing_state,billing_zip', 'crew')
+            $query = Estimate::with('customer:customer_id,customer_first_name,customer_last_name,customer_email,branch,source', 'crew')->select('estimate_id', 'customer_id', 'customer_name', 'customer_phone', 'customer_address', 'billing_address', 'project_name', 'project_type', 'project_owner', 'estimate_status')
                 ->where('estimate_status', $status ? $status : 'pending');
 
             if ($branch) {
@@ -1206,18 +1206,18 @@ class ApiController extends Controller
          $userDetails = auth()->user();
 
         $estimate = Estimate::where('estimate_id', $id)
-                    ->select('estimate_id','customer_id','customer_name','customer_phone','customer_address','billing_address','customer_last_name','project_name','project_number','project_type','building_type','project_owner')->first();
+                    ->select('estimate_id','customer_id','customer_name','customer_phone','customer_address','billing_address','customer_last_name', 'project_owner')->first();
         $estimateImages = EstimateImages::where('estimate_id', $estimate->estimate_id)->get();
-        $customer = Customer::where('customer_id', $estimate->customer_id)->first();
+        $customer = Customer::select('customer_email')->where('customer_id', $estimate->customer_id)->first();
         $users = User::where('id', '<>', $userDetails->id)->where('sts', 'active')->get();
         $chatMessages = EstimateChat::with('addedUser')->where('estimate_id', $id)->orderby('estimate_chat_id', 'asc')->get();
         return response()->json([
             'success'=> true,
             'data'=>[
-                'chatMessages' => $chatMessages,
+                // 'chatMessages' => $chatMessages,
                 'estimate' => $estimate,
+                'customer' => $customer,
                 'estimate_images' => $estimateImages,
-                // 'customer' => $customer,
                 // 'users' => $users,
                 // 'user_details' => $userDetails
             ]
@@ -1719,7 +1719,7 @@ class ApiController extends Controller
                 ->send($mail);
 
             $mail = EstimateEmail::create([
-                'added_user_id' => $userDetails['id'],
+                'added_user_id' => $userDetails->id,
                 'estimate_id' => $validatedData['estimate_id'],
                 'email_id' => $validatedData['email_id'],
                 'email_name' => $validatedData['email_name'],
@@ -1815,7 +1815,8 @@ class ApiController extends Controller
     public function getPayment($id)
     {
         try {
-            $invoice = AssignPayment::where('estimate_complete_invoice_id', $id)->first();
+            $invoice = AssignPayment::select('added_user_id', 'estimate_id', 'payment_assigned_to', 'start_date', 'end_date', 'note', 'complete_invoice_date', 'invoice_name', 'tax_rate', 'invoice_total', 'invoice_due', 'invoice_status', 'invoice_subtotal')->where('estimate_complete_invoice_id', $id)->first();
+            // $invoice = AssignPayment::where('estimate_complete_invoice_id', $id)->first();
             $payment = EstimatePayments::where('estimate_complete_invoice_id', $id)->first();
             if (!$invoice) {
                 return response()->json(['success' => false, 'message' => 'Payment not found!'], 404);
@@ -1905,7 +1906,7 @@ class ApiController extends Controller
             // dd($payment);
             return response()->json([
                 'success'=>true,
-                'data' => ['user_details' => $userDetails, 'payment' => $payment, 'estimate' => $estimate, 'type' => 'Payment']
+                'data' => ['payment' => $payment, 'estimate' => $estimate, 'type' => 'Payment']
             ]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -2082,7 +2083,7 @@ class ApiController extends Controller
     {
         try {
 
-            $invoice = AssignPayment::where('estimate_complete_invoice_id', $id)->first();
+            $invoice = AssignPayment::select('estimate_complete_invoice_id', 'added_user_id', 'estimate_id', 'payment_assigned_to', 'start_date', 'end_date', 'note', 'complete_invoice_date', 'invoice_name', 'tax_rate', 'invoice_total', 'invoice_due', 'invoice_status', 'invoice_subtotal')->where('estimate_complete_invoice_id', $id)->first();
 
             if (!$invoice) {
                 return response()->json(['success' => false, 'message' => 'Invoice not found!'], 404);
@@ -2165,7 +2166,7 @@ class ApiController extends Controller
             $userDetails = auth()->user();
             $estimate = Estimate::with('customer:customer_id,customer_first_name,customer_last_name,customer_email,customer_phone,customer_primary_address,customer_secondary_address,customer_city,customer_state,customer_zip_code,billing_address,billing_city,billing_state,billing_zip')->where('estimate_id', $id)
             ->select('estimate_id','customer_id','customer_name','customer_phone','customer_address','billing_address','customer_last_name','project_name','project_number','project_type','building_type','project_owner')->first();
-            $invoice = AssignPayment::where('estimate_complete_invoice_id', $id)->first();
+            $invoice = AssignPayment::select('estimate_complete_invoice_id','added_user_id', 'estimate_id', 'payment_assigned_to', 'start_date', 'end_date', 'note', 'complete_invoice_date', 'invoice_name', 'tax_rate', 'invoice_total', 'invoice_due', 'invoice_status', 'invoice_subtotal')->where('estimate_complete_invoice_id', $id)->first();
             // dd($invoice);
             return response()->json([
                 'success'=> true,
@@ -2938,7 +2939,7 @@ class ApiController extends Controller
      public function uploadImage(Request $request)
     {
         try {
-            $userDetails = session('user_details');
+            $userDetails = Auth()->user();
 
             // Validate the form data
             $request->validate([
@@ -2964,7 +2965,7 @@ class ApiController extends Controller
 
             // Create a new record in the database for each file
             $estimateImage = new EstimateImages([
-                'added_user_id' =>  $userDetails['id'],
+                'added_user_id' =>  $userDetails->id,
                 'estimate_id' => $estimateId,
                 'estimate_image' => $imageUrl,
             ]);
@@ -3247,8 +3248,13 @@ class ApiController extends Controller
         try{
             $userDetails = auth()->user();
 
-            $user = User::find($userDetails->id);
-            $company = Company::first();
+            $user = User::select('id', 'name', 'email', 'phone', 'address', 'user_image', 'password', 'user_role',)->find($userDetails->id);
+
+            $company = null;
+            if($user && $user->user_role === 'admin'){
+                $company = Company::first();
+            }
+            // $company = Company::first();
             return response()->json([
                 'success'=> true,
                 'data'=> [
@@ -3314,6 +3320,201 @@ class ApiController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
+
+     // update estimate item
+    public function updateEstimateItem(Request $request)
+    {
+        try {
+            // dd($request);
+            $userDetails = Auth()->user();
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'item_id' => 'required',
+                'item_name' => 'required',
+                'item_units' => 'nullable',
+                'labour_expense' => 'nullable',
+                'material_expense' => 'nullable',
+                'item_cost' => 'required',
+                'item_price' => 'required',
+                'item_qty' => 'required',
+                'item_total' => 'required',
+                'item_description' => 'nullable',
+                'item_note' => 'nullable',
+                'assembly_id' => 'nullable|array',
+                'assembly_name' => 'nullable|array',
+                'ass_item_id' => 'nullable|array',
+                'group_name' => 'nullable',
+                'assembly_unit_by_item_unit' => 'nullable|array',
+                'item_unit_by_assembly_unit' => 'nullable|array',
+                // 'selected_items' => 'required|array',
+                'additional_item' => 'nullable',
+            ]);
+
+            $estimateItem = EstimateItem::where('estimate_item_id', $validatedData['item_id'])->first();
+            $estimateItemAssembly = EstimateItemAssembly::where('estimate_item_id', $estimateItem->estimate_item_id)->get();
+            if (isset($validatedData['group_name']) && $validatedData['group_name'] != null) {
+                $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
+                if (!$groupDetail) {
+                    $newGroup = Groups::create([
+                        'group_name' => $validatedData['group_name'],
+                        'group_type' => 'assemblies',
+                        'show_unit_price' => 1,
+                        'show_quantity' => 1,
+                        'show_total' => 1,
+                        'show_group_total' => 1,
+                        'include_est_total' => 1,
+                    ]);
+                    $estimateItem->group_id = $newGroup->group_id;
+                } else {
+                    $estimateItem->group_id = $groupDetail->group_id;
+                }
+            } else {
+                $groupDetail = Groups::where('group_name', 'Single')->first();
+                if (!$groupDetail) {
+                    $groupDetail = Groups::create([
+                        'group_name' => 'Single',
+                        'group_type' => 'assemblies',
+                        'show_unit_price' => 1,
+                        'show_quantity' => 1,
+                        'show_total' => 1,
+                        'show_group_total' => 1,
+                        'include_est_total' => 1,
+                    ]);
+                }
+                $estimateItem->group_id = $groupDetail->group_id;
+            }
+
+            $estimateItem->item_name = $validatedData['item_name'];
+            $estimateItem->item_unit = $validatedData['item_units'];
+            $estimateItem->labour_expense = $validatedData['labour_expense'];
+            $estimateItem->material_expense = $validatedData['material_expense'];
+            $estimateItem->item_cost = $validatedData['item_cost'];
+            $estimateItem->item_price = $validatedData['item_price'];
+            $estimateItem->item_qty = $validatedData['item_qty'];
+            $estimateItem->item_total = $validatedData['item_total'];
+            $estimateItem->item_description = $validatedData['item_description'];
+            $estimateItem->item_note = $validatedData['item_note'];
+
+            $estimateItem->save();
+
+            $estItemAssembly = EstimateItemAssembly::where('estimate_item_id', $validatedData['item_id'])->get();
+
+            foreach ($estItemAssembly as $assembly) {
+                $assembly->delete();
+            }
+
+            // Update or insert EstimateItemAssembly data
+            if (isset($validatedData['assembly_name'])) {
+
+                foreach ($validatedData['assembly_name'] as $key => $assemblyName) {
+                    if ($assemblyName != null) {
+                        $itemUnitByAssUnitSum = $validatedData['item_unit_by_assembly_unit'][$key];
+                        $assUnitByItemUnitSum = $validatedData['assembly_unit_by_item_unit'][$key];
+                        $assItems = Items::where('item_id', $validatedData['ass_item_id'][$key])->first();
+                        $assItemQty = $validatedData['item_qty'] * $assUnitByItemUnitSum;
+                        $assItemPrice = $assItems->item_price * $assItemQty;
+
+                        $assemblyData = [
+                            'added_user_id' => $userDetails->id,
+                            'estimate_id' => $validatedData['estimate_id'],
+                            'estimate_item_id' => $validatedData['item_id'],
+                            'est_ass_item_name' => $validatedData['assembly_name'][$key],
+                            'item_unit_by_ass_unit' => $itemUnitByAssUnitSum,
+                            'ass_unit_by_item_unit' => $assUnitByItemUnitSum,
+                            'item_id' => $assItems->item_id,
+                            'ass_item_cost' => $assItems->item_cost,
+                            'ass_item_price' => $assItems->item_price,
+                            'ass_item_qty' => $assItemQty,
+                            'ass_item_total' => $assItemPrice,
+                            'ass_item_unit' => $assItems->item_units,
+                            'ass_item_description' => $assItems->item_description,
+                            'ass_item_type' => $assItems->item_type,
+                            'ass_labour_expense' => $assItems->labour_expense,
+                            'ass_material_expense' => $assItems->material_expense,
+                        ];
+                        EstimateItemAssembly::create($assemblyData);
+                    }
+                    // Insert new record
+                }
+            }
+            if ($validatedData['additional_item'] == 'no') {
+                $pendingProposal = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->where('proposal_status', 'pending')->first();
+
+                if ($pendingProposal) {
+                    $pendingProposal->proposal_status = 'canceled';
+
+                    $pendingProposal->save();
+                }
+            }
+            return response()->json(['success' => true, 'message' => 'Item updated successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+     // edit group
+    public function editGroup(Request $request)
+    {
+        try {
+
+            $validatedData = $request->validate([
+                'group_id' => 'required',
+                'group_name' => 'required|string',
+                // 'total_items' => 'required|numeric',
+                'group_type' => 'required|string',
+                // 'group_item_ids' => 'required|array',
+                'group_description' => 'nullable|string',
+                'show_unit_price' => 'nullable',
+                'show_quantity' => 'nullable',
+                'show_total' => 'nullable',
+                'show_unit_price' => 'nullable|boolean', // Validate as boolean
+                'show_quantity' => 'nullable|boolean', // Validate as boolean
+                'show_total' => 'nullable|boolean', // Validate as boolean
+                'show_group_total' => 'nullable',
+                'include_est_total' => 'nullable',
+            ]);
+
+            $group = Groups::where('group_id', $validatedData['group_id'])->first();
+
+            $group->group_name = $validatedData['group_name'];
+            $group->group_type = $validatedData['group_type'];
+            $group->group_description = $validatedData['group_description'];
+            // Set the values of checkboxes to 1 if checked, otherwise set to 0
+            $group->show_unit_price = $request->has('show_unit_price') ? 1 : 0;
+            $group->show_quantity = $request->has('show_quantity') ? 1 : 0;
+            $group->show_total = $request->has('show_total') ? 1 : 0;
+            $group->show_group_total = $request->has('show_group_total') ? 1 : 0;
+            $group->include_est_total = $request->has('include_est_total') ? 1 : 0;
+
+            $group->save();
+
+            return response()->json(['success' => true, 'message' => 'Group Updated!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
+        public function deleteEstimateGroupItems(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'group_id' => 'required',
+            ]);
+
+            $estimateItems = EstimateItem::where('estimate_id', $validatedData['estimate_id'])
+                ->where('group_id', $validatedData['group_id'])
+                ->get();
+
+            foreach ($estimateItems as $item) {
+                $item->delete();
+            }
+
+            return response()->json(['success' => true, 'message' => 'Items deleted!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
     // Log Out
     public function logout(Request $request)
     {
