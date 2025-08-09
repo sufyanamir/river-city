@@ -689,233 +689,179 @@ class ApiController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
-    public function getEstimateDetails($id)
-{
-    try {
-        // Get user details from session
-        $userDetails = session('user_details');
-        
-        // Main estimate query with all relationships
-        $estimate = Estimate::with([
-            'customer',
-            'estimateContacts',
-            'estimateFiles',
-            'images',
-            'proposals',
-            'notes',
-            'estimateEmails',
-            'invoices',
-            'invoice',
-        ])
-        ->where('estimate_id', $id)
-        ->first();
+    public function getEstimateDetails($id){
+        try {
+            $userDetails = auth()->user();
 
-        if (!$estimate) {
-            return response()->json([
-                'success' => false, 
-                'message' => 'Estimate not found'
-            ], 404);
-        }
+            $estimate = Estimate::with(
+                'customer',
+                'estimateContacts',
+                'estimateFiles',
+                'images',
+                'proposals',
+                'notes',
+                'estimateEmails',
+                'invoices',
+                'invoice',
+            )
+                ->where('estimate_id', $id)
+                ->first();
 
-        // Get company details
-        $company = Company::first();
+            $company = Company::first();
 
-        // Process proposals to extract customer_signature from proposal_data JSON
-        foreach ($estimate->proposals as $proposal) {
-            if (!empty($proposal->proposal_data)) {
-                $proposalData = json_decode($proposal->proposal_data, true);
-                $proposal->customer_signature = $proposalData['estimate']['customer_signature'] ?? null;
-            } else {
-                $proposal->customer_signature = null;
+            if (!$estimate) {
+                // Handle the case where the estimate is not found
+                // You may want to return a response or redirect to an error page
+                return response()->json(['success' => false, 'message' => 'Estimate not found'], 404);
             }
-        }
 
-        // Optimize database queries using single queries with conditions
-        $estimateItems = EstimateItem::with('group', 'assemblies')
-            ->where('estimate_id', $estimate->estimate_id)
-            ->where('additional_item', '<>', 'yes')
-            ->get()
-            ->sortBy(function ($item) {
-                return $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order;
+            // Process proposals to extract customer_signature from proposal_data JSON
+            foreach ($estimate->proposals as $proposal) {
+                if (!empty($proposal->proposal_data)) {
+                    $proposalData = json_decode($proposal->proposal_data, true);
+                    if (isset($proposalData['estimate']['customer_signature'])) {
+                        $proposal->customer_signature = $proposalData['estimate']['customer_signature'];
+                    } else {
+                        $proposal->customer_signature = null;
+                    }
+                } else {
+                    $proposal->customer_signature = null;
+                }
+            }
+
+            $estimateItems = EstimateItem::with('group', 'assemblies')
+                ->where('estimate_id', $estimate->estimate_id)
+                ->where('additional_item', '<>', 'yes')
+                ->get()
+                ->sortBy(function ($item) {
+                    // Push sort_order == 0 to the end
+                    return $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order;
+                });
+
+
+            $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
+
+            $profitHours = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->where('additional_item', '<>', 'yes')->sum('item_qty');
+            $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->where('additional_item', '<>', 'yes')->get();
+
+            $assemblyLabourTotalHours = 0;
+            $assemblyLabourTotal = 0;
+            $assemblyMaterialTotal = 0;
+            foreach ($estimateAssemblyItems as $estimateAssemblyItem) {
+                $labourAssemblyItems = $estimateAssemblyItem->assemblies->filter(function ($assembly) {
+                    return $assembly->ass_item_type === 'labour';
+                });
+                $MaterialAssemblyItems = $estimateAssemblyItem->assemblies->filter(function ($assembly) {
+                    return $assembly->ass_item_type === 'material';
+                });
+                $assemblyLabourTotalHours += $labourAssemblyItems->sum('ass_item_qty');
+                $assemblyLabourTotal += $labourAssemblyItems->sum('ass_item_total');
+                $assemblyMaterialTotal += $MaterialAssemblyItems->sum('ass_item_total');
+            }
+
+            $profitHours += $assemblyLabourTotalHours;
+
+            $items = Items::get();
+            $groups = Groups::get();
+            $itemsForAssemblies = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
+            $labourItems = Items::where('item_type', 'labour')->get();
+            $materialItems = Items::where('item_type', 'material')->get();
+            $assemblyItems = Items::where('item_type', 'assemblies')->get();
+            $users = User::where('sts', 'active')->get();
+            $emailTemplates = Email::get();
+            $payments = EstimatePayments::with('invoice')->where('estimate_id', $estimate->estimate_id)->get();
+            $toDos = EstimateToDos::with('assigned_to', 'assigned_by')->where('estimate_id', $estimate->estimate_id)->get();
+            $advancePayment = AdvancePayment::where('estimate_id', $id)->first();
+            //$expenses = EstimateExpenses::where('estimate_id', $estimate->estimate_id)->get();
+
+            $estimateId = $estimate->estimate_id;
+            $expenses = EstimateExpenses::where('estimate_id', $estimateId)->get();
+
+            // Initialize an array to store vendor-wise totals
+            $vendorTotals = [];
+
+            foreach ($expenses as $expense) {
+                $vendorId = $expense->expense_vendor;
+
+                // If vendorId is not set in the array, initialize it
+                if (!isset($vendorTotals[$vendorId])) {
+                    $vendorTotals[$vendorId] = 0;
+                }
+
+                // Add the expense total to the vendor's total
+                $vendorTotals[$vendorId] += $expense->expense_total;
+            }
+
+            $expenseTotal = $expenses->sum('expense_total');
+            $itemTemplates = ItemTemplates::orderByRaw('CASE WHEN template_order IS NULL OR template_order = 0 THEN 1 ELSE 0 END, template_order ASC')->get();
+
+            $sumEstimateItems = EstimateItem::where('estimate_id', $id)->where('additional_item', '<>', 'yes')->get();
+            $profitFromEstimateItems = $sumEstimateItems->sum('item_total');
+
+            $profitCostEstimateItems = $sumEstimateItems->sum(function ($itemm) {
+                return $itemm->item_cost * $itemm->item_qty;
             });
 
-        $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')
-            ->where('estimate_id', $estimate->estimate_id)
-            ->where('additional_item', 'yes')
-            ->get();
+            $profitCost = $profitCostEstimateItems;
+            $profitItems = $profitFromEstimateItems;
 
-        $estimateAssemblyItems = EstimateItem::with('assemblies')
-            ->where('estimate_id', $estimate->estimate_id)
-            ->where('item_type', 'assemblies')
-            ->where('additional_item', '<>', 'yes')
-            ->get();
+            $budgetLabour = $profitItems;
+            $budgetLabour = $budgetLabour * (1 - $company->company_labor_budget);
 
-        // Calculate profit hours and assembly totals
-        $profitHours = EstimateItem::where('item_type', 'labour')
-            ->where('estimate_id', $id)
-            ->where('additional_item', '<>', 'yes')
-            ->sum('item_qty');
+            $budgetMaterial = $profitItems;
+            $budgetMaterial = $budgetMaterial * (1 - $company->company_material_budget);
 
-        $assemblyLabourTotalHours = 0;
-        $assemblyLabourTotal = 0;
-        $assemblyMaterialTotal = 0;
+            $budgetProfit = $budgetLabour + $budgetMaterial;
+            $budgetProfit = $profitItems - $budgetProfit - $expenseTotal;
 
-        foreach ($estimateAssemblyItems as $estimateAssemblyItem) {
-            $labourAssemblyItems = $estimateAssemblyItem->assemblies->where('ass_item_type', 'labour');
-            $materialAssemblyItems = $estimateAssemblyItem->assemblies->where('ass_item_type', 'material');
-            
-            $assemblyLabourTotalHours += $labourAssemblyItems->sum('ass_item_qty');
-            $assemblyLabourTotal += $labourAssemblyItems->sum('ass_item_total');
-            $assemblyMaterialTotal += $materialAssemblyItems->sum('ass_item_total');
-        }
+            $mainProfit = $profitItems - $profitCost - $expenseTotal;
+            if ($profitItems) {
+                $budgetMargin = $budgetProfit / $profitItems * 100;
+                $profitMargin = $mainProfit / $profitItems * 100;
+            } else {
+                $profitMargin = 0;
+                $budgetMargin = 0;
+            }
 
-        $profitHours += $assemblyLabourTotalHours;
+            // Calculate the sum of item_price for the estimate
+            $totalPrice = $sumEstimateItems->sum('item_price');
 
-        // Get reference data in optimized queries
-        $items = Items::select('id', 'item_name', 'item_type', 'item_price', 'item_cost')->get();
-        $groups = Groups::select('id', 'group_name')->get();
-        
-        // Optimize items queries with specific selects
-        $itemsForAssemblies = Items::select('id', 'item_name', 'item_type', 'item_price', 'item_cost')
-            ->whereIn('item_type', ['labour', 'material'])
-            ->get();
-            
-        $labourItems = Items::select('id', 'item_name', 'item_price', 'item_cost')
-            ->where('item_type', 'labour')
-            ->get();
-            
-        $materialItems = Items::select('id', 'item_name', 'item_price', 'item_cost')
-            ->where('item_type', 'material')
-            ->get();
-            
-        $assemblyItems = Items::select('id', 'item_name', 'item_price', 'item_cost')
-            ->where('item_type', 'assemblies')
-            ->get();
-
-        $users = User::select('id', 'name', 'email')
-            ->where('sts', 'active')
-            ->get();
-            
-        $emailTemplates = Email::select('id', 'template_name', 'template_subject', 'template_body')->get();
-
-        // Get related data
-        $payments = EstimatePayments::with('invoice:id,invoice_number,invoice_total')
-            ->where('estimate_id', $estimate->estimate_id)
-            ->get();
-            
-        $toDos = EstimateToDos::with([
-            'assigned_to:id,name', 
-            'assigned_by:id,name'
-        ])
-        ->where('estimate_id', $estimate->estimate_id)
-        ->get();
-
-        $advancePayment = AdvancePayment::where('estimate_id', $id)->first();
-
-        // Get expenses and calculate vendor totals
-        $expenses = EstimateExpenses::where('estimate_id', $estimate->estimate_id)->get();
-        $vendorTotals = $expenses->groupBy('expense_vendor')
-            ->map(function ($vendorExpenses) {
-                return $vendorExpenses->sum('expense_total');
-            })
-            ->toArray();
-
-        $expenseTotal = $expenses->sum('expense_total');
-
-        $itemTemplates = ItemTemplates::select('id', 'template_name', 'template_order')
-            ->orderByRaw('CASE WHEN template_order IS NULL OR template_order = 0 THEN 1 ELSE 0 END, template_order ASC')
-            ->get();
-
-        // Calculate financial metrics
-        $sumEstimateItems = EstimateItem::where('estimate_id', $id)
-            ->where('additional_item', '<>', 'yes')
-            ->get();
-
-        $profitFromEstimateItems = $sumEstimateItems->sum('item_total');
-        $profitCostEstimateItems = $sumEstimateItems->sum(function ($item) {
-            return $item->item_cost * $item->item_qty;
-        });
-
-        $profitCost = $profitCostEstimateItems;
-        $profitItems = $profitFromEstimateItems;
-        
-        // Budget calculations
-        $budgetLabour = $profitItems * (1 - $company->company_labor_budget);
-        $budgetMaterial = $profitItems * (1 - $company->company_material_budget);
-        $budgetProfit = $profitItems - $budgetLabour - $budgetMaterial - $expenseTotal;
-        $mainProfit = $profitItems - $profitCost - $expenseTotal;
-
-        // Calculate margins
-        if ($profitItems > 0) {
-            $budgetMargin = ($budgetProfit / $profitItems) * 100;
-            $profitMargin = ($mainProfit / $profitItems) * 100;
-        } else {
-            $profitMargin = 0;
-            $budgetMargin = 0;
-        }
-
-        $totalPrice = $sumEstimateItems->sum('item_price');
-
-        // Return optimized response structure
-        return response()->json([
-            'success' => true,
-            'data' => [
+            return response()->json([
+                'success' => true,
                 'estimate' => $estimate,
-                'company' => $company,
-                'financial_summary' => [
-                    'total_price' => $totalPrice,
-                    'profit_hours' => $profitHours,
-                    'profit_cost' => $profitCost,
-                    'main_profit' => $mainProfit,
-                    'profit_margin' => round($profitMargin, 2),
-                    'budget_labour' => $budgetLabour,
-                    'budget_material' => $budgetMaterial,
-                    'budget_profit' => $budgetProfit,
-                    'budget_margin' => round($budgetMargin, 2),
-                    'expense_total' => $expenseTotal,
-                    'vendor_totals' => $vendorTotals,
-                ],
-                'items' => [
-                    'estimate_items' => $estimateItems->values(),
-                    'estimate_additional_items' => $estimateAdditionalItems,
-                    'estimate_assembly_items' => $estimateAssemblyItems,
-                ],
-                'reference_data' => [
-                    'items' => $items,
-                    'groups' => $groups,
-                    'labour_items' => $labourItems,
-                    'material_items' => $materialItems,
-                    'assembly_items' => $assemblyItems,
-                    'items_for_assemblies' => $itemsForAssemblies,
-                    'item_templates' => $itemTemplates,
-                ],
-                'users_and_templates' => [
-                    'employees' => $users,
-                    'email_templates' => $emailTemplates,
-                ],
-                'related_data' => [
-                    'payments' => $payments,
-                    'todos' => $toDos,
-                    'expenses' => $expenses,
-                    'advance_payment' => $advancePayment,
-                ],
+                'items' => $items,
+                'labour_items' => $labourItems,
+                'material_items' => $materialItems,
+                'assembly_items' => $assemblyItems,
+                'estimate_items' => $estimateItems,
+                'estimate_assembly_items' => $estimateAssemblyItems,
                 'user_details' => $userDetails,
-            ]
-        ], 200);
-
-    } catch (\Exception $e) {
-        \Log::error('Error fetching estimate details: ' . $e->getMessage(), [
-            'estimate_id' => $id,
-            'trace' => $e->getTraceAsString()
-        ]);
-        
-        return response()->json([
-            'success' => false, 
-            'message' => 'An error occurred while fetching estimate details',
-            'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
-        ], 500);
+                'item_total' => $totalPrice, // Pass the total price to the view
+                'employees' => $users,
+                'groups' => $groups,
+                'email_templates' => $emailTemplates,
+                'payments' => $payments,
+                'toDos' => $toDos,
+                'expenses' => $expenses,
+                'itemsForAssemblies' => $itemsForAssemblies,
+                'item_templates' => $itemTemplates,
+                'profitHours' => $profitHours,
+                'profitCost' => $profitCost,
+                'mainProfit' => $mainProfit,
+                'profitMargin' => $profitMargin,
+                'budgetLabour' => $budgetLabour,
+                'budgetMaterial' => $budgetMaterial,
+                'budgetProfit' => $budgetProfit,
+                'budgetMargin' => $budgetMargin,
+                'expenseTotal' => $expenseTotal,
+                'vendorTotals' => $vendorTotals,
+                'advancePayment' => $advancePayment,
+                'estimateAdditionalItems' => $estimateAdditionalItems,             
+            ], 200);
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+            }
     }
-}
 
      public function updateEstimateDetail(Request $request)
     {
