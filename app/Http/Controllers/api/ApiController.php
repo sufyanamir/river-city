@@ -730,6 +730,7 @@ class ApiController extends Controller
                 
                 // Remove proposal_data from the response
                 unset($proposal->proposal_data);
+                unset($proposal->proposal_terms_and_conditions);
             }
 
             $estimateItems = EstimateItem::with('group', 'assemblies')
