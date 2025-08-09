@@ -203,10 +203,10 @@ class ApiController extends Controller
                 ],
                 'Todos' => $userToDos,
                 // 'estimateToDos' => $estimateToDos,
-                // 'schedules' => [
-                //     $schedules,
-                //     $estimates,
-                // ],
+                'schedules' => [
+                    $schedules,
+                    $estimates,
+                ],
                 // 'admins' => $admins,
                 // 'user_details' => $userDetails,
                 ]
@@ -472,7 +472,7 @@ class ApiController extends Controller
 
         if ($userDetails['user_role'] == 'admin') {
             $customers = Customer::get();
-            $query = Estimate::with('customer:customer_id,customer_first_name,customer_last_name,customer_email,branch,source', 'crew')->select('estimate_id', 'customer_id', 'customer_name', 'customer_phone', 'customer_address', 'billing_address', 'project_name', 'project_type', 'project_owner', 'estimate_status')
+            $query = Estimate::with('customer:customer_id,customer_first_name,customer_last_name,customer_email,branch,source', 'crew')->select('estimate_id', 'customer_id', 'complete_work_date', 'customer_name', 'customer_phone', 'customer_address', 'project_type', 'building_type', 'schedule_assigned', 'invoiced_payment', 'invoice_paid_total', 'estimate_status')
                 ->where('estimate_status', $status ? $status : 'pending');
 
             if ($branch) {
@@ -3515,6 +3515,49 @@ class ApiController extends Controller
         }
     }
 
+    public function getBranches(){
+        try {
+            $userDetails = auth()->user();
+            // $branches = CompanyBranches::select('branch_id', 'branch_name', 'branch_address', 'branch_city', 'branch_state', 'branch_zip_code')->get();
+            $branches = CompanyBranches::all();
+            return response()->json([
+                'success' => true,
+                'data' => $branches
+            ], 200);
+
+        }
+        catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    // OwerList Api
+    public function getUsersList(Request $request, $key = null){
+        // $userDetails = auth()->user();
+        $query = User::select('id', 'name', 'email', 'phone', 'address', 'user_image', 'departement', 'user_role');
+            if ($key) {
+                $query->where('user_role', $key);
+            }
+            $owner = $query->get();
+
+        // $owner = User::find($key);
+
+        // $addedUser = User::whereIn('added_user_id', $owner->pluck('id'))
+        //     ->select('id', 'name', 'email', 'phone', 'address', 'user_image', 'departement', 'user_role')
+        //     ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'owner' => $owner,
+                    // 'added_user' => $addedUser
+                ]
+            ], 200);
+
+    }
     // Log Out
     public function logout(Request $request)
     {
