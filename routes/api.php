@@ -115,6 +115,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/getUserOnSettings', [ApiController::class, 'getUserOnSettings']);
     Route::post('/updateSettings', [ApiController::class, 'updateSettings']);
 
+    // Company Branch
+    Route::get('/getBranches', [ApiController::class, 'getBranches']);
+    //Owner List
+    Route::get('/getUsersList/{key?}', [ApiController::class, 'getUsersList']);
+
     Route::post('/logout', [ApiController::class, 'logout']);
 });
 
