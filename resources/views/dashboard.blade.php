@@ -202,6 +202,11 @@
                     <div class=" py-4 px-2 my-2">
                         <form action="/addUserToDo" method="post">
                             @csrf
+                            <input type="hidden" value="{{session('user_Details.id')}}" name="assign_work[]" id="">
+                            <input type="hidden" name="start_date" value="{{ date('Y-m-d') }}">
+                            <input type="hidden" name="end_date" value="{{ date('Y-m-d') }}">
+                            <input type="hidden" name="note" value="">
+                            <input type="hidden" name="address" value="">
                             <div class=" flex justify-between">
                                 <input type="text" name="to_do_title" id="to_do_title" placeholder="Add New" autocomplete="given-name" class=" inline-block mb-2 w-full rounded-md border-0 text-gray-400 p-2 ring-0 border-b-2 focus:border-0 border-[#f5f5f5] placeholder:text-gray-400 outline-none focus:ring-0 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                                 <button class=" rounded-lg bg-[#930027] px-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]">
@@ -396,6 +401,11 @@
                 <div class=" py-4 px-2 my-2 h-64 overflow-scroll">
                     <form action="/addUserToDo" method="post">
                         @csrf
+                        <input type="hidden" name="assign_work[]" value="{{ session('user_details.id') }}">
+                        <input type="hidden" name="start_date" value="{{ date('Y-m-d') }}">
+                        <input type="hidden" name="end_date" value="{{ date('Y-m-d') }}">
+                        <input type="hidden" name="note" value="">
+                        <input type="hidden" name="address" value="No Address">
                         <div class=" flex justify-between">
                             <input type="text" name="to_do_title" id="to_do_title" placeholder="Add New" autocomplete="given-name" class=" inline-block mb-2 w-full rounded-md border-0 text-gray-400 p-2 ring-0 border-b-2 focus:border-0 border-[#f5f5f5] placeholder:text-gray-400 outline-none focus:ring-1  focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
                             <button class="rounded-lg h-10 flex justify-center items-center w-10 bg-[#930027] px-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]">
