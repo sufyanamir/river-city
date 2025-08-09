@@ -121,6 +121,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/getUsersList/{key?}', [ApiController::class, 'getUsersList']);
 
     Route::post('/logout', [ApiController::class, 'logout']);
+
+    Route::get('/getItems', [ApiController::class, 'getItems']);
 });
 
 

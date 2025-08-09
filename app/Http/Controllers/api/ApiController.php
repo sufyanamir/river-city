@@ -689,6 +689,20 @@ class ApiController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
+
+    public function getItems() {
+        try {
+            $items = Items::get();
+            $itemsForAssemblies = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
+            $labourItems = Items::where('item_type', 'labour')->get();
+            $materialItems = Items::where('item_type', 'material')->get();
+            $assemblyItems = Items::where('item_type', 'assemblies')->get();
+            return response()->json(['success' => true, 'items' => $items, 'itemsForAssemblies' => $itemsForAssemblies, 'labourItems' => $labourItems, 'materialItems' => $materialItems, 'assemblyItems' => $assemblyItems], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
     public function getEstimateDetails($id){
         try {
             $userDetails = auth()->user();
@@ -765,12 +779,12 @@ class ApiController extends Controller
 
             $profitHours += $assemblyLabourTotalHours;
 
-            $items = Items::get();
+            // $items = Items::get();
             $groups = Groups::get();
-            $itemsForAssemblies = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
-            $labourItems = Items::where('item_type', 'labour')->get();
-            $materialItems = Items::where('item_type', 'material')->get();
-            $assemblyItems = Items::where('item_type', 'assemblies')->get();
+            // $itemsForAssemblies = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
+            // $labourItems = Items::where('item_type', 'labour')->get();
+            // $materialItems = Items::where('item_type', 'material')->get();
+            // $assemblyItems = Items::where('item_type', 'assemblies')->get();
             $users = User::where('sts', 'active')->get();
             $emailTemplates = Email::get();
             $payments = EstimatePayments::with('invoice')->where('estimate_id', $estimate->estimate_id)->get();
@@ -833,10 +847,10 @@ class ApiController extends Controller
             return response()->json([
                 'success' => true,
                 'estimate' => $estimate,
-                'items' => $items,
-                'labour_items' => $labourItems,
-                'material_items' => $materialItems,
-                'assembly_items' => $assemblyItems,
+                // 'items' => $items,
+                // 'labour_items' => $labourItems,
+                // 'material_items' => $materialItems,
+                // 'assembly_items' => $assemblyItems,
                 'estimate_items' => $estimateItems,
                 'estimate_assembly_items' => $estimateAssemblyItems,
                 'user_details' => $userDetails,
@@ -847,7 +861,7 @@ class ApiController extends Controller
                 'payments' => $payments,
                 'toDos' => $toDos,
                 'expenses' => $expenses,
-                'itemsForAssemblies' => $itemsForAssemblies,
+                // 'itemsForAssemblies' => $itemsForAssemblies,
                 'item_templates' => $itemTemplates,
                 'profitHours' => $profitHours,
                 'profitCost' => $profitCost,
