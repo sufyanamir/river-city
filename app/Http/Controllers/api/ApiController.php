@@ -727,6 +727,9 @@ class ApiController extends Controller
                 } else {
                     $proposal->customer_signature = null;
                 }
+                
+                // Remove proposal_data from the response
+                unset($proposal->proposal_data);
             }
 
             $estimateItems = EstimateItem::with('group', 'assemblies')
