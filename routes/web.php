@@ -10,7 +10,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ItemTemplatesController;
 use App\Http\Controllers\NotificationsController;
-use App\Http\Controllers\ReportsController;//report controller
+use App\Http\Controllers\ReportsController; //report controller
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserToDoController;
 use App\Http\Controllers\BotManController;
@@ -246,7 +246,11 @@ Route::middleware('customauth')->group(function () {
     Route::post('/updatePayment', [EstimateController::class, 'updatePayment']);
     Route::match(['post', 'get'], '/deletePayment/{id}', [EstimateController::class, 'deletePayment']);
 
-Route::post('/save-edited-image', [EstimageImagesController::class, 'saveEditedImage']);
+    Route::post('/save-edited-image', [EstimageImagesController::class, 'saveEditedImage']);
+
+    Route::get('/saleAnalytics', function () {
+        return view('saleAnalytics');
+    });
 
 });
 Route::get('/forgotPassword', function () {

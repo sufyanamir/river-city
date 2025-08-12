@@ -248,6 +248,8 @@
                 :icon="'campaign-icon.svg'"></x-sidebar-links>
             <x-sidebar-links :class="'text-white sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/reports'" :title="'Reports'" :hoverIcon="'hover-reports-icon.svg'"
                 :icon="'reports-icon.svg'"></x-sidebar-links>
+            <x-sidebar-links :class="'text-white sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/saleAnalytics'" :title="'Sale Analytics'" :hoverIcon="'hover-reports-icon.svg'"
+                :icon="'reports-icon.svg'"></x-sidebar-links>
             <x-sidebar-links :class="'text-white sidebar-link p-2 mt-3 flex items-center rounded-md px-4 mx-5 duration-300 cursor-pointer hover:bg-[#edf2f7] hover:text-[#930027] '" :url="'/emails'" :title="'Email Templates'" :hoverIcon="'hover-emailTemplate-icon.svg'"
                 :icon="'emailTemplate-icon.svg'"></x-sidebar-links>
 
@@ -448,6 +450,8 @@
             {{-- Email Templates Link --}}
             @if (isset($userPrivileges->reports) && $userPrivileges->reports->view === 'on')
                 <x-sidebar-links :class="'text-white'" :url="'/reports'" :title="'Reports'" :hoverIcon="'hover-reports-icon.svg'"
+                    :icon="'reports-icon.svg'"></x-sidebar-links>
+                <x-sidebar-links :class="'text-white'" :url="'/saleAnalytics'" :title="'Sale Analytics'" :hoverIcon="'hover-reports-icon.svg'"
                     :icon="'reports-icon.svg'"></x-sidebar-links>
             @endif
             {{-- User Dropdown Menu --}}
