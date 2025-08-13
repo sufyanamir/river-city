@@ -248,14 +248,16 @@ h1, h2, h3, h4, h5 {
 
             <!-- Main Items Section -->
             <div class="itemDiv col-span-10 ml-2 overflow-auto rounded-lg border-[#0000004D] m-3">
-                @if ($estimate_items->count() > 0)
+                @if ( $estimate_items->count() > 0)
+
                     @foreach ($groupedItems as $groupName => $itemss)
-                    <div class="mb-2 bg-white  group-section">
+                    @if (($itemss[0]->group->include_est_total ?? 0) !== 0)
+                        <div class="mb-2 bg-white  group-section">
                         <!-- Group Header - Keep with content if possible -->
                         <div class="p-1 text-black w-full rounded-t-lg group-header">
                             <div class="inline-block">
                                 <div class="flex gap-3">
-                                    <h1 class="font-medium my-auto p-2 underline">{{$groupName}}</h1>
+                                    <h1 class="font-medium my-auto p-2 underline text-[16px]">{{$groupName}}</h1>
                                 </div>
                             </div>
                         </div>
@@ -337,6 +339,7 @@ h1, h2, h3, h4, h5 {
                             </div>
                         </div>
                     </div>
+                    @endif
                     @endforeach
                 @endif
             </div>
@@ -352,12 +355,15 @@ h1, h2, h3, h4, h5 {
             }
             @endphp
 
-            <div class="py-7 px-4 shadow-md rounded-lg border page-break-header">
-                <h1 class="font-bold">Additional Items</h1>
+
+                {{-- @if ($estimateAdditionalItems->count() > 0) --}}
+            <div class="py-7 px-4 page-break-header">
+                {{-- <h1 class="font-bold">Additional Items</h1> --}}
                 <div class="itemDiv col-span-10 ml-2 overflow-auto rounded-lg border-[#0000004D] m-3">
                     @if ($estimateAdditionalItems->count() > 0)
+                    <h1 class="text-[16px] font-bold">Additional Items</h1>
                         @foreach ($groupedItems as $groupName => $itemss)
-                        <div class="mb-2 bg-white shadow-xl group-section">
+                        <div class="mb-2 bg-white group-section">
                             <!-- Group Header - Keep with content if possible -->
                             <div class="p-1 bg-[#930027] text-white w-full rounded-t-lg group-header">
                                 <div class="inline-block">
