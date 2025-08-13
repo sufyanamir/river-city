@@ -53,6 +53,30 @@
         display: flex;
         flex-direction: column;
     }
+    /* Always transparent scrollbar */
+::-webkit-scrollbar {
+    width: 8px; /* keep space if needed */
+    background: transparent; /* transparent background */
+}
+
+::-webkit-scrollbar-thumb {
+    background: transparent; /* transparent thumb */
+}
+
+body {
+    scrollbar-width: none; /* Firefox hide */
+}
+
+/* When printing, remove scrollbar entirely */
+@media print {
+    body {
+        overflow: hidden !important;
+    }
+    ::-webkit-scrollbar {
+        display: none !important;
+    }
+}
+
 </style>
 <div class=" relative" id="grandDiv">
 
@@ -174,7 +198,7 @@
                             <div class=" itemDiv col-span-10 overflow-auto  rounded-lg border-[#0000004D]">
                                 @if (count($estimate_items) > 0)
                                 @foreach ($groupedItems as $groupName => $itemss)
-                                <div class="mb-2 bg-white shadow-xl">
+                                <div class="mb-2 bg-white">
                                     <div class=" group-card p-1 bg-white text-black w-full rounded-t-lg">
                                         <div class="">
                                             @if($groupName)
@@ -420,7 +444,7 @@
                             </div>
                             @endforeach
                             @if(count($upgrades) > 0)
-                            <div class="mb-2 bg-white shadow-xl">
+                            <div class="mb-2 bg-white ">
                                 <div class=" p-1 bg-[#930027] text-white w-full rounded-t-lg">
                                     <div class="inline-block">
                                         <div class="flex gap-3">

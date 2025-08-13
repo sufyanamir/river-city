@@ -61,8 +61,8 @@
 </div>
 <form action="/sendProposal" method="post" id="sendProposalForm">
     @csrf
-    <div class="my-4" id="printableArea">
-        <div class="bg-white w-full overflow-auto rounded-lg shadow-lg">
+    <div class="my-4 " id="printableArea">
+        <div class="bg-white w-full overflow-auto rounded-lg">
             <div class="grid grid-cols-12 p-5">
                 <div class="col-span-6 px-4 ">
                     <div class="projectLogo ">
@@ -155,7 +155,7 @@
                             <div class=" itemDiv col-span-10 overflow-auto  rounded-lg border-[#0000004D]">
                                 @if ($estimate_items->count() > 0)
                                 @foreach ($groupedItems as $groupName => $itemss)
-                                <div class="mb-2 bg-white shadow-xl">
+                                <div class="mb-2 bg-white">
                                     <div class=" group-card bg-white text-black">
                                         <div class="inline-block">
                                             @if($groupName)
@@ -275,7 +275,7 @@
                                 @endif
                             </div>
                             @if(count($upgrades) > 0)
-                            <div class="mb-2 bg-white shadow-xl">
+                            <div class="mb-2 bg-white">
                                 <div class=" p-1 bg-[#930027] text-white w-full rounded-t-lg">
                                     <div class="inline-block">
                                         <div class="flex gap-3">
@@ -440,7 +440,7 @@
 
                     </div>
                 </div>
-                <div class="mx-auto bg-white p-4 rounded-lg shadow-md w-[75vw] mx-2" id="editor-div">
+                <div class="bg-white p-4 rounded-lg grid px-3 col-span-10" id="editor-div">
                     @if($preview == null)
                     <textarea name="terms_and_conditions" id="editor" class="h-64 bg-white p-4 border border-gray-300 rounded-lg">
                     @endif
@@ -569,6 +569,7 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
             </div>
         </div>
 </form>
+</div>
 @include('layouts.footer')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 @php

@@ -1,4 +1,4 @@
-v<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -168,8 +168,8 @@ v<!DOCTYPE html>
                                 </td>
                                 <td class="px-6 py-4">
                                     @if(!empty($proposal->proposal_data))
-                                    <a href="{{ $proposal->proposal_status === 'pending' 
-                ? '/viewProposal?estimateId=' . $proposal->estimate_proposal_id 
+                                    <a href="{{ $proposal->proposal_status === 'pending'
+                ? '/viewProposal?estimateId=' . $proposal->estimate_proposal_id
                 : '/viewProposal?proposalId=' . $proposal->estimate_proposal_id }}{{ $proposal->group_id ? '&group_id=' . $proposal->group_id : '' }}">
                                         <button class="px-2 py-2 bg-blue-500 text-white rounded-md">View</button>
                                     </a>
@@ -205,8 +205,8 @@ v<!DOCTYPE html>
                             <span>{{ $proposal->proposal_status }}</span>
                         </div>
                         @if(!empty($proposal->proposal_data))
-                        <a href="{{ $proposal->proposal_status === 'pending' 
-            ? '/viewProposal?estimateId=' . $proposal->estimate_proposal_id 
+                        <a href="{{ $proposal->proposal_status === 'pending'
+            ? '/viewProposal?estimateId=' . $proposal->estimate_proposal_id
             : '/viewProposal?proposalId=' . $proposal->estimate_proposal_id }}{{ $proposal->group_id ? '&group_id=' . $proposal->group_id : '' }}">
                             <button class="w-full px-4 py-2 bg-blue-500 text-white rounded-md">View</button>
                         </a>
