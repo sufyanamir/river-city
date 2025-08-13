@@ -703,6 +703,30 @@ class ApiController extends Controller
         }
     }
 
+    public function getEstimateItems($id)
+    {
+        $estimate = Estimate::find($id);
+        if (!$estimate) {
+            return response()->json(['success' => false, 'message' => 'Estimate not found'], 404);
+        }
+
+        $estimateItems = EstimateItem::with('group', 'assemblies')
+                ->where('estimate_id', $estimate->estimate_id)
+                ->where('additional_item', '<>', 'yes')
+                ->get()
+                ->sortBy(function ($item) {
+                    // Push sort_order == 0 to the end
+                    return $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order;
+                });
+
+
+            $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
+
+            return response()->json(['success' => true, 'estimateItems' => $estimateItems, 'estimateAdditionalItems' => $estimateAdditionalItems], 200);
+
+
+    }
+
     public function getEstimateDetails($id){
         try {
             $userDetails = auth()->user();
@@ -851,8 +875,8 @@ class ApiController extends Controller
                 // 'labour_items' => $labourItems,
                 // 'material_items' => $materialItems,
                 // 'assembly_items' => $assemblyItems,
-                'estimate_items' => $estimateItems,
-                'estimate_assembly_items' => $estimateAssemblyItems,
+                // 'estimate_items' => $estimateItems,
+                // 'estimate_assembly_items' => $estimateAssemblyItems,
                 'user_details' => $userDetails,
                 'item_total' => $totalPrice, // Pass the total price to the view
                 'employees' => $users,
@@ -874,7 +898,7 @@ class ApiController extends Controller
                 'expenseTotal' => $expenseTotal,
                 'vendorTotals' => $vendorTotals,
                 'advancePayment' => $advancePayment,
-                'estimateAdditionalItems' => $estimateAdditionalItems,             
+                // 'estimateAdditionalItems' => $estimateAdditionalItems,             
             ], 200);
             } catch (\Exception $e) {
                 return response()->json(['success' => false, 'message' => $e->getMessage()], 400);

@@ -32,6 +32,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
    Route::get('/getEstimate',[ApiController::class, 'getEstimate']);//for Estimate
    Route::post('/CustomerAndEstimateAdd', [ApiController::class, 'CustomerAndEstimateAdd']); //Add estimate
    Route::get('/getEstimateDetails/{id}', [ApiController::class, 'getEstimateDetails']);//estimate details
+   Route::get('/getEstimateItems/{id}', [ApiController::class, 'getEstimateItems']);
+
 
    Route::get('/getEstimateActivity/{id}', [ApiController::class, 'getEstimateActivity']);
    Route::get('/viewEstimateMaterials/{id}', [ApiController::class, 'viewEstimateMaterials']);
