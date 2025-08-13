@@ -942,7 +942,7 @@ class ApiController extends Controller
             $estimate->building_type = $validatedData['building_type'];
             $estimate->customer_address = $validatedData['first_address'];
             $estimate->tax_rate = $validatedData['tax_rate'];
-            $estimate->project_owner = isset($user) && $user != null ? $user->name . ' ' . $user->last_name : '';
+            $estimate->project_owner = isset($user) && $user != null ? $user->name . ' ' . $user->last_name : $estimate->project_owner;
 
             $estimate->estimate_internal_note = $validatedData['internal_note'];
 
