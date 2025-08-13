@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdvancePayment;
+use App\Models\AssignPayment;
 use App\Models\Customer;
 use App\Models\Estimate;
+use App\Models\EstimatePayments;
 use App\Models\Groups;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -234,4 +237,121 @@ class ReportsController extends Controller
             'new_estimates_by_owner' => $newEstimatesByOwner,
         ]);
     }
+
+    public function saleAnalysis(Request $request)
+    {   
+        // 1. Total Sales and Revenue Analysis
+        $totalSales = Estimate::whereNotNull('estimate_total')->count();
+        $totalRevenue = Estimate::whereNotNull('estimate_total')->sum('estimate_total');
+        
+        // Daily sales
+        $dailySales = Estimate::whereNotNull('estimate_total')
+            ->whereDate('created_at', Carbon::today())
+            ->sum('estimate_total');
+
+        // Weekly sales
+        $weeklySales = Estimate::whereNotNull('estimate_total')
+            ->whereBetween('created_at', [
+                Carbon::now()->startOfWeek(),
+                Carbon::now()->endOfWeek()
+            ])
+            ->sum('estimate_total');
+
+        // Monthly sales
+        $monthlySales = Estimate::whereNotNull('estimate_total')
+            ->whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->sum('estimate_total');
+
+        // Yearly sales
+        $yearlySales = Estimate::whereNotNull('estimate_total')
+            ->whereYear('created_at', Carbon::now()->year)
+            ->sum('estimate_total');
+        
+
+        // 2. Paid vs Unpaid Invoices
+        $paidInvoices = AssignPayment::where('invoice_status', 'paid')->get();
+        $unpaidInvoices = AssignPayment::where('invoice_status', 'unpaid')->get();
+        
+        $totalInvoices = $paidInvoices->count() + $unpaidInvoices->count();
+        $paidInvoicesPercent = $totalInvoices > 0 ? round(($paidInvoices->count() / $totalInvoices) * 100) : 0;
+        $unpaidInvoicesPercent = $totalInvoices > 0 ? round(($unpaidInvoices->count() / $totalInvoices) * 100) : 0;
+        
+        $paidInvoicesTotal = $paidInvoices->sum('invoice_total');
+        $unpaidInvoicesTotal = $unpaidInvoices->sum('invoice_total');
+
+        // 3. Top 10 Highest Value Estimates
+        $topEstimates = Estimate::whereNotNull('estimate_total')
+            ->orderBy('estimate_total', 'desc')
+            ->take(10)
+            ->with('customer')
+            ->get();
+
+        // 4. Revenue by Project Type
+        $projectTypes = Estimate::get()
+            ->groupBy('project_type');
+
+        $revenueByProjectType = [];
+        $totalProjectRevenue = 0;
+
+        foreach ($projectTypes as $type => $estimates) {
+            $revenueByProjectType[$type] = $estimates->sum('estimate_total');
+            $totalProjectRevenue += $revenueByProjectType[$type];
+        }
+
+        $revenueByProjectTypePercent = [];
+        foreach ($revenueByProjectType as $type => $revenue) {
+            $revenueByProjectTypePercent[$type] = $totalProjectRevenue > 0 ? round(($revenue / $totalProjectRevenue) * 100) : 0;
+        }
+
+        // 5. Revenue by Building Type
+        $buildingTypes = Estimate::get()
+            ->groupBy('building_type');
+
+        $revenueByBuildingType = [];
+        $totalBuildingRevenue = 0;
+
+        foreach ($buildingTypes as $type => $estimates) {
+            $revenueByBuildingType[$type] = $estimates->sum('estimate_total');
+            $totalBuildingRevenue += $revenueByBuildingType[$type];
+        }
+
+        $revenueByBuildingTypePercent = [];
+        foreach ($revenueByBuildingType as $type => $revenue) {
+            $revenueByBuildingTypePercent[$type] = $totalBuildingRevenue > 0 ? round(($revenue / $totalBuildingRevenue) * 100) : 0;
+        }
+
+
+        // 5. Advance Payment Analysis
+        // $advancePayments = AdvancePayment::all();
+        // $totalAdvanceAmount = $advancePayments->sum('advance_payment');
+        // $totalEstimateAmount = $advancePayments->sum('estimate_total');
+        
+        // $advancePaidPercent = $totalEstimateAmount > 0 ? round(($totalAdvanceAmount / $totalEstimateAmount) * 100) : 0;
+        // $remainingPercent = 100 - $advancePaidPercent;
+
+        return view('saleAnalytics', [
+            'totalSales' => $totalSales,
+            'dailySales' => $dailySales,
+            'weeklySales' => $weeklySales,
+            'monthlySales' => $monthlySales,
+            'yearlySales' => $yearlySales,
+            'totalRevenue' => $totalRevenue,
+            'revenueByBuildingType' => $revenueByBuildingType,
+            'revenueByBuildingTypePercent' => $revenueByBuildingTypePercent,
+            'paidInvoicesPercent' => $paidInvoicesPercent,
+            'unpaidInvoicesPercent' => $unpaidInvoicesPercent,
+            'paidInvoicesTotal' => $paidInvoicesTotal,
+            'unpaidInvoicesTotal' => $unpaidInvoicesTotal,
+            'topEstimates' => $topEstimates,
+            'revenueByProjectType' => $revenueByProjectType,
+            'revenueByProjectTypePercent' => $revenueByProjectTypePercent,
+            // 'advancePaidPercent' => $advancePaidPercent,
+            // 'remainingPercent' => $remainingPercent,
+            // 'totalAdvanceAmount' => $totalAdvanceAmount,
+            // 'totalEstimateAmount' => $totalEstimateAmount
+        ]);
+    }
+
+
 }
