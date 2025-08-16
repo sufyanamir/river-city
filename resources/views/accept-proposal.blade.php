@@ -172,7 +172,7 @@
                             $groupedItems[$groupName][] = $groupItems;
                             }
                             @endphp
-                            <div class=" itemDiv col-span-10 overflow-auto  rounded-lg border-[#0000004D]">
+                            <div class=" itemDiv col-span-12  rounded-lg border-[#0000004D]">
                                 @if (count($estimate_items) > 0)
                                 @foreach ($groupedItems as $groupName => $itemss)
                                 <div class="mb-2 bg-white">

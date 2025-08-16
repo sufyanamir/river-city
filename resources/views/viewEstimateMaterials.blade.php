@@ -548,7 +548,7 @@ h1, h2, h3, h4, h5 {
             </div>
             @endforeach
             <hr>
-             <div class="py-7 px-4 shadow-md rounded-lg border">
+             <div class="py-7 px-4 rounded-lg border">
                     <h1 class="font-bold my-2">Lien Release</h1>
                     <p class="text-sm text-[#6b7280] repeating-header p-3" > The undersigned Lienor, in consideration of the final payment in the amount of <br>
                     $_______________________________, hereby waives and releases its lien and right to claim a lien for <br>
