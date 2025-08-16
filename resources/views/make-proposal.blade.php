@@ -440,7 +440,7 @@
 
                     </div>
                 </div>
-                <div class="bg-white p-4 rounded-lg grid px-3 col-span-10" id="editor-div">
+                <div class="bg-white p-4 rounded-lg grid px-3 col-span-12" id="editor-div">
                     @if($preview == null)
                     <textarea name="terms_and_conditions" id="editor" class="h-64 bg-white p-4 border border-gray-300 rounded-lg">
                     @endif
