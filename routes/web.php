@@ -248,7 +248,7 @@ Route::middleware('customauth')->group(function () {
 
     Route::post('/save-edited-image', [EstimageImagesController::class, 'saveEditedImage']);
 
-    Route::get('/saleAnalytics', [ReportsController::class, 'saleAnalysis']);
+    Route::get('/saleAnalytics', [ReportsController::class, 'saleAnalysis'])->name('saleAnalytics');
 
 
 });
