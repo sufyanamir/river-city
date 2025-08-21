@@ -7,6 +7,7 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Mail\AddUserMail;
 use App\Mail\ForgotPasswordMail;
 use App\Models\Company;
+use App\Models\CompanyBranches;
 use App\Models\Email;
 use App\Models\User;
 use App\Models\UserRole;
@@ -116,6 +117,36 @@ class UserController extends Controller
         }
     }
 
+    public function updateBranchTargets(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+            
+            // Check if user is admin
+            if ($userDetails['user_role'] !== 'admin') {
+                return response()->json(['success' => false, 'message' => 'Unauthorized access'], 403);
+            }
+
+            $validatedData = $request->validate([
+                'branch_targets' => 'required|array',
+                'branch_targets.*.branch_id' => 'required|exists:company_branches,branch_id',
+                'branch_targets.*.yearly_target' => 'nullable|numeric|min:0',
+            ]);
+
+            foreach ($validatedData['branch_targets'] as $branchData) {
+                $branch = CompanyBranches::where('branch_id', $branchData['branch_id'])->first();
+                if ($branch) {
+                    $branch->yearly_target = $branchData['yearly_target'];
+                    $branch->save();
+                }
+            }
+
+            return response()->json(['success' => true, 'message' => 'Branch targets updated successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
     // update UserDetails
     public function updateSettings(Request $request)
     {
@@ -176,8 +207,9 @@ class UserController extends Controller
 
         $user = User::find($userDetails['id']);
         $company = Company::first();
+        $branches = CompanyBranches::all();
 
-        return view('settings', ['user_details' => $user, 'company' => $company]);
+        return view('settings', ['user_details' => $user, 'company' => $company, 'branches' => $branches]);
     }
     // get user on setting
 

@@ -239,17 +239,37 @@ class ReportsController extends Controller
     }
 
     public function saleAnalysis(Request $request)
-    {   
-        // 1. Total Sales and Revenue Analysis
-        $totalSales = Estimate::whereNotNull('estimate_total')->count();
-        $totalRevenue = Estimate::whereNotNull('estimate_total')->sum('estimate_total');
-        
-        // Daily sales
+{   
+    // Get date parameters from request
+    $fromDate = $request->input('from_date');
+    $toDate = $request->input('to_date');
+    
+    // Create base query with optional date filtering
+    $baseQuery = Estimate::whereNotNull('estimate_total');
+    if ($fromDate && $toDate) {
+        $baseQuery->whereBetween('created_at', [
+            Carbon::parse($fromDate)->startOfDay(),
+            Carbon::parse($toDate)->endOfDay()
+        ]);
+    }
+    
+    // 1. Total Sales and Revenue Analysis
+    $totalSales = (clone $baseQuery)->count();
+    $totalRevenue = (clone $baseQuery)->sum('estimate_total');
+    
+    // For period-based sales, use original logic if no date filter is applied
+    if ($fromDate && $toDate) {
+        // If date range is provided, use the filtered data for all calculations
+        $dailySales = (clone $baseQuery)->sum('estimate_total');
+        $weeklySales = (clone $baseQuery)->sum('estimate_total');
+        $monthlySales = (clone $baseQuery)->sum('estimate_total');
+        $yearlySales = (clone $baseQuery)->sum('estimate_total');
+    } else {
+        // Original period-based calculations
         $dailySales = Estimate::whereNotNull('estimate_total')
             ->whereDate('created_at', Carbon::today())
             ->sum('estimate_total');
 
-        // Weekly sales
         $weeklySales = Estimate::whereNotNull('estimate_total')
             ->whereBetween('created_at', [
                 Carbon::now()->startOfWeek(),
@@ -257,101 +277,180 @@ class ReportsController extends Controller
             ])
             ->sum('estimate_total');
 
-        // Monthly sales
         $monthlySales = Estimate::whereNotNull('estimate_total')
             ->whereYear('created_at', Carbon::now()->year)
             ->whereMonth('created_at', Carbon::now()->month)
             ->sum('estimate_total');
 
-        // Yearly sales
         $yearlySales = Estimate::whereNotNull('estimate_total')
             ->whereYear('created_at', Carbon::now()->year)
             ->sum('estimate_total');
-        
-
-        // 2. Paid vs Unpaid Invoices
-        $paidInvoices = AssignPayment::where('invoice_status', 'paid')->get();
-        $unpaidInvoices = AssignPayment::where('invoice_status', 'unpaid')->get();
-        
-        $totalInvoices = $paidInvoices->count() + $unpaidInvoices->count();
-        $paidInvoicesPercent = $totalInvoices > 0 ? round(($paidInvoices->count() / $totalInvoices) * 100) : 0;
-        $unpaidInvoicesPercent = $totalInvoices > 0 ? round(($unpaidInvoices->count() / $totalInvoices) * 100) : 0;
-        
-        $paidInvoicesTotal = $paidInvoices->sum('invoice_total');
-        $unpaidInvoicesTotal = $unpaidInvoices->sum('invoice_total');
-
-        // 3. Top 10 Highest Value Estimates
-        $topEstimates = Estimate::whereNotNull('estimate_total')
-            ->orderBy('estimate_total', 'desc')
-            ->take(10)
-            ->with('customer')
-            ->get();
-
-        // 4. Revenue by Project Type
-        $projectTypes = Estimate::get()
-            ->groupBy('project_type');
-
-        $revenueByProjectType = [];
-        $totalProjectRevenue = 0;
-
-        foreach ($projectTypes as $type => $estimates) {
-            $revenueByProjectType[$type] = $estimates->sum('estimate_total');
-            $totalProjectRevenue += $revenueByProjectType[$type];
-        }
-
-        $revenueByProjectTypePercent = [];
-        foreach ($revenueByProjectType as $type => $revenue) {
-            $revenueByProjectTypePercent[$type] = $totalProjectRevenue > 0 ? round(($revenue / $totalProjectRevenue) * 100) : 0;
-        }
-
-        // 5. Revenue by Building Type
-        $buildingTypes = Estimate::get()
-            ->groupBy('building_type');
-
-        $revenueByBuildingType = [];
-        $totalBuildingRevenue = 0;
-
-        foreach ($buildingTypes as $type => $estimates) {
-            $revenueByBuildingType[$type] = $estimates->sum('estimate_total');
-            $totalBuildingRevenue += $revenueByBuildingType[$type];
-        }
-
-        $revenueByBuildingTypePercent = [];
-        foreach ($revenueByBuildingType as $type => $revenue) {
-            $revenueByBuildingTypePercent[$type] = $totalBuildingRevenue > 0 ? round(($revenue / $totalBuildingRevenue) * 100) : 0;
-        }
-
-
-        // 5. Advance Payment Analysis
-        // $advancePayments = AdvancePayment::all();
-        // $totalAdvanceAmount = $advancePayments->sum('advance_payment');
-        // $totalEstimateAmount = $advancePayments->sum('estimate_total');
-        
-        // $advancePaidPercent = $totalEstimateAmount > 0 ? round(($totalAdvanceAmount / $totalEstimateAmount) * 100) : 0;
-        // $remainingPercent = 100 - $advancePaidPercent;
-
-        return view('saleAnalytics', [
-            'totalSales' => $totalSales,
-            'dailySales' => $dailySales,
-            'weeklySales' => $weeklySales,
-            'monthlySales' => $monthlySales,
-            'yearlySales' => $yearlySales,
-            'totalRevenue' => $totalRevenue,
-            'revenueByBuildingType' => $revenueByBuildingType,
-            'revenueByBuildingTypePercent' => $revenueByBuildingTypePercent,
-            'paidInvoicesPercent' => $paidInvoicesPercent,
-            'unpaidInvoicesPercent' => $unpaidInvoicesPercent,
-            'paidInvoicesTotal' => $paidInvoicesTotal,
-            'unpaidInvoicesTotal' => $unpaidInvoicesTotal,
-            'topEstimates' => $topEstimates,
-            'revenueByProjectType' => $revenueByProjectType,
-            'revenueByProjectTypePercent' => $revenueByProjectTypePercent,
-            // 'advancePaidPercent' => $advancePaidPercent,
-            // 'remainingPercent' => $remainingPercent,
-            // 'totalAdvanceAmount' => $totalAdvanceAmount,
-            // 'totalEstimateAmount' => $totalEstimateAmount
-        ]);
     }
 
+    // 2. Paid vs Unpaid Invoices (with optional date filtering)
+    $paidInvoicesQuery = AssignPayment::where('invoice_status', 'paid');
+    $unpaidInvoicesQuery = AssignPayment::where('invoice_status', 'unpaid');
+    
+    if ($fromDate && $toDate) {
+        $paidInvoicesQuery->whereBetween('created_at', [
+            Carbon::parse($fromDate)->startOfDay(),
+            Carbon::parse($toDate)->endOfDay()
+        ]);
+        $unpaidInvoicesQuery->whereBetween('created_at', [
+            Carbon::parse($fromDate)->startOfDay(),
+            Carbon::parse($toDate)->endOfDay()
+        ]);
+    }
+    
+    $paidInvoices = $paidInvoicesQuery->get();
+    $unpaidInvoices = $unpaidInvoicesQuery->get();
+    
+    $totalInvoices = $paidInvoices->count() + $unpaidInvoices->count();
+    $paidInvoicesPercent = $totalInvoices > 0 ? round(($paidInvoices->count() / $totalInvoices) * 100) : 0;
+    $unpaidInvoicesPercent = $totalInvoices > 0 ? round(($unpaidInvoices->count() / $totalInvoices) * 100) : 0;
+    
+    $paidInvoicesTotal = $paidInvoices->sum('invoice_total');
+    $unpaidInvoicesTotal = $unpaidInvoices->sum('invoice_total');
+
+    // 3. Top 10 Highest Value Estimates (with optional date filtering)
+    $topEstimates = (clone $baseQuery)
+        ->orderBy('estimate_total', 'desc')
+        ->take(10)
+        ->with('customer')
+        ->get();
+        
+    // Top 10 Highest Value Estimates By Branch
+    $estimatesByBranch = [];
+    $branchesQuery = (clone $baseQuery)->with('customer')->get();
+    
+    // Group estimates by branch
+    foreach ($branchesQuery as $estimate) {
+        if ($estimate->customer) {
+            $branch = $estimate->customer->branch ?? 'Unspecified';
+            if (!isset($estimatesByBranch[$branch])) {
+                $estimatesByBranch[$branch] = [];
+            }
+            $estimatesByBranch[$branch][] = $estimate;
+        }
+    }
+    
+    // Sort estimates within each branch by value (descending) and take top 10
+    $topEstimatesByBranch = [];
+    foreach ($estimatesByBranch as $branch => $branchEstimates) {
+        // Convert to collection for better sorting
+        $collection = collect($branchEstimates);
+        
+        // Sort by estimate_total in descending order and take top 10
+        $topEstimatesByBranch[$branch] = $collection
+            ->sortByDesc('estimate_total')
+            ->take(10); // Reset array keys to 0, 1, 2, etc.
+    }
+
+    // 4. Revenue by Project Type (with optional date filtering)
+    $projectTypesQuery = Estimate::query();
+    if ($fromDate && $toDate) {
+        $projectTypesQuery->whereBetween('created_at', [
+            Carbon::parse($fromDate)->startOfDay(),
+            Carbon::parse($toDate)->endOfDay()
+        ]);
+    }
+    
+    $projectTypes = $projectTypesQuery->get()->groupBy('project_type');
+    $revenueByProjectType = [];
+    $totalProjectRevenue = 0;
+
+    foreach ($projectTypes as $type => $estimates) {
+        $revenueByProjectType[$type] = $estimates->sum('estimate_total');
+        $totalProjectRevenue += $revenueByProjectType[$type];
+    }
+
+    $revenueByProjectTypePercent = [];
+    foreach ($revenueByProjectType as $type => $revenue) {
+        $revenueByProjectTypePercent[$type] = $totalProjectRevenue > 0 ? round(($revenue / $totalProjectRevenue) * 100) : 0;
+    }
+
+    // 5. Revenue by Building Type (with optional date filtering)
+    $buildingTypesQuery = Estimate::query();
+    if ($fromDate && $toDate) {
+        $buildingTypesQuery->whereBetween('created_at', [
+            Carbon::parse($fromDate)->startOfDay(),
+            Carbon::parse($toDate)->endOfDay()
+        ]);
+    }
+    
+    $buildingTypes = $buildingTypesQuery->get()->groupBy('building_type');
+    $revenueByBuildingType = [];
+    $totalBuildingRevenue = 0;
+
+    foreach ($buildingTypes as $type => $estimates) {
+        $revenueByBuildingType[$type] = $estimates->sum('estimate_total');
+        $totalBuildingRevenue += $revenueByBuildingType[$type];
+    }
+
+    $revenueByBuildingTypePercent = [];
+    foreach ($revenueByBuildingType as $type => $revenue) {
+        $revenueByBuildingTypePercent[$type] = $totalBuildingRevenue > 0 ? round(($revenue / $totalBuildingRevenue) * 100) : 0;
+    }
+
+    return view('saleAnalytics', [
+        'totalSales' => $totalSales,
+        'dailySales' => $dailySales,
+        'weeklySales' => $weeklySales,
+        'monthlySales' => $monthlySales,
+        'yearlySales' => $yearlySales,
+        'totalRevenue' => $totalRevenue,
+        'revenueByBuildingType' => $revenueByBuildingType,
+        'revenueByBuildingTypePercent' => $revenueByBuildingTypePercent,
+        'paidInvoicesPercent' => $paidInvoicesPercent,
+        'unpaidInvoicesPercent' => $unpaidInvoicesPercent,
+        'paidInvoicesTotal' => $paidInvoicesTotal,
+        'unpaidInvoicesTotal' => $unpaidInvoicesTotal,
+        'topEstimates' => $topEstimates,
+        'topEstimatesByBranch' => $topEstimatesByBranch,
+        'revenueByProjectType' => $revenueByProjectType,
+        'revenueByProjectTypePercent' => $revenueByProjectTypePercent,
+        'fromDate' => $fromDate,
+        'toDate' => $toDate,
+    ]);
+}
+
+
+    public function invoiceDetails(Request $request, $status)
+    {
+        // Validate status parameter
+        if (!in_array($status, ['paid', 'unpaid'])) {
+            abort(404, 'Invalid status. Must be either "paid" or "unpaid".');
+        }
+        
+        // Get date parameters from request
+        $fromDate = $request->input('from_date');
+        $toDate = $request->input('to_date');
+        
+        // Create base query for invoices with the specified status
+        $invoicesQuery = AssignPayment::where('invoice_status', $status)
+            ->with(['estimate.customer']);
+        
+        // Apply date filtering if provided
+        if ($fromDate && $toDate) {
+            $invoicesQuery->whereBetween('created_at', [
+                Carbon::parse($fromDate)->startOfDay(),
+                Carbon::parse($toDate)->endOfDay()
+            ]);
+        } elseif ($fromDate) {
+            $invoicesQuery->whereDate('created_at', '>=', Carbon::parse($fromDate)->startOfDay());
+        } elseif ($toDate) {
+            $invoicesQuery->whereDate('created_at', '<=', Carbon::parse($toDate)->endOfDay());
+        }
+        
+        // Get the invoices ordered by most recent first
+        $invoices = $invoicesQuery->orderBy('created_at', 'desc')->get();
+        
+        return view('invoiceDetails', [
+            'invoices' => $invoices,
+            'status' => $status,
+            'fromDate' => $fromDate,
+            'toDate' => $toDate,
+        ]);
+    }
 
 }

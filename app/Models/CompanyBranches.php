@@ -22,6 +22,7 @@ class CompanyBranches extends Model
         'branch_zip_code',
         'branch_email',
         'branch_phone',
+        'yearly_target',
     ];
 
     public $timestamps = true;
