@@ -31,4 +31,9 @@ class AssignPayment extends Model
 
     public $timestamps = true;
 
+    public function estimate()
+    {
+        return $this->belongsTo(Estimate::class, 'estimate_id');
+    }
+
 }

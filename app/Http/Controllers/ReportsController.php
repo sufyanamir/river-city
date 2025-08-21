@@ -415,4 +415,42 @@ class ReportsController extends Controller
 }
 
 
+    public function invoiceDetails(Request $request, $status)
+    {
+        // Validate status parameter
+        if (!in_array($status, ['paid', 'unpaid'])) {
+            abort(404, 'Invalid status. Must be either "paid" or "unpaid".');
+        }
+        
+        // Get date parameters from request
+        $fromDate = $request->input('from_date');
+        $toDate = $request->input('to_date');
+        
+        // Create base query for invoices with the specified status
+        $invoicesQuery = AssignPayment::where('invoice_status', $status)
+            ->with(['estimate.customer']);
+        
+        // Apply date filtering if provided
+        if ($fromDate && $toDate) {
+            $invoicesQuery->whereBetween('created_at', [
+                Carbon::parse($fromDate)->startOfDay(),
+                Carbon::parse($toDate)->endOfDay()
+            ]);
+        } elseif ($fromDate) {
+            $invoicesQuery->whereDate('created_at', '>=', Carbon::parse($fromDate)->startOfDay());
+        } elseif ($toDate) {
+            $invoicesQuery->whereDate('created_at', '<=', Carbon::parse($toDate)->endOfDay());
+        }
+        
+        // Get the invoices ordered by most recent first
+        $invoices = $invoicesQuery->orderBy('created_at', 'desc')->get();
+        
+        return view('invoiceDetails', [
+            'invoices' => $invoices,
+            'status' => $status,
+            'fromDate' => $fromDate,
+            'toDate' => $toDate,
+        ]);
+    }
+
 }

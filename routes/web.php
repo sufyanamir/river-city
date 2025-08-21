@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BranchReportsController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmailController;
@@ -223,6 +224,13 @@ Route::middleware('customauth')->group(function () {
     Route::get('/settings', [UserController::class, 'getUserOnSettings']);
     Route::post('/updateSettings', [UserController::class, 'updateSettings']);
     Route::post('/updateCompany', [UserController::class, 'updateCompany']);
+    Route::post('/updateBranchTargets', [UserController::class, 'updateBranchTargets']);
+    
+    // Branch Reports Routes
+    Route::get('/branch-reports', [BranchReportsController::class, 'index'])->name('branch-reports.index');
+    Route::get('/branch-reports/weekly/{branchName?}/{year?}', [BranchReportsController::class, 'weeklyReport'])->name('branch-reports.weekly');
+    Route::get('/branch-reports/monthly/{branchName?}/{year?}', [BranchReportsController::class, 'monthlyReport'])->name('branch-reports.monthly');
+    Route::get('/api/branch-performance', [BranchReportsController::class, 'getBranchPerformanceData'])->name('api.branch-performance');
 
     Route::get('/getEmailToEdit/{id}', [EmailController::class, 'getEmailToEdit']);
     Route::post('/updateEmail', [EmailController::class, 'updateEmail']);
@@ -249,6 +257,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/save-edited-image', [EstimageImagesController::class, 'saveEditedImage']);
 
     Route::get('/saleAnalytics', [ReportsController::class, 'saleAnalysis'])->name('saleAnalytics');
+    Route::get('/invoiceDetails/{status}', [ReportsController::class, 'invoiceDetails'])->name('invoiceDetails');
 
 
 });

@@ -216,22 +216,36 @@
                             <h2 class="text-xl font-semibold mb-2 text-left">Invoice Status</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="my-auto">
-                                    <div class="bg-white p-4 flex justify-between rounded-lg shadow mb-4">
-                                        <h3 class="font-medium text-gray-700">Paid Invoices</h3>
-                                        <div>
-                                            <p class="text-2xl font-bold text-green-600">{{ $paidInvoicesPercent }}%</p>
-                                            <p class="text-sm text-gray-500">${{ number_format($paidInvoicesTotal, 2) }}
-                                            </p>
+                                    <a href="{{ route('invoiceDetails', ['status' => 'paid']) }}{{ request('from_date') || request('to_date') ? '?' . http_build_query(array_filter(['from_date' => request('from_date'), 'to_date' => request('to_date')])) : '' }}" class="block bg-white p-4 rounded-lg shadow mb-4 hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+                                        <div class="flex justify-between">
+                                            <h3 class="font-medium text-gray-700 flex items-center">
+                                                <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                                Paid Invoices
+                                            </h3>
+                                            <div class="text-right">
+                                                <p class="text-2xl font-bold text-green-600">{{ $paidInvoicesPercent }}%</p>
+                                                <p class="text-sm text-gray-500">${{ number_format($paidInvoicesTotal, 2) }}</p>
+                                                <p class="text-xs text-blue-600 mt-1">
+                                                    <i class="fas fa-external-link-alt mr-1"></i>View Details
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="bg-white p-4 flex justify-between rounded-lg shadow">
-                                        <h3 class="font-medium text-gray-700">Unpaid Invoices</h3>
-                                        <div>
-                                            <p class="text-2xl font-bold text-red-600">{{ $unpaidInvoicesPercent }}%</p>
-                                            <p class="text-sm text-gray-500">
-                                                ${{ number_format($unpaidInvoicesTotal, 2) }}</p>
+                                    </a>
+                                    <a href="{{ route('invoiceDetails', ['status' => 'unpaid']) }}{{ request('from_date') || request('to_date') ? '?' . http_build_query(array_filter(['from_date' => request('from_date'), 'to_date' => request('to_date')])) : '' }}" class="block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+                                        <div class="flex justify-between">
+                                            <h3 class="font-medium text-gray-700 flex items-center">
+                                                <i class="fas fa-clock text-red-600 mr-2"></i>
+                                                Unpaid Invoices
+                                            </h3>
+                                            <div class="text-right">
+                                                <p class="text-2xl font-bold text-red-600">{{ $unpaidInvoicesPercent }}%</p>
+                                                <p class="text-sm text-gray-500">${{ number_format($unpaidInvoicesTotal, 2) }}</p>
+                                                <p class="text-xs text-blue-600 mt-1">
+                                                    <i class="fas fa-external-link-alt mr-1"></i>View Details
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                                 <div class="mx-auto">
                                     <div class="bg-white my-2 rounded-2xl w-auto xl:w-[100%]">
