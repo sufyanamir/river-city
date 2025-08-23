@@ -518,6 +518,7 @@
                 <input type="hidden" name="discounted_total" value="{{ $discountedTotal }}">
                 <input type="hidden" name="proposal_type" value="{{ $group_id != null ? 'change_order' : 'estimate' }}">
                                         <input type="hidden" name="group_id" value="{{ $group_id }}">
+                            <input type="hidden" name="estimate_group_id" value="{{ $group_id }}">
                         @if($group_id)
                             @php
                                 // Determine if this is an estimate-specific group or global group
