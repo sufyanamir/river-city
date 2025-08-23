@@ -101,13 +101,6 @@ $modalTotal = 0;
                             <span class="pl-2">Estimate Pending Schedule
                             </span>
                         </p>
-                        {{-- <p class="mt-1 flex text-[#323C47] font-medium">
-                            <img src="{{ asset('assets/icons/person-icon.svg') }}" alt="">
-                        <span class="pl-2 flex">{{ $estimate->customer->owner }} Assigned To Schedule Estimate On <span class="pl-2 text-[#31A613] flex">
-                                <img class="pr-1" src="{{ asset('assets/icons/green-calendar.svg') }}" alt="">
-                                {{ $estimate->customer->created_at }}</span>
-                        </span>
-                        </p> --}}
                     </div>
                     <div class=" col-span-2 p-3 text-left sm:text-right md:text-right lg:text-right">
                         <p class="text-lg font-bold text-[#323C47]">
@@ -782,16 +775,6 @@ $userPrivileges->estimate->notes === 'on')
                         </form>
                         @endif
                         @endif
-                        {{-- <button type="button"
-                            class="flex h-[40px] w-[190px] ml-2  px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#F4AC50]"
-                            id=" action-menubutton" aria-expanded="true" aria-haspopup="true">
-                            <img class="h-[14px] w-[14px] my-auto mx-1"
-                                src="{{ asset('assets/icons/settings-icon.svg') }}" alt="">
-                        <span class=" my-auto">More</span>
-                        <svg class="-mr-1 h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-                        </svg>
-                        </button> --}}
                         <button id="copyButton" class="flex h-[40px] w-[190px] ml-2 p-2 py-auto text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#59A95E]">
                             <div class="flex mx-auto">
                                 <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
@@ -895,17 +878,6 @@ $userPrivileges->estimate->notes === 'on')
                                 <img class="h-[14px] w-[14px] my-auto mx-1" src="{{ asset('assets/icons/check-icon.svg') }}" alt="">
                                 <span class=" my-auto whitespace-nowrap">Send Proposal Again</span>
                             </button>
-                        <!-- <button type="button" class=" flex h-[40px] w-[190px] ml-2 px-12 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#4088CD]">
-                            <img class="h-[14px] w-[14px]  my-auto mx-1" src="{{ asset('assets/icons/emailTemplate-icon.svg') }}" alt="">
-                            <span class=" my-auto">Email</span>
-                        </button>
-                        <button type="button" class=" flex h-[40px] w-[190px] ml-2 px-auto px-5 py-2  text-[17px]/[19.92px] rounded-md text-white font-medium bg-[#E36152]">
-                            <svg class="h-[14px] w-[14px]  my-auto mx-1" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="3.5" y="3.5" width="7" height="7" fill="white" />
-                                <rect x="0.5" y="0.5" width="13" height="13" stroke="white" />
-                            </svg>
-                            <span class=" my-auto">Stop Campaign</span>
-                        </button> -->
                     </div>
                 </div>
             </div>
@@ -1037,8 +1009,25 @@ $userPrivileges->estimate->notes === 'on')
 
             $groupedItems = [];
             foreach ($estimate_items as $groupItems) {
-            $groupName = $groupItems->group->group_name ?? ''; // Use 'Other' if no group is associated
-            $groupedItems[$groupName][] = $groupItems;
+                // Get group name from either estimate group or global group
+                $groupName = '';
+                $group = null;
+                
+                if ($groupItems->estimate_group_id && $groupItems->estimateGroup) {
+                    $groupName = $groupItems->estimateGroup->group_name ?? '';
+                    $group = $groupItems->estimateGroup;
+                    $group->is_estimate_specific = true;
+                    // Ensure the group object has the correct ID field for JavaScript compatibility
+                    $group->group_id = $group->estimate_group_id;
+                } elseif ($groupItems->group_id && $groupItems->globalGroup) {
+                    $groupName = $groupItems->globalGroup->group_name ?? '';
+                    $group = $groupItems->globalGroup;
+                    $group->is_estimate_specific = false;
+                }
+                
+                // Add the group object to the item for use in the view
+                $groupItems->group = $group;
+                $groupedItems[$groupName][] = $groupItems;
             }
             @endphp
             <div class=" itemDiv col-span-10 ml-2 overflow-auto  rounded-lg border-[#0000004D] m-3">
@@ -1061,13 +1050,18 @@ $userPrivileges->estimate->notes === 'on')
                                 <!-- Display edit button only if the group has not been displayed before -->
                                 @php
                                 $displayedGroups[] = $group->group_id; // Add group to displayed groups
+                                $isEstimateSpecific = isset($group->is_estimate_specific) && $group->is_estimate_specific;
+                                $groupId = $isEstimateSpecific ? $group->estimate_group_id : $group->group_id;
+                                $formAction = $isEstimateSpecific ? '/editEstimateGroup' : '/editGroup';
+                                $inputName = $isEstimateSpecific ? 'estimate_group_id' : 'group_id';
+                                $modalTitle = $isEstimateSpecific ? 'Edit Estimate Group' : 'Edit Global Group';
                                 @endphp
 
                                 <div>
-                                    <button type="button" id="editGroup{{$group->group_id}}" class="inline">
+                                    <button type="button" id="editGroup{{$groupId}}" class="inline">
                                         <img class="" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                     </button>
-                                    <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="editGroup-modal{{$group->group_id}}">
+                                    <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="editGroup-modal{{$groupId}}">
                                         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                                             <!-- Background overlay -->
                                             <div class="fixed inset-0 transition-opacity" aria-hidden="true">
@@ -1077,13 +1071,13 @@ $userPrivileges->estimate->notes === 'on')
                                             <!-- Modal panel -->
                                             <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                                                 <div class=" ">
-                                                <form action="/editGroup" method="post" id="formData{{$group->group_id}}">
+                                                <form action="{{ $formAction }}" method="post" id="formData{{$groupId}}">
                                                     @csrf
-                                                    <input type="hidden" name="group_id" value="{{$group->group_id}}">
+                                                    <input type="hidden" name="{{ $inputName }}" value="{{ $groupId }}">
                                                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                                         <!-- Modal content here -->
                                                         <div class=" flex justify-between">
-                                                            <h2 class=" text-xl font-semibold mb-2 text-black" id="modal-title">Edit Group</h2>
+                                                            <h2 class=" text-xl font-semibold mb-2 text-black" id="modal-title">{{ $modalTitle }}</h2>
                                                             <button class="modal-close" type="button">
                                                                 <img src="{{ asset('assets/icons/close-icon.svg') }}" alt="icon">
                                                             </button>
@@ -1099,10 +1093,6 @@ $userPrivileges->estimate->notes === 'on')
                                                                     @endforeach
                                                                 </datalist>
                                                             </div>
-                                                            <!-- <div class="my-2">
-                                                                <label for="total_items">Total Items:</label>
-                                                                <input type="text" name="total_items" id="total_items" placeholder="Total Items" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                                            </div> -->
                                                             <div class=" my-2">
                                                                 <label for="group_type">Group Type:</label>
                                                                 <select id="group_type" name="group_type" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
@@ -1171,16 +1161,16 @@ $userPrivileges->estimate->notes === 'on')
                                         </div>
                                     </div>
                                     <script>
-                                        document.getElementById("editGroup{{$group->group_id}}").addEventListener("click", function(e) {
+                                        document.getElementById("editGroup{{$groupId}}").addEventListener("click", function(e) {
                                             e.preventDefault();
-                                            document.getElementById("editGroup-modal{{$group->group_id}}").classList.remove('hidden');
+                                            document.getElementById("editGroup-modal{{$groupId}}").classList.remove('hidden');
                                         });
 
                                         document.querySelectorAll(".modal-close").forEach(function(closeBtn) {
                                             closeBtn.addEventListener("click", function(e) {
                                                 e.preventDefault();
-                                                document.getElementById("editGroup-modal{{$group->group_id}}").classList.add('hidden');
-                                                document.getElementById("formData{{$group->group_id}}").reset();
+                                                document.getElementById("editGroup-modal{{$groupId}}").classList.add('hidden');
+                                                document.getElementById("formData{{$groupId}}").reset();
                                             });
                                         });
                                     </script>
@@ -1190,16 +1180,17 @@ $userPrivileges->estimate->notes === 'on')
                                 <div class=" relative">
                                     <h1 class=" font-medium my-auto p-2 inline-block">{{$groupName}}</h1>
                                     <div class=" z-10 inline-block absolute">
-                                        <button type="button" id="exclude-include-menuBtn{{$item->group_id}}" class="inline p-2">
+                                        <button type="button" id="exclude-include-menuBtn{{$groupId}}" class="inline p-2">
                                             <i class="fa-solid fa-square-caret-down text-[#fff] text-lg"></i>
                                         </button>
-                                        <div id="exclude-include-menu{{$item->group_id}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                        <div id="exclude-include-menu{{$groupId}}" class=" topbar-manuLeaving bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                                             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                                                 <li>
                                                     <form action="/includeexcludeEstimateItem" method="post">
                                                         @csrf
                                                         <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                        <input type="hidden" name="group_id" value="{{$item->group_id}}">
+                                                        <input type="hidden" name="estimate_group_id" value="{{$isEstimateSpecific ? $groupId : ''}}">
+                                                        <input type="hidden" name="group_id" value="{{!$isEstimateSpecific ? $groupId : ''}}">
                                                         <input type="hidden" name="item_status" value="included">
                                                         <input type="hidden" name="estimate_item_id" value="">
                                                         <button id="" class=" block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
@@ -1212,7 +1203,8 @@ $userPrivileges->estimate->notes === 'on')
                                                     <form action="/includeexcludeEstimateItem" method="post">
                                                         @csrf
                                                         <input type="hidden" name="estimate_id" value="{{$estimate->estimate_id}}">
-                                                        <input type="hidden" name="group_id" value="{{$item->group_id}}">
+                                                        <input type="hidden" name="estimate_group_id" value="{{$isEstimateSpecific ? $groupId : ''}}">
+                                                        <input type="hidden" name="group_id" value="{{!$isEstimateSpecific ? $groupId : ''}}">
                                                         <input type="hidden" name="item_status" value="excluded">
                                                         <input type="hidden" name="estimate_item_id" value="">
                                                         <button id="" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
@@ -1224,16 +1216,16 @@ $userPrivileges->estimate->notes === 'on')
                                         </div>
                                     </div>
                                     <script>
-                                        document.getElementById("exclude-include-menuBtn{{$item->group_id}}").addEventListener("click", function(e) {
+                                        document.getElementById("exclude-include-menuBtn{{$groupId}}").addEventListener("click", function(e) {
                                             e.stopPropagation(); // Prevents the click event from reaching the document body
-                                            var dropdownMenu = document.getElementById("exclude-include-menu{{$item->group_id}}");
+                                            var dropdownMenu = document.getElementById("exclude-include-menu{{$groupId}}");
                                             dropdownMenu.classList.toggle("topbar-menuEntring");
                                             dropdownMenu.classList.toggle("topbar-manuLeaving");
                                         });
 
                                         document.addEventListener('click', function(e) {
-                                            var btn = document.getElementById("exclude-include-menuBtn{{$item->group_id}}");
-                                            var dropdownMenu = document.getElementById("exclude-include-menu{{$item->group_id}}");
+                                            var btn = document.getElementById("exclude-include-menuBtn{{$groupId}}");
+                                            var dropdownMenu = document.getElementById("exclude-include-menu{{$groupId}}");
 
                                             if (!btn.contains(e.target) && !dropdownMenu.contains(e.target)) {
                                                 // Click occurred outside the button and dropdown, hide the dropdown
@@ -1617,10 +1609,6 @@ $userPrivileges->estimate->notes === 'on')
                                                             @endforeach
                                                         </datalist>
                                                     </div>
-                                                    <!-- <div class="my-2">
-                                                                <label for="total_items">Total Items:</label>
-                                                                <input type="text" name="total_items" id="total_items" placeholder="Total Items" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                                            </div> -->
                                                     <div class=" my-2">
                                                         <label for="group_type">Group Type:</label>
                                                         <select id="group_type" name="group_type" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
@@ -1647,24 +1635,6 @@ $userPrivileges->estimate->notes === 'on')
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <!-- <div class=" text-left col-span-2">
-                                                                <h3 class=" font-medium text-lg">Items:</h3>
-                                                                {{-- <select id="customer" name="customer" autocomplete="customer-name" class=" p-2 w-[92%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                                                                    <option>Item name</option>
-                                                                    <option>Interior</option>
-                                                                    <option>Exterior</option>
-                                                                    <option>Labour</option>
-                                                                </select> --}}
-                                                                {{-- ======multiple item inputs===== --}}
-                                                                <div id="muliple_items">
-                                                                </div>
-
-                                                                <div class=" text-right mt-2">
-                                                                    <button type="button" class=" gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="selectItems" aria-expanded="true" aria-haspopup="true">
-                                                                        <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                                                                    </button>
-                                                                </div>
-                                                            </div> -->
                                                     <div class="my-2 col-span-2 relative">
                                                         <label for="group_description">Description:</label>
                                                         <textarea name="group_description" id="group_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">{{$group->group_description}}</textarea>
@@ -1982,9 +1952,6 @@ $userPrivileges->estimate->items === 'on')
                             </button>
                         </li>
                         <hr>
-                        {{-- <li>
-                                <button id="addTemplate" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Template Name</button>
-                            </li> --}}
                         @foreach ($item_templates as $template)
                         <li>
                             <button id="addTemplate{{ $template->item_template_id }}" class="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $template->item_template_name }}
@@ -2074,10 +2041,6 @@ $userPrivileges->estimate->items === 'on')
                                                             @endforeach
                                                         </datalist>
                                                     </div>
-                                                    <!-- <div class="my-2">
-                                                        <label for="total_items">Total Items:</label>
-                                                        <input type="text" name="total_items" id="total_items" placeholder="Total Items" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                                    </div> -->
                                                     <div class=" my-2">
                                                         <label for="group_type">Group Type:</label>
                                                         <select id="group_type" name="group_type" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
@@ -2590,10 +2553,6 @@ $userPrivileges->estimate->items === 'on')
                                                             @endforeach
                                                         </datalist>
                                                     </div>
-                                                    <!-- <div class="my-2">
-                                                                <label for="total_items">Total Items:</label>
-                                                                <input type="text" name="total_items" id="total_items" placeholder="Total Items" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                                            </div> -->
                                                     <div class=" my-2">
                                                         <label for="group_type">Group Type:</label>
                                                         <select id="group_type" name="group_type" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
@@ -2620,24 +2579,6 @@ $userPrivileges->estimate->items === 'on')
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <!-- <div class=" text-left col-span-2">
-                                                                <h3 class=" font-medium text-lg">Items:</h3>
-                                                                {{-- <select id="customer" name="customer" autocomplete="customer-name" class=" p-2 w-[92%] outline-none rounded-md border-0 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                                                                    <option>Item name</option>
-                                                                    <option>Interior</option>
-                                                                    <option>Exterior</option>
-                                                                    <option>Labour</option>
-                                                                </select> --}}
-                                                                {{-- ======multiple item inputs===== --}}
-                                                                <div id="muliple_items">
-                                                                </div>
-
-                                                                <div class=" text-right mt-2">
-                                                                    <button type="button" class=" gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="selectItems" aria-expanded="true" aria-haspopup="true">
-                                                                        <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                                                                    </button>
-                                                                </div>
-                                                            </div> -->
                                                     <div class="my-2 col-span-2 relative">
                                                         <label for="group_description">Description:</label>
                                                         <textarea name="group_description" id="group_description" placeholder="Description" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">{{$group->group_description}}</textarea>
@@ -2970,11 +2911,6 @@ $userPrivileges->estimate->items === 'on')
                         @foreach ($estimate_items as $item)
                         @if ($item->item_type === 'labour')
                         <tr class="bg-white border-b">
-                            <!-- <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
-                                    <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                                </button>
-                            </th> -->
                             <td class="px-6 py-4 w-[60%]">
                                 {{ $item->item_name }}
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
@@ -3115,11 +3051,6 @@ $userPrivileges->estimate->items === 'on')
                         @foreach ($estimate_items as $item)
                         @if ($item->item_type === 'labour')
                         <tr class="bg-white border-b">
-                            <!-- <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
-                                    <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                                </button>
-                            </th> -->
                             <td class="px-6 py-4 w-[60%]">
                                 {{ $item->item_name }}
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
@@ -3259,11 +3190,6 @@ $userPrivileges->estimate->items === 'on')
                         @foreach ($estimate_items as $item)
                         @if ($item->item_type === 'material')
                         <tr class="bg-white border-b">
-                            <!-- <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
-                                    <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                                </button>
-                            </th> -->
                             <td class="px-2 py-4 w-[60%] text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px]">
                                 {{ $item->item_name }}
                                 <p class="text-[10px] md:text-[12px] lg:text-[12px] xl:text-[12px] text-[#323C47] font">
@@ -3402,11 +3328,6 @@ $userPrivileges->estimate->items === 'on')
                         @foreach ($estimate_items as $item)
                         @if ($item->item_type === 'material')
                         <tr class="bg-white border-b">
-                            <!-- <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                <button type="button" id="editEstimate-item{{ $item->estimate_item_id }}" class="inline">
-                                    <img class="h-[50px] w-[50px]" src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
-                                </button>
-                            </th> -->
                             <td class="px-6 py-4 w-[60%]">
                                 {{ $item->item_name }}
                                 <p class="text-[16px]/[18px] text-[#323C47] font">
@@ -5631,9 +5552,6 @@ $userPrivileges->estimate->expenses === 'on')
                                 </option>
                                 @endforeach
                             </select>
-                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                                <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                            </button> -->
                         </div>
                     </div>
                     <div>
@@ -5708,9 +5626,6 @@ $userPrivileges->estimate->expenses === 'on')
                             <p class=" font-medium items-center">Who will complete estimate?</p>
                             <input type="text" id="estimator_name" disabled value="{{ $user_details['name'] }}" name="estimator_name" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                             <input type="hidden" id="estimator_id" value="{{ $user_details['id'] }}" name="estimator_id" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                                <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                            </button> -->
                         </div>
                     </div>
                     <div id="dropdown-div" class="">
@@ -5722,9 +5637,6 @@ $userPrivileges->estimate->expenses === 'on')
                             </option>
                             @endforeach
                         </select>
-                        <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                        </button> -->
                     </div>
                     <div>
                         <p class=" font-medium inline-block items-center">When should it be completed?</p>
@@ -5788,16 +5700,10 @@ $userPrivileges->estimate->expenses === 'on')
                             <p class=" font-medium items-center">Who completed the work Order?</p>
                             <input type="text" id="estimator_name" disabled value="{{ $user_details['name'] }}" name="estimator_name" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                             <input type="hidden" id="work_completed_by" value="{{ $user_details['id'] }}" name="work_completed_by" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                                <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                            </button> -->
                         </div>
                         <div id="dropdown-div" class="">
                             <p class=" font-medium items-center">What is the complete work date?</p>
                             <input type="date" id="complete_work_date" name="complete_work_date" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                                <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                            </button> -->
                         </div>
                     </div>
                     <hr>
@@ -5810,9 +5716,6 @@ $userPrivileges->estimate->expenses === 'on')
                             </option>
                             @endforeach
                         </select>
-                        <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                        </button> -->
                     </div>
                     <div>
                         <p class=" font-medium inline-block items-center">When should it be completed?</p>
@@ -5875,9 +5778,6 @@ $userPrivileges->estimate->expenses === 'on')
                         <div id="dropdown-div" class="">
                             <p class=" font-medium items-center">What is the complete invoice date?</p>
                             <input type="date" id="complete_invoice_date" name="complete_invoice_date" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                                <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                            </button> -->
                         </div>
                     </div>
                     <hr>
@@ -5890,9 +5790,6 @@ $userPrivileges->estimate->expenses === 'on')
                             </option>
                             @endforeach
                         </select>
-                        <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                        </button> -->
                     </div>
                     <div>
                         <p class=" font-medium inline-block items-center">When should it be completed?</p>
@@ -5948,9 +5845,6 @@ $userPrivileges->estimate->expenses === 'on')
                     <!-- task details -->
                     <div id="dropdown-div" class="">
                         <label for="assiegne-estimate">Details:</label>
-                        <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                        </button> -->
                     </div>
                     <div class=" grid grid-cols-2 gap-3 mb-2">
                         <div>
@@ -5972,9 +5866,6 @@ $userPrivileges->estimate->expenses === 'on')
                     <div id="invoiceAmountDiv">
                         <div id="dropdown-div" class="">
                             <label for="assiegne-estimate">Amount:</label>
-                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                        </button> -->
                         </div>
                         <div class="grid grid-cols-3 gap-3">
                             <div class=" col-span-2 mx-auto mt-3">
@@ -5994,15 +5885,6 @@ $userPrivileges->estimate->expenses === 'on')
                                     <input id="custom_amount" type="radio" name="payment_option" value="custom" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600">
                                     <label for="custom_amount" class="block ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Custom Amount</label>
                                 </div>
-                                <!-- <label for="">%:</label>
-                            <select name="amount_percentage" id="amount_percentage" class="p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
-                                <option value="">Select</option>
-                                <option value="10%">10%</option>
-                                <option value="20%">20%</option>
-                                <option value="30%">30%</option>
-                                <option value="40%">40%</option>
-                                <option value="50%">50%</option>
-                            </select> -->
                             </div>
                             <div class="">
                                 <div>
@@ -6090,17 +5972,11 @@ $userPrivileges->estimate->expenses === 'on')
                             <p class=" font-medium items-center">Invoice:</p>
                             <input type="text" id="invoice" name="invoice" value="{{ $estimate->invoice->invoice_name }} (Due {{ $estimate->invoice->invoice_due }})" autocomplete="customer-name" class=" p-2 w-[100%] outline-none rounded-md border-0 py-1.5 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm sm:leading-6">
                             <input type="hidden" name="invoice_id" value="{{ $estimate->invoice->estimate_complete_invoice_id }}">
-                            <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                                <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                            </button> -->
                         </div>
                     </div>
                     <hr>
                     <div id="dropdown-div" class="">
                         <label for="assiegne-estimate">Details:</label>
-                        <!-- <button type="button" class="inline-flex justify-center gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="topbar-menubutton" aria-expanded="true" aria-haspopup="true">
-                            <img src="{{ asset('assets/icons/plus-icon.svg') }}" alt="icon">
-                        </button> -->
                     </div>
                     <div class=" grid grid-cols-2 gap-3">
                         <div>
@@ -6475,25 +6351,6 @@ $userPrivileges->estimate->expenses === 'on')
                         <div class=" my-0 col-span-12 hidden" id="multiAdd-items">
                             <div id="mulitple_input">
                                 <label for="" class="block text-left text-sm mb-1"> Assembly Name </label>
-                                <!-- <div id="item_main">
-                                    <select name="assembly_name[]" id="assembly_name" placeholder="Item Name" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                        <option value="">Select Item</option>
-                                        @foreach ($itemsForAssemblies as $item)
-                                        <option value="{{ $item->item_name }}" data-unit="{{ $item->item_units }}">{{ $item->item_name }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                    <div class=" grid grid-cols-2 gap-3 mt-2">
-                                        <div>
-                                            <input type="text" step="any" name="assembly_unit_by_item_unit[]" id="assembly_unit_by_item_unit" placeholder="00.0" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                            <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="unit">unit</span>/<span class="addedItemUnit">LNFT</span></span>
-                                        </div>
-                                        <div>
-                                            <input type="text" step="any" name="item_unit_by_assembly_unit[]" id="item_unit_by_assembly_unit" placeholder="00.0" autocomplete="given-name" class=" w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm">
-                                            <span class=" m-0 p-0 text-xs float-left text-gray-400"><span class="addedItemUnit">LNFT</span>/<span class="unit">unit</span></span>
-                                        </div>
-                                    </div>
-                                </div> -->
                             </div>
                             <div class=" text-right mt-2">
                                 <button type="button" class=" gap-x-1.5 rounded-lg bg-[#930027] px-2 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-[#930017]" id="addbtn" aria-expanded="true" aria-haspopup="true">
@@ -7017,14 +6874,6 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
 </script>
 <script>
     $(document).ready(function() {
-
-        // $('.deleteButton').click(function(event) {
-        //     if (confirm('Are you sure you want to delete?')) {
-        //         event.preventDefault();
-        //         $(this).closest('form').submit();
-        //     }
-        // });
-
         var estimateTotal = parseFloat("{{ $estimate->estimate_total }}");
         var totalPrice = parseFloat("{{ $totalPrice }}");
         estimateTotal = isNaN(estimateTotal) ? totalPrice : estimateTotal;
@@ -7116,13 +6965,7 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                             groupIdInput.val('');
                         }
                         console.log(itemData);
-                        // groupNameInput.val(itemData.group.group_name);
-                        // console.log(itemData);
-                        // console.log(itemData.item_units);
 
-                        // assemblyName.val(assemblyItemData.assembly_name);
-                        // assByItem.val(assemblyItemData.item_unit_by_ass_unit);
-                        // itemByAss.val(assemblyItemData.ass_unit_by_item_unit);
                         type.trigger('change');
 
                         let mulitple_input = $('#mulitple_input');
@@ -7200,20 +7043,6 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                                 $('[id^="item_unit_by_ass_unit_"]').trigger('input');
                             }
                         }
-                        // applyInputEventListenerForAssUnit();
-
-                        // Show/hide expense fields based on the selected item type
-                        // if (itemData.type === 'labour') {
-                        //     labourExpenseDiv.removeClass('hidden');
-                        //     materialExpenseDiv.addClass('hidden');
-                        // } else if (itemData.type === 'material') {
-                        //     labourExpenseDiv.addClass('hidden');
-                        //     materialExpenseDiv.removeClass('hidden');
-                        // } else {
-                        //     // Handle other item types if needed
-                        //     labourExpenseDiv.addClass('hidden');
-                        //     materialExpenseDiv.addClass('hidden');
-                        // }
                     },
                     error: function(error) {
                         console.error('Error fetching item data:', error);
@@ -7425,114 +7254,6 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                 }
             });
         });
-
-
-        // function applyInputEventListenerForAssUnit() {
-        //     $(document).on('input', '[id^="item_unit_by_ass_unit_"]', function() {
-        //         // Initialize variables to store total expenses for labour and material items
-        //         var totalLabourExpense = 0;
-        //         var totalMaterialExpense = 0;
-
-        //         // Iterate over each row
-        //         $('[id^="item_unit_by_ass_unit_"]').each(function() {
-        //             // Get the ID of the item_unit_by_ass_unit input for the current row
-        //             var itemId = $(this).attr('id').replace('item_unit_by_ass_unit_', '');
-
-        //             // Retrieve the selected option from the corresponding select element for the current row
-        //             var selectedOption = $('#assembly_id_' + itemId + ' option:selected');
-
-        //             // Retrieve data from the selected option for the current row
-        //             var itemType = selectedOption.data('item-type');
-        //             var labourExpense = selectedOption.data('labour-expense');
-        //             var materialExpense = selectedOption.data('material-expense');
-        //             var itemCost = selectedOption.data('item-cost');
-        //             var itemPrice = selectedOption.data('item-price');
-        //             var assitemIds = selectedOption.data('item-id');
-
-        //             var EstItemQty = $('#item_qty').val();
-
-        //             $('#ass_item_id_' + itemId).val(assitemIds);
-        //             // Get the value entered in the item_unit_by_ass_unit input for the current row
-        //             var itemUnitValue = parseFloat($(this).val());
-
-        //             // Perform calculations based on item type for the current row
-        //             if (itemType === 'labour') {
-        //                 if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-        //                     var calculatedValue = 1 / itemUnitValue;
-
-        //                     $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(2));
-        //                     // Update total labour expense for the current row
-        //                     totalLabourExpense += labourExpense / itemUnitValue;
-
-        //                     var assTotalQty = EstItemQty * calculatedValue;
-        //                     $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
-        //                 } else {
-        //                     $('#labour_expense').val('');
-        //                     $('#ass_unit_by_item_unit_' + itemId).val('');
-        //                     $('#total_qty_' + itemId).val('');
-        //                 }
-        //             } else if (itemType === 'material') {
-        //                 if (!isNaN(itemUnitValue) && itemUnitValue !== 0) {
-        //                     var calculatedValue = 1 / itemUnitValue;
-        //                     $('#ass_unit_by_item_unit_' + itemId).val(calculatedValue.toFixed(2));
-        //                     // Update total material expense for the current row
-        //                     totalMaterialExpense += calculatedValue * 1 * itemCost;
-
-        //                     var assTotalQty = EstItemQty * calculatedValue;
-        //                     $('#total_qty_' + itemId).val(assTotalQty.toFixed(2));
-        //                 } else {
-        //                     $('#material_expense').val('');
-        //                     $('#ass_unit_by_item_unit_' + itemId).val('');
-        //                     $('#total_qty_' + itemId).val('');
-        //                 }
-        //             }
-        //         });
-
-        //         // Set the total labour and material expenses in their respective inputs
-        //         $('#labour_expense').val(totalLabourExpense.toFixed(2));
-        //         $('#material_expense').val(totalMaterialExpense.toFixed(2));
-
-        //         // Calculate the sum of labour expense and material expense
-        //         var totalExpense = totalLabourExpense + totalMaterialExpense;
-
-        //         // Calculate the item cost as half of the total expense
-        //         var itemCost = totalExpense / 2;
-
-        //         // Set the total expense and item cost in their respective inputs
-        //         $('#item_price').val(totalExpense.toFixed(2));
-        //         $('#item_cost').val(itemCost.toFixed(2));
-        //     });
-        // }
-
-        // typeDropdown.on('change', function() {
-        //     var selectedValue = typeDropdown.val();
-
-        //     // Reset all fields
-        //     $('#labour_expense, #material_expense, #item_price').val('');
-
-        //     if (selectedValue === 'assemblies') {
-        //         multiAddItemsDiv.removeClass('hidden');
-        //         $('#labour_expense, #material_expense, #item_price').attr('readonly', true).addClass('bg-gray-200');
-        //     } else if (selectedValue === 'material') {
-        //         multiAddItemsDiv.addClass('hidden');
-        //         $('#labour_expense').attr('readonly', true).addClass('bg-gray-200');
-        //         $('#material_expense').removeClass('bg-gray-200').attr('readonly', false);
-        //         // $('#item_price').attr('readonly', true).addClass('bg-gray-200');
-        //     } else if (selectedValue === 'labour') {
-        //         multiAddItemsDiv.addClass('hidden');
-        //         unitItemInput.val('hour');
-        //         unitLabel.text('hour');
-        //         $('#material_expense').attr('readonly', true).addClass('bg-gray-200');
-        //         $('#labour_expense, #item_price').attr('readonly', false).removeClass('bg-gray-200');
-        //     } else {
-        //         // If none of the above, reset all fields
-        //         multiAddItemsDiv.addClass('hidden');
-        //         $('#labour_expense, #material_expense').attr('readonly', false).removeClass('bg-gray-200');
-        //         unitItemInput.val(null);
-        //         unitLabel.text('unit');
-        //         $('#item_price').attr('readonly', false).removeClass('bg-gray-200');
-        //     }
-        // });
     });
 </script>
 <script>

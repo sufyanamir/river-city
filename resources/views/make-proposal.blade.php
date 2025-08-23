@@ -148,8 +148,25 @@
 
                             $groupedItems = [];
                             foreach ($estimate_items as $groupItems) {
-                            $groupName = $groupItems->group->group_name ?? ''; // Use 'Other' if no group is associated
-                            $groupedItems[$groupName][] = $groupItems;
+                                // Get group name from either estimate group or global group
+                                $groupName = '';
+                                $group = null;
+                                
+                                if ($groupItems->estimate_group_id && $groupItems->estimateGroup) {
+                                    $groupName = $groupItems->estimateGroup->group_name ?? '';
+                                    $group = $groupItems->estimateGroup;
+                                    $group->is_estimate_specific = true;
+                                    // Ensure the group object has the correct ID field for JavaScript compatibility
+                                    $group->group_id = $group->estimate_group_id;
+                                } elseif ($groupItems->group_id && $groupItems->globalGroup) {
+                                    $groupName = $groupItems->globalGroup->group_name ?? '';
+                                    $group = $groupItems->globalGroup;
+                                    $group->is_estimate_specific = false;
+                                }
+                                
+                                // Add the group object to the item for use in the view
+                                $groupItems->group = $group;
+                                $groupedItems[$groupName][] = $groupItems;
                             }
                             @endphp
                             <div class=" itemDiv col-span-10 overflow-auto  rounded-lg border-[#0000004D]">
@@ -500,7 +517,21 @@
                 <input type="hidden" name="estimate_total" value="{{ $subTotal + ($subTotal * $estimate->tax_rate) / 100 }}">
                 <input type="hidden" name="discounted_total" value="{{ $discountedTotal }}">
                 <input type="hidden" name="proposal_type" value="{{ $group_id != null ? 'change_order' : 'estimate' }}">
-                <input type="hidden" name="group_id" value="{{ $group_id }}">
+                                        <input type="hidden" name="group_id" value="{{ $group_id }}">
+                        @if($group_id)
+                            @php
+                                // Determine if this is an estimate-specific group or global group
+                                $isEstimateSpecific = false;
+                                if ($estimate_items->count() > 0) {
+                                    $firstItem = $estimate_items->first();
+                                    if ($firstItem && $firstItem->estimate_group_id == $group_id) {
+                                        $isEstimateSpecific = true;
+                                    }
+                                }
+                            @endphp
+                            <input type="hidden" name="estimate_group_id" value="{{ $isEstimateSpecific ? $group_id : '' }}">
+                            <input type="hidden" name="group_id" value="{{ !$isEstimateSpecific ? $group_id : '' }}">
+                        @endif
                 <div class="col-span-12 p-4 flex justify-end mt-10" id="send-button">
                     <button class="bg-[#930027] text-white p-2 rounded-md hover:bg-red-900 " id="sendProposal-btn">Send Proposal</button>
                 </div>

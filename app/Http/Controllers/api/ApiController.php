@@ -11,6 +11,7 @@ use App\Models\EstimateItemTemplateItems;
 use App\Models\EstimateItemTemplates;
 use App\Models\Items;
 use App\Models\Groups;
+use App\Models\EstimateGroups;
 use App\Models\EstimateItem;
 use App\Models\EstimateItemAssembly;
 use App\Models\EstimateProposal;
@@ -710,7 +711,7 @@ class ApiController extends Controller
             return response()->json(['success' => false, 'message' => 'Estimate not found'], 404);
         }
 
-        $estimateItems = EstimateItem::with('group', 'assemblies')
+        $estimateItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')
                 ->where('estimate_id', $estimate->estimate_id)
                 ->where('additional_item', '<>', 'yes')
                 ->get()
@@ -720,7 +721,7 @@ class ApiController extends Controller
                 });
 
 
-            $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
+            $estimateAdditionalItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
 
             return response()->json(['success' => true, 'estimateItems' => $estimateItems, 'estimateAdditionalItems' => $estimateAdditionalItems], 200);
 
@@ -771,7 +772,7 @@ class ApiController extends Controller
                 unset($proposal->proposal_terms_and_conditions);
             }
 
-            $estimateItems = EstimateItem::with('group', 'assemblies')
+            $estimateItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')
                 ->where('estimate_id', $estimate->estimate_id)
                 ->where('additional_item', '<>', 'yes')
                 ->get()
@@ -781,7 +782,7 @@ class ApiController extends Controller
                 });
 
 
-            $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
+            $estimateAdditionalItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
 
             $profitHours = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->where('additional_item', '<>', 'yes')->sum('item_qty');
             $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->where('additional_item', '<>', 'yes')->get();
@@ -1176,7 +1177,7 @@ class ApiController extends Controller
 
     public function getEstimateItem($id){
         try{
-            $estimateItem = EstimateItem::with('group')->where('estimate_item_id', $id)->first();
+            $estimateItem = EstimateItem::with('estimateGroup', 'globalGroup')->where('estimate_item_id', $id)->first();
             $estimateItemAssembly = EstimateItemAssembly::where('estimate_item_id', $estimateItem->estimate_item_id)->get();
 
             return response()->json([
@@ -1618,15 +1619,18 @@ class ApiController extends Controller
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
 
         // Base query for estimate items
-        $itemsQuery = EstimateItem::with('group')
-            ->where('estimate_id', $estimate->estimate_id)
-            ->where('item_type', '<>', 'upgrades')
-            ->where('additional_item', '<>', 'yes')
-            ->where('item_status', 'included');
+                    $itemsQuery = EstimateItem::with('estimateGroup', 'globalGroup')
+                ->where('estimate_id', $estimate->estimate_id)
+                ->where('item_type', '<>', 'upgrades')
+                ->where('additional_item', '<>', 'yes')
+                ->where('item_status', 'included');
 
-        // If group_id is provided, filter by group_id
+        // If group_id is provided, filter by either group_id or estimate_group_id
         if ($group_id) {
-            $itemsQuery->where('group_id', $group_id);
+            $itemsQuery->where(function($query) use ($group_id) {
+                $query->where('group_id', $group_id)
+                      ->orWhere('estimate_group_id', $group_id);
+            });
         }
 
 
@@ -1734,7 +1738,10 @@ class ApiController extends Controller
                         $query->where('proposal_status', 'pending')
                             ->orWhere('proposal_status', 'accepted');
                     })->when($group_id, function ($query, $group_id) {
-                        return $query->where('group_id', $group_id);
+                        return $query->where(function($subQuery) use ($group_id) {
+                            $subQuery->where('group_id', $group_id)
+                                    ->orWhere('estimate_group_id', $group_id);
+                        });
                     })
                     ->orderByRaw("FIELD(proposal_status, 'pending', 'accepted')")
                     ->orderBy('created_at', 'desc')
@@ -1770,9 +1777,12 @@ class ApiController extends Controller
 
                 // Fetch the latest proposal with priority to 'pending' status
                 $latestProposal = EstimateProposal::where('estimate_proposal_id', $proposalId)
-                    ->when($group_id, function ($query, $group_id) {
-                        return $query->where('group_id', $group_id);
-                    })
+                                    ->when($group_id, function ($query, $group_id) {
+                    return $query->where(function($subQuery) use ($group_id) {
+                        $subQuery->where('group_id', $group_id)
+                                ->orWhere('estimate_group_id', $group_id);
+                    });
+                })
                     ->first();
                 $proposalData = json_decode($latestProposal->proposal_data, true);
                 // dd($latestProposal);
@@ -3359,7 +3369,7 @@ class ApiController extends Controller
         $itemTemplates = EstimateItemTemplates::with('templateItems')->where('estimate_id', $id)->get();
         $customer = Customer::where('customer_id', $estimate->customer_id)
         ->select('customer_id','added_user_id','customer_first_name','customer_last_name','customer_email','customer_phone','customer_city','customer_state','customer_zip_code','billing_address','billing_city','billing_state','billing_zip')->first();
-        $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
+                    $estimateAdditionalItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
         // return view('viewEstimateMaterials', ['estimate_items' => $materialItems, 'estimateAdditionalItems' => $estimateAdditionalItems, 'assemblies' => $estimateAssemblyItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
 
             return response()->json([
