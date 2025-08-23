@@ -241,7 +241,24 @@ h1, h2, h3, h4, h5 {
 
             $groupedItems = [];
             foreach ($estimate_items as $groupItems) {
-                $groupName = $groupItems->group->group_name ?? 'Other'; // Use 'Other' if no group is associated
+                // Get group name from either estimate group or global group
+                $groupName = '';
+                $group = null;
+                
+                if ($groupItems->estimate_group_id && $groupItems->estimateGroup) {
+                    $groupName = $groupItems->estimateGroup->group_name ?? '';
+                    $group = $groupItems->estimateGroup;
+                    $group->is_estimate_specific = true;
+                    // Ensure the group object has the correct ID field for JavaScript compatibility
+                    $group->group_id = $group->estimate_group_id;
+                } elseif ($groupItems->group_id && $groupItems->globalGroup) {
+                    $groupName = $groupItems->globalGroup->group_name ?? '';
+                    $group = $groupItems->globalGroup;
+                    $group->is_estimate_specific = false;
+                }
+                
+                // Add the group object to the item for use in the view
+                $groupItems->group = $group;
                 $groupedItems[$groupName][] = $groupItems;
             }
             @endphp
@@ -350,7 +367,24 @@ h1, h2, h3, h4, h5 {
 
             $groupedItems = [];
             foreach ($estimateAdditionalItems as $groupItems) {
-                $groupName = $groupItems->group->group_name ?? 'Other'; // Use 'Other' if no group is associated
+                // Get group name from either estimate group or global group
+                $groupName = '';
+                $group = null;
+                
+                if ($groupItems->estimate_group_id && $groupItems->estimateGroup) {
+                    $groupName = $groupItems->estimateGroup->group_name ?? '';
+                    $group = $groupItems->estimateGroup;
+                    $group->is_estimate_specific = true;
+                    // Ensure the group object has the correct ID field for JavaScript compatibility
+                    $group->group_id = $group->estimate_group_id;
+                } elseif ($groupItems->group_id && $groupItems->globalGroup) {
+                    $groupName = $groupItems->globalGroup->group_name ?? '';
+                    $group = $groupItems->globalGroup;
+                    $group->is_estimate_specific = false;
+                }
+                
+                // Add the group object to the item for use in the view
+                $groupItems->group = $group;
                 $groupedItems[$groupName][] = $groupItems;
             }
             @endphp

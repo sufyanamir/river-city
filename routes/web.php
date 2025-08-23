@@ -162,6 +162,7 @@ Route::middleware('customauth')->group(function () {
 
     Route::get('/group', [GroupController::class, 'getGroups']);
     Route::post('/editGroup', [GroupController::class, 'editGroup']);
+    Route::post('/editEstimateGroup', [EstimateController::class, 'editEstimateGroup']);
     Route::post('/addGroup', [GroupController::class, 'addGroup']);
     Route::match(['post', 'get'], '/delete/group/{id}', [GroupController::class, 'deleteGroup']);
     Route::get('/emails', function () {

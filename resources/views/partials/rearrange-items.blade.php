@@ -1,7 +1,19 @@
 @include('layouts.header')
 <div class="my-4 space-y-4" id="group-sortable-container">
     @php
-        $groupedItems = $estimateItems->groupBy('group.group_name');
+        $groupedItems = [];
+        foreach ($estimateItems as $item) {
+            // Get group name from either estimate group or global group
+            $groupName = '';
+            
+            if ($item->estimate_group_id && $item->estimateGroup) {
+                $groupName = $item->estimateGroup->group_name ?? '';
+            } elseif ($item->group_id && $item->globalGroup) {
+                $groupName = $item->globalGroup->group_name ?? '';
+            }
+            
+            $groupedItems[$groupName][] = $item;
+        }
     @endphp
 
     @foreach ($groupedItems as $groupName => $items)

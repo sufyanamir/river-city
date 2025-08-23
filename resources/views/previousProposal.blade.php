@@ -188,11 +188,38 @@ body {
                             $subTotal = 0;
                             @endphp
                             @php
-
                             $groupedItems = [];
                             foreach ($estimate_items as $groupItems) {
-                            $groupName = $groupItems['group']['group_name'] ?? ''; // Use 'Other' if no group is associated
-                            $groupedItems[$groupName][] = $groupItems;
+                                // Get group name from either estimate group or global group
+                                $groupName = '';
+                                $group = null;
+                                
+                                // Check for estimate group first
+                                if (!empty($groupItems['estimate_group_id']) && 
+                                    isset($groupItems['estimate_group']) && 
+                                    is_array($groupItems['estimate_group']) && 
+                                    !empty($groupItems['estimate_group'])) {
+                                    
+                                    $groupName = $groupItems['estimate_group']['group_name'] ?? '';
+                                    $group = $groupItems['estimate_group'];
+                                    $group['is_estimate_specific'] = true;
+                                    // Ensure the group object has the correct ID field for JavaScript compatibility
+                                    $group['group_id'] = $group['estimate_group_id'] ?? null;
+                                }
+                                // Check for global group if estimate group is not found
+                                elseif (!empty($groupItems['group_id']) && 
+                                        isset($groupItems['global_group']) && 
+                                        is_array($groupItems['global_group']) && 
+                                        !empty($groupItems['global_group'])) {
+                                    
+                                    $groupName = $groupItems['global_group']['group_name'] ?? '';
+                                    $group = $groupItems['global_group'];
+                                    $group['is_estimate_specific'] = false;
+                                }
+                                
+                                // Add the group object to the item for use in the view
+                                $groupItems['group'] = $group;
+                                $groupedItems[$groupName][] = $groupItems;
                             }
                             @endphp
                             <div class=" itemDiv col-span-12  rounded-lg border-[#0000004D]">

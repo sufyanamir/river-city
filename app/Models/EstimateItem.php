@@ -11,6 +11,20 @@ class EstimateItem extends Model
 
     public function group()
     {
+        // First try to get estimate-specific group, fallback to global group
+        if ($this->estimate_group_id) {
+            return $this->belongsTo(EstimateGroups::class, 'estimate_group_id');
+        }
+        return $this->belongsTo(Groups::class, 'group_id');
+    }
+
+    public function estimateGroup()
+    {
+        return $this->belongsTo(EstimateGroups::class, 'estimate_group_id');
+    }
+
+    public function globalGroup()
+    {
         return $this->belongsTo(Groups::class, 'group_id');
     }
 
@@ -42,6 +56,7 @@ class EstimateItem extends Model
         'upgrade_status',
         'item_status',
         'group_id',
+        'estimate_group_id',
         'additional_item',
     ];
 

@@ -32,6 +32,7 @@ use App\Models\EstimateProposal;
 use App\Models\EstimateSchedule;
 use App\Models\EstimateToDos;
 use App\Models\Groups;
+use App\Models\EstimateGroups;
 use App\Models\ItemAssembly;
 use App\Models\Items;
 use App\Models\ItemTemplateItems;
@@ -190,7 +191,7 @@ class EstimateController extends Controller
         try {
             $estimate = Estimate::where('estimate_id', $id)->first();
 
-            $estimateItems = EstimateItem::with('group')
+            $estimateItems = EstimateItem::with('estimateGroup', 'globalGroup')
                 ->where('estimate_id', $id)
                 ->get()
                 ->sortBy(function ($item) {
@@ -465,11 +466,20 @@ class EstimateController extends Controller
                 'estimate_item_id' => 'nullable',
                 'item_status' => 'required',
                 'group_id' => 'nullable',
+                'estimate_group_id' => 'nullable',
             ]);
 
             if (isset($validatedData['group_id']) && $validatedData['group_id'] != null) {
-
+                // Handle global groups
                 $estimateItems = EstimateItem::where('group_id', $validatedData['group_id'])->get();
+
+                foreach ($estimateItems as $item) {
+                    $item->item_status = $validatedData['item_status'];
+                    $item->save();
+                }
+            } elseif (isset($validatedData['estimate_group_id']) && $validatedData['estimate_group_id'] != null) {
+                // Handle estimate-specific groups
+                $estimateItems = EstimateItem::where('estimate_group_id', $validatedData['estimate_group_id'])->get();
 
                 foreach ($estimateItems as $item) {
                     $item->item_status = $validatedData['item_status'];
@@ -507,7 +517,7 @@ class EstimateController extends Controller
         $upgrades = EstimateItem::with('assemblies')->where('estimate_id', $id)->where('item_type', 'upgrades')->where('upgrade_status', 'accepted')->where('additional_item', '<>', 'yes')->get();
         $itemTemplates = EstimateItemTemplates::with('templateItems')->where('estimate_id', $id)->get();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
-        $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
+                    $estimateAdditionalItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
         return view('viewEstimateMaterials', ['estimate_items' => $materialItems, 'estimateAdditionalItems' => $estimateAdditionalItems, 'assemblies' => $estimateAssemblyItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
     }
     // view Estimate Materials
@@ -724,19 +734,16 @@ class EstimateController extends Controller
                 'group_name' => 'nullable',
             ]);
             if (isset($validatedData['group_name']) && $validatedData['group_name'] != null) {
-                $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
-                if (!$groupDetail) {
-                    $groupDetail = Groups::create([
-                        'group_name' => $validatedData['group_name'],
-                        'group_type' => 'assemblies',
-                        'show_unit_price' => 1,
-                        'show_quantity' => 1,
-                        'show_total' => 1,
-                        'show_group_total' => 1,
-                        'include_est_total' => 1,
-                    ]);
-                }
+                // Create or get estimate-specific group
+                $groupDetail = EstimateGroups::getOrCreate(
+                    $validatedData['estimate_id'],
+                    $validatedData['group_name'],
+                    $userDetails['id']
+                );
+                $groupId = null;
+                $estimateGroupId = $groupDetail->estimate_group_id;
             } else {
+                // Use global 'Single' group
                 $groupDetail = Groups::where('group_name', 'Single')->first();
                 if (!$groupDetail) {
                     $groupDetail = Groups::create([
@@ -749,6 +756,8 @@ class EstimateController extends Controller
                         'include_est_total' => 1,
                     ]);
                 }
+                $groupId = $groupDetail->group_id;
+                $estimateGroupId = null;
             }
 
             // $estTemplate = EstimateItemTemplates::create([
@@ -803,7 +812,8 @@ class EstimateController extends Controller
                                 'item_Description' => $item->item_description,
                                 'item_note' => $item->item_note,
                                 // 'is_upgrade' => $validatedData['is_upgrade'],
-                                'group_id' => $groupDetail != null ? $groupDetail->group_id : $item->group_ids,
+                                'group_id' => $groupId,
+                                'estimate_group_id' => $estimateGroupId,
                             ]);
 
                             if ($item->item_type == 'assemblies') {
@@ -2447,12 +2457,20 @@ class EstimateController extends Controller
                             }
                         }
 
-                        // Update include_est_total
+                        // Update include_est_total for both global groups and estimate-specific groups
                         if ($type === 'acceptAll' || $type === 'rejectAll') {
-                            $group = Groups::where('group_id', $groupId)->first();
-                            if ($group) {
-                                $group->include_est_total = $type === 'acceptAll' ? 1 : 0;
-                                $group->save();
+                            // First try to find estimate-specific group
+                            $estimateGroup = EstimateGroups::where('estimate_group_id', $groupId)->first();
+                            if ($estimateGroup) {
+                                $estimateGroup->include_est_total = $type === 'acceptAll' ? 1 : 0;
+                                $estimateGroup->save();
+                            } else {
+                                // Fallback to global group
+                                $globalGroup = Groups::where('group_id', $groupId)->first();
+                                if ($globalGroup) {
+                                    $globalGroup->include_est_total = $type === 'acceptAll' ? 1 : 0;
+                                    $globalGroup->save();
+                                }
                             }
                         }
                     }
@@ -2689,13 +2707,14 @@ class EstimateController extends Controller
                     'terms_and_conditions' => 'required',
                     'discounted_total' => 'nullable',
                     'proposal_type' => 'nullable',
-                    'group_id' => 'nullable'
+                    'group_id' => 'nullable',
+                    'estimate_group_id' => 'nullable',
                 ]);
                 $group_id = $validatedData['group_id'];
                 $preview = null;
                 // Prepare the proposal data
                 $estimateCustomer = Estimate::where('estimate_id', $validatedData['estimate_id'])->pluck('customer_id')->first();
-                $data = $this->prepareProposalData($validatedData['estimate_id'], $preview, $group_id);
+                $data = $this->prepareProposalData($validatedData['estimate_id'], $preview, $validatedData['estimate_group_id'] ?? $group_id,);
                 $data['terms_and_conditions'] = $validatedData['terms_and_conditions'];
 
                 // Set estimate_total and customer_signature to null
@@ -2724,7 +2743,7 @@ class EstimateController extends Controller
                     'branch' => $estimate->customer->branch,
                     'attachments' => [],
                 ];
-                if ($group_id == null) {
+                if ($group_id == null && $validatedData['estimate_group_id'] == null) {
                     $estimate->estimate_total = null;
                     $estimate->discounted_total = $validatedData['discounted_total'];
                     $estimate->save();
@@ -2769,7 +2788,7 @@ class EstimateController extends Controller
                 // Send a copy to the company (already included in CC, but for safety)
                 // $zapierData['email_to'] = 'office@rivercitypaintinginc.com';
                 // Http::post('https://hooks.zapier.com/hooks/catch/17891889/2q9xn0t/', $zapierData);
-                if ($validatedData['group_id'] == null) {
+                if ($validatedData['group_id'] == null && $validatedData['estimate_group_id'] == null) {
                     $existingProposals = EstimateProposal::where('estimate_id', $validatedData['estimate_id'])->get();
                     if (!$existingProposals->isEmpty()) {
                         $existingProposals->each(function ($proposal) {
@@ -2785,7 +2804,7 @@ class EstimateController extends Controller
                     'proposal_data' => $jsonData,
                     'proposal_terms_and_conditions' => $validatedData['terms_and_conditions'],
                     'proposal_type' => $validatedData['proposal_type'],
-                    'group_id' => $validatedData['group_id'],
+                    'group_id' => $validatedData['estimate_group_id'] ?? $validatedData['group_id'],
                 ]);
 
                 // Log activity
@@ -2825,15 +2844,18 @@ class EstimateController extends Controller
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
 
         // Base query for estimate items
-        $itemsQuery = EstimateItem::with('group')
+        $itemsQuery = EstimateItem::with('estimateGroup', 'globalGroup')
             ->where('estimate_id', $estimate->estimate_id)
             ->where('item_type', '<>', 'upgrades')
             ->where('additional_item', '<>', 'yes')
             ->where('item_status', 'included');
 
-        // If group_id is provided, filter by group_id
+        // If group_id is provided, filter by either group_id or estimate_group_id
         if ($group_id) {
-            $itemsQuery->where('group_id', $group_id);
+            $itemsQuery->where(function($query) use ($group_id) {
+                $query->where('group_id', $group_id)
+                      ->orWhere('estimate_group_id', $group_id);
+            });
         }
 
 
@@ -3077,22 +3099,16 @@ class EstimateController extends Controller
             $estimateItem = EstimateItem::where('estimate_item_id', $validatedData['item_id'])->first();
             $estimateItemAssembly = EstimateItemAssembly::where('estimate_item_id', $estimateItem->estimate_item_id)->get();
             if (isset($validatedData['group_name']) && $validatedData['group_name'] != null) {
-                $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
-                if (!$groupDetail) {
-                    $newGroup = Groups::create([
-                        'group_name' => $validatedData['group_name'],
-                        'group_type' => 'assemblies',
-                        'show_unit_price' => 1,
-                        'show_quantity' => 1,
-                        'show_total' => 1,
-                        'show_group_total' => 1,
-                        'include_est_total' => 1,
-                    ]);
-                    $estimateItem->group_id = $newGroup->group_id;
-                } else {
-                    $estimateItem->group_id = $groupDetail->group_id;
-                }
+                // Create or get estimate-specific group
+                $groupDetail = EstimateGroups::getOrCreate(
+                    $validatedData['estimate_id'],
+                    $validatedData['group_name'],
+                    $userDetails['id']
+                );
+                $estimateItem->group_id = null;
+                $estimateItem->estimate_group_id = $groupDetail->estimate_group_id;
             } else {
+                // Use global 'Single' group
                 $groupDetail = Groups::where('group_name', 'Single')->first();
                 if (!$groupDetail) {
                     $groupDetail = Groups::create([
@@ -3106,6 +3122,7 @@ class EstimateController extends Controller
                     ]);
                 }
                 $estimateItem->group_id = $groupDetail->group_id;
+                $estimateItem->estimate_group_id = null;
             }
 
             $estimateItem->item_name = $validatedData['item_name'];
@@ -3180,7 +3197,7 @@ class EstimateController extends Controller
     // get estimate item details for edit
     public function getEstimateItem($id)
     {
-        $estimateItem = EstimateItem::with('group')->where('estimate_item_id', $id)->first();
+                    $estimateItem = EstimateItem::with('estimateGroup', 'globalGroup')->where('estimate_item_id', $id)->first();
         $estimateItemAssembly = EstimateItemAssembly::where('estimate_item_id', $estimateItem->estimate_item_id)->get();
 
         return response()->json(['success' => true, 'item_detail' => $estimateItem, 'assembly_items' => $estimateItemAssembly], 200);
@@ -3232,19 +3249,16 @@ class EstimateController extends Controller
             //     ];
             // }
             if (isset($validatedData['group_name']) && $validatedData['group_name'] != null) {
-                $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
-                if (!$groupDetail) {
-                    $groupDetail = Groups::create([
-                        'group_name' => $validatedData['group_name'],
-                        'group_type' => 'assemblies',
-                        'show_unit_price' => 1,
-                        'show_quantity' => 1,
-                        'show_total' => 1,
-                        'show_group_total' => 1,
-                        'include_est_total' => 1,
-                    ]);
-                }
+                // Create or get estimate-specific group
+                $groupDetail = EstimateGroups::getOrCreate(
+                    $validatedData['estimate_id'],
+                    $validatedData['group_name'],
+                    $userDetails['id']
+                );
+                $groupId = null;
+                $estimateGroupId = $groupDetail->estimate_group_id;
             } else {
+                // Use global 'Single' group
                 $groupDetail = Groups::where('group_name', 'Single')->first();
                 if (!$groupDetail) {
                     $groupDetail = Groups::create([
@@ -3257,6 +3271,8 @@ class EstimateController extends Controller
                         'include_est_total' => 1,
                     ]);
                 }
+                $groupId = $groupDetail->group_id;
+                $estimateGroupId = null;
             }
 
             $estimateItem = EstimateItem::create([
@@ -3275,7 +3291,8 @@ class EstimateController extends Controller
                 'item_Description' => $validatedData['item_description'],
                 'item_note' => $validatedData['item_note'],
                 'is_upgrade' => $validatedData['is_upgrade'],
-                'group_id' => $groupDetail->group_id,
+                'group_id' => $groupId,
+                'estimate_group_id' => $estimateGroupId,
                 'additional_item' => $validatedData['additional_item'],
             ]);
 
@@ -3343,6 +3360,60 @@ class EstimateController extends Controller
         }
     }
     // estimate items
+
+    // edit estimate group
+    public function editEstimateGroup(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+            
+            $validatedData = $request->validate([
+                'estimate_group_id' => 'required',
+                'group_name' => 'required|string',
+                'group_type' => 'required|string',
+                'group_description' => 'nullable|string',
+                'show_unit_price' => 'nullable|boolean',
+                'show_quantity' => 'nullable|boolean',
+                'show_total' => 'nullable|boolean',
+                'show_group_total' => 'nullable|boolean',
+                'include_est_total' => 'nullable|boolean',
+            ]);
+
+            $estimateGroup = EstimateGroups::find($validatedData['estimate_group_id']);
+            
+            if (!$estimateGroup) {
+                return response()->json(['success' => false, 'message' => 'Estimate group not found!'], 404);
+            }
+
+            // Check if user has permission to edit this group
+            // For now, allow any authenticated user to edit estimate groups
+            // You can add more specific permission logic here if needed
+            if ($estimateGroup->estimate_id) {
+                $estimate = Estimate::find($estimateGroup->estimate_id);
+                if (!$estimate) {
+                    return response()->json(['success' => false, 'message' => 'Estimate not found!'], 404);
+                }
+                // Optional: Add more specific permission checks here if needed
+                // For example, check if user is admin, or has specific role, etc.
+            }
+
+            $estimateGroup->group_name = $validatedData['group_name'];
+            $estimateGroup->group_type = $validatedData['group_type'];
+            $estimateGroup->group_description = $validatedData['group_description'];
+            $estimateGroup->show_unit_price = $validatedData['show_unit_price'] ?? 0;
+            $estimateGroup->show_quantity = $validatedData['show_quantity'] ?? 0;
+            $estimateGroup->show_total = $validatedData['show_total'] ?? 0;
+            $estimateGroup->show_group_total = $validatedData['show_group_total'] ?? 0;
+            $estimateGroup->include_est_total = $validatedData['include_est_total'] ?? 0;
+
+            $estimateGroup->save();
+
+            return response()->json(['success' => true, 'message' => 'Group updated successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    // edit estimate group
 
     // get images
     public function getEstimateWithImages()
@@ -3525,7 +3596,7 @@ class EstimateController extends Controller
                 }
             }
 
-            $estimateItems = EstimateItem::with('group', 'assemblies')
+            $estimateItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')
                 ->where('estimate_id', $estimate->estimate_id)
                 ->where('additional_item', '<>', 'yes')
                 ->get()
@@ -3535,7 +3606,7 @@ class EstimateController extends Controller
                 });
 
 
-            $estimateAdditionalItems = EstimateItem::with('group', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
+            $estimateAdditionalItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
 
             $profitHours = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->where('additional_item', '<>', 'yes')->sum('item_qty');
             $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->where('additional_item', '<>', 'yes')->get();
@@ -3558,7 +3629,8 @@ class EstimateController extends Controller
             $profitHours += $assemblyLabourTotalHours;
 
             $items = Items::get();
-            $groups = Groups::get();
+            // Get combined groups (estimate-specific + global) for this estimate
+            $groups = EstimateGroups::getCombinedGroups($id);
             $itemsForAssemblies = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
             $labourItems = Items::where('item_type', 'labour')->get();
             $materialItems = Items::where('item_type', 'material')->get();
