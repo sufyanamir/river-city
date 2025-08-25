@@ -219,9 +219,9 @@
                                                     $groupTotal += $item['item_total'];
                                                 }
                                                 @endphp
-                                                @if(!empty($group) && !in_array($group['group_id'], $displayedGroups))
+                                                @if(!empty($group) && !in_array($group['estimate_group_id'] ?? $group['group_id'], $displayedGroups))
                                                 @php
-                                                $displayedGroups[] = $group['group_id'];
+                                                $displayedGroups[] = $group['estimate_group_id'] ?? $group['group_id'];
                                                 @endphp
                                                 @endif
                                                 @endforeach
@@ -229,16 +229,16 @@
                                                 <div class="w-full flex justify-between">
                                                     <div id="cuttingDiv">
                                                         <h1 class="font-bold text-xl my-auto p-2 underline">{{$groupName}}</h1>
-                                                        <input type="hidden" class="group-total" data-group-id="{{$item['group_id']}}" value="{{$groupTotal}}">
+                                                        <input type="hidden" class="group-total" data-group-id="{{$item['estimate_group_id'] ?? $item['group_id']}}" value="{{$groupTotal}}">
                                                     </div>
                                                     @if(isset($item['group']['include_est_total']) && $item['group']['include_est_total'] == 0)
                                                     <div class="my-auto mx-2 text-lg">
                                                         <div class="inline-block p-3 rounded-md bg-green-100">
                                                             <input type="radio"
-                                                            name="group_accept_reject_{{$item['group_id']}}"
+                                                            name="group_accept_reject_{{$item['estimate_group_id'] ?? $item['group_id']}}"
                                                             value="accepted"
                                                             class="group-radio"
-                                                            data-group-id="{{$item['group_id']}}"
+                                                            data-group-id="{{$item['estimate_group_id'] ?? $item['group_id']}}"
                                                             data-proposal-id="{{$proposal_id}}"
                                                             {{ $item['upgrade_status'] == 'accepted' ? 'checked' : '' }}>
                                                             <label class="text-green-800">Accept</label>
@@ -246,10 +246,10 @@
                                                         |
                                                         <div class="inline-block p-3 rounded-md bg-red-100">
                                                             <input type="radio"
-                                                                name="group_accept_reject_{{$item['group_id']}}"
+                                                                name="group_accept_reject_{{$item['estimate_group_id'] ?? $item['group_id']}}"
                                                                 value="rejected"
                                                                 class="group-radio"
-                                                                data-group-id="{{$item['group_id']}}"
+                                                                data-group-id="{{$item['estimate_group_id'] ?? $item['group_id']}}"
                                                                 data-proposal-id="{{$proposal_id}}"
                                                                 {{ $item['upgrade_status'] == 'rejected' ? 'checked' : '' }}>
                                                             <label class="text-red-800">Reject</label>
@@ -299,10 +299,6 @@
                                                     @endphp
                                                     @foreach ($itemss as $item)
                                                     <tr class="bg-white border-b">
-                                                        <!-- <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                                        <input type="checkbox" disabled name="privileges[reports][view]" id="privilegeReportsView">
-                                                        <label for="privilegeReportsView" class=" text-gray-500"></label>
-                                                    </th> -->
                                                         @php
                                                         $showQty = $item['group'] && $item['group']['show_quantity'] == 1;
                                                         $showTotal = $item['group'] && $item['group']['show_total'] == 1;
@@ -412,10 +408,6 @@
                                                 $itemName = App\Models\Items::where('item_id', $item['item_id'])->first();
                                                 @endphp
                                                 <tr class="bg-white border-b">
-                                                    <!-- <td class="px-6 py-4">
-                                                    <input type="checkbox" disabled name="privileges[reports][view]" id="privilegeReportsView">
-                                                    <label for="privilegeReportsView" class=" text-gray-500"></label>
-                                                </td> -->
                                                     <td class="px-6 py-4">
                                                         <label class="text-lg font-semibold text-[#323C47]" for="">{{ $itemName->item_name }}</label>
                                                     </td>
@@ -476,10 +468,6 @@
                                             <tbody>
                                                 @foreach($upgrades as $upgrade)
                                                 <tr class="bg-white border-b">
-                                                    <!-- <th scope="row" class="px-6 font-medium text-gray-900 whitespace-nowrap">
-                                                    <input type="checkbox" disabled name="privileges[reports][view]" id="privilegeReportsView">
-                                                    <label for="privilegeReportsView" class=" text-gray-500"></label>
-                                                </th> -->
                                                     <td class="px-6 py-4">
                                                         <label class="text-lg font-semibold text-[#323C47]" for="">{{ $upgrade->item_name }}</label>
                                                         <p class="text-[16px]/[18px] text-[#323C47] font">
@@ -614,9 +602,6 @@
                                     $discountedTotal = null;
                                     }
                                     @endphp
-                                    {{-- <p class="text-[#858585]">
-                                        ${{ number_format($discountedTotal, 2) }}
-                                    </p> --}}
                                 </div>
                             </div>
                         </div>
