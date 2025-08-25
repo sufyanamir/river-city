@@ -238,20 +238,20 @@ body {
                                                 @php
                                                 $group = $item['group']; // Get group details
                                                 @endphp
-                                                @if(!empty($group) && !in_array($group['group_id'], $displayedGroups))
+                                                @if(!empty($group) && !in_array($group['estimate_group_id'] ?? $group['group_id'], $displayedGroups))
                                                 <!-- Display edit button only if the group has not been displayed before -->
                                                 @php
-                                                $displayedGroups[] = $group['group_id']; // Add group to displayed groups
+                                                $displayedGroups[] = $group['estimate_group_id'] ?? $group['group_id']; // Add group to displayed groups
                                                 @endphp
                                                 @endif
                                                 @endforeach
                                                 <div class="w-full flex justify-between">
                                                     <div id="cuttingDiv">
                                                         <h1 class=" font-bold text-xl my-auto p-2 underline">{{$groupName}}</h1>
-                                                        <div id="formData{{$item['group_id']}}" class="hidden">
+                                                        <div id="formData{{$item['estimate_group_id'] ?? $item['group_id']}}" class="hidden">
                                                             @csrf
                                                             <input type="hidden" name="estimate_id" value="{{$estimate['estimate_id']}}">
-                                                            <input type="hidden" name="group_id" value="{{$item['group_id']}}">
+                                                            <input type="hidden" name="group_id" value="{{$item['estimate_group_id'] ?? $item['group_id']}}">
                                                             <input type="hidden" name="type" value="acceptAll">
                                                             <input type="hidden" name="item_status" value="accepted">
                                                             <input type="hidden" name="estimate_item_id" value="">
@@ -263,7 +263,7 @@ body {
                                                             type="radio"
                                                             name="group_accept_reject"
                                                             value="accepted"
-                                                            id="submitAcceptionRejection{{$item->group_id}}"
+                                                            id="submitAcceptionRejection{{$item['estimate_group_id'] ?? $item['group_id']}}"
                                                             data-type="acceptAll"
                                                             data-status="accepted"
                                                             {{ $item->upgrade_status == 'accepted' ? 'checked' : '' }}>
@@ -273,7 +273,7 @@ body {
                                                             type="radio"
                                                             name="group_accept_reject"
                                                             value="rejected"
-                                                            id="submitAcceptionRejection{{$item->group_id}}"
+                                                            id="submitAcceptionRejection{{$item['estimate_group_id'] ?? $item['group_id']}}"
                                                             data-type="rejectAll"
                                                             data-status="rejected"
                                                             {{ $item->upgrade_status == 'rejected' ? 'checked' : '' }}>

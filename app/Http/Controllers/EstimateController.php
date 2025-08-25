@@ -2457,6 +2457,19 @@ class EstimateController extends Controller
                             }
                         }
 
+                        foreach ($proposalData['estimate_items'] as &$item) {
+                            if ($item['estimate_id'] == $id && $item['estimate_group_id'] == $groupId) {
+                                $item['upgrade_status'] = $status;
+
+                                // Update upgrade_status in DB
+                                $dbItem = EstimateItem::find($item['estimate_item_id']);
+                                if ($dbItem) {
+                                    $dbItem->upgrade_status = $status;
+                                    $dbItem->save();
+                                }
+                            }
+                        }
+
                         // Update include_est_total for both global groups and estimate-specific groups
                         if ($type === 'acceptAll' || $type === 'rejectAll') {
                             // First try to find estimate-specific group
