@@ -270,7 +270,7 @@ h1, h2, h3, h4, h5 {
                 @if ( $estimate_items->count() > 0)
 
                     @foreach ($groupedItems as $groupName => $itemss)
-                    @if (($itemss[0]->group->include_est_total ?? 0) !== 0)
+                    @if (($itemss[0]->group->include_est_total ?? 0) != 0)
                         <div class="mb-2 bg-white  group-section">
                         <!-- Group Header - Keep with content if possible -->
                         <div class="p-1 text-black w-full rounded-t-lg group-header">
