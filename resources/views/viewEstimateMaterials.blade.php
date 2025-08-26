@@ -255,6 +255,8 @@ h1, h2, h3, h4, h5 {
                     $groupName = $groupItems->globalGroup->group_name ?? '';
                     $group = $groupItems->globalGroup;
                     $group->is_estimate_specific = false;
+                }else{
+                    $groupName = $groupItems['group']['group_name'] ?? ''; // Use 'Other' if no group is associated
                 }
                 
                 // Add the group object to the item for use in the view
