@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Email;
+use App\Models\EstimateGroups;
+use App\Models\EstimateItem;
 use App\Models\Groups;
 use App\Models\ItemAssembly;
 use App\Models\Items;
@@ -18,6 +20,8 @@ class GroupController extends Controller
     public function editGroup(Request $request)
     {
         try {
+            
+            $userDetails = session('user_details');
 
             $validatedData = $request->validate([
                 'group_id' => 'required',
@@ -37,6 +41,44 @@ class GroupController extends Controller
             ]);
 
             $group = Groups::where('group_id', $validatedData['group_id'])->first();
+
+            $estimateId = $request->input('estimate_id');
+
+            if ($estimateId) {
+                // Get estimate items linked to this group in that estimate
+                $estimateItems = EstimateItem::where('estimate_id', $estimateId)
+                    ->where('group_id', $group->group_id)
+                    ->get();
+
+                if ($estimateItems->isNotEmpty()) {
+                    // ✅ Create a new EstimateGroups record instead of updating Groups
+                    $estimateGroup = EstimateGroups::create([
+                        'estimate_id'       => $estimateId,
+                        'group_name'        => $validatedData['group_name'],
+                        'group_type'        => $validatedData['group_type'],
+                        'group_description' => $validatedData['group_description'],
+                        'show_unit_price'   => $request->has('show_unit_price') ? 1 : 0,
+                        'show_quantity'     => $request->has('show_quantity') ? 1 : 0,
+                        'show_total'        => $request->has('show_total') ? 1 : 0,
+                        'show_group_total'  => $request->has('show_group_total') ? 1 : 0,
+                        'include_est_total' => $request->has('include_est_total') ? 1 : 0,
+                        'added_user_id'     => $userDetails['id'],
+                    ]);
+
+                    // ✅ Reassign estimate items to new estimate group
+                    foreach ($estimateItems as $item) {
+                        $item->estimate_group_id = $estimateGroup->estimate_group_id;
+                        $item->group_id = null;
+                        $item->save();
+                    }
+
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Group moved to estimate groups and items reassigned!',
+                        'estimate_group_id' => $estimateGroup->estimate_group_id
+                    ], 200);
+                }
+            }
 
             $group->group_name = $validatedData['group_name'];
             $group->group_type = $validatedData['group_type'];
