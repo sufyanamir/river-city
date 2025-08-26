@@ -205,6 +205,7 @@ body {
                                     $group['is_estimate_specific'] = true;
                                     // Ensure the group object has the correct ID field for JavaScript compatibility
                                     $group['group_id'] = $group['estimate_group_id'] ?? null;
+                                    $groupItems['group'] = $group;
                                 }
                                 // Check for global group if estimate group is not found
                                 elseif (!empty($groupItems['group_id']) && 
@@ -215,10 +216,13 @@ body {
                                     $groupName = $groupItems['global_group']['group_name'] ?? '';
                                     $group = $groupItems['global_group'];
                                     $group['is_estimate_specific'] = false;
+                                    $groupItems['group'] = $group;
+                                }else{
+                                    $groupName = $groupItems['group']['group_name'] ?? ''; // Use 'Other' if no group is associated
                                 }
                                 
                                 // Add the group object to the item for use in the view
-                                $groupItems['group'] = $group;
+                                
                                 $groupedItems[$groupName][] = $groupItems;
                             }
                             @endphp

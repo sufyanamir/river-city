@@ -1483,7 +1483,7 @@ $userPrivileges->estimate->notes === 'on')
                                     @endphp
                                     @endforeach
                                     @php
-                                        if($currentGroupId && $groupTotal > 0) {
+                                        if($currentGroupId) {
                                             // Check if this group ID already exists in $groupTotals
                                             $groupExists = false;
                                             foreach($groupTotals as &$existingGroup) {
