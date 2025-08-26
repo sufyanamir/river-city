@@ -1074,6 +1074,7 @@ $userPrivileges->estimate->notes === 'on')
                                                 <form action="{{ $formAction }}" method="post" id="formData{{$groupId}}">
                                                     @csrf
                                                     <input type="hidden" name="{{ $inputName }}" value="{{ $groupId }}">
+                                                    <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
                                                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                                         <!-- Modal content here -->
                                                         <div class=" flex justify-between">
@@ -1590,6 +1591,7 @@ $userPrivileges->estimate->notes === 'on')
                                         <form action="/editGroup" method="post" id="formData{{$group->group_id}}">
                                             @csrf
                                             <input type="hidden" name="group_id" value="{{$group->group_id}}">
+                                            <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
                                             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                                 <!-- Modal content here -->
                                                 <div class=" flex justify-between">
@@ -2022,6 +2024,7 @@ $userPrivileges->estimate->items === 'on')
                                         <form action="/editGroup" method="post" id="formData{{$group->group_id}}">
                                             @csrf
                                             <input type="hidden" name="group_id" value="{{$group->group_id}}">
+                                            <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
                                             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                                 <!-- Modal content here -->
                                                 <div class=" flex justify-between">
@@ -2534,6 +2537,7 @@ $userPrivileges->estimate->items === 'on')
                                         <form action="/editGroup" method="post" id="formData{{$group->group_id}}">
                                             @csrf
                                             <input type="hidden" name="group_id" value="{{$group->group_id}}">
+                                            <input type="hidden" name="estimate_id" value="{{ $estimate->estimate_id }}">
                                             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                                 <!-- Modal content here -->
                                                 <div class=" flex justify-between">
