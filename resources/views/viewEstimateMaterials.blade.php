@@ -271,7 +271,7 @@ h1, h2, h3, h4, h5 {
 
                     @foreach ($groupedItems as $groupName => $itemss)
                     @if (($itemss[0]->group->include_est_total ?? 0) != 0)
-                        <div class="mb-2 bg-white  group-section">
+                        <div class=" bg-white  group-section">
                         <!-- Group Header - Keep with content if possible -->
                         <div class="p-1 text-black w-full rounded-t-lg group-header">
                             <div class="inline-block">
@@ -281,7 +281,7 @@ h1, h2, h3, h4, h5 {
                             </div>
                         </div>
 
-                        <div class="relative overflow-x-auto mb-8 group-content">
+                        <div class="relative overflow-x-auto group-content">
                             <div class="itemDiv">
                                 <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                                     <thead class="text-xs text-gray-700 uppercase border-b border-gray-500 bg-gray-50 repeating-header">
