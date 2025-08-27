@@ -1063,7 +1063,7 @@ $('#end_date').val(endDateTime);
                             $('#update_start_date').val(response.scheduled_start_date);
                             $('#update_end_date').val(response.scheduled_end_date);
                             $('#event-customer-address').text(response.customer_address + ', ' + response.customer.customer_city + ', ' + response.customer.customer_state + ', ' + response.customer.customer_zip_code);
-                            $('#address-link').attr('href', 'https://maps.google.com/?q=' + response.customer_address);
+                            $('#address-link').attr('href', 'https://maps.google.com/?q=' + response.customer_address + ' ' + response.customer.customer_city + ' ' + response.customer.customer_state + ' ' + response.customer.customer_zip_code);
                             $('#viewEstimateIcon').attr('href', '/viewEstimate/' + response.estimate_id);
                             $('#editEventForm').attr('action', '/setScheduleEstimate');
                             $('#estimate_schedule_id').val(response.estimate_schedule.estimate_schedule_id);
