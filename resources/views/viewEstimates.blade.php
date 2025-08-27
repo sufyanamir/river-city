@@ -1381,7 +1381,7 @@ $userPrivileges->estimate->notes === 'on')
                                         @endif
                                         @php
                                         if(isset($item->group->show_group_total) && $item->group->show_group_total == 1) {
-                                        $groupTotal += $item->item_total; // Add item price to group total
+                                        $groupTotal += round($item->item_total, 2); // Add item price to group total
                                         }
                                         @endphp
                                         @if ($item->item_type === 'assemblies' && $item->assemblies->count() > 0)
@@ -1478,7 +1478,7 @@ $userPrivileges->estimate->notes === 'on')
                                     @php
                                     if(isset($item->group->include_est_total) && $item->group->include_est_total == 1) {
                                     $incEstTotal = 1; // Add item price to included estimate total
-                                    $grandGroupTotal += $item->item_total;;
+                                    $grandGroupTotal += round($item->item_total, 2);
                                     }
                                     $acceptorreject = $item->upgrade_status
                                     @endphp
