@@ -372,16 +372,16 @@ body {
                                                     </tr>
                                                     @php
                                                     if(isset($item['group']['show_group_total']) && $item['group']['show_group_total'] == 1) {
-                                                    $groupTotal += $item['item_total']; // Add item price to group total
+                                                    $groupTotal += round($item['item_total'], 2); // Add item price to group total
                                                     }
                                                     @endphp
                                                     @php
                                                     if(isset($item['group']['include_est_total']) && $item['group']['include_est_total'] == 1) {
                                                     $incEstTotal = 1;
-                                                    $subTotal += $item['item_total']; // Add item price to total
+                                                    $subTotal += round($item['item_total'], 2); // Add item price to total
                                                     }else{
                                                     if($item['upgrade_status'] == 'accepted'){
-                                                    $subTotal += $item['item_total'];
+                                                    $subTotal += round($item['item_total'], 2);
                                                     }
                                                     }
                                                     $acceptorreject = $item['upgrade_status'];
@@ -465,7 +465,7 @@ body {
                                                     </td>
                                                 </tr>
                                                 @php
-                                                $subTotal += $item['item_total']; // Add item price to total
+                                                $subTotal += round($item['item_total'], 2); // Add item price to total
                                                 @endphp
                                                 @endforeach
                                             </tbody>
