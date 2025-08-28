@@ -732,17 +732,17 @@ class ApiController extends Controller
         try {
             $userDetails = auth()->user();
 
-            $estimate = Estimate::with(
-                'customer',
+            $estimate = Estimate::with([
+                'customer:customer_id,customer_email,customer_company_name,customer_project_name,customer_project_number,customer_primary_address,customer_secondary_address,customer_city,customer_state,customer_zip_code,tax_rate,potential_value,source,branch,billing_address,billing_city,billing_state,billing_zip',
                 'estimateContacts',
                 'estimateFiles',
                 'images',
                 'proposals',
-                'notes',
-                'estimateEmails',
-                'invoices',
-                'invoice',
-            )
+                'notes'
+                // 'estimateEmails',
+                // 'invoices',
+                // 'invoice'
+           ])
                 ->where('estimate_id', $id)
                 ->first();
 
@@ -766,7 +766,7 @@ class ApiController extends Controller
                 } else {
                     $proposal->customer_signature = null;
                 }
-                
+
                 // Remove proposal_data from the response
                 unset($proposal->proposal_data);
                 unset($proposal->proposal_terms_and_conditions);
@@ -780,6 +780,55 @@ class ApiController extends Controller
                     // Push sort_order == 0 to the end
                     return $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order;
                 });
+
+                // Group items by estimateGroup (fallback to globalGroup if needed)
+                $groupedItems = $estimateItems->groupBy(function ($item) {
+                    return $item->estimateGroup->group_name
+                        ?? $item->globalGroup->group_name
+                        ?? 'Ungrouped';
+            });
+
+            // Format for response
+            $formattedGroups = $groupedItems->map(function ($items, $groupName) {
+    // get group model (estimateGroup or globalGroup)
+    $group = $items->first()->estimateGroup ?? $items->first()->globalGroup;
+
+    return [
+        'group_id'          => $group->id ?? null,
+        'group_name'        => $group->group_name ?? $groupName,
+        'group_description' => $group->group_description ?? null,
+        'group_type'        => $group->group_type ?? null,
+        'group_source'      => $items->first()->estimateGroup
+                                ? 'estimate_group'
+                                : 'global_group',
+        'show_unit_price'   => $group->show_unit_price ?? null,
+        'show_quantity'     => $group->show_quantity ?? null,
+        'show_total'        => $group->show_total ?? null,
+        'show_group_total'  => $group->show_group_total ?? null,
+        'include_est_total' => $group->include_est_total ?? null,
+        'items'             => $items->map(function ($item) {
+            return [
+                'id'         => $item->id,
+                'item_name'  => $item->name,
+                'quantity'   => $item->quantity,
+                'rate'       => $item->rate,
+                'sort_order' => $item->sort_order,
+                'assemblies' => $item->assemblies,
+            ];
+        })->values(),
+    ];
+})->values();
+
+
+
+            // $estimateItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')
+            //     ->where('estimate_id', $estimate->estimate_id)
+            //     ->where('additional_item', '<>', 'yes')
+            //     ->get()
+            //     ->sortBy(function ($item) {
+            //         // Push sort_order == 0 to the end
+            //         return $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order;
+            //     });
 
 
             $estimateAdditionalItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
@@ -804,8 +853,8 @@ class ApiController extends Controller
 
             $profitHours += $assemblyLabourTotalHours;
 
-            // $items = Items::get();
-            $groups = Groups::get();
+            $items = Items::get();
+            $groups = Groups::select('group_id','group_name')->get();
             // $itemsForAssemblies = Items::where('item_type', 'labour')->orWhere('item_type', 'material')->get();
             // $labourItems = Items::where('item_type', 'labour')->get();
             // $materialItems = Items::where('item_type', 'material')->get();
@@ -813,7 +862,7 @@ class ApiController extends Controller
             $users = User::where('sts', 'active')->get();
             $emailTemplates = Email::get();
             $payments = EstimatePayments::with('invoice')->where('estimate_id', $estimate->estimate_id)->get();
-            $toDos = EstimateToDos::with('assigned_to', 'assigned_by')->where('estimate_id', $estimate->estimate_id)->get();
+            $toDos = EstimateToDos::with('assigned_to:id,name,last_name,email', 'assigned_by:id,name,last_name,email')->where('estimate_id', $estimate->estimate_id)->get();
             $advancePayment = AdvancePayment::where('estimate_id', $id)->first();
             //$expenses = EstimateExpenses::where('estimate_id', $estimate->estimate_id)->get();
 
@@ -876,30 +925,30 @@ class ApiController extends Controller
                 // 'labour_items' => $labourItems,
                 // 'material_items' => $materialItems,
                 // 'assembly_items' => $assemblyItems,
-                // 'estimate_items' => $estimateItems,
+                'estimate_items_group' => $formattedGroups,
                 // 'estimate_assembly_items' => $estimateAssemblyItems,
-                'user_details' => $userDetails,
-                'item_total' => $totalPrice, // Pass the total price to the view
-                'employees' => $users,
-                'groups' => $groups,
-                'email_templates' => $emailTemplates,
-                'payments' => $payments,
-                'toDos' => $toDos,
-                'expenses' => $expenses,
+                // 'user_details' => $userDetails,
+                // 'item_total' => $totalPrice,
+                // 'employees' => $users,
+                // 'groups' => $groups,
+                // 'email_templates' => $emailTemplates,
+                // 'payments' => $payments,
+                // 'toDos' => $toDos,
+                // 'expenses' => $expenses,
                 // 'itemsForAssemblies' => $itemsForAssemblies,
-                'item_templates' => $itemTemplates,
-                'profitHours' => $profitHours,
-                'profitCost' => $profitCost,
-                'mainProfit' => $mainProfit,
-                'profitMargin' => $profitMargin,
-                'budgetLabour' => $budgetLabour,
-                'budgetMaterial' => $budgetMaterial,
-                'budgetProfit' => $budgetProfit,
-                'budgetMargin' => $budgetMargin,
-                'expenseTotal' => $expenseTotal,
-                'vendorTotals' => $vendorTotals,
-                'advancePayment' => $advancePayment,
-                // 'estimateAdditionalItems' => $estimateAdditionalItems,             
+                // 'item_templates' => $itemTemplates,
+                // 'profitHours' => $profitHours,
+                // 'profitCost' => $profitCost,
+                // 'mainProfit' => $mainProfit,
+                // 'profitMargin' => $profitMargin,
+                // 'budgetLabour' => $budgetLabour,
+                // 'budgetMaterial' => $budgetMaterial,
+                // 'budgetProfit' => $budgetProfit,
+                // 'budgetMargin' => $budgetMargin,
+                // 'expenseTotal' => $expenseTotal,
+                // 'vendorTotals' => $vendorTotals,
+                // 'advancePayment' => $advancePayment,
+                'estimateAdditionalItems' => $estimateAdditionalItems,
             ], 200);
             } catch (\Exception $e) {
                 return response()->json(['success' => false, 'message' => $e->getMessage()], 400);

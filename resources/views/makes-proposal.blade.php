@@ -45,15 +45,6 @@
         display: flex;
         flex-direction: column;
     }
-    #printableArea {
-   margin: 0 !important;
-   padding: 0 !important;
-}
-#printableArea * {
-   margin-bottom: 0 !important;
-   padding-bottom: 0 !important;
-}
-
 </style>
 <div class="flex justify-between text-right my-2">
     <a href="/viewEstimate/{{$estimate->estimate_id}}">
@@ -63,9 +54,13 @@
         <a href="javascript:void(0);" onclick="printPageArea('printableArea')">
             <button class="bg-[#930027] p-2 text-white rounded-md">Print</button>
         </a>
-        <a href="javascript:void(0);" onclick="downloadAsPDF('printableArea')">
-            <button class="bg-[#930027] p-2 text-white rounded-md ml-2">Download as PDF</button>
-        </a>
+        {{-- <a href="javascript:void(0);" onclick="downloadAsPDF('printableArea')"> --}}
+                <a href="{{ url('/makeProposal/' . $estimate->estimate_id . '?download=pdf') }}" class="btn bg-[#930027] p-2 text-white rounded-md">
+                Download as PDF
+            </a>
+
+
+        {{-- </a> --}}
     </div>
 </div>
 <form action="/sendProposal" method="post" id="sendProposalForm">
@@ -100,6 +95,7 @@
                         </p>
                     </div>
                 </div>
+
                 <div class="col-span-6 px-4">
                     <div class="">
                         <p class=" text-end text-[16px] font-bold text-[#323C47]">Estimate</p>
@@ -589,7 +585,7 @@
                             <div class=" col-span-2">
                                 <label for="email_body">Email body:</label>
                                 <textarea name="email_body" id="email_body" class="w-[100%] outline-none rounded-md border-0 text-gray-400 p-2 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#0095E5] sm:text-sm" rows="10">Hi {{ ucfirst($customer->customer_first_name)}} {{ ucfirst($customer->customer_last_name)}}!
-Thank you for the opportunity to provide you with an estimate.</textarea>
+                            Thank you for the opportunity to provide you with an estimate.</textarea>
                             </div>
                         </div>
                         <div class="">
@@ -609,10 +605,39 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                 </div>
             </div>
         </div>
+    </div>
 </form>
-</div>
 @include('layouts.footer')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+async function downloadAsPDF() {
+    const { jsPDF } = window.jspdf;
+    const element = document.getElementById('printableArea');
+
+    if (!element) {
+        alert('No printable area found!');
+        return;
+    }
+
+    // Convert HTML to canvas
+    const canvas = await html2canvas(element, { scale: 2 });
+    const imgData = canvas.toDataURL('image/png');
+
+    // Create PDF
+    const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'px',
+        format: [canvas.width, canvas.height]
+    });
+
+    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+    pdf.save('document.pdf');
+}
+</script>
 @php
 $exsistingProposals = $existing_proposals;
 @endphp
@@ -731,15 +756,14 @@ $exsistingProposals = $existing_proposals;
     tempDiv.appendChild(style);
 
     // Define PDF options
-  var opt = {
-    margin: [0.3, 0.3, 0.3, 0.3], // top, left, bottom, right
-    filename: 'Estimate_{{ $estimate->customer_name }}_{{ $estimate->customer_last_name }}.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, scrollY: 0 }, // 👈 important
-    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // 👈 avoid gaps
-};
-
+    var opt = {
+        margin: 0.5,
+        filename: 'Estimate_{{ $estimate->customer_name }}_{{$estimate->customer_last_name}}.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 1.5 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+        pagebreak: { mode: ['css'] }
+    };
 
     // Generate PDF with centered page numbers
     html2pdf().set(opt).from(tempDiv).toPdf().get('pdf').then(function (pdf) {
