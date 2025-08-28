@@ -789,12 +789,11 @@ class ApiController extends Controller
             });
 
             // Format for response
-            $formattedGroups = $groupedItems->map(function ($items, $groupName) {
-    // get group model (estimateGroup or globalGroup)
+           $formattedGroups = $groupedItems->map(function ($items, $groupName) {
     $group = $items->first()->estimateGroup ?? $items->first()->globalGroup;
 
     return [
-        'group_id'          => $group->id ?? null,
+        'group_id'          => $group->estimate_group_id ?? null,
         'group_name'        => $group->group_name ?? $groupName,
         'group_description' => $group->group_description ?? null,
         'group_type'        => $group->group_type ?? null,
@@ -806,18 +805,15 @@ class ApiController extends Controller
         'show_total'        => $group->show_total ?? null,
         'show_group_total'  => $group->show_group_total ?? null,
         'include_est_total' => $group->include_est_total ?? null,
+
         'items'             => $items->map(function ($item) {
-            return [
-                'id'         => $item->id,
-                'item_name'  => $item->name,
-                'quantity'   => $item->quantity,
-                'rate'       => $item->rate,
-                'sort_order' => $item->sort_order,
-                'assemblies' => $item->assemblies,
-            ];
+            $data = $item->toArray();   // all item fields
+            $data['assemblies'] = $item->assemblies; // relation
+            return $data;
         })->values(),
     ];
 })->values();
+
 
 
 
