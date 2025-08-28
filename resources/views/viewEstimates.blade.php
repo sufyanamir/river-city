@@ -7154,9 +7154,18 @@ Thank you for the opportunity to provide you with an estimate.</textarea>
                         $('#item_description').val(itemDetail.item_description);
                         $('#item_note').val(itemDetail.item_note);
                         $('#additional_item').val(itemDetail.additional_item).trigger('change');
-                        if (itemDetail.group && itemDetail.group.group_name != null) {
-                            $('#group_name').val(itemDetail.group.group_name);
-                            $('#group_id').val(itemDetail.group.group_id);
+                        // console.log(itemDetail.group);
+                        let groupData = null;
+
+                        if (itemDetail.global_group) {
+                            groupData = itemDetail.global_group;
+                        } else if (itemDetail.estimate_group) {
+                            groupData = itemDetail.estimate_group;
+                        }
+
+                        if (groupData && groupData.group_name != null) {
+                            $('#group_name').val(groupData.group_name);
+                            $('#group_id').val(groupData.group_id);
                         } else {
                             $('#group_name').val('');
                             $('#group_id').val('');
