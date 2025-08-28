@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 use App\Mail\ProposalAcceptedMail;
 use App\Mail\ProposalMail;
 use App\Mail\sendMailToClient;
@@ -2834,20 +2836,58 @@ class EstimateController extends Controller
     // send proposal
 
     // make proposal
-    public function makeProposal($id, Request $request)
-    {
-        try {
+ public function makeProposal($id, Request $request)
+{
+    try {
+        $preview = $request->query('preview');
+        $group_id = $request->query('group_id');
 
-            $preview = $request->query('preview');
-            $group_id = $request->query('group_id');
+        $data = $this->prepareProposalData($id, $preview, $group_id);
 
-            $data = $this->prepareProposalData($id, $preview, $group_id);
-
-            return view('make-proposal', $data);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        // If you want to generate PDF instead of showing view
+        if ($request->query('download') === 'pdf') {
+            $pdf = Pdf::loadView('makes-proposal-pdf', $data)
+                    ->setPaper('a4', 'portrait');
+            return $pdf->download("proposal_$id.pdf"); // Download as PDF
         }
+
+        // Default: just show the HTML page
+        return view('makes-proposal-pdf', $data);
+
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
     }
+}
+
+// public function makeProposal($id, Request $request)
+// {
+//     try {
+//         $preview = $request->query('preview');
+//         $group_id = $request->query('group_id');
+
+//         $data = $this->prepareProposalData($id, $preview, $group_id);
+
+//         // If you want to generate PDF instead of showing view
+//         if ($request->query('download') === 'pdf') {
+//             // Use absolute paths for assets in PDF
+//             $data['is_pdf'] = true;
+
+//             $pdf = Pdf::loadView('makes-proposal-pdf', $data)
+//                      ->setPaper('a4', 'portrait')
+//                      ->setOption(['isRemoteEnabled' => true]);
+
+//             return $pdf->download("proposal_$id.pdf");
+//         }
+
+//         // Default: just show the HTML page
+//         $data['is_pdf'] = false;
+//         return view('makes-proposal-pdf', $data);
+
+//     } catch (\Exception $e) {
+//         return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+//     }
+// }
+
 
     private function prepareProposalData($id, $preview = null, $group_id = null)
     {
@@ -3379,7 +3419,7 @@ class EstimateController extends Controller
     {
         try {
             $userDetails = session('user_details');
-            
+
             $validatedData = $request->validate([
                 'estimate_group_id' => 'required',
                 'group_name' => 'required|string',
@@ -3393,7 +3433,7 @@ class EstimateController extends Controller
             ]);
 
             $estimateGroup = EstimateGroups::find($validatedData['estimate_group_id']);
-            
+
             if (!$estimateGroup) {
                 return response()->json(['success' => false, 'message' => 'Estimate group not found!'], 404);
             }

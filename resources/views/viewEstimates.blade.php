@@ -1012,7 +1012,7 @@ $userPrivileges->estimate->notes === 'on')
                 // Get group name from either estimate group or global group
                 $groupName = '';
                 $group = null;
-                
+
                 if ($groupItems->estimate_group_id && $groupItems->estimateGroup) {
                     $groupName = $groupItems->estimateGroup->group_name ?? '';
                     $group = $groupItems->estimateGroup;
@@ -1024,7 +1024,7 @@ $userPrivileges->estimate->notes === 'on')
                     $group = $groupItems->globalGroup;
                     $group->is_estimate_specific = false;
                 }
-                
+
                 // Add the group object to the item for use in the view
                 $groupItems->group = $group;
                 $groupedItems[$groupName][] = $groupItems;
@@ -4604,7 +4604,7 @@ $userPrivileges->estimate->todos === 'on')
                         @foreach ($expenses as $expense)
                         <tr class="bg-white border-b">
                             <td>
-                                <button type="button" id="editExpense-btn{{ $expense->estimate_expense_id }}" class="flex">
+                                <button type="button" id="editExpense-btn{{ $expense->estimate_expense_id }}" class="flex h-[50px] w-[50px]">
                                     <img class="h-[50px] w-[50px] " src="{{ asset('assets/icons/edit-estimate-icon.svg') }}" alt="">
                                 </button>
                             </td>
@@ -4629,7 +4629,7 @@ $userPrivileges->estimate->todos === 'on')
                             <td>
                                 <form action="/deleteEstimateExpense/{{$expense->estimate_expense_id}}" class="" method="post">
                                     @csrf
-                                    <button type="submit" class="">
+                                    <button type="submit" class="w-[90px]">
                                         <img src="{{ asset('assets/icons/del-icon.svg') }}" alt="icon">
                                     </button>
                                 </form>
