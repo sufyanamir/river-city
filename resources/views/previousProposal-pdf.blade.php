@@ -8,7 +8,7 @@
         /* Base styling for PDF generation */
          * {
             margin: 0;
-            padding: 0;
+            padding: 1px;
             box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
@@ -427,18 +427,20 @@
         }
 
         .mb-2 {
-            margin-bottom: 8px;
+            /* margin-bottom: 8px; */
         }
 
         .mb-8 {
             margin-bottom: 22px;
         }
 
-        .w-70 {
-            width: 70%;
+        .width-60 {
+            width: 60%;
         }
-        .w-30 {
-            width: 30%;
+        .width-20 {
+            width: 20%;
+            padding: 0px 14px 0px 0px;
+            font-size: 10px;
         }
 
         .pt-2 {
@@ -446,13 +448,13 @@
         }
 
         .py-3 {
-            padding-top: 8px;
-            padding-bottom: 8px;
+            padding-top: 6px;
+            padding-bottom: 6px;
         }
 
         .py-4 {
-            padding-top: 10px;
-            padding-bottom: 10px;
+            padding-top: 6px;
+            padding-bottom: 6px;
         }
 
         .px-6 {
@@ -705,7 +707,7 @@
                                                 <input type="hidden" class="group-total" data-group-id="{{$item['estimate_group_id'] ?? $item['group_id']}}" value="{{$groupTotal}}">
                                             </div>
                                             @if(isset($item['group']['include_est_total']) && $item['group']['include_est_total'] == 0)
-                                            <div class="my-auto mx-2 text-12">
+                                            {{-- <div class="my-auto mx-2 text-12">
                                                 <div class="inline-block p-3 rounded-md bg-green-100">
                                                     <input type="radio"
                                                     name="group_accept_reject_{{$item['estimate_group_id'] ?? $item['group_id']}}"
@@ -727,7 +729,7 @@
                                                         {{ $item['upgrade_status'] == 'rejected' ? 'checked' : '' }}>
                                                     <label class="text-red-800">Reject</label>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                             @endif
                                         </div>
                                         @endif
@@ -739,7 +741,7 @@
                                         <table class="full-width text-sm text-left rtl:text-right text-gray-500">
                                             <thead class="text-10 text-gray-700 uppercase table-header-bg">
                                                 <tr>
-                                                    <th scope="col" class="px-6 py-3 text-10 item_left">
+                                                    <th scope="col" class="px-6 py-3 text-10 item_left width-60">
                                                         Item Name
                                                     </th>
                                                     @php
@@ -751,13 +753,21 @@
                                                     }
                                                     @endphp
                                                     @if($showItemQty == 1)
-                                                    <th scope="col" class="text-center">
+                                                    <th scope="col" class="text-right width-20">
                                                         Item Qty
                                                     </th>
+                                                    @else
+                                                    <th scope="col" class="text-right width-20">
+                                                    </th>
+
                                                     @endif
                                                     @if($showItemTotal == 1)
-                                                    <th scope="col" class="text-center">
+                                                    <th scope="col" class="text-right width-20">
                                                         Item Total
+                                                    </th>
+                                                    @else
+                                                    <th scope="col" class="text-right width-20">
+                                                        Item Qty
                                                     </th>
                                                     @endif
                                                 </tr>
@@ -774,7 +784,7 @@
                                                     $showTotal = $item['group'] && $item['group']['show_total'] == 1;
                                                     $colspan = (!$showQty && !$showTotal) ? 3 : 1;
                                                     @endphp
-                                                    <td class="px-6 py-4" colspan="{{ $colspan }}">
+                                                    <td class="px-6 py-4 width-60" colspan="{{ $colspan }}">
                                                         <label class="text-12 font-semibold text-primary underline" for="">{{ $item['item_name'] }}</label>
                                                         <p class="text-primary pt-2">
                                                             @if ($item['item_description'])
@@ -792,13 +802,20 @@
                                                         </p>
                                                     </td>
                                                     @if($showQty)
-                                                        <td scope="col" class="text-center text-10">
+                                                        <td scope="col" class="text-right text-10 width-20">
                                                             {{ number_format($item['item_qty'], 2) }} <br> {{ $item['item_unit'] }}
                                                         </td>
+                                                    @else
+                                                    <td scope="col" class="text-right text-10 width-20">
+                                                        </td>
                                                     @endif
+
                                                     @if($showTotal)
-                                                        <td scope="col" class="text-center text-10">
+                                                        <td scope="col" class="text-right width-20">
                                                             ${{ number_format($item['item_total'], 2) }}
+                                                        </td>
+                                                        @else
+                                                        <td scope="col" class="text-right width-20">
                                                         </td>
                                                     @endif
                                                 </tr>
