@@ -922,7 +922,7 @@ function splitMultiDayEvent(event) {
 
     // Last day
     let lastDayStart = new Date(end);
-    lastDayStart.setHours(9, 0, 0, 0);
+    lastDayStart.setHours(8, 0, 0, 0);
     events.push({ ...event, start: lastDayStart, end: new Date(end) });
 
     return events;
