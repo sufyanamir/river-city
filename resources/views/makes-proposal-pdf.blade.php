@@ -1152,9 +1152,9 @@
                     </div>
                 </div>
                 <div class=" grid col-span-12 editor-container">
-                    @if ($preview == null)
-                        <div name="terms_and_conditions" id="editor" class="text_area ">
-                    @endif
+                    {{-- @if ($preview == null)
+                        <textarea name="terms_and_conditions" id="editor" class="text_area ">
+                    @endif --}}
                     <p class="text-14"><strong>Required Deposit</strong></p>
                     <p class="text-10">A nonrefundable 1/3 deposit is required for all projects due at the time of
                         scheduling to secure your spot on our schedule. The remaining balance will be due upon
@@ -1270,9 +1270,9 @@
                     <p class="text-10">Invoice will be issued to Client upon Completion of the work client shall pay
                         invoice within 10 days of client’s receipt of the invoice. Client shall also pay a late charge
                         of 1-1/2% per month on all balances unpaid 30 days after the invoice date.</p>
-                    @if ($preview == null)
-                    </div>
-                         @endif
+                    {{-- @if ($preview == null)
+                    </textarea>
+                         @endif --}}
                 </div>
 
             </div>

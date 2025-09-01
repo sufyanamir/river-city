@@ -18,9 +18,9 @@ body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     color: #333;
-    background-color: #f8f9fa;
+    background-color: white;
     margin: 0;
-    padding: 0;
+    padding: 8px 0px 0px 8px;
 }
 .p-3 {
     padding: 6px;
@@ -99,7 +99,7 @@ th, td {
     padding: 2px 8px;
     /* text-align: left; */
     vertical-align: top;
-    font-size: 12px;
+    font-size: 10px;
     word-break: break-word;
     }
 /* Column widths */
@@ -611,7 +611,7 @@ img {
                                         @foreach ($itemss as $item)
                                         <tr class="bg-white border-b item-with-description">
                                             <td class="px-6 py-4" style="width: 85% !important; text-align:justify">
-                                                <label class="text-14 font-semibold text-[#323C47] underline" for="">{{ $item->item_name }}</label>
+                                                <label class="text-12 font-semibold text-[#323C47] underline" for="">{{ $item->item_name }}</label>
                                                 <div class="text-[16px]/[18px] text-[#323C47] mt-2">
                                                     @if ($item->item_description)
                                                     <p class="font-medium">Description:</p>
@@ -739,7 +739,7 @@ img {
                                             @foreach ($itemss as $item)
                                             <tr class="bg-white border-b item-with-description">
                                                 <td class="px-6 py-4" style="text-align:justify">
-                                                    <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
+                                                    <label class="text-12 font-semibold text-[#323C47]" for="">{{ $item->item_name }}</label>
                                                     <div class="text-12 text-[#323C47] font">
                                                         @if ($item->item_description)
                                                         <p class="font-medium">Description:</p>
@@ -845,13 +845,13 @@ img {
                                         <label for="privilegeReportsView" class="text-gray-500"></label>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <label class="text-lg font-semibold text-[#323C47]" for="">{{ $itemName->item_name }}</label>
+                                        <label class="text-12 font-semibold text-[#323C47]" for="">{{ $itemName->item_name }}</label>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <label class="text-lg font-semibold text-[#323C47]" for="">{!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}</label>
+                                        <label class="text-12 font-semibold text-[#323C47]" for="">{!! preg_replace('/\*(.*?)\*/', '<b>$1</b>', $item['item_description']) !!}</label>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <label class="text-lg font-semibold text-[#323C47]" for="">{{ $item['item_qty'] }}</label> <br> {{$itemName->item_units}}
+                                        <label class="text-12 font-semibold text-[#323C47]" for="">{{ $item['item_qty'] }}</label> <br> {{$itemName->item_units}}
                                     </td>
                                 </tr>
                                 @endforeach
@@ -889,7 +889,7 @@ img {
                                         <label for="privilegeReportsView" class="text-gray-500"></label>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <label class="text-lg font-semibold text-[#323C47]" for="">{{ $assembly['est_ass_item_name'] }}</label>
+                                        <label class="text-12 font-semibold text-[#323C47]" for="">{{ $assembly['est_ass_item_name'] }}</label>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -902,6 +902,7 @@ img {
             {{-- <hr>py-7 px-4 rounded-lg border --}}
              <div class="">
                     <h1 class="font-bold my-2 text-18 text-center">Lien Release</h1>
+                    <div class="lint_release_center">
                     <p class="text-12 text-[#6b7280]  p-3" > The undersigned Lienor, in consideration of the final payment in the amount of <br>
                     $_______________________________, hereby waives and releases its lien and right to claim a lien for <br>
                     labor, services or materials furnished to River City Painting on the job of (Owner of Property):</p>
@@ -917,6 +918,7 @@ img {
                     <p class="text-12 text-[#6b7280]  p-3"> Signature:___________________________________________________Date:__________________________ <br>
                         Printed Name: __________________________________________________________
                     </p>
+                    </div>
                 </div>
         </div>
         {{-- <hr> --}}
