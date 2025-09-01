@@ -55,9 +55,10 @@
             <button class="bg-[#930027] p-2 text-white rounded-md">Print</button>
         </a>
         {{-- <a href="javascript:void(0);" onclick="downloadAsPDF('printableArea')"> --}}
-                <a href="{{ url('/makeProposal/' . $estimate->estimate_id . '?download=pdf') }}" class="btn bg-[#930027] p-2 text-white rounded-md">
-                Download as PDF
-            </a>
+               <a href="{{ url('/makeProposal/' . $estimate->estimate_id) . '?download=pdf&group_id=' .  request('group_id')}}"
+                class="btn bg-[#930027] p-2 text-white rounded-md">
+                    Download as PDF
+                </a>
 
 
         {{-- </a> --}}

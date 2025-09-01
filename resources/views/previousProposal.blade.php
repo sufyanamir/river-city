@@ -96,9 +96,10 @@ body {
                 Print
             </button>
         </a>
-        <a href="javascript:void(0);" onclick="downloadAsPDF('printableArea')">
-            <button class="bg-[#930027] p-2 text-white rounded-md ml-2">Download as PDF</button>
-        </a>
+            <a href="{{ route('viewProposal', ['proposalId' => $proposal_id, 'download' => 'pdf']) }}"
+    class="btn bg-[#930027] p-2 text-white rounded-md">
+    Download as PDF
+    </a>
     </div>
     <form action="/acceptProposal/{{ $estimate['estimate_id'] }}" method="post">
         @csrf
@@ -193,13 +194,13 @@ body {
                                 // Get group name from either estimate group or global group
                                 $groupName = '';
                                 $group = null;
-                                
+
                                 // Check for estimate group first
-                                if (!empty($groupItems['estimate_group_id']) && 
-                                    isset($groupItems['estimate_group']) && 
-                                    is_array($groupItems['estimate_group']) && 
+                                if (!empty($groupItems['estimate_group_id']) &&
+                                    isset($groupItems['estimate_group']) &&
+                                    is_array($groupItems['estimate_group']) &&
                                     !empty($groupItems['estimate_group'])) {
-                                    
+
                                     $groupName = $groupItems['estimate_group']['group_name'] ?? '';
                                     $group = $groupItems['estimate_group'];
                                     $group['is_estimate_specific'] = true;
@@ -208,11 +209,11 @@ body {
                                     $groupItems['group'] = $group;
                                 }
                                 // Check for global group if estimate group is not found
-                                elseif (!empty($groupItems['group_id']) && 
-                                        isset($groupItems['global_group']) && 
-                                        is_array($groupItems['global_group']) && 
+                                elseif (!empty($groupItems['group_id']) &&
+                                        isset($groupItems['global_group']) &&
+                                        is_array($groupItems['global_group']) &&
                                         !empty($groupItems['global_group'])) {
-                                    
+
                                     $groupName = $groupItems['global_group']['group_name'] ?? '';
                                     $group = $groupItems['global_group'];
                                     $group['is_estimate_specific'] = false;
@@ -220,9 +221,9 @@ body {
                                 }else{
                                     $groupName = $groupItems['group']['group_name'] ?? ''; // Use 'Other' if no group is associated
                                 }
-                                
+
                                 // Add the group object to the item for use in the view
-                                
+
                                 $groupedItems[$groupName][] = $groupItems;
                             }
                             @endphp

@@ -503,7 +503,7 @@ class EstimateController extends Controller
     // update item status
 
     // view Estimate Materials
-    public function viewEstimateMaterials($id)
+    public function viewEstimateMaterials(Request $request, $id)
     {
 
         $userDetails = session('user_details');
@@ -520,6 +520,11 @@ class EstimateController extends Controller
         $itemTemplates = EstimateItemTemplates::with('templateItems')->where('estimate_id', $id)->get();
         $customer = Customer::where('customer_id', $estimate->customer_id)->first();
                     $estimateAdditionalItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
+        if ($request->has('download') && $request->download == 'pdf') {
+                    $pdf = Pdf::loadView('viewEstimateMaterials-pdf', ['estimate_items' => $materialItems, 'estimateAdditionalItems' => $estimateAdditionalItems, 'assemblies' => $estimateAssemblyItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
+                    return $pdf->download('estimate-materials-' . $estimate->estimate_id . '.pdf');
+                }
+
         return view('viewEstimateMaterials', ['estimate_items' => $materialItems, 'estimateAdditionalItems' => $estimateAdditionalItems, 'assemblies' => $estimateAssemblyItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
     }
     // view Estimate Materials
@@ -2645,12 +2650,19 @@ class EstimateController extends Controller
                 $data['proposal_status'] = $latestProposal->proposal_status;
                 $data['proposal_total'] = $latestProposal->proposal_total;
                 // dd($data);
+                if ($request->has('download') && $request->download == 'pdf') {
+                    $pdf = Pdf::loadView('previousProposal-pdf', $data);
+                    return $pdf->download('proposal-' . $latestProposal->estimate_proposal_id . '.pdf');
+                }
                 return view('previousProposal', $data);
             } else {
                 // return response()->json(['success' => false, 'message' => 'No valid ID provided'], 400);
                 return view('accept-proposal', ['success' => false, 'message' => 'No valid ID provided', 'sts' => 400]);
             }
-
+            if ($request->has('download') && $request->download == 'pdf') {
+                $pdf = Pdf::loadView('accept-proposal-pdf', $data);
+                return $pdf->download('proposal-' . $latestProposal->estimate_proposal_id . '.pdf');
+            }
             return view('accept-proposal', $data);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -2852,7 +2864,7 @@ class EstimateController extends Controller
         }
 
         // Default: just show the HTML page
-        return view('makes-proposal-pdf', $data);
+        return view('makes-proposal', $data);
 
     } catch (\Exception $e) {
         return response()->json(['success' => false, 'message' => $e->getMessage()], 400);

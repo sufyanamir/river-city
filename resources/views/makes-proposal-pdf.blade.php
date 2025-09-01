@@ -67,7 +67,7 @@
         }
 
         .grid-padding {
-            padding: 20px;
+            padding: 10px;
         }
 
         .px-4 {
@@ -148,50 +148,50 @@
 
         /* Spacing */
         .mt-2 {
-            margin-top: 8px;
+            margin-top: 4px;
         }
 
         .mt-5 {
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .mt-10 {
-            margin-top: 40px;
+            margin-top: 15px;
         }
 
         .mb-2 {
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .mb-8 {
-            margin-bottom: 32px;
+            margin-bottom: 20px;
         }
 
         .py-3 {
-            padding-top: 12px;
-            padding-bottom: 12px;
+            padding-top: 6px;
+            padding-bottom: 6px;
         }
 
         .py-4 {
-            padding-top: 16px;
-            padding-bottom: 16px;
+            padding-top: 8px;
+            padding-bottom: 8px;
         }
 
         .px-6 {
-            padding-left: 24px;
-            padding-right: 24px;
+            padding-left: 18px;
+            padding-right: 18px;
         }
 
         .p-2 {
-            padding: 8px;
+            padding: 6px;
         }
 
         .p-4 {
-            padding: 16px;
+            padding: 10px;
         }
 
         .pb-6 {
-            padding-bottom: 24px;
+            padding-bottom: 14px;
         }
 
         .sub_total_p {
@@ -215,7 +215,7 @@
         }
 
         .border-solid {
-            border: 1px solid #323C47;
+            /* border: 1px solid #323C47; */
         }
 
         .rounded-md {
@@ -230,7 +230,7 @@
 
         th,
         td {
-            padding: 8px 12px;
+            padding: 4px 6px;
             text-align: left;
         }
 
@@ -258,9 +258,9 @@
             text-align: center;
         }
 
-        .table-border-bottom {
+        /* .table-border-bottom {
             border-bottom: 1px solid #e5e5e5;
-        }
+        } */
 
         /* Specific Components */
         /* .projectLogo img {
@@ -441,7 +441,7 @@
 
         .totals-table {
             width: 100%;
-            margin-top: 10px;
+            margin-top: 6px;
             border-collapse: collapse;
             font-size: 14px;
         }
@@ -449,9 +449,10 @@
         .totals-table td.value-right {
             text-align: right;
             /* align both label and amount to the right */
-            font-style: italic;
+            /* font-style: italic; */
             color: #333;
-            padding: 6px 12px;
+            padding: 2px 10px;
+            font-size: 12px;
         }
 
         /*
@@ -797,7 +798,7 @@
                         </div>
                     </div> --}}
                     <div class="col-span-12">
-                        <div class="text-primary font-medium border-bottom pb-6 border-solid">
+                        <div class="text-primary font-medium  border-solid">
                             @php
                                 $subTotal = 0;
                             @endphp
@@ -1151,9 +1152,9 @@
                     </div>
                 </div>
                 <div class=" grid col-span-12 editor-container">
-                    {{-- @if ($preview == null)
-                        <textarea name="terms_and_conditions" id="editor" class="text_area ">
-                    @endif --}}
+                    @if ($preview == null)
+                        <div name="terms_and_conditions" id="editor" class="text_area ">
+                    @endif
                     <p class="text-14"><strong>Required Deposit</strong></p>
                     <p class="text-10">A nonrefundable 1/3 deposit is required for all projects due at the time of
                         scheduling to secure your spot on our schedule. The remaining balance will be due upon
@@ -1269,9 +1270,9 @@
                     <p class="text-10">Invoice will be issued to Client upon Completion of the work client shall pay
                         invoice within 10 days of client’s receipt of the invoice. Client shall also pay a late charge
                         of 1-1/2% per month on all balances unpaid 30 days after the invoice date.</p>
-                    {{-- @if ($preview == null)
-                            </textarea>
-                         @endif --}}
+                    @if ($preview == null)
+                    </div>
+                         @endif
                 </div>
 
             </div>

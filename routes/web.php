@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', [UserController::class, 'index']);
 Route::post('/Login', [UserController::class, 'login']);
 Route::match(['get', 'post'], '/logout', [UserController::class, 'logout']);
-Route::get('/viewProposal', [EstimateController::class, 'viewProposal']);
+Route::get('/viewProposal', [EstimateController::class, 'viewProposal'])->name('viewProposal');
 Route::post('/acceptProposal/{id}', [EstimateController::class, 'acceptProposal']);
 
 Route::middleware('customauth')->group(function () {
@@ -137,7 +137,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/deleteEstimateItem/{id}', [EstimateController::class, 'deleteEstimateItem']);
     Route::post('/includeexcludeEstimateItem', [EstimateController::class, 'includeexcludeEstimateItem']);
     Route::get('/getEventDetailOnCalendar', [EstimateController::class, 'getEventDetailOnCalendar']);
-    Route::get('/viewEstimateMaterials/{id}', [EstimateController::class, 'viewEstimateMaterials']);
+    Route::get('/viewEstimateMaterials/{id}', [EstimateController::class, 'viewEstimateMaterials'])->name('viewEstimateMaterials');
     Route::post('/applyDiscount', [EstimateController::class, 'applyDiscount']);
     Route::post('/sendInvoiceOrPaymentMail', [EstimateController::class, 'sendInvoiceOrPaymentMail']);
 
@@ -226,7 +226,7 @@ Route::middleware('customauth')->group(function () {
     Route::post('/updateSettings', [UserController::class, 'updateSettings']);
     Route::post('/updateCompany', [UserController::class, 'updateCompany']);
     Route::post('/updateBranchTargets', [UserController::class, 'updateBranchTargets']);
-    
+
     // Branch Reports Routes
     Route::get('/branch-reports', [BranchReportsController::class, 'index'])->name('branch-reports.index');
     Route::get('/branch-reports/weekly/{branchName?}/{year?}', [BranchReportsController::class, 'weeklyReport'])->name('branch-reports.weekly');
