@@ -885,6 +885,55 @@ estimateEvent.filter(function(estimate) {
             var day = ('0' + date.getDate()).slice(-2);
             return `${year}-${month}-${day}`;
         }
+        // Function to split multi-day events into daily chunks
+function splitMultiDayEvent(event) {
+    let events = [];
+    let start = new Date(event.start);
+    let end = new Date(event.end);
+
+    if (start.toDateString() === end.toDateString()) {
+        events.push(event);
+        return events;
+    }
+
+    // First day
+    let firstDayEnd = new Date(start);
+    firstDayEnd.setHours(17, 0, 0, 0);
+    events.push({ ...event, start: new Date(start), end: firstDayEnd });
+
+    // Middle days
+    let current = new Date(start);
+    current.setDate(current.getDate() + 1);
+    while (current < end) {
+        let dayStart = new Date(current);
+        dayStart.setHours(8, 0, 0, 0);
+
+        let dayEnd = new Date(current);
+        dayEnd.setHours(17, 0, 0, 0);
+
+        // Only add middle full days
+        let endOfDay = new Date(end);
+        endOfDay.setHours(0, 0, 0, 0);
+        if (dayEnd < endOfDay) {
+            events.push({ ...event, start: dayStart, end: dayEnd });
+        }
+        current.setDate(current.getDate() + 1);
+    }
+
+    // Last day
+    let lastDayStart = new Date(end);
+    lastDayStart.setHours(9, 0, 0, 0);
+    events.push({ ...event, start: lastDayStart, end: new Date(end) });
+
+    return events;
+}
+
+// Expand multi-day events
+let expandedEvents = [];
+allEvents.forEach(event => {
+    expandedEvents = expandedEvents.concat(splitMultiDayEvent(event));
+});
+
 
         var calendar = new Calendar(calendarEl, {
             headerToolbar: {
@@ -894,7 +943,7 @@ estimateEvent.filter(function(estimate) {
             },
             initialView: 'timeGridWeek',
             themeSystem: 'bootstrap',
-            events: allEvents,
+            events: expandedEvents,
             editable: true,
             droppable: true,
             drop: function(info) {
@@ -1029,7 +1078,7 @@ $('#end_date').val(endDateTime);
                             $('#event-start').text(new Date(response.scheduled_start_date).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' }));
                             $('#event-end').text(new Date(response.scheduled_end_date).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' }));
                             $('#event-project-name').text(response.project_name);
-                            
+
                             // For work events (work_assigned == 1), prioritize crew over schedulers
                             let assignedUsers = [];
                             if (response.work_assigned == 1 && response.crew) {
@@ -1043,7 +1092,7 @@ $('#end_date').val(endDateTime);
                                     : JSON.parse(response.estimate_schedule_assigned_to || '[]'); // Parse if it's a JSON string
                                 console.log('Using schedulers:', assignedUsers);
                             }
-                            
+
                             let $select = $('#update_assign_work');
 
                             // Destroy Select2 before modifying the select element
