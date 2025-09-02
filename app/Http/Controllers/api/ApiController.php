@@ -775,7 +775,7 @@ class ApiController extends Controller
 
             $estimateItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')
                 ->where('estimate_id', $estimate->estimate_id)
-                ->where('additional_item', '<>', 'yes')
+                ->where('additional_item', 'no')
                 ->get()
                 ->sortBy(function ($item) {
                     // Push sort_order == 0 to the end
@@ -809,6 +809,7 @@ class ApiController extends Controller
 
         'items'             => $items->map(function ($item) {
             $data = $item->toArray();   // all item fields
+            unset($data['estimate_group'], $data['global_group']);
             $data['assemblies'] = $item->assemblies; // relation
             return $data;
         })->values(),
@@ -828,7 +829,43 @@ class ApiController extends Controller
             //     });
 
 
-            $estimateAdditionalItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
+            $estimateAdditionalItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get()->sortBy(function ($item) {
+                    // Push sort_order == 0 to the end
+                    return $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order;
+                });
+                  // Group items by estimateGroup (fallback to globalGroup if needed)
+                $groupedItems = $estimateAdditionalItems->groupBy(function ($item) {
+                    return $item->estimateGroup->group_name
+                        ?? $item->globalGroup->group_name
+                        ?? 'Ungrouped';
+            });
+
+            // Format for response
+           $formattedGroupsAdditionalItems = $groupedItems->map(function ($items, $groupName) {
+    $group = $items->first()->estimateGroup ?? $items->first()->globalGroup;
+
+    return [
+        'group_id'          => $group->estimate_group_id ?? null,
+        'group_name'        => $group->group_name ?? $groupName,
+        'group_description' => $group->group_description ?? null,
+        'group_type'        => $group->group_type ?? null,
+        'group_source'      => $items->first()->estimateGroup
+                                ? 'estimate_group'
+                                : 'global_group',
+        'show_unit_price'   => $group->show_unit_price ?? null,
+        'show_quantity'     => $group->show_quantity ?? null,
+        'show_total'        => $group->show_total ?? null,
+        'show_group_total'  => $group->show_group_total ?? null,
+        'include_est_total' => $group->include_est_total ?? null,
+
+        'items'             => $items->map(function ($item) {
+            $data = $item->toArray();   // all item fields
+             unset($data['estimate_group'], $data['global_group']);
+           // $data['assemblies'] = $item->assemblies; // relation
+            return $data;
+        })->values(),
+    ];
+})->values();
 
             $profitHours = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->where('additional_item', '<>', 'yes')->sum('item_qty');
             $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->where('additional_item', '<>', 'yes')->get();
@@ -945,7 +982,7 @@ class ApiController extends Controller
                 // 'expenseTotal' => $expenseTotal,
                 // 'vendorTotals' => $vendorTotals,
                 // 'advancePayment' => $advancePayment,
-                'estimateAdditionalItems' => $estimateAdditionalItems,
+                'estimateAdditionalItems' => $formattedGroupsAdditionalItems,
             ], 200);
             } catch (\Exception $e) {
                 return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -3888,10 +3925,18 @@ class ApiController extends Controller
 
 public function ItemList(){
     try{
-        $itemList = Items::get();
+        $itemList = Items::with('assemblies')->get();
         return response()->json(['success' => true, 'itemList'=>$itemList],200);
     } catch(\Exception $e){
         return response()->json(['success'=>false, 'message'=> $e->getMessage()]);
+    }
+}
+public function TemplateList(){
+    try{
+        $TemplateList = ItemTemplates::get();
+        return response()->json(['TemplateList'=> $TemplateList],200);
+    } catch(\Exception $e){
+        return response()->json(['success'=>false, 'message'=>$e->getMessage()],400);
     }
 }
 
