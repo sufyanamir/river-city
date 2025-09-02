@@ -125,6 +125,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/logout', [ApiController::class, 'logout']);
 
     Route::get('/getItems', [ApiController::class, 'getItems']);
+    Route::get('/ItemList', [ApiController::class, 'ItemList']);
+    Route::get('/itemTemplateList/{id}', [ApiController::class, 'getEstimateTemplateItem']);
 });
 
 

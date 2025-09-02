@@ -11,6 +11,13 @@ class EstimateItemTemplateItems extends Model
 
     protected $table = 'estimate_item_template_items';
 
+    // In EstimateItemTemplateItems model
+public function item()
+{
+    return $this->belongsTo(Items::class, 'item_id', 'item_id');
+
+}
+
     protected $primaryKey = 'est_template_item_id';
 
     protected $fillable = [
