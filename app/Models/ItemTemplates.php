@@ -13,6 +13,10 @@ class ItemTemplates extends Model
     {
         return $this->hasMany(ItemTemplateItems::class, 'item_template_id');
     }
+    public function itemTemplateItems()
+    {
+        return $this->hasMany(ItemTemplateItems::class, 'item_template_id');
+    }
 
     protected $table = 'item_templates';
 
