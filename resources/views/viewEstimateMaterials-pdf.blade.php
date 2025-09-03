@@ -19,7 +19,7 @@ body {
     line-height: 1.6;
     color: #333;
     background-color: white;
-    margin: 0;
+    margin: 5px 20px 5px 20px;
     padding: 8px 0px 0px 8px;
 }
 .p-3 {
@@ -475,6 +475,12 @@ img {
     text-align: left;
 }
 
+.lint_release_center{
+    width: 100%;
+    align-content: center;
+    text-align: start;
+}
+
 /* Responsive adjustments */
 @media (max-width: 640px) {
     .sm\:grid-cols-10 {
@@ -903,9 +909,10 @@ img {
              <div class="">
                     <h1 class="font-bold my-2 text-18 text-center">Lien Release</h1>
                     <div class="lint_release_center">
-                    <p class="text-12 text-[#6b7280]  p-3" > The undersigned Lienor, in consideration of the final payment in the amount of <br>
-                    $_______________________________, hereby waives and releases its lien and right to claim a lien for <br>
-                    labor, services or materials furnished to River City Painting on the job of (Owner of Property):</p>
+
+                    <p class="text-12 text-[#6b7280]  p-3" > The undersigned Lienor, in consideration of the final payment in the amount of
+                    $_______________________________,<br> hereby waives and releases its lien and right to claim a lien for
+                    labor, services or materials furnished to River City Painting<br> on the job of (Owner of Property):</p>
                     <p class="text-12 text-[#6b7280]  p-3">
                         Project Name: {{$estimate->project_name}}
                     </p>
