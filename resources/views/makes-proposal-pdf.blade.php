@@ -18,6 +18,7 @@
             background-color: white;
             color: #333;
             line-height: 1.6;
+            margin: 5px 20px 5px 20px;
         }
 
         /* Form Styles */
