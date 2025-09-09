@@ -3930,7 +3930,7 @@ public function ItemList(Request $request){
 
         if($key === 'assemblies'){
             $query->where('item_type', 'assemblies')->with('assemblies');
-        }elseif ($key === 'labourmaterial'){
+        }elseif ($key === 'labourMaterial'){
             $query->whereIn('item_type',['labour', 'material'])->with('assemblies');
         }elseif ($key === 'all'){
             $query->with('assemblies');
