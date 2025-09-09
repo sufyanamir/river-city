@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Material;
+use App\Models\Labour;
 
 class Items extends Model
 {
@@ -17,6 +19,17 @@ class Items extends Model
     public function assemblies()
     {
         return $this->hasMany(ItemAssembly::class, 'item_id', 'item_id');
+    }
+
+
+    public function labor()
+    {
+        return $this->hasMany(Labour::class, 'item_id', 'item_id');
+    }
+
+    public function material()
+    {
+        return $this->hasMany(Material::class, 'item_id', 'item_id');
     }
 
     protected $table = 'items';
