@@ -3923,9 +3923,26 @@ class ApiController extends Controller
     }
 }
 
-public function ItemList(){
+public function ItemList(Request $request){
     try{
-        $itemList = Items::with('assemblies')->get();
+        $key = $request->input('type');
+        $query = Items::query();
+
+        if($key === 'assemblies'){
+            $query->where('item_type', 'assemblies')
+                  ->with('assemblies');
+        } elseif ($key === 'labour'){
+            $query->where('item_type','labour')->with('assemblies');
+        } elseif ($key === 'material'){
+            $query->where('item_type','material')->with('assemblies');
+        }elseif ($key === 'all') {
+            $query->with('assemblies');
+        }else{
+            $query->with('assemblies');
+        }
+
+        $itemList = $query->get();
+
         return response()->json(['success' => true, 'itemList'=>$itemList],200);
     } catch(\Exception $e){
         return response()->json(['success'=>false, 'message'=> $e->getMessage()]);
