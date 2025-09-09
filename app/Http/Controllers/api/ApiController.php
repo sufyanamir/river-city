@@ -3929,17 +3929,27 @@ public function ItemList(Request $request){
         $query = Items::query();
 
         if($key === 'assemblies'){
-            $query->where('item_type', 'assemblies')
-                  ->with('assemblies');
-        } elseif ($key === 'labour'){
-            $query->where('item_type','labour')->with('assemblies');
-        } elseif ($key === 'material'){
-            $query->where('item_type','material')->with('assemblies');
-        }elseif ($key === 'all') {
+            $query->where('item_type', 'assemblies')->with('assemblies');
+        }elseif ($key === 'labourmaterial'){
+            $query->whereIn('item_type',['labour', 'material'])->with('assemblies');
+        }elseif ($key === 'all'){
             $query->with('assemblies');
         }else{
             $query->with('assemblies');
         }
+
+        // if($key === 'assemblies'){
+        //     $query->where('item_type', 'assemblies')
+        //           ->with('assemblies');
+        // } elseif ($key === 'labour'){
+        //     $query->where('item_type','labour')->with('assemblies');
+        // } elseif ($key === 'material'){
+        //     $query->where('item_type','material')->with('assemblies');
+        // }elseif ($key === 'all') {
+        //     $query->with('assemblies');
+        // }else{
+        //     $query->with('assemblies');
+        // }
 
         $itemList = $query->get();
 
