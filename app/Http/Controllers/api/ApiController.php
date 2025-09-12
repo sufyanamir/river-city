@@ -3967,6 +3967,15 @@ public function TemplateList(){
     }
 }
 
+public function getAllGroups(){
+    try{
+        $groups = Groups::whereIn('group_type', ['assemblies','material','labour'])->get();
+        return response()->json(['success'=> true, 'data'=> $groups], 200);
+    }catch(\Exception $e){
+        return response()->json(['success'=> false, 'message'=> $e->getMessage()], 400);
+    }
+}
+
     // OwerList Api
     public function getUsersList(Request $request, $key = null){
         // $userDetails = auth()->user();
