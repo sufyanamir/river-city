@@ -87,6 +87,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
    Route::post('/addToDos', [ApiController::class, 'addToDos']);// addToDos
    Route::post('/completeToDo/{id}', [ApiController::class, 'completeToDo']);//completeToDo
    Route::delete('/deleteToDo/{id}', [ApiController::class, 'deleteToDo']); //deleteToDo
+
+   Route::post('/includeexcludeEstimateItem', [ApiController::class, 'includeexcludeEstimateItem']);
 //    Calendar
    Route::get('/getEstimatesOnCalendar/{id?}', [ApiController::class, 'getEstimatesOnCalendar']);//getEstimatesOnCalendar
    Route::get('/getEstimateToSetSchedule/{id}',[ApiController::class,'getEstimateToSetSchedule']);

@@ -66,6 +66,52 @@ class ApiController extends Controller
         }
     }
 
+
+    public function includeexcludeEstimateItem(Request $request)
+    {
+        try {
+
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_id' => 'required',
+                'estimate_item_id' => 'nullable',
+                'item_status' => 'required',
+                'group_id' => 'nullable',
+                'estimate_group_id' => 'nullable',
+            ]);
+
+            if (isset($validatedData['group_id']) && $validatedData['group_id'] != null) {
+                // Handle global groups
+                $estimateItems = EstimateItem::where('group_id', $validatedData['group_id'])->get();
+
+                foreach ($estimateItems as $item) {
+                    $item->item_status = $validatedData['item_status'];
+                    $item->save();
+                }
+            } elseif (isset($validatedData['estimate_group_id']) && $validatedData['estimate_group_id'] != null) {
+                // Handle estimate-specific groups
+                $estimateItems = EstimateItem::where('estimate_group_id', $validatedData['estimate_group_id'])->get();
+
+                foreach ($estimateItems as $item) {
+                    $item->item_status = $validatedData['item_status'];
+                    $item->save();
+                }
+            } else {
+                $estimateItem = EstimateItem::where('estimate_item_id', $validatedData['estimate_item_id'])->first();
+                $estimateItem->item_status = $validatedData['item_status'];
+
+                $estimateItem->save();
+            }
+
+
+            return response()->json(['success' => true, 'message' => 'Item status changed to ' . $validatedData['item_status']], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
+
     public function login(Request $request)
     {
         try {
