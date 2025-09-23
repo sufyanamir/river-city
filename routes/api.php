@@ -53,6 +53,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
    Route::post('/editGroup', [ApiController::class, 'editGroup']);//editGroup
    Route::post('/deleteEstimateGroupItems', [ApiController::class, 'deleteEstimateGroupItems']);//deleteEstimateGroupItems
     Route::post('/addEstimateItemTemplate', [ApiController::class, 'addEstimateItemTemplate']);
+
+    Route::post('/editEstimateGroup', [ApiController::class, 'editEstimateGroup']);
    //Add Estimate File
    Route::post('/addEstimateFile', [ApiController::class, 'addEstimateFile']);//addEstimateFile
    Route::delete('/deleteFile/{id}', [ApiController::class, 'deleteFile']); //deleteFile

@@ -66,6 +66,57 @@ class ApiController extends Controller
         }
     }
 
+    public function editEstimateGroup(Request $request)
+    {
+        try {
+            $userDetails = session('user_details');
+
+            $validatedData = $request->validate([
+                'estimate_group_id' => 'required',
+                'group_name' => 'required|string',
+                'group_type' => 'required|string',
+                'group_description' => 'nullable|string',
+                'show_unit_price' => 'nullable|boolean',
+                'show_quantity' => 'nullable|boolean',
+                'show_total' => 'nullable|boolean',
+                'show_group_total' => 'nullable|boolean',
+                'include_est_total' => 'nullable|boolean',
+            ]);
+
+            $estimateGroup = EstimateGroups::find($validatedData['estimate_group_id']);
+
+            if (!$estimateGroup) {
+                return response()->json(['success' => false, 'message' => 'Estimate group not found!'], 404);
+            }
+
+            // Check if user has permission to edit this group
+            // For now, allow any authenticated user to edit estimate groups
+            // You can add more specific permission logic here if needed
+            if ($estimateGroup->estimate_id) {
+                $estimate = Estimate::find($estimateGroup->estimate_id);
+                if (!$estimate) {
+                    return response()->json(['success' => false, 'message' => 'Estimate not found!'], 404);
+                }
+                // Optional: Add more specific permission checks here if needed
+                // For example, check if user is admin, or has specific role, etc.
+            }
+
+            $estimateGroup->group_name = $validatedData['group_name'];
+            $estimateGroup->group_type = $validatedData['group_type'];
+            $estimateGroup->group_description = $validatedData['group_description'];
+            $estimateGroup->show_unit_price = $validatedData['show_unit_price'] ?? 0;
+            $estimateGroup->show_quantity = $validatedData['show_quantity'] ?? 0;
+            $estimateGroup->show_total = $validatedData['show_total'] ?? 0;
+            $estimateGroup->show_group_total = $validatedData['show_group_total'] ?? 0;
+            $estimateGroup->include_est_total = $validatedData['include_est_total'] ?? 0;
+
+            $estimateGroup->save();
+
+            return response()->json(['success' => true, 'message' => 'Group updated successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
 
     public function includeexcludeEstimateItem(Request $request)
     {
