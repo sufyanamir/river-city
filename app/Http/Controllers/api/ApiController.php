@@ -1216,19 +1216,16 @@ class ApiController extends Controller
                 // 'selected_items' => 'required|array',
             ]);
             if (isset($validatedData['group_name']) && $validatedData['group_name'] != null) {
-                $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
-                if (!$groupDetail) {
-                    $groupDetail = Groups::create([
-                        'group_name' => $validatedData['group_name'],
-                        'group_type' => 'assemblies',
-                        'show_unit_price' => 1,
-                        'show_quantity' => 1,
-                        'show_total' => 1,
-                        'show_group_total' => 1,
-                        'include_est_total' => 1,
-                    ]);
-                }
+                // Create or get estimate-specific group
+                $groupDetail = EstimateGroups::getOrCreate(
+                    $validatedData['estimate_id'],
+                    $validatedData['group_name'],
+                    $userDetails['id']
+                );
+                $groupId = null;
+                $estimateGroupId = $groupDetail->estimate_group_id;
             } else {
+                // Use global 'Single' group
                 $groupDetail = Groups::where('group_name', 'Single')->first();
                 if (!$groupDetail) {
                     $groupDetail = Groups::create([
@@ -1241,6 +1238,8 @@ class ApiController extends Controller
                         'include_est_total' => 1,
                     ]);
                 }
+                $groupId = $groupDetail->group_id;
+                $estimateGroupId = null;
             }
 
             $estimateItem = EstimateItem::create([
@@ -1259,7 +1258,8 @@ class ApiController extends Controller
                 'item_Description' => $validatedData['item_description'],
                 'item_note' => $validatedData['item_note'],
                 'is_upgrade' => $validatedData['is_upgrade'],
-                'group_id' => $groupDetail->group_id,
+                'group_id' => $groupId,
+                'estimate_group_id' => $estimateGroupId,
                 'additional_item' => $validatedData['additional_item'],
             ]);
 
