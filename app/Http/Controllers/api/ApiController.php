@@ -1247,10 +1247,7 @@ class ApiController extends Controller
                 $groupId = null;
                 $estimateGroupId = $groupDetail->estimate_group_id;
             } else {
-                // Use global 'Single' group
-                $groupDetail = Groups::where('group_name', 'Single')->first();
-                if (!$groupDetail) {
-                    $groupDetail = Groups::create([
+                    $groupDetail = EstimateGroups::create([
                         'group_name' => 'Single',
                         'group_type' => 'assemblies',
                         'show_unit_price' => 1,
@@ -1258,10 +1255,10 @@ class ApiController extends Controller
                         'show_total' => 1,
                         'show_group_total' => 1,
                         'include_est_total' => 1,
+                        $userDetails->id
                     ]);
-                }
-                $groupId = $groupDetail->group_id;
-                $estimateGroupId = null;
+                $groupId = null;
+                $estimateGroupId = $groupDetail->estimate_group_id;
             }
 
             $estimateItem = EstimateItem::create([
@@ -3849,6 +3846,8 @@ class ApiController extends Controller
     public function editGroup(Request $request)
     {
         try {
+            
+            $userDetails = auth()->user();
 
             $validatedData = $request->validate([
                 'group_id' => 'required',
@@ -3868,6 +3867,44 @@ class ApiController extends Controller
             ]);
 
             $group = Groups::where('group_id', $validatedData['group_id'])->first();
+
+            $estimateId = $request->input('estimate_id');
+
+            if ($estimateId) {
+                // Get estimate items linked to this group in that estimate
+                $estimateItems = EstimateItem::where('estimate_id', $estimateId)
+                    ->where('group_id', $group->group_id)
+                    ->get();
+
+                if ($estimateItems->isNotEmpty()) {
+                    // ✅ Create a new EstimateGroups record instead of updating Groups
+                    $estimateGroup = EstimateGroups::create([
+                        'estimate_id'       => $estimateId,
+                        'group_name'        => $validatedData['group_name'],
+                        'group_type'        => $validatedData['group_type'],
+                        'group_description' => $validatedData['group_description'],
+                        'show_unit_price'   => $request->has('show_unit_price') ? 1 : 0,
+                        'show_quantity'     => $request->has('show_quantity') ? 1 : 0,
+                        'show_total'        => $request->has('show_total') ? 1 : 0,
+                        'show_group_total'  => $request->has('show_group_total') ? 1 : 0,
+                        'include_est_total' => $request->has('include_est_total') ? 1 : 0,
+                        'added_user_id'     => $userDetails->id,
+                    ]);
+
+                    // ✅ Reassign estimate items to new estimate group
+                    foreach ($estimateItems as $item) {
+                        $item->estimate_group_id = $estimateGroup->estimate_group_id;
+                        $item->group_id = null;
+                        $item->save();
+                    }
+
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Group moved to estimate groups and items reassigned!',
+                        'estimate_group_id' => $estimateGroup->estimate_group_id
+                    ], 200);
+                }
+            }
 
             $group->group_name = $validatedData['group_name'];
             $group->group_type = $validatedData['group_type'];
@@ -3892,12 +3929,19 @@ class ApiController extends Controller
         try {
             $validatedData = $request->validate([
                 'estimate_id' => 'required',
-                'group_id' => 'required',
+                'group_id' => 'nullable',
+                'estimate_group_id' => 'nullable',
             ]);
 
-            $estimateItems = EstimateItem::where('estimate_id', $validatedData['estimate_id'])
-                ->where('group_id', $validatedData['group_id'])
-                ->get();
+            if($validatedData['group_id'] != null){
+                $estimateItems = EstimateItem::where('estimate_id', $validatedData['estimate_id'])
+                    ->where('group_id', $validatedData['group_id'])
+                    ->get();
+            }else{
+                $estimateItems = EstimateItem::where('estimate_id', $validatedData['estimate_id'])
+                    ->where('estimate_group_id', $validatedData['estimate_group_id'])
+                    ->get();
+            }
 
             foreach ($estimateItems as $item) {
                 $item->delete();
