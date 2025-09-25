@@ -16,6 +16,7 @@
             background-color: white;
             color: #333;
             line-height: 1.6;
+            margin: 5px 20px 5px 20px;
         }
 
         .width-60{
@@ -130,7 +131,8 @@
             padding: 0 15px;
         }
         .grid-paddingbadge {
-            padding: 20px;
+            /* padding: 20px; */
+            padding: 10px;
         }
         .term_condition p{
             font-size: 10px;

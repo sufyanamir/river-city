@@ -11,6 +11,7 @@ use App\Models\CompanyBranches;
 use App\Models\EstimateItemTemplateItems;
 use App\Models\EstimateItemTemplates;
 use App\Models\Items;
+use App\Models\ItemTemplateItems;
 use App\Models\Groups;
 use App\Models\EstimateGroups;
 use App\Models\EstimateItem;
@@ -878,7 +879,7 @@ class ApiController extends Controller
 
             $estimateItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')
                 ->where('estimate_id', $estimate->estimate_id)
-                ->where('additional_item', '<>', 'yes')
+                ->where('additional_item', 'no')
                 ->get()
                 ->sortBy(function ($item) {
                     // Push sort_order == 0 to the end
@@ -893,30 +894,31 @@ class ApiController extends Controller
             });
 
             // Format for response
-            $formattedGroups = $groupedItems->map(function ($items, $groupName) {
-                $group = $items->first()->estimateGroup ?? $items->first()->globalGroup;
+           $formattedGroups = $groupedItems->map(function ($items, $groupName) {
+    $group = $items->first()->estimateGroup ?? $items->first()->globalGroup;
 
-                return [
-                    'group_id'          => $group->estimate_group_id ?? null,
-                    'group_name'        => $group->group_name ?? $groupName,
-                    'group_description' => $group->group_description ?? null,
-                    'group_type'        => $group->group_type ?? null,
-                    'group_source'      => $items->first()->estimateGroup
-                        ? 'estimate_group'
-                        : 'global_group',
-                    'show_unit_price'   => $group->show_unit_price ?? null,
-                    'show_quantity'     => $group->show_quantity ?? null,
-                    'show_total'        => $group->show_total ?? null,
-                    'show_group_total'  => $group->show_group_total ?? null,
-                    'include_est_total' => $group->include_est_total ?? null,
+    return [
+        'group_id'          => $group->estimate_group_id ?? null,
+        'group_name'        => $group->group_name ?? $groupName,
+        'group_description' => $group->group_description ?? null,
+        'group_type'        => $group->group_type ?? null,
+        'group_source'      => $items->first()->estimateGroup
+                                ? 'estimate_group'
+                                : 'global_group',
+        'show_unit_price'   => $group->show_unit_price ?? null,
+        'show_quantity'     => $group->show_quantity ?? null,
+        'show_total'        => $group->show_total ?? null,
+        'show_group_total'  => $group->show_group_total ?? null,
+        'include_est_total' => $group->include_est_total ?? null,
 
-                    'items'             => $items->map(function ($item) {
-                        $data = $item->toArray();   // all item fields
-                        $data['assemblies'] = $item->assemblies; // relation
-                        return $data;
-                    })->values(),
-                ];
-            })->values();
+        'items'             => $items->map(function ($item) {
+            $data = $item->toArray();   // all item fields
+            unset($data['estimate_group'], $data['global_group']);
+            $data['assemblies'] = $item->assemblies; // relation
+            return $data;
+        })->values(),
+    ];
+})->values();
 
 
 
@@ -931,7 +933,43 @@ class ApiController extends Controller
             //     });
 
 
-            $estimateAdditionalItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
+            $estimateAdditionalItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get()->sortBy(function ($item) {
+                    // Push sort_order == 0 to the end
+                    return $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order;
+                });
+                  // Group items by estimateGroup (fallback to globalGroup if needed)
+                $groupedItems = $estimateAdditionalItems->groupBy(function ($item) {
+                    return $item->estimateGroup->group_name
+                        ?? $item->globalGroup->group_name
+                        ?? 'Ungrouped';
+            });
+
+            // Format for response
+           $formattedGroupsAdditionalItems = $groupedItems->map(function ($items, $groupName) {
+    $group = $items->first()->estimateGroup ?? $items->first()->globalGroup;
+
+    return [
+        'group_id'          => $group->estimate_group_id ?? null,
+        'group_name'        => $group->group_name ?? $groupName,
+        'group_description' => $group->group_description ?? null,
+        'group_type'        => $group->group_type ?? null,
+        'group_source'      => $items->first()->estimateGroup
+                                ? 'estimate_group'
+                                : 'global_group',
+        'show_unit_price'   => $group->show_unit_price ?? null,
+        'show_quantity'     => $group->show_quantity ?? null,
+        'show_total'        => $group->show_total ?? null,
+        'show_group_total'  => $group->show_group_total ?? null,
+        'include_est_total' => $group->include_est_total ?? null,
+
+        'items'             => $items->map(function ($item) {
+            $data = $item->toArray();   // all item fields
+             unset($data['estimate_group'], $data['global_group']);
+           // $data['assemblies'] = $item->assemblies; // relation
+            return $data;
+        })->values(),
+    ];
+})->values();
 
             $profitHours = EstimateItem::where('item_type', 'labour')->where('estimate_id', $id)->where('additional_item', '<>', 'yes')->sum('item_qty');
             $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->where('additional_item', '<>', 'yes')->get();
@@ -1048,7 +1086,7 @@ class ApiController extends Controller
                 // 'expenseTotal' => $expenseTotal,
                 // 'vendorTotals' => $vendorTotals,
                 // 'advancePayment' => $advancePayment,
-                'estimateAdditionalItems' => $estimateAdditionalItems,
+                'estimateAdditionalItems' => $formattedGroupsAdditionalItems,
             ], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
@@ -3529,29 +3567,61 @@ class ApiController extends Controller
     {
         try {
             $userDetails = auth()->user();
-            $estimate = Estimate::where('estimate_id', $id)
-                ->select('estimate_id', 'customer_id', 'customer_name', 'customer_phone', 'customer_address', 'billing_address', 'customer_last_name', 'project_name', 'project_number', 'project_type', 'building_type', 'project_owner')->first();
-            $materialItems = EstimateItem::where('estimate_id', $id)
-                ->where('item_type', '<>', 'upgrades')
-                ->where('additional_item', '<>', 'yes')
-                ->get()
-                ->sortBy(function ($item) {
-                    return $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order;
-                });
-            $estimateAssemblyItems = EstimateItem::with('assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->where('additional_item', '<>', 'yes')->get();
-            $upgrades = EstimateItem::with('assemblies')->where('estimate_id', $id)->where('item_type', 'upgrades')->where('upgrade_status', 'accepted')->where('additional_item', '<>', 'yes')->get();
-            $itemTemplates = EstimateItemTemplates::with('templateItems')->where('estimate_id', $id)->get();
-            $customer = Customer::where('customer_id', $estimate->customer_id)
-                ->select('customer_id', 'added_user_id', 'customer_first_name', 'customer_last_name', 'customer_email', 'customer_phone', 'customer_city', 'customer_state', 'customer_zip_code', 'billing_address', 'billing_city', 'billing_state', 'billing_zip')->first();
-            $estimateAdditionalItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
-            // return view('viewEstimateMaterials', ['estimate_items' => $materialItems, 'estimateAdditionalItems' => $estimateAdditionalItems, 'assemblies' => $estimateAssemblyItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
+        $estimate = Estimate::where('estimate_id', $id)
+        ->select('estimate_id','customer_id','customer_name','customer_phone','customer_address','billing_address','customer_last_name','project_name','project_number','project_type','building_type','project_owner')->first();
+        $materialItems = EstimateItem::where('estimate_id', $id)
+            ->where('item_type', '<>', 'upgrades')
+            ->where('additional_item', '<>', 'yes')
+            ->get()
+            ->sortBy(function ($item) {
+                return $item->sort_order == 0 ? PHP_INT_MAX : $item->sort_order;
+            });
+        $estimateAssemblyItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('item_type', 'assemblies')->where('additional_item', '<>', 'yes')->get();
+        $upgrades = EstimateItem::with('assemblies')->where('estimate_id', $id)->where('item_type', 'upgrades')->where('upgrade_status', 'accepted')->where('additional_item', '<>', 'yes')->get();
+        $itemTemplates = EstimateItemTemplates::with('templateItems')->where('estimate_id', $id)->get();
+        $customer = Customer::where('customer_id', $estimate->customer_id)
+        ->select('customer_id','added_user_id','customer_first_name','customer_last_name','customer_email','customer_phone','customer_city','customer_state','customer_zip_code','billing_address','billing_city','billing_state','billing_zip')->first();
+                    $estimateAdditionalItems = EstimateItem::with('estimateGroup', 'globalGroup', 'assemblies')->where('estimate_id', $estimate->estimate_id)->where('additional_item', 'yes')->get();
+        // return view('viewEstimateMaterials', ['estimate_items' => $materialItems, 'estimateAdditionalItems' => $estimateAdditionalItems, 'assemblies' => $estimateAssemblyItems, 'upgrades' => $upgrades, 'templates' => $itemTemplates, 'customer' => $customer, 'estimate' => $estimate]);
+                 // Group items by estimateGroup (fallback to globalGroup if needed)
+            $groupedItems = $estimateAssemblyItems->groupBy(function ($item) {
+                return $item->estimateGroup->group_name
+                    ?? $item->globalGroup->group_name
+                    ?? 'Ungrouped';
+            });
+            // Format for response
+            $formattedGroups = $groupedItems->map(function ($items, $groupName) {
+                $group = $items->first()->estimateGroup ?? $items->first()->globalGroup;
+
+                return [
+                    'group_id'          => $group->estimate_group_id ?? null,
+                    'group_name'        => $group->group_name ?? $groupName,
+                    'group_description' => $group->group_description ?? null,
+                    'group_type'        => $group->group_type ?? null,
+                    'group_source'      => $items->first()->estimateGroup
+                                            ? 'estimate_group'
+                                            : 'global_group',
+                    'show_unit_price'   => $group->show_unit_price ?? null,
+                    'show_quantity'     => $group->show_quantity ?? null,
+                    'show_total'        => $group->show_total ?? null,
+                    'show_group_total'  => $group->show_group_total ?? null,
+                    'include_est_total' => $group->include_est_total ?? null,
+
+                    'items'             => $items->map(function ($item) {
+                        $data = $item->toArray();   // all item fields
+                        $data['assemblies'] = $item->assemblies; // relation
+                        return $data;
+                    })->values(),
+                ];
+            })->values();
+
 
             return response()->json([
-                'success' => true,
-                'data' => [
-                    'estimate_items' => $materialItems,
+                'success'=> true,
+                'data'=>[
+                    'estimate_group_items' => $formattedGroups,
                     'estimateAdditionalItems' => $estimateAdditionalItems,
-                    'assemblies' => $estimateAssemblyItems,
+                    // 'assemblies' => $estimateAssemblyItems,
                     'upgrades' => $upgrades,
                     'templates' => $itemTemplates,
                     'customer' => $customer,
@@ -3970,6 +4040,116 @@ class ApiController extends Controller
             ], 400);
         }
     }
+
+    // public function itemTemplateList(Request $request){
+    //     try{
+    //         $userDetails = auth()->user();
+    //         // $id = $request->input('item_id');
+
+    //         $itemTemplate = ItemTemplates::with('itemTemplateItems')->get();
+    //         // $itemTemplate = ItemTemplates::select('item_template_id','added_user_id','item_template_name','description','note','template_order')->get();
+    //         return response()->json(['template'=> $itemTemplate]);
+    //     } catch(\Exception $e){
+    //         return response()->json(['success'=> false, 'message'=> $e->getMessage()]);
+    //     }
+    // }
+    public function getEstimateTemplateItem($id)
+{
+    try {
+        $userDetails = auth()->user();
+        $template = ItemTemplates::select('item_template_name')->where('item_template_id', $id)->first();
+
+        if (!$template) {
+            return response()->json(['success' => false, 'message' => 'Template not found'], 404);
+        }
+        $templateItems = ItemTemplateItems::where('item_template_id', $id)->get();
+
+        $items = [];
+        foreach ($templateItems as $tItem) {
+            $itemDetail = Items::where('item_id', $tItem->item_id)->first();
+            if ($itemDetail) {
+                $items[] = [
+                    // 'template_item' => $tItem,
+                    // 'item_detail'   => $itemDetail,
+                    'item_id'      => $itemDetail->item_id,
+                    'item_name'    => $itemDetail->item_name,
+                    'item_type'    => $itemDetail->item_type,
+                    'item_units'   => $itemDetail->item_units,
+                    'item_cost'    => $itemDetail->item_cost,
+                    'item_price'   => $tItem->item_price,
+                    'labour_expense' => $tItem->labour_expense,
+                    'item_description' => $tItem->item_description,
+                    'material_expense' => $tItem->material_expense,
+                    'group_ids'       => $tItem->group_ids,
+                ];
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'template_name' => $template->item_template_name,
+                'items'    => $items,
+            ]
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+    }
+}
+
+public function ItemList(Request $request){
+    try{
+        $key = $request->input('type');
+        $query = Items::query();
+
+        if($key === 'assemblies'){
+            $query->where('item_type', 'assemblies')->with('assemblies');
+        }elseif ($key === 'labourMaterial'){
+            $query->whereIn('item_type',['labour', 'material'])->with('assemblies');
+        }elseif ($key === 'all'){
+            $query->with('assemblies');
+        }else{
+            $query->with('assemblies');
+        }
+
+        // if($key === 'assemblies'){
+        //     $query->where('item_type', 'assemblies')
+        //           ->with('assemblies');
+        // } elseif ($key === 'labour'){
+        //     $query->where('item_type','labour')->with('assemblies');
+        // } elseif ($key === 'material'){
+        //     $query->where('item_type','material')->with('assemblies');
+        // }elseif ($key === 'all') {
+        //     $query->with('assemblies');
+        // }else{
+        //     $query->with('assemblies');
+        // }
+
+        $itemList = $query->get();
+
+        return response()->json(['success' => true, 'itemList'=>$itemList],200);
+    } catch(\Exception $e){
+        return response()->json(['success'=>false, 'message'=> $e->getMessage()]);
+    }
+}
+public function TemplateList(){
+    try{
+        $TemplateList = ItemTemplates::get();
+        return response()->json(['TemplateList'=> $TemplateList],200);
+    } catch(\Exception $e){
+        return response()->json(['success'=>false, 'message'=>$e->getMessage()],400);
+    }
+}
+
+public function getAllGroups(){
+    try{
+        $groups = Groups::whereIn('group_type', ['assemblies','material','labour'])->get();
+        return response()->json(['success'=> true, 'data'=> $groups], 200);
+    }catch(\Exception $e){
+        return response()->json(['success'=> false, 'message'=> $e->getMessage()], 400);
+    }
+}
 
     // OwerList Api
     public function getUsersList(Request $request, $key = null)

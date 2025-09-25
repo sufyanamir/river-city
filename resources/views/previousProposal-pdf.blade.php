@@ -16,6 +16,7 @@
             background-color: white;
             color: #333;
             line-height: 1.6;
+            margin: 5px 20px 5px 20px;
         }
 
         /* Layout and structure */
@@ -95,7 +96,7 @@
 
         .badge-item {
             display: inline-block;
-            margin: 10px 30px;
+            margin: 5px 20px;
             width: 120px;
             height: 120px;
             text-align: center;

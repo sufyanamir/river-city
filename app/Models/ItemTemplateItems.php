@@ -11,6 +11,10 @@ class ItemTemplateItems extends Model
 
     protected $table = 'item_template_items';
 
+    public function template()
+    {
+        return $this->belongsTo(ItemTemplates::class, 'item_template_id');
+    }
     protected $primaryKey = 'it_item_id';
 
     protected $fillable = [
