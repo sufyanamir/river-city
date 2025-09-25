@@ -898,7 +898,7 @@ class ApiController extends Controller
     $group = $items->first()->estimateGroup ?? $items->first()->globalGroup;
 
     return [
-        'group_id'          => $group->estimate_group_id ?? null,
+        'group_id'          => $group->estimate_group_id ?? $group->group_id,
         'group_name'        => $group->group_name ?? $groupName,
         'group_description' => $group->group_description ?? null,
         'group_type'        => $group->group_type ?? null,
