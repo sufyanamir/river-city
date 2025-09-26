@@ -3323,9 +3323,6 @@ class EstimateController extends Controller
                 $groupId = null;
                 $estimateGroupId = $groupDetail->estimate_group_id;
             } else {
-                // Use global 'Single' group
-                $groupDetail = Groups::where('group_name', 'Single')->first();
-                if (!$groupDetail) {
                     $groupDetail = Groups::create([
                         'group_name' => 'Single',
                         'group_type' => 'assemblies',
@@ -3334,10 +3331,10 @@ class EstimateController extends Controller
                         'show_total' => 1,
                         'show_group_total' => 1,
                         'include_est_total' => 1,
+                        'added_user_id' => $userDetails['id']
                     ]);
-                }
-                $groupId = $groupDetail->group_id;
-                $estimateGroupId = null;
+                $groupId = null;
+                $estimateGroupId = $groupDetail->estimate_group_id;
             }
 
             $estimateItem = EstimateItem::create([

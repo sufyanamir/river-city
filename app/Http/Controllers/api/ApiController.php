@@ -1293,7 +1293,7 @@ class ApiController extends Controller
                         'show_total' => 1,
                         'show_group_total' => 1,
                         'include_est_total' => 1,
-                        $userDetails->id
+                        'added_user_id' => $userDetails->id
                     ]);
                 $groupId = null;
                 $estimateGroupId = $groupDetail->estimate_group_id;
@@ -3814,25 +3814,16 @@ class ApiController extends Controller
             $estimateItem = EstimateItem::where('estimate_item_id', $validatedData['item_id'])->first();
             $estimateItemAssembly = EstimateItemAssembly::where('estimate_item_id', $estimateItem->estimate_item_id)->get();
             if (isset($validatedData['group_name']) && $validatedData['group_name'] != null) {
-                $groupDetail = Groups::where('group_name', $validatedData['group_name'])->first();
-                if (!$groupDetail) {
-                    $newGroup = Groups::create([
-                        'group_name' => $validatedData['group_name'],
-                        'group_type' => 'assemblies',
-                        'show_unit_price' => 1,
-                        'show_quantity' => 1,
-                        'show_total' => 1,
-                        'show_group_total' => 1,
-                        'include_est_total' => 1,
-                    ]);
-                    $estimateItem->group_id = $newGroup->group_id;
-                } else {
-                    $estimateItem->group_id = $groupDetail->group_id;
-                }
+                // Create or get estimate-specific group
+                $groupDetail = EstimateGroups::getOrCreate(
+                    $validatedData['estimate_id'],
+                    $validatedData['group_name'],
+                    $userDetails->id
+                );
+                $groupId = null;
+                $estimateItem = $groupDetail->estimate_group_id;
             } else {
-                $groupDetail = Groups::where('group_name', 'Single')->first();
-                if (!$groupDetail) {
-                    $groupDetail = Groups::create([
+                    $groupDetail = EstimateGroups::create([
                         'group_name' => 'Single',
                         'group_type' => 'assemblies',
                         'show_unit_price' => 1,
@@ -3840,9 +3831,10 @@ class ApiController extends Controller
                         'show_total' => 1,
                         'show_group_total' => 1,
                         'include_est_total' => 1,
+                        'added_user_id' => $userDetails->id
                     ]);
-                }
-                $estimateItem->group_id = $groupDetail->group_id;
+                $groupId = null;
+                $estimateItem = $groupDetail->estimate_group_id;
             }
 
             $estimateItem->item_name = $validatedData['item_name'];
