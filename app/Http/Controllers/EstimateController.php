@@ -3343,7 +3343,7 @@ class EstimateController extends Controller
                 $groupId = null;
                 $estimateGroupId = $groupDetail->estimate_group_id;
             } else {
-                    $groupDetail = Groups::create([
+                    $groupDetail = EstimateGroups::create([
                         'group_name' => 'Single',
                         'group_type' => 'assemblies',
                         'show_unit_price' => 1,
