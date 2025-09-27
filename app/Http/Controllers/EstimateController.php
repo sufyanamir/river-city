@@ -238,26 +238,46 @@ class EstimateController extends Controller
 
     // deleteEstimateGroupItems
     public function deleteEstimateGroupItems(Request $request)
-    {
-        try {
-            $validatedData = $request->validate([
-                'estimate_id' => 'required',
-                'group_id' => 'required',
-            ]);
+{
+    try {
+        $validatedData = $request->validate([
+            'estimate_id'       => 'required|integer',
+            'group_id'          => 'nullable|integer',
+            'estimate_group_id' => 'nullable|integer',
+        ]);
 
-            $estimateItems = EstimateItem::where('estimate_id', $validatedData['estimate_id'])
-                ->where('group_id', $validatedData['group_id'])
-                ->get();
+        // Determine which ID to use
+        $query = EstimateItem::where('estimate_id', $validatedData['estimate_id']);
 
-            foreach ($estimateItems as $item) {
-                $item->delete();
-            }
-
-            return response()->json(['success' => true, 'message' => 'Items deleted!'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        if (!empty($validatedData['group_id'])) {
+            $query->where('group_id', $validatedData['group_id']);
+        } elseif (!empty($validatedData['estimate_group_id'])) {
+            $query->where('estimate_group_id', $validatedData['estimate_group_id']);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Either group_id or estimate_group_id is required.'
+            ], 422);
         }
+
+        // Delete items in one query (faster than looping)
+        $deletedCount = $query->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => $deletedCount > 0 
+                ? 'Items deleted successfully!' 
+                : 'No items found to delete.',
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage(),
+        ], 400);
     }
+}
+
     // deleteEstimateGroupItems
 
     // acceptRejectEstimateItems
